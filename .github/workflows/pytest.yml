@@ -43,10 +43,15 @@ jobs:
             libpangoft2-1.0-0 \
             libgdk-pixbuf-2.0-0 \
             libffi-dev \
+            libmagic1 \
             shared-mime-info
 
       - name: Install Python dependencies
-        run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt && python -m pip install pytest
+        run: |
+          python -m pip install --upgrade pip
+          grep -v '^python-magic-bin==' requirements.txt > /tmp/requirements-ci.txt
+          python -m pip install -r /tmp/requirements-ci.txt
+          python -m pip install python-magic pytest
 
       - name: Run test suite
         run: python -m pytest -q
