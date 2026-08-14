@@ -492,12 +492,22 @@ def init_db(criar_indices_performance, init_fts):
             cursor.execute("SELECT COUNT(*) FROM usuarios WHERE usuario = 'admin'")
             if cursor.fetchone()[0] == 0:
                 from werkzeug.security import generate_password_hash
-                senha_hash = generate_password_hash('admin123')
+                senha_inicial = Config.INITIAL_ADMIN_PASSWORD
+                if not senha_inicial:
+                    if Config.IS_PRODUCTION:
+                        raise RuntimeError(
+                            "INITIAL_ADMIN_PASSWORD deve ser definido antes da primeira inicialização em produção."
+                        )
+                    senha_inicial = 'admin123'
+                    logger.warning(
+                        "Senha administrativa de desenvolvimento usada; altere-a no primeiro acesso."
+                    )
+                senha_hash = generate_password_hash(senha_inicial)
                 cursor.execute(
                     "INSERT INTO usuarios (nome, email, usuario, senha, ativo, role, must_change_password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
                     ['Administrador', 'admin@exemplo.com', 'admin', senha_hash, 1, 'admin', 1]
                 )
-                logger.info("Usuário padrão 'admin / admin123' criado. Troca de senha obrigatória no primeiro acesso.")
+                logger.info("Usuário administrativo inicial criado com troca de senha obrigatória no primeiro acesso.")
             else:
                 cursor.execute("UPDATE usuarios SET role = 'admin' WHERE usuario = 'admin' AND (role IS NULL OR role != 'admin')")
                 if cursor.rowcount > 0:
