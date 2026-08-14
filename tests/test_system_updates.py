@@ -3,6 +3,7 @@ import json
 import pytest
 
 from data import system_updates
+from data.update_config import load_update_settings
 
 
 def _login_admin(client):
@@ -13,6 +14,77 @@ def _login_admin(client):
             usuario_role="admin",
             usuario_username="admin",
             csrf_token="csrf-test",
+        )
+
+
+def test_external_update_ini_overrides_manifest_urls(tmp_path):
+    config_path = tmp_path / "update.ini"
+    config_path.write_text(
+        "[update]\n"
+        "manifest_url = https://primary.example/manifest.json\n"
+        "fallback_manifest_url = https://fallback.example/manifest.json\n"
+        "timeout_seconds = 9\n",
+        encoding="utf-8",
+    )
+
+    settings = load_update_settings(config_path)
+
+    assert settings["manifest_url"] == "https://primary.example/manifest.json"
+    assert settings["fallback_manifest_url"] == "https://fallback.example/manifest.json"
+    assert settings["timeout_seconds"] == 9
+
+
+def test_fetch_manifest_accepts_valid_payload(monkeypatch):
+    payload = {
+        "version": "3.19.0",
+        "package_url": "https://github.com/example/app.zip",
+        "sha256": "a" * 64,
+    }
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self):
+            return json.dumps(payload).encode("utf-8")
+
+    monkeypatch.setattr(system_updates, "urlopen", lambda *_args, **_kwargs: Response())
+    manifest = system_updates.fetch_update_manifest(
+        {
+            "manifest_url": "https://example.com/manifest.json",
+            "fallback_manifest_url": "",
+            "timeout_seconds": 5,
+        }
+    )
+
+    assert manifest["version"] == "3.19.0"
+    assert manifest["sha256"] == "a" * 64
+
+
+def test_fetch_manifest_rejects_insecure_package_url(monkeypatch):
+    payload = {"version": "3.19.0", "package_url": "http://insecure/app.zip", "sha256": "a" * 64}
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self):
+            return json.dumps(payload).encode("utf-8")
+
+    monkeypatch.setattr(system_updates, "urlopen", lambda *_args, **_kwargs: Response())
+    with pytest.raises(RuntimeError, match="manifesto válido"):
+        system_updates.fetch_update_manifest(
+            {
+                "manifest_url": "https://example.com/manifest.json",
+                "fallback_manifest_url": "",
+                "timeout_seconds": 5,
+            }
         )
 
 

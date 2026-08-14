@@ -66,3 +66,28 @@ Os estados principais são `idle`, `update_available`, `awaiting_confirmation`, 
 As rotas administrativas são `POST /api/system/update/check`, `POST /api/system/update/confirm` e `POST /api/system/update/cancel`. Confirmação e cancelamento exigem autenticação administrativa e CSRF. O servidor retorna HTTP `423 Locked` para operações mutáveis enquanto o estado está em manutenção; bloquear apenas os botões do navegador não é suficiente.
 
 Nesta etapa, `REGISTROFACIL_UPDATE_VERSION` pode ser usado em homologação para simular uma nova versão. O download, a conferência de assinatura, o backup, a troca atômica de diretórios e o reinício devem ser executados por um launcher externo, que será integrado em uma etapa posterior. O Flask não deve substituir os próprios arquivos enquanto estiver atendendo requisições.
+
+## Canal externo de atualização pelo GitHub
+
+O endereço do manifesto não fica fixo exclusivamente no código. Cada instalação pode possuir `DATA_DIR/update.ini`, copiado a partir de `update.ini.example`. O arquivo permite alterar `manifest_url`, `fallback_manifest_url`, `channel` e `timeout_seconds` sem recompilar o aplicativo.
+
+A configuração usa como padrão um manifesto em um GitHub Release:
+
+```ini
+[update]
+manifest_url = https://github.com/espetocearensesobral-boop/registrofacil-v3/releases/latest/download/manifest.json
+fallback_manifest_url = https://raw.githubusercontent.com/espetocearensesobral-boop/registrofacil-v3/main/updates/manifest.json
+channel = stable
+timeout_seconds = 20
+```
+
+O Release é a fonte principal porque permite manter o endereço estável `releases/latest/download/manifest.json`, enquanto o nome do pacote pode variar por versão. O arquivo Raw fica como fallback caso o asset principal seja removido ou o endereço do Release seja alterado. A documentação do GitHub descreve esse padrão de link para o asset da release mais recente [1] e também disponibiliza `browser_download_url` para assets de releases via API [2].
+
+O manifesto precisa conter pelo menos `version`, `package_url` e `sha256`. O sistema aceita somente URLs HTTPS e rejeita manifesto incompleto ou pacote sem hash SHA-256 válido. O exemplo está em `updates/manifest.example.json`.
+
+As variáveis `REGISTROFACIL_UPDATE_CONFIG`, `REGISTROFACIL_UPDATE_MANIFEST_URL`, `REGISTROFACIL_UPDATE_FALLBACK_URL`, `REGISTROFACIL_UPDATE_CHANNEL` e `REGISTROFACIL_UPDATE_TIMEOUT` podem substituir o arquivo INI em ambientes automatizados.
+
+### Referências
+
+[1]: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases "GitHub Docs — Linking to releases"
+[2]: https://docs.github.com/en/rest/releases/assets "GitHub Docs — REST API endpoints for release assets"

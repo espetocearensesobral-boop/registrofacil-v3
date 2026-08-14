@@ -11,6 +11,10 @@ import json
 import sqlite3
 from datetime import datetime
 from typing import Any
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+from data.update_config import load_update_settings, manifest_urls
 
 from config import Config
 from data.database import get_sqlite_connection
@@ -104,15 +108,52 @@ def compare_versions(left: str, right: str) -> int:
     return (left_parts > right_parts) - (left_parts < right_parts)
 
 
-def detect_available_version() -> dict[str, Any]:
-    """Detecta uma versão informada pelo distribuidor local.
+def fetch_update_manifest(settings: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Busca o manifesto principal e usa o fallback quando necessário."""
+    settings = settings or load_update_settings()
+    errors = []
+    for url in manifest_urls(settings):
+        try:
+            request = Request(url, headers={"Accept": "application/json", "User-Agent": "RegistroFacil-Updater"})
+            with urlopen(request, timeout=settings["timeout_seconds"]) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            version = str(payload.get("version", "")).strip()
+            package_url = str(payload.get("package_url", "")).strip()
+            sha256 = str(payload.get("sha256", "")).strip().lower()
+            if not version or not package_url.startswith("https://") or len(sha256) != 64:
+                raise ValueError("Manifesto incompleto ou inseguro.")
+            return {
+                **payload,
+                "version": version,
+                "package_url": package_url,
+                "sha256": sha256,
+                "source_url": url,
+            }
+        except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as exc:
+            errors.append(f"{url}: {exc}")
 
-    A integração remota assinada será adicionada na etapa do launcher. Para
-    homologação, REGISTROFACIL_UPDATE_VERSION funciona como manifesto local.
-    """
+    raise RuntimeError("Não foi possível obter um manifesto válido. " + " | ".join(errors))
+
+
+def detect_available_version() -> dict[str, Any]:
+    """Detecta uma versão local em homologação ou no manifesto do canal."""
     import os
 
     candidate = os.environ.get("REGISTROFACIL_UPDATE_VERSION", "").strip()
+    manifest = None
+    if not candidate:
+        try:
+            manifest = fetch_update_manifest()
+            candidate = manifest["version"]
+        except RuntimeError as exc:
+            return {
+                "available": False,
+                "current_version": Config.VERSION,
+                "available_version": None,
+                "message": "Não foi possível consultar o canal de atualização.",
+                "error": str(exc),
+            }
+
     if not candidate or compare_versions(candidate, Config.VERSION) <= 0:
         return {
             "available": False,
@@ -130,12 +171,14 @@ def detect_available_version() -> dict[str, Any]:
         error=None,
         reload_required=False,
         can_cancel=True,
+        manifest=manifest,
     )
     return {
         "available": True,
         "current_version": Config.VERSION,
         "available_version": candidate,
         "message": state["message"],
+        "manifest": manifest,
     }
 
 
