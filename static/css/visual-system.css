@@ -157,7 +157,23 @@ h4, .h4, h5, .h5 { font-size: 1.0625rem; line-height: 1.35; font-weight: 650; }
 .btn:focus-visible,
 .navbar .nav-btn:focus-visible,
 button:focus-visible,
-a:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-primary) 45%, #fff); outline-offset: 2px; }
+a:focus-visible,
+.menu-item:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+[tabindex]:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-primary) 45%, #fff); outline-offset: 2px; }
+.menu-item:focus-visible { background: #26334a; color: #fff; }
+
+/* Campos com seleção e dropdowns deixam claro que são interativos. */
+select, .form-select, [data-bs-toggle="dropdown"] { cursor: pointer; }
+.form-select { padding-right: 2.5rem; }
+
+/* Escala mínima para telas com baixa densidade de conteúdo. */
+.page-title-text + .text-muted,
+.page-header .text-muted,
+.section-subtitle { font-size: .9375rem; line-height: 1.55; }
+.empty-state, .no-results, .placeholder-message { font-size: 1rem; line-height: 1.6; }
+
 .btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--rf-text-on-primary); }
 .btn-primary:hover, .btn-primary:focus { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: var(--rf-text-on-primary); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 24%, transparent); }
 .btn-secondary { background: #526071; border-color: #526071; color: #fff; }

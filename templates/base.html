@@ -596,6 +596,7 @@
     
     {# O main.js agora é o orquestrador, ele DEVE ser o último script a ser carregado, e também precisa ser um módulo #}
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/accessibility.js') }}" defer></script>
     <script>
     // ── Controle de sidebar mobile ──────────────────────────────
     window.toggleMobileSidebar = function() {
