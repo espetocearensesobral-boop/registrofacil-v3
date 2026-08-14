@@ -133,6 +133,12 @@ def test_cancel_is_allowed_before_confirmation(temp_database):
     assert state["message"] == "Atualização cancelada pelo administrador."
 
 
+def test_health_check_is_public(app_client):
+    response = app_client.get("/api/system/update/health")
+    assert response.status_code == 200
+    assert response.get_json()["status"] == "ok"
+
+
 def test_update_http_status_and_confirmation_require_auth_and_csrf(app_client):
     response = app_client.get("/api/system/update/status")
     assert response.status_code == 302
@@ -156,6 +162,7 @@ def test_update_http_status_and_confirmation_require_auth_and_csrf(app_client):
     )
     assert confirmed.status_code == 200
     assert confirmed.get_json()["state"] == "maintenance_pending"
+    assert confirmed.get_json()["worker_started"] is False
 
 
 def test_mutations_are_blocked_during_maintenance(app_client):

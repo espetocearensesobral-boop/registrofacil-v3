@@ -1,6 +1,11 @@
 """Endpoints administrativos do ciclo de atualização do sistema."""
 
-from flask import Blueprint, jsonify, request
+import os
+import shlex
+import subprocess
+import sys
+
+from flask import Blueprint, current_app, jsonify, request
 
 from data.system_updates import (
     cancel_update,
@@ -21,6 +26,21 @@ def _csrf_failure():
 def _require_csrf():
     token = request.headers.get("X-CSRFToken") or request.form.get("csrf_token")
     return verificar_csrf_token(token)
+
+
+def start_worker() -> bool:
+    """Inicia o worker fora do processo Flask, exceto durante testes."""
+    if current_app.testing or os.environ.get("REGISTROFACIL_DISABLE_WORKER") == "true":
+        return False
+    raw_command = os.environ.get("REGISTROFACIL_UPDATE_WORKER_COMMAND", "").strip()
+    command = shlex.split(raw_command) if raw_command else [sys.executable, "-m", "data.update_worker"]
+    subprocess.Popen(command, close_fds=True)
+    return True
+
+
+@system_updates_bp.get("/health")
+def health():
+    return jsonify(success=True, status="ok")
 
 
 @system_updates_bp.get("/status")
@@ -47,7 +67,10 @@ def confirm():
     try:
         state = request_confirmation(target_version)
         state = set_maintenance_pending()
-        return jsonify(success=True, **state)
+        worker_started = start_worker()
+        if worker_started:
+            state["message"] = "Atualização iniciada. Aguarde o progresso e não feche o sistema."
+        return jsonify(success=True, worker_started=worker_started, **state)
     except ValueError as exc:
         return jsonify(success=False, message=str(exc), type="warning"), 400
     except RuntimeError as exc:

@@ -116,3 +116,20 @@ python -m data.update_launcher activate 3.19.0
 ```
 
 O comando `prepare` somente baixa, valida e prepara a release. O comando `backup` copia banco, uploads e chaves. A ativação deve ser executada pelo supervisor externo depois que o Flask estiver bloqueando novas operações e o backup tiver sido confirmado. Ainda não é recomendado chamar `activate` diretamente a partir de uma requisição web.
+
+## Integração com o worker externo
+
+Depois da confirmação administrativa, o endpoint inicia `python -m data.update_worker` em um subprocesso separado. Durante testes, o subprocesso é desabilitado automaticamente para evitar efeitos colaterais. Em uma instalação empacotada, o comando pode ser substituído por `REGISTROFACIL_UPDATE_WORKER_COMMAND`.
+
+O worker valida que o estado está em `maintenance_pending`, cria o backup, prepara a release, persiste o progresso e só ativa a versão quando existe `REGISTROFACIL_RESTART_COMMAND`. Sem esse comando, o estado fica em `ready_to_restart`, mantendo os terminais bloqueados em vez de liberar uma atualização que ainda não foi reiniciada e verificada.
+
+As variáveis operacionais são:
+
+```text
+REGISTROFACIL_UPDATE_WORKER_COMMAND
+REGISTROFACIL_RESTART_COMMAND
+REGISTROFACIL_HEALTH_URL
+REGISTROFACIL_UPDATE_ROOT
+```
+
+O health check padrão é `/api/system/update/health`. Em produção, o supervisor deve iniciar o novo processo, aguardar HTTP 200, confirmar a versão retornada e somente então marcar o estado como `ready`, permitindo a recarga dos terminais.
