@@ -318,13 +318,11 @@
                         <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             {% for category, message in messages %}
-                            if(typeof showToast === 'function') {
-                                showToast('{{ "success" if category == "success" else ("danger" if category == "danger" else ("warning" if category == "warning" else "info")) }}', '{{ message | replace("'", "\'") }}');
-                            } else {
-                                setTimeout(function(){
-                                    if(typeof window.showToast === 'function') window.showToast('{{ "success" if category == "success" else ("danger" if category == "danger" else ("warning" if category == "warning" else "info")) }}', '{{ message | replace("'", "\'") }}');
-                                }, 300);
-                            }
+                            window.showToast && window.showToast({
+                                type: {{ ('success' if category == 'success' else ('danger' if category in ['danger', 'error'] else ('warning' if category == 'warning' else 'info'))) | tojson }},
+                                title: {{ ('Sucesso' if category == 'success' else ('Erro' if category in ['danger', 'error'] else ('Atenção' if category == 'warning' else 'Informação'))) | tojson }},
+                                message: {{ message | tojson }}
+                            });
                             {% endfor %}
                         });
                         </script>

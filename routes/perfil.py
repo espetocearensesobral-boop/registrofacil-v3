@@ -12,6 +12,7 @@ from models import (
 )
 from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token, gerar_csrf_token
 from utils.logger import logger
+from utils.notification_contract import success, error, warning
 from config import Config
 from utils.file_uploads import get_image_url_for_display, handle_image_upload, remove_image_file, PROFILE_UPLOAD_FOLDER
 
@@ -99,7 +100,7 @@ def index(user_id=None):
     if request.method == 'POST':
         if not verificar_csrf_token(request.form.get('csrf_token')):
             logger.error(f"Token CSRF inválido. User: {current_user_id}, Alvo: {target_user_id}. IP: {get_client_ip()}")
-            return jsonify(success=False, message="Token de segurança inválido.", type='danger'), 403
+            return jsonify(success=False, message="Sua sessão de segurança expirou. Recarregue a página e tente novamente.", title='Sessão expirada', type='danger'), 403
         
         # ===== CONTEXTO: PRÓPRIO PERFIL (AUTO-EDIÇÃO) =====
         if contexto == 'proprio_perfil':
@@ -205,6 +206,8 @@ def index(user_id=None):
                 
                 return jsonify(
                     success=True,
+                    title='Sucesso',
+                    type='success',
                     message=mensagem,
                     redirect=url_for('perfil.index'),
                     updated_user_data={
@@ -215,10 +218,10 @@ def index(user_id=None):
                 )
             
             except ValueError as e:
-                return jsonify(success=False, message=str(e), type='danger'), 400
+                return jsonify(success=False, message=str(e), title='Verifique os dados', type='warning'), 400
             except Exception as e:
                 logger.exception(f"Erro ao atualizar perfil: {e}")
-                return jsonify(success=False, message=f'Erro inesperado: {str(e)}', type='danger'), 500
+                return jsonify(success=False, message='Não foi possível atualizar o perfil. Tente novamente ou consulte os logs.', title='Erro ao atualizar perfil', type='danger'), 500
         
         # ===== CONTEXTO: GERENCIAMENTO ADMIN =====
         elif contexto == 'gerenciamento_admin':
@@ -362,28 +365,32 @@ def salvar_tema():
         csrf_token_header = request.headers.get('X-CSRFToken')
         if not verificar_csrf_token(csrf_token_header):
             logger.warning(f"Tentativa de alteração de tema com CSRF inválido. IP: {get_client_ip()}")
-            return jsonify({'success': False, 'error': 'Token de segurança inválido (CSRF)'}), 403
+            return jsonify({**error('Sua sessão de segurança expirou. Recarregue a página e tente novamente.'), 'success': False}), 403
 
         data = request.get_json() or {}
         tema = data.get('tema') or data.get('tema_cor')
         
         if not tema:
-            return jsonify({'success': False, 'error': 'Tema não informado'}), 400
+            return jsonify({**warning('Selecione uma paleta antes de salvar.'), 'success': False}), 400
             
         # Validação de temas permitidos contra injeção de parâmetros
         temas_validos = [
             'dourado', 'azul-marinho', 'vinho', 'verde-esmeralda',
             'azul-petroleo', 'roxo-real', 'azul-royal', 'verde-oliva',
-            'terracota', 'azul-cobalto', 'magenta', 'cinza-grafite',
+            'terracota', 'azul-cobalto', 'magenta',             'cinza-grafite',
             'teal', 'indigo', 'ambar', 'verde-floresta', 'azul-aco',
-            'coral', 'lavanda', 'preto-classico'
+            'coral', 'lavanda', 'preto-classico', 'vermelho-rubi',
+            'rosa-antigo', 'laranja-queimado', 'verde-jade',
+            'azul-meia-noite', 'violeta-ametista', 'marrom-cafe',
+            'cinza-carvao', 'verde-salvia', 'azul-oceano'
+
         ]
         if tema not in temas_validos:
-            return jsonify({'success': False, 'error': 'Tema inválido'}), 400
+            return jsonify({**warning('A paleta selecionada não está disponível. Escolha uma das opções exibidas.'), 'success': False}), 400
 
         usuario_id = session.get('usuario_id')
         if not usuario_id:
-            return jsonify({'success': False, 'error': 'Usuário não autenticado'}), 401
+            return jsonify({**error('Sua sessão expirou. Entre novamente para salvar a paleta.'), 'success': False}), 401
             
         from models import salvar_tema_usuario
         sucesso = salvar_tema_usuario(usuario_id, tema)
@@ -400,10 +407,10 @@ def salvar_tema():
                 descricao=f"Usuário alterou o tema visual corporativo para '{tema}'."
             )
             
-            return jsonify({'success': True, 'message': 'Tema salvo com sucesso', 'sucesso': True})
+            return jsonify({**success('Paleta salva com sucesso.'), 'success': True, 'sucesso': True})
         else:
-            return jsonify({'success': False, 'error': 'Erro ao salvar no banco de dados'}), 500
+            return jsonify({**error('Não foi possível salvar a paleta no banco de dados.'), 'success': False}), 500
             
     except Exception as e:
         logger.error(f"Erro ao salvar tema do usuário: {e}", exc_info=True)
-        return jsonify({'success': False, 'error': str(e)}), 500
+        return jsonify({**error('Não foi possível salvar a paleta. Consulte os logs para obter detalhes.'), 'success': False}), 500

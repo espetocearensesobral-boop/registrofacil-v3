@@ -133,3 +133,11 @@ REGISTROFACIL_UPDATE_ROOT
 ```
 
 O health check padrão é `/api/system/update/health`. Em produção, o supervisor deve iniciar o novo processo, aguardar HTTP 200, confirmar a versão retornada e somente então marcar o estado como `ready`, permitindo a recarga dos terminais.
+
+## Motor de notificações
+
+As notificações HTTP e os toasts usam o contrato `{ success, type, title, message }`. Os tipos válidos são `success`, `danger`, `warning` e `info`; o título padrão é, respectivamente, **Sucesso**, **Erro**, **Atenção** e **Informação**. Uma resposta sem tipo não deve exibir apenas o identificador técnico do tipo: o frontend aplica o fallback contextual correspondente.
+
+O helper JavaScript aceita o contrato novo e também normaliza as assinaturas legadas `showToast(type, message)` e `showToast(message, type)`. Isso evita quebra durante a migração gradual dos templates. Mensagens recebidas da API são escapadas antes de serem inseridas no dropdown ou no toast.
+
+A convenção para ações é a seguinte: operações concluídas usam `success` e descrevem o resultado; dados incompletos ou ação não executada usam `warning`; falhas de servidor, permissão ou comunicação usam `danger`; carregamentos e estados informativos usam `info`. Exclusões devem ser confirmadas antes do envio e, após a resposta, devem exibir o resultado recebido — sucesso, bloqueio por vínculos ou erro — em vez de uma mensagem genérica.

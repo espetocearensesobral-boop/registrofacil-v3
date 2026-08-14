@@ -8,45 +8,45 @@ class NotificationManager {
         this.notificationsShown = new Set(); // Evitar duplicatas
         this.intervalId = null;
         this.enabled = true;
-        
+
         this.init();
     }
-    
+
     async init() {
         // Verificar suporte a notificações
         if (!('Notification' in window)) {
             console.warn('Este navegador não suporta notificações');
             return;
         }
-        
+
         // Solicitar permissão
         this.permission = await this.requestPermission();
-        
+
         if (this.permission === 'granted') {
             // Iniciar verificações periódicas
             this.startChecking();
-            
+
             // Verificação imediata
             this.checkNotifications();
         }
-        
+
         // Configurar listeners
         this.setupEventListeners();
     }
-    
+
     async requestPermission() {
         if (Notification.permission === 'granted') {
             return 'granted';
         }
-        
+
         if (Notification.permission !== 'denied') {
             const permission = await Notification.requestPermission();
             return permission;
         }
-        
+
         return Notification.permission;
     }
-    
+
     setupEventListeners() {
         // Botão para solicitar permissão novamente
         document.addEventListener('click', (e) => {
@@ -59,19 +59,19 @@ class NotificationManager {
                 });
             }
         });
-        
+
         // Marcar como lida ao clicar na notificação no dropdown
         document.addEventListener('click', (e) => {
             if (e.target.closest('.notificacao-item[data-notificacao-id]')) {
                 const item = e.target.closest('.notificacao-item');
                 const notifId = item.dataset.notificacaoId;
-                
+
                 if (notifId && !notifId.startsWith('prazo_')) {
                     this.markAsRead(notifId);
                 }
             }
         });
-        
+
         // Botão marcar todas como lidas
         document.addEventListener('click', (e) => {
             if (e.target.matches('[data-mark-all-read]')) {
@@ -79,21 +79,21 @@ class NotificationManager {
             }
         });
     }
-    
+
     startChecking() {
         if (this.intervalId) {
             clearInterval(this.intervalId);
         }
-        
+
         this.intervalId = setInterval(() => {
             if (this.enabled) {
                 this.checkNotifications();
             }
         }, this.checkInterval);
-        
+
         console.log(`Verificação de notificações iniciada (intervalo: ${this.checkInterval / 1000}s)`);
     }
-    
+
     stopChecking() {
         if (this.intervalId) {
             clearInterval(this.intervalId);
@@ -101,19 +101,19 @@ class NotificationManager {
             console.log('Verificação de notificações parada');
         }
     }
-    
+
     async checkNotifications() {
         try {
             const response = await fetch('/notificacoes/api/pendentes');
             const data = await response.json();
-            
+
             if (data.success && data.notificacoes) {
                 // Atualizar badge
                 this.updateBadge(data.nao_lidas);
-                
+
                 // Atualizar dropdown
                 this.updateDropdown(data.notificacoes);
-                
+
                 // Mostrar notificações push para novas notificações
                 if (this.permission === 'granted') {
                     data.notificacoes.forEach(notif => {
@@ -128,7 +128,7 @@ class NotificationManager {
             console.error('Erro ao verificar notificações:', error);
         }
     }
-    
+
     updateBadge(count) {
         const badge = document.querySelector('.notificacoes-badge');
         if (badge) {
@@ -140,11 +140,17 @@ class NotificationManager {
             }
         }
     }
-    
+
+    escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>\"']/g, (char) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[char]));
+    }
+
     updateDropdown(notificacoes) {
         const dropdown = document.querySelector('#notificacoes-dropdown-list');
         if (!dropdown) return;
-        
+
         if (notificacoes.length === 0) {
             dropdown.innerHTML = `
                 <div class="dropdown-item text-center text-muted py-3">
@@ -154,33 +160,34 @@ class NotificationManager {
             `;
             return;
         }
-        
+
         // Limitar a 10 notificações no dropdown
         const notificacoesLimitadas = notificacoes.slice(0, 10);
-        
+
         dropdown.innerHTML = notificacoesLimitadas.map(notif => {
             const icone = this.getIconePorTipo(notif.tipo);
             const corClass = this.getCorPorPrioridade(notif.prioridade);
             const lida = notif.lida ? 'lida' : '';
-            
+
+            const safeUrl = typeof notif.url === 'string' && notif.url.startsWith('/') ? notif.url : '#';
             return `
-                <a href="${notif.url || '#'}" 
-                   class="dropdown-item notificacao-item ${lida} ${corClass}" 
-                   data-notificacao-id="${notif.id}">
+                <a href="${this.escapeHtml(safeUrl)}"
+                   class="dropdown-item notificacao-item ${lida} ${corClass}"
+                   data-notificacao-id="${this.escapeHtml(notif.id)}">
                     <div class="d-flex align-items-start">
                         <div class="notificacao-icon me-2">
-                            <i class="fas ${icone}"></i>
+                            <i class="fas ${icone}" aria-hidden="true"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="notificacao-titulo">${notif.titulo}</div>
-                            <div class="notificacao-mensagem">${notif.mensagem}</div>
-                            ${notif.created_at ? `<small class="text-muted">${this.formatarData(notif.created_at)}</small>` : ''}
+                            <div class="notificacao-titulo">${this.escapeHtml(notif.titulo || 'Notificação')}</div>
+                            <div class="notificacao-mensagem">${this.escapeHtml(notif.mensagem || 'Você recebeu uma nova notificação.')}</div>
+                            ${notif.created_at ? `<small class="text-muted">${this.escapeHtml(this.formatarData(notif.created_at))}</small>` : ''}
                         </div>
                     </div>
                 </a>
             `;
         }).join('');
-        
+
         // Adicionar botão "Ver todas" se houver mais de 10
         if (notificacoes.length > 10) {
             dropdown.innerHTML += `
@@ -190,7 +197,7 @@ class NotificationManager {
                 </a>
             `;
         }
-        
+
         // Adicionar botão "Marcar todas como lidas" no final
         dropdown.innerHTML += `
             <div class="dropdown-divider"></div>
@@ -199,15 +206,15 @@ class NotificationManager {
             </button>
         `;
     }
-    
+
     showNotification(notif) {
         // Evitar mostrar a mesma notificação múltiplas vezes
         const notifKey = `${notif.tipo}_${notif.processo_id || notif.id}`;
-        
+
         if (this.notificationsShown.has(notifKey)) {
             return;
         }
-        
+
         if (this.permission === 'granted') {
             const notification = new Notification(notif.titulo, {
                 body: notif.mensagem,
@@ -215,41 +222,41 @@ class NotificationManager {
                 badge: '/static/img/logo_cartorio.png',
                 tag: notifKey,
                 requireInteraction: notif.prioridade === 'alta',
-                data: { 
+                data: {
                     url: notif.url,
                     id: notif.id
                 }
             });
-            
+
             notification.onclick = (event) => {
                 event.preventDefault();
                 window.focus();
-                
+
                 if (notif.url) {
                     window.location.href = notif.url;
                 }
-                
+
                 // Marcar como lida se for notificação do banco
                 if (notif.id && !notif.id.toString().startsWith('prazo_')) {
                     this.markAsRead(notif.id);
                 }
-                
+
                 notification.close();
             };
-            
+
             // Adicionar ao set de notificações mostradas
             this.notificationsShown.add(notifKey);
-            
+
             // Remover do set após 1 hora para permitir reexibição
             setTimeout(() => {
                 this.notificationsShown.delete(notifKey);
             }, 60 * 60 * 1000);
-            
+
             // Reproduzir som (opcional)
             this.playNotificationSound();
         }
     }
-    
+
     async markAsRead(notificacaoId) {
         try {
             const response = await fetch(`/notificacoes/api/${notificacaoId}/marcar-lida`, {
@@ -258,9 +265,9 @@ class NotificationManager {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 // Atualizar interface
                 this.checkNotifications();
@@ -269,7 +276,7 @@ class NotificationManager {
             console.error('Erro ao marcar notificação como lida:', error);
         }
     }
-    
+
     async markAllAsRead() {
         try {
             const response = await fetch('/notificacoes/api/marcar-todas-lidas', {
@@ -278,19 +285,19 @@ class NotificationManager {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.showToast('success', 'Todas as notificações foram marcadas como lidas');
                 this.checkNotifications();
             }
         } catch (error) {
             console.error('Erro ao marcar todas como lidas:', error);
-            this.showToast('error', 'Erro ao atualizar notificações');
+            this.showToast('danger', 'Não foi possível atualizar suas notificações. Tente novamente.');
         }
     }
-    
+
     getIconePorTipo(tipo) {
         const icones = {
             'prazo_vencendo': 'fa-clock',
@@ -301,10 +308,10 @@ class NotificationManager {
             'comentario': 'fa-comment',
             'sistema': 'fa-info-circle'
         };
-        
+
         return icones[tipo] || 'fa-bell';
     }
-    
+
     getCorPorPrioridade(prioridade) {
         const cores = {
             'alta': 'border-danger',
@@ -312,15 +319,15 @@ class NotificationManager {
             'normal': 'border-info',
             'baixa': 'border-secondary'
         };
-        
+
         return cores[prioridade] || '';
     }
-    
+
     formatarData(dataString) {
         const data = new Date(dataString);
         const agora = new Date();
         const diff = Math.floor((agora - data) / 1000); // diferença em segundos
-        
+
         if (diff < 60) {
             return 'Agora';
         } else if (diff < 3600) {
@@ -336,7 +343,7 @@ class NotificationManager {
             return data.toLocaleDateString('pt-BR');
         }
     }
-    
+
     playNotificationSound() {
         // Som de notificação (opcional)
         try {
@@ -349,21 +356,21 @@ class NotificationManager {
             // Som não disponível
         }
     }
-    
+
     showToast(type, message) {
-        // Integração com sistema de toast existente
-        if (typeof showToast === 'function') {
-            showToast(type, message);
+        // Integração com o motor global; mantém fallback para páginas antigas.
+        if (typeof window.showToast === 'function') {
+            window.showToast({ type, message });
         } else {
             console.log(`[${type}] ${message}`);
         }
     }
-    
+
     enable() {
         this.enabled = true;
         this.startChecking();
     }
-    
+
     disable() {
         this.enabled = false;
         this.stopChecking();
@@ -375,7 +382,7 @@ let notificationManager;
 
 document.addEventListener('DOMContentLoaded', function() {
     notificationManager = new NotificationManager();
-    
+
     // Expor globalmente para uso em outras partes do código
     window.notificationManager = notificationManager;
 });
