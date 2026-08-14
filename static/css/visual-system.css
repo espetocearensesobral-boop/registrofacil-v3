@@ -1,0 +1,456 @@
+/* ============================================================
+   VISUAL SYSTEM - RegistroFácil 3.18
+   Camada final de normalização visual.
+   Mantém as cores primárias dinâmicas de color-themes.css.
+   ============================================================ */
+
+:root {
+    --rf-font-sans: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --rf-font-size: 1rem;
+    --rf-line-height: 1.5;
+    --rf-space-1: .25rem;
+    --rf-space-2: .5rem;
+    --rf-space-3: .75rem;
+    --rf-space-4: 1rem;
+    --rf-space-5: 1.25rem;
+    --rf-space-6: 1.5rem;
+    --rf-space-8: 2rem;
+    --rf-radius-sm: .375rem;
+    --rf-radius-md: .625rem;
+    --rf-radius-lg: .875rem;
+    --rf-shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
+    --rf-shadow-md: 0 8px 24px rgba(15, 23, 42, .10);
+    --rf-focus-ring: 0 0 0 .2rem color-mix(in srgb, var(--color-primary) 24%, transparent);
+    --rf-text-on-primary: var(--color-primary-contrast, #fff);
+    --rf-text-strong: #172033;
+    --rf-text-body: #293241;
+    --rf-text-muted: #586579;
+    --rf-surface: #fff;
+    --rf-surface-muted: #f4f6f8;
+    --rf-page: #eef1f5;
+    --rf-border: #d9dee7;
+    --rf-border-strong: #b8c1cf;
+}
+
+html {
+    font-size: 16px;
+}
+
+body,
+button,
+input,
+select,
+textarea,
+.dropdown-menu,
+.modal,
+.tooltip,
+.popover {
+    font-family: var(--rf-font-sans);
+}
+
+body {
+    font-size: var(--rf-font-size);
+    line-height: var(--rf-line-height);
+    color: var(--rf-text-body);
+    background: var(--rf-page);
+    text-rendering: optimizeLegibility;
+}
+
+p { margin-bottom: var(--rf-space-4); }
+small, .small { font-size: .875rem; }
+.text-muted { color: var(--rf-text-muted) !important; }
+
+h1, .h1 { font-size: clamp(1.5rem, 1.25rem + .7vw, 2rem); line-height: 1.2; font-weight: 700; }
+h2, .h2 { font-size: clamp(1.25rem, 1.1rem + .45vw, 1.625rem); line-height: 1.25; font-weight: 700; }
+h3, .h3 { font-size: clamp(1.125rem, 1rem + .3vw, 1.375rem); line-height: 1.3; font-weight: 650; }
+h4, .h4, h5, .h5 { font-size: 1.0625rem; line-height: 1.35; font-weight: 650; }
+.page-title-text { font-size: clamp(1.25rem, 1.05rem + .45vw, 1.625rem) !important; font-weight: 700 !important; }
+
+/* Estrutura principal */
+#page-content-wrapper { background: var(--rf-page); }
+#page-content-wrapper .navbar {
+    min-height: 4.25rem;
+    padding: .875rem clamp(1rem, 2vw, 1.75rem);
+    background: var(--rf-surface);
+    border-bottom: 1px solid var(--rf-border);
+    box-shadow: var(--rf-shadow-sm);
+}
+#page-content-wrapper > .container-fluid,
+#page-content-wrapper > main {
+    padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1rem, 2.5vw, 2rem);
+}
+
+/* Sidebar */
+.sidebar { width: 240px; background: #172033; box-shadow: 2px 0 12px rgba(15, 23, 42, .12); }
+#page-content-wrapper { margin-left: 240px; }
+#wrapper.toggled #page-content-wrapper { margin-left: 64px; }
+.sidebar.collapsed { width: 64px; }
+.menu-item { min-height: 46px; height: auto; padding: .7rem 1rem; font-size: .9375rem; }
+.menu-text { font-size: .9375rem; }
+.sidebar-group-label { color: #b8c1cf; font-size: .75rem; letter-spacing: .1em; }
+.menu-item:hover { background: #26334a; }
+.menu-item.active { background: var(--color-primary); color: var(--rf-text-on-primary); }
+
+/* Superfícies e cards */
+.card,
+.rf-card,
+.kpi-bar,
+.filter-bar {
+    border: 1px solid var(--rf-border);
+    border-radius: var(--rf-radius-md);
+    box-shadow: var(--rf-shadow-sm);
+}
+.card { overflow: hidden; }
+.card-header,
+.rf-card-header {
+    padding: .875rem 1.125rem;
+    background: var(--rf-surface-muted);
+    border-bottom: 1px solid var(--rf-border);
+}
+.card-body,
+.rf-card-body { padding: clamp(1rem, 2vw, 1.5rem); }
+.card-title,
+.rf-card-title { color: var(--rf-text-strong); }
+
+/* Formulários: altura e contraste previsíveis */
+.form-label { margin-bottom: .4rem; color: var(--rf-text-strong); font-size: .9375rem; font-weight: 600; }
+.form-control,
+.form-select,
+.input-group-text {
+    min-height: 2.75rem;
+    border: 1px solid var(--rf-border-strong);
+    border-radius: var(--rf-radius-sm);
+    background: var(--rf-surface);
+    color: var(--rf-text-body);
+    font-size: .9375rem;
+}
+.form-control::placeholder { color: #687588; opacity: 1; }
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: var(--rf-focus-ring);
+}
+
+/* Botões: um único ritmo de altura, peso e interação */
+.btn,
+.navbar .nav-btn,
+.btn-filter-apply,
+.btn-filter-clear {
+    min-height: 2.625rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    padding: .55rem .95rem;
+    border-radius: var(--rf-radius-sm);
+    font-size: .9375rem;
+    font-weight: 650;
+    line-height: 1.2;
+    transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.btn:hover,
+.navbar .nav-btn:hover,
+.btn-filter-apply:hover,
+.btn-filter-clear:hover { transform: translateY(-1px); }
+.btn:active,
+.navbar .nav-btn:active { transform: translateY(0); }
+.btn:focus-visible,
+.navbar .nav-btn:focus-visible,
+button:focus-visible,
+a:focus-visible,
+.menu-item:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+[tabindex]:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-primary) 45%, #fff); outline-offset: 2px; }
+.menu-item:focus-visible { background: #26334a; color: #fff; }
+
+/* Campos com seleção e dropdowns deixam claro que são interativos. */
+select, .form-select, [data-bs-toggle="dropdown"] { cursor: pointer; }
+.form-select { padding-right: 2.5rem; }
+
+/* Escala mínima para telas com baixa densidade de conteúdo. */
+.page-title-text + .text-muted,
+.page-header .text-muted,
+.section-subtitle { font-size: .9375rem; line-height: 1.55; }
+.empty-state, .no-results, .placeholder-message { font-size: 1rem; line-height: 1.6; }
+
+.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--rf-text-on-primary); }
+.btn-primary:hover, .btn-primary:focus { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: var(--rf-text-on-primary); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 24%, transparent); }
+.btn-secondary { background: #526071; border-color: #526071; color: #fff; }
+.btn-secondary:hover { background: #3e4b5c; border-color: #3e4b5c; color: #fff; }
+.btn-success { background: #237a3b; border-color: #237a3b; color: #fff; }
+.btn-danger { background: #b4232c; border-color: #b4232c; color: #fff; }
+.btn-warning { background: #a85b00; border-color: #a85b00; color: #fff; }
+.btn-info { background: #1264a3; border-color: #1264a3; color: #fff; }
+.btn-outline-primary { border-color: var(--color-primary); color: var(--color-primary-dark); background: transparent; }
+.btn-outline-primary:hover { background: var(--color-primary); border-color: var(--color-primary); color: var(--rf-text-on-primary); }
+.btn-link { min-height: auto; padding: 0; }
+
+/* Modais e overlays */
+.modal-content { border: 1px solid var(--rf-border); border-radius: var(--rf-radius-lg); box-shadow: var(--rf-shadow-md); overflow: hidden; }
+.modal-header { padding: 1rem 1.25rem; background: var(--rf-surface-muted); border-bottom: 1px solid var(--rf-border); }
+.modal-title { color: var(--rf-text-strong); font-size: 1.125rem; font-weight: 700; }
+.modal-body { padding: 1.25rem; }
+.modal-footer { padding: .875rem 1.25rem; background: #fafbfc; border-top: 1px solid var(--rf-border); }
+.btn-close:focus-visible { box-shadow: var(--rf-focus-ring); }
+
+/* Alertas e badges com fundos suaves e texto legível */
+.alert { border-radius: var(--rf-radius-sm); border-width: 1px; font-size: .9375rem; }
+.alert-success { color: #155b2c; background: #e9f6ed; border-color: #b9e1c3; }
+.alert-danger { color: #842029; background: #fbeaec; border-color: #efb8bf; }
+.alert-warning { color: #704300; background: #fff4dc; border-color: #f1d393; }
+.alert-info { color: #124b78; background: #e8f3fb; border-color: #b7d9ef; }
+.badge, .rf-badge { font-weight: 650; letter-spacing: .01em; }
+
+/* Tabelas e áreas com muito espaço */
+.table, .rf-table { color: var(--rf-text-body); font-size: .9375rem; }
+.table thead th, .rf-table th { padding: .75rem .875rem; color: var(--rf-text-strong); font-size: .8125rem; letter-spacing: .04em; }
+.table tbody td, .rf-table td { padding: .8rem .875rem; vertical-align: middle; }
+.table tbody tr:hover, .rf-table tbody tr:hover td { background: #f6f8fa; }
+
+/* Estados vazios, textos de apoio e paginação */
+.form-text, .text-muted, .empty-state, .pagination { font-size: .875rem; }
+.pagination .page-link { min-width: 2.5rem; min-height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; color: var(--color-primary-dark); }
+
+@media (max-width: 991.98px) {
+    .sidebar { width: 240px; }
+    #page-content-wrapper { margin-left: 0 !important; }
+    #page-content-wrapper > .container-fluid,
+    #page-content-wrapper > main { padding: 1rem; }
+}
+
+@media (max-width: 575.98px) {
+    html { font-size: 15px; }
+    .btn, .navbar .nav-btn { min-height: 2.75rem; }
+    .modal-body { padding: 1rem; }
+    .card-body, .rf-card-body { padding: 1rem; }
+}
+
+/* ============================================================
+   NORMALIZAÇÃO DAS TELAS COM ESTILOS LOCAIS LEGADOS
+   ============================================================ */
+
+/* Botões do topo: todas as variantes compartilham métrica e interação. */
+body .navbar .nav-btn,
+body .nav-btn {
+    min-height: 2.625rem !important;
+    height: 2.625rem !important;
+    padding: .55rem .95rem !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-radius: var(--rf-radius-sm) !important;
+    font-size: .9375rem !important;
+    font-weight: 650 !important;
+    line-height: 1.2 !important;
+    transform: none !important;
+    box-shadow: none !important;
+    transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease !important;
+}
+body .navbar .nav-btn:hover,
+body .nav-btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, .14) !important;
+}
+body .navbar .nav-btn:active,
+body .nav-btn:active { transform: translateY(0) !important; box-shadow: none !important; }
+body .navbar .nav-btn-primary,
+body .nav-btn-primary,
+body .navbar .nav-btn-gold,
+body .nav-btn-gold { background: var(--color-primary) !important; border-color: var(--color-primary) !important; color: var(--rf-text-on-primary) !important; }
+body .navbar .nav-btn-primary:hover,
+body .nav-btn-primary:hover,
+body .navbar .nav-btn-gold:hover,
+body .nav-btn-gold:hover { background: var(--color-primary-dark) !important; border-color: var(--color-primary-dark) !important; color: var(--rf-text-on-primary) !important; }
+body .navbar .nav-btn-secondary,
+body .nav-btn-secondary { background: #526071 !important; border-color: #526071 !important; color: #fff !important; }
+body .navbar .nav-btn-secondary:hover,
+body .nav-btn-secondary:hover { background: #3e4b5c !important; border-color: #3e4b5c !important; color: #fff !important; }
+body .navbar .nav-btn-success,
+body .nav-btn-success { background: #237a3b !important; border-color: #237a3b !important; color: #fff !important; }
+body .navbar .nav-btn-success:hover,
+body .nav-btn-success:hover { background: #195d2d !important; border-color: #195d2d !important; color: #fff !important; }
+body .navbar .nav-btn-danger,
+body .nav-btn-danger { background: #b4232c !important; border-color: #b4232c !important; color: #fff !important; }
+body .navbar .nav-btn-danger:hover,
+body .nav-btn-danger:hover { background: #8f1c23 !important; border-color: #8f1c23 !important; color: #fff !important; }
+body .navbar .nav-btn-warning,
+body .nav-btn-warning { background: #a85b00 !important; border-color: #a85b00 !important; color: #fff !important; }
+body .navbar .nav-btn-warning:hover,
+body .nav-btn-warning:hover { background: #7d4300 !important; border-color: #7d4300 !important; color: #fff !important; }
+body .navbar .nav-btn-info,
+body .nav-btn-info { background: #1264a3 !important; border-color: #1264a3 !important; color: #fff !important; }
+body .navbar .nav-btn-info:hover,
+body .nav-btn-info:hover { background: #0d4d7d !important; border-color: #0d4d7d !important; color: #fff !important; }
+
+/* Cadastros de titular e apresentante: aproveitam melhor a largura e a leitura. */
+.nt-wrap { max-width: 760px !important; }
+.nt-header { padding: 1.25rem 1.5rem !important; }
+.nt-header h5 { font-size: 1.125rem !important; }
+.nt-header small { font-size: .9375rem !important; line-height: 1.5 !important; }
+.nt-body { padding: 1.5rem !important; gap: 1.25rem !important; }
+.nt-fld label { font-size: .9375rem !important; text-transform: none !important; letter-spacing: normal !important; color: var(--rf-text-strong) !important; margin-bottom: .45rem !important; }
+.nt-fld input { height: 2.75rem !important; font-size: 1rem !important; padding: 0 .875rem !important; }
+.nt-row-2 { gap: 1.25rem !important; }
+.nt-footer { padding: 1rem 1.5rem !important; }
+.nt-btn-save, .nt-btn-cancel { min-height: 2.625rem !important; height: 2.625rem !important; font-size: .9375rem !important; border-radius: var(--rf-radius-sm) !important; transition: background-color .18s ease, transform .18s ease, box-shadow .18s ease !important; }
+.nt-btn-save:hover, .nt-btn-cancel:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 10px rgba(15, 23, 42, .14) !important; }
+.nt-required-note { font-size: .875rem !important; }
+
+/* Configurações: substitui a microtipografia local por uma escala legível. */
+.cfg-panel-header h5 { font-size: 1.125rem !important; }
+.cfg-ph-icon { width: 2.5rem !important; height: 2.5rem !important; font-size: 1.125rem !important; }
+.cfg-card-header { padding: .875rem 1rem !important; font-size: .8125rem !important; }
+.cfg-card-body { padding: 1rem !important; }
+.cfg-add-row { padding: 1rem !important; gap: .75rem !important; }
+.cfg-add-row .cfg-fg label, .cfg-fld label { font-size: .875rem !important; text-transform: none !important; letter-spacing: normal !important; color: var(--rf-text-strong) !important; }
+.cfg-add-row .cfg-fg input[type=text], .cfg-add-row .cfg-fg input[type=number], .cfg-fld input, .cfg-fld select { height: 2.75rem !important; font-size: .9375rem !important; }
+.cfg-tbl { font-size: .9375rem !important; }
+.cfg-tbl th { padding: .75rem 1rem !important; font-size: .8125rem !important; }
+.cfg-tbl td { padding: .8rem 1rem !important; }
+.cfg-info-row, .cfg-sw { font-size: .9375rem !important; }
+.cfg-info-lbl { width: 150px !important; font-size: .8125rem !important; }
+.cfg-sbtn, .cfg-obtn, .cfg-btn-add { min-height: 2.625rem !important; height: 2.625rem !important; font-size: .9375rem !important; border-radius: var(--rf-radius-sm) !important; transition: background-color .18s ease, transform .18s ease, box-shadow .18s ease !important; }
+.cfg-sbtn:hover, .cfg-obtn:hover, .cfg-btn-add:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 10px rgba(15, 23, 42, .14) !important; }
+.cfg-fld input:focus, .cfg-fld select:focus, .cfg-add-row input:focus { border-color: var(--color-primary) !important; box-shadow: var(--rf-focus-ring) !important; outline: none !important; }
+
+/* Tela de visualização de processo: menos vazio, mais contraste e texto fluido. */
+.process-detail, .process-view, .det-wrapper, .det-grid { font-size: .9375rem; }
+.det-lbl { font-size: .8125rem !important; font-weight: 700 !important; letter-spacing: .04em !important; color: var(--rf-text-muted) !important; margin-bottom: .4rem !important; }
+.det-val { font-size: 1rem !important; line-height: 1.5 !important; color: var(--rf-text-body) !important; }
+.det-item { padding: 1.125rem 1.25rem !important; }
+.htl-body, .htl-detail { font-size: .9375rem !important; line-height: 1.55 !important; }
+.htl-meta { font-size: .8125rem !important; }
+
+.process-detail h5, .process-view h5, .det-wrapper h5 { font-size: 1.125rem !important; }
+.process-detail p, .process-view p, .det-wrapper p, .det-grid p { font-size: .9375rem !important; line-height: 1.55 !important; }
+.process-detail .text-muted, .process-view .text-muted, .det-wrapper .text-muted { color: var(--rf-text-muted) !important; }
+.process-detail .card, .process-view .card, .det-wrapper .card { margin-bottom: 1.25rem !important; }
+.process-detail .card-body, .process-view .card-body, .det-wrapper .card-body { padding: 1.25rem !important; }
+.process-detail .badge, .process-view .badge, .det-wrapper .badge { font-size: .8125rem !important; padding: .35rem .65rem !important; }
+
+/* Perfil: cards de preferência e conta seguem a mesma hierarquia visual. */
+.profile-appearance-card { margin-bottom: 1.25rem !important; }
+.profile-appearance-card .rf-card-body { min-height: 6.5rem; display: flex; flex-direction: column; justify-content: center; }
+#form-perfil .form-label { font-size: .9375rem !important; text-transform: none !important; letter-spacing: normal !important; color: var(--rf-text-strong) !important; }
+
+@media (max-width: 767.98px) {
+    .nt-row-2 { grid-template-columns: 1fr !important; }
+    .nt-footer { flex-wrap: wrap; }
+    .nt-required-note { width: 100%; margin: 0 !important; }
+    .cfg-form-2, .cfg-form-3 { grid-template-columns: 1fr !important; }
+    .cfg-info-lbl { width: 120px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+
+/* ============================================================
+   PADRÃO ABSOLUTO DE BOTÕES — PRETO E BRANCO, SEM EFEITOS
+   ============================================================ */
+button:not(.btn-close),
+a.btn,
+input[type="submit"],
+input[type="button"],
+.btn:not(.btn-close),
+.nav-btn,
+.cfg-btn-add,
+.cfg-sbtn,
+.cfg-obtn,
+.nt-btn-save,
+.nt-btn-cancel,
+.auth-btn,
+.cfg-ibtn,
+.action-btn,
+.icon-btn {
+    background: #111827 !important;
+    background-image: none !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+button:not(.btn-close):hover,
+a.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.btn:not(.btn-close):hover,
+.nav-btn:hover,
+.cfg-btn-add:hover,
+.cfg-sbtn:hover,
+.cfg-obtn:hover,
+.nt-btn-save:hover,
+.nt-btn-cancel:hover,
+.auth-btn:hover,
+.cfg-ibtn:hover,
+.action-btn:hover,
+.icon-btn:hover,
+button:not(.btn-close):active,
+a.btn:active,
+input[type="submit"]:active,
+input[type="button"]:active,
+.btn:not(.btn-close):active,
+.nav-btn:active,
+.cfg-btn-add:active,
+.cfg-sbtn:active,
+.cfg-obtn:active,
+.nt-btn-save:active,
+.nt-btn-cancel:active,
+.auth-btn:active,
+.cfg-ibtn:active,
+.action-btn:active,
+.icon-btn:active {
+    background: #111827 !important;
+    background-image: none !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+button:not(.btn-close):disabled,
+a.btn.disabled,
+.btn:not(.btn-close):disabled,
+.nav-btn:disabled,
+input[type="submit"]:disabled,
+input[type="button"]:disabled {
+    background: #111827 !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+    opacity: .55 !important;
+    cursor: not-allowed;
+}
+
+/* O foco permanece apenas como indicador de teclado, sem mudança cromática. */
+button:not(.btn-close):focus-visible,
+a.btn:focus-visible,
+.btn:not(.btn-close):focus-visible,
+.nav-btn:focus-visible,
+.cfg-btn-add:focus-visible,
+.cfg-sbtn:focus-visible,
+.cfg-obtn:focus-visible,
+.nt-btn-save:focus-visible,
+.nt-btn-cancel:focus-visible,
+.auth-btn:focus-visible,
+.cfg-ibtn:focus-visible,
+.action-btn:focus-visible,
+.icon-btn:focus-visible {
+    outline: 3px solid #111827 !important;
+    outline-offset: 3px;
+}
+
+/* O fechamento de modais mantém apenas a affordance de fechar, sem hover cromático. */
+.btn-close:hover,
+.btn-close:focus,
+.btn-close:active { opacity: .8; box-shadow: none !important; transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    button, a, input, select, textarea { transition: none !important; }
+}
