@@ -1,4 +1,9 @@
 import models
+from config import Config
+
+
+def _default_admin_password():
+    return Config.INITIAL_ADMIN_PASSWORD or "admin123"
 
 
 def _csrf_token(client):
@@ -16,7 +21,7 @@ def test_dashboard_requires_login(app_client):
 def test_login_rejects_invalid_csrf(app_client):
     response = app_client.post(
         "/login",
-        data={"usuario": "admin", "senha": "admin123", "csrf_token": "invalid"},
+        data={"usuario": "admin", "senha": _default_admin_password(), "csrf_token": "invalid"},
     )
     assert response.status_code == 200
     with app_client.session_transaction() as session:
@@ -32,7 +37,7 @@ def test_login_requires_password_change_on_default_account(app_client):
         "/login",
         data={
             "usuario": "admin",
-            "senha": "admin123",
+            "senha": _default_admin_password(),
             "csrf_token": _csrf_token(app_client),
         },
     )
