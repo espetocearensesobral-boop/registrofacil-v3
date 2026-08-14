@@ -344,3 +344,113 @@ body .nav-btn-info:hover { background: #0d4d7d !important; border-color: #0d4d7d
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* ============================================================
+   PADRÃO ABSOLUTO DE BOTÕES — PRETO E BRANCO, SEM EFEITOS
+   ============================================================ */
+button:not(.btn-close),
+a.btn,
+input[type="submit"],
+input[type="button"],
+.btn:not(.btn-close),
+.nav-btn,
+.cfg-btn-add,
+.cfg-sbtn,
+.cfg-obtn,
+.nt-btn-save,
+.nt-btn-cancel,
+.auth-btn,
+.cfg-ibtn,
+.action-btn,
+.icon-btn {
+    background: #111827 !important;
+    background-image: none !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+button:not(.btn-close):hover,
+a.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.btn:not(.btn-close):hover,
+.nav-btn:hover,
+.cfg-btn-add:hover,
+.cfg-sbtn:hover,
+.cfg-obtn:hover,
+.nt-btn-save:hover,
+.nt-btn-cancel:hover,
+.auth-btn:hover,
+.cfg-ibtn:hover,
+.action-btn:hover,
+.icon-btn:hover,
+button:not(.btn-close):active,
+a.btn:active,
+input[type="submit"]:active,
+input[type="button"]:active,
+.btn:not(.btn-close):active,
+.nav-btn:active,
+.cfg-btn-add:active,
+.cfg-sbtn:active,
+.cfg-obtn:active,
+.nt-btn-save:active,
+.nt-btn-cancel:active,
+.auth-btn:active,
+.cfg-ibtn:active,
+.action-btn:active,
+.icon-btn:active {
+    background: #111827 !important;
+    background-image: none !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+button:not(.btn-close):disabled,
+a.btn.disabled,
+.btn:not(.btn-close):disabled,
+.nav-btn:disabled,
+input[type="submit"]:disabled,
+input[type="button"]:disabled {
+    background: #111827 !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+    opacity: .55 !important;
+    cursor: not-allowed;
+}
+
+/* O foco permanece apenas como indicador de teclado, sem mudança cromática. */
+button:not(.btn-close):focus-visible,
+a.btn:focus-visible,
+.btn:not(.btn-close):focus-visible,
+.nav-btn:focus-visible,
+.cfg-btn-add:focus-visible,
+.cfg-sbtn:focus-visible,
+.cfg-obtn:focus-visible,
+.nt-btn-save:focus-visible,
+.nt-btn-cancel:focus-visible,
+.auth-btn:focus-visible,
+.cfg-ibtn:focus-visible,
+.action-btn:focus-visible,
+.icon-btn:focus-visible {
+    outline: 3px solid #111827 !important;
+    outline-offset: 3px;
+}
+
+/* O fechamento de modais mantém apenas a affordance de fechar, sem hover cromático. */
+.btn-close:hover,
+.btn-close:focus,
+.btn-close:active { opacity: .8; box-shadow: none !important; transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    button, a, input, select, textarea { transition: none !important; }
+}
