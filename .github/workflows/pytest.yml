@@ -20,7 +20,7 @@ jobs:
     env:
       REGISTROFACIL_ENV: test
       SECRET_KEY: ci-test-secret-key
-      ENCRYPTION_KEY: ci-test-encryption-key
+      ENCRYPTION_KEY: MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=
       INITIAL_ADMIN_PASSWORD: ci-admin-password
       SESSION_COOKIE_SECURE: "false"
 
