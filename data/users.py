@@ -42,8 +42,8 @@ def get_user_by_username(username):
         # CORREÇÃO DE IMAGEM/CACHE: Adicionando updated_at na query para o cache-busting
         return executar_query(
             "SELECT id, nome, email, usuario, senha, ativo, foto, role, "
-            "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at "
-            "FROM usuarios WHERE usuario = ?",
+            "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at, "
+            "must_change_password FROM usuarios WHERE usuario = ?",
             [username],
             fetch_one=True
         )
@@ -53,7 +53,7 @@ def get_user_by_username(username):
             logger.warning(f"Coluna 'session_invalidate_at' não encontrada durante a inicialização/migração. Selecionando usuário sem ela. Erro: {e}")
             return executar_query(
                 "SELECT id, nome, email, usuario, senha, ativo, foto, role, "
-                "created_at, updated_at, deleted_at, last_login_at "
+                "created_at, updated_at, deleted_at, last_login_at, must_change_password "
                 "FROM usuarios WHERE usuario = ?",
                 [username],
                 fetch_one=True
