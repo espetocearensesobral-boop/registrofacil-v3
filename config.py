@@ -23,6 +23,10 @@ else:
 
 class Config:
     VERSION = '3.17.6'
+    ENVIRONMENT = os.environ.get('REGISTROFACIL_ENV', 'development').strip().lower()
+    IS_PRODUCTION = ENVIRONMENT in {'production', 'prod'}
+    INITIAL_ADMIN_PASSWORD = os.environ.get('INITIAL_ADMIN_PASSWORD')
+    TRUST_PROXY_HEADERS = os.environ.get('TRUST_PROXY_HEADERS', 'false').strip().lower() == 'true'
     # SECRET_KEY persistente: gerado uma vez e salvo em arquivo oculto.
     # Sem persistência, toda reinicialização invalida as sessões ativas dos usuários.
     _secret_key_file = os.path.join(DATA_DIR, '.secret_key')
@@ -55,7 +59,7 @@ class Config:
     # Segurança dos cookies de sessão
     SESSION_COOKIE_HTTPONLY = True   # Impede acesso JS ao cookie
     SESSION_COOKIE_SAMESITE = 'Lax'  # Proteção CSRF
-    SESSION_COOKIE_SECURE = False    # Mudar para True em produção com HTTPS
+    SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'true' if IS_PRODUCTION else 'false').strip().lower() == 'true'
 
     TENTATIVAS_MAX = 5
     BLOQUEIO_TEMPO = 900

@@ -144,7 +144,7 @@ def proteger_input(text):
 
 
 def get_client_ip():
-    if request.headers.get('X-Forwarded-For'):
+    if Config.TRUST_PROXY_HEADERS and request.headers.get('X-Forwarded-For'):
         return request.headers.get('X-Forwarded-For').split(',')[0].strip()
     return request.remote_addr
 

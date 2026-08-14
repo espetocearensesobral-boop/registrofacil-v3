@@ -1,0 +1,57 @@
+name: Python tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - refactor/models-modularizacao
+  push:
+    branches:
+      - main
+      - refactor/models-modularizacao
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    name: pytest (Python 3.11)
+    runs-on: ubuntu-latest
+    env:
+      REGISTROFACIL_ENV: test
+      SECRET_KEY: ci-test-secret-key
+      ENCRYPTION_KEY: MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=
+      INITIAL_ADMIN_PASSWORD: ci-admin-password
+      SESSION_COOKIE_SECURE: "false"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcairo2 \
+            libpango-1.0-0 \
+            libpangoft2-1.0-0 \
+            libgdk-pixbuf-2.0-0 \
+            libffi-dev \
+            libmagic1 \
+            shared-mime-info
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          grep -v '^python-magic-bin==' requirements.txt > /tmp/requirements-ci.txt
+          python -m pip install -r /tmp/requirements-ci.txt
+          python -m pip install python-magic pytest
+
+      - name: Run test suite
+        run: python -m pytest -q
