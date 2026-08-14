@@ -91,3 +91,28 @@ As variáveis `REGISTROFACIL_UPDATE_CONFIG`, `REGISTROFACIL_UPDATE_MANIFEST_URL`
 
 [1]: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases "GitHub Docs — Linking to releases"
 [2]: https://docs.github.com/en/rest/releases/assets "GitHub Docs — REST API endpoints for release assets"
+
+## Launcher externo de releases
+
+O módulo `data/update_launcher.py` prepara releases fora do diretório ativo. A estrutura usada é:
+
+```text
+DATA_DIR/updates/
+├── downloads/
+├── staging/
+├── releases/
+├── backups/
+└── current.json
+```
+
+O launcher aceita somente pacotes HTTPS, exige SHA-256 com 64 caracteres hexadecimais, rejeita entradas ZIP com `..` ou caminhos absolutos e grava o ponteiro `current.json` com `os.replace`, evitando um arquivo parcialmente escrito.
+
+Comandos disponíveis:
+
+```bash
+python -m data.update_launcher prepare caminho/manifest.json
+python -m data.update_launcher backup
+python -m data.update_launcher activate 3.19.0
+```
+
+O comando `prepare` somente baixa, valida e prepara a release. O comando `backup` copia banco, uploads e chaves. A ativação deve ser executada pelo supervisor externo depois que o Flask estiver bloqueando novas operações e o backup tiver sido confirmado. Ainda não é recomendado chamar `activate` diretamente a partir de uma requisição web.
