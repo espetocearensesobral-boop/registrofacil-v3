@@ -56,3 +56,13 @@ Para executar apenas os testes HTTP:
 ```bash
 python -m pytest tests/test_http_auth.py tests/test_http_authorization.py -q
 ```
+
+## Atualização coordenada do sistema
+
+A primeira etapa do atualizador usa a tabela `configuracoes` para persistir o estado `system_update_state` em JSON. Isso evita criar uma tabela nova apenas para o controle inicial e mantém compatibilidade com bancos existentes.
+
+Os estados principais são `idle`, `update_available`, `awaiting_confirmation`, `maintenance_pending`, `failed` e `ready`. O estado inclui versão de origem, versão de destino, progresso, mensagem, erro e indicação de recarga. Todos os terminais autenticados consultam `GET /api/system/update/status` e exibem o modo de manutenção quando há uma atualização em andamento.
+
+As rotas administrativas são `POST /api/system/update/check`, `POST /api/system/update/confirm` e `POST /api/system/update/cancel`. Confirmação e cancelamento exigem autenticação administrativa e CSRF. O servidor retorna HTTP `423 Locked` para operações mutáveis enquanto o estado está em manutenção; bloquear apenas os botões do navegador não é suficiente.
+
+Nesta etapa, `REGISTROFACIL_UPDATE_VERSION` pode ser usado em homologação para simular uma nova versão. O download, a conferência de assinatura, o backup, a troca atômica de diretórios e o reinício devem ser executados por um launcher externo, que será integrado em uma etapa posterior. O Flask não deve substituir os próprios arquivos enquanto estiver atendendo requisições.

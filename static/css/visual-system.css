@@ -454,3 +454,44 @@ a.btn:focus-visible,
 @media (prefers-reduced-motion: reduce) {
     button, a, input, select, textarea { transition: none !important; }
 }
+
+
+/* Atualização do sistema: bloqueio global e progresso persistente. */
+.system-update-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 12000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(15, 23, 42, .78);
+}
+.system-update-dialog {
+    width: min(100%, 31rem);
+    padding: 2rem;
+    text-align: center;
+    color: #fff;
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 1rem;
+}
+.system-update-icon {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    font-size: 1.35rem;
+}
+.system-update-dialog h2 { margin: 0 0 .75rem; font-size: 1.35rem; }
+.system-update-dialog p { margin: 0 0 1.25rem; color: #e5e7eb; line-height: 1.55; }
+.system-update-progress { height: .75rem; overflow: hidden; background: #374151; border-radius: 999px; }
+.system-update-progress-bar { height: 100%; background: #fff; transition: width .25s ease; }
+.system-update-progress-label { margin-top: .65rem; font-weight: 700; color: #fff; }
+.system-update-error { margin-top: 1rem; padding: .75rem; color: #fff; background: #7f1d1d; border-radius: .5rem; }
+html.system-update-active { overflow: hidden; }
+html.system-update-active body > *:not(#system-update-overlay) { pointer-events: none; user-select: none; }

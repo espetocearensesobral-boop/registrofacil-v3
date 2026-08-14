@@ -88,6 +88,28 @@ def create_app():
             from routes.auth import gerar_csrf_token
             gerar_csrf_token()
 
+    @app.before_request
+    def block_mutations_during_update():
+        """Impede alterações enquanto o sistema está em atualização."""
+        if request.method not in {'POST', 'PUT', 'PATCH', 'DELETE'}:
+            return None
+        endpoint = request.endpoint or ''
+        if endpoint.startswith('system_updates.') or endpoint in {'auth.login', 'auth.logout'}:
+            return None
+        try:
+            from data.system_updates import get_update_state, is_maintenance_active
+            if is_maintenance_active(get_update_state()):
+                message = 'O sistema está em atualização. Aguarde a conclusão para continuar.'
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.is_json:
+                    from flask import jsonify
+                    return jsonify(success=False, message=message, type='maintenance'), 423
+                return message, 423
+        except Exception:
+            # Falha na leitura do estado não deve derrubar a aplicação.
+            # O endpoint de atualização registrará a falha caso necessário.
+            return None
+        return None
+
     @app.context_processor
     def inject_global_vars():
         # Apenas injeta o valor já garantido pelo before_request acima.
@@ -168,6 +190,7 @@ def create_app():
     from routes.notificacoes import notificacoes_bp
     from routes.perfil import perfil_bp  # NOVA ROTA
     from routes.permissoes import permissoes_bp  # SISTEMA DE PERMISSÕES
+    from routes.system_updates import system_updates_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(titulares_bp)
@@ -185,6 +208,7 @@ def create_app():
     app.register_blueprint(notificacoes_bp)
     app.register_blueprint(perfil_bp)  # REGISTRAR NOVA ROTA
     app.register_blueprint(permissoes_bp)  # REGISTRAR SISTEMA DE PERMISSÕES
+    app.register_blueprint(system_updates_bp)
 
 
     @app.route('/')
