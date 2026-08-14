@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Usuários - Registro Fácil{% endblock %}
+
+{% block page_title %}Gerenciar Usuários{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('auth.novo_usuario') }}" class="nav-btn nav-btn-primary">
+        <i class="bi bi-person-plus"></i> Novo Usuário
+    </a>
+    <a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-person-badge-fill"></i> Perfis de Permissão
+    </a>
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-house"></i> Dashboard
+    </a>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card kpi-info">
+        <div class="kpi-label">Total de Usuários</div>
+        <div class="kpi-value kpi-info">{{ contagem_total }}</div>
+        <div class="kpi-sub">Cadastrados no sistema</div>
+        <i class="bi bi-person-lines-fill kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-label">Ativos</div>
+        <div class="kpi-value kpi-success">{{ contagem_ativos }}</div>
+        <div class="kpi-sub">Com acesso habilitado</div>
+        <i class="bi bi-person-check kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Inativos</div>
+        <div class="kpi-value kpi-danger">{{ contagem_inativos }}</div>
+        <div class="kpi-sub">Com acesso desabilitado</div>
+        <i class="bi bi-person-x kpi-bg-icon"></i>
+    </div>
+</div>
+
+<div class="filter-bar {% if has_active_filters %}active-filters{% endif %}">
+    <button class="filter-bar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false">
+        <i class="bi bi-funnel-fill"></i> <strong>Filtros</strong>
+        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
+    </button>
+
+    <div class="collapse filter-bar-body" id="filterCollapse">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-12 col-md-4">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-select">
+                    <option value="ativo" {% if filtro_status == 'ativo' %}selected{% endif %}>Ativos</option>
+                    <option value="inativo" {% if filtro_status == 'inativo' %}selected{% endif %}>Inativos</option>
+                    <option value="todos" {% if filtro_status == 'todos' %}selected{% endif %}>Todos</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="busca" class="form-label">Buscar</label>
+                <input type="text" name="busca" id="busca" class="form-control"
+                       value="{{ filtro_busca | default('') }}"
+                       placeholder="Usuário, nome ou e-mail">
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="itens_por_pagina" class="form-label">Registros por página</label>
+                <select name="itens_por_pagina" id="itens_por_pagina" class="form-select">
+                    <option value="10" {% if itens_por_pagina == 10 %}selected{% endif %}>10</option>
+                    <option value="25" {% if itens_por_pagina == 25 %}selected{% endif %}>25</option>
+                    <option value="50" {% if itens_por_pagina == 50 %}selected{% endif %}>50</option>
+                    <option value="100" {% if itens_por_pagina == 100 %}selected{% endif %}>100</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn-filter-apply">
+                    <i class="bi bi-funnel me-1"></i> Filtrar
+                </button>
+                <a href="{{ url_for('admin_users.users_list') }}" class="btn btn-limpar ms-2">
+                    <i class="bi bi-x-circle me-1"></i> Limpar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if filtro_status == 'inativo' %}
+<div style="background:rgba(30,136,229,.08);border:1px solid rgba(30,136,229,.2);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--color-info);margin-bottom:1rem;">
+    <i class="bi bi-info-circle-fill me-2"></i>
+    Usuários inativos não podem acessar o sistema. Para reativar um usuário, edite o perfil e marque-o como "Ativo".
+</div>
+{% endif %}
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center py-3">
+        <h5 class="m-0">Lista de Usuários</h5>
+        <span class="badge bg-primary rounded-pill">
+            {% if filtro_status == 'todos' %}Total{% else %}{{ filtro_status | capitalize }}{% endif %}: {{ total_usuarios }}
+        </span>
+    </div>
+    <div class="card-body p-0">
+        {% if not usuarios %}
+            <div class="empty-state">
+                <i class="bi bi-people text-muted"></i>
+                <h4 class="mb-2">Nenhum usuário encontrado</h4>
+                <p class="text-muted mb-4">Nenhum usuário encontrado para os filtros aplicados.</p>
+                <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary">
+                    <i class="bi bi-x-circle me-1"></i> Limpar Filtros
+                </a>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="rf-table table-usuarios">
+                    <thead>
+                        <tr>
+                            <th>
+                                {% set temp_args = request.args.to_dict() %}
+                                {% set new_ordenar_val = 'id_asc' if ordenar == 'id_desc' else 'id_desc' %}
+                                <a href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    ID
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'id_asc' else ('bi-sort-down' if ordenar == 'id_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th>
+                                {% set temp_args = request.args.to_dict() %}
+                                {% set new_ordenar_val = 'usuario_asc' if ordenar == 'usuario_desc' else 'usuario_desc' %}
+                                <a href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Usuário
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'usuario_asc' else ('bi-sort-down' if ordenar == 'usuario_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th>
+                                {% set temp_args = request.args.to_dict() %}
+                                {% set new_ordenar_val = 'nome_asc' if ordenar == 'nome_desc' else 'nome_desc' %}
+                                <a href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Nome Completo
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'nome_asc' else ('bi-sort-down' if ordenar == 'nome_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th>
+                                {% set temp_args = request.args.to_dict() %}
+                                {% set new_ordenar_val = 'email_asc' if ordenar == 'email_desc' else 'email_desc' %}
+                                <a href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    E-mail
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'email_asc' else ('bi-sort-down' if ordenar == 'email_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th>
+                                {% set temp_args = request.args.to_dict() %}
+                                {% set new_ordenar_val = 'created_at_asc' if ordenar == 'created_at_desc' else 'created_at_desc' %}
+                                <a href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Cadastrado em
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'created_at_asc' else ('bi-sort-down' if ordenar == 'created_at_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th>
+                                {% set temp_args = request.args.to_dict() %}
+                                {% set new_ordenar_val = 'status_asc' if ordenar == 'status_desc' else 'status_desc' %}
+                                <a href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Status
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'status_asc' else ('bi-sort-down' if ordenar == 'status_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_item in usuarios %}
+                            <tr data-user-id="{{ user_item.id }}">
+                                <td data-label="ID">{{ user_item.id }}</td>
+                                <td data-label="Usuário">{{ user_item.usuario }}</td>
+                                <td data-label="Nome Completo">{{ user_item.nome }}</td>
+                                <td data-label="E-mail">{{ user_item.email }}</td>
+                                <td data-label="Cadastrado em">{{ user_item.created_at | format_datetime_full }}</td>
+                                <td data-label="Status">
+                                    {% if user_item.ativo %}
+                                        <span class="badge bg-success">Ativo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary" title="Inativado em {{ user_item.deleted_at | format_datetime_full if user_item.deleted_at }}">
+                                            Inativo
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td data-label="Ações" class="text-end">
+                                    <div class="tbl-actions">
+                                        {# Botão de Permissões #}
+                                        {% if user_item.role not in ['admin', 'suporte'] %}
+                                            <a href="{{ url_for('permissoes.visualizar_permissoes', usuario_id=user_item.id) }}"
+                                               class="tbl-btn view"
+                                               title="Gerenciar Permissões">
+                                                <i class="bi bi-shield-lock"></i>
+                                            </a>
+                                        {% else %}
+                                            <span class="tbl-btn" style="opacity:.35;cursor:default;" title="Administradores têm acesso total">
+                                                <i class="bi bi-shield-check"></i>
+                                            </span>
+                                        {% endif %}
+
+                                        {# Botão de Gerenciar #}
+                                        <a href="{{ url_for('perfil.index', user_id=user_item.id) }}" class="tbl-btn edit" title="Gerenciar Usuário">
+                                            <i class="bi bi-gear"></i>
+                                        </a>
+
+                                        {# Botão de Inativar #}
+                                        {% if user_item.ativo and user_item.id != current_user_id %}
+                                            <button type="button" class="tbl-btn del" title="Inativar Usuário"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#inactivateModal"
+                                                    data-user-id="{{ user_item.id }}"
+                                                    data-user-name="{{ user_item.nome }}">
+                                                <i class="bi bi-person-slash"></i>
+                                            </button>
+                                        {% else %}
+                                            <span class="tbl-btn" style="opacity:.25;cursor:default;" title="{% if user_item.id == current_user_id %}Você não pode inativar sua própria conta{% else %}Usuário já inativo{% endif %}">
+                                                <i class="bi bi-person-slash"></i>
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if total_paginas > 1 %}
+                {% set temp_args = request.args.to_dict() %}
+                {% set inicio = (pagina_atual - 1) * itens_por_pagina + 1 %}
+                {% set fim = inicio + usuarios|length - 1 %}
+                <div class="rf-pagination">
+                    <div></div>
+                    <div class="rf-pagination-nav">
+                        <nav aria-label="Paginação">
+                            <ul class="pagination mb-0" style="gap:3px;">
+                                <li class="page-item {{ 'disabled' if pagina_atual <= 1 }}">
+                                    <a class="page-link" href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': pagina_atual - 1}))) }}">Anterior</a>
+                                </li>
+                                {% set max_links = 7 %}
+                                {% set start_p = [1, pagina_atual - (max_links // 2)] | max %}
+                                {% set end_p = [total_paginas, start_p + max_links - 1] | min %}
+                                {% set start_p = [1, end_p - max_links + 1] | max %}
+                                {% if start_p > 1 %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': 1}))) }}">1</a></li>
+                                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                {% endif %}
+                                {% for i in range(start_p, end_p + 1) %}
+                                    <li class="page-item {{ 'active' if i == pagina_atual }}">
+                                        <a class="page-link" href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': i}))) }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if end_p < total_paginas %}
+                                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': total_paginas}))) }}">{{ total_paginas }}</a></li>
+                                {% endif %}
+                                <li class="page-item {{ 'disabled' if pagina_atual >= total_paginas }}">
+                                    <a class="page-link" href="{{ url_for('admin_users.users_list', **(temp_args | combine({'pagina': pagina_atual + 1}))) }}">Próximo</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="rf-pagination-info">
+                        Mostrando {{ inicio }}–{{ fim }} de {{ total_usuarios }} registro{{ 's' if total_usuarios != 1 }}
+                    </div>
+                </div>
+            {% endif %}
+            {% endif %}
+    </div>
+</div>
+
+{# Modal de Confirmação de Inativação de Usuário (inalterado) #}
+<div class="modal fade" id="inactivateModal" tabindex="-1" aria-labelledby="inactivateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="inactivateModalLabel">Confirmar Inativação de Usuário</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="inactivateForm" action="{{ url_for('admin_users.users_list') }}">
+                <div class="modal-body">
+                    <p>Tem certeza que deseja **inativar** o usuário <strong id="inactivateUserName"></strong>? Ele perderá o acesso ao sistema. Todos os processos sob sua responsabilidade serão reatribuídos a você.</p>
+                    <p class="text-danger fw-bold">Esta ação não pode ser desfeita diretamente por usuários comuns. Um administrador precisará reativá-lo.</p>
+                    <div class="mb-3">
+                        <label for="senhaAdmin" class="form-label">Sua Senha</label>
+                        <input type="password" class="form-control" id="senhaAdmin" name="senha_admin" required autocomplete="current-password">
+                        <small class="text-muted">Digite sua senha para confirmar a inativação.</small>
+                        <div class="invalid-feedback">Por favor, informe sua senha.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden" name="id_usuario" id="inactivateUserId">
+                    <input type="hidden" name="action" value="inativar_usuario">
+                    <button type="submit" class="btn btn-danger">Confirmar Inativação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lógica para o botão de colapsar/exibir filtros
+        const filterCollapse = document.getElementById('filterCollapse');
+        const filterToggleText = document.querySelector('.filter-toggle #filterToggleText');
+        const filterToggleButton = document.querySelector('[data-bs-target="#filterCollapse"]');
+
+        if (filterCollapse && filterToggleText && filterToggleButton) {
+            filterCollapse.addEventListener('show.bs.collapse', function () {
+                filterToggleText.textContent = 'Recolher Filtros';
+                filterToggleButton.setAttribute('aria-expanded', 'true');
+            });
+
+            filterCollapse.addEventListener('hide.bs.collapse', function () {
+                filterToggleText.textContent = 'Filtros Avançados';
+                filterToggleButton.setAttribute('aria-expanded', 'false');
+            });
+
+            filterToggleText.textContent = 'Filtros Avançados';
+            filterToggleButton.setAttribute('aria-expanded', 'false');
+        }
+
+        // Configurar o modal de inativação
+        const inactivateModal = document.getElementById('inactivateModal');
+        if (inactivateModal) {
+            inactivateModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const userId = button.getAttribute('data-user-id');
+                const userName = button.getAttribute('data-user-name');
+
+                const modalUserIdInput = this.querySelector('#inactivateUserId');
+                const modalUserNameDisplay = this.querySelector('#inactivateUserName');
+                const senhaAdminInput = this.querySelector('#senhaAdmin');
+
+                if (modalUserIdInput) modalUserIdInput.value = userId;
+                if (modalUserNameDisplay) modalUserNameDisplay.textContent = userName;
+                if (senhaAdminInput) {
+                    senhaAdminInput.value = '';
+                    senhaAdminInput.classList.remove('is-invalid', 'is-valid');
+                }
+                this.querySelector('form').classList.remove('was-validated');
+            });
+        }
+    });
+</script>
+{% endblock scripts %}

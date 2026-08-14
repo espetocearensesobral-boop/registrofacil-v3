@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+
+{% block title %}Todos os Processos - Registro Fácil{% endblock %}
+
+{% block page_title %}Todos os Processos{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary">
+        <i class="bi bi-plus-circle"></i> Novo Processo
+    </a>
+    <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#printListModal">
+        <i class="bi bi-printer"></i> Imprimir
+    </button>
+    <div class="dropdown">
+        <button class="nav-btn nav-btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-download"></i> Exportar
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{{ url_for('processos.exportar_excel', **request.args.to_dict()) }}">
+                <i class="bi bi-filetype-xlsx me-2"></i>Exportar Excel
+            </a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div id="processos-container">
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Atrasados</div>
+        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
+        <div class="kpi-sub">Com prazo vencido</div>
+        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-warning">
+        <div class="kpi-label">Pendentes</div>
+        <div class="kpi-value kpi-warning">{{ processos_andamento }}</div>
+        <div class="kpi-sub">Aguardando conclusão</div>
+        <i class="bi bi-hourglass-split kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-gold">
+        <div class="kpi-label">Total</div>
+        <div class="kpi-value kpi-gold">{{ total_processos }}</div>
+        <div class="kpi-sub">Processos no sistema</div>
+        <i class="bi bi-archive-fill kpi-bg-icon"></i>
+    </div>
+</div>
+
+<div class="filter-bar {% if has_active_filters %}active-filters{% endif %}">
+    <button class="filter-bar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false">
+        <i class="bi bi-funnel-fill"></i> <strong>Filtros</strong>
+        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
+    </button>
+<div class="collapse filter-bar-body" id="filterCollapse">
+    <form hx-get="{{ url_for('processos.todos') }}" hx-target="#processos-container" hx-select="#processos-container" hx-push-url="true" hx-indicator=".loader-overlay" class="row g-3 align-items-end">
+        <div class="col-md-6 col-lg-3">
+            <label for="busca" class="form-label">Buscar</label>
+            <input type="text" name="busca" id="busca" class="form-control"
+                   placeholder="ID, Titular, Matrícula..."
+                   value="{{ filtro_busca | default('') }}">
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <label for="status" class="form-label">Status</label>
+            <select name="status" id="status" class="form-select">
+                <option value="">Todos</option>
+                {% for status in status_list %}
+                    <option value="{{ status.id }}" {% if filtro_status_id == status.id %}selected{% endif %}>
+                        {{ status.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <label for="tipo" class="form-label">Tipo de Serviço</label>
+            <select name="tipo" id="tipo" class="form-select">
+                <option value="">Todos</option>
+                {% for tipo in tipos_servico %}
+                    <option value="{{ tipo.id }}" {% if filtro_tipo == tipo.id %}selected{% endif %}>
+                        {{ tipo.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <label for="envolve_notas" class="form-label">Envolve Notas</label>
+            <select name="envolve_notas" id="envolve_notas" class="form-select">
+                <option value="">Todos</option>
+                <option value="1" {% if filtro_envolve_notas == 1 %}selected{% endif %}>Sim</option>
+                <option value="0" {% if filtro_envolve_notas == 0 %}selected{% endif %}>Não</option>
+            </select>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <label for="data_inicio" class="form-label">Data Início</label>
+            <input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ filtro_data_inicio | default('') }}">
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <label for="data_fim" class="form-label">Data Fim</label>
+            <input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ filtro_data_fim | default('') }}">
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <label for="ordenar" class="form-label">Ordenar por</label>
+            <select name="ordenar" id="ordenar" class="form-select">
+                <option value="id_desc" {% if ordenar == 'id_desc' %}selected{% endif %}>ID (Mais Recente)</option>
+                <option value="id_asc" {% if ordenar == 'id_asc' %}selected{% endif %}>ID (Mais Antigo)</option>
+                <option value="data_entrada_desc" {% if ordenar == 'data_entrada_desc' %}selected{% endif %}>Entrada (Mais Recente)</option>
+                <option value="data_entrada_asc" {% if ordenar == 'data_entrada_asc' %}selected{% endif %}>Entrada (Mais Antiga)</option>
+                <option value="titular_asc" {% if ordenar == 'titular_asc' %}selected{% endif %}>Titular (A-Z)</option>
+                <option value="titular_desc" {% if ordenar == 'titular_desc' %}selected{% endif %}>Titular (Z-A)</option>
+                <option value="status_asc" {% if ordenar == 'status_asc' %}selected{% endif %}>Status (A-Z)</option>
+                <option value="status_desc" {% if ordenar == 'status_desc' %}selected{% endif %}>Status (Z-A)</option>
+                <option value="prazo_asc" {% if ordenar == 'prazo_asc' %}selected{% endif %}>Prazo (Crescente)</option>
+                <option value="prazo_desc" {% if ordenar == 'prazo_desc' %}selected{% endif %}>Prazo (Decrescente)</option>
+            </select>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <label for="registros_por_pagina" class="form-label">Registros por página</label>
+            <select name="registros_por_pagina" id="registros_por_pagina" class="form-select">
+                <option value="10" {% if registros_por_pagina == 10 %}selected{% endif %}>10</option>
+                <option value="25" {% if registros_por_pagina == 25 %}selected{% endif %}>25</option>
+                <option value="50" {% if registros_por_pagina == 50 %}selected{% endif %}>50</option>
+                <option value="100" {% if registros_por_pagina == 100 %}selected{% endif %}>100</option>
+            </select>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+            <button type="submit" class="btn-filter-apply">
+                <i class="bi bi-funnel me-1"></i> Filtrar
+            </button>
+            <a href="{{ url_for('processos.todos') }}" hx-get="{{ url_for('processos.todos') }}" hx-target="#processos-container" hx-select="#processos-container" hx-push-url="true" hx-indicator=".loader-overlay" class="btn-filter-clear">
+                <i class="bi bi-x-circle me-1"></i> Limpar
+            </a>
+        </div>
+    </form>
+   </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center py-3">
+        <h6 class="rf-card-title mb-0"><i class="bi bi-folder-fill"></i> Todos os Processos</h6>
+        <span class="rf-badge count">{{ total_registros }}</span>
+    </div>
+    <div class="card-body p-0">
+        {% if not processos %}
+            <div class="empty-state">
+                <i class="bi bi-folder-x"></i>
+                <h4 class="mb-2">Nenhum processo encontrado</h4>
+                <p class="text-muted mb-4">Tente ajustar os filtros ou cadastre um novo processo.</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table-processos table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            {% set th_sort = "cursor:pointer;user-select:none;" %}
+                            {% macro sort_icon_p(col) %}{% if ordenar == col + '_asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;font-size:10px;"></i>{% elif ordenar == col + '_desc' %}<i class="bi bi-sort-down ms-1" style="opacity:.8;font-size:10px;"></i>{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;font-size:10px;"></i>{% endif %}{% endmacro %}
+                            {% macro sort_url_p(col) %}{% set cur_args = request.args.to_dict() %}{% if ordenar == col + '_asc' %}{{ url_for('processos.todos', **(cur_args | combine({'ordenar': col + '_desc', 'pagina': 1}))) }}{% else %}{{ url_for('processos.todos', **(cur_args | combine({'ordenar': col + '_asc', 'pagina': 1}))) }}{% endif %}{% endmacro %}
+                            <th style="{{ th_sort }}" onclick="window.location='{{ sort_url_p('id') }}'">ID{{ sort_icon_p('id') }}</th>
+                            <th style="{{ th_sort }}" onclick="window.location='{{ sort_url_p('titular') }}'">Titular{{ sort_icon_p('titular') }}</th>
+                            <th>Matrícula</th>
+                            <th>Tipo</th>
+                            <th style="{{ th_sort }}" onclick="window.location='{{ sort_url_p('data_entrada') }}'">Entrada{{ sort_icon_p('data_entrada') }}</th>
+                            <th style="{{ th_sort }}" onclick="window.location='{{ sort_url_p('status') }}'">Status{{ sort_icon_p('status') }}</th>
+                            <th style="{{ th_sort }}" onclick="window.location='{{ sort_url_p('prazo') }}'">Prazo{{ sort_icon_p('prazo') }}</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for processo in processos %}
+                            {% set prazo_class = '' %}
+                            {% if processo.prazo_final and processo.prazo_final < now().strftime('%Y-%m-%d') and processo.status_nome|lower not in ['concluído', 'finalizado'] %}
+                                {% set prazo_class = 'prazo-atrasado' %}
+                            {% endif %}
+                            <tr>
+                                <td class="fw-bold">{{ '%04d' % processo.id }}</td>
+                                <td data-label="Titular" class="break-word">
+    <div class="d-flex flex-column">
+        <span class="fw-medium">{{ processo.titular }}</span>
+        {% if processo.envolvido_notas %}
+            <small class="text-muted">Envolve Notas</small>
+        {% endif %}
+    </div>
+</td>
+                                <td data-label="Matrícula">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else 'Sem Matrícula' }}</td>
+                                <td>{{ processo.tipo_nome }}</td>
+                                <td>{{ processo.data_entrada | format_datetime_full }}</td>
+                                <td>
+                                    <span class="badge rounded-pill" style="background-color: {{ processo.status_hex }}; color: {{ get_contrast_color(processo.status_hex) }};">
+                                        {{ processo.status_nome }}
+                                    </span>
+                                </td>
+                                <td class="{{ prazo_class }}">{{ processo.prazo_final | format_datetime_full if processo.prazo_final else 'N/A' }}</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="tbl-actions">
+                                        <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" class="tbl-btn view" title="Visualizar"><i class="bi bi-eye"></i></a>
+                                        {% if processo.status_nome_original == 'Finalizado' or processo.data_conclusao %}
+                                        <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="tbl-btn edit" title="Processo finalizado — edição registrada no histórico" style="color:var(--color-warning, #f59e0b);"><i class="bi bi-exclamation-triangle"></i></a>
+                                        {% else %}
+                                        <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="tbl-btn edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                                        {% endif %}
+                                        <button type="button" class="tbl-btn del" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="{{ processo.id }}" title="Excluir"><i class="bi bi-trash"></i></button>
+                                    </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if total_paginas > 1 %}
+                {% set temp_args = request.args.to_dict() %}
+                {% set inicio = (pagina_atual - 1) * registros_por_pagina + 1 %}
+                {% set fim = inicio + processos|length - 1 %}
+                <div class="rf-pagination">
+                    <div></div>
+                    <div class="rf-pagination-nav">
+                        <nav aria-label="Paginação">
+                            <ul class="pagination mb-0" style="gap:3px;" hx-boost="true" hx-target="#processos-container" hx-select="#processos-container" hx-indicator=".loader-overlay">
+                                <li class="page-item {{ 'disabled' if pagina_atual <= 1 }}">
+                                    <a class="page-link" href="{{ url_for('processos.todos', **(temp_args | combine({'pagina': pagina_atual - 1}))) }}">Anterior</a>
+                                </li>
+                                {% set max_links = 7 %}
+                                {% set start_p = [1, pagina_atual - (max_links // 2)] | max %}
+                                {% set end_p = [total_paginas, start_p + max_links - 1] | min %}
+                                {% set start_p = [1, end_p - max_links + 1] | max %}
+                                {% if start_p > 1 %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('processos.todos', **(temp_args | combine({'pagina': 1}))) }}">1</a></li>
+                                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                {% endif %}
+                                {% for i in range(start_p, end_p + 1) %}
+                                    <li class="page-item {{ 'active' if i == pagina_atual }}">
+                                        <a class="page-link" href="{{ url_for('processos.todos', **(temp_args | combine({'pagina': i}))) }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if end_p < total_paginas %}
+                                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('processos.todos', **(temp_args | combine({'pagina': total_paginas}))) }}">{{ total_paginas }}</a></li>
+                                {% endif %}
+                                <li class="page-item {{ 'disabled' if pagina_atual >= total_paginas }}">
+                                    <a class="page-link" href="{{ url_for('processos.todos', **(temp_args | combine({'pagina': pagina_atual + 1}))) }}">Próximo</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="rf-pagination-info">
+                        Mostrando {{ inicio }}–{{ fim }} de {{ total_registros }} registro{{ 's' if total_registros != 1 }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+</div>
+
+<!-- Modal de Impressão da Lista -->
+<div class="modal fade" id="printListModal" tabindex="-1" aria-labelledby="printListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="printListModalLabel">
+                    <i class="bi bi-printer me-2"></i>Opções de Relatório
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-3" style="font-size:13px;color:var(--text-color-secondary);">Escolha como deseja gerar o relatório desta listagem:</p>
+                <div class="d-grid gap-3">
+                    <a id="btnPdfLista" href="#" target="_blank" class="btn btn-dark btn-lg">
+                        <i class="bi bi-file-earmark-pdf-fill me-2"></i> Baixar como PDF
+                    </a>
+                    <a id="btnImprimirLista" href="#" target="_blank" class="btn btn-dark btn-lg">
+                        <i class="bi bi-printer me-2"></i> Imprimir
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    function updatePrintListUrls() {
+        const params = new URLSearchParams(window.location.search);
+        params.set('view_mode', 'todos');
+        params.delete('pagina');
+        const queryString = params.toString() ? '?' + params.toString() : '';
+        const baseImprimir = "{{ url_for('processos.imprimir_lista') }}";
+        const basePdf      = "{{ url_for('processos.gerar_pdf_lista') }}";
+        document.getElementById('btnImprimirLista').href = baseImprimir + queryString;
+        document.getElementById('btnPdfLista').href      = basePdf      + queryString;
+    }
+    document.getElementById('printListModal').addEventListener('show.bs.modal', updatePrintListUrls);
+</script>
+<script>
+    document.addEventListener('show.bs.collapse', function(e) {
+        if (e.target.id === 'filterCollapse') {
+            const btn = document.querySelector('[data-bs-target="#filterCollapse"] strong');
+            if (btn) btn.textContent = 'Recolher Filtros';
+        }
+    });
+    document.addEventListener('hide.bs.collapse', function(e) {
+        if (e.target.id === 'filterCollapse') {
+            const btn = document.querySelector('[data-bs-target="#filterCollapse"] strong');
+            if (btn) btn.textContent = 'Filtros Avançados';
+        }
+    });
+</script>
+{% endblock %}

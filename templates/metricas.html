@@ -1,0 +1,1192 @@
+{% extends "base.html" %}
+
+{% block title %}Métricas e Desempenho — Registro Fácil{% endblock %}
+
+{% block page_title %}Métricas e Desempenho{% endblock %}
+
+{% block page_actions %}
+    <span class="text-muted small" id="refresh-info" style="display:none;">
+        Atualizado: <strong id="last-update" class="text-primary">—</strong>
+    </span>
+    <button class="nav-btn nav-btn-secondary" onclick="refreshAll()" title="Atualizar dados">
+        <i class="bi bi-arrow-clockwise" id="refresh-icon"></i> Atualizar
+    </button>
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-house"></i> Dashboard
+    </a>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+    /* ── TABS ── */
+    .metricas-tabs {
+        display: flex;
+        gap: 4px;
+        background: var(--background-color-card);
+        border: 1px solid var(--border-color-default);
+        border-radius: 10px;
+        padding: 4px;
+        width: fit-content;
+        margin-bottom: 1.5rem;
+    }
+    .metricas-tab-btn {
+        padding: 8px 20px;
+        border-radius: 7px;
+        border: none;
+        background: transparent;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--text-color-secondary);
+        transition: all .2s;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+    .metricas-tab-btn.active {
+        background: var(--color-black-premium);
+        color: var(--color-white-pure);
+    }
+    .metricas-tab-btn:hover:not(.active) {
+        background: var(--background-color-body);
+        color: var(--text-color-primary);
+    }
+    .metricas-tab-panel { display: none; }
+    .metricas-tab-panel.active { display: block; }
+
+    /* ── KPI CARDS ── */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+        background: var(--background-color-card);
+        border: 1px solid var(--border-color-default);
+        border-radius: 10px;
+        padding: 20px 18px;
+        position: relative;
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+        box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    }
+    .kpi-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 18px rgba(0,0,0,.1);
+    }
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+    }
+    .kpi-card.kpi-gold::before   { background: var(--color-gold-primary); }
+    .kpi-card.kpi-success::before { background: var(--color-success); }
+    .kpi-card.kpi-warning::before { background: var(--color-warning); }
+    .kpi-card.kpi-danger::before  { background: var(--color-error); }
+    .kpi-card.kpi-info::before    { background: var(--color-info); }
+
+    .kpi-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-color-secondary);
+        margin-bottom: 8px;
+    }
+    .kpi-value {
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1;
+        color: var(--text-color-primary);
+    }
+    .kpi-value.kpi-gold    { color: var(--color-gold-dark); }
+    .kpi-value.kpi-success { color: var(--color-success); }
+    .kpi-value.kpi-warning { color: var(--color-warning); }
+    .kpi-value.kpi-danger  { color: var(--color-error); }
+    .kpi-value.kpi-info    { color: var(--color-info); }
+    .kpi-sub {
+        font-size: 12px;
+        color: var(--text-color-secondary);
+        margin-top: 5px;
+    }
+    .kpi-bg-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 40px;
+        opacity: .06;
+        color: var(--text-color-primary);
+    }
+
+    /* ── CHARTS GRID ── */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .chart-full-width { grid-column: 1 / -1; }
+    .chart-body { position: relative; min-height: 260px; }
+    .chart-body canvas { max-height: 260px; }
+
+    /* ── COMPARATIVO ── */
+    .compare-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    .compare-card {
+        background: var(--background-color-body);
+        border: 1px solid var(--border-color-default);
+        border-radius: 8px;
+        padding: 18px;
+    }
+    .compare-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-color-secondary);
+        margin-bottom: 14px;
+    }
+    .compare-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 10px;
+    }
+    .compare-mine {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--color-black-premium);
+        line-height: 1;
+    }
+    .compare-team {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-color-secondary);
+    }
+    .compare-mine-label,
+    .compare-team-label {
+        font-size: 10px;
+        color: var(--text-color-secondary);
+        margin-bottom: 2px;
+    }
+
+    /* ── BADGES / DIFF ── */
+    .diff-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 99px;
+    }
+    .diff-up      { background: rgba(0,168,107,.15); color: var(--color-success); }
+    .diff-down    { background: rgba(197,40,47,.12);  color: var(--color-error); }
+    .diff-neutral { background: var(--background-color-body); color: var(--text-color-secondary);
+                    border: 1px solid var(--border-color-default); }
+
+    /* ── PROGRESS BARS ── */
+    .mtr-progress {
+        height: 7px;
+        border-radius: 99px;
+        background: var(--border-color-default);
+        overflow: hidden;
+        min-width: 80px;
+    }
+    .mtr-progress-fill {
+        height: 100%;
+        border-radius: 99px;
+        transition: width .6s ease;
+    }
+    .mtr-progress-fill.success { background: var(--color-success); }
+    .mtr-progress-fill.warning { background: var(--color-warning); }
+    .mtr-progress-fill.danger  { background: var(--color-error); }
+    .mtr-progress-fill.gold    { background: var(--color-gold-primary); }
+
+    /* ── LOADING / EMPTY / ERROR ── */
+    .mtr-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 48px 20px;
+        color: var(--text-color-secondary);
+        font-size: 13px;
+    }
+    .mtr-spinner {
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        border: 3px solid var(--border-color-default);
+        border-top-color: var(--color-gold-primary);
+        animation: mtr-spin .75s linear infinite;
+    }
+    @keyframes mtr-spin { to { transform: rotate(360deg); } }
+
+    .mtr-empty, .mtr-error {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 40px 20px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-color-secondary);
+    }
+    .mtr-empty i { font-size: 32px; opacity: .3; }
+    .mtr-error i { font-size: 32px; color: var(--color-error); opacity: .5; }
+
+    /* ── TABELA EQUIPE ── */
+    .mtr-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .mtr-table thead { background: var(--background-color-body); }
+    .mtr-table th {
+        padding: 10px 14px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: var(--text-color-secondary);
+        white-space: nowrap;
+        border-bottom: 2px solid var(--border-color-default);
+    }
+    .mtr-table td {
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--border-color-default);
+        vertical-align: middle;
+    }
+    .mtr-table tbody tr:hover td {
+        background: var(--color-pastel-gold);
+    }
+    .mtr-table tbody tr:last-child td { border-bottom: none; }
+
+    .mtr-avatar {
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        background: var(--color-pastel-gold);
+        color: var(--color-gold-dark);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 12px;
+        flex-shrink: 0;
+    }
+
+    /* Responsivo */
+    @media (max-width: 1100px) {
+        .charts-grid { grid-template-columns: 1fr; }
+        .chart-full-width { grid-column: 1; }
+    }
+    @media (max-width: 768px) {
+        .compare-grid { grid-template-columns: 1fr; }
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+<script>
+/* ─────────────────────────────────────────────────────────
+   CONFIG GLOBAL DO CHART.JS
+───────────────────────────────────────────────────────── */
+Chart.defaults.font.family = "'Segoe UI', sans-serif";
+Chart.defaults.font.size   = 12;
+Chart.defaults.color       = '#6B6B6B';
+Chart.defaults.plugins.legend.position = 'bottom';
+
+// Paleta do sistema
+const C = {
+    gold:    '#CDA865',
+    goldDk:  '#8B6332',
+    success: '#00A86B',
+    warning: '#FF8C00',
+    error:   '#C5282F',
+    info:    '#1E88E5',
+    black:   '#121212',
+    gray:    '#6B6B6B',
+};
+const PALETTE = [C.gold, C.info, C.success, C.warning, C.error, C.goldDk, '#7C3AED', '#0891B2'];
+
+const charts = {};
+
+function fmt(n, dec=1) {
+    if (n == null || isNaN(n)) return '0';
+    return Number(n).toFixed(dec).replace(/\.0$/, '');
+}
+function fmtPct(n) { return fmt(n) + '%'; }
+function fmtDias(n) { return fmt(n) + ' d'; }
+
+/* ─────────────────────────────────────────────────────────
+   TABS
+───────────────────────────────────────────────────────── */
+function switchTab(btn) {
+    document.querySelectorAll('.metricas-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.metricas-tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('tab-' + btn.dataset.tab);
+    if (panel) panel.classList.add('active');
+}
+
+/* ─────────────────────────────────────────────────────────
+   UTILITÁRIOS DOM
+───────────────────────────────────────────────────────── */
+function setWrap(id, html) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+}
+const loadingHTML = () =>
+    `<div class="mtr-loading"><div class="mtr-spinner"></div></div>`;
+const errorHTML = (msg='Não foi possível carregar os dados.') =>
+    `<div class="mtr-error"><i class="bi bi-exclamation-triangle-fill"></i><p>${msg}</p></div>`;
+const emptyHTML = (msg='Nenhum dado disponível para o período.') =>
+    `<div class="mtr-empty"><i class="bi bi-bar-chart"></i><p>${msg}</p></div>`;
+
+function destroyChart(key) {
+    if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   API
+───────────────────────────────────────────────────────── */
+async function fetchJSON(url) {
+    const r = await fetch(url, { credentials: 'same-origin' });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+}
+
+/* ─────────────────────────────────────────────────────────
+   ABA: MEU DESEMPENHO
+───────────────────────────────────────────────────────── */
+async function loadMetricasUsuario() {
+    try {
+        const data = await fetchJSON('/dashboard/api/metricas/usuario');
+        if (!data.success) throw new Error(data.message || 'Erro desconhecido');
+        renderKPIUsuario(data.kpis);
+        renderEvolucao(data.evolucao);
+        renderStatusUsuario(data.por_status);
+        renderTiposUsuario(data.por_tipo);
+        renderSemanal(data.performance_semanal);
+        renderComparativo(data.comparativo);
+    } catch(e) {
+        setWrap('kpi-usuario', `<div class="mtr-error" style="grid-column:1/-1"><i class="bi bi-exclamation-triangle-fill"></i><p>Erro ao carregar indicadores.</p></div>`);
+        ['chart-evolucao-wrap','chart-status-wrap','chart-tipo-wrap',
+         'chart-semanal-wrap','comparativo-wrap'].forEach(id => setWrap(id, errorHTML()));
+        console.error('Métricas usuário:', e);
+    }
+}
+
+function renderKPIUsuario(kpis) {
+    if (!kpis) { setWrap('kpi-usuario', errorHTML()); return; }
+    setWrap('kpi-usuario', `
+        <div class="kpi-card kpi-info">
+            <div class="kpi-label">Total Processos (90d)</div>
+            <div class="kpi-value kpi-info">${kpis.total_processos ?? 0}</div>
+            <div class="kpi-sub">${kpis.em_andamento ?? 0} em andamento</div>
+            <i class="bi bi-folder2-open kpi-bg-icon"></i>
+        </div>
+        <div class="kpi-card kpi-success">
+            <div class="kpi-label">Concluídos</div>
+            <div class="kpi-value kpi-success">${kpis.concluidos ?? 0}</div>
+            <div class="kpi-sub">Taxa: ${fmtPct(kpis.taxa_conclusao)}</div>
+            <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
+        </div>
+        <div class="kpi-card kpi-gold">
+            <div class="kpi-label">No Prazo</div>
+            <div class="kpi-value kpi-gold">${fmtPct(kpis.taxa_prazo)}</div>
+            <div class="kpi-sub">Dos processos concluídos</div>
+            <i class="bi bi-clock-fill kpi-bg-icon"></i>
+        </div>
+        <div class="kpi-card kpi-danger">
+            <div class="kpi-label">Atrasados</div>
+            <div class="kpi-value kpi-danger">${kpis.atrasados ?? 0}</div>
+            <div class="kpi-sub">Taxa: ${fmtPct(kpis.taxa_atraso)}</div>
+            <i class="bi bi-exclamation-triangle-fill kpi-bg-icon"></i>
+        </div>
+        <div class="kpi-card kpi-info">
+            <div class="kpi-label">Tempo Médio</div>
+            <div class="kpi-value kpi-info">${fmtDias(kpis.tempo_medio_dias)}</div>
+            <div class="kpi-sub">Conclusão nos últimos 90d</div>
+            <i class="bi bi-stopwatch-fill kpi-bg-icon"></i>
+        </div>
+    `);
+}
+
+function renderEvolucao(evolucao) {
+    const wrap = document.getElementById('chart-evolucao-wrap');
+    if (!wrap) return;
+    if (!evolucao || evolucao.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    const el = document.getElementById('badge-evolucao');
+    if (el) el.textContent = evolucao.length + ' dias';
+    destroyChart('evolucao');
+    wrap.innerHTML = '<canvas id="cv-evolucao"></canvas>';
+    charts['evolucao'] = new Chart(
+        document.getElementById('cv-evolucao').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: evolucao.map(d => d.data),
+            datasets: [
+                {
+                    label: 'Criados',
+                    data: evolucao.map(d => d.criados),
+                    borderColor: C.info,
+                    backgroundColor: 'rgba(30,136,229,.1)',
+                    borderWidth: 2, fill: true, tension: .35,
+                    pointRadius: 3, pointHoverRadius: 6
+                },
+                {
+                    label: 'Concluídos',
+                    data: evolucao.map(d => d.concluidos),
+                    borderColor: C.success,
+                    backgroundColor: 'rgba(0,168,107,.08)',
+                    borderWidth: 2, fill: true, tension: .35,
+                    pointRadius: 3, pointHoverRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { position: 'top' }, tooltip: { mode: 'index', intersect: false } },
+            scales: {
+                x: { grid: { color: '#f0f0f0' }, ticks: { maxTicksLimit: 12 } },
+                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+}
+
+function renderStatusUsuario(porStatus) {
+    const wrap = document.getElementById('chart-status-wrap');
+    if (!wrap) return;
+    if (!porStatus || porStatus.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('status-usr');
+    wrap.innerHTML = '<canvas id="cv-status-usr"></canvas>';
+    charts['status-usr'] = new Chart(
+        document.getElementById('cv-status-usr').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: porStatus.map(d => d.status),
+            datasets: [{
+                data: porStatus.map(d => d.quantidade),
+                backgroundColor: porStatus.map((d, i) => d.cor || PALETTE[i % PALETTE.length]),
+                borderWidth: 2, borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            cutout: '60%',
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}` } }
+            }
+        }
+    });
+}
+
+function renderTiposUsuario(porTipo) {
+    const wrap = document.getElementById('chart-tipo-wrap');
+    if (!wrap) return;
+    if (!porTipo || porTipo.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('tipo-usr');
+    wrap.innerHTML = '<canvas id="cv-tipo-usr"></canvas>';
+    charts['tipo-usr'] = new Chart(
+        document.getElementById('cv-tipo-usr').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: porTipo.map(d => d.tipo),
+            datasets: [
+                {
+                    label: 'Total',
+                    data: porTipo.map(d => d.quantidade),
+                    backgroundColor: 'rgba(30,136,229,.8)',
+                    borderRadius: 5
+                },
+                {
+                    label: 'Concluídos',
+                    data: porTipo.map(d => d.concluidos),
+                    backgroundColor: 'rgba(0,168,107,.8)',
+                    borderRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                x: { grid: { display: false }, ticks: { maxRotation: 35 } },
+                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+}
+
+function renderSemanal(semanal) {
+    const wrap = document.getElementById('chart-semanal-wrap');
+    if (!wrap) return;
+    if (!semanal || semanal.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('semanal');
+    wrap.innerHTML = '<canvas id="cv-semanal"></canvas>';
+    charts['semanal'] = new Chart(
+        document.getElementById('cv-semanal').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: semanal.map(d => 'Sem. ' + d.semana.replace(/^\d{4}-/, '')),
+            datasets: [
+                {
+                    label: 'Total',
+                    data: semanal.map(d => d.total),
+                    backgroundColor: 'rgba(30,136,229,.75)',
+                    borderRadius: 5, yAxisID: 'y'
+                },
+                {
+                    label: 'Concluídos',
+                    data: semanal.map(d => d.concluidos),
+                    backgroundColor: 'rgba(0,168,107,.75)',
+                    borderRadius: 5, yAxisID: 'y'
+                },
+                {
+                    label: 'Tempo Médio (dias)',
+                    data: semanal.map(d => d.tempo_medio ? parseFloat(d.tempo_medio).toFixed(1) : 0),
+                    type: 'line',
+                    borderColor: C.gold,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2, pointRadius: 4, tension: .3,
+                    yAxisID: 'y2'
+                }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 },
+                     title: { display: true, text: 'Processos' } },
+                y2: { position: 'right', grid: { drawOnChartArea: false },
+                      beginAtZero: true, title: { display: true, text: 'Dias' } }
+            }
+        }
+    });
+}
+
+function renderComparativo(comp) {
+    const wrap = document.getElementById('comparativo-wrap');
+    if (!wrap) return;
+    if (!comp) { wrap.innerHTML = emptyHTML('Dados de comparativo não disponíveis.'); return; }
+
+    function diffBadge(val) {
+        if (val > 0)  return `<span class="diff-badge diff-up"><i class="bi bi-arrow-up-short"></i>+${fmt(val)}%</span>`;
+        if (val < 0)  return `<span class="diff-badge diff-down"><i class="bi bi-arrow-down-short"></i>${fmt(val)}%</span>`;
+        return `<span class="diff-badge diff-neutral">Na média</span>`;
+    }
+
+    wrap.innerHTML = `
+        <div class="compare-grid">
+            <div class="compare-card">
+                <div class="compare-label">Volume de Processos</div>
+                <div class="compare-row">
+                    <div>
+                        <div class="compare-mine-label">Você</div>
+                        <div class="compare-mine">${comp.meus_processos ?? 0}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="compare-team-label">Média da equipe</div>
+                        <div class="compare-team">${fmt(comp.media_processos, 1)}</div>
+                    </div>
+                </div>
+                ${diffBadge(comp.perf_volume)}
+            </div>
+            <div class="compare-card">
+                <div class="compare-label">Processos Concluídos</div>
+                <div class="compare-row">
+                    <div>
+                        <div class="compare-mine-label">Você</div>
+                        <div class="compare-mine">${comp.meus_concluidos ?? 0}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="compare-team-label">Média da equipe</div>
+                        <div class="compare-team">${fmt(comp.media_concluidos, 1)}</div>
+                    </div>
+                </div>
+                ${diffBadge(comp.perf_conclusao)}
+            </div>
+            <div class="compare-card">
+                <div class="compare-label">Velocidade (tempo médio)</div>
+                <div class="compare-row">
+                    <div>
+                        <div class="compare-mine-label">Você</div>
+                        <div class="compare-mine">${fmtDias(comp.meu_tempo_medio)}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="compare-team-label">Média da equipe</div>
+                        <div class="compare-team">${fmtDias(comp.media_tempo_equipe)}</div>
+                    </div>
+                </div>
+                ${diffBadge(comp.perf_velocidade)}
+            </div>
+        </div>
+    `;
+}
+
+/* ─────────────────────────────────────────────────────────
+   ABA: VISÃO GERAL
+───────────────────────────────────────────────────────── */
+async function loadGraficosGerais() {
+    try {
+        const data = await fetchJSON('/dashboard/api/graficos');
+        if (!data.success) throw new Error(data.message);
+        renderKPIResumo(data.stats);
+        renderGeralStatus(data.graficos.status);
+        renderGeralPrazo(data.graficos.prazo);
+        renderTimeline(data.graficos.timeline);
+        renderGeralTipos(data.graficos.tipos);
+        renderMensal(data.graficos.mensal);
+        loadStatsResumo();
+    } catch(e) {
+        setWrap('kpi-resumo', `<div class="mtr-error" style="grid-column:1/-1"><i class="bi bi-exclamation-triangle-fill"></i><p>Erro ao carregar dados.</p></div>`);
+        console.error('Gráficos gerais:', e);
+    }
+}
+
+async function loadStatsResumo() {
+    try {
+        const data = await fetchJSON('/dashboard/api/stats/resumo');
+        if (!data.success) return;
+        const s = data.stats;
+        const wrap = document.getElementById('kpi-resumo');
+        if (wrap) {
+            wrap.insertAdjacentHTML('beforeend', `
+                <div class="kpi-card kpi-info">
+                    <div class="kpi-label">Criados Hoje</div>
+                    <div class="kpi-value kpi-info">${s.hoje ?? 0}</div>
+                    <i class="bi bi-calendar-day kpi-bg-icon"></i>
+                </div>
+            `);
+        }
+    } catch(e) { console.error('Stats resumo:', e); }
+}
+
+function renderKPIResumo(stats) {
+    if (!stats) { setWrap('kpi-resumo', errorHTML()); return; }
+    setWrap('kpi-resumo', `
+        <div class="kpi-card kpi-info">
+            <div class="kpi-label">Total Geral</div>
+            <div class="kpi-value kpi-info">${stats.total ?? 0}</div>
+            <div class="kpi-sub">todos os processos</div>
+            <i class="bi bi-folder2-open kpi-bg-icon"></i>
+        </div>
+        <div class="kpi-card kpi-warning">
+            <div class="kpi-label">Em Andamento</div>
+            <div class="kpi-value kpi-warning">${stats.ativos ?? 0}</div>
+            <i class="bi bi-arrow-repeat kpi-bg-icon"></i>
+        </div>
+        <div class="kpi-card kpi-success">
+            <div class="kpi-label">Concluídos</div>
+            <div class="kpi-value kpi-success">${stats.concluidos ?? 0}</div>
+            <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
+        </div>
+        <div class="kpi-card kpi-danger">
+            <div class="kpi-label">Vencidos</div>
+            <div class="kpi-value kpi-danger">${stats.vencidos ?? 0}</div>
+            <i class="bi bi-exclamation-triangle-fill kpi-bg-icon"></i>
+        </div>
+    `);
+}
+
+function renderGeralStatus(dados) {
+    const wrap = document.getElementById('chart-geral-status-wrap');
+    if (!wrap) return;
+    if (!dados || dados.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('geral-status');
+    wrap.innerHTML = '<canvas id="cv-geral-status"></canvas>';
+    charts['geral-status'] = new Chart(
+        document.getElementById('cv-geral-status').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: dados.map(d => d.label),
+            datasets: [{
+                data: dados.map(d => d.value),
+                backgroundColor: dados.map((d, i) => d.color || PALETTE[i % PALETTE.length]),
+                borderWidth: 2, borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            cutout: '55%',
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+}
+
+function renderGeralPrazo(dados) {
+    const wrap = document.getElementById('chart-prazo-wrap');
+    if (!wrap) return;
+    if (!dados || dados.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('prazo');
+    wrap.innerHTML = '<canvas id="cv-prazo"></canvas>';
+    charts['prazo'] = new Chart(
+        document.getElementById('cv-prazo').getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: dados.map(d => d.label),
+            datasets: [{
+                data: dados.map(d => d.value),
+                backgroundColor: dados.map(d => d.color),
+                borderWidth: 2, borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+}
+
+function renderTimeline(dados) {
+    const wrap = document.getElementById('chart-timeline-wrap');
+    if (!wrap) return;
+    if (!dados || dados.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('timeline');
+    wrap.innerHTML = '<canvas id="cv-timeline"></canvas>';
+    charts['timeline'] = new Chart(
+        document.getElementById('cv-timeline').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: dados.map(d => d.label),
+            datasets: [{
+                label: 'Processos criados',
+                data: dados.map(d => d.value),
+                backgroundColor: 'rgba(205,168,101,.8)',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false }, ticks: { maxTicksLimit: 15 } },
+                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+}
+
+function renderGeralTipos(dados) {
+    const wrap = document.getElementById('chart-tipos-wrap');
+    if (!wrap) return;
+    if (!dados || dados.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('geral-tipos');
+    wrap.innerHTML = '<canvas id="cv-geral-tipos"></canvas>';
+    charts['geral-tipos'] = new Chart(
+        document.getElementById('cv-geral-tipos').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: dados.map(d => d.label),
+            datasets: [{
+                label: 'Processos',
+                data: dados.map(d => d.value),
+                backgroundColor: PALETTE.slice(0, dados.length),
+                borderRadius: 5
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+}
+
+function renderMensal(dados) {
+    const wrap = document.getElementById('chart-mensal-wrap');
+    if (!wrap) return;
+    if (!dados || dados.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('mensal');
+    wrap.innerHTML = '<canvas id="cv-mensal"></canvas>';
+    const MESES = {'01':'Jan','02':'Fev','03':'Mar','04':'Abr','05':'Mai','06':'Jun',
+                   '07':'Jul','08':'Ago','09':'Set','10':'Out','11':'Nov','12':'Dez'};
+    charts['mensal'] = new Chart(
+        document.getElementById('cv-mensal').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: dados.map(d => {
+                const [y, m] = d.mes.split('-');
+                return (MESES[m] || m) + '/' + y.slice(2);
+            }),
+            datasets: [
+                {
+                    label: 'Criados',
+                    data: dados.map(d => d.criados),
+                    backgroundColor: 'rgba(30,136,229,.75)',
+                    borderRadius: 5
+                },
+                {
+                    label: 'Concluídos',
+                    data: dados.map(d => d.concluidos),
+                    backgroundColor: 'rgba(0,168,107,.75)',
+                    borderRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+}
+
+/* ─────────────────────────────────────────────────────────
+   ABA: EQUIPE
+───────────────────────────────────────────────────────── */
+async function loadPerformanceEquipe() {
+    try {
+        const data = await fetchJSON('/dashboard/api/stats/performance');
+        if (!data.success) throw new Error(data.message);
+        renderTabelaEquipe(data.performance);
+        renderResponsaveis(data.performance);
+    } catch(e) {
+        setWrap('tabela-equipe-wrap', errorHTML());
+        setWrap('chart-responsaveis-wrap', errorHTML());
+        console.error('Performance equipe:', e);
+    }
+}
+
+function renderTabelaEquipe(perf) {
+    const wrap = document.getElementById('tabela-equipe-wrap');
+    if (!wrap) return;
+    const badge = document.getElementById('badge-equipe');
+    if (badge) badge.textContent = (perf?.length ?? 0) + ' usuários';
+    if (!perf || perf.length === 0) { wrap.innerHTML = emptyHTML('Nenhum usuário com processos no período.'); return; }
+
+    const rows = perf.map(p => {
+        const tc = p.taxa_conclusao ?? 0;
+        const fillClass = tc >= 75 ? 'success' : tc >= 50 ? 'warning' : 'danger';
+        const badgeCls  = tc >= 75 ? 'bg-success' : tc >= 50 ? 'bg-warning text-dark' : 'bg-danger';
+        return `
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="mtr-avatar">${p.usuario ? p.usuario.charAt(0).toUpperCase() : '?'}</div>
+                        <strong>${p.usuario || '—'}</strong>
+                    </div>
+                </td>
+                <td><strong>${p.total_processos ?? 0}</strong></td>
+                <td><span class="text-success fw-bold">${p.concluidos ?? 0}</span></td>
+                <td><span class="text-danger fw-bold">${p.vencidos ?? 0}</span></td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="mtr-progress" style="width:90px;">
+                            <div class="mtr-progress-fill ${fillClass}" style="width:${Math.min(tc,100)}%;"></div>
+                        </div>
+                        <span class="badge ${badgeCls}">${fmtPct(tc)}</span>
+                    </div>
+                </td>
+                <td>${p.tempo_medio ? fmtDias(p.tempo_medio) : '<span class="text-muted">—</span>'}</td>
+            </tr>
+        `;
+    }).join('');
+
+    wrap.innerHTML = `
+        <div class="table-responsive">
+            <table class="mtr-table">
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Total</th>
+                        <th>Concluídos</th>
+                        <th>Vencidos</th>
+                        <th>Taxa de Conclusão</th>
+                        <th>Tempo Médio</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function renderResponsaveis(perf) {
+    const wrap = document.getElementById('chart-responsaveis-wrap');
+    if (!wrap) return;
+    if (!perf || perf.length === 0) { wrap.innerHTML = emptyHTML(); return; }
+    destroyChart('responsaveis');
+    wrap.innerHTML = '<canvas id="cv-responsaveis"></canvas>';
+    charts['responsaveis'] = new Chart(
+        document.getElementById('cv-responsaveis').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: perf.map(p => p.usuario),
+            datasets: [
+                {
+                    label: 'Em Andamento',
+                    data: perf.map(p => (p.total_processos ?? 0) - (p.concluidos ?? 0)),
+                    backgroundColor: 'rgba(30,136,229,.75)',
+                    borderRadius: 5, stack: 'carga'
+                },
+                {
+                    label: 'Concluídos',
+                    data: perf.map(p => p.concluidos ?? 0),
+                    backgroundColor: 'rgba(0,168,107,.75)',
+                    borderRadius: 5, stack: 'carga'
+                },
+                {
+                    label: 'Vencidos',
+                    data: perf.map(p => p.vencidos ?? 0),
+                    backgroundColor: 'rgba(197,40,47,.75)',
+                    borderRadius: 5, stack: 'carga'
+                }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                x: { grid: { display: false }, stacked: true },
+                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, stacked: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+}
+
+/* ─────────────────────────────────────────────────────────
+   REFRESH GERAL
+───────────────────────────────────────────────────────── */
+function updateTimestamp() {
+    const el = document.getElementById('last-update');
+    const info = document.getElementById('refresh-info');
+    if (el) el.textContent = new Date().toLocaleTimeString('pt-BR');
+    if (info) info.style.display = '';
+}
+
+function refreshAll() {
+    const icon = document.getElementById('refresh-icon');
+    if (icon) icon.classList.add('bi-arrow-clockwise');
+
+    // Reset KPIs
+    setWrap('kpi-usuario', `<div class="mtr-loading" style="grid-column:1/-1"><div class="mtr-spinner"></div></div>`);
+    setWrap('kpi-resumo',  `<div class="mtr-loading" style="grid-column:1/-1"><div class="mtr-spinner"></div></div>`);
+
+    // Reset charts
+    ['chart-evolucao-wrap','chart-status-wrap','chart-tipo-wrap','chart-semanal-wrap',
+     'comparativo-wrap','chart-geral-status-wrap','chart-prazo-wrap','chart-timeline-wrap',
+     'chart-tipos-wrap','chart-mensal-wrap','tabela-equipe-wrap','chart-responsaveis-wrap'
+    ].forEach(id => setWrap(id, loadingHTML()));
+
+    // Destruir charts existentes
+    Object.keys(charts).forEach(k => { if(charts[k]) { charts[k].destroy(); delete charts[k]; } });
+
+    Promise.all([
+        loadMetricasUsuario(),
+        loadGraficosGerais(),
+        loadPerformanceEquipe()
+    ]).finally(() => {
+        if (icon) icon.classList.remove('bi-spin');
+        updateTimestamp();
+    });
+}
+
+/* ─────────────────────────────────────────────────────────
+   INICIALIZAÇÃO
+───────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+    refreshAll();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- TABS -->
+<div class="metricas-tabs">
+    <button class="metricas-tab-btn active" data-tab="meu-desempenho" onclick="switchTab(this)">
+        <i class="bi bi-person-lines-fill"></i> Meu Desempenho
+    </button>
+    <button class="metricas-tab-btn" data-tab="visao-geral" onclick="switchTab(this)">
+        <i class="bi bi-globe2"></i> Visão Geral
+    </button>
+    <button class="metricas-tab-btn" data-tab="equipe" onclick="switchTab(this)">
+        <i class="bi bi-people-fill"></i> Equipe
+    </button>
+</div>
+
+<!-- ══ TAB: MEU DESEMPENHO ══ -->
+<div class="metricas-tab-panel active" id="tab-meu-desempenho">
+
+    <div class="kpi-grid" id="kpi-usuario">
+        <div class="mtr-loading" style="grid-column:1/-1">
+            <div class="mtr-spinner"></div>Carregando indicadores…
+        </div>
+    </div>
+
+    <div class="charts-grid">
+
+        <!-- Evolução Diária -->
+        <div class="card shadow-sm chart-full-width">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-graph-up-arrow me-2 text-primary"></i>Evolução Diária — Últimos 30 Dias
+                </h6>
+                <span class="badge bg-secondary" id="badge-evolucao">—</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-body" id="chart-evolucao-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Por Status -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-pie-chart-fill me-2 text-primary"></i>Processos por Status
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-body" id="chart-status-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Por Tipo de Serviço -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-tags-fill me-2 text-primary"></i>Por Tipo de Serviço
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-body" id="chart-tipo-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparativo com Equipe -->
+        <div class="card shadow-sm chart-full-width">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-arrow-left-right me-2 text-primary"></i>Comparativo com a Equipe — Últimos 30 Dias
+                </h6>
+                <small class="text-muted">Você vs. Média da equipe</small>
+            </div>
+            <div class="card-body">
+                <div id="comparativo-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══ TAB: VISÃO GERAL ══ -->
+<div class="metricas-tab-panel" id="tab-visao-geral">
+
+    <div class="kpi-grid" id="kpi-resumo">
+        <div class="mtr-loading" style="grid-column:1/-1">
+            <div class="mtr-spinner"></div>Carregando estatísticas…
+        </div>
+    </div>
+
+    <div class="charts-grid">
+
+        <!-- Status Geral -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-pie-chart me-2 text-primary"></i>Status dos Processos — 30 Dias
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-body" id="chart-geral-status-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prazo Geral -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-hourglass-split me-2 text-primary"></i>Situação de Prazo (Processos Ativos)
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-body" id="chart-prazo-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Tipos -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-list-ol me-2 text-primary"></i>Top 5 Tipos de Serviço
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-body" id="chart-tipos-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evolução Mensal -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-bar-chart-steps me-2 text-primary"></i>Evolução Mensal — 6 Meses
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-body" id="chart-mensal-wrap">
+                    <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══ TAB: EQUIPE ══ -->
+<div class="metricas-tab-panel" id="tab-equipe">
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold">
+                <i class="bi bi-trophy-fill me-2" style="color:var(--color-gold-primary);"></i>Performance da Equipe — Últimos 30 Dias
+            </h6>
+            <span class="badge bg-secondary" id="badge-equipe">—</span>
+        </div>
+        <div class="card-body p-0" id="tabela-equipe-wrap">
+            <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h6 class="mb-0 fw-bold">
+                <i class="bi bi-person-workspace me-2 text-primary"></i>Carga de Trabalho por Responsável
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="chart-body" id="chart-responsaveis-wrap">
+                <div class="mtr-loading"><div class="mtr-spinner"></div></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

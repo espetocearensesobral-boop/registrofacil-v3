@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block title %}Visualizar Processo #{{ processo.id }} - Registro Fácil{% endblock %}
+
+{% block page_title %}Processo #{{ '%04d' % processo.id }}{% endblock %}
+
+{% block page_actions %}
+    {% if processo.status_nome_original == 'Finalizado' or processo.data_conclusao %}
+    <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="nav-btn nav-btn-warning"
+       title="Este processo está finalizado. A edição será registrada no histórico.">
+        <i class="bi bi-exclamation-triangle me-1"></i> Editar
+    </a>
+    {% else %}
+    <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="nav-btn nav-btn-primary">
+        <i class="bi bi-pencil"></i> Editar
+    </a>
+    {% endif %}
+    <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#reportOptionsModal">
+        <i class="bi bi-printer"></i> Imprimir
+    </button>
+    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-list-ul"></i> Todos
+    </a>
+    <button type="button" class="nav-btn nav-btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmDeleteModal"
+            data-id="{{ processo.id }}">
+        <i class="bi bi-trash"></i> Excluir
+    </button>
+{% endblock %}
+
+{% block content %}
+
+<div class="row g-4 mb-4">
+    <!-- Card Dados do Titular -->
+    <div class="col-md-6">
+        <div class="rf-card h-100">
+            <div class="rf-card-header" style="background: rgba(var(--color-gold-rgb), 0.05);">
+                <h5 class="m-0" style="color: var(--color-gold-dark);">
+                    <i class="bi bi-person-fill me-2"></i>Dados do Titular
+                </h5>
+            </div>
+            <div class="rf-card-body p-4">
+                <div class="mb-3">
+                    <div class="det-lbl">Nome do Titular</div>
+                    <div class="det-val fw-bold" style="font-size: 18px;">{{ processo.titular }}</div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="det-lbl">Telefone</div>
+                        <div class="det-val">
+                            {% if processo.titular_telefone %}
+                            <a href="https://wa.me/55{{ processo.titular_telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" class="d-flex align-items-center gap-2" style="color:var(--color-success);text-decoration:none;">
+                                <i class="bi bi-whatsapp"></i>{{ processo.titular_telefone }}
+                            </a>
+                            {% else %}<span class="text-muted">Não informado</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="det-lbl">E-mail</div>
+                        <div class="det-val">
+                            {% if processo.titular_email %}
+                            <a href="mailto:{{ processo.titular_email }}" class="d-flex align-items-center gap-2" style="color:var(--color-info);text-decoration:none;">
+                                <i class="bi bi-envelope"></i>{{ processo.titular_email }}
+                            </a>
+                            {% else %}<span class="text-muted">Não informado</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Dados do Apresentante -->
+    <div class="col-md-6">
+        <div class="rf-card h-100">
+            <div class="rf-card-header" style="background: rgba(var(--text-color-secondary-rgb), 0.05);">
+                <h5 class="m-0">
+                    <i class="bi bi-person-badge-fill me-2"></i>Dados do Apresentante
+                </h5>
+            </div>
+            <div class="rf-card-body p-4">
+                <div class="mb-3">
+                    <div class="det-lbl">Nome do Apresentante</div>
+                    <div class="det-val fw-bold" style="font-size: 16px;">{{ processo.apresentante | default('Não informado') }}</div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="det-lbl">Telefone</div>
+                        <div class="det-val">
+                            {% if processo.apresentante_telefone %}
+                            <a href="https://wa.me/55{{ processo.apresentante_telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" class="d-flex align-items-center gap-2" style="color:var(--color-success);text-decoration:none;">
+                                <i class="bi bi-whatsapp"></i>{{ processo.apresentante_telefone }}
+                            </a>
+                            {% else %}<span class="text-muted">Não informado</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="det-lbl">E-mail</div>
+                        <div class="det-val">
+                            {% if processo.apresentante_email %}
+                            <a href="mailto:{{ processo.apresentante_email }}" class="d-flex align-items-center gap-2" style="color:var(--color-info);text-decoration:none;">
+                                <i class="bi bi-envelope"></i>{{ processo.apresentante_email }}
+                            </a>
+                            {% else %}<span class="text-muted">Não informado</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Card Informações do Processo -->
+<div class="rf-card mb-4">
+    <div class="rf-card-header d-flex justify-content-between align-items-center">
+        <h5 class="m-0"><i class="bi bi-info-circle me-2" style="color:var(--color-gold-primary);"></i>Informações do Processo</h5>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge rounded-pill" style="background-color: {{ processo.status_hex_original | default('#6c757d') }}; color: {{ get_contrast_color(processo.status_hex_original | default('#6c757d')) }}; font-size:12px;padding:4px 12px;">
+                {{ (processo.status_nome_original | default('Desconhecido')) | replace('_', ' ') | capitalize }}
+            </span>
+            <span style="background:var(--background-color-body);border:1px solid var(--border-color-default);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 10px;font-weight:600;">#{{ '%04d' % processo.id }}</span>
+        </div>
+    </div>
+    <div class="rf-card-body" style="padding:0;">
+        <div class="det-grid">
+            <div class="det-item">
+                <div class="det-lbl">Tipo de Serviço</div>
+                <div class="det-val fw-bold">{{ processo.tipo_nome | default('N/A') }}</div>
+            </div>
+            <div class="det-item">
+                <div class="det-lbl">Matrícula / Nº Ordem</div>
+                <div class="det-val fw-bold" style="font-family:monospace;">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</div>
+            </div>
+            <div class="det-item">
+                <div class="det-lbl">Responsável</div>
+                <div class="det-val">{{ processo.responsavel_nome | default('N/A') }}</div>
+            </div>
+            <div class="det-item">
+                <div class="det-lbl">Data de Entrada</div>
+                <div class="det-val">{{ formatar_data(processo.data_entrada) }}</div>
+            </div>
+            <div class="det-item">
+                <div class="det-lbl">Data de Conclusão</div>
+                <div class="det-val">
+                    {% if processo.data_conclusao %}
+                        <span style="color:var(--color-success);font-weight:600;"><i class="bi bi-check-circle me-1"></i>{{ formatar_data(processo.data_conclusao) }}</span>
+                    {% else %}
+                        <span style="color:var(--color-warning);font-weight:600;"><i class="bi bi-arrow-repeat me-1"></i>Em andamento</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="det-item">
+                <div class="det-lbl">Prazo Final</div>
+                <div class="det-val fw-bold" style="color:var(--color-warning);">{{ formatar_data(processo.prazo_final) }}</div>
+            </div>
+            <div class="det-item" style="border-bottom: none;">
+                <div class="det-lbl">Envolve Notas</div>
+                <div class="det-val">
+                    {% if processo.envolvido_notas %}
+                    <span style="color:var(--color-success);font-weight:700;"><i class="bi bi-check-circle-fill me-1"></i>Sim</span>
+                    {% else %}
+                    <span style="color:var(--text-color-secondary);">Não</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="det-item" style="border-bottom: none;">
+                <div class="det-lbl">Identificador Único</div>
+                <div class="det-val" style="font-size: 11px; color: var(--text-color-secondary);">{{ processo.numero_processo }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.det-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.det-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color-default);
+}
+.det-item:nth-child(even) {
+    border-left: 1px solid var(--border-color-default);
+}
+.det-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-color-secondary);
+    margin-bottom: 6px;
+}
+.det-val {
+    font-size: 14px;
+    color: var(--text-color-primary);
+    word-break: break-word;
+}
+@media (max-width: 768px) {
+    .det-grid { grid-template-columns: 1fr; }
+    .det-item:nth-child(even) { border-left: none; }
+}
+</style>
+
+<!-- Observações e Anexos -->
+<div class="row g-4 mb-4">
+    <div class="col-md-7">
+        <div class="rf-card h-100">
+            <div class="rf-card-header">
+                <h5 class="m-0"><i class="bi bi-chat-left-text me-2" style="color:var(--color-gold-primary);"></i>Observações</h5>
+            </div>
+            <div class="rf-card-body p-4">
+                {% if processo.observacoes %}
+                    <p style="font-size:14px;line-height:1.7;color:var(--text-color-primary);margin:0;">{{ processo.observacoes | nl2br }}</p>
+                {% else %}
+                    <p style="color:var(--text-color-secondary);font-size:13px;margin:0;"><i class="bi bi-dash-circle me-1"></i>Nenhuma observação registrada.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="rf-card h-100">
+            <div class="rf-card-header d-flex justify-content-between align-items-center">
+                <h5 class="m-0"><i class="bi bi-paperclip me-2" style="color:var(--color-gold-primary);"></i>Anexos</h5>
+                <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ anexos_do_processo | length }}</span>
+            </div>
+            <div class="rf-card-body p-0">
+                {% if anexos_do_processo %}
+                    <div class="list-group list-group-flush">
+                        {% for anexo in anexos_do_processo %}
+                            <a href="{{ url_for('processos.download_anexo', anexo_id=anexo.id) }}"
+                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                               style="padding:12px 16px;font-size:13px;border:none;border-bottom:1px solid var(--border-color-default);">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi {{ get_icone_anexo(anexo.tipo) }}" style="font-size:16px;color:var(--color-gold-primary);"></i>
+                                    <div>
+                                        <div class="fw-semibold text-truncate" style="max-width: 180px;">{{ anexo.nome_original }}</div>
+                                        <small style="color:var(--text-color-secondary);font-size:10px;">
+                                            {{ formatar_tamanho_arquivo(anexo.tamanho) }}
+                                        </small>
+                                    </div>
+                                </div>
+                                <i class="bi bi-download" style="color:var(--text-color-secondary);"></i>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-4 text-center">
+                        <p style="color:var(--text-color-secondary);font-size:13px;margin:0;"><i class="bi bi-dash-circle me-1"></i>Nenhum anexo.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Histórico de Alterações -->
+<div class="rf-card mb-4">
+    <div class="rf-card-header d-flex justify-content-between align-items-center">
+        <h5 class="m-0"><i class="bi bi-clock-history me-2" style="color:var(--color-gold-primary);"></i>Histórico de Alterações</h5>
+        <button class="btn btn-sm btn-outline-secondary" onclick="toggleHistorico()" id="btn-toggle-hist">
+            <i class="bi bi-eye" id="ico-toggle-hist"></i> <span id="txt-toggle-hist">Exibir</span>
+        </button>
+    </div>
+    <div class="rf-card-body" id="historico-body" style="display:none;">
+        {% if historico_alteracoes %}
+            <div class="htl-wrap">
+                {% for registro in historico_alteracoes %}
+                {% set tipo = 'sistema' %}
+                {% set tipo_class = 'sistema' %}
+                {% set tipo_label = 'Evento' %}
+                
+                {% if 'Cadastrou' in registro.campo_alterado %}
+                    {% set tipo = 'criacao' %}
+                    {% set tipo_class = 'criacao' %}
+                    {% set tipo_label = 'Criação' %}
+                {% elif 'Excluiu' in registro.campo_alterado %}
+                    {% set tipo = 'exclusao' %}
+                    {% set tipo_class = 'exclusao' %}
+                    {% set tipo_label = 'Exclusão' %}
+                {% elif 'status' in registro.campo_alterado|lower %}
+                    {% set tipo = 'status' %}
+                    {% set tipo_class = 'status' %}
+                    {% set tipo_label = 'Status' %}
+                {% else %}
+                    {% set tipo = 'edicao' %}
+                    {% set tipo_class = 'edicao' %}
+                    {% set tipo_label = 'Edição' %}
+                {% endif %}
+
+                <div class="htl-item">
+                    <div class="htl-dot-col">
+                        <div class="htl-dot {{ tipo_class }}">
+                            {% if tipo == 'criacao' %}<i class="bi bi-plus-lg"></i>
+                            {% elif tipo == 'edicao' %}<i class="bi bi-pencil"></i>
+                            {% elif tipo == 'exclusao' %}<i class="bi bi-trash"></i>
+                            {% elif tipo == 'status' %}<i class="bi bi-flag"></i>
+                            {% else %}<i class="bi bi-gear"></i>{% endif %}
+                        </div>
+                        <div class="htl-line"></div>
+                    </div>
+                    <div class="htl-body">
+                        <div class="htl-header">
+                            <div style="display:flex;align-items:center;gap:6px;">
+                                <span class="htl-badge {{ tipo_class }}">{{ tipo_label }}</span>
+                                {% if registro.usuario_nome %}
+                                <span style="font-size:12px;font-weight:600;color:var(--text-color-primary);">{{ registro.usuario_nome }}</span>
+                                {% endif %}
+                            </div>
+                            <span class="htl-meta">
+                                <i class="bi bi-clock me-1"></i>{{ formatar_data(registro.timestamp_alteracao) }}
+                            </span>
+                        </div>
+                        <div class="htl-detail">
+                            {% if tipo == 'criacao' %}
+                                <span style="color:var(--text-color-secondary);">Processo cadastrado no sistema com ID <strong>#{{ '%04d' % registro.processo_id }}</strong>.</span>
+                            {% elif tipo == 'exclusao' %}
+                                <span style="color:var(--color-error);">Processo marcado para exclusão.</span>
+                            {% elif registro.observacao_adicional %}
+                                <span style="color:var(--text-color-secondary);">{{ registro.observacao_adicional }}</span>
+                            {% elif registro.campo_alterado %}
+                                <div class="htl-change">
+                                    <span class="field-name">{{ registro.campo_alterado | replace('_', ' ') | capitalize }}</span>
+                                    <span class="val-old">{{ registro.valor_antigo | default('(vazio)') }}</span>
+                                    <span class="arr"><i class="bi bi-arrow-right"></i></span>
+                                    <span class="val-new">{{ registro.valor_novo | default('(vazio)') }}</span>
+                                </div>
+                            {% else %}
+                                <span style="color:var(--text-color-secondary);">Evento registrado pelo sistema.</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align:center;padding:28px 16px;color:var(--text-color-secondary);">
+                <i class="bi bi-journal-x" style="font-size:2rem;opacity:.2;display:block;margin-bottom:8px;"></i>
+                <span style="font-size:13px;">Nenhuma alteração registrada para este processo.</span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.htl-wrap { display: flex; flex-direction: column; gap: 0; }
+.htl-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-color-default);
+    position: relative;
+}
+.htl-item:last-child { border-bottom: none; }
+.htl-dot-col { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 32px; }
+.htl-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0; border: 2px solid transparent;
+}
+.htl-dot.criacao  { background: rgba(25,135,84,.12); color: var(--color-success); border-color: var(--color-success); }
+.htl-dot.edicao   { background: rgba(13,110,253,.1); color: var(--color-info); border-color: var(--color-info); }
+.htl-dot.exclusao { background: rgba(220,53,69,.12); color: var(--color-error); border-color: var(--color-error); }
+.htl-dot.status   { background: rgba(184,142,67,.12); color: var(--color-gold-dark); border-color: var(--color-gold-primary); }
+.htl-dot.sistema  { background: var(--background-color-body); color: var(--text-color-secondary); border-color: var(--border-color-default); }
+.htl-line { flex: 1; width: 1px; background: var(--border-color-default); min-height: 12px; margin-top: 4px; }
+.htl-item:last-child .htl-line { display: none; }
+.htl-body { flex: 1; min-width: 0; padding-top: 4px; }
+.htl-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+.htl-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 99px; white-space: nowrap;
+}
+.htl-badge.criacao  { background: rgba(25,135,84,.12); color: var(--color-success); }
+.htl-badge.edicao   { background: rgba(13,110,253,.1); color: var(--color-info); }
+.htl-badge.exclusao { background: rgba(220,53,69,.12); color: var(--color-error); }
+.htl-badge.status   { background: rgba(184,142,67,.1); color: var(--color-gold-dark); }
+.htl-badge.sistema  { background: var(--background-color-body); color: var(--text-color-secondary); }
+.htl-meta { font-size: 11px; color: var(--text-color-secondary); }
+.htl-detail { font-size: 13px; color: var(--text-color-primary); }
+.htl-change { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: var(--background-color-body); padding: 6px 10px; border-radius: 6px; margin-top: 4px; border: 1px solid var(--border-color-default); }
+.htl-change .field-name { font-weight: 700; color: var(--text-color-secondary); text-transform: uppercase; font-size: 10px; }
+.htl-change .val-old { color: var(--color-error); text-decoration: line-through; opacity: 0.7; }
+.htl-change .arr { color: var(--text-color-secondary); }
+.htl-change .val-new { color: var(--color-success); font-weight: 600; }
+</style>
+
+<!-- Modal de Relatório -->
+<div class="modal fade" id="reportOptionsModal" tabindex="-1" aria-labelledby="reportOptionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="reportOptionsModalLabel">
+                    <i class="bi bi-printer me-2"></i>Opções de Relatório — Processo #{{ '%04d' % processo.id }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-3" style="font-size:13px;color:var(--text-color-secondary);">Escolha como deseja gerar o relatório deste processo:</p>
+                <div class="d-grid gap-3">
+                    <a href="{{ url_for('processos.gerar_pdf', processo_id=processo.id) }}" target="_blank" class="btn btn-dark btn-lg">
+                        <i class="bi bi-file-earmark-pdf-fill me-2"></i> Baixar como PDF
+                    </a>
+                    <button type="button" class="btn btn-dark btn-lg" onclick="generateReport('print')">
+                        <i class="bi bi-printer me-2"></i> Imprimir Página
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Exclusão -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o processo <strong>#{{ '%04d' % processo.id }}</strong>?</p>
+                <p class="text-danger small mb-0"><i class="bi bi-exclamation-triangle me-1"></i> Esta ação é irreversível e removerá todos os anexos e históricos associados.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="{{ url_for('processos.excluir', processo_id=processo.id) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="btn btn-danger">Excluir Permanentemente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    function toggleHistorico() {
+        const body = document.getElementById('historico-body');
+        const ico  = document.getElementById('ico-toggle-hist');
+        const txt  = document.getElementById('txt-toggle-hist');
+        const isHidden = body.style.display === 'none';
+        body.style.display = isHidden ? 'block' : 'none';
+        ico.className  = isHidden ? 'bi bi-eye-slash' : 'bi bi-eye';
+        txt.textContent = isHidden ? 'Ocultar' : 'Exibir';
+    }
+
+    function generateReport(option) {
+        const processoId = {{ processo.id }};
+        let url = '';
+        switch (option) {
+            case 'print':
+                url = `{{ url_for('processos.gerar_relatorio_customizado', processo_id=processo.id, tipo='html_print') }}`;
+                break;
+            case 'pdf':
+                url = `{{ url_for('processos.gerar_relatorio_customizado', processo_id=processo.id, tipo='pdf') }}`;
+                break;
+            default: return;
+        }
+        const newWindow = window.open(url, '_blank');
+        if (!newWindow || newWindow.closed || typeof newWindow.focus !== 'function') {
+            alert('Pop-up bloqueado. Permita pop-ups para este site para gerar o relatório.');
+        } else {
+            newWindow.focus();
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,649 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Processo - Registro Fácil{% endblock %}
+
+{# Define o título da página que será usado na navbar do base.html #}
+{% block page_title %}Cadastrar Novo Processo{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-list-ul"></i> Processos
+    </a>
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-house"></i> Dashboard
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.novo') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-person-badge"></i>
+                Dados Principais
+            </h3>
+            
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="form-floating position-relative">
+                        <input type="text" class="form-control" id="titular" name="titular" 
+                               placeholder="Nome do Titular" required autocomplete="off"
+                               value="{{ dados_form.titular }}">
+                        <label for="titular" class="required-field">Titular</label>
+                        <div id="titulares-dropdown" class="list-group position-absolute w-100 shadow-sm d-none" style="z-index: 1000; max-height: 200px; overflow-y: auto;">
+                            <!-- Resultados da busca aparecerão aqui -->
+                        </div>
+                        <div class="invalid-feedback">
+                            Por favor, informe o nome do titular.
+                        </div>
+                        <small class="text-muted">Digite para pesquisar titulares ou <strong>%</strong> para listar todos.</small>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" id="tipo_servico" name="tipo_servico" required>
+                            <option value="">Selecione um tipo...</option>
+                            {% for tipo in tipos_processo %}
+                                <option value="{{ tipo.id }}" 
+                                    {% if dados_form.tipo_servico == tipo.id %}selected{% endif %}>
+                                    {{ tipo.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label for="tipo_servico" class="required-field">Tipo de Serviço</label>
+                        <div class="invalid-feedback">
+                            Por favor, selecione um tipo de serviço.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control" id="titular_telefone" name="titular_telefone" 
+                               placeholder="Telefone do Titular" autocomplete="tel"
+                               value="{{ dados_form.titular_telefone }}">
+                        <label for="titular_telefone">Telefone do Titular</label>
+                        <div class="invalid-feedback">Formato inválido.</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="titular_email" name="titular_email" 
+                               placeholder="E-mail do Titular" autocomplete="email"
+                               value="{{ dados_form.titular_email }}">
+                        <label for="titular_email">E-mail do Titular</label>
+                        <div class="invalid-feedback">E-mail inválido.</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="">Selecione um status...</option>
+                            {% for status_item in status_processo %}
+                                <option value="{{ status_item.nome }}" 
+                                    {% if dados_form.status == status_item.nome %}selected{% endif %}>
+                                    {{ status_item.nome | replace('_', ' ') | capitalize }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label for="status" class="required-field">Status</label>
+                        <div class="invalid-feedback">
+                            Por favor, selecione o status do processo.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    {# Switch + campo matrícula alinhados em uma única linha #}
+                    <div class="d-flex align-items-center gap-2">
+                        {# Campo matrícula — ocupa o espaço disponível #}
+                        <div id="campo_matricula_wrapper" class="form-floating flex-grow-1" {% if dados_form.get('possui_matricula', '0') != '1' %}style="display:none"{% endif %}>
+                            <input type="text" class="form-control" id="matricula" name="matricula"
+                                   placeholder="Matrícula/Nº da Ordem"
+                                   pattern="[A-Za-z0-9\s\-\.\/]{1,50}" maxlength="50"
+                                   value="{{ dados_form.matricula }}">
+                            <label for="matricula">Matrícula/Nº da Ordem</label>
+                            <div class="invalid-feedback">
+                                Use apenas letras, números, espaços, hífens, pontos e barras (1-50 caracteres).
+                            </div>
+                        </div>
+                        {# Switch à direita do campo, alinhado verticalmente ao centro #}
+                        <div class="form-check form-switch flex-shrink-0 d-flex flex-column align-items-center mb-0" style="min-width:90px;">
+                            <input class="form-check-input" type="checkbox" id="possui_matricula_check"
+                                   name="possui_matricula" value="1"
+                                   {% if dados_form.get('possui_matricula', '0') == '1' %}checked{% endif %}
+                                   onchange="toggleMatricula(this)">
+                            <label class="form-check-label small text-muted mt-1" for="possui_matricula_check">Possui matrícula?</label>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                function toggleMatricula(cb) {
+                    var wrapper = document.getElementById('campo_matricula_wrapper');
+                    var input = document.getElementById('matricula');
+                    if (cb.checked) {
+                        wrapper.style.display = '';
+                    } else {
+                        wrapper.style.display = 'none';
+                        input.value = '';
+                    }
+                }
+                </script>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-person-badge"></i>
+                Prazos e Notas
+            </h3>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" id="data_entrada" name="data_entrada"
+                               value="{{ dados_form.data_entrada if dados_form.data_entrada else now().strftime('%Y-%m-%d') }}"
+                               required>
+                        <label for="data_entrada" class="required-field">Data de Entrada</label>
+                        <div class="invalid-feedback">
+                            Por favor, informe a data de entrada.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" id="prazo_final" name="prazo_final"
+                               value="{{ dados_form.prazo_final }}"
+                               required>
+                        <label for="prazo_final" class="required-field">Prazo Final</label>
+                        <div class="invalid-feedback">
+                            Por favor, informe o prazo final.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <select class="form-select" id="envolvido_notas" name="envolvido_notas">
+                            <option value="0" {% if dados_form.envolvido_notas == 0 %}selected{% endif %}>Não</option>
+                            <option value="1" {% if dados_form.envolvido_notas == 1 %}selected{% endif %}>Sim</option>
+                        </select>
+                        <label for="envolvido_notas">Envolve Notas?</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-person-badge-fill"></i>
+                Dados do Apresentante
+            </h3>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="form-floating position-relative">
+                        <input type="text" class="form-control" id="apresentante" name="apresentante" 
+                               placeholder="Apresentante/Contato" autocomplete="off"
+                               value="{{ dados_form.apresentante }}">
+                        <label for="apresentante">Apresentante/Contato</label>
+                        <div id="apresentantes-dropdown" class="list-group position-absolute w-100 shadow-sm d-none" style="z-index: 1000; max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control" id="apresentante_telefone" name="apresentante_telefone" 
+                               placeholder="Telefone" autocomplete="tel"
+                               value="{{ dados_form.apresentante_telefone }}">
+                        <label for="apresentante_telefone">Telefone</label>
+                        <div class="invalid-feedback">
+                            Formato inválido. Ex: (XX) 9XXXX-XXXX ou (XX) XXXXX-XXXX
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="apresentante_email" name="apresentante_email" 
+                               placeholder="E-mail" autocomplete="email"
+                               value="{{ dados_form.apresentante_email }}">
+                        <label for="apresentante_email">E-mail</label>
+                        <div class="invalid-feedback">
+                            Por favor, informe um e-mail válido.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-chat-left-text"></i>
+                Observações
+            </h3>
+            
+            <div class="form-floating">
+                <textarea class="form-control" id="observacoes" name="observacoes" 
+                          rows="50" maxlength="5000"
+                          placeholder="Observações sobre o processo" style="min-height: 120px;">{{ dados_form.observacoes }}</textarea>
+                <label for="observacoes">Observações sobre o processo</label>
+            </div>
+            <div class="text-muted small mt-1" id="observacoes-counter">
+                0 caracteres, 0 linhas (Máx: 5000 caracteres, 50 linhas)
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-cloud-arrow-up"></i>
+                Anexos
+            </h3>
+            
+            <div class="file-upload-area" id="file-upload-area">
+                <i class="bi bi-cloud-arrow-up upload-icon"></i>
+                <div class="upload-text">Arraste arquivos aqui ou clique para selecionar</div>
+                <div class="upload-hint">
+                    Formatos aceitos: PDF, DOC, DOCX, JPG, PNG, GIF (máx. 50MB por arquivo)
+                </div>
+                <input type="file" class="file-input" id="anexos" name="anexos[]" multiple 
+                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif">
+            </div>
+            
+            <div id="file-preview" class="file-preview d-none"></div>
+            <div id="total-size" class="mt-2 text-muted small"></div>
+        </div>
+
+        <div class="action-buttons" style="display:flex; justify-content:flex-end; gap:.5rem;">
+            <a href="{{ url_for('processos.todos') }}" class="btn btn-danger">
+                <i class="bi bi-x-lg"></i>
+                Cancelar
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-lg"></i>
+                Cadastrar Processo
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+{% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    /* ─── Titular autocomplete com suporte a % ─────────────────── */
+    /* ─── Titular autocomplete ─── */
+    const titularInput = document.getElementById('titular');
+    const titularesDropdown = document.getElementById('titulares-dropdown');
+    const titularTelefoneInput = document.getElementById('titular_telefone');
+    const titularEmailInput = document.getElementById('titular_email');
+    let timeoutTitular = null;
+
+    function doSearchTitular(query) {
+        fetch(`{{ url_for('titulares.api_buscar') }}?q=${encodeURIComponent(query)}`)
+            .then(r => r.json())
+            .then(data => {
+                titularesDropdown.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(t => {
+                        const item = document.createElement('button');
+                        item.type = 'button';
+                        item.className = 'list-group-item list-group-item-action';
+                        item.style.cssText = 'font-size:13px;padding:8px 12px;';
+                        item.innerHTML = `<div class="d-flex justify-content-between align-items-center">
+                            <strong>${t.nome}</strong>
+                            <small class="text-muted">${t.telefone || ''} ${t.email ? '· '+t.email : ''}</small>
+                        </div>`;
+                        item.addEventListener('click', function() {
+                            titularInput.value = t.nome;
+                            if (t.telefone) titularTelefoneInput.value = t.telefone;
+                            if (t.email)    titularEmailInput.value    = t.email;
+                            titularesDropdown.classList.add('d-none');
+                            titularInput.focus();
+                        });
+                        titularesDropdown.appendChild(item);
+                    });
+                    titularesDropdown.classList.remove('d-none');
+                } else {
+                    const empty = document.createElement('div');
+                    empty.className = 'list-group-item';
+                    empty.style.cssText = 'font-size:12px;color:var(--text-color-secondary);text-align:center;padding:10px;';
+                    empty.textContent = 'Nenhum titular encontrado.';
+                    titularesDropdown.appendChild(empty);
+                    titularesDropdown.classList.remove('d-none');
+                }
+            })
+            .catch(() => titularesDropdown.classList.add('d-none'));
+    }
+
+    if (titularInput) {
+        titularInput.addEventListener('input', function() {
+            clearTimeout(timeoutTitular);
+            const query = this.value.trim();
+            if (query === '%') {
+                doSearchTitular('%');
+                return;
+            }
+            if (query.length < 2) {
+                titularesDropdown.classList.add('d-none');
+                return;
+            }
+            timeoutTitular = setTimeout(() => doSearchTitular(query), 300);
+        });
+
+        titularInput.addEventListener('focus', function() {
+            if (this.value.trim() === '%') doSearchTitular('%');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!titularInput.contains(e.target) && !titularesDropdown.contains(e.target)) {
+                titularesDropdown.classList.add('d-none');
+            }
+        });
+    }
+
+    /* ─── Apresentante autocomplete ─── */
+    const apresentanteInput = document.getElementById('apresentante');
+    const apresentantesDropdown = document.getElementById('apresentantes-dropdown');
+    const apresentanteTelefoneInput = document.getElementById('apresentante_telefone');
+    const apresentanteEmailInput = document.getElementById('apresentante_email');
+    let timeoutApresentante = null;
+
+    function doSearchApresentante(query) {
+        fetch(`{{ url_for('apresentantes.api_buscar') }}?q=${encodeURIComponent(query)}`)
+            .then(r => r.json())
+            .then(data => {
+                apresentantesDropdown.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(a => {
+                        const item = document.createElement('button');
+                        item.type = 'button';
+                        item.className = 'list-group-item list-group-item-action';
+                        item.style.cssText = 'font-size:13px;padding:8px 12px;';
+                        item.innerHTML = `<div class="d-flex justify-content-between align-items-center">
+                            <strong>${a.nome}</strong>
+                            <small class="text-muted">${a.telefone || ''} ${a.email ? '· '+a.email : ''}</small>
+                        </div>`;
+                        item.addEventListener('click', function() {
+                            apresentanteInput.value = a.nome;
+                            if (a.telefone) apresentanteTelefoneInput.value = a.telefone;
+                            if (a.email)    apresentanteEmailInput.value    = a.email;
+                            apresentantesDropdown.classList.add('d-none');
+                            apresentanteInput.focus();
+                        });
+                        apresentantesDropdown.appendChild(item);
+                    });
+                    apresentantesDropdown.classList.remove('d-none');
+                } else {
+                    const empty = document.createElement('div');
+                    empty.className = 'list-group-item';
+                    empty.style.cssText = 'font-size:12px;color:var(--text-color-secondary);text-align:center;padding:10px;';
+                    empty.textContent = 'Nenhum apresentante encontrado.';
+                    apresentantesDropdown.appendChild(empty);
+                    apresentantesDropdown.classList.remove('d-none');
+                }
+            })
+            .catch(() => apresentantesDropdown.classList.add('d-none'));
+    }
+
+    if (apresentanteInput) {
+        apresentanteInput.addEventListener('input', function() {
+            clearTimeout(timeoutApresentante);
+            const query = this.value.trim();
+            if (query === '%') {
+                doSearchApresentante('%');
+                return;
+            }
+            if (query.length < 2) {
+                apresentantesDropdown.classList.add('d-none');
+                return;
+            }
+            timeoutApresentante = setTimeout(() => doSearchApresentante(query), 300);
+        });
+
+        apresentanteInput.addEventListener('focus', function() {
+            if (this.value.trim() === '%') doSearchApresentante('%');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!apresentanteInput.contains(e.target) && !apresentantesDropdown.contains(e.target)) {
+                apresentantesDropdown.classList.add('d-none');
+            }
+        });
+    }
+
+    titularInput.addEventListener('input', function() {
+        clearTimeout(timeout);
+        const query = this.value.trim();
+        // Uppercase imediato
+        const pos = this.selectionStart;
+        this.value = this.value.toUpperCase();
+        this.setSelectionRange(pos, pos);
+
+        if (query === '%') {
+            doSearch('%');
+            return;
+        }
+        if (query.length < 2) { dropdown.classList.add('d-none'); return; }
+        timeout = setTimeout(() => doSearch(query), 300);
+    });
+
+    titularInput.addEventListener('keydown', function(e) {
+        if (!dropdown.classList.contains('d-none')) {
+            const items = dropdown.querySelectorAll('button');
+            if (!items.length) return;
+            let idx = Array.from(items).indexOf(document.activeElement);
+            if (e.key === 'ArrowDown') { e.preventDefault(); items[Math.min(idx+1, items.length-1)].focus(); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); if (idx<=0) titularInput.focus(); else items[idx-1].focus(); }
+            else if (e.key === 'Escape') { dropdown.classList.add('d-none'); }
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!titularInput.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.add('d-none');
+        }
+    });
+
+    /* ─── Uppercase global (exceto observações, email, senha) ───── */
+    const UPPER_SELECTORS = 'input:not([type="email"]):not([type="password"]):not([name="csrf_token"]):not([type="date"]):not([type="file"]):not([type="checkbox"]):not([type="radio"])';
+    document.querySelectorAll(UPPER_SELECTORS).forEach(function(inp) {
+        if (['observacoes'].includes(inp.id)) return;
+        inp.addEventListener('input', function() {
+            if (this.id === 'titular') return; // handled above
+            const pos = this.selectionStart;
+            this.value = this.value.toUpperCase();
+            this.setSelectionRange(pos, pos);
+        });
+    });
+    // Email lowercase e validação básica
+    document.querySelectorAll('input[type="email"]').forEach(function(inp) {
+        inp.addEventListener('input', function() {
+            const pos = this.selectionStart;
+            this.value = this.value.toLowerCase();
+            this.setSelectionRange(pos, pos);
+        });
+        inp.addEventListener('blur', function() {
+            if (this.value && !this.value.includes('@') || !this.value.includes('.')) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+
+    // Máscara de telefone (XX) XXXXX-XXXX / (XX) XXXX-XXXX
+    document.querySelectorAll('input[type="tel"]').forEach(function(inp) {
+        inp.addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 6) {
+                v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+            } else if (v.length > 2) {
+                v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+            } else if (v.length > 0) {
+                v = `(${v}`;
+            }
+            this.value = v;
+        });
+    });
+
+    /* ─── Enter → próximo campo ──────────────────────────────────── */
+    const formInputs = Array.from(document.querySelectorAll(
+        '#form-processo input:not([type="hidden"]):not([type="file"]):not([type="checkbox"]):not([type="radio"]), ' +
+        '#form-processo select, #form-processo textarea'
+    )).filter(el => !el.disabled && el.offsetParent !== null);
+
+    formInputs.forEach(function(el, i) {
+        el.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && this.tagName !== 'TEXTAREA' && this.tagName !== 'SELECT') {
+                e.preventDefault();
+                const next = formInputs[i + 1];
+                if (next) next.focus();
+            }
+        });
+    });
+
+    /* ─── Área de upload de anexos melhorada ─────────────────────── */
+    const fileInput     = document.getElementById('anexos');
+    const fileUploadArea = document.getElementById('file-upload-area');
+    const filePreview   = document.getElementById('file-preview');
+    const totalSizeEl   = document.getElementById('total-size');
+    const MAX_FILE_MB   = 50;
+    const MAX_TOTAL_MB  = 50;
+    const ALLOWED_TYPES = {
+        'application/pdf': ['pdf'],
+        'application/msword': ['doc'],
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['docx'],
+        'image/jpeg': ['jpg','jpeg'],
+        'image/png': ['png'],
+        'image/gif': ['gif']
+    };
+    const ALL_EXT = Object.values(ALLOWED_TYPES).flat();
+
+    let selectedFiles = [];
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sz = ['B','KB','MB','GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sz[i];
+    }
+
+    function getFileIcon(name) {
+        const ext = name.split('.').pop().toLowerCase();
+        if (ext === 'pdf') return 'bi-file-earmark-pdf text-danger';
+        if (['doc','docx'].includes(ext)) return 'bi-file-earmark-word text-primary';
+        if (['jpg','jpeg','png','gif'].includes(ext)) return 'bi-file-earmark-image text-success';
+        return 'bi-file-earmark';
+    }
+
+    function validateFile(file) {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (!ALL_EXT.includes(ext)) return `Tipo não permitido: .${ext}`;
+        if (file.size > MAX_FILE_MB * 1024 * 1024) return `"${file.name}" ultrapassa ${MAX_FILE_MB}MB`;
+        return null;
+    }
+
+    function updateFileList() {
+        if (selectedFiles.length === 0) {
+            filePreview.classList.add('d-none');
+            totalSizeEl.textContent = '';
+            rebuildFileInput();
+            return;
+        }
+        filePreview.classList.remove('d-none');
+        filePreview.innerHTML = '';
+        let totalBytes = 0;
+
+        selectedFiles.forEach(function(file, idx) {
+            totalBytes += file.size;
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border-color-default);border-radius:8px;margin-bottom:6px;background:var(--background-color-card);';
+            row.innerHTML = `
+                <i class="bi ${getFileIcon(file.name)}" style="font-size:20px;flex-shrink:0;"></i>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${file.name}</div>
+                    <div style="font-size:11px;color:var(--text-color-secondary);">${formatBytes(file.size)}</div>
+                </div>
+                <button type="button" data-idx="${idx}" class="btn-remove-file nav-btn nav-btn-danger" style="height:26px;padding:0 8px;font-size:11px;flex-shrink:0;">
+                    <i class="bi bi-x"></i>
+                </button>`;
+            filePreview.appendChild(row);
+        });
+
+        filePreview.querySelectorAll('.btn-remove-file').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const i = parseInt(this.dataset.idx);
+                selectedFiles.splice(i, 1);
+                updateFileList();
+            });
+        });
+
+        const totalMB = totalBytes / (1024 * 1024);
+        const over    = totalMB > MAX_TOTAL_MB;
+        totalSizeEl.innerHTML = `<span style="color:${over ? 'var(--color-error)' : 'var(--text-color-secondary)'};">
+            <i class="bi bi-hdd"></i> Total: ${formatBytes(totalBytes)} / ${MAX_TOTAL_MB}MB
+            ${over ? ' — <strong>Limite excedido!</strong>' : ''}
+        </span>`;
+
+        rebuildFileInput();
+    }
+
+    function rebuildFileInput() {
+        // Cria um DataTransfer para manter a lista de files no input
+        const dt = new DataTransfer();
+        selectedFiles.forEach(f => dt.items.add(f));
+        fileInput.files = dt.files;
+    }
+
+    fileInput.addEventListener('change', function() {
+        Array.from(this.files).forEach(function(file) {
+            const err = validateFile(file);
+            if (err) { showToast('warning', err); return; }
+            const dup = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+            if (!dup) selectedFiles.push(file);
+        });
+        updateFileList();
+    });
+
+    // Drag & Drop
+    fileUploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.borderColor = 'var(--color-success)';
+        this.style.background  = 'rgba(0,157,95,.05)';
+    });
+    fileUploadArea.addEventListener('dragleave', function() {
+        this.style.borderColor = '';
+        this.style.background  = '';
+    });
+    fileUploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '';
+        this.style.background  = '';
+        Array.from(e.dataTransfer.files).forEach(function(file) {
+            const err = validateFile(file);
+            if (err) { showToast('warning', err); return; }
+            const dup = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+            if (!dup) selectedFiles.push(file);
+        });
+        updateFileList();
+    });
+});
+</script>
+{% endblock scripts %}

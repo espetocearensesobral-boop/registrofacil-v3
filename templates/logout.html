@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Sair — Registro Fácil{% endblock %}
+{% block page_title %}Sair do Sistema{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+{% endblock %}
+
+{% block content %}
+<style>
+.logout-wrap {
+    min-height: calc(100vh - 130px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.logout-card {
+    background: var(--background-color-card);
+    border: 1px solid var(--border-color-default);
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.logout-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-black-premium), #444, var(--color-black-premium));
+}
+.logout-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.06);
+    border: 1.5px solid var(--border-color-default);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--text-color-secondary);
+    margin: 0 auto 1.4rem;
+}
+[data-bs-theme="dark"] .logout-icon {
+    background: rgba(255,255,255,.06);
+}
+.logout-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color-primary);
+    margin-bottom: .5rem;
+    letter-spacing: -.01em;
+}
+.logout-sub {
+    font-size: .875rem;
+    color: var(--text-color-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+.logout-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--background-color-body);
+    border: 1px solid var(--border-color-default);
+    border-radius: 99px;
+    padding: 5px 14px 5px 8px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--text-color-primary);
+    margin-bottom: 1.8rem;
+}
+.logout-user-chip i { font-size: .9rem; color: var(--text-color-secondary); }
+.logout-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+</style>
+
+<div class="logout-wrap">
+    <div class="logout-card">
+        <div class="logout-icon">
+            <i class="bi bi-box-arrow-right"></i>
+        </div>
+        <h4 class="logout-title">Sair do Sistema</h4>
+        <p class="logout-sub">Você está prestes a encerrar sua sessão.<br>Deseja continuar?</p>
+
+        {% if session.get('usuario_nome') %}
+        <div class="logout-user-chip">
+            <i class="bi bi-person-circle"></i>
+            {{ session.get('usuario_nome') }}
+        </div>
+        {% endif %}
+
+        <div class="logout-actions">
+            <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary" style="height:40px;padding:0 22px;font-size:14px;">
+                <i class="bi bi-x-lg"></i> Cancelar
+            </a>
+            <form method="post" id="logoutForm" action="{{ url_for('auth.logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" id="btnLogout" class="nav-btn nav-btn-primary" style="height:40px;padding:0 22px;font-size:14px;">
+                    <span class="spinner-border spinner-border-sm d-none me-1" id="logoutSpinner"></span>
+                    <i class="bi bi-box-arrow-right" id="logoutIcon"></i>
+                    <span id="logoutText"> Confirmar Saída</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.getElementById('logoutForm').addEventListener('submit', function() {
+    const btn = document.getElementById('btnLogout');
+    const spinner = document.getElementById('logoutSpinner');
+    const icon = document.getElementById('logoutIcon');
+    const text = document.getElementById('logoutText');
+    btn.disabled = true;
+    spinner.classList.remove('d-none');
+    icon.classList.add('d-none');
+    text.textContent = ' Saindo...';
+});
+</script>
+{% endblock %}

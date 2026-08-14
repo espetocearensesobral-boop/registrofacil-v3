@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+
+{% block title %}Informações da Empresa - Registro Fácil{% endblock %}
+{% block page_title %}Dados da Organização{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+{% endblock %}
+
+{% block content %}
+<style>
+.emp-section-lbl {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--text-color-secondary); margin-bottom: 6px;
+}
+.emp-fld label {
+    display: block; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+    color: var(--text-color-secondary); margin-bottom: 5px;
+}
+.emp-fld label .req { color: var(--color-error); }
+.emp-fld input, .emp-fld textarea {
+    width: 100%; font-size: 13px;
+    border-radius: 7px; border: 1px solid var(--border-color-input);
+    background: var(--background-color-card); color: var(--text-color-primary);
+    padding: 8px 11px; transition: border-color .15s, box-shadow .15s;
+}
+.emp-fld input { height: 38px; }
+.emp-fld textarea { height: 82px; resize: vertical; }
+.emp-fld input:focus, .emp-fld textarea:focus { outline: none; border-color: var(--color-gold-primary); box-shadow: 0 0 0 3px rgba(184,142,67,.12); }
+.emp-fld input:disabled, .emp-fld textarea:disabled { opacity: .6; cursor: not-allowed; }
+.emp-fld .invalid-feedback { font-size: 11px; color: var(--color-error); margin-top: 3px; display: none; }
+.emp-fld input.is-invalid, .emp-fld textarea.is-invalid { border-color: var(--color-error); }
+.emp-fld input.is-invalid ~ .invalid-feedback, .emp-fld textarea.is-invalid ~ .invalid-feedback { display: block; }
+.emp-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 576px) { .emp-row-2 { grid-template-columns: 1fr; } }
+</style>
+
+<form id="form-empresa" method="post" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="row g-3">
+        <!-- Coluna principal: formulário -->
+        <div class="col-lg-8">
+
+            <!-- Informações da Organização -->
+            <div class="rf-card mb-3">
+                <div class="rf-card-header">
+                    <h5 class="m-0"><i class="bi bi-building me-2" style="color:var(--color-gold-primary);"></i>Informações da Organização</h5>
+                </div>
+                <div class="rf-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="emp-fld">
+                        <label>Nome da Organização <span class="req">*</span></label>
+                        <input type="text" id="cartorio" name="cartorio"
+                               value="{{ empresa.cartorio | default('') }}" required
+                               placeholder="Ex: Cartório de Registro de Imóveis"
+                               {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                        <div class="invalid-feedback">O nome da Organização é obrigatório.</div>
+                    </div>
+                    <div class="emp-row-2">
+                        <div class="emp-fld">
+                            <label>Responsável Principal <span class="req">*</span></label>
+                            <input type="text" id="oficial" name="oficial"
+                                   value="{{ empresa.oficial | default('') }}" required
+                                   placeholder="Nome do Oficial/Responsável"
+                                   {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                            <div class="invalid-feedback">O nome do Responsável é obrigatório.</div>
+                        </div>
+                        <div class="emp-fld">
+                            <label>Substituto(a)</label>
+                            <input type="text" id="substituta" name="substituta"
+                                   value="{{ empresa.substituta | default('') }}"
+                                   placeholder="Nome do substituto"
+                                   {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                        </div>
+                    </div>
+                    <div class="emp-fld">
+                        <label>Endereço Completo <span class="req">*</span></label>
+                        <textarea id="endereco" name="endereco" required
+                                  placeholder="Rua, número, complemento, bairro, cidade - UF, CEP"
+                                  {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>{{ empresa.endereco | default('') }}</textarea>
+                        <div class="invalid-feedback">O Endereço é obrigatório.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dados de Contato -->
+            <div class="rf-card mb-3">
+                <div class="rf-card-header">
+                    <h5 class="m-0"><i class="bi bi-telephone-fill me-2" style="color:var(--color-gold-primary);"></i>Dados de Contato</h5>
+                </div>
+                <div class="rf-card-body">
+                    <div class="emp-row-2">
+                        <div class="emp-fld">
+                            <label>Telefone <span class="req">*</span></label>
+                            <input type="text" id="telefone" name="telefone"
+                                   value="{{ empresa.telefone | default('') }}" required
+                                   placeholder="(00) 0000-0000"
+                                   {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                            <div class="invalid-feedback">O Telefone é obrigatório.</div>
+                        </div>
+                        <div class="emp-fld">
+                            <label>E-mail <span class="req">*</span></label>
+                            <input type="email" id="email" name="email"
+                                   value="{{ empresa.email | default('') }}" required
+                                   placeholder="contato@organizacao.com.br"
+                                   {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                            <div class="invalid-feedback">Por favor, insira um e-mail válido.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if session.get('usuario_role') == 'admin' %}
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+                    <i class="bi bi-x"></i> Cancelar
+                </a>
+                <button type="submit" class="nav-btn nav-btn-success">
+                    <i class="bi bi-check-lg"></i> Salvar Alterações
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Coluna lateral: logo + sistema -->
+        <div class="col-lg-4">
+
+            <!-- Logo -->
+            <div class="rf-card mb-3">
+                <div class="rf-card-header">
+                    <h5 class="m-0"><i class="bi bi-image-fill me-2" style="color:var(--color-gold-primary);"></i>Logo</h5>
+                </div>
+                <div class="rf-card-body" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+                    <div class="logo-preview-container position-relative" style="width:160px;height:160px;border-radius:50%;overflow:hidden;border:3px solid var(--border-color-default);cursor:pointer;transition:all .2s;">
+                        <img src="{{ display_logo_url }}" class="logo-preview-image" id="logoPreview"
+                             alt="Logo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"
+                             onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default_avatar.png') }}';">
+                        <div class="logo-overlay" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
+                            <div style="text-align:center;color:#fff;">
+                                <i class="bi bi-camera-fill" style="font-size:1.4rem;display:block;margin-bottom:4px;"></i>
+                                <span style="font-size:11px;font-weight:600;">Alterar</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="d-none" type="file" id="logo" name="logo" accept="image/jpeg,image/png,image/svg+xml"
+                           {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                    <div id="logoFileInfo" class="d-none" style="width:100%;background:var(--background-color-body);border:1px solid var(--border-color-default);border-radius:8px;padding:8px 12px;font-size:12px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span id="logoFileName" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;"></span>
+                            <span id="logoFileSize" style="color:var(--text-color-secondary);flex-shrink:0;margin-left:6px;"></span>
+                        </div>
+                        <button type="button" id="btnCancelarUpload" style="font-size:11px;color:var(--color-error);background:none;border:none;padding:2px 0;cursor:pointer;margin-top:3px;">
+                            <i class="bi bi-x-circle me-1"></i>Cancelar seleção
+                        </button>
+                    </div>
+                    {% if empresa.logo and session.get('usuario_role') == 'admin' %}
+                    <button type="button" class="nav-btn nav-btn-secondary" id="btnRemoverLogo" style="width:100%;justify-content:center;font-size:12px;">
+                        <i class="bi bi-trash me-1"></i>Remover Logo
+                    </button>
+                    {% endif %}
+                    {% if empresa.logo %}
+                    <input type="checkbox" class="d-none" id="remover_logo" name="remover_logo" value="1"
+                           {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                    {% endif %}
+                    <p style="font-size:11px;color:var(--text-color-secondary);text-align:center;margin:0;">
+                        JPG, PNG ou SVG · máx. 2MB<br>Recomendado: 200×200px
+                    </p>
+                </div>
+            </div>
+
+            <!-- Informações do Sistema -->
+            <div class="rf-card">
+                <div class="rf-card-header">
+                    <h5 class="m-0"><i class="bi bi-info-circle me-2" style="color:var(--color-gold-primary);"></i>Sistema</h5>
+                </div>
+                <div class="rf-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                    <div>
+                        <div class="emp-section-lbl"><i class="bi bi-calendar-plus me-1"></i>Cadastrado em</div>
+                        <div style="font-size:13px;font-weight:600;color:var(--text-color-primary);">
+                            {% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">Não registrado</span>{% endif %}
+                        </div>
+                    </div>
+                    <div style="border-top:1px solid var(--border-color-default);padding-top:12px;">
+                        <div class="emp-section-lbl"><i class="bi bi-pencil-square me-1"></i>Última Atualização</div>
+                        <div style="font-size:13px;font-weight:600;color:var(--text-color-primary);">
+                            {% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">Nunca atualizado</span>{% endif %}
+                        </div>
+                    </div>
+                    {% if not session.get('usuario_role') == 'admin' %}
+                    <div style="border-top:1px solid var(--border-color-default);padding-top:12px;">
+                        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-warning);">
+                            <i class="bi bi-lock-fill"></i>
+                            <span>Apenas administradores podem editar estas informações.</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUserRole = "{{ session.get('usuario_role') }}";
+    const isAdmin = currentUserRole === 'admin';
+
+    const logoPreviewContainer = document.querySelector('.logo-preview-container');
+    const logoPreview = document.getElementById('logoPreview');
+    const logoInput = document.getElementById('logo');
+    const logoFileInfo = document.getElementById('logoFileInfo');
+    const logoFileName = document.getElementById('logoFileName');
+    const logoFileSize = document.getElementById('logoFileSize');
+    const btnRemoverLogo = document.getElementById('btnRemoverLogo');
+    const btnCancelarUpload = document.getElementById('btnCancelarUpload');
+    const removeLogoCheckbox = document.getElementById('remover_logo');
+    const sidebarCompanyLogo = document.getElementById('sidebar-company-logo');
+    const currentLogoUrl = "{{ display_logo_url }}";
+    const defaultLogoUrl = "{{ url_for('static', filename='img/default_avatar.png') }}";
+
+    // Hover effect on logo container
+    if (logoPreviewContainer) {
+        logoPreviewContainer.addEventListener('mouseenter', function() {
+            const overlay = this.querySelector('.logo-overlay');
+            if (overlay && isAdmin) overlay.style.opacity = '1';
+        });
+        logoPreviewContainer.addEventListener('mouseleave', function() {
+            const overlay = this.querySelector('.logo-overlay');
+            if (overlay) overlay.style.opacity = '0';
+        });
+        logoPreviewContainer.addEventListener('click', function() {
+            if (isAdmin && logoInput) logoInput.click();
+        });
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0B';
+        const k = 1024, sizes = ['B','KB','MB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    if (logoInput) {
+        logoInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+            const allowed = ['image/jpeg','image/png','image/svg+xml'];
+            if (!allowed.includes(file.type)) { alert('Formato não suportado. Use JPG, PNG ou SVG.'); return; }
+            if (file.size > 2 * 1024 * 1024) { alert('Arquivo muito grande. Máx. 2MB.'); return; }
+            const reader = new FileReader();
+            reader.onload = e => {
+                if (logoPreview) logoPreview.src = e.target.result;
+                if (sidebarCompanyLogo) sidebarCompanyLogo.src = e.target.result;
+                if (logoFileName) logoFileName.textContent = file.name;
+                if (logoFileSize) logoFileSize.textContent = formatFileSize(file.size);
+                if (logoFileInfo) logoFileInfo.classList.remove('d-none');
+                if (removeLogoCheckbox) removeLogoCheckbox.checked = false;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (btnCancelarUpload) {
+        btnCancelarUpload.addEventListener('click', function() {
+            if (logoPreview) logoPreview.src = currentLogoUrl;
+            if (sidebarCompanyLogo) sidebarCompanyLogo.src = currentLogoUrl;
+            if (logoInput) logoInput.value = '';
+            if (logoFileInfo) logoFileInfo.classList.add('d-none');
+            if (removeLogoCheckbox) removeLogoCheckbox.checked = false;
+        });
+    }
+
+    if (btnRemoverLogo) {
+        btnRemoverLogo.addEventListener('click', function() {
+            if (!confirm('Remover a logo atual?')) return;
+            if (logoPreview) logoPreview.src = defaultLogoUrl;
+            if (sidebarCompanyLogo) sidebarCompanyLogo.src = defaultLogoUrl;
+            if (logoInput) logoInput.value = '';
+            if (logoFileInfo) logoFileInfo.classList.add('d-none');
+            if (removeLogoCheckbox) removeLogoCheckbox.checked = true;
+        });
+    }
+
+    // Phone mask
+    const telefoneInput = document.getElementById('telefone');
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', function() {
+            let v = this.value.replace(/\D/g,'');
+            if(v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');
+            else v = v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');
+            this.value = v.trim().replace(/-$/,'');
+        });
+    }
+
+    // Form submit validation
+    const formEmpresa = document.getElementById('form-empresa');
+    if (formEmpresa && isAdmin) {
+        formEmpresa.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+            formEmpresa.querySelectorAll('[required]').forEach(inp => {
+                inp.classList.remove('is-invalid');
+                if (!inp.value.trim()) { inp.classList.add('is-invalid'); valid = false; }
+            });
+            const emailInp = document.getElementById('email');
+            if (emailInp && emailInp.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInp.value)) {
+                emailInp.classList.add('is-invalid'); valid = false;
+            }
+            if (valid) formEmpresa.submit();
+            else formEmpresa.querySelector('.is-invalid')?.focus();
+        });
+    }
+});
+</script>
+{% endblock %}

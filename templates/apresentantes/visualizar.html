@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Histórico de {{ apresentante.nome }} - Registro Fácil{% endblock %}
+
+{% block page_title %}Histórico do Apresentante{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('apresentantes.index') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+    {% if historico %}
+    <span class="nav-btn nav-btn-secondary"
+          style="opacity:.45;cursor:not-allowed;pointer-events:none;"
+          title="Não é possível editar um apresentante com processos vinculados">
+        <i class="bi bi-pencil"></i> Editar
+    </span>
+    {% else %}
+    <a href="{{ url_for('apresentantes.editar', apresentante_id=apresentante.id) }}" class="nav-btn nav-btn-primary">
+        <i class="bi bi-pencil"></i> Editar
+    </a>
+    {% endif %}
+    {% if not historico %}
+    <button type="button" class="nav-btn nav-btn-danger"
+            onclick="confirmarExclusaoApresentante({{ apresentante.id }}, '{{ apresentante.nome | replace("'", "\\'") }}')">
+        <i class="bi bi-trash"></i> Excluir
+    </button>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card kpi-info">
+        <div class="kpi-label">Cadastrado em</div>
+        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.created_at) }}</div>
+        <div class="kpi-sub">Data de cadastro</div>
+        <i class="bi bi-calendar-event kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-label">Última Atualização</div>
+        <div class="kpi-value kpi-success" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.updated_at) }}</div>
+        <div class="kpi-sub">Data de modificação</div>
+        <i class="bi bi-pencil-square kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-gold">
+        <div class="kpi-label">Processos Vinculados</div>
+        <div class="kpi-value kpi-gold">{{ historico | length }}</div>
+        <div class="kpi-sub">Total de registros</div>
+        <i class="bi bi-folder2-open kpi-bg-icon"></i>
+    </div>
+</div>
+
+<!-- Histórico de Serviços com dados do apresentante embutidos -->
+<div class="rf-card">
+    <div class="rf-card-header">
+        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;">
+                {{ apresentante.nome[0] | upper }}
+            </div>
+            <div style="min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <h5 class="m-0" style="font-size:15px;font-weight:700;">{{ apresentante.nome }}</h5>
+                    {% if apresentante.telefone %}
+                    <a href="https://wa.me/55{{ apresentante.telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" style="font-size:12px;color:var(--color-success);text-decoration:none;display:flex;align-items:center;gap:3px;">
+                        <i class="bi bi-whatsapp"></i>{{ apresentante.telefone }}
+                    </a>
+                    {% endif %}
+                    {% if apresentante.email %}
+                    <a href="mailto:{{ apresentante.email }}" style="font-size:12px;color:var(--color-info);text-decoration:none;display:flex;align-items:center;gap:3px;">
+                        <i class="bi bi-envelope"></i>{{ apresentante.email }}
+                    </a>
+                    {% endif %}
+                </div>
+                <div style="margin-top:4px;">
+                    <code style="font-size:10px;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % apresentante.id }}</code>
+                    {% if not apresentante.telefone and not apresentante.email %}
+                    <span style="font-size:11px;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+                <thead>
+                    <tr style="background:var(--background-color-body);">
+                        <th class="ps-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
+                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
+                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
+                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
+                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
+                        <th class="text-end pe-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for processo in historico %}
+                    <tr>
+                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ processo.tipo_servico_nome }}</td>
+                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.data_entrada) }}</td>
+                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.prazo_final) if processo.prazo_final else '—' }}</td>
+                        <td style="padding:10px 12px;">
+                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size:11px;border-radius:6px;padding:3px 8px;">
+                                {{ processo.status_nome }}
+                            </span>
+                        </td>
+                        <td class="text-end pe-4" style="padding:10px 12px;">
+                            <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}"
+                               class="nav-btn nav-btn-secondary"
+                               style="height:28px;padding:0 10px;font-size:12px;"
+                               title="Ver Processo">
+                                <i class="bi bi-eye"></i> Ver
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
+                            <i class="bi bi-folder2 d-block mb-2" style="font-size:2rem;opacity:.3;"></i>
+                            <span style="font-size:13px;">Nenhum processo encontrado para este apresentante.</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+<!-- Modal exclusão apresentante -->
+<div class="modal fade" id="confirmDeleteApresentanteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+                <h5 class="modal-title fw-bold"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" style="font-size:14px;">
+                Excluir o apresentante <strong id="apresentanteNomeParaExcluir"></strong>?<br>
+                <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Cancelar</button>
+                <form id="formExcluirApresentante" method="POST" action="" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+{{ super() }}
+<script>
+function confirmarExclusaoApresentante(id, nome) {
+    document.getElementById('apresentanteNomeParaExcluir').textContent = nome;
+    document.getElementById('formExcluirApresentante').action = '/apresentantes/excluir/' + id;
+    new bootstrap.Modal(document.getElementById('confirmDeleteApresentanteModal')).show();
+}
+</script>
+{% endblock %}

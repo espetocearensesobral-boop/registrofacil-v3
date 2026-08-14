@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Apresentantes — Registro Fácil</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
+    {% include 'relatorios/_cadastros_print_styles.html' %}
+</head>
+<body>
+<div class="page">
+
+    <div class="header">
+        <div class="header-left">
+            {% if logo_url %}
+            <img src="{{ logo_url }}" alt="Logo" class="logo"
+                 onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/registrofacil.png') }}';">
+            {% endif %}
+        </div>
+        <div class="header-right">
+            <div class="report-title">Relatório de Apresentantes</div>
+            <div class="report-sub">Gerado em {{ now.strftime('%d/%m/%Y às %H:%M:%S') }}</div>
+        </div>
+    </div>
+
+    <div class="summary-bar">
+        <div class="sum-cell">
+            <span class="sum-label">Total de Apresentantes</span>
+            <span class="sum-value">{{ total_registros }}</span>
+        </div>
+        <div class="sum-cell">
+            <div class="sum-label">Filtro Ativo</div>
+            <span class="sum-value small">{{ busca if busca else '(Todos)' }}</span>
+        </div>
+        <div class="sum-cell">
+            <span class="sum-label">Data</span>
+            <span class="sum-value small">{{ now.strftime('%d/%m/%Y') }}</span>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:4%">#</th>
+                <th style="width:30%">Nome do Apresentante</th>
+                <th style="width:15%">Telefone</th>
+                <th style="width:25%">E-mail</th>
+                <th style="width:16%">Último Reg.</th>
+                <th style="width:10%;text-align:center;">Processos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for apresentante in apresentantes %}
+            <tr>
+                <td style="color:#bbb;">{{ loop.index }}</td>
+                <td class="nome-col">{{ apresentante.nome }}</td>
+                <td>{{ apresentante.telefone or '—' }}</td>
+                <td style="font-size:7.5pt;">{{ apresentante.email or '—' }}</td>
+                <td>{{ apresentante.ultimo_registro_matricula or '—' }}</td>
+                <td style="text-align:center;">
+                    {% if apresentante.total_processos %}
+                    <span class="count-badge">{{ apresentante.total_processos }}</span>
+                    {% else %}
+                    <span style="color:#ccc;">0</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center;padding:20px;color:#bbb;font-style:italic;">Nenhum apresentante encontrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <div class="footer-left">Registro Fácil — Listagem de Apresentantes</div>
+        <div class="footer-right">Total: {{ total_registros }} registros &nbsp;|&nbsp; {{ now.strftime('%d/%m/%Y %H:%M') }}</div>
+    </div>
+
+</div>
+<script>
+    window.onload = function() { window.print(); };
+    window.addEventListener('afterprint', function() { window.close(); });
+</script>
+</body>
+</html>

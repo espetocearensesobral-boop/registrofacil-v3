@@ -1,0 +1,665 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ============================================================
+         SCRIPT ANTI-FLICKER DA SIDEBAR
+         Aplica o estado salvo ANTES da página renderizar
+         ============================================================ -->
+    <script>
+        (function() {
+            // 1. Recuperar estado da sidebar
+            var sidebarState = localStorage.getItem('registrofacil_sidebar_collapsed');
+            var sidebar = document.documentElement;
+            
+            // 2. Aplicar classe imediatamente (antes do CSS carregar)
+            if (sidebarState === 'true') {
+                sidebar.classList.add('sidebar-collapsed-initial');
+            }
+            
+            // 3. Desabilitar transições durante o carregamento
+            sidebar.classList.add('no-transitions');
+            
+            // 4. Remover classe de no-transitions após página carregar
+            window.addEventListener('load', function() {
+                // Pequeno delay para garantir que tudo renderizou
+                setTimeout(function() {
+                    document.documentElement.classList.remove('no-transitions');
+                }, 100);
+            });
+        })();
+    </script>
+
+    <title>{% block title %}Registro Fácil{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/processos.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/compact.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+    <style>
+        /* ── Padronização global dos botões do cabeçalho (navbar page_actions) ── */
+        .navbar .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 7px;
+            border: 1.5px solid transparent;
+            line-height: 1.4;
+            white-space: nowrap;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color .18s, border-color .18s, color .18s, box-shadow .18s;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .navbar .nav-btn i { font-size: 14px; }
+
+        /* Primário — preto sólido */
+        .navbar .nav-btn-primary,
+        .navbar .nav-btn.nav-btn-primary {
+            background-color: #1a1a1a !important;
+            border-color: #1a1a1a !important;
+            color: #fff !important;
+        }
+        .navbar .nav-btn-primary:hover,
+        .navbar .nav-btn.nav-btn-primary:hover {
+            background-color: #333 !important;
+            border-color: #333 !important;
+            color: #fff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+
+        /* Secundário — cinza escuro */
+        .navbar .nav-btn-secondary,
+        .navbar .nav-btn.nav-btn-secondary {
+            background-color: #2a2a2a !important;
+            border-color: #2a2a2a !important;
+            color: #e8e8e8 !important;
+        }
+        .navbar .nav-btn-secondary:hover,
+        .navbar .nav-btn.nav-btn-secondary:hover {
+            background-color: #3a3a3a !important;
+            border-color: var(--color-gold-primary) !important;
+            color: var(--color-gold-primary) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+
+        /* Perigo — vermelho */
+        .navbar .nav-btn-danger,
+        .navbar .nav-btn.nav-btn-danger {
+            background-color: var(--color-error) !important;
+            border-color: var(--color-error) !important;
+            color: #fff !important;
+        }
+        .navbar .nav-btn-danger:hover,
+        .navbar .nav-btn.nav-btn-danger:hover {
+            background-color: #a01f25 !important;
+            border-color: #a01f25 !important;
+            color: #fff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+
+        /* Dropdown toggle herda o estilo do pai */
+        .navbar .nav-btn.dropdown-toggle::after { margin-left: 4px; }
+
+        /* Remove espaçamentos avulsos antigos que causavam colagem */
+        .navbar .nav-btn + .nav-btn,
+        .navbar .nav-btn + .dropdown,
+        .navbar .dropdown + .nav-btn,
+        .navbar .dropdown + .dropdown { margin-left: 0; } /* gap-2 do flex cuida disso */
+
+        /* Botão Editar no cabeçalho — preto padrão do sistema (sobrepõe dourado) */
+        .navbar .nav-btn-gold,
+        .navbar .nav-btn.nav-btn-gold {
+            background-color: #1a1a1a !important;
+            border-color: #1a1a1a !important;
+            color: #fff !important;
+        }
+        .navbar .nav-btn-gold:hover,
+        .navbar .nav-btn.nav-btn-gold:hover {
+            background-color: #333 !important;
+            border-color: #333 !important;
+            color: #fff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+    </style>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const temaSalvo = localStorage.getItem("registrofacil_tema_cor");
+            if (temaSalvo) {
+                document.body.setAttribute("data-cor", temaSalvo);
+            }
+        });
+    </script>
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
+</head>
+<body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}">
+    <!-- Overlay para fechar sidebar no mobile -->
+    <div id="sidebar-overlay"></div>
+    <div class="loader-overlay"></div>
+    <div class="d-flex" id="wrapper">
+        <div class="sidebar" id="sidebar">
+
+            <div class="hamburger-menu" data-accesskey="i"
+                 title="Expandir/Recolher Menu (Alt+I)">
+                <img src="{{ session.get('empresa_logo_url', url_for('static', filename='img/registrofacil.png')) }}"
+                     alt="Logo" class="sidebar-company-logo" id="sidebar-company-logo"
+                     onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/registrofacil.png') }}'">
+            </div>
+
+            <div class="menu-section">
+
+                {# ─── PRINCIPAL ─── #}
+                <div class="sidebar-group-label">Principal</div>
+
+                <div class="menu-item" data-href="{{ url_for('auth.dashboard') }}" data-accesskey="d" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Início (Alt+D)">
+                    <div class="menu-icon"><i class="bi bi-speedometer2"></i></div>
+                    <span class="menu-text">Início</span>
+                </div>
+
+                <div class="menu-item" data-bs-toggle="modal" data-bs-target="#globalSearchModal" data-accesskey="q" onclick="setActive(this)"
+                     title="Buscar (Alt+Q)">
+                    <div class="menu-icon"><i class="bi bi-search"></i></div>
+                    <span class="menu-text">Buscar</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('processos.novo') }}" data-accesskey="n" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Novo Processo (Alt+N)">
+                    <div class="menu-icon"><i class="bi bi-plus-circle-fill"></i></div>
+                    <span class="menu-text">Novo Processo</span>
+                </div>
+
+                {# ─── PROCESSOS ─── #}
+                <div class="sidebar-group-label">Processos</div>
+
+                <div class="menu-item" data-href="{{ url_for('processos.vinculados') }}" data-accesskey="f" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Meus Processos (Alt+F)">
+                    <div class="menu-icon"><i class="bi bi-person-check-fill"></i></div>
+                    <span class="menu-text">Meus Processos</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('processos.em_andamento') }}" data-accesskey="m" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Em Andamento (Alt+M)">
+                    <div class="menu-icon"><i class="bi bi-arrow-repeat"></i></div>
+                    <span class="menu-text">Em Andamento</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('processos.pendentes') }}" data-accesskey="e" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Pendentes (Alt+E)">
+                    <div class="menu-icon"><i class="bi bi-hourglass-split"></i></div>
+                    <span class="menu-text">Pendentes</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('processos.hoje') }}" data-accesskey="h" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Processos do Dia (Alt+H)">
+                    <div class="menu-icon"><i class="bi bi-calendar-check-fill"></i></div>
+                    <span class="menu-text">Processos do Dia</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('processos.todos') }}" data-accesskey="t" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Todos os Processos (Alt+T)">
+                    <div class="menu-icon"><i class="bi bi-folder-fill"></i></div>
+                    <span class="menu-text">Todos os Processos</span>
+                </div>
+
+                {# ─── CADASTROS ─── #}
+                <div class="sidebar-group-label">Cadastros</div>
+
+                <div class="menu-item" data-href="{{ url_for('titulares.index') }}" data-accesskey="l" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Titulares (Alt+L)">
+                    <div class="menu-icon"><i class="bi bi-person-lines-fill"></i></div>
+                    <span class="menu-text">Titulares</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('apresentantes.index') }}" data-accesskey="r" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Apresentantes (Alt+R)">
+                    <div class="menu-icon"><i class="bi bi-person-badge-fill"></i></div>
+                    <span class="menu-text">Apresentantes</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('atividades.historico') }}" data-accesskey="a" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Atividades (Alt+A)">
+                    <div class="menu-icon"><i class="bi bi-activity"></i></div>
+                    <span class="menu-text">Atividades</span>
+                </div>
+
+                {# ─── SISTEMA ─── #}
+                <div class="sidebar-group-label">Sistema</div>
+
+                {% if session.get('usuario_role') == 'admin' %}
+                <div class="menu-item" data-href="{{ url_for('admin_users.users_list') }}" data-accesskey="u" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Gerenciar Usuários (Alt+U)">
+                    <div class="menu-icon"><i class="bi bi-people-fill"></i></div>
+                    <span class="menu-text">Gerenciar Usuários</span>
+                </div>
+                {% endif %}
+
+                <div class="menu-item" data-href="{{ url_for('configuracoes.index') }}" data-accesskey="s" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Configurações (Alt+S)">
+                    <div class="menu-icon"><i class="bi bi-gear-wide-connected"></i></div>
+                    <span class="menu-text">Configurações</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('backup.index') }}" data-accesskey="b" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Cópia de Segurança (Alt+B)">
+                    <div class="menu-icon"><i class="bi bi-cloud-arrow-up-fill"></i></div>
+                    <span class="menu-text">Cópia de Segurança</span>
+                </div>
+
+            </div>
+
+            {# ─── RODAPÉ: Perfil do usuário ─── #}
+            <div class="bottom-section" id="profile-section">
+                <div class="section-title-toggle" id="profile-section-toggle">
+                    <div class="menu-icon">
+                        <img src="{{ session.get('usuario_foto_url', url_for('static', filename='img/default_avatar.png')) }}"
+                             alt="Avatar" class="sidebar-avatar">
+                    </div>
+                    <span class="menu-text" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;">
+                        {{ session.get('usuario_nome', 'Meu Perfil') | truncate(18) }}
+                    </span>
+                    <i class="bi bi-chevron-down toggle-icon"></i>
+                </div>
+                <div class="profile-menu-items">
+                    <div class="menu-item" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
+                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ session.get('usuario_nome', 'Meu Perfil') }} (Alt+M)">
+                        <div class="menu-icon"><i class="bi bi-person-circle"></i></div>
+                        <span class="menu-text">Meu Perfil</span>
+                    </div>
+                    <div class="menu-item" data-bs-toggle="modal" data-bs-target="#shortcutsModal" data-accesskey="j" onclick="setActive(this)"
+                         title="Atalhos do Sistema (Alt+J)">
+                        <div class="menu-icon"><i class="bi bi-keyboard"></i></div>
+                        <span class="menu-text">Atalhos</span>
+                    </div>
+                    <div class="menu-item" data-bs-toggle="modal" data-bs-target="#aboutModal" data-accesskey="p" onclick="setActive(this)"
+                         title="Sobre (Alt+P)">
+                        <div class="menu-icon"><i class="bi bi-info-circle"></i></div>
+                        <span class="menu-text">Sobre</span>
+                    </div>
+                    <div class="menu-item logout-menu-item" data-href="{{ url_for('auth.logout') }}" data-accesskey="x" onclick="setActive(this)"
+                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Sair da Conta (Alt+X)">
+                        <div class="menu-icon"><i class="bi bi-box-arrow-right"></i></div>
+                        <span class="menu-text menu-text-logout">Sair da Conta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="page-content-wrapper" class="flex-fill">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+                <div class="container-fluid">
+                    <button id="mobile-menu-btn" aria-label="Abrir menu" onclick="toggleMobileSidebar()">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <span class="navbar-brand mb-0 h1 fs-5 fw-bold ms-2 text-dark">{% block page_title %}Registro Fácil{% endblock %}</span>
+                    <div class="ms-auto d-flex align-items-center gap-2">
+                        {% block page_actions %}{% endblock %}
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid py-4">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            {% for category, message in messages %}
+                            if(typeof showToast === 'function') {
+                                showToast('{{ "success" if category == "success" else ("danger" if category == "danger" else ("warning" if category == "warning" else "info")) }}', '{{ message | replace("'", "\'") }}');
+                            } else {
+                                setTimeout(function(){
+                                    if(typeof window.showToast === 'function') window.showToast('{{ "success" if category == "success" else ("danger" if category == "danger" else ("warning" if category == "warning" else "info")) }}', '{{ message | replace("'", "\'") }}');
+                                }, 300);
+                            }
+                            {% endfor %}
+                        });
+                        </script>
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    {# Modal de Confirmação de Exclusão de Processo (Global) #}
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background:var(--color-error);color:#fff;">
+                    <h5 class="modal-title fw-bold" id="confirmDeleteModalLabel"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body" style="font-size:14px;">
+                    Tem certeza que deseja excluir este processo?<br>
+                    <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i> Cancelar
+                    </button>
+                    <form id="deleteForm" method="POST" action="" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="id" id="deleteProcessId" value="">
+                        <button type="submit" class="nav-btn nav-btn-danger">
+                            <i class="bi bi-trash"></i> Excluir Permanentemente
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal de Busca Global - Modernizado #}
+    <div class="modal fade" id="globalSearchModal" tabindex="-1" aria-labelledby="globalSearchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:620px;">
+            <div class="modal-content" style="border-radius:14px;overflow:hidden;border:1px solid var(--border-color-default);box-shadow:0 20px 60px rgba(0,0,0,.2);">
+                <style>
+                .gs-wrap { padding:0; }
+                .gs-input-bar { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border-color-default); background:var(--background-color-card); }
+                .gs-input-bar i.gs-icon { font-size:17px; color:var(--text-color-secondary); flex-shrink:0; }
+                .gs-input-bar input { flex:1; border:none; background:transparent; font-size:15px; color:var(--text-color-primary); outline:none; }
+                .gs-input-bar input::placeholder { color:var(--text-color-secondary); }
+                .gs-kbd { background:var(--background-color-body); border:1px solid var(--border-color-default); border-radius:5px; padding:2px 7px; font-size:11px; color:var(--text-color-secondary); font-family:monospace; }
+                .gs-body { max-height:380px; overflow-y:auto; background:var(--background-color-card); }
+                .gs-section-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-color-secondary); padding:10px 16px 4px; }
+                .gs-item { display:flex; align-items:center; gap:12px; padding:10px 16px; cursor:pointer; transition:background .1s; text-decoration:none; color:inherit; border:none; background:transparent; width:100%; }
+                .gs-item:hover, .gs-item.gs-active { background:var(--background-color-body); }
+                .gs-item-icon { width:34px; height:34px; border-radius:8px; background:var(--background-color-body); border:1px solid var(--border-color-default); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; color:var(--color-gold-dark); }
+                .gs-item-text { flex:1; min-width:0; text-align:left; }
+                .gs-item-title { font-size:13px; font-weight:600; color:var(--text-color-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+                .gs-item-sub { font-size:11px; color:var(--text-color-secondary); margin-top:1px; }
+                .gs-item-arrow { font-size:12px; color:var(--text-color-secondary); }
+                .gs-empty { padding:36px 16px; text-align:center; }
+                .gs-empty i { font-size:2rem; opacity:.2; display:block; margin-bottom:8px; }
+                .gs-empty p { font-size:13px; color:var(--text-color-secondary); margin:0; }
+                .gs-loading { padding:24px; text-align:center; color:var(--text-color-secondary); font-size:13px; }
+                .gs-footer { display:flex; align-items:center; gap:12px; padding:8px 16px; border-top:1px solid var(--border-color-default); background:var(--background-color-body); font-size:11px; color:var(--text-color-secondary); }
+                </style>
+                <div class="gs-wrap">
+                    <div class="gs-input-bar">
+                        <i class="bi bi-search gs-icon"></i>
+                        <input type="text" id="modal-global-search-input" placeholder="Buscar processos por titular, matrícula ou ID..." autofocus autocomplete="off">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size:11px;opacity:.5;"></button>
+                    </div>
+                    <div class="gs-body" id="modal-search-results-list">
+                        <div class="gs-empty" id="modal-search-no-results">
+                            <i class="bi bi-search"></i>
+                            <p>Digite para buscar processos no sistema</p>
+                            <p style="font-size:10px;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
+                        </div>
+                    </div>
+                    <div class="gs-footer">
+                        <span><kbd class="gs-kbd">↑↓</kbd> navegar</span>
+                        <span><kbd class="gs-kbd">Enter</kbd> abrir</span>
+                        <span><kbd class="gs-kbd">Esc</kbd> fechar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal: Sobre #}
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">
+                        <i class="bi bi-info-circle me-2"></i>Sobre
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img src="{{ url_for('static', filename='img/registrofacil.png') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 150px;">
+                        <h4>Registro Fácil</h4>
+                        <p class="text-muted">Sistema de Gestão de Processos</p>
+                    </div>
+                    <hr>
+                    <p><strong>Versão:</strong> {{ app_version }}</p>
+                    <p><strong>Desenvolvido por:</strong> Tauan Pires</p>
+                    <p><strong>Data de Lançamento:</strong> Fevereiro 2026</p>
+                    <hr>
+                    <p class="small text-muted">© 2025 Registro Fácil. Todos os direitos reservados.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal: Atalhos do Sistema #}
+    <div class="modal fade" id="shortcutsModal" tabindex="-1" aria-labelledby="shortcutsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--color-black-premium); color: #fff;">
+                    <h5 class="modal-title" id="shortcutsModalLabel">
+                        <i class="bi bi-keyboard me-2"></i>Atalhos do Sistema
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" style="filter: invert(1) brightness(2);"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
+                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Navegação Principal</h6>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Expandir/Recolher Menu Lateral</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>I</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Dashboard</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>D</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Buscar</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>Q</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Novo Processo</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>N</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Titulares</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>L</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary">Todos os Processos</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>T</kbd></span>
+                        </div>
+                    </div>
+
+                    <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
+                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Processos Hoje</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>H</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Processos Pendentes</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>E</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary">Meus Processos</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>F</kbd></span>
+                        </div>
+                    </div>
+
+                    <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
+                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Configurações e Sistema</h6>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Configurações do Sistema</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>S</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Gerenciar Usuários</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>U</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary">Cópia de Segurança</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>B</kbd></span>
+                        </div>
+                    </div>
+
+                    <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
+                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Processos do Dia</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>H</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Pendentes</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>E</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary">Meus Processos</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>F</kbd></span>
+                        </div>
+                    </div>
+
+                    <div class="list-group list-group-flush border rounded-3 p-3">
+                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Opções do Usuário</h6>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Meu Perfil</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>M</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Atalhos</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>J</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
+                            <span class="text-secondary">Sobre</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>P</kbd></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary">Sair da Conta</span>
+                            <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>X</kbd></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // URLs dinâmicas passadas do Flask para o JavaScript
+        const FlaskRoutes = {
+            dashboard: "{{ url_for('auth.dashboard') }}",
+            processosTodos: "{{ url_for('processos.todos') }}",
+            processosNovo: "{{ url_for('processos.novo') }}",
+            processosHoje: "{{ url_for('processos.hoje') }}",
+            processosPendentes: "{{ url_for('processos.pendentes') }}",
+            processosVinculados: "{{ url_for('processos.vinculados') }}",
+            authLogout: "{{ url_for('auth.logout') }}",
+            processosExcluir: "{{ url_for('processos.excluir') }}",
+            processosVisualizarBase: "{{ url_for('processos.visualizar', processo_id=0) | replace('0', '') }}", // Base URL sem ID
+            processosEditarBase: "{{ url_for('processos.editar', processo_id=0) | replace('0', '') }}",     // Base URL sem ID
+            apiAcquireLock: "{{ url_for('search.api_acquire_lock') }}",
+            apiRenewLock: "{{ url_for('search.api_renew_lock') }}",
+            apiReleaseLock: "{{ url_for('search.api_release_lock') }}",
+            apiGlobalSearch: "{{ url_for('search.global_search') }}",
+            atividadesHistorico: "{{ url_for('atividades.historico') }}",
+            configuracoesIndex: "{{ url_for('configuracoes.index') }}",
+            adminUsersList: "{{ url_for('admin_users.users_list') }}",
+            adminEditUserBase: "{{ url_for('admin_users.edit_user', user_id=0) | replace('0', '') }}", // Base URL sem ID
+            uploadsPerfilBase: "{{ url_for('serve_upload', filepath='perfil/') }}",
+            uploadsEmpresaBase: "{{ url_for('serve_upload', filepath='empresa/') }}",
+            empresaIndex: "{{ url_for('empresa.index') }}",
+            backupIndex: "{{ url_for('backup.index') }}", // Adicionado o link para a página de backup
+            perfilIndex: "{{ url_for('perfil.index') }}" // NOVA ROTA DE PERFIL
+        };
+    </script>
+    
+    {# Importações dos novos módulos JavaScript - IMPORTANTES: type="module" e a ordem de dependência #}
+    <script type="module" src="{{ url_for('static', filename='js/utils/dom_helpers.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/processos/form_logic.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/processos/record_locking.js') }}"></script>
+    
+    {# O main.js agora é o orquestrador, ele DEVE ser o último script a ser carregado, e também precisa ser um módulo #}
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+    // ── Controle de sidebar mobile ──────────────────────────────
+    window.toggleMobileSidebar = function() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const isOpen  = sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    window.closeMobileSidebar = function() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Fecha sidebar ao clicar no overlay
+    document.getElementById('sidebar-overlay').addEventListener('click', closeMobileSidebar);
+
+    // Fecha sidebar ao navegar (clique em menu-item com data-href)
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#sidebar .menu-item[data-href]').forEach(function(item) {
+            item.addEventListener('click', function () {
+                if (window.innerWidth <= 991) closeMobileSidebar();
+            });
+        });
+
+        // Em mobile: nunca restaurar estado "collapsed" do desktop
+        if (window.innerWidth <= 991) {
+            const sidebar  = document.getElementById('sidebar');
+            const wrapper  = document.getElementById('wrapper');
+            const pcw      = document.getElementById('page-content-wrapper');
+            sidebar.classList.remove('collapsed');
+            wrapper.classList.remove('toggled');
+            if (pcw) pcw.style.marginLeft = '0';
+        }
+    });
+
+    // Ao redimensionar: limpar estado mobile quando volta para desktop
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 991) {
+            closeMobileSidebar();
+            document.body.style.overflow = '';
+        }
+    });
+    </script>
+    {% block scripts %}{% endblock %}
+    <!-- Toast Container Global -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;"></div>
+
+<script>
+    // Garantir que a sidebar está no estado correto
+    // (fallback caso o script do head não tenha funcionado)
+    document.addEventListener('DOMContentLoaded', function() {
+        const isCollapsed = localStorage.getItem('registrofacil_sidebar_collapsed') === 'true';
+        const sidebar = document.getElementById('sidebar');
+        const wrapper = document.getElementById('wrapper');
+        
+        if (sidebar && wrapper && isCollapsed) {
+            sidebar.classList.add('collapsed');
+            wrapper.classList.add('toggled');
+        }
+    });
+</script>
+</body>
+</html>

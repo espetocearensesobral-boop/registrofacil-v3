@@ -1,0 +1,1000 @@
+{% extends "base.html" %}
+
+{% block title %}Configurações - Registro Fácil{% endblock %}
+{% block page_title %}Configurações{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-house"></i> Dashboard
+    </a>
+{% endblock %}
+
+{% block content %}
+<style>
+.cfg-panel { display: none; }
+.cfg-panel.active { display: block; }
+
+.cfg-panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.1rem; }
+.cfg-panel-header h5 { margin: 0; font-size: 15px; font-weight: 700; color: var(--text-color-primary); }
+.cfg-ph-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--color-black-premium); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+}
+
+.cfg-card { background: var(--background-color-card); border: 1px solid var(--border-color-default); border-radius: 10px; overflow: hidden; margin-bottom: 1rem; }
+.cfg-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--background-color-body); border-bottom: 1px solid var(--border-color-default);
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-color-secondary);
+}
+.cfg-card-body { padding: 14px; }
+
+.cfg-add-row {
+    display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap;
+    padding: 12px 14px;
+    background: var(--background-color-body);
+    border: 1px solid var(--border-color-default);
+    border-radius: 8px; margin-bottom: 1rem;
+}
+.cfg-add-row .cfg-fg { display: flex; flex-direction: column; gap: 4px; min-width: 140px; }
+.cfg-add-row .cfg-fg label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-color-secondary); margin: 0; }
+.cfg-add-row .cfg-fg input[type=text],
+.cfg-add-row .cfg-fg input[type=number] {
+    height: 34px; font-size: 13px; border-radius: 6px;
+    border: 1px solid var(--border-color-input); padding: 0 9px;
+    background: var(--background-color-card); color: var(--text-color-primary);
+}
+.cfg-add-row .cfg-fg input[type=color] { height: 34px; width: 54px; border-radius: 6px; border: 1px solid var(--border-color-input); padding: 2px; cursor: pointer; }
+
+.cfg-btn-add {
+    height: 34px; padding: 0 14px; font-size: 13px; font-weight: 600;
+    border-radius: 6px; border: none; background: var(--color-success); color: #fff;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+    transition: background .15s; flex-shrink: 0; align-self: flex-end;
+}
+.cfg-btn-add:hover { background: #008a57; }
+
+.cfg-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cfg-tbl thead { background: var(--background-color-body); border-bottom: 2px solid var(--border-color-default); }
+.cfg-tbl th { padding: 8px 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-color-secondary); text-align: left; white-space: nowrap; }
+.cfg-tbl td { padding: 9px 12px; border-bottom: 1px solid var(--border-color-default); vertical-align: middle; }
+.cfg-tbl tbody tr:last-child td { border-bottom: none; }
+.cfg-tbl tbody tr:hover td { background: rgba(0,0,0,.018); }
+.cfg-tbl tr.row-off td { opacity: .45; }
+
+.cfg-row-actions { display: flex; gap: 4px; justify-content: flex-end; }
+.cfg-ibtn {
+    width: 28px; height: 28px; border-radius: 6px;
+    border: 1px solid var(--border-color-default); background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; cursor: pointer; color: var(--text-color-secondary); transition: all .15s;
+}
+.cfg-ibtn:hover { background: var(--background-color-body); color: var(--text-color-primary); border-color: #bbb; }
+.cfg-ibtn.edit:hover { color: #FF8C00; border-color: #FF8C00; }
+.cfg-ibtn.act-on:hover { color: var(--color-success); border-color: var(--color-success); }
+.cfg-ibtn.del:hover { color: var(--color-error); border-color: var(--color-error); }
+
+.cfg-info-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border-color-default); font-size: 13px; }
+.cfg-info-row:last-child { border-bottom: none; }
+.cfg-info-lbl { width: 130px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-secondary); flex-shrink: 0; }
+
+.cfg-form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cfg-form-3 { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: end; }
+.cfg-fld label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-secondary); margin-bottom: 4px; }
+.cfg-fld input, .cfg-fld select { height: 34px; font-size: 13px; border-radius: 6px; border: 1px solid var(--border-color-input); background: var(--background-color-card); color: var(--text-color-primary); padding: 0 9px; width: 100%; }
+.cfg-fld input[type=password] { padding: 0 9px; }
+
+.cfg-switches { display: flex; gap: 18px; flex-wrap: wrap; }
+.cfg-sw { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.cfg-sw input { cursor: pointer; }
+
+.cfg-sbtn {
+    height: 36px; padding: 0 18px; font-size: 13px; font-weight: 600;
+    border-radius: 7px; border: none; background: var(--color-success); color: #fff;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background .15s;
+}
+.cfg-sbtn:hover { background: #008a57; }
+.cfg-sbtn.green { background: var(--color-success); }
+.cfg-sbtn.green:hover { background: #008a57; }
+.cfg-sbtn.blue { background: #0d6efd; }
+.cfg-sbtn.blue:hover { background: #0b5ed7; }
+.cfg-obtn {
+    height: 36px; padding: 0 18px; font-size: 13px; font-weight: 600;
+    border-radius: 7px; border: none; background: var(--color-error); color: #fff;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all .15s;
+}
+.cfg-obtn:hover { background: #a01f25; }
+
+.week-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+.wchip { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 99px; border: 1.5px solid var(--border-color-default); font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; }
+.wchip input { display: none; }
+.wchip:has(input:checked) { background: var(--color-black-premium); border-color: var(--color-black-premium); color: #fff; }
+/* Circular color swatches */
+.color-swatch-picker { display: flex; flex-direction: column; gap: 4px; }
+.color-swatches { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.cswatch {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid transparent; cursor: pointer;
+    transition: transform .15s, border-color .15s;
+    flex-shrink: 0; display: inline-block;
+}
+.cswatch:hover { transform: scale(1.2); }
+.cswatch.selected { border-color: var(--text-color-primary); box-shadow: 0 0 0 1px var(--background-color-card); }
+.cswatch-custom {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--background-color-body); border: 1.5px dashed var(--border-color-default);
+    color: var(--text-color-secondary); font-size: 13px; cursor: pointer; position: relative;
+}
+.cswatch-custom input[type=color] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: none; padding: 0; }
+.cswatch-custom:hover { border-color: var(--color-black-premium); color: var(--color-black-premium); }
+
+</style>
+
+<div class="rf-card">
+    <div class="rf-card-body" style="padding: 14px 16px 0;">
+        <div class="rf-tabs" id="cfg-tabs">
+            <button class="rf-tab-btn{% if not active_tab or active_tab == 'status' %} active{% endif %}" data-panel="status" onclick="cfgSwitch(this)">
+                <i class="bi bi-palette-fill"></i> Status
+            </button>
+            <button class="rf-tab-btn{% if active_tab == 'services' %} active{% endif %}" data-panel="services" onclick="cfgSwitch(this)">
+                <i class="bi bi-list-check"></i> Tipos de Serviço
+            </button>
+            {% if session.get('usuario_role') == 'admin' %}
+            <button class="rf-tab-btn{% if active_tab == 'email' %} active{% endif %}" data-panel="email" onclick="cfgSwitch(this)">
+                <i class="bi bi-envelope"></i> E-mail
+            </button>
+            <button class="rf-tab-btn{% if active_tab == 'backup' %} active{% endif %}" data-panel="backup" onclick="cfgSwitch(this)">
+                <i class="bi bi-cloud-arrow-up"></i> Backup
+            </button>
+            <button class="rf-tab-btn{% if active_tab == 'estabelecimento' %} active{% endif %}" data-panel="estabelecimento" onclick="cfgSwitch(this)">
+                <i class="bi bi-building-fill"></i> Estabelecimento
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    <div class="rf-card-body">
+    <div>
+
+        <!-- STATUS -->
+        <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status">
+            <div class="cfg-panel-header">
+                <div class="cfg-ph-icon"><i class="bi bi-palette-fill"></i></div>
+                <h5>Gerenciar Status</h5>
+            </div>
+            <form method="post" novalidate id="form-add-status" action="{{ url_for('configuracoes.index') }}">
+                <input type="hidden" name="action" value="add_status">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="cfg-add-row">
+                    <div class="cfg-fg" style="flex:1;">
+                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+                        <input type="text" name="nome" id="status_nome" required placeholder="Ex: Em análise">
+                    </div>
+                    <div class="cfg-fg">
+                        <label>Cor</label>
+                        <input type="hidden" name="hex_color" id="status_hex" value="#0d6efd">
+                        <div class="color-swatches">
+                            <span class="cswatch selected" data-color="#0d6efd" style="background:#0d6efd" title="Azul"></span>
+                            <span class="cswatch" data-color="#198754" style="background:#198754" title="Verde"></span>
+                            <span class="cswatch" data-color="#dc3545" style="background:#dc3545" title="Vermelho"></span>
+                            <span class="cswatch" data-color="#fd7e14" style="background:#fd7e14" title="Laranja"></span>
+                            <span class="cswatch" data-color="#ffc107" style="background:#ffc107" title="Amarelo"></span>
+                            <span class="cswatch" data-color="#6f42c1" style="background:#6f42c1" title="Roxo"></span>
+                            <span class="cswatch" data-color="#20c997" style="background:#20c997" title="Teal"></span>
+                            <span class="cswatch" data-color="#0dcaf0" style="background:#0dcaf0" title="Ciano"></span>
+                            <span class="cswatch" data-color="#6c757d" style="background:#6c757d" title="Cinza"></span>
+                            <span class="cswatch" data-color="#212529" style="background:#212529" title="Preto"></span>
+                            <label class="cswatch cswatch-custom" title="Cor personalizada">
+                                <input type="color" id="status_hex_custom" value="#0d6efd">
+                                <i class="bi bi-plus"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="cfg-btn-add"><i class="bi bi-plus-lg"></i> Adicionar</button>
+                </div>
+            </form>
+            <div class="cfg-card">
+                <div class="cfg-card-header">
+                    <span>Status Cadastrados</span>
+                    <span style="background:var(--color-black-premium);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ status_list|length }}</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="cfg-tbl">
+                        <thead><tr><th>Nome</th><th>Cor</th><th>Processos</th><th>Situação</th><th style="text-align:right;">Ações</th></tr></thead>
+                        <tbody>
+                        {% if status_list %}
+                            {% for s in status_list %}
+                            <tr class="{% if not s.ativo %}row-off{% endif %}">
+                                <td>
+                                    <span style="display:inline-flex;align-items:center;gap:6px;">
+                                        <span style="width:9px;height:9px;border-radius:50%;background:{{s.hex_color}};flex-shrink:0;display:inline-block;"></span>
+                                        <strong>{{s.nome}}</strong>
+                                    </span>
+                                </td>
+                                <td><code style="font-size:11px;background:var(--background-color-body);padding:2px 6px;border-radius:4px;">{{s.hex_color}}</code></td>
+                                <td style="font-weight:600;">{{s.total_processos|default(0)}}</td>
+                                <td>
+                                    <span style="font-size:11px;background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+                                        {% if s.ativo %}Ativo{% else %}Inativo{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="cfg-row-actions">
+                                        <button class="cfg-ibtn edit" data-bs-toggle="modal" data-bs-target="#editStatusModal"
+                                                data-id="{{s.id}}" data-nome="{{s.nome}}" data-hex_color="{{s.hex_color}}" data-ativo="{{s.ativo}}" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+                                            <input type="hidden" name="action" value="toggle_status">
+                                            <input type="hidden" name="id" value="{{s.id}}">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <button type="submit" class="cfg-ibtn {% if s.ativo %}{% else %}act-on{% endif %}" title="{% if s.ativo %}Desativar{% else %}Ativar{% endif %}">
+                                                <i class="bi bi-power"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum status cadastrado.</td></tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVIÇOS -->
+        <div class="cfg-panel{% if active_tab == 'services' %} active{% endif %}" id="panel-services">
+            <div class="cfg-panel-header">
+                <div class="cfg-ph-icon"><i class="bi bi-list-check"></i></div>
+                <h5>Tipos de Serviço</h5>
+            </div>
+            <form method="post" novalidate id="form-add-service" action="{{ url_for('configuracoes.index') }}">
+                <input type="hidden" name="action" value="add_service">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="cfg-add-row">
+                    <div class="cfg-fg" style="flex:1;">
+                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+                        <input type="text" name="nome" id="service_nome" required placeholder="Ex: Registro de Imóvel">
+                    </div>
+                    <div class="cfg-fg" style="flex:1.5;">
+                        <label>Descrição</label>
+                        <input type="text" name="descricao" id="service_descricao" placeholder="Opcional">
+                    </div>
+                    <div class="cfg-fg" style="width:110px;">
+                        <label>Dias <span title="Prazo padrão em dias" style="cursor:help;color:var(--text-color-secondary);">ⓘ</span></label>
+                        <input type="number" name="prazo_padrao" id="service_prazo" min="1" placeholder="30">
+                    </div>
+                    <button type="submit" class="cfg-btn-add"><i class="bi bi-plus-lg"></i> Adicionar</button>
+                </div>
+            </form>
+            <div class="cfg-card">
+                <div class="cfg-card-header">
+                    <span>Serviços Cadastrados</span>
+                    <span style="background:var(--color-black-premium);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ tipos_processo|length }}</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="cfg-tbl">
+                        <thead><tr><th>Nome</th><th>Descrição</th><th>Dias</th><th>Situação</th><th style="text-align:right;">Ações</th></tr></thead>
+                        <tbody>
+                        {% if tipos_processo %}
+                            {% for sv in tipos_processo %}
+                            <tr class="{% if not sv.ativo %}row-off{% endif %}">
+                                <td><strong>{{sv.nome}}</strong></td>
+                                <td style="color:var(--text-color-secondary);">{{sv.descricao or '—'}}</td>
+                                <td style="font-weight:600;">{{sv.prazo_padrao or '—'}}</td>
+                                <td>
+                                    <span style="font-size:11px;background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+                                        {% if sv.ativo %}Ativo{% else %}Inativo{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="cfg-row-actions">
+                                        <button class="cfg-ibtn edit" data-bs-toggle="modal" data-bs-target="#editServiceModal"
+                                                data-id="{{sv.id}}" data-nome="{{sv.nome}}" data-descricao="{{sv.descricao or ''}}" data-prazo="{{sv.prazo_padrao or ''}}" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+                                            <input type="hidden" name="action" value="toggle_service">
+                                            <input type="hidden" name="id" value="{{sv.id}}">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <button type="submit" class="cfg-ibtn {% if sv.ativo %}{% else %}act-on{% endif %}" title="{% if sv.ativo %}Desativar{% else %}Ativar{% endif %}">
+                                                <i class="bi bi-power"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum serviço cadastrado.</td></tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {% if session.get('usuario_role') == 'admin' %}
+
+        <!-- E-MAIL -->
+        <div class="cfg-panel{% if active_tab == 'email' %} active{% endif %}" id="panel-email">
+            <div class="cfg-panel-header">
+                <div class="cfg-ph-icon"><i class="bi bi-envelope"></i></div>
+                <h5>E-mail / SMTP</h5>
+            </div>
+            <div class="cfg-card">
+                <div class="cfg-card-header">Configurações SMTP</div>
+                <div class="cfg-card-body">
+                    <form method="post" novalidate id="form-email-config" action="{{ url_for('configuracoes.index') }}">
+                        <input type="hidden" name="action" value="update_email_config">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="id" value="{{ email_config.id if email_config else '' }}">
+                        <div class="cfg-form-3" style="margin-bottom:10px;">
+                            <div class="cfg-fld">
+                                <label>Servidor SMTP <span style="color:var(--color-error)">*</span></label>
+                                <input type="text" name="mail_server" id="mail_server" value="{{ email_config.mail_server if email_config else '' }}" required placeholder="smtp.gmail.com">
+                            </div>
+                            <div class="cfg-fld" style="width:85px;">
+                                <label>Porta <span style="color:var(--color-error)">*</span></label>
+                                <input type="number" name="mail_port" id="mail_port" value="{{ email_config.mail_port if email_config else 587 }}" required>
+                            </div>
+                        </div>
+                        <div class="cfg-form-2" style="margin-bottom:10px;">
+                            <div class="cfg-fld">
+                                <label>Usuário / E-mail <span style="color:var(--color-error)">*</span></label>
+                                <input type="email" name="mail_username" id="mail_username" value="{{ email_config.mail_username if email_config else '' }}" required placeholder="usuario@email.com">
+                            </div>
+                            <div class="cfg-fld">
+                                <label>Senha SMTP</label>
+                                <input type="password" name="mail_password" id="mail_password" placeholder="Deixar em branco = manter" autocomplete="new-password">
+                            </div>
+                        </div>
+                        <div class="cfg-fld" style="margin-bottom:12px;">
+                            <label>E-mail Remetente <span style="color:var(--color-error)">*</span></label>
+                            <input type="email" name="mail_default_sender" id="mail_default_sender" value="{{ email_config.mail_default_sender if email_config else '' }}" required placeholder="no-reply@empresa.com">
+                        </div>
+                        <div class="cfg-switches" style="margin-bottom:14px;">
+                            <label class="cfg-sw"><input class="form-check-input" type="checkbox" name="mail_use_tls" value="1" {% if email_config and email_config.mail_use_tls %}checked{% endif %}> TLS</label>
+                            <label class="cfg-sw"><input class="form-check-input" type="checkbox" name="mail_use_ssl" value="1" {% if email_config and email_config.mail_use_ssl %}checked{% endif %}> SSL</label>
+                            <label class="cfg-sw"><input class="form-check-input" type="checkbox" name="ativo" value="1" {% if email_config and email_config.ativo %}checked{% endif %}> Ativo</label>
+                        </div>
+                        <div style="display:flex;gap:8px;justify-content:flex-end;">
+                            <button type="button" class="cfg-sbtn blue" id="btn-test-email">
+                                <span class="spinner-border spinner-border-sm d-none"></span>
+                                <i class="bi bi-send-check"></i> Testar
+                            </button>
+                            <button type="submit" class="cfg-sbtn" id="btn-save-email">
+                                <span class="spinner-border spinner-border-sm d-none"></span>
+                                <i class="bi bi-save"></i> Salvar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- BACKUP -->
+        <div class="cfg-panel{% if active_tab == 'backup' %} active{% endif %}" id="panel-backup">
+            <div class="cfg-panel-header">
+                <div class="cfg-ph-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                <h5>Backup do Sistema</h5>
+            </div>
+            <form id="form-all-backup-settings" method="post" novalidate action="{{ url_for('configuracoes.index') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="action" value="update_backup_settings">
+                <input type="hidden" name="id" value="{{ backup_config.id if backup_config else '' }}">
+
+                <div class="cfg-card" style="margin-bottom:10px;">
+                    <div class="cfg-card-header">Caminhos</div>
+                    <div class="cfg-card-body" style="display:flex;flex-direction:column;gap:10px;">
+                        <div class="cfg-fld">
+                            <label>Caminho dos Backups</label>
+                            <div style="display:flex;gap:0;height:34px;">
+                                <input type="text" id="local_backup_path" name="local_path" value="{{ backup_config.local_path | default(DEFAULT_BACKUP_PATH) }}" required style="flex:1;border-radius:6px 0 0 6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);border-right:0;padding:0 9px;background:var(--background-color-card);color:var(--text-color-primary);">
+                                <button class="btn-browse-dir" type="button" data-target="#local_backup_path" style="width:38px;height:34px;border-radius:0 6px 6px 0;border:1px solid var(--border-color-input);background:var(--background-color-body);color:var(--text-color-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0;" onmouseover="this.style.background='var(--color-black-premium)';this.style.color='#fff'" onmouseout="this.style.background='var(--background-color-body)';this.style.color='var(--text-color-secondary)'"><i class="bi bi-folder2-open"></i></button>
+                            </div>
+                        </div>
+                        <div class="cfg-fld">
+                            <label>Caminho dos Anexos <small style="font-weight:400;color:var(--text-color-secondary);">(definido automaticamente pelo sistema)</small></label>
+                            <input type="text" readonly value="{{ UPLOAD_PROCESSOS_DIR }}" title="Este caminho é gerenciado pelo sistema e não pode ser alterado manualmente." style="flex:1;border-radius:6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);padding:0 9px;background:var(--background-color-body);color:var(--text-color-secondary);cursor:not-allowed;width:100%;box-sizing:border-box;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cfg-card" style="margin-bottom:12px;">
+                    <div class="cfg-card-header">
+                        <span>Backup Automático</span>
+                        <label class="cfg-sw" style="text-transform:none;letter-spacing:normal;font-weight:600;font-size:12px;margin:0;">
+                            <input class="form-check-input" type="checkbox" id="auto_backup_enabled" name="auto_backup_enabled" value="1" role="switch"
+                                   {% if backup_config and backup_config.auto_backup_enabled %}checked{% endif %}>
+                            Ativado
+                        </label>
+                    </div>
+                    <div id="auto-backup-settings" style="padding:14px;display:{% if backup_config and backup_config.auto_backup_enabled %}block{% else %}none{% endif %};">
+                        <div class="cfg-form-2" style="margin-bottom:10px;">
+                            <div class="cfg-fld">
+                                <label>Frequência</label>
+                                <select id="backup_frequency" name="backup_frequency" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+                                    <option value="daily" {% if backup_config and backup_config.backup_frequency == 'daily' %}selected{% endif %}>Diário</option>
+                                    <option value="weekly" {% if backup_config and backup_config.backup_frequency == 'weekly' %}selected{% endif %}>Semanal</option>
+                                    <option value="monthly" {% if backup_config and backup_config.backup_frequency == 'monthly' %}selected{% endif %}>Mensal</option>
+                                </select>
+                            </div>
+                            <div class="cfg-fld">
+                                <label>Hora</label>
+                                <input type="time" name="backup_time" value="{{ backup_config.backup_time | default('02:00') }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+                            </div>
+                        </div>
+                        <div id="weekly-settings" style="display:{% if backup_config and backup_config.backup_frequency == 'weekly' %}block{% else %}none{% endif %};">
+                            <div class="cfg-fld" style="margin-bottom:6px;"><label>Dias da Semana</label></div>
+                            <div class="week-chips">
+                                {% set days_of_week = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] %}
+                                {% set day_pt = {'Monday':'Seg','Tuesday':'Ter','Wednesday':'Qua','Thursday':'Qui','Friday':'Sex','Saturday':'Sáb','Sunday':'Dom'} %}
+                                {% for day in days_of_week %}
+                                <label class="wchip">
+                                    <input type="checkbox" name="backup_days[]" value="{{ day }}" {% if backup_config and backup_config.backup_days and day in backup_config.backup_days %}checked{% endif %}>
+                                    {{ day_pt[day] }}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div id="monthly-settings" style="display:{% if backup_config and backup_config.backup_frequency == 'monthly' %}block{% else %}none{% endif %};margin-top:8px;">
+                            <div class="cfg-fld" style="max-width:140px;">
+                                <label>Dia do Mês</label>
+                                <input type="number" name="backup_day_of_month" min="1" max="31" value="{{ backup_config.backup_day_of_month | default(1) }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                    <button type="submit" class="cfg-sbtn green"><i class="bi bi-save"></i> Salvar Backup</button>
+                </div>
+            </form>
+        </div>
+
+        {# ── ABA: ESTABELECIMENTO (conteúdo de empresa.html integrado) ── #}
+        <div class="cfg-panel{% if active_tab == 'estabelecimento' %} active{% endif %}" id="panel-estabelecimento">
+            <div class="cfg-panel-header">
+                <div class="cfg-ph-icon"><i class="bi bi-building-fill"></i></div>
+                <h5>Dados do Estabelecimento</h5>
+            </div>
+
+            <form id="form-empresa-cfg" method="post" action="{{ url_for('empresa.index') }}" enctype="multipart/form-data" novalidate>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                <div class="row g-3">
+                    <!-- Coluna principal: formulário -->
+                    <div class="col-lg-8">
+
+                        <!-- Informações da Organização -->
+                        <div class="cfg-card mb-3">
+                            <div class="cfg-card-header">
+                                <span><i class="bi bi-building me-1"></i> Informações da Organização</span>
+                            </div>
+                            <div class="cfg-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                                <div class="cfg-fld">
+                                    <label>Nome da Organização <span style="color:var(--color-error);">*</span></label>
+                                    <input type="text" id="cfg-cartorio" name="cartorio"
+                                           value="{{ empresa.cartorio | default('') }}" required
+                                           placeholder="Ex: Cartório de Registro de Imóveis"
+                                           {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                </div>
+                                <div class="cfg-form-2">
+                                    <div class="cfg-fld">
+                                        <label>Responsável Principal <span style="color:var(--color-error);">*</span></label>
+                                        <input type="text" id="cfg-oficial" name="oficial"
+                                               value="{{ empresa.oficial | default('') }}" required
+                                               placeholder="Nome do Oficial/Responsável"
+                                               {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                    </div>
+                                    <div class="cfg-fld">
+                                        <label>Substituto(a)</label>
+                                        <input type="text" id="cfg-substituta" name="substituta"
+                                               value="{{ empresa.substituta | default('') }}"
+                                               placeholder="Nome do substituto"
+                                               {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                    </div>
+                                </div>
+                                <div class="cfg-fld">
+                                    <label>Endereço Completo <span style="color:var(--color-error);">*</span></label>
+                                    <input type="text" id="cfg-endereco" name="endereco" required
+                                           value="{{ empresa.endereco | default('') }}"
+                                           placeholder="Rua, número, complemento, bairro, cidade - UF, CEP"
+                                           {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dados de Contato -->
+                        <div class="cfg-card mb-3">
+                            <div class="cfg-card-header">
+                                <span><i class="bi bi-telephone me-1"></i> Dados de Contato</span>
+                            </div>
+                            <div class="cfg-card-body">
+                                <div class="cfg-form-2">
+                                    <div class="cfg-fld">
+                                        <label>Telefone <span style="color:var(--color-error);">*</span></label>
+                                        <input type="text" id="cfg-telefone" name="telefone"
+                                               value="{{ empresa.telefone | default('') }}" required
+                                               placeholder="(00) 0000-0000"
+                                               {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                    </div>
+                                    <div class="cfg-fld">
+                                        <label>E-mail <span style="color:var(--color-error);">*</span></label>
+                                        <input type="email" id="cfg-email-emp" name="email"
+                                               value="{{ empresa.email | default('') }}" required
+                                               placeholder="contato@organizacao.com.br"
+                                               {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if session.get('usuario_role') == 'admin' %}
+                        <div style="display:flex;gap:10px;justify-content:flex-end;">
+                            <button type="reset" class="nav-btn nav-btn-danger">
+                                <i class="bi bi-x"></i> Restaurar
+                            </button>
+                            <button type="submit" class="nav-btn nav-btn-success">
+                                <i class="bi bi-check-lg"></i> Salvar Alterações
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Coluna lateral: logo + info -->
+                    <div class="col-lg-4">
+                        <div class="cfg-card mb-3">
+                            <div class="cfg-card-header"><span><i class="bi bi-image me-1"></i> Logo</span></div>
+                            <div class="cfg-card-body" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+                                <div class="logo-preview-container-cfg position-relative" style="width:140px;height:140px;border-radius:50%;overflow:hidden;border:3px solid var(--border-color-default);cursor:{% if session.get('usuario_role') == 'admin' %}pointer{% else %}default{% endif %};transition:all .2s;">
+                                    <img src="{{ display_logo_url }}" class="logo-preview-image-cfg" id="cfgLogoPreview"
+                                         alt="Logo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"
+                                         onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default_avatar.png') }}';">
+                                    {% if session.get('usuario_role') == 'admin' %}
+                                    <div class="logo-overlay-cfg" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
+                                        <div style="text-align:center;color:#fff;">
+                                            <i class="bi bi-camera-fill" style="font-size:1.4rem;display:block;margin-bottom:4px;"></i>
+                                            <span style="font-size:11px;font-weight:600;">Alterar</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <input class="d-none" type="file" id="cfg-logo" name="logo" accept="image/jpeg,image/png,image/svg+xml"
+                                       {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                {% if empresa.logo and session.get('usuario_role') == 'admin' %}
+                                <button type="button" class="nav-btn nav-btn-danger" id="cfgBtnRemoverLogo" style="width:100%;justify-content:center;font-size:12px;">
+                                    <i class="bi bi-trash me-1"></i>Remover Logo
+                                </button>
+                                {% endif %}
+                                {% if empresa.logo %}
+                                <input type="checkbox" class="d-none" id="cfg-remover_logo" name="remover_logo" value="1"
+                                       {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
+                                {% endif %}
+                                <p style="font-size:11px;color:var(--text-color-secondary);text-align:center;margin:0;">
+                                    JPG, PNG ou SVG · máx. 2MB
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="cfg-card">
+                            <div class="cfg-card-header"><span><i class="bi bi-info-circle me-1"></i> Registro</span></div>
+                            <div class="cfg-card-body" style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+                                <div>
+                                    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Cadastrado em</div>
+                                    <div style="font-weight:600;">{% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+                                </div>
+                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;">
+                                    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Última Atualização</div>
+                                    <div style="font-weight:600;">{% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+                                </div>
+                                {% if not session.get('usuario_role') == 'admin' %}
+                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;color:var(--color-warning);font-size:11px;">
+                                    <i class="bi bi-lock-fill me-1"></i> Apenas administradores podem editar.
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+</div>
+
+<!-- Modais -->
+<div class="modal fade" id="editStatusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="padding:12px 16px;">
+                <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Status</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" novalidate action="{{ url_for('configuracoes.index') }}">
+                <input type="hidden" name="action" value="edit_status">
+                <input type="hidden" name="id" id="edit_status_id">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="modal-body" style="padding:14px 16px;">
+                    <div class="cfg-fld" style="margin-bottom:10px;">
+                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+                        <input type="text" id="edit_status_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:flex-start;">
+                        <div class="cfg-fld">
+                            <label>Cor</label>
+                            <input type="hidden" id="edit_status_hex" name="hex_color" value="#0d6efd">
+                            <div class="color-swatches" id="edit-status-swatches">
+                                <span class="cswatch" data-color="#0d6efd" style="background:#0d6efd"></span>
+                                <span class="cswatch" data-color="#198754" style="background:#198754"></span>
+                                <span class="cswatch" data-color="#dc3545" style="background:#dc3545"></span>
+                                <span class="cswatch" data-color="#fd7e14" style="background:#fd7e14"></span>
+                                <span class="cswatch" data-color="#ffc107" style="background:#ffc107"></span>
+                                <span class="cswatch" data-color="#6f42c1" style="background:#6f42c1"></span>
+                                <span class="cswatch" data-color="#20c997" style="background:#20c997"></span>
+                                <span class="cswatch" data-color="#0dcaf0" style="background:#0dcaf0"></span>
+                                <span class="cswatch" data-color="#6c757d" style="background:#6c757d"></span>
+                                <span class="cswatch" data-color="#212529" style="background:#212529"></span>
+                                <label class="cswatch cswatch-custom">
+                                    <input type="color" id="edit_status_hex_custom" value="#0d6efd">
+                                    <i class="bi bi-plus"></i>
+                                </label>
+                            </div>
+                        </div>
+                        <label class="cfg-sw" style="padding-top:20px;text-transform:none;letter-spacing:normal;">
+                            <input class="form-check-input" type="checkbox" id="edit_status_ativo" name="ativo" value="1">
+                            Ativo
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:10px 16px;gap:8px;">
+                    <button type="button" class="cfg-obtn" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="cfg-sbtn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editServiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="padding:12px 16px;">
+                <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Serviço</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" novalidate action="{{ url_for('configuracoes.index') }}">
+                <input type="hidden" name="action" value="edit_service">
+                <input type="hidden" name="id" id="edit_service_id">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="modal-body" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+                    <div class="cfg-fld">
+                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+                        <input type="text" id="edit_service_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                    </div>
+                    <div class="cfg-fld">
+                        <label>Descrição</label>
+                        <input type="text" id="edit_service_descricao" name="descricao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                    </div>
+                    <div class="cfg-fld" style="max-width:160px;">
+                        <label>Prazo Padrão (dias)</label>
+                        <input type="number" id="edit_service_prazo_padrao" name="prazo_padrao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:10px 16px;gap:8px;">
+                    <button type="button" class="cfg-obtn" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="cfg-sbtn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dirSelectorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title fw-bold"><i class="bi bi-folder2-open me-2"></i>Selecionar Diretório</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3"><div class="input-group">
+                    <button class="btn btn-outline-secondary" type="button" id="btn-dir-up" title="Subir um nível"><i class="bi bi-arrow-up"></i></button>
+                    <input type="text" class="form-control" id="current-dir-path" placeholder="Digite ou navegue até o caminho desejado...">
+                    <button class="btn btn-outline-secondary" type="button" id="btn-dir-go" title="Navegar para o caminho digitado"><i class="bi bi-arrow-right-circle"></i></button>
+                </div>
+                <div class="form-text text-muted" style="margin-top:4px;font-size:11px;">
+                    <i class="bi bi-info-circle"></i> Você pode digitar qualquer caminho diretamente (ex: <code>D:\Backups</code>) e pressionar Enter ou clicar <i class="bi bi-arrow-right-circle"></i> para navegar.
+                </div>
+                </div>
+                <div class="list-group" id="dir-list" style="max-height:340px;overflow-y:auto;">
+                    <div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cfg-obtn" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="cfg-sbtn" id="btn-confirm-dir">Selecionar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div></div>
+<div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+{% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+window.cfgSwitch = function(btn) {
+    document.querySelectorAll('.rf-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.cfg-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('panel-' + btn.dataset.panel);
+    if (panel) panel.classList.add('active');
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Backup automático
+    const autoBackupSwitch = document.getElementById('auto_backup_enabled');
+    const autoBackupSettings = document.getElementById('auto-backup-settings');
+    if (autoBackupSwitch && autoBackupSettings) {
+        autoBackupSwitch.addEventListener('change', function() {
+            autoBackupSettings.style.display = this.checked ? 'block' : 'none';
+        });
+    }
+    const freqSel = document.getElementById('backup_frequency');
+    const weeklyS = document.getElementById('weekly-settings');
+    const monthlyS = document.getElementById('monthly-settings');
+    if (freqSel) {
+        freqSel.addEventListener('change', function() {
+            if (weeklyS) weeklyS.style.display = this.value === 'weekly' ? 'block' : 'none';
+            if (monthlyS) monthlyS.style.display = this.value === 'monthly' ? 'block' : 'none';
+        });
+    }
+
+    // Circular color swatches
+    function initColorSwatches(containerSelector, hiddenInputId, customInputId) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+        const hidden = document.getElementById(hiddenInputId);
+        const customInput = document.getElementById(customInputId);
+        container.querySelectorAll('.cswatch:not(.cswatch-custom)').forEach(sw => {
+            sw.addEventListener('click', function() {
+                container.querySelectorAll('.cswatch').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                if (hidden) hidden.value = this.dataset.color;
+                if (customInput) customInput.value = this.dataset.color;
+            });
+        });
+        if (customInput) {
+            customInput.addEventListener('input', function() {
+                container.querySelectorAll('.cswatch').forEach(s => s.classList.remove('selected'));
+                const customSwatch = container.querySelector('.cswatch-custom');
+                if (customSwatch) { customSwatch.classList.add('selected'); customSwatch.style.background = this.value; }
+                if (hidden) hidden.value = this.value;
+            });
+        }
+    }
+    initColorSwatches('.cfg-add-row .color-swatches', 'status_hex', 'status_hex_custom');
+
+    // Edit status modal - sync swatches
+    const eSM2 = document.getElementById('editStatusModal');
+    if (eSM2) {
+        eSM2.addEventListener('show.bs.modal', e => {
+            const b = e.relatedTarget;
+            const editSwatches = document.getElementById('edit-status-swatches');
+            const hexVal = b.dataset.hex_color;
+            document.getElementById('edit_status_hex').value = hexVal;
+            const cust = document.getElementById('edit_status_hex_custom');
+            if (cust) cust.value = hexVal;
+            if (editSwatches) {
+                editSwatches.querySelectorAll('.cswatch').forEach(s => s.classList.remove('selected'));
+                const match = editSwatches.querySelector(`.cswatch[data-color="${hexVal}"]`);
+                if (match) { match.classList.add('selected'); }
+                else {
+                    const custSw = editSwatches.querySelector('.cswatch-custom');
+                    if (custSw) { custSw.classList.add('selected'); custSw.style.background = hexVal; }
+                }
+            }
+        });
+    }
+    initColorSwatches('#edit-status-swatches', 'edit_status_hex', 'edit_status_hex_custom');
+
+    // Modais edição
+    const eSM = document.getElementById('editStatusModal');
+    if (eSM) eSM.addEventListener('show.bs.modal', e => {
+        const b = e.relatedTarget;
+        document.getElementById('edit_status_id').value = b.dataset.id;
+        document.getElementById('edit_status_nome').value = b.dataset.nome;
+        document.getElementById('edit_status_hex').value = b.dataset.hex_color;
+        document.getElementById('edit_status_ativo').checked = b.dataset.ativo === '1';
+    });
+    const eSvM = document.getElementById('editServiceModal');
+    if (eSvM) eSvM.addEventListener('show.bs.modal', e => {
+        const b = e.relatedTarget;
+        document.getElementById('edit_service_id').value = b.dataset.id;
+        document.getElementById('edit_service_nome').value = b.dataset.nome;
+        document.getElementById('edit_service_descricao').value = b.dataset.descricao;
+        document.getElementById('edit_service_prazo_padrao').value = b.dataset.prazo;
+    });
+
+    // E-mail AJAX
+    const btnSE = document.getElementById('btn-save-email');
+    const btnTE = document.getElementById('btn-test-email');
+    const fE = document.getElementById('form-email-config');
+
+    function showToast(msg, ok=true) {
+        const c = document.querySelector('.toast-container');
+        const d = document.createElement('div');
+        d.innerHTML = `<div class="toast align-items-center text-white bg-${ok?'success':'danger'} border-0" role="alert">
+            <div class="d-flex"><div class="toast-body">${msg}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>`;
+        const el = d.firstElementChild;
+        c.appendChild(el);
+        new bootstrap.Toast(el, {delay:5000}).show();
+        el.addEventListener('hidden.bs.toast', ()=>el.remove());
+    }
+
+    async function handleEmail(isTest=false) {
+        if (fE && !fE.checkValidity()) { fE.classList.add('was-validated'); showToast("Preencha os campos obrigatórios.", false); return; }
+        const btn = isTest ? btnTE : btnSE, other = isTest ? btnSE : btnTE;
+        const sp = btn?.querySelector('.spinner-border'), ic = btn?.querySelector('i');
+        if (btn) btn.disabled = true;
+        if (other) other.disabled = true;
+        if (sp) sp.classList.remove('d-none');
+        if (ic) ic.classList.add('d-none');
+        const fd = new FormData(fE);
+        if (isTest) fd.append('test_email', '1');
+        try {
+            const r = await fetch("{{ url_for('configuracoes.index') }}", {method:'POST',body:fd,headers:{'X-Requested-With':'XMLHttpRequest'}});
+            if (!r.ok) throw new Error("Erro no servidor.");
+            const res = await r.json();
+            showToast(res.message, res.success);
+            if (res.success && !isTest && fE) fE.classList.remove('was-validated');
+        } catch(err) { showToast("Erro: "+err.message, false); }
+        finally {
+            if (btn) btn.disabled = false;
+            if (other) other.disabled = false;
+            if (sp) sp.classList.add('d-none');
+            if (ic) ic.classList.remove('d-none');
+        }
+    }
+    if (fE) fE.addEventListener('submit', e => { e.preventDefault(); handleEmail(false); });
+    if (btnTE) btnTE.addEventListener('click', e => { e.preventDefault(); handleEmail(true); });
+
+    // Seletor de diretórios
+    let tgtInput = null;
+    const dME = document.getElementById('dirSelectorModal');
+    const dM = dME ? new bootstrap.Modal(dME) : null;
+    const dL = document.getElementById('dir-list');
+    const cDP = document.getElementById('current-dir-path');
+    const bCD = document.getElementById('btn-confirm-dir');
+    const bDU = document.getElementById('btn-dir-up');
+    const bDG = document.getElementById('btn-dir-go');
+
+    async function loadDirs(path="") {
+        if (!dL) return;
+        dL.innerHTML = '<div class="text-center p-3"><div class="spinner-border text-primary" role="status"></div></div>';
+        try {
+            const r = await fetch("{{ url_for('utils.list_dirs') }}", {
+                method:'POST', headers:{'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
+                body: JSON.stringify({path})
+            });
+            const data = await r.json();
+            if (data.success) {
+                cDP.value = data.current_path;
+                dL.innerHTML = "";
+                if (data.dirs.length === 0) {
+                    dL.innerHTML = '<div class="list-group-item text-center text-muted py-3">Nenhuma subpasta encontrada</div>';
+                } else {
+                    data.dirs.forEach(n => {
+                        const item = document.createElement('button');
+                        item.type = 'button';
+                        item.className = 'list-group-item list-group-item-action d-flex align-items-center';
+                        item.innerHTML = `<i class="bi bi-folder me-2 text-warning"></i>${n}`;
+                        item.onclick = () => {
+                            const sep = data.current_path.includes('\\') ? '\\' : '/';
+                            const np = data.current_path ? (data.current_path.endsWith('/')||data.current_path.endsWith('\\') ? data.current_path+n : data.current_path+sep+n) : n;
+                            loadDirs(np);
+                        };
+                        dL.appendChild(item);
+                    });
+                }
+            } else { dL.innerHTML = `<div class="list-group-item list-group-item-danger"><i class="bi bi-exclamation-triangle me-2"></i>${data.message}</div>`; }
+        } catch { dL.innerHTML = '<div class="list-group-item list-group-item-danger"><i class="bi bi-exclamation-triangle me-2"></i>Erro ao carregar diretório.</div>'; }
+    }
+    document.querySelectorAll('.btn-browse-dir').forEach(btn => {
+        btn.addEventListener('click', function() {
+            tgtInput = document.querySelector(this.dataset.target);
+            loadDirs(tgtInput ? tgtInput.value : "");
+            if (dM) dM.show();
+        });
+    });
+    if (bCD) bCD.addEventListener('click', () => { if (tgtInput) tgtInput.value = cDP.value; if (dM) dM.hide(); });
+    // Subir um nível
+    if (bDU) bDU.addEventListener('click', () => {
+        const p = cDP.value;
+        if (!p) { loadDirs(""); return; }
+        const sep = p.includes('\\') ? '\\' : '/';
+        // Se for raiz de disco (ex: C:\) ou raiz Unix (/), volta para lista de drives
+        const isRoot = (p.length <= 3 && p.includes(':')) || p === '/';
+        if (isRoot) { loadDirs(""); return; }
+        const parent = p.substring(0, p.lastIndexOf(sep)) || sep;
+        loadDirs(parent);
+    });
+    // Navegar para caminho digitado manualmente
+    function navigateToTyped() {
+        const typed = cDP ? cDP.value.trim() : '';
+        if (typed) loadDirs(typed);
+    }
+    if (bDG) bDG.addEventListener('click', navigateToTyped);
+    if (cDP) cDP.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); navigateToTyped(); } });
+});
+
+// ── Aba Estabelecimento: upload de logo ──────────────────────────────────
+(function() {
+    const container = document.querySelector('.logo-preview-container-cfg');
+    const preview   = document.getElementById('cfgLogoPreview');
+    const input     = document.getElementById('cfg-logo');
+    const overlay   = document.querySelector('.logo-overlay-cfg');
+    const btnRemove = document.getElementById('cfgBtnRemoverLogo');
+    const chkRemove = document.getElementById('cfg-remover_logo');
+    const sidebarLogo = document.getElementById('sidebar-company-logo');
+    const defaultUrl  = "{{ url_for('static', filename='img/default_avatar.png') }}";
+
+    if (container && overlay) {
+        container.addEventListener('mouseenter', () => overlay.style.opacity = '1');
+        container.addEventListener('mouseleave', () => overlay.style.opacity = '0');
+        container.addEventListener('click', () => { if (input) input.click(); });
+    }
+
+    if (input) {
+        input.addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+            if (!['image/jpeg','image/png','image/svg+xml'].includes(file.type)) { alert('Formato inválido. Use JPG, PNG ou SVG.'); return; }
+            if (file.size > 2*1024*1024) { alert('Arquivo muito grande. Máx 2MB.'); return; }
+            const reader = new FileReader();
+            reader.onload = e => {
+                if (preview) preview.src = e.target.result;
+                if (sidebarLogo) sidebarLogo.src = e.target.result;
+                if (chkRemove) chkRemove.checked = false;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (btnRemove) {
+        btnRemove.addEventListener('click', () => {
+            if (!confirm('Remover a logo atual?')) return;
+            if (preview) preview.src = defaultUrl;
+            if (sidebarLogo) sidebarLogo.src = defaultUrl;
+            if (input) input.value = '';
+            if (chkRemove) chkRemove.checked = true;
+        });
+    }
+
+    // Máscara de telefone
+    const tel = document.getElementById('cfg-telefone');
+    if (tel) {
+        tel.addEventListener('input', function() {
+            let v = this.value.replace(/\D/g,'');
+            if (v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');
+            else v = v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');
+            this.value = v.trim().replace(/-$/,'');
+        });
+    }
+})();
+</script>
+{% endblock %}

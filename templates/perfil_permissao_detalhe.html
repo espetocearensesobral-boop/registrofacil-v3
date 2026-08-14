@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}Editar Perfil — {{ perfil.nome }}{% endblock %}
+{% block page_title %}Perfil: {{ perfil.nome }}{% endblock %}
+
+{% block page_actions %}
+<button type="button" class="nav-btn nav-btn-primary" onclick="salvarPerfil()">
+    <i class="bi bi-save me-1"></i> Salvar Alterações
+</button>
+<a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary">
+    <i class="bi bi-arrow-left"></i> Voltar
+</a>
+{% endblock %}
+
+{% block content %}
+
+<div id="feedbackAlert" class="d-none" role="alert"
+     style="border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;"></div>
+
+{# Dados do Perfil #}
+<div class="rf-card mb-3">
+    <div class="card-body" style="padding:16px 20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+                <label style="font-size:11px;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Nome do Perfil</label>
+                <input id="perfilNome" type="text" class="form-control form-control-sm mt-1" value="{{ perfil.nome }}">
+            </div>
+            <div>
+                <label style="font-size:11px;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Descrição</label>
+                <input id="perfilDesc" type="text" class="form-control form-control-sm mt-1" value="{{ perfil.descricao or '' }}">
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Permissões do Perfil #}
+<form id="formPerfil">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button type="button" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;" onclick="selecionarTodas()">
+            <i class="bi bi-check-all"></i> Selecionar Tudo
+        </button>
+        <button type="button" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;" onclick="desselecionarTodas()">
+            <i class="bi bi-x-circle"></i> Limpar Tudo
+        </button>
+        <div style="flex:1;"></div>
+        <div style="font-size:12px;color:var(--text-color-secondary);">
+            <span id="contador-ativas">0</span> permissões selecionadas
+        </div>
+    </div>
+
+    {% for categoria, modulos in modulos_por_categoria.items() %}
+    <div class="rf-card mb-2">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border-color-default);"
+             onclick="toggleCategoria('cat-{{ loop.index }}')">
+            <div style="font-size:13px;font-weight:700;color:var(--text-color-primary);">
+                <i class="bi bi-chevron-down me-2" id="icon-cat-{{ loop.index }}"></i>{{ categoria }}
+            </div>
+            <div style="font-size:11px;color:var(--text-color-secondary);">
+                {% set ativas = modulos|selectattr('concedido','eq',1)|list|length %}
+                {{ ativas }}/{{ modulos|length }}
+            </div>
+        </div>
+        <div id="cat-{{ loop.index }}" style="padding:12px 16px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;">
+            {% for modulo in modulos %}
+            <label style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border:1px solid var(--border-color-default);border-radius:6px;cursor:pointer;font-size:12px;transition:background .15s;"
+                   onmouseover="this.style.background='var(--background-color-body)'"
+                   onmouseout="this.style.background=''">
+                <input type="checkbox" name="permissoes[]" value="{{ modulo.nome }}"
+                       {% if modulo.concedido %}checked{% endif %}
+                       style="margin-top:2px;flex-shrink:0;" onchange="atualizarContador()">
+                <div>
+                    <div style="font-weight:600;color:var(--text-color-primary);">{{ modulo.descricao }}</div>
+                    <code style="font-size:10px;color:var(--text-color-secondary);">{{ modulo.nome }}</code>
+                </div>
+            </label>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</form>
+
+{% if usuarios_vinculados %}
+<div class="rf-card mt-3">
+    <div class="card-body" style="padding:16px 20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">
+            <i class="bi bi-people me-1" style="color:var(--color-gold-dark);"></i>
+            Usuários vinculados ({{ usuarios_vinculados|length }})
+        </div>
+        {% for u in usuarios_vinculados %}
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border-color-default);">
+            <div style="width:30px;height:30px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">
+                {{ u.nome[0]|upper }}
+            </div>
+            <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;">{{ u.nome }}</div>
+                <div style="font-size:11px;color:var(--text-color-secondary);">@{{ u.usuario }}</div>
+            </div>
+            <a href="{{ url_for('permissoes.visualizar_permissoes', usuario_id=u.id) }}"
+               class="nav-btn nav-btn-secondary" style="height:26px;padding:0 8px;font-size:11px;">
+                <i class="bi bi-eye"></i>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+const csrfToken = '{{ csrf_token }}';
+const perfilId = {{ perfil.id }};
+
+function toggleCategoria(id) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById('icon-' + id);
+    if (el.style.display === 'none') {
+        el.style.display = '';
+        icon.className = 'bi bi-chevron-down me-2';
+    } else {
+        el.style.display = 'none';
+        icon.className = 'bi bi-chevron-right me-2';
+    }
+}
+
+function allCheckboxes() {
+    return Array.from(document.querySelectorAll('input[name="permissoes[]"]'));
+}
+
+function selecionarTodas() {
+    allCheckboxes().forEach(cb => { cb.checked = true; });
+    atualizarContador();
+}
+
+function desselecionarTodas() {
+    allCheckboxes().forEach(cb => { cb.checked = false; });
+    atualizarContador();
+}
+
+function atualizarContador() {
+    const total = allCheckboxes().filter(cb => cb.checked).length;
+    document.getElementById('contador-ativas').textContent = total;
+}
+
+async function salvarPerfil() {
+    const fd = new FormData();
+    fd.append('csrf_token', csrfToken);
+    fd.append('nome', document.getElementById('perfilNome').value.trim());
+    fd.append('descricao', document.getElementById('perfilDesc').value.trim());
+    allCheckboxes().filter(cb => cb.checked).forEach(cb => fd.append('permissoes[]', cb.value));
+
+    try {
+        const res = await fetch(`/permissoes/perfis/${perfilId}/atualizar`, { method: 'POST', body: fd });
+        const data = await res.json();
+        const el = document.getElementById('feedbackAlert');
+        el.className = '';
+        if (data.success) {
+            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+            el.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+        } else {
+            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+            el.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+        }
+        el.scrollIntoView({ behavior: 'smooth' });
+    } catch(e) { alert('Erro de rede.'); }
+}
+
+document.addEventListener('DOMContentLoaded', atualizarContador);
+</script>
+{% endblock %}

@@ -1,0 +1,883 @@
+{# registrofacil/templates/admin/editar_usuario.html #}
+{% extends "base.html" %}
+
+{% block title %}Editar Usuário - Registro Fácil{% endblock %}
+
+{% block page_title %}Editar Usuário{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-people"></i> Usuários
+    </a>
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-house"></i> Dashboard
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <form id="form-edit-user" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('admin_users.edit_user', user_id=user_data.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="row g-4">
+            <div class="col-lg-8 order-lg-2">
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="bi bi-info-circle me-2"></i> Informações do Perfil
+                    </h3>
+                    <div class="rf-card-body">
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="nome" 
+                                           name="nome"
+                                           placeholder="Nome Completo" 
+                                           value="{{ user_data.nome }}" 
+                                           required>
+                                    <label for="nome" class="required-field">Nome Completo</label>
+                                    <div class="invalid-feedback">Por favor, informe o nome completo.</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" 
+                                           class="form-control" 
+                                           id="email" 
+                                           name="email"
+                                           placeholder="E-mail" 
+                                           value="{{ user_data.email }}" 
+                                           required>
+                                    <label for="email" class="required-field">E-mail</label>
+                                    <div class="invalid-feedback">Por favor, informe um e-mail válido.</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="usuario" 
+                                           name="usuario"
+                                           placeholder="Nome de Usuário" 
+                                           value="{{ user_data.usuario }}" 
+                                           disabled>
+                                    <label for="usuario">Nome de Usuário</label>
+                                    <small class="form-text text-muted">O nome de usuário não pode ser alterado.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="bi bi-key me-2"></i> Alterar Senha (Opcional)
+                    </h3>
+                    <div class="rf-card-body">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating password-toggle">
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="nova_senha" 
+                                           name="nova_senha"
+                                           placeholder="Nova Senha (deixe em branco para não alterar)" 
+                                           minlength="8">
+                                    <label for="nova_senha">Nova Senha</label>
+                                    <span class="toggle-icon" onclick="togglePassword('nova_senha')">
+                                        <i class="bi bi-eye"></i>
+                                    </span>
+                                    <div class="invalid-feedback">A nova senha deve ter no mínimo 8 caracteres.</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating password-toggle">
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="confirmar_senha" 
+                                           name="confirmar_senha"
+                                           placeholder="Confirmar Nova Senha">
+                                    <label for="confirmar_senha">Confirmar Nova Senha</label>
+                                    <span class="toggle-icon" onclick="togglePassword('confirmar_senha')">
+                                        <i class="bi bi-eye"></i>
+                                    </span>
+                                    <div class="invalid-feedback">As senhas não coincidem.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if current_user_role == 'admin' %}
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="bi bi-check-circle-fill me-2"></i> Status e Permissão
+                    </h3>
+                    <div class="rf-card-body">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="role" name="role">
+                                        <option value="user" {% if user_data.role == 'user' %}selected{% endif %}>Usuário Padrão</option>
+                                        <option value="admin" {% if user_data.role == 'admin' %}selected{% endif %}>Administrador</option>
+                                    </select>
+                                    <label for="role">Permissão (Role)</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mt-3">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           id="ativo" 
+                                           name="ativo" 
+                                           value="1"
+                                           {% if user_data.ativo %}checked{% endif %}>
+                                    <label class="form-check-label" for="ativo">Usuário Ativo</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4 order-lg-1">
+                <div class="d-flex flex-column gap-4">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="bi bi-person-circle me-2"></i> Foto de Perfil
+                        </h3>
+                        <div class="rf-card-body">
+                            <div class="logo-upload-container">
+                                <div class="logo-preview-wrapper">
+                                    <div class="logo-preview-container position-relative">
+                                        <img src="{{ display_foto_url }}"
+                                             class="logo-preview-image" {# Removido: rounded-circle #}
+                                             id="avatar-preview"
+                                             alt="Foto de perfil"
+                                             onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/default_avatar.png') }}';">
+                                        
+                                        <div class="logo-overlay" id="avatarOverlay">
+                                            <div class="logo-overlay-content">
+                                                <i class="bi bi-camera-fill"></i>
+                                                <span class="logo-overlay-text">Clique para alterar</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input class="d-none" 
+                                       type="file" 
+                                       id="imagem_perfil" 
+                                       name="imagem_perfil" 
+                                       accept="image/jpeg,image/png,image/gif">
+
+                                <div class="logo-actions">
+                                    {% if user_data.foto and 'default_avatar.png' not in user_data.foto and 'gravatar.com' not in user_data.foto %}
+                                    <button type="button" class="btn btn-outline-danger btn-sm" id="btnRemoverFoto">
+                                        <i class="bi bi-trash me-1"></i> Remover Foto
+                                    </button>
+                                    {% endif %}
+                                </div>
+
+                                <div class="logo-info">
+                                    <div class="logo-file-info d-none" id="avatarFileInfo">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="file-details">
+                                                <i class="bi bi-file-image me-1 text-primary"></i>
+                                                <span class="file-name" id="avatarFileName"></span>
+                                            </div>
+                                            <div class="file-size">
+                                                <small class="text-muted" id="avatarFileSize"></small>
+                                            </div>
+                                        </div>
+                                        <div class="file-actions mt-2">
+                                            <button type="button" class="btn btn-link btn-sm p-0 text-danger" id="btnCancelarUpload">
+                                                <i class="bi bi-x-circle me-1"></i> Cancelar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="logo-requirements">
+                                        <small class="text-muted">
+                                            Formatos: JPG, PNG, GIF<br>
+                                            Tam. máximo: 2MB<br>
+                                            Dim. recomendadas: 200x200px
+                                        </small>
+                                    </div>
+                                </div>
+
+                                {% if user_data.foto and 'default_avatar.png' not in user_data.foto and 'gravatar.com' not in user_data.foto %}
+                                <input type="checkbox" 
+                                       class="d-none" 
+                                       id="remove_current_image" 
+                                       name="remove_current_image" 
+                                       value="1">
+                                {% endif %}
+
+                                <div class="logo-progress d-none" id="avatarProgress">
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <small class="text-muted mt-1">Processando imagem...</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# REMOVIDA A SEÇÃO "INFORMAÇÕES DO SISTEMA" DA COLUNA LATERAL #}
+                </div>
+            </div>
+        </div>
+
+        {# NOVA LINHA ABAIXO PARA A SEÇÃO "INFORMAÇÕES DO SISTEMA" #}
+        <div class="row mt-4"> {# Adiciona um espaçamento superior #}
+            <div class="col-12"> {# Faz esta coluna ocupar a largura total #}
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="bi bi-clock-history me-2"></i> Informações do Sistema
+                    </h3>
+<div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="info-label text-muted">Cadastrado em:</div>
+                            <div class="info-value fw-bold">
+                                {% if user_data.created_at %} {# Alterado de .criado_em para .created_at #}
+                                    {{ user_data.created_at | format_datetime_full }}
+                                {% else %}
+                                    Não cadastrado
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="info-label text-muted">Última atualização:</div>
+                            <div class="info-value fw-bold">
+                                {% if user_data.updated_at %} {# Alterado de .atualizado_em para .updated_at #}
+                                    {{ user_data.updated_at | format_datetime_full }}
+                                {% else %}
+                                    Nunca atualizado
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="info-label text-muted">Último acesso:</div>
+                            <div class="info-value fw-bold">
+                                {% if user_data.last_login_at %}
+                                    {{ user_data.last_login_at | format_datetime_full }}
+                                {% else %}
+                                    Nunca acessou
+                                {% endif %}
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('admin_users.users_list') }}" class="btn btn-warning">
+                <i class="bi bi-x-lg"></i> Cancelar
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-lg"></i> Salvar Alterações
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<style>
+/* Estilos para a nova seção de logo */
+.logo-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.logo-preview-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.logo-preview-container {
+    width: 252px;
+    height: 252px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e9ecef; /* Ajustado a largura da borda */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+	padding: 2px;
+}
+
+.logo-preview-container:hover {
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+}
+
+.logo-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+	contain; border-radius: 100%;
+    transition: transform 0.3s ease;
+}
+
+.logo-preview-container:hover .logo-preview-image {
+    transform: scale(1.05);
+}
+
+.logo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.logo-preview-container:hover .logo-overlay {
+    opacity: 1;
+}
+
+.logo-overlay-content {
+    text-align: center;
+    color: white;
+}
+
+.logo-overlay-content i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.logo-overlay-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.logo-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.logo-info {
+    margin-top: 1rem;
+}
+
+.logo-file-info {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.file-details {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.file-name {
+    font-weight: 500;
+    color: #495057;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-size {
+    font-size: 0.75rem;
+}
+
+.logo-requirements {
+    background: #f8f9fa;
+    border-left: 3px solid #0d6efd;
+    padding: 0.75rem;
+    border-radius: 0 6px 6px 0;
+}
+
+.logo-progress {
+    margin-top: 1rem;
+}
+
+@media (max-width: 576px) {
+    .logo-preview-container {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .logo-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .logo-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="module">
+    import { showToast, togglePassword, isValidEmail, MD5 } from '{{ url_for('static', filename='js/utils/dom_helpers.js') }}';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // ===== FUNÇÕES DE VALIDAÇÃO =====
+        
+        function validarEmail(email) {
+            if (!email) return false;
+            // Corrigida a regex para ser mais robusta para emails
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+            return re.test(String(email).toLowerCase());
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function showProgress() {
+            const progressDiv = document.getElementById('avatarProgress');
+            if (progressDiv) {
+                progressDiv.classList.remove('d-none');
+                // Simular progresso
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    const progressBar = progressDiv.querySelector('.progress-bar');
+                    if (progressBar) {
+                        progressBar.style.width = progress + '%';
+                    }
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progressDiv.classList.add('d-none');
+                        }, 500);
+                    }
+                }, 100);
+            }
+        }
+
+        // ===== ELEMENTOS DO FORMULÁRIO =====
+        const form = document.getElementById('form-edit-user');
+        const imagemPerfilInput = document.getElementById('imagem_perfil');
+        const removeCurrentImageCheckbox = document.getElementById('remove_current_image');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const sidebarAvatar = document.querySelector('.sidebar-avatar');
+        const logoPreviewContainer = document.querySelector('.logo-preview-container'); // O container principal da imagem
+        const btnRemoverFoto = document.getElementById('btnRemoverFoto');
+        const btnCancelarUpload = document.getElementById('btnCancelarUpload');
+        const avatarFileInfo = document.getElementById('avatarFileInfo');
+        const avatarFileName = document.getElementById('avatarFileName');
+        const avatarFileSize = document.getElementById('avatarFileSize');
+
+        const FlaskRoutes = {
+            uploadsPerfilBase: "{{ url_for('serve_upload', filepath='perfil/') }}",
+            uploadsEmpresaBase: "{{ url_for('serve_upload', filepath='empresa/') }}"
+        };
+
+        const defaultAvatarUrl = "{{ url_for('static', filename='img/default_avatar.png') }}";
+        const currentAvatarUrl = "{{ display_foto_url }}";
+
+        function getProfileImageUrl(fileName, email) {
+            if (fileName && (fileName.startsWith('http://') || fileName.startsWith('https://'))) {
+                return fileName;
+            } else if (fileName) {
+                return FlaskRoutes.uploadsPerfilBase + fileName + '?v=' + new Date().getTime();
+            } else if (email) {
+                return '{{ url_for("static", filename="img/default_avatar.png") }}';
+            }
+            return defaultAvatarUrl;
+        }
+
+        // Função para resetar para avatar padrão
+        function resetToDefaultAvatar() {
+            console.log("DEBUG: resetToDefaultAvatar chamado.");
+            if (avatarPreview) avatarPreview.src = defaultAvatarUrl;
+            if (sidebarAvatar) sidebarAvatar.src = defaultAvatarUrl;
+            if (imagemPerfilInput) imagemPerfilInput.value = '';
+            if (avatarFileInfo) avatarFileInfo.classList.add('d-none');
+            if (removeCurrentImageCheckbox) removeCurrentImageCheckbox.checked = true;
+        }
+
+        // Função para restaurar avatar atual
+        function restoreCurrentAvatar() {
+            console.log("DEBUG: restoreCurrentAvatar chamado.");
+            if (avatarPreview) avatarPreview.src = currentAvatarUrl;
+            if (sidebarAvatar) sidebarAvatar.src = currentAvatarUrl;
+            if (imagemPerfilInput) imagemPerfilInput.value = '';
+            if (avatarFileInfo) avatarFileInfo.classList.add('d-none');
+            if (removeCurrentImageCheckbox) removeCurrentImageCheckbox.checked = false;
+        }
+
+        // Função para processar arquivo selecionado
+        function processSelectedFile(file) {
+            console.log("DEBUG: processSelectedFile chamado para arquivo:", file.name);
+            // Validar tipo de arquivo
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Tipo de arquivo não suportado. Use JPG, PNG ou GIF.');
+                console.warn("DEBUG: Tipo de arquivo não suportado:", file.type);
+                return;
+            }
+
+            // Validar tamanho
+            if (file.size > 2 * 1024 * 1024) { // 2MB
+                alert('Arquivo muito grande. Tamanho máximo: 2MB.');
+                console.warn("DEBUG: Arquivo muito grande:", file.size);
+                return;
+            }
+
+            // Mostrar progresso
+            showProgress();
+
+            // Ler arquivo
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Atualizar preview
+                if (avatarPreview) avatarPreview.src = e.target.result;
+                if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
+                    sidebarAvatar.src = e.target.result;
+                }
+                
+                // Mostrar informações do arquivo
+                if (avatarFileName) avatarFileName.textContent = file.name;
+                if (avatarFileSize) avatarFileSize.textContent = formatFileSize(file.size);
+                if (avatarFileInfo) avatarFileInfo.classList.remove('d-none');
+                
+                // Desmarcar remoção
+                if (removeCurrentImageCheckbox) removeCurrentImageCheckbox.checked = false;
+                console.log("DEBUG: Arquivo lido e preview atualizado.");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ===== EVENT LISTENERS PARA UPLOAD DE IMAGEM =====
+        console.log("DEBUG: logoPreviewContainer element encontrado?", !!logoPreviewContainer);
+        console.log("DEBUG: imagemPerfilInput element encontrado?", !!imagemPerfilInput);
+
+        if (logoPreviewContainer) {
+            logoPreviewContainer.addEventListener('click', function() {
+                console.log("DEBUG: Clique detectado no logoPreviewContainer. Tentando disparar input de arquivo.");
+                if (imagemPerfilInput) {
+                    imagemPerfilInput.click();
+                    console.log("DEBUG: imagemPerfilInput.click() chamado.");
+                } else {
+                    console.error("DEBUG: imagemPerfilInput não encontrado, não é possível disparar o clique.");
+                }
+            });
+        }
+        else {
+            console.log("DEBUG: logoPreviewContainer não encontrado, listener de clique não pode ser anexado.");
+        }
+
+        if (imagemPerfilInput) {
+            imagemPerfilInput.addEventListener('change', function() {
+                console.log("DEBUG: Evento 'change' detectado no input de arquivo.");
+                const file = this.files[0];
+                if (file) {
+                    processSelectedFile(file);
+                }
+            });
+        }
+
+        if (btnRemoverFoto) {
+            btnRemoverFoto.addEventListener('click', function() {
+                console.log("DEBUG: Clique detectado no botão 'Remover Foto'.");
+                const confirmRemove = confirm('Tem certeza que deseja remover a foto atual?');
+                if (confirmRemove) {
+                    resetToDefaultAvatar();
+                }
+            });
+        }
+
+        if (btnCancelarUpload) {
+            btnCancelarUpload.addEventListener('click', function() {
+                console.log("DEBUG: Clique detectado no botão 'Cancelar Upload'.");
+                restoreCurrentAvatar();
+            });
+        }
+
+        if (removeCurrentImageCheckbox) {
+            removeCurrentImageCheckbox.addEventListener('change', function() {
+                console.log("DEBUG: Evento 'change' detectado no checkbox 'Remover foto atual'.");
+                const userEmail = "{{ user_data.email | default('') }}";
+                
+                if (this.checked) {
+                    if (avatarPreview) avatarPreview.src = defaultAvatarUrl;
+                    if (imagemPerfilInput) imagemPerfilInput.value = '';
+                    if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
+                        sidebarAvatar.src = defaultAvatarUrl;
+                    }
+                    console.log("DEBUG: Checkbox de remover foto marcado.");
+                } else {
+                    const originalDbPhoto = "{{ user_data.foto | default('') }}";
+                    const newSrc = getProfileImageUrl(originalDbPhoto, userEmail);
+                    if (avatarPreview) avatarPreview.src = newSrc;
+                    if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
+                        sidebarAvatar.src = newSrc;
+                    }
+                    console.log("DEBUG: Checkbox de remover foto desmarcado.");
+                }
+            });
+        }
+
+        // Drag and drop
+        if (logoPreviewContainer) {
+            logoPreviewContainer.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#0d6efd';
+                this.style.backgroundColor = 'rgba(13, 110, 253, 0.1)';
+                console.log("DEBUG: Evento 'dragover' detectado.");
+            });
+
+            logoPreviewContainer.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#e9ecef';
+                this.style.backgroundColor = 'transparent';
+                console.log("DEBUG: Evento 'dragleave' detectado.");
+            });
+
+            logoPreviewContainer.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#e9ecef';
+                this.style.backgroundColor = 'transparent';
+                console.log("DEBUG: Evento 'drop' detectado.");
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const file = files[0];
+                    imagemPerfilInput.files = files; // Atribui o FileList ao input
+                    processSelectedFile(file);
+                }
+            });
+        }
+
+        // ===== VALIDAÇÃO DE SENHAS =====
+        const novaSenhaInput = document.getElementById('nova_senha');
+        const confirmarSenhaInput = document.getElementById('confirmar_senha');
+
+        function validatePasswordFields() {
+            let isValid = true;
+
+            if (novaSenhaInput && novaSenhaInput.value.length > 0) {
+                if (novaSenhaInput.value.length < 8) {
+                    novaSenhaInput.classList.add('is-invalid');
+                    novaSenhaInput.classList.remove('is-valid');
+                    isValid = false;
+                } else {
+                    novaSenhaInput.classList.remove('is-invalid');
+                    novaSenhaInput.classList.add('is-valid');
+                }
+
+                if (novaSenhaInput.value !== confirmarSenhaInput.value) {
+                    confirmarSenhaInput.classList.add('is-invalid');
+                    confirmarSenhaInput.classList.remove('is-valid');
+                    isValid = false;
+                } else {
+                    confirmarSenhaInput.classList.remove('is-invalid');
+                    confirmarSenhaInput.classList.add('is-valid');
+                }
+            } else {
+                if (novaSenhaInput) {
+                    novaSenhaInput.classList.remove('is-invalid', 'is-valid');
+                }
+                if (confirmarSenhaInput) {
+                    confirmarSenhaInput.classList.remove('is-invalid', 'is-valid');
+                }
+            }
+            return isValid;
+        }
+
+        if (novaSenhaInput) {
+            novaSenhaInput.addEventListener('input', validatePasswordFields);
+            novaSenhaInput.addEventListener('blur', validatePasswordFields);
+        }
+        if (confirmarSenhaInput) {
+            confirmarSenhaInput.addEventListener('input', validatePasswordFields);
+            confirmarSenhaInput.addEventListener('blur', validatePasswordFields);
+        }
+
+        // ===== VALIDAÇÃO DE E-MAIL =====
+        const emailInput = document.getElementById('email');
+        if (emailInput) {
+            emailInput.addEventListener('blur', function() {
+                let isValid = true;
+                let feedbackMessage = '';
+                
+                this.classList.remove('is-valid', 'is-invalid');
+                const feedbackDiv = this.parentNode.querySelector('.invalid-feedback'); // Melhor forma de pegar o feedback
+
+                if (this.required && this.value.trim() === '') {
+                    isValid = false;
+                    feedbackMessage = 'Este campo é obrigatório.';
+                } else if (this.value.trim() !== '' && !validarEmail(this.value)) {
+                    isValid = false;
+                    feedbackMessage = 'Por favor, insira um e-mail válido.';
+                }
+
+                if (!isValid) {
+                    this.classList.add('is-invalid');
+                    if (feedbackDiv) {
+                        feedbackDiv.textContent = feedbackMessage;
+                    }
+                } else if (this.value.trim() !== '') {
+                    this.classList.add('is-valid');
+                }
+            });
+        }
+
+        // ===== CONTROLE DO STATUS ATIVO =====
+        const ativoCheckbox = document.getElementById('ativo');
+        if (ativoCheckbox) {
+            ativoCheckbox.addEventListener('change', function() {
+                this.nextElementSibling.textContent = this.checked ? 'Usuário Ativo' : 'Usuário Inativo';
+            });
+            ativoCheckbox.dispatchEvent(new Event('change'));
+        }
+
+        // ===== VALIDAÇÃO E SUBMISSÃO DO FORMULÁRIO =====
+        if (form) {
+            const loadingOverlay = document.getElementById('loading-overlay');
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                form.classList.remove('was-validated');
+                form.querySelectorAll('.is-invalid, .is-valid').forEach(el => {
+                    el.classList.remove('is-invalid', 'is-valid');
+                });
+
+                let allFieldsValid = true;
+
+                // Validar campos obrigatórios
+                const requiredInputs = form.querySelectorAll('[required]');
+                requiredInputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        input.classList.add('is-invalid');
+                        allFieldsValid = false;
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+
+                // Validação específica do email
+                if (emailInput && emailInput.value && !validarEmail(emailInput.value)) {
+                    emailInput.classList.add('is-invalid');
+                    allFieldsValid = false;
+                }
+
+                // Validação das senhas
+                const passwordFieldsValid = validatePasswordFields();
+                if (!passwordFieldsValid) {
+                    allFieldsValid = false;
+                }
+
+                if (!allFieldsValid) {
+                    form.classList.add('was-validated');
+                    showToast('danger', 'Por favor, corrija os campos destacados. Alguns campos obrigatórios não foram preenchidos ou estão inválidos.');
+                    const firstInvalidField = form.querySelector('.is-invalid');
+                    if (firstInvalidField) {
+                        firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstInvalidField.focus();
+                    }
+                    return;
+                }
+
+                if (loadingOverlay) { loadingOverlay.style.display = 'flex'; }
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    const contentType = response.headers.get("content-type");
+                    let result = {};
+
+                    if (contentType && contentType.includes("application/json")) {
+                        result = await response.json();
+                    } else {
+                        const errorText = await response.text();
+                        console.error('Server response was not valid JSON:', response.status, response.statusText, errorText);
+                        showToast('danger', 'Ocorreu um erro ao se comunicar com o servidor. Resposta inválida.');
+                        return;
+                    }
+
+                    if (response.ok && result.success) {
+                        showToast('success', result.message);
+                        if (result.user_id && result.user_id == {{ user_data.id }}) {
+                            if (result.updated_user_data.usuario_foto_url && sidebarAvatar) {
+                                sidebarAvatar.src = result.updated_user_data.usuario_foto_url;
+                            } else if (sidebarAvatar) {
+                                sidebarAvatar.src = defaultAvatarUrl;
+                            }
+                            const sidebarUserNameElement = document.querySelector('.sidebar .menu-item[data-accesskey="m"] .menu-text');
+                            if (sidebarUserNameElement && result.updated_user_data.nome) {
+                                sidebarUserNameElement.textContent = result.updated_user_data.nome;
+                            }
+                        }
+                        if (result.redirect) {
+                            setTimeout(() => { window.location.href = result.redirect; }, 500);
+                        } else {
+                            setTimeout(() => { window.location.reload(); }, 500);
+                        }
+                    } else {
+                        showToast(result.type || 'danger', result.message);
+                        if (result.field_error) {
+                            const errorField = document.getElementById(result.field_error);
+                            if (errorField) {
+                                errorField.classList.add('is-invalid');
+                                errorField.focus();
+                                errorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        } else {
+                             const firstInvalidField = form.querySelector('.is-invalid');
+                            if (firstInvalidField) {
+                                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                firstInvalidField.focus();
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Fetch request error:', error);
+                    showToast('danger', 'Ocorreu um erro de comunicação com o servidor. Por favor, verifique sua conexão e tente novamente.');
+                } finally {
+                    if (loadingOverlay) { loadingOverlay.style.display = 'none'; }
+                }
+            });
+        }
+    });
+</script>
+{% endblock scripts %}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Processos — Registro Fácil</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #222; background: #fff; font-size: 8.5pt; }
+        .page { width: 277mm; margin: 0 auto; padding: 10mm 12mm; }
+
+        /* CABEÇALHO */
+        .header { display: table; width: 100%; padding-bottom: 10px; margin-bottom: 12px; border-bottom: 3px solid #CDA865; }
+        .header-left, .header-right { display: table-cell; vertical-align: middle; width: 50%; }
+        .header-right { text-align: right; }
+        .logo { max-width: 150px; max-height: 48px; object-fit: contain; }
+        .report-title { font-size: 13pt; font-weight: 300; color: #444; margin-bottom: 2px; }
+        .report-sub { font-size: 8pt; color: #999; font-style: italic; }
+
+        /* BLOCO RESUMO */
+        .summary-bar { display: table; width: 100%; margin-bottom: 12px; background: #fffdf7; border: 1px solid #e5d7be; border-radius: 5px; overflow: hidden; }
+        .sum-cell { display: table-cell; padding: 7px 12px; vertical-align: middle; text-align: center; border-right: 1px solid #e5d7be; }
+        .sum-cell:last-child { border-right: none; }
+        .sum-label { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; color: #b09060; letter-spacing: 0.4px; display: block; margin-bottom: 2px; }
+        .sum-value { font-size: 12pt; font-weight: 700; color: #8B6332; }
+        .sum-value.small { font-size: 8pt; color: #555; font-weight: 600; }
+
+        /* TABELA */
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        thead th {
+            background: #8B6332;
+            color: #fff;
+            font-size: 7pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 6px 5px;
+            text-align: left;
+            border-right: 1px solid rgba(255,255,255,0.15);
+            word-break: break-word;
+        }
+        thead th:last-child { border-right: none; }
+        tbody td {
+            font-size: 7.5pt;
+            padding: 5px 5px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0e8d8;
+            color: #333;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        tbody tr:nth-child(even) td { background: #fdfaf5; }
+        tbody tr:last-child td { border-bottom: none; }
+        .id-col { font-weight: 700; color: #8B6332; white-space: nowrap; }
+        .badge {
+            display: inline-block;
+            padding: 2px 5px;
+            font-size: 7pt;
+            font-weight: 700;
+            border-radius: 8px;
+            white-space: nowrap;
+            line-height: 1.4;
+        }
+
+        /* RODAPÉ */
+        .footer { display: table; width: 100%; padding-top: 7px; border-top: 1px solid #e5d7be; margin-top: 10px; }
+        .footer-left, .footer-right { display: table-cell; font-size: 7pt; color: #bbb; vertical-align: middle; }
+        .footer-right { text-align: right; }
+
+        @page { size: A4 landscape; margin: 10mm 12mm; }
+        @media print {
+            body { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
+            .page { max-width: none; width: 100%; margin: 0; padding: 0; }
+            thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            tbody tr:nth-child(even) td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            thead { display: table-header-group; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <div class="header">
+        <div class="header-left">
+            {% if logo_url %}
+            <img src="{{ logo_url }}" alt="Logo" class="logo"
+                 onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/registrofacil.png') }}';">
+            {% endif %}
+        </div>
+        <div class="header-right">
+            <div class="report-title">{{ titulo_relatorio | default('Relatório de Processos') }}</div>
+            <div class="report-sub">Gerado em {{ now.strftime('%d/%m/%Y às %H:%M:%S') }}</div>
+        </div>
+    </div>
+
+    <div class="summary-bar">
+        <div class="sum-cell">
+            <span class="sum-label">Total de Processos</span>
+            <span class="sum-value">{{ total_registros }}</span>
+        </div>
+        <div class="sum-cell">
+            <span class="sum-label">Data do Relatório</span>
+            <span class="sum-value small">{{ now.strftime('%d/%m/%Y') }}</span>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:5%">ID</th>
+                <th style="width:19%">Titular</th>
+                <th style="width:14%">Tipo de Serviço</th>
+                <th style="width:10%">Matrícula</th>
+                <th style="width:8%">Entrada</th>
+                <th style="width:8%">Prazo</th>
+                <th style="width:14%">Status</th>
+                <th style="width:14%">Responsável</th>
+                <th style="width:4%;text-align:center;">Notas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for processo in processos %}
+            <tr>
+                <td class="id-col">#{{ '%04d' % processo.id }}</td>
+                <td>{{ processo.titular }}</td>
+                <td>{{ processo.tipo_nome | default('—') }}</td>
+                <td>{{ processo.matricula if processo.matricula and processo.matricula != 'None' else 'Sem Matrícula' }}</td>
+                <td>{{ formatar_data(processo.data_entrada) }}</td>
+                <td>{{ formatar_data(processo.prazo_final) }}</td>
+                <td>
+                    <span class="badge"
+                          style="background-color:{{ processo.status_hex | default('#6c757d') }};color:{{ get_contrast_color(processo.status_hex | default('#6c757d')) }};">
+                        {{ (processo.status_nome | default('—')) | replace('_', ' ') | capitalize }}
+                    </span>
+                </td>
+                <td>{{ processo.responsavel_nome | default('—') }}</td>
+                <td style="text-align:center;">{% if processo.envolvido_notas %}✔{% else %}—{% endif %}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="9" style="text-align:center;padding:18px;color:#bbb;font-style:italic;">Nenhum processo encontrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <div class="footer-left">Registro Fácil — {{ titulo_relatorio | default('Listagem de Processos') }}</div>
+        <div class="footer-right">Total: {{ total_registros }} registro{{ 's' if total_registros != 1 }} &nbsp;|&nbsp; {{ now.strftime('%d/%m/%Y %H:%M') }}</div>
+    </div>
+
+</div>
+<script>
+    window.onload = function() { window.print(); };
+    window.addEventListener('afterprint', function() { window.close(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block title %}Meu Perfil - Registro Fácil{% endblock %}
+
+{% block page_title %}Meu Perfil{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-house"></i> Dashboard
+    </a>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="rf-card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Dados Pessoais</h5>
+            </div>
+            <div class="rf-card-body">
+                <form id="form-perfil" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    
+                    {# Foto de Perfil #}
+                    <div class="mb-4">
+                        <label class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Foto de Perfil</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="position-relative">
+                                <img src="{{ display_foto_url }}" 
+                                     alt="Foto de Perfil" 
+                                     class="rounded-circle border"
+                                     id="preview-foto-perfil"
+                                     style="width: 100px; height: 100px; object-fit: cover;">
+                            </div>
+                            <div class="flex-grow-1">
+                                <input type="file" 
+                                       class="form-control mb-2" 
+                                       id="imagem_perfil" 
+                                       name="imagem_perfil" 
+                                       accept="image/jpeg,image/png,image/gif">
+                                <small class="text-muted">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 2MB.</small>
+                                {% if user_data.foto %}
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="remove_current_image" 
+                                           id="remove_current_image" 
+                                           value="1">
+                                    <label class="form-check-label" for="remove_current_image">
+                                        Remover foto atual e usar avatar padrão
+                                    </label>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    {# Nome Completo #}
+                    <div class="mb-3">
+                        <label for="nome" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">
+                            Nome Completo <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="nome" 
+                               name="nome" 
+                               value="{{ user_data.nome }}" 
+                               required 
+                               maxlength="100">
+                    </div>
+                    
+                    {# Email #}
+                    <div class="mb-3">
+                        <label for="email" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">
+                            E-mail <span class="text-danger">*</span>
+                        </label>
+                        <input type="email" 
+                               class="form-control" 
+                               id="email" 
+                               name="email" 
+                               value="{{ user_data.email }}" 
+                               required>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    {# Alterar Senha #}
+                    <h6 class="mb-3"><i class="bi bi-key me-2"></i>Alterar Senha</h6>
+                    {% if session.get('force_password_change') %}
+                    <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span><strong>Ação obrigatória:</strong> você está usando a senha padrão do sistema. Defina uma nova senha para continuar.</span>
+                    </div>
+                    {% else %}
+                    <p class="text-muted small mb-3">
+                        Deixe os campos em branco se não desejar alterar sua senha.
+                    </p>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="senha_atual" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Senha Atual</label>
+                        <div class="input-group">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="senha_atual" 
+                                   name="senha_atual"
+                                   autocomplete="current-password">
+                            <button class="btn btn-outline-secondary" 
+                                    type="button" 
+                                    onclick="togglePassword('senha_atual')">
+                                <i class="bi bi-eye" id="senha_atual-icon"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted">Digite sua senha atual para confirmar as alterações.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="nova_senha" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Nova Senha</label>
+                        <div class="input-group">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="nova_senha" 
+                                   name="nova_senha"
+                                   minlength="8"
+                                   autocomplete="new-password">
+                            <button class="btn btn-outline-secondary" 
+                                    type="button" 
+                                    onclick="togglePassword('nova_senha')">
+                                <i class="bi bi-eye" id="nova_senha-icon"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted">Mínimo de 8 caracteres.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="confirmar_senha" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Confirmar Nova Senha</label>
+                        <div class="input-group">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="confirmar_senha" 
+                                   name="confirmar_senha"
+                                   minlength="8"
+                                   autocomplete="new-password">
+                            <button class="btn btn-outline-secondary" 
+                                    type="button" 
+                                    onclick="togglePassword('confirmar_senha')">
+                                <i class="bi bi-eye" id="confirmar_senha-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    {# Botões #}
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-danger">
+                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle me-1"></i> Salvar Alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Botão para abrir modal (adicione na seção de preferências) -->
+        <div class="rf-card mt-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-palette-fill me-2"></i>Aparência do Sistema
+                </h5>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPaletas">
+                    <i class="bi bi-droplet-fill me-1"></i>
+                    Personalizar Cores
+                </button>
+            </div>
+            <div class="rf-card-body">
+                <p class="text-muted mb-2">
+                    Escolha uma paleta de cores para personalizar sua experiência. 
+                    A alteração é salva automaticamente no seu perfil.
+                </p>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted">Paleta atual:</span>
+                    <span class="badge badge-primary" id="paleta-atual-badge" style="background-color: var(--color-primary); color: white;">
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        <span id="paleta-atual-nome">Dourado Institucional</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        {# Informações da Conta (Somente Leitura) #}
+        <div class="card shadow-sm mb-3">
+            <div class="card-header bg-light">
+                <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informações da Conta</h6>
+            </div>
+            <div class="rf-card-body">
+                <div class="mb-3">
+                    <label class="fw-bold text-muted small text-uppercase">Usuário</label>
+                    <div class="p-2 bg-light rounded border small">
+                        <code>{{ user_data.usuario }}</code>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="fw-bold text-muted small text-uppercase">Função</label>
+                    <div class="p-2 bg-light rounded border small">
+                        {% if user_data.role == 'admin' %}
+                        <span class="badge bg-danger">
+                            <i class="bi bi-shield-check me-1"></i> Administrador
+                        </span>
+                        {% else %}
+                        <span class="badge bg-primary">
+                            <i class="bi bi-person me-1"></i> Usuário
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="fw-bold text-muted small text-uppercase">Status</label>
+                    <div class="p-2 bg-light rounded border small">
+                        {% if user_data.ativo %}
+                        <span class="badge bg-success">
+                            <i class="bi bi-check-circle me-1"></i> Ativo
+                        </span>
+                        {% else %}
+                        <span class="badge bg-secondary">
+                            <i class="bi bi-x-circle me-1"></i> Inativo
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="mb-0">
+                    <label class="fw-bold text-muted small text-uppercase">Cadastrado em</label>
+                    <div class="p-2 bg-light rounded border small">
+                        {{ user_data.created_at }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {# Dicas de Segurança #}
+        <div class="card shadow-sm border-primary">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Dicas de Segurança</h6>
+            </div>
+            <div class="rf-card-body">
+                <ul class="list-unstyled mb-0 small">
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Use uma senha forte com pelo menos 8 caracteres
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Combine letras, números e símbolos
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Não compartilhe sua senha com ninguém
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Altere sua senha periodicamente
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Seleção de Paletas -->
+<div class="modal fade" id="modalPaletas" tabindex="-1" aria-labelledby="modalPaletasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalPaletasLabel">
+                    <i class="bi bi-palette-fill me-2 text-primary"></i>
+                    Escolha sua Paleta de Cores
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-4">
+                    Selecione uma das <strong>30 paletas profissionais</strong> abaixo. 
+                    O sistema aplica a cor instantaneamente para você visualizar.
+                </p>
+                
+                <!-- Grid de paletas -->
+                <div class="row g-3" id="grid-paletas">
+                    <!-- Paletas serão geradas via JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-salvar-paleta">
+                    <i class="bi bi-check-lg me-1"></i>
+                    Confirmar Seleção
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Preview da paleta (fixo no canto durante seleção) -->
+<div class="paleta-preview" id="paleta-preview" style="display: none;">
+    <div class="preview-header">
+        <i class="bi bi-eye-fill me-1"></i>
+        Preview
+    </div>
+    <div class="preview-buttons">
+        <button class="btn btn-primary btn-sm">Botão Primário</button>
+        <button class="btn btn-outline-primary btn-sm">Secundário</button>
+        <span class="badge" style="background-color: var(--color-primary); color: white;">Badge</span>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/paleta.js') }}"></script>
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Preview da imagem antes do upload
+    const inputFoto = document.getElementById('imagem_perfil');
+    const previewFoto = document.getElementById('preview-foto-perfil');
+    const checkboxRemover = document.getElementById('remove_current_image');
+    
+    if (inputFoto) {
+        inputFoto.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Desmarcar checkbox de remoção se uma nova foto for selecionada
+                if (checkboxRemover) {
+                    checkboxRemover.checked = false;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewFoto.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Preview ao marcar checkbox de remoção
+    if (checkboxRemover) {
+        checkboxRemover.addEventListener('change', function() {
+            if (this.checked) {
+                // Mostrar avatar padrão
+                previewFoto.src = "{{ url_for('static', filename='img/default_avatar.png') }}";
+                // Limpar input de arquivo
+                if (inputFoto) {
+                    inputFoto.value = '';
+                }
+            } else {
+                // Restaurar foto original
+                previewFoto.src = "{{ display_foto_url }}";
+            }
+        });
+    }
+    
+    // Submissão do formulário via AJAX
+    const formPerfil = document.getElementById('form-perfil');
+    if (formPerfil) {
+        formPerfil.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = formPerfil.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+            
+            const formData = new FormData(formPerfil);
+            
+            fetch("{{ url_for('perfil.index') }}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    
+                    // Atualizar dados na sessão/interface se fornecidos
+                    if (data.updated_user_data) {
+                        // Atualizar foto na sidebar
+                        const sidebarAvatar = document.querySelector('.sidebar-avatar');
+                        if (sidebarAvatar && data.updated_user_data.usuario_foto_url) {
+                            sidebarAvatar.src = data.updated_user_data.usuario_foto_url;
+                        }
+                        
+                        // Atualizar nome na sidebar
+                        const sidebarNome = document.querySelector('.menu-item[data-accesskey="m"] .menu-text');
+                        if (sidebarNome && data.updated_user_data.nome) {
+                            // Truncar nome se muito longo
+                            const nomeDisplay = data.updated_user_data.nome.length > 20 
+                                ? data.updated_user_data.nome.substring(0, 17) + '...' 
+                                : data.updated_user_data.nome;
+                            sidebarNome.textContent = nomeDisplay;
+                        }
+                    }
+                    
+                    // Redirecionar se especificado
+                    if (data.redirect) {
+                        setTimeout(() => {
+                            window.location.href = data.redirect;
+                        }, 1500);
+                    } else {
+                        // Recarregar a página após 1.5s
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    }
+                } else {
+                    showToast(data.message, data.type || 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showToast(error.message || 'Erro inesperado ao atualizar perfil.', error.type || 'danger');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

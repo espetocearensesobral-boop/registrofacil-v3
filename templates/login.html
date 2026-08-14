@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Registro Fácil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8;overflow:hidden}
+        /* Painel esquerdo = formulário */
+        .auth-panel-left{width:100%;max-width:480px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0}
+        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
+        /* Painel direito = branding */
+        .auth-panel-right{display:none;flex:1;background:linear-gradient(145deg,#0f0f0f 0%,#1a1a1a 40%,#0d0d0d 100%);position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:3rem}
+        @media(min-width:992px){.auth-panel-right{display:flex}}
+        .auth-panel-right::before{content:'';position:absolute;top:-30%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(205,168,101,.12) 0%,transparent 65%);border-radius:50%}
+        .auth-panel-right::after{content:'';position:absolute;bottom:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(30,136,229,.08) 0%,transparent 65%);border-radius:50%}
+        .panel-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(205,168,101,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(205,168,101,.04) 1px,transparent 1px);background-size:60px 60px}
+        .panel-brand{position:relative;z-index:2;text-align:center}
+        .panel-brand img{width:90px;height:90px;object-fit:contain;border-radius:50%;background:#1a1a1a;border:2px solid rgba(205,168,101,.3);padding:10px;margin-bottom:2rem;box-shadow:0 4px 24px rgba(205,168,101,.15)}
+        .panel-brand h1{font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
+        .panel-brand .gold-line{display:inline-block;width:48px;height:3px;background:#CDA865;border-radius:2px;margin:1.2rem auto}
+        .panel-brand p{font-size:.95rem;color:#888;line-height:1.7;max-width:280px}
+        .panel-features{position:relative;z-index:2;margin-top:3rem;display:flex;flex-direction:column;gap:.8rem}
+        .panel-feature-item{display:flex;align-items:center;gap:.75rem;font-size:.82rem;color:#666}
+        .panel-feature-item i{color:#CDA865;font-size:1rem;flex-shrink:0}
+        .auth-form-wrap{width:100%;max-width:380px}
+        .auth-logo-sm{text-align:center;margin-bottom:2rem}
+        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}
+        .auth-logo-sm .logo-circle img{width:58px;height:58px;object-fit:contain;}
+        @media(min-width:992px){.auth-logo-sm{display:none}}
+        .auth-title{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em}
+        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem}
+        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
+        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
+        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+        .auth-input-group input::placeholder{color:#444}
+        .auth-input-group .toggle-pw{padding:0 14px;color:#555;cursor:pointer;font-size:15px;flex-shrink:0;transition:color .2s}
+        .auth-input-group .toggle-pw:hover{color:#CDA865}
+        .auth-field{margin-bottom:1.2rem}
+        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
+        .auth-btn:active{transform:translateY(1px)}
+        .auth-btn i{font-size:16px}
+        .auth-links{display:flex;flex-direction:column;align-items:center;gap:.55rem;margin-top:1.6rem}
+        .auth-divider{color:#333;font-size:.8rem}
+        .auth-link{font-size:.83rem;color:#666;text-decoration:none;transition:color .2s}
+        .auth-link:hover{color:#CDA865}
+        .auth-alert{padding:12px 14px;border-radius:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.4rem;border:1.5px solid}
+        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
+        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
+        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
+        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
+        .auth-alert i{font-size:1rem;flex-shrink:0;margin-top:1px}
+        .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
+        .auth-alert .close-btn:hover{opacity:1}
+        .lock-warning{font-size:.75rem;color:#f07070;margin-top:5px;display:none}
+        .honeypot-field{position:absolute;left:-9999px;visibility:hidden;height:1px;width:1px;pointer-events:none;opacity:0}
+        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+    </style>
+</head>
+<body>
+    <!-- Painel esquerdo: formulário -->
+    <div class="auth-panel-left">
+        <div class="auth-form-wrap">
+            <div class="auth-logo-sm">
+                <div class="logo-circle">
+                    <img src="{{ logo_url or url_for('static', filename='img/registrofacil.png') }}" alt="Logo">
+                </div>
+            </div>
+            <h2 class="auth-title">Bem-vindo</h2>
+            <p class="auth-subtitle">Informe suas credenciais para acessar o sistema</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="auth-alert {{ 'danger' if category == 'error' else category }}">
+                        <i class="bi bi-{{ 'exclamation-circle-fill' if category == 'error' or category == 'warning' else 'check-circle-fill' if category == 'success' else 'info-circle-fill' }}"></i>
+                        <div>{{ message }}</div>
+                        <span class="close-btn" onclick="this.parentElement.remove()"><i class="bi bi-x-lg"></i></span>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="post" id="loginForm" novalidate>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="honeypot-field">
+                    <label for="honeypot">Deixe este campo vazio:</label>
+                    <input type="text" id="honeypot" name="honeypot" tabindex="-1" autocomplete="off">
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label" for="usuario">Usuário</label>
+                    <div class="auth-input-group">
+                        <span class="input-icon"><i class="bi bi-person"></i></span>
+                        <input type="text" id="usuario" name="usuario" value="{{ usuario }}" placeholder="Seu usuário" autocomplete="username" required>
+                    </div>
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label" for="senha">Senha</label>
+                    <div class="auth-input-group">
+                        <span class="input-icon"><i class="bi bi-lock"></i></span>
+                        <input type="password" id="senha" name="senha" placeholder="Sua senha" autocomplete="current-password" required>
+                        <span class="toggle-pw" onclick="togglePw('senha',this)" title="Mostrar/ocultar"><i class="bi bi-eye"></i></span>
+                    </div>
+                    <div class="lock-warning" id="capsWarning"><i class="bi bi-exclamation-triangle me-1"></i>Caps Lock ativado</div>
+                    <div class="lock-warning" id="numWarning"><i class="bi bi-exclamation-triangle me-1"></i>Num Lock desativado</div>
+                </div>
+                <button type="submit" class="auth-btn"><i class="bi bi-box-arrow-in-right"></i> Entrar</button>
+            </form>
+
+            <div class="auth-links">
+                <a href="{{ url_for('auth.recuperar_senha') }}" class="auth-link"><i class="bi bi-key me-1"></i>Esqueceu sua senha?</a>
+                <span class="auth-divider">•</span>
+                <a href="{{ url_for('auth.novo_usuario') }}" class="auth-link"><i class="bi bi-person-plus me-1"></i>Criar nova conta</a>
+            </div>
+        </div>
+        <span class="version-badge">v{{ app_version }}</span>
+    </div>
+
+    <!-- Painel direito: branding -->
+    <div class="auth-panel-right">
+        <div class="panel-grid"></div>
+        <div class="panel-brand">
+            <img src="{{ logo_url or url_for('static', filename='img/registrofacil.png') }}" alt="Logo">
+            <h1>Registro Fácil</h1>
+            <div class="gold-line"></div>
+            <p>Sistema de Gestão de Processos</p>
+        </div>
+        <div class="panel-features">
+            <div class="panel-feature-item"><i class="bi bi-shield-check"></i> Segurança e controle de acesso</div>
+            <div class="panel-feature-item"><i class="bi bi-lightning-charge"></i> Agilidade no registro de processos</div>
+            <div class="panel-feature-item"><i class="bi bi-graph-up"></i> Relatórios e métricas em tempo real</div>
+            <div class="panel-feature-item"><i class="bi bi-cloud-arrow-up"></i> Backup automático integrado</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePw(id,btn){
+            const input=document.getElementById(id);
+            const icon=btn.querySelector('i');
+            if(input.type==='password'){input.type='text';icon.className='bi bi-eye-slash';}
+            else{input.type='password';icon.className='bi bi-eye';}
+        }
+        document.addEventListener('DOMContentLoaded',function(){
+            const u=document.getElementById('usuario');
+            if(u)u.focus();
+            const s=document.getElementById('senha');
+            const c=document.getElementById('capsWarning');
+            const n=document.getElementById('numWarning');
+            function checkLocks(e){
+                c.style.display=e.getModifierState('CapsLock')?'block':'none';
+                n.style.display=!e.getModifierState('NumLock')?'block':'none';
+            }
+            s.addEventListener('keydown',checkLocks);
+            s.addEventListener('keyup',checkLocks);
+            const inputs=[...document.querySelectorAll('#loginForm input:not([type="hidden"]):not(#honeypot)')];
+            inputs.forEach((inp,i)=>inp.addEventListener('keydown',function(e){
+                if(e.key==='Enter'){e.preventDefault();if(i+1<inputs.length)inputs[i+1].focus();else document.getElementById('loginForm').submit();}
+            }));
+        });
+    </script>
+</body>
+</html>

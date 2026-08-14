@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Usuário - Registro Fácil{% endblock %}
+
+{% block page_title %}Gerenciar Usuário{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+{% endblock %}
+
+{% block content %}
+<p class="header-description">
+    Gerencie configurações administrativas do usuário {{ user_data.nome }}.
+</p>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="rf-card">
+            <div class="rf-card-header">
+                <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informações do Usuário (Somente Leitura)</h5>
+            </div>
+            <div class="rf-card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Nome</label>
+                        <div class="p-2 bg-light rounded border">
+                            {{ user_data.nome }}
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Email (Protegido)</label>
+                        <div class="p-2 bg-light rounded border">
+                            <code>{{ user_data.email_mascarado }}</code>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Usuário</label>
+                        <div class="p-2 bg-light rounded border">
+                            <code>{{ user_data.usuario }}</code>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Cadastrado em</label>
+                        <div class="p-2 bg-light rounded border">
+                            {{ user_data.created_at }}
+                        </div>
+                    </div>
+                    {% if user_data.last_login_at %}
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Último acesso</label>
+                        <div class="p-2 bg-light rounded border">
+                            {{ user_data.last_login_at }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Processos Vinculados</label>
+                        <div class="p-2 bg-light rounded border">
+                            <span class="badge bg-info">{{ user_data.processos_count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rf-card">
+            <div class="rf-card-header">
+                <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Configurações Administrativas</h5>
+            </div>
+            <div class="rf-card-body">
+                <form id="form-gerenciar-usuario" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Função <span class="text-danger">*</span>
+                            </label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" 
+                                           type="radio" 
+                                           name="role" 
+                                           id="role_user" 
+                                           value="user" 
+                                           {% if user_data.role == 'user' %}checked{% endif %}>
+                                    <label class="form-check-label" for="role_user">
+                                        <i class="bi bi-person me-1"></i> Usuário
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" 
+                                           type="radio" 
+                                           name="role" 
+                                           id="role_admin" 
+                                           value="admin" 
+                                           {% if user_data.role == 'admin' %}checked{% endif %}>
+                                    <label class="form-check-label" for="role_admin">
+                                        <i class="bi bi-shield-check me-1"></i> Administrador
+                                    </label>
+                                </div>
+                            </div>
+                            <small class="text-muted">
+                                Administradores têm acesso completo ao sistema.
+                            </small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Status</label>
+                            <div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="ativo" 
+                                           id="ativo" 
+                                           {% if user_data.ativo %}checked{% endif %}>
+                                    <label class="form-check-label" for="ativo">
+                                        Usuário Ativo
+                                    </label>
+                                </div>
+                            </div>
+                            <small class="text-muted">
+                                Usuários inativos não podem acessar o sistema.
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h6 class="mb-3"><i class="bi bi-shield-lock me-2"></i>Confirmação de Segurança</h6>
+                    <p class="text-muted small mb-3">
+                        Para realizar alterações administrativas, confirme sua identidade e forneça uma justificativa.
+                    </p>
+                    
+                    <div class="mb-3">
+                        <label for="senha_admin" class="form-label fw-bold">
+                            Sua Senha <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="senha_admin" 
+                                   name="senha_admin" 
+                                   required
+                                   autocomplete="current-password">
+                            <button class="btn btn-outline-secondary" 
+                                    type="button" 
+                                    onclick="togglePassword('senha_admin')">
+                                <i class="bi bi-eye" id="senha_admin-icon"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted">Digite sua senha de administrador para confirmar.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="justificativa" class="form-label fw-bold">
+                            Justificativa <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" 
+                                  id="justificativa" 
+                                  name="justificativa" 
+                                  rows="3" 
+                                  required
+                                  minlength="20"
+                                  placeholder="Explique o motivo das alterações (mínimo 20 caracteres)"></textarea>
+                        <div class="form-text">
+                            <span id="justificativa-count">0</span>/20 caracteres
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i> Salvar Alterações
+                        </button>
+                        <a href="{{ url_for('admin_users.users_list') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="rf-card">
+            <div class="rf-card-header">
+                <h6 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Ações Administrativas</h6>
+            </div>
+            <div class="rf-card-body">
+                {% if user_data.ativo and user_data.processos_count > 0 %}
+                <div class="alert alert-info small mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <strong>Atenção:</strong> Este usuário possui {{ user_data.processos_count }} processos vinculados. 
+                    Ao inativar, os processos serão reatribuídos.
+                </div>
+                {% else %}
+                <div class="alert alert-info small mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <strong>Redefinição de Senha:</strong> O usuário deve utilizar o recurso "Esqueci minha senha" na página de login para redefinir sua senha.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="rf-card">
+            <div class="rf-card-header">
+                <h6 class="mb-0"><i class="bi bi-shield-check me-2"></i>Política de Privacidade</h6>
+            </div>
+            <div class="rf-card-body">
+                <ul class="list-unstyled mb-0 small">
+                    <li class="mb-2">
+                        <i class="bi bi-lock text-success me-2"></i>
+                        Email protegido e mascarado
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-lock text-success me-2"></i>
+                        Dados pessoais não editáveis
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-lock text-success me-2"></i>
+                        Todas as ações são auditadas
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-lock text-success me-2"></i>
+                        Justificativas obrigatórias
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-lock text-success me-2"></i>
+                        Usuário é notificado de mudanças
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contador de caracteres da justificativa
+    const justificativaField = document.getElementById('justificativa');
+    const justificativaCount = document.getElementById('justificativa-count');
+    
+    if (justificativaField && justificativaCount) {
+        justificativaField.addEventListener('input', function() {
+            justificativaCount.textContent = this.value.length;
+        });
+    }
+    
+    const justificativaResetField = document.getElementById('justificativa_reset');
+    const justificativaResetCount = document.getElementById('justificativa-reset-count');
+    
+    if (justificativaResetField && justificativaResetCount) {
+        justificativaResetField.addEventListener('input', function() {
+            justificativaResetCount.textContent = this.value.length;
+        });
+    }
+    
+    // Submissão do formulário de gerenciamento
+    const formGerenciar = document.getElementById('form-gerenciar-usuario');
+    if (formGerenciar) {
+        formGerenciar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = formGerenciar.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+            
+            fetch("{{ url_for('perfil.index', user_id=user_data.id) }}", {
+                method: 'POST',
+                body: new FormData(formGerenciar),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    if (data.redirect) {
+                        setTimeout(() => {
+                            window.location.href = data.redirect;
+                        }, 1500);
+                    }
+                } else {
+                    showToast(data.message, data.type || 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showToast(error.message || 'Erro ao salvar alterações.', error.type || 'danger');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Salvar Alterações';
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

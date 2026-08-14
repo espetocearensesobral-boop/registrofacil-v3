@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block title %}Representantes - Registro Fácil{% endblock %}
+
+{% block page_title %}Representantes{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('representantes.novo') }}" class="nav-btn nav-btn-primary">
+        <i class="bi bi-plus-circle"></i> Novo Representante
+    </a>
+    <button type="button" class="nav-btn nav-btn-secondary"
+            onclick="window.open('{{ url_for('representantes.imprimir', **request.args.to_dict()) }}', '_blank')">
+        <i class="bi bi-printer"></i> Imprimir
+    </button>
+    <div class="dropdown">
+        <button class="nav-btn nav-btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-download"></i> Exportar
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{{ url_for('representantes.exportar', **request.args.to_dict()) }}">
+                <i class="bi bi-filetype-xlsx me-2"></i>Exportar Excel
+            </a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card kpi-gold">
+        <div class="kpi-label">Total de Representantes</div>
+        <div class="kpi-value kpi-gold">{{ total_registros }}</div>
+        <div class="kpi-sub">Cadastrados no sistema</div>
+        <i class="bi bi-people-fill kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-info">
+        <div class="kpi-label">Com Registros</div>
+        <div class="kpi-value kpi-info">{{ representantes | selectattr('total_processos') | list | length }}</div>
+        <div class="kpi-sub">Representantes com processos</div>
+        <i class="bi bi-file-earmark-text kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-label">Resultado da Busca</div>
+        <div class="kpi-value kpi-success">{{ representantes | list | length }}</div>
+        <div class="kpi-sub">{% if busca %}Filtrado por "{{ busca }}"{% else %}Exibindo todos{% endif %}</div>
+        <i class="bi bi-funnel-fill kpi-bg-icon"></i>
+    </div>
+</div>
+
+<!-- Filtro -->
+<div class="rf-card mb-4">
+    <div class="rf-card-body" style="padding:12px 16px;">
+        <form method="get" class="row g-2 align-items-end">
+            <input type="hidden" name="ordenar" value="{{ ordenar | default('nome') }}">
+            <input type="hidden" name="direcao" value="{{ direcao | default('asc') }}">
+            <div class="col-md-7">
+                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Representante</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background:var(--background-color-body);border-color:var(--border-color-input);"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="busca" class="form-control" placeholder="Nome, E-mail ou Telefone..." value="{{ busca | default('') }}" style="border-left:none;font-size:13px;">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
+                <select name="registros_por_pagina" class="form-select form-select-sm" style="font-size:13px;">
+                    {% for n in [10, 25, 50, 100] %}
+                    <option value="{{ n }}" {% if registros_por_pagina == n %}selected{% endif %}>{{ n }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="nav-btn nav-btn-success flex-fill"><i class="bi bi-funnel"></i> Filtrar</button>
+                <a href="{{ url_for('representantes.index') }}" class="nav-btn nav-btn-danger flex-fill" style="justify-content:center;"><i class="bi bi-x-circle"></i> Limpar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabela -->
+<div class="rf-card">
+    <div class="rf-card-header">
+        <h5 class="m-0"><i class="bi bi-people me-2" style="color:var(--color-gold-primary);"></i>Lista de Representantes</h5>
+        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table-representantes table table-hover align-middle mb-0" style="font-size:13px;">
+                <thead>
+                    <tr style="background:var(--background-color-body);">
+                        {% set th_style = "padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);" %}
+                        {% set th_sort_style = th_style + "cursor:pointer;user-select:none;" %}
+                        {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;"></i>{% else %}<i class="bi bi-sort-down ms-1" style="opacity:.8;"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;"></i>{% endif %}{% endmacro %}
+                        {% macro sort_url(col) %}{{ url_for('representantes.index', busca=busca, registros_por_pagina=registros_por_pagina, ordenar=col, direcao='desc' if (ordenar == col and direcao == 'asc') else 'asc', pagina=1) }}{% endmacro %}
+                        <th class="ps-4" style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('nome') }}'">Nome do Representante{{ sort_icon('nome') }}</th>
+                        <th style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('telefone') }}'">Telefone{{ sort_icon('telefone') }}</th>
+                        <th style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('email') }}'">E-mail{{ sort_icon('email') }}</th>
+                        <th style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('processos') }}'">Processos{{ sort_icon('processos') }}</th>
+                        <th style="{{ th_style }}">Último Registro</th>
+                        <th class="text-end pe-4" style="{{ th_style }}">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for representante in representantes %}
+                    {% set tem_vinculo = representante.total_processos and representante.total_processos > 0 %}
+                    <tr>
+                        <td class="ps-4 fw-semibold" style="padding:11px 12px;">{{ representante.nome }}</td>
+                        <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ representante.telefone or '—' }}</td>
+                        <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ representante.email or '—' }}</td>
+                        <td style="padding:11px 12px;">
+                            {% if tem_vinculo %}
+                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+                                <i class="bi bi-folder me-1"></i>{{ representante.total_processos }}
+                            </span>
+                            {% else %}
+                            <span style="color:var(--text-color-secondary);">0</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding:11px 12px;">
+                            {% if representante.ultimo_registro_id %}
+                            <a href="{{ url_for('processos.visualizar', processo_id=representante.ultimo_registro_id) }}" class="text-decoration-none">
+                                {% if representante.ultimo_registro_matricula == 'Sem Matrícula' %}
+                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+                                    <i class="bi bi-file-earmark me-1"></i>Sem Matrícula
+                                </span>
+                                {% else %}
+                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+                                    <i class="bi bi-file-earmark-text me-1"></i>{{ representante.ultimo_registro_matricula }}
+                                </span>
+                                {% endif %}
+                            </a>
+                            {% else %}
+                            <span style="color:var(--text-color-secondary);">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end pe-4" style="padding:11px 12px;">
+                            <div style="display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap;">
+                                <a href="{{ url_for('representantes.visualizar', representante_id=representante.id) }}"
+                                   class="nav-btn nav-btn-info"
+                                   style="height:28px;padding:0 10px;font-size:12px;"
+                                   title="Ver Histórico">
+                                    <i class="bi bi-clock-history"></i> Histórico
+                                </a>
+                                {% if tem_vinculo %}
+                                {# Botões visíveis mas inativos quando há vínculo #}
+                                <span class="nav-btn nav-btn-gold"
+                                   style="height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;"
+                                   title="Não é possível editar: representante possui {{ representante.total_processos }} processo(s) vinculado(s)">
+                                    <i class="bi bi-pencil"></i>
+                                </span>
+                                <span class="nav-btn nav-btn-danger"
+                                   style="height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;"
+                                   title="Não é possível excluir: representante possui {{ representante.total_processos }} processo(s) vinculado(s)">
+                                    <i class="bi bi-trash"></i>
+                                </span>
+                                {% else %}
+                                <a href="{{ url_for('representantes.editar', representante_id=representante.id) }}"
+                                   class="nav-btn nav-btn-gold"
+                                   style="height:28px;padding:0 10px;font-size:12px;"
+                                   title="Editar Representante">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button type="button"
+                                        class="nav-btn nav-btn-danger btn-excluir-representante"
+                                        style="height:28px;padding:0 10px;font-size:12px;"
+                                        data-id="{{ representante.id }}"
+                                        data-nome="{{ representante.nome }}"
+                                        title="Excluir Representante">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
+                            <i class="bi bi-people mb-2 d-block" style="font-size:2rem;opacity:.3;"></i>
+                            <span style="font-size:13px;">Nenhum representante encontrado.</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if total_paginas > 1 %}
+    {% set inicio = (pagina_atual - 1) * registros_por_pagina + 1 %}
+    {% set fim = inicio + representantes|length - 1 %}
+    <div style="padding:10px 16px;border-top:1px solid var(--border-color-default);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
+        <div></div>
+        <nav aria-label="Páginas">
+            <ul class="pagination justify-content-center mb-0" style="gap:4px;">
+                <li class="page-item {{ 'disabled' if pagina_atual == 1 }}">
+                    <a class="page-link" href="{{ url_for('representantes.index', pagina=pagina_atual-1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">Anterior</a>
+                </li>
+                {% set max_links = 7 %}
+                {% set start_p = [1, pagina_atual - (max_links // 2)] | max %}
+                {% set end_p = [total_paginas, start_p + max_links - 1] | min %}
+                {% set start_p = [1, end_p - max_links + 1] | max %}
+                {% if start_p > 1 %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('representantes.index', pagina=1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">1</a></li>
+                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link" style="border-radius:6px;font-size:13px;">…</span></li>{% endif %}
+                {% endif %}
+                {% for p in range(start_p, end_p + 1) %}
+                <li class="page-item {{ 'active' if p == pagina_atual }}">
+                    <a class="page-link" href="{{ url_for('representantes.index', pagina=p, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">{{ p }}</a>
+                </li>
+                {% endfor %}
+                {% if end_p < total_paginas %}
+                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link" style="border-radius:6px;font-size:13px;">…</span></li>{% endif %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('representantes.index', pagina=total_paginas, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">{{ total_paginas }}</a></li>
+                {% endif %}
+                <li class="page-item {{ 'disabled' if pagina_atual == total_paginas }}">
+                    <a class="page-link" href="{{ url_for('representantes.index', pagina=pagina_atual+1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">Próximo</a>
+                </li>
+            </ul>
+        </nav>
+        <div style="text-align:right;font-size:12px;color:var(--text-color-secondary);white-space:nowrap;">
+            Mostrando {{ inicio }}–{{ fim }} de {{ total_registros }} registro{{ 's' if total_registros != 1 }}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal exclusão representante -->
+<div class="modal fade" id="confirmDeleteRepresentanteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+                <h5 class="modal-title fw-bold"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" style="font-size:14px;">
+                Excluir o representante <strong id="representanteNomeParaExcluir"></strong>?<br>
+                <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Cancelar</button>
+                <form id="formExcluirRepresentante" method="POST" action="" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-excluir-representante').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const id   = this.dataset.id;
+            const nome = this.dataset.nome;
+            document.getElementById('representanteNomeParaExcluir').textContent = nome;
+            document.getElementById('formExcluirRepresentante').action = '/representantes/excluir/' + id;
+            new bootstrap.Modal(document.getElementById('confirmDeleteRepresentanteModal')).show();
+        });
+    });
+});
+</script>
+{% endblock %}

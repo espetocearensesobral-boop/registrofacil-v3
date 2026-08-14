@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Perfis de Permissão{% endblock %}
+{% block page_title %}Perfis de Permissão{% endblock %}
+
+{% block page_actions %}
+<button type="button" class="nav-btn nav-btn-primary" onclick="document.getElementById('modalCriar').style.display='flex'">
+    <i class="bi bi-plus-lg me-1"></i> Novo Perfil
+</button>
+<a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary">
+    <i class="bi bi-arrow-left"></i> Voltar
+</a>
+{% endblock %}
+
+{% block content %}
+
+<div id="feedbackAlert" class="d-none" role="alert"
+     style="border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;"></div>
+
+<div class="rf-card mb-3">
+    <div class="card-body" style="padding:16px 20px;">
+        <div style="font-size:13px;color:var(--text-color-secondary);margin-bottom:4px;">
+            <i class="bi bi-info-circle me-1" style="color:var(--color-gold-dark);"></i>
+            Perfis permitem agrupar conjuntos de permissões e atribuí-los a usuários de forma rápida.
+            Ao vincular um perfil, as permissões do usuário são substituídas pelas do perfil.
+        </div>
+    </div>
+</div>
+
+<div class="rf-card">
+    <div class="card-body" style="padding:0;">
+        <table class="table table-hover mb-0" style="font-size:13px;">
+            <thead>
+                <tr style="background:var(--background-color-body);">
+                    <th style="padding:10px 16px;">Perfil</th>
+                    <th style="padding:10px 16px;">Permissões</th>
+                    <th style="padding:10px 16px;">Usuários</th>
+                    <th style="padding:10px 16px;">Criado em</th>
+                    <th style="padding:10px 16px;text-align:right;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for perfil in perfis %}
+            <tr>
+                <td style="padding:10px 16px;">
+                    <div style="font-weight:700;color:var(--text-color-primary);">{{ perfil.nome }}</div>
+                    {% if perfil.descricao %}
+                    <div style="font-size:11px;color:var(--text-color-secondary);">{{ perfil.descricao }}</div>
+                    {% endif %}
+                </td>
+                <td style="padding:10px 16px;">
+                    <span class="badge" style="background:var(--color-gold-dark);color:#fff;border-radius:99px;padding:3px 10px;">
+                        {{ perfil.total_permissoes }} permissões
+                    </span>
+                </td>
+                <td style="padding:10px 16px;">{{ perfil.total_usuarios }} usuário(s)</td>
+                <td style="padding:10px 16px;">{{ perfil.created_at[:10] if perfil.created_at else '—' }}</td>
+                <td style="padding:10px 16px;text-align:right;">
+                    <a href="{{ url_for('permissoes.visualizar_perfil', perfil_id=perfil.id) }}"
+                       class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:11px;">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <button type="button"
+                            class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:11px;color:#dc2626;"
+                            onclick="excluirPerfil({{ perfil.id }}, '{{ perfil.nome|e }}', {{ perfil.total_usuarios }})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align:center;padding:32px;color:var(--text-color-secondary);">
+                    <i class="bi bi-person-badge" style="font-size:32px;display:block;margin-bottom:8px;opacity:.3;"></i>
+                    Nenhum perfil criado. Crie o primeiro perfil clicando em "Novo Perfil".
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{# Modal: Criar Perfil #}
+<div id="modalCriar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-width:95vw;">
+        <h5 style="margin:0 0 16px;font-size:15px;font-weight:700;">Novo Perfil de Permissão</h5>
+        <label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;">Nome do Perfil *</label>
+        <input id="novoNome" type="text" class="form-control form-control-sm" placeholder="Ex: Operador, Gerente..." style="margin-bottom:10px;">
+        <label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;">Descrição</label>
+        <input id="novaDesc" type="text" class="form-control form-control-sm" placeholder="Descrição opcional" style="margin-bottom:16px;">
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button type="button" class="nav-btn nav-btn-secondary" onclick="document.getElementById('modalCriar').style.display='none'">Cancelar</button>
+            <button type="button" class="nav-btn nav-btn-primary" onclick="criarPerfil()">
+                <i class="bi bi-plus-lg me-1"></i> Criar Perfil
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+const csrfToken = '{{ csrf_token }}';
+
+async function criarPerfil() {
+    const nome = document.getElementById('novoNome').value.trim();
+    if (!nome) { alert('Informe o nome do perfil.'); return; }
+    const fd = new FormData();
+    fd.append('csrf_token', csrfToken);
+    fd.append('nome', nome);
+    fd.append('descricao', document.getElementById('novaDesc').value.trim());
+    try {
+        const res = await fetch('{{ url_for("permissoes.criar_perfil") }}', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('modalCriar').style.display = 'none';
+            if (data.perfil_id) window.location.href = '/permissoes/perfis/' + data.perfil_id;
+            else window.location.reload();
+        } else {
+            alert(data.message || 'Erro ao criar perfil.');
+        }
+    } catch(e) { alert('Erro de rede.'); }
+}
+
+async function excluirPerfil(id, nome, totalUsuarios) {
+    if (totalUsuarios > 0) {
+        alert(`Não é possível excluir: ${totalUsuarios} usuário(s) vinculado(s) a este perfil.`);
+        return;
+    }
+    if (!confirm(`Excluir o perfil "${nome}"? Esta ação não pode ser desfeita.`)) return;
+    const fd = new FormData();
+    fd.append('csrf_token', csrfToken);
+    try {
+        const res = await fetch(`/permissoes/perfis/${id}/excluir`, { method: 'POST', body: fd });
+        const data = await res.json();
+        const el = document.getElementById('feedbackAlert');
+        el.className = '';
+        if (data.success) {
+            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+            el.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+            setTimeout(() => window.location.reload(), 1500);
+        } else {
+            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+            el.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+        }
+        el.scrollIntoView({ behavior: 'smooth' });
+    } catch(e) { alert('Erro de rede.'); }
+}
+</script>
+{% endblock %}

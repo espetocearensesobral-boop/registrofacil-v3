@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block title %}Permissões — {{ usuario.nome }}{% endblock %}
+{% block page_title %}Permissões do Utilizador{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+{% endblock %}
+
+{% block content %}
+
+{# ── Cabeçalho do utilizador ── #}
+<div class="rf-card mb-3">
+    <div class="card-body" style="padding:16px 20px;">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div style="width:46px;height:46px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;">
+                {{ usuario.nome[0]|upper }}
+            </div>
+            <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span style="font-size:15px;font-weight:700;color:var(--text-color-primary);">{{ usuario.nome }}</span>
+                    <code style="font-size:11px;background:var(--background-color-body);padding:1px 7px;border-radius:4px;color:var(--text-color-secondary);">@{{ usuario.usuario }}</code>
+                    <span class="badge" style="background:var(--color-gold-dark);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ usuario.role|upper }}</span>
+                    {% if usuario.role in ['admin','suporte'] %}
+                    <span class="badge" style="background:#198754;color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;"><i class="bi bi-shield-fill-check me-1"></i>Acesso Total</span>
+                    {% endif %}
+                </div>
+                <div style="font-size:12px;color:var(--text-color-secondary);margin-top:3px;"><i class="bi bi-envelope me-1"></i>{{ usuario.email }}</div>
+            </div>
+            <div id="permissoes-summary" style="text-align:right;flex-shrink:0;">
+                <div style="font-size:22px;font-weight:800;color:var(--color-black-premium);" id="contador-num">0</div>
+                <div style="font-size:11px;color:var(--text-color-secondary);">permissões ativas</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if usuario.role in ['admin','suporte'] %}
+<div style="display:flex;align-items:center;gap:10px;background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;">
+    <i class="bi bi-shield-lock-fill" style="color:#f59e0b;font-size:18px;flex-shrink:0;"></i>
+    <span><strong>Administradores e suporte</strong> têm acesso irrestrito ao sistema. Permissões granulares não se aplicam a este perfil.</span>
+</div>
+{% endif %}
+
+{# Alerta de feedback #}
+<div id="feedbackAlert" class="d-none" role="alert"
+     style="border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;"></div>
+
+{% if usuario.role not in ['admin','suporte'] %}
+{# ── Seção: Perfil de Permissão ── #}
+<div class="rf-card mb-3">
+    <div class="card-body" style="padding:16px 20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text-color-primary);margin-bottom:2px;">
+                    <i class="bi bi-person-badge me-1" style="color:var(--color-gold-dark);"></i>Perfil de Permissão
+                </div>
+                <div id="perfil-status" style="font-size:12px;color:var(--text-color-secondary);">Carregando...</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <select id="selectPerfil" class="form-select form-select-sm" style="min-width:180px;font-size:12px;">
+                    <option value="">— Sem perfil (permissões manuais) —</option>
+                </select>
+                <button type="button" class="nav-btn nav-btn-primary" style="height:30px;padding:0 12px;font-size:12px;" onclick="aplicarPerfil()">
+                    <i class="bi bi-check-circle me-1"></i>Aplicar Perfil
+                </button>
+                <a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;">
+                    <i class="bi bi-gear me-1"></i>Gerir Perfis
+                </a>
+            </div>
+        </div>
+        <div style="font-size:11px;color:#f59e0b;margin-top:8px;background:#fff8e1;border-radius:6px;padding:6px 10px;">
+            <i class="bi bi-info-circle me-1"></i>
+            Ao aplicar um perfil, as permissões do usuário serão substituídas pelas permissões do perfil selecionado.
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{# ── Formulário ── #}
+<form id="formPermissoes" method="POST" action="{{ url_for('permissoes.atualizar_permissoes', usuario_id=usuario.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    {# Barra de ações rápidas #}
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+        <button type="button" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;" onclick="selecionarTodas()">
+            <i class="bi bi-check-all"></i> Selecionar Tudo
+        </button>
+        <button type="button" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;" onclick="desselecionarTodas()">
+            <i class="bi bi-x-circle"></i> Limpar Tudo
+        </button>
+        <div style="flex:1;"></div>
+        {# Barra de progresso #}
+        <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:120px;height:6px;background:var(--border-color-default);border-radius:99px;overflow:hidden;">
+                <div id="progress-bar" style="height:100%;background:var(--color-success);border-radius:99px;transition:width .3s;width:0%;"></div>
+            </div>
+            <span id="contador-pct" style="font-size:11px;color:var(--text-color-secondary);white-space:nowrap;">0%</span>
+        </div>
+    </div>
+
+    {# Cards de categorias de permissões #}
+    {% for categoria, permissoes in permissoes_por_categoria.items() %}
+    {%- set cat_id = loop.index %}
+    {%- set total_cat = permissoes|length %}
+    {%- set ativas_cat = permissoes|selectattr('concedido','eq',1)|list|length %}
+
+    <div class="perm-category-card rf-card mb-2" id="cat-{{ cat_id }}">
+        {# Cabeçalho da categoria — clicável para expandir #}
+        <div class="perm-cat-header"
+             onclick="toggleCategoria('body-{{ cat_id }}')"
+             style="display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;border-radius:8px;user-select:none;">
+
+            {# Ícone de categoria #}
+            {%- set cat_icon = {
+                'Processos':     'bi-folder2-open',
+                'Titulares':     'bi-people',
+                'Configurações': 'bi-gear',
+                'Administração': 'bi-shield-lock',
+                'Relatórios':    'bi-bar-chart-line'
+            }.get(categoria, 'bi-puzzle') %}
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--background-color-body);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i class="bi {{ cat_icon }}" style="font-size:15px;color:var(--text-color-secondary);"></i>
+            </div>
+
+            <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--text-color-primary);">{{ categoria }}</div>
+                <div style="font-size:11px;color:var(--text-color-secondary);margin-top:1px;">
+                    <span class="cat-ativas-{{ cat_id }}">{{ ativas_cat }}</span> de {{ total_cat }} permissões activas
+                </div>
+            </div>
+
+            {# Botão toggle da categoria #}
+            <button type="button"
+                    class="nav-btn nav-btn-secondary cat-toggle-btn"
+                    id="toggle-btn-{{ cat_id }}"
+                    onclick="event.stopPropagation(); toggleAllCat({{ cat_id }})"
+                    style="height:26px;padding:0 10px;font-size:11px;flex-shrink:0;"
+                    title="Alternar todas de {{ categoria }}">
+                <i class="bi bi-toggle-on"></i> Alternar
+            </button>
+
+            <i class="bi bi-chevron-down cat-chevron" id="chevron-{{ cat_id }}" style="font-size:13px;color:var(--text-color-secondary);transition:transform .2s;flex-shrink:0;"></i>
+        </div>
+
+        {# Corpo da categoria — permissões #}
+        <div id="body-{{ cat_id }}" class="perm-cat-body" style="padding:4px 18px 14px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">
+                {% for perm in permissoes %}
+                <label class="perm-item" for="perm_{{ perm.nome }}"
+                       style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:7px;border:1.5px solid var(--border-color-default);cursor:pointer;transition:border-color .15s,background .15s;">
+                    <input class="perm-checkbox" type="checkbox"
+                           name="permissoes[]"
+                           value="{{ perm.nome }}"
+                           id="perm_{{ perm.nome }}"
+                           data-cat="{{ cat_id }}"
+                           {% if perm.concedido == 1 %}checked{% endif %}
+                           style="width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--color-success);">
+                    <div style="min-width:0;">
+                        <div style="font-size:12px;font-weight:600;color:var(--text-color-primary);line-height:1.3;">{{ perm.descricao }}</div>
+                        <div style="font-size:10px;color:var(--text-color-secondary);margin-top:2px;font-family:monospace;">{{ perm.nome }}</div>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {# Botão Salvar #}
+    <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+        <button type="submit" class="nav-btn" id="btnSalvar"
+                style="background:#198754;border-color:#198754;color:#fff;height:38px;padding:0 22px;font-size:13px;font-weight:700;border-radius:8px;">
+            <i class="bi bi-save me-1"></i> Salvar Alterações
+        </button>
+    </div>
+</form>
+
+<style>
+.perm-category-card { border-radius:9px; overflow:hidden; }
+.perm-cat-header:hover { background:var(--background-color-body); }
+.perm-item:has(.perm-checkbox:checked) {
+    border-color: #198754 !important;
+    background: #f0fdf4 !important;
+}
+[data-bs-theme="dark"] .perm-item:has(.perm-checkbox:checked) {
+    background: #0d2b1a !important;
+}
+.perm-item:hover { border-color: #198754 !important; }
+</style>
+
+<script>
+// ── Contador e barra de progresso ──
+const allCheckboxes = () => document.querySelectorAll('.perm-checkbox');
+{% set ns = namespace(total=0) %}{% for lst in permissoes_por_categoria.values() %}{% set ns.total = ns.total + lst|length %}{% endfor %}
+const totalPerms = {{ ns.total }};
+
+function atualizarContador() {
+    const checked = document.querySelectorAll('.perm-checkbox:checked').length;
+    document.getElementById('contador-num').textContent = checked;
+    const pct = totalPerms > 0 ? Math.round((checked / totalPerms) * 100) : 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('contador-pct').textContent = pct + '%';
+
+    // Actualiza contadores por categoria
+    document.querySelectorAll('.perm-checkbox').forEach(cb => {
+        const catId = cb.dataset.cat;
+        const catChecked = document.querySelectorAll(`.perm-checkbox[data-cat="${catId}"]:checked`).length;
+        const el = document.querySelector(`.cat-ativas-${catId}`);
+        if (el) el.textContent = catChecked;
+    });
+}
+
+// ── Expandir / Colapsar categoria ──
+function toggleCategoria(bodyId) {
+    const body = document.getElementById(bodyId);
+    const num = bodyId.replace('body-', '');
+    const chevron = document.getElementById('chevron-' + num);
+    if (!body) return;
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : '';
+    if (chevron) chevron.style.transform = isOpen ? 'rotate(-90deg)' : '';
+}
+
+// ── Alternar todas da categoria ──
+function toggleAllCat(catId) {
+    const boxes = document.querySelectorAll(`.perm-checkbox[data-cat="${catId}"]`);
+    const anyUnchecked = Array.from(boxes).some(b => !b.checked);
+    boxes.forEach(b => b.checked = anyUnchecked);
+    atualizarContador();
+}
+
+function selecionarTodas() {
+    allCheckboxes().forEach(b => b.checked = true);
+    atualizarContador();
+}
+function desselecionarTodas() {
+    allCheckboxes().forEach(b => b.checked = false);
+    atualizarContador();
+}
+
+// ── Submit via fetch ──
+document.getElementById('formPermissoes').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSalvar');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:14px;height:14px;" role="status"></span>Salvando...';
+
+    fetch(this.action, { method: 'POST', body: new FormData(this) })
+        .then(r => r.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-save me-1"></i> Salvar Alterações';
+            const el = document.getElementById('feedbackAlert');
+            el.className = '';
+            if (data.success) {
+                el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+                el.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size:16px;flex-shrink:0;"></i><span>' + (data.message || 'Permissões guardadas com sucesso!') + '</span>';
+                setTimeout(() => window.location.reload(), 1800);
+            } else {
+                el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+                el.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="font-size:16px;flex-shrink:0;"></i><span>' + (data.message || 'Erro ao guardar.') + '</span>';
+            }
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-save me-1"></i> Salvar Alterações';
+            const el = document.getElementById('feedbackAlert');
+            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+            el.innerHTML = '<i class="bi bi-wifi-off" style="font-size:16px;flex-shrink:0;"></i><span>Erro de rede. Verifique a ligação.</span>';
+        });
+});
+
+// Adicionar listener nos checkboxes
+allCheckboxes().forEach(cb => cb.addEventListener('change', atualizarContador));
+
+// Inicializar ao carregar
+document.addEventListener('DOMContentLoaded', () => {
+    atualizarContador();
+    carregarPerfis();
+});
+
+// ── Gestão de Perfis ──
+async function carregarPerfis() {
+    try {
+        const res = await fetch('{{ url_for("permissoes.perfil_atual_usuario", usuario_id=usuario.id) }}');
+        const data = await res.json();
+        if (!data.success) return;
+        const sel = document.getElementById('selectPerfil');
+        if (!sel) return;
+        sel.innerHTML = '<option value="">— Sem perfil (permissões manuais) —</option>';
+        (data.todos_perfis || []).forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.nome + (p.descricao ? ` — ${p.descricao}` : '');
+            if (data.perfil_atual && data.perfil_atual.id === p.id) opt.selected = true;
+            sel.appendChild(opt);
+        });
+        const statusEl = document.getElementById('perfil-status');
+        if (statusEl) {
+            statusEl.textContent = data.perfil_atual
+                ? `Perfil atual: ${data.perfil_atual.nome} (aplicado em ${data.perfil_atual.atribuido_em})`
+                : 'Nenhum perfil vinculado — permissões configuradas manualmente';
+        }
+    } catch(e) {
+        const statusEl = document.getElementById('perfil-status');
+        if (statusEl) statusEl.textContent = 'Erro ao carregar perfis.';
+    }
+}
+
+async function aplicarPerfil() {
+    const sel = document.getElementById('selectPerfil');
+    if (!sel) return;
+    const perfilId = sel.value;
+    const msg = perfilId
+        ? 'Aplicar este perfil substituirá todas as permissões atuais do usuário. Deseja continuar?'
+        : 'Remover o perfil manterá as permissões atuais sem vínculo de perfil. Deseja continuar?';
+    if (!confirm(msg)) return;
+    const fd = new FormData();
+    fd.append('csrf_token', '{{ csrf_token }}');
+    if (perfilId) fd.append('perfil_id', perfilId);
+    try {
+        const res = await fetch('{{ url_for("permissoes.aplicar_perfil_usuario", usuario_id=usuario.id) }}', {
+            method: 'POST', body: fd
+        });
+        const data = await res.json();
+        const el = document.getElementById('feedbackAlert');
+        el.className = '';
+        if (data.success) {
+            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+            el.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+            setTimeout(() => window.location.reload(), 1800);
+        } else {
+            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+            el.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+        }
+        el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    } catch(e) {
+        alert('Erro de rede ao aplicar perfil.');
+    }
+}
+</script>
+{% endblock %}

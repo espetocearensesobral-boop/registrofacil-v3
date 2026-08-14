@@ -1,0 +1,127 @@
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #222;
+        background: #fff;
+        font-size: 9.5pt;
+    }
+    .page { width: 210mm; margin: 0 auto; padding: 12mm 14mm; }
+
+    /* CABEÇALHO */
+    .header {
+        display: table;
+        width: 100%;
+        padding-bottom: 12px;
+        margin-bottom: 14px;
+        border-bottom: 3px solid #CDA865;
+    }
+    .header-left, .header-right {
+        display: table-cell;
+        vertical-align: middle;
+        width: 50%;
+    }
+    .header-right { text-align: right; }
+    .logo { max-width: 160px; max-height: 55px; object-fit: contain; }
+    .report-title { font-size: 15pt; font-weight: 300; color: #444; margin-bottom: 2px; }
+    .report-sub { font-size: 8.5pt; color: #999; font-style: italic; }
+
+    /* RESUMO */
+    .summary-bar {
+        display: table;
+        width: 100%;
+        margin-bottom: 14px;
+        background: #fffdf7;
+        border: 1px solid #e5d7be;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .sum-cell {
+        display: table-cell;
+        padding: 9px 14px;
+        vertical-align: middle;
+        text-align: center;
+        border-right: 1px solid #e5d7be;
+    }
+    .sum-cell:last-child { border-right: none; }
+    .sum-label {
+        font-size: 7pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #b09060;
+        letter-spacing: 0.4px;
+        display: block;
+        margin-bottom: 2px;
+    }
+    .sum-value { font-size: 14pt; font-weight: 700; color: #8B6332; }
+    .sum-value.small { font-size: 9pt; color: #555; font-weight: 600; }
+
+    /* TABELA */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+    thead th {
+        background: #8B6332;
+        color: #fff;
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 8px 7px;
+        text-align: left;
+        border-right: 1px solid rgba(255,255,255,0.15);
+    }
+    thead th:last-child { border-right: none; }
+    tbody td {
+        font-size: 8.5pt;
+        padding: 6px 7px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0e8d8;
+        color: #333;
+    }
+    tbody tr:nth-child(even) td { background: #fdfaf5; }
+    tbody tr:last-child td { border-bottom: none; }
+    .nome-col { font-weight: 600; color: #222; }
+    .count-badge {
+        display: inline-block;
+        background: #f0e8d8;
+        color: #8B6332;
+        font-weight: 700;
+        font-size: 8pt;
+        padding: 2px 7px;
+        border-radius: 10px;
+    }
+
+    /* RODAPÉ */
+    .footer {
+        display: table;
+        width: 100%;
+        padding-top: 8px;
+        border-top: 1px solid #e5d7be;
+    }
+    .footer-left, .footer-right {
+        display: table-cell;
+        font-size: 7.5pt;
+        color: #bbb;
+        vertical-align: middle;
+    }
+    .footer-right { text-align: right; }
+
+    @page { size: A4; margin: 12mm 14mm; }
+    @media print {
+        body {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .page { max-width: none; margin: 0; padding: 0; }
+        thead th {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        tbody tr:nth-child(even) td {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        thead { display: table-header-group; }
+        tr { page-break-inside: avoid; }
+    }
+</style>

@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+{% block title %}Processos de Hoje - Registro Fácil{% endblock %}
+
+{# Define o título da página que será usado na navbar do base.html #}
+{% block page_title %}Processos de Hoje{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary">
+        <i class="bi bi-plus-circle"></i> Novo Processo
+    </a>
+    <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#printListModal">
+        <i class="bi bi-printer"></i> Imprimir
+    </button>
+    <div class="dropdown">
+        <button class="nav-btn nav-btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-download"></i> Exportar
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{{ url_for('processos.exportar_excel', **request.args.to_dict()) }}">
+                <i class="bi bi-filetype-xlsx me-2"></i>Exportar Excel
+            </a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Atrasados</div>
+        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
+        <div class="kpi-sub">Com prazo vencido</div>
+        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-warning">
+        <div class="kpi-label">Em Andamento</div>
+        <div class="kpi-value kpi-warning">{{ processos_andamento }}</div>
+        <div class="kpi-sub">Aguardando conclusão</div>
+        <i class="bi bi-hourglass kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-label">Processos Hoje</div>
+        <div class="kpi-value kpi-success">{{ processos_hoje }}</div>
+        <div class="kpi-sub">Registrados no dia atual</div>
+        <i class="bi bi-calendar-check kpi-bg-icon"></i>
+    </div>
+</div>
+
+<div class="filter-bar {% if has_active_filters %}active-filters{% endif %}">
+    <button class="filter-bar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false">
+        <i class="bi bi-funnel-fill"></i> <strong>Filtros</strong>
+        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
+    </button>
+
+    <div class="collapse filter-bar-body" id="filterCollapse">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-6 col-lg-3">
+                <label for="busca" class="form-label">Buscar</label>
+                <input type="text" name="busca" id="busca" class="form-control"
+                       placeholder="ID, Titular..."
+                       value="{{ filtro_busca | default('') }}">
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <label for="status_id" class="form-label">Status</label>
+                <select name="status" id="status_id" class="form-select">
+                    <option value="">Todos</option>
+                    {% for status in status_list %}
+                        <option value="{{ status.id }}" {% if filtro_status_id == status.id %}selected{% endif %}>
+                            {{ status.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <label for="tipo" class="form-label">Tipo de Serviço</label>
+                <select name="tipo" id="tipo" class="form-select">
+                    <option value="">Todos</option>
+                    {% for tipo in tipos_servico %}
+                        <option value="{{ tipo.id }}" {% if filtro_tipo == tipo.id %}selected{% endif %}>
+                            {{ tipo.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <label for="envolve_notas" class="form-label">Envolve Notas</label>
+                <select name="envolve_notas" id="envolve_notas" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="1" {% if filtro_envolve_notas == 1 %}selected{% endif %}>Sim</option>
+                    <option value="0" {% if filtro_envolve_notas == 0 %}selected{% endif %}>Não</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <label for="data_inicio" class="form-label">Data Início</label>
+                <input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ filtro_data_inicio | default('') }}">
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <label for="data_fim" class="form-label">Data Fim</label>
+                <input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ filtro_data_fim | default('') }}">
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <label for="ordenar" class="form-label">Ordenar por</label>
+                <select name="ordenar" id="ordenar" class="form-select">
+                    <option value="prazo_asc" {% if ordenar == 'prazo_asc' %}selected{% endif %}>Prazo (Mais Próximo)</option>
+                    <option value="prazo_desc" {% if ordenar == 'prazo_desc' %}selected{% endif %}>Prazo (Mais Distante)</option>
+                    <option value="id_desc" {% if ordenar == 'id_desc' %}selected{% endif %}>ID (Mais Recente)</option>
+                    <option value="id_asc" {% if ordenar == 'id_asc' %}selected{% endif %}>ID (Mais Antigo)</option>
+                    <option value="data_entrada_desc" {% if ordenar == 'data_entrada_desc' %}selected{% endif %}>Entrada (Mais Recente)</option>
+                    <option value="data_entrada_asc" {% if ordenar == 'data_entrada_asc' %}selected{% endif %}>Entrada (Mais Antiga)</option>
+                    <option value="titular_asc" {% if ordenar == 'titular_asc' %}selected{% endif %}>Titular (A-Z)</option>
+                    <option value="titular_desc" {% if ordenar == 'titular_desc' %}selected{% endif %}>Titular (Z-A)</option>
+                    <option value="status_asc" {% if ordenar == 'status_asc' %}selected{% endif %}>Status (A-Z)</option>
+                    <option value="status_desc" {% if ordenar == 'status_desc' %}selected{% endif %}>Status (Z-A)</option>
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <label for="registros_por_pagina" class="form-label">Registros por página</label>
+                <select name="registros_por_pagina" id="registros_por_pagina" class="form-select">
+                    <option value="10" {% if registros_por_pagina == 10 %}selected{% endif %}>10</option>
+                    <option value="25" {% if registros_por_pagina == 25 %}selected{% endif %}>25</option>
+                    <option value="50" {% if registros_por_pagina == 50 %}selected{% endif %}>50</option>
+                    <option value="100" {% if registros_por_pagina == 100 %}selected{% endif %}>100</option>
+                </select>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+                <button type="submit" class="btn-filter-apply">
+                    <i class="bi bi-funnel me-1"></i> Filtrar
+                </button>
+                <a href="{{ url_for('processos.hoje') }}" class="btn-filter-clear">
+                    <i class="bi bi-x-circle me-1"></i> Limpar Filtros do Dia
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="rf-card-header">
+        <h6 class="rf-card-title mb-0"><i class="bi bi-table"></i> Processos com Prazo para Hoje</h6>
+        <span class="rf-badge count">{{ total_registros }}</span>
+    </div>
+    <div class="card-body p-0">
+        {% if not processos %}
+            <div class="empty-state">
+                <i class="bi bi-calendar-x"></i>
+                <h4 class="mb-2">Nenhum processo com prazo para hoje encontrado</h4>
+                <p class="text-muted mb-4">Tente ajustar os filtros ou cadastre um novo processo.</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table id="processosTable" class="table-processos table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th data-column-id="id">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                {% set new_ordenar_val = 'id_asc' if ordenar == 'id_desc' else 'id_desc' %}
+                                <a href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    ID
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'id_asc' else ('bi-sort-down' if ordenar == 'id_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th data-column-id="titular">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                {% set new_ordenar_val = 'titular_asc' if ordenar == 'titular_desc' else 'titular_desc' %}
+                                <a href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Titular
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'titular_asc' else ('bi-sort-down' if ordenar == 'titular_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th data-column-id="matricula">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                {% set new_ordenar_val = 'matricula_asc' if ordenar == 'matricula_desc' else 'matricula_desc' %}
+                                <a href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Matrícula
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'matricula_asc' else ('bi-sort-down' if ordenar == 'matricula_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th data-column-id="tipo">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                {% set new_ordenar_val = 'tipo_asc' if ordenar == 'tipo_desc' else 'tipo_desc' %}
+                                <a href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Tipo
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'tipo_asc' else ('bi-sort-down' if ordenar == 'tipo_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th data-column-id="data_entrada">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                {% set new_ordenar_val = 'data_entrada_asc' if ordenar == 'data_entrada_desc' else 'data_entrada_desc' %}
+                                <a href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Entrada
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'data_entrada_asc' else ('bi-sort-down' if ordenar == 'data_entrada_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th data-column-id="status">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                {% set new_ordenar_val = 'status_asc' if ordenar == 'status_desc' else 'status_desc' %}
+                                <a href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Status
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'status_asc' else ('bi-sort-down' if ordenar == 'status_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th data-column-id="prazo">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                {% set new_ordenar_val = 'prazo_asc' if ordenar == 'prazo_desc' else 'prazo_desc' %}
+                                <a href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1, 'ordenar': new_ordenar_val}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Prazo
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'prazo_asc' else ('bi-sort-down' if ordenar == 'prazo_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for processo in processos %}
+                            {% set prazo_class = '' %}
+                            {% set prazo_text = '-' %}
+                            {% set data_entrada_formatada = formatar_data(processo.data_entrada) %}
+                            {% set processo_status_hex = processo.status_hex | default('#6c757d') %}
+
+                            {% if processo.prazo_final and processo.prazo_final != '0000-00-00' %}
+                                {% set hoje_dt_str = now().strftime('%Y-%m-%d') %}
+                                {% set prazo_final_data = processo.prazo_final %}
+
+                                {% if prazo_final_data < hoje_dt_str and processo.status_nome | lower not in ['concluído', 'arquivado', 'finalizado'] %}
+                                    {% set prazo_class = 'prazo-atrasado' %}
+                                {% elif prazo_final_data == hoje_dt_str %}
+                                    {% set prazo_class = 'prazo-hoje' %}
+                                {% endif %}
+                                {% set prazo_text = formatar_data(processo.prazo_final) %}
+                            {% else %}
+                                {% set prazo_text = 'Sem prazo' %}
+                            {% endif %}
+
+                            <tr>
+                                <td class="fw-bold" data-label="ID">{{ '%04d' % processo.id }}</td>
+                                <td data-label="Titular" class="break-word">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-medium">{{ processo.titular }}</span>
+                                        {% if processo.envolvido_notas %}
+                                            <small class="text-muted">Envolve Notas</small>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td data-label="Matrícula">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else 'Sem Matrícula' }}</td>
+                                <td data-label="Tipo">{{ processo.tipo_nome | default('Desconhecido') }}</td>
+                                <td data-label="Entrada">{{ data_entrada_formatada }}</td>
+                                <td data-label="Status">
+                                    <span class="badge rounded-pill" style="background-color: {{ processo_status_hex }}; color: {{ get_contrast_color(processo_status_hex) }};">
+                                        {{ (processo.status_nome | default('Desconhecido')) | replace('_', ' ') | capitalize }}
+                                    </span>
+                                </td>
+                                <td data-label="Prazo" class="{{ prazo_class }}">{{ prazo_text }}</td>
+                                <td data-label="Ações" class="text-center">
+                                    <div class="tbl-acoes"><a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" class="view" title="Visualizar" data-bs-toggle="tooltip">
+                                            <i class="bi bi-eye"></i>
+                                        </a><a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="edit" title="Editar" data-bs-toggle="tooltip">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a><button type="button" class="del"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#confirmDeleteModal"
+                                                data-id="{{ processo.id }}"
+                                                title="Excluir" data-bs-toggle="tooltip">
+                                            <i class="bi bi-trash"></i>
+                                        </button></div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if total_paginas > 1 %}
+                {% set temp_args = request.args.copy().to_dict() %}
+                {% set inicio = (pagina_atual - 1) * registros_por_pagina + 1 %}
+                {% set fim = inicio + processos|length - 1 %}
+                <div class="rf-pagination">
+                    <div></div>
+                    <div class="rf-pagination-nav">
+                        <nav aria-label="Paginação">
+                            <ul class="pagination mb-0" style="gap:3px;">
+                                <li class="page-item {{ 'disabled' if pagina_atual <= 1 }}">
+                                    <a class="page-link" href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': pagina_atual - 1}))) }}">Anterior</a>
+                                </li>
+                                {% set max_links = 7 %}
+                                {% set start_p = [1, pagina_atual - (max_links // 2)] | max %}
+                                {% set end_p = [total_paginas, start_p + max_links - 1] | min %}
+                                {% set start_p = [1, end_p - max_links + 1] | max %}
+                                {% if start_p > 1 %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': 1}))) }}">1</a></li>
+                                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                {% endif %}
+                                {% for i in range(start_p, end_p + 1) %}
+                                    <li class="page-item {{ 'active' if i == pagina_atual }}">
+                                        <a class="page-link" href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': i}))) }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if end_p < total_paginas %}
+                                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': total_paginas}))) }}">{{ total_paginas }}</a></li>
+                                {% endif %}
+                                <li class="page-item {{ 'disabled' if pagina_atual >= total_paginas }}">
+                                    <a class="page-link" href="{{ url_for('processos.hoje', **(temp_args | combine({'pagina': pagina_atual + 1}))) }}">Próximo</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="rf-pagination-info">
+                        Mostrando {{ inicio }}–{{ fim }} de {{ total_registros }} registro{{ 's' if total_registros != 1 }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+<!-- Modal de Impressão da Lista -->
+<div class="modal fade" id="printListModal" tabindex="-1" aria-labelledby="printListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="printListModalLabel">
+                    <i class="bi bi-printer me-2"></i>Opções de Relatório
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-3" style="font-size:13px;color:var(--text-color-secondary);">Escolha como deseja gerar o relatório desta listagem:</p>
+                <div class="d-grid gap-3">
+                    <a id="btnPdfLista" href="#" target="_blank" class="btn btn-dark btn-lg">
+                        <i class="bi bi-file-earmark-pdf-fill me-2"></i> Baixar como PDF
+                    </a>
+                    <a id="btnImprimirLista" href="#" target="_blank" class="btn btn-dark btn-lg">
+                        <i class="bi bi-printer me-2"></i> Imprimir
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    function updatePrintListUrls() {
+        const params = new URLSearchParams(window.location.search);
+        params.set('view_mode', 'hoje');
+        params.delete('pagina');
+        const queryString = params.toString() ? '?' + params.toString() : '';
+        const baseImprimir = "{{ url_for('processos.imprimir_lista') }}";
+        const basePdf      = "{{ url_for('processos.gerar_pdf_lista') }}";
+        document.getElementById('btnImprimirLista').href = baseImprimir + queryString;
+        document.getElementById('btnPdfLista').href      = basePdf      + queryString;
+    }
+    document.getElementById('printListModal').addEventListener('show.bs.modal', updatePrintListUrls);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lógica para o botão de colapsar/exibir filtros
+        const filterCollapse = document.getElementById('filterCollapse');
+        const filterToggleButton = document.querySelector('[data-bs-target="#filterCollapse"]'); // Seleciona o botão de toggle
+
+        filterCollapse.addEventListener('show.bs.collapse', function () {
+            filterToggleText.textContent = 'Recolher Filtros';
+            filterToggleButton.setAttribute('aria-expanded', 'true');
+        });
+
+        filterCollapse.addEventListener('hide.bs.collapse', function () {
+            filterToggleText.textContent = 'Filtros Avançados';
+            filterToggleButton.setAttribute('aria-expanded', 'false');
+        });
+
+        // Define o texto inicial do botão de filtro como "Filtros Avançados" (estado padrão recolhido)
+        filterToggleText.textContent = 'Filtros Avançados';
+        filterToggleButton.setAttribute('aria-expanded', 'false');
+    });
+</script>
+{% endblock scripts %}

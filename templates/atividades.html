@@ -1,0 +1,574 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Atividades - Registro Fácil{% endblock %}
+{% block page_title %}Histórico de Atividades{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-house"></i> Dashboard
+    </a>
+{% endblock %}
+
+{% block content %}
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card kpi-gold">
+        <div class="kpi-label">Total de Registros</div>
+        <div class="kpi-value kpi-gold">{{ contagem_total }}</div>
+        <div class="kpi-sub">Atividades no sistema</div>
+        <i class="bi bi-list-columns kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-label">Usuários com Log</div>
+        <div class="kpi-value kpi-success">{{ contagem_usuarios }}</div>
+        <div class="kpi-sub">Usuários com atividades</div>
+        <i class="bi bi-people-fill kpi-bg-icon"></i>
+    </div>
+    <div class="kpi-card kpi-info">
+        <div class="kpi-label">Atividades Hoje</div>
+        <div class="kpi-value kpi-info">{{ contagem_hoje }}</div>
+        <div class="kpi-sub">Registradas no dia atual</div>
+        <i class="bi bi-clock kpi-bg-icon"></i>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="filter-bar {% if has_active_filters %}active-filters{% endif %}">
+    <button class="filter-bar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false">
+        <i class="bi bi-funnel-fill"></i> <strong>Filtros</strong>
+        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
+    </button>
+
+    <div class="collapse filter-bar-body" id="filterCollapse">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-6 col-lg-4">
+                <label for="usuario" class="form-label">Usuário</label>
+                <select name="usuario" id="usuario" class="form-select">
+                    <option value="">Todos os Usuários</option>
+                    {% for user_item in usuarios %}
+                        <option value="{{ user_item.id }}" {% if filtro_usuario == user_item.id %}selected{% endif %}>
+                            {{ user_item.nome }} ({{ user_item.email }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <label for="acao" class="form-label">Ação</label>
+                <select name="acao" id="acao" class="form-select">
+                    <option value="">Todas as Ações</option>
+                    {% for acao_item in acoes %}
+                        <option value="{{ acao_item }}" {% if filtro_acao == acao_item %}selected{% endif %}>
+                            {{ acao_item }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <label for="data" class="form-label">Data Específica</label>
+                <input type="date" name="data" id="data" class="form-control" value="{{ filtro_data | default('') }}">
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <label for="ordenar" class="form-label">Ordenar por</label>
+                <select name="ordenar" id="ordenar" class="form-select">
+                    <option value="created_at_desc" {% if ordenar == 'created_at_desc' %}selected{% endif %}>Mais Recente</option>
+                    <option value="created_at_asc"  {% if ordenar == 'created_at_asc'  %}selected{% endif %}>Mais Antigo</option>
+                    <option value="usuario_asc"     {% if ordenar == 'usuario_asc'     %}selected{% endif %}>Usuário (A-Z)</option>
+                    <option value="usuario_desc"    {% if ordenar == 'usuario_desc'    %}selected{% endif %}>Usuário (Z-A)</option>
+                    <option value="acao_asc"        {% if ordenar == 'acao_asc'        %}selected{% endif %}>Ação (A-Z)</option>
+                    <option value="acao_desc"       {% if ordenar == 'acao_desc'       %}selected{% endif %}>Ação (Z-A)</option>
+                    <option value="processo_asc"    {% if ordenar == 'processo_asc'    %}selected{% endif %}>Processo (Crescente)</option>
+                    <option value="processo_desc"   {% if ordenar == 'processo_desc'   %}selected{% endif %}>Processo (Decrescente)</option>
+                    <option value="ip_asc"          {% if ordenar == 'ip_asc'          %}selected{% endif %}>IP (A-Z)</option>
+                    <option value="ip_desc"         {% if ordenar == 'ip_desc'         %}selected{% endif %}>IP (Z-A)</option>
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <label for="itens_por_pagina" class="form-label">Registros por página</label>
+                <select name="itens_por_pagina" id="itens_por_pagina" class="form-select">
+                    <option value="10"  {% if itens_por_pagina == 10  %}selected{% endif %}>10</option>
+                    <option value="25"  {% if itens_por_pagina == 25  %}selected{% endif %}>25</option>
+                    <option value="50"  {% if itens_por_pagina == 50  %}selected{% endif %}>50</option>
+                    <option value="100" {% if itens_por_pagina == 100 %}selected{% endif %}>100</option>
+                </select>
+            </div>
+            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+                <button type="submit" class="btn-filter-apply">
+                    <i class="bi bi-funnel me-1"></i> Filtrar
+                </button>
+                <a href="{{ url_for('atividades.historico') }}" class="btn-filter-clear">
+                    <i class="bi bi-x-circle me-1"></i> Limpar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabela -->
+<div class="rf-card">
+    <div class="rf-card-header">
+        <h6 class="rf-card-title mb-0"><i class="bi bi-activity"></i> Atividades</h6>
+        <span class="rf-badge count">{{ total_registros }}</span>
+    </div>
+    <div class="card-body p-0">
+        {% if not atividades %}
+            <div class="empty-state">
+                <i class="bi bi-journal-x"></i>
+                <h4 class="mb-2">Nenhuma atividade encontrada</h4>
+                <p class="text-muted mb-4">Nenhuma atividade encontrada para os filtros aplicados.</p>
+                <a href="{{ url_for('atividades.historico') }}" class="nav-btn nav-btn-secondary">
+                    <i class="bi bi-x-circle me-1"></i> Limpar Filtros
+                </a>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="rf-table">
+                    {# Macro de ordenação para atividades #}
+                    {% macro sort_th_atv(label, col) %}
+                    {% set cur = request.args.to_dict() %}
+                    {% set next_ord = col ~ '_asc' if ordenar == col ~ '_desc' else col ~ '_desc' %}
+                    <th>
+                        <a href="{{ url_for('atividades.historico', **(cur | combine({'pagina': 1, 'ordenar': next_ord}))) }}"
+                           class="text-decoration-none text-reset">
+                            {{ label }}
+                            <i class="bi {% if ordenar == col ~ '_asc' %}bi-sort-up{% elif ordenar == col ~ '_desc' %}bi-sort-down{% else %}bi-sort-down-alt{% endif %} filter-icon"></i>
+                        </a>
+                    </th>
+                    {% endmacro %}
+                    <thead>
+                        <tr>
+                            {{ sort_th_atv('ID', 'created_at') }}
+                            {{ sort_th_atv('Usuário', 'usuario') }}
+                            {{ sort_th_atv('Ação', 'acao') }}
+                            {{ sort_th_atv('Processo', 'processo') }}
+                            {{ sort_th_atv('IP', 'ip') }}
+                            {{ sort_th_atv('Data/Hora', 'created_at') }}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for atividade in atividades %}
+                        <tr>
+                            <td data-label="ID">{{ atividade.id }}</td>
+                            <td data-label="Usuário">{{ atividade.usuario_nome | default('N/A') }}</td>
+                            <td data-label="Ação">
+                                {# Separa acao principal da descrição (formato "Tipo: Descrição") #}
+                                {% set partes = atividade.acao.split(': ', 1) %}
+                                {% set acao_tipo = partes[0] %}
+                                {% set acao_desc = partes[1] if partes|length > 1 else '' %}
+
+                                {% if atividade.contexto %}
+                                    {# Tem contexto extra → ação clicável que abre o modal #}
+                                    <button type="button"
+                                            class="btn-acao-clicavel"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalDetalheAtividade"
+                                            data-id="{{ atividade.id }}"
+                                            data-acao="{{ atividade.acao | e }}"
+                                            data-contexto="{{ atividade.contexto | e }}"
+                                            data-usuario="{{ atividade.usuario_nome | default('N/A') | e }}"
+                                            data-ip="{{ atividade.ip | default('N/A') | e }}"
+                                            data-timestamp="{{ atividade.timestamp | format_datetime_full }}"
+                                            data-processo-id="{{ atividade.processo_id or '' }}"
+                                            title="Clique para ver detalhes das alterações">
+                                        <span class="acao-tipo">{{ acao_tipo }}</span>{% if acao_desc %}<span class="acao-sep">: </span><span class="acao-desc">{{ acao_desc }}</span>{% endif %}
+                                        <i class="bi bi-chevron-right acao-icon"></i>
+                                    </button>
+                                {% else %}
+                                    {# Sem contexto → exibe texto normal (mesmo visual, sem botão) #}
+                                    <span class="acao-texto">
+                                        <span class="acao-tipo">{{ acao_tipo }}</span>{% if acao_desc %}<span class="acao-sep">: </span><span class="acao-desc">{{ acao_desc }}</span>{% endif %}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td data-label="Descrição">{{ atividade.ip | default('N/A') }}</td>
+                            <td data-label="Data/Hora">{{ atividade.timestamp | format_datetime_full }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if total_paginas > 1 %}
+                {% set _a = request.args.to_dict() %}
+                {% set inicio = (pagina_atual - 1) * itens_por_pagina + 1 %}
+                {% set fim = inicio + atividades|length - 1 %}
+                <div class="rf-pagination">
+                    <div></div>
+                    <div class="rf-pagination-nav">
+                        <nav aria-label="Paginação">
+                            <ul class="pagination mb-0" style="gap:3px;">
+                                <li class="page-item {{ 'disabled' if pagina_atual <= 1 }}">
+                                    <a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': pagina_atual - 1}))) }}">Anterior</a>
+                                </li>
+                                {% set max_links = 7 %}
+                                {% set start_p = [1, pagina_atual - (max_links // 2)] | max %}
+                                {% set end_p = [total_paginas, start_p + max_links - 1] | min %}
+                                {% set start_p = [1, end_p - max_links + 1] | max %}
+                                {% if start_p > 1 %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': 1}))) }}">1</a></li>
+                                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                {% endif %}
+                                {% for i in range(start_p, end_p + 1) %}
+                                    <li class="page-item {{ 'active' if i == pagina_atual }}">
+                                        <a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': i}))) }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if end_p < total_paginas %}
+                                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': total_paginas}))) }}">{{ total_paginas }}</a></li>
+                                {% endif %}
+                                <li class="page-item {{ 'disabled' if pagina_atual >= total_paginas }}">
+                                    <a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': pagina_atual + 1}))) }}">Próximo</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="rf-pagination-info">
+                        Mostrando {{ inicio }}–{{ fim }} de {{ total_registros }} registro{{ 's' if total_registros != 1 }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- ==================== MODAL DETALHE ==================== -->
+<div class="modal fade" id="modalDetalheAtividade" tabindex="-1" aria-labelledby="modalDetalheLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalheLabel">
+                    <i class="bi bi-activity me-2 text-primary"></i>Detalhes da Atividade
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body p-0">
+
+                <!-- ── Cabeçalho colorido com tipo + descrição ── -->
+                <div class="modal-acao-header px-4 py-3 border-bottom">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="modal-badge-acao" id="modal-tipo-acao"></span>
+                        <span class="modal-acao-desc text-muted" id="modal-desc-acao"></span>
+                    </div>
+                </div>
+
+                <div class="px-4 py-3">
+
+                    <!-- ── Alterações (contexto) ── -->
+                    <div id="modal-contexto-bloco" class="mb-3">
+                        <p class="modal-section-label">
+                            <i class="bi bi-pencil-square me-1"></i>Alterações realizadas
+                        </p>
+                        <div id="modal-contexto-corpo"></div>
+                    </div>
+
+                    <!-- ── Metadados ── -->
+                    <p class="modal-section-label"><i class="bi bi-info-circle me-1"></i>Informações do registro</p>
+                    <div class="modal-meta-grid">
+                        <div class="modal-meta-item">
+                            <span class="modal-meta-label"><i class="bi bi-person me-1"></i>Usuário</span>
+                            <span class="modal-meta-value" id="modal-usuario"></span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span class="modal-meta-label"><i class="bi bi-geo-alt me-1"></i>IP de Origem</span>
+                            <span class="modal-meta-value font-monospace" id="modal-ip"></span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span class="modal-meta-label"><i class="bi bi-calendar-event me-1"></i>Data / Hora</span>
+                            <span class="modal-meta-value" id="modal-timestamp"></span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span class="modal-meta-label"><i class="bi bi-hash me-1"></i>ID do Registro</span>
+                            <span class="modal-meta-value font-monospace" id="modal-id"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="btn-consultar-processo"
+                   href="#"
+                   class="btn btn-success"
+                   target="_blank"
+                   style="display:none;">
+                    <i class="bi bi-search me-1"></i>Consultar Processo
+                </a>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<style>
+/* ── Ação clicável na tabela ── */
+.btn-acao-clicavel {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    color: inherit;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0;
+    max-width: 100%;
+    word-break: break-word;
+    transition: color .15s;
+}
+.btn-acao-clicavel:hover { color: var(--color-primary, #0d6efd); }
+.btn-acao-clicavel:hover .acao-tipo { text-decoration: underline; text-underline-offset: 3px; }
+.acao-icon { font-size:.7rem; margin-left:4px; opacity:.45; vertical-align:middle; flex-shrink:0; }
+.acao-texto { color: inherit; }
+.acao-tipo  { font-weight: 600; }
+.acao-sep   { opacity: .6; }
+.acao-desc  { font-weight: 400; }
+
+/* ── Modal ── */
+.modal-acao-header {
+    background: var(--color-bg-alt, #f8f9fa);
+}
+.modal-badge-acao {
+    display: inline-block;
+    padding: .3em .75em;
+    border-radius: 20px;
+    background: var(--color-primary, #0d6efd);
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    white-space: nowrap;
+}
+.modal-acao-desc {
+    font-size: .92rem;
+    word-break: break-word;
+}
+.modal-section-label {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--color-muted, #6c757d);
+    margin-bottom: .6rem;
+}
+
+/* ── Tabela de alterações ── */
+.modal-alteracoes-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--color-border, #dee2e6);
+}
+.modal-alteracoes-table th {
+    background: var(--color-bg-alt, #f0f2f5);
+    padding: .45em .75em;
+    font-weight: 700;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--color-muted, #6c757d);
+    border-bottom: 1px solid var(--color-border, #dee2e6);
+}
+.modal-alteracoes-table td {
+    padding: .55em .75em;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--color-border, #dee2e6);
+    word-break: break-word;
+}
+.modal-alteracoes-table tr:last-child td { border-bottom: none; }
+.modal-alteracoes-table tr:hover td { background: var(--color-bg-alt, #f8f9fa); }
+.td-campo { font-weight: 600; width: 30%; color: var(--color-text, #212529); }
+.td-de    { color: #dc3545; }
+.td-para  { color: #198754; font-weight: 600; }
+.td-seta  { text-align: center; color: var(--color-muted, #adb5bd); font-size: .8rem; width: 3%; }
+.td-info  { color: var(--color-muted, #6c757d); font-style: italic; }
+.ctx-aviso {
+    padding: .55em .75em;
+    font-size: .88rem;
+    color: var(--color-muted, #6c757d);
+    font-style: italic;
+}
+.ctx-anexos-nota {
+    margin-top: .5rem;
+    padding: .45em .75em;
+    font-size: .84rem;
+    color: var(--color-muted, #6c757d);
+    border-top: 1px dashed var(--color-border, #dee2e6);
+}
+
+/* ── Grid de metadados ── */
+.modal-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6rem;
+}
+.modal-meta-item {
+    background: var(--color-bg-alt, #f8f9fa);
+    border: 1px solid var(--color-border, #dee2e6);
+    border-radius: 6px;
+    padding: .55em .8em;
+    display: flex;
+    flex-direction: column;
+    gap: .15em;
+}
+.modal-meta-label {
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--color-muted, #6c757d);
+}
+.modal-meta-value {
+    font-size: .9rem;
+    word-break: break-all;
+}
+@media (max-width: 480px) {
+    .modal-meta-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ── Filtros collapse ── */
+    const filterCollapse = document.getElementById('filterCollapse');
+    const filterToggleBtn = document.querySelector('[data-bs-target="#filterCollapse"]');
+    if (filterCollapse && filterToggleBtn) {
+        filterCollapse.addEventListener('show.bs.collapse', () => filterToggleBtn.setAttribute('aria-expanded', 'true'));
+        filterCollapse.addEventListener('hide.bs.collapse', () => filterToggleBtn.setAttribute('aria-expanded', 'false'));
+    }
+
+    /* ── Modal de detalhe ── */
+    const modalEl = document.getElementById('modalDetalheAtividade');
+    if (!modalEl) return;
+
+    modalEl.addEventListener('show.bs.modal', function (event) {
+        const btn = event.relatedTarget;
+        if (!btn) return;
+
+        document.getElementById('modal-id').textContent        = '#' + (btn.dataset.id        || '—');
+        document.getElementById('modal-usuario').textContent   = btn.dataset.usuario            || '—';
+        document.getElementById('modal-ip').textContent        = btn.dataset.ip                || '—';
+        document.getElementById('modal-timestamp').textContent = btn.dataset.timestamp         || '—';
+
+        /* Separar tipo e descrição a partir de "Tipo: Descrição" */
+        const acaoRaw   = btn.dataset.acao || '';
+        const sepIdx    = acaoRaw.indexOf(': ');
+        const tipoAcao  = sepIdx !== -1 ? acaoRaw.slice(0, sepIdx) : acaoRaw;
+        const descAcao  = sepIdx !== -1 ? acaoRaw.slice(sepIdx + 2) : '';
+        document.getElementById('modal-tipo-acao').textContent = tipoAcao;
+        document.getElementById('modal-desc-acao').textContent = descAcao || '';
+
+        /* Botão Consultar Processo */
+        const btnConsultar  = document.getElementById('btn-consultar-processo');
+        const processoId    = btn.dataset.processoId || '';
+        if (processoId) {
+            btnConsultar.href         = '/processos/visualizar/processo=' + processoId;
+            btnConsultar.style.display = '';
+        } else {
+            btnConsultar.style.display = 'none';
+        }
+
+        /* 2. Renderizar contexto */
+        const contexto = (btn.dataset.contexto || '').trim();
+        const bloco    = document.getElementById('modal-contexto-bloco');
+        const corpo    = document.getElementById('modal-contexto-corpo');
+        corpo.innerHTML = '';
+
+        if (!contexto) {
+            bloco.style.display = 'none';
+            return;
+        }
+        bloco.style.display = '';
+
+        /*  Regex para detectar linhas do tipo:
+            "Campo: 'valor antigo' → 'valor novo'"
+            Também aceita sem aspas: "Campo: X → Y"
+        */
+        const RE_CAMPO_SETA = /^(.+?):\s*(.+?)\s*→\s*(.+)$/;
+        const RE_ANEXOS = /^\[anexos\]\s*(.+)$/;
+
+        const linhas = contexto.split('\n').filter(l => l.trim());
+        const linhasTabela = [];
+        const linhasAviso  = [];
+
+        linhas.forEach(linha => {
+            const mAnexos = linha.match(RE_ANEXOS);
+            if (mAnexos) {
+                /* Coloca "Possui anexos" direto na tabela como linha informativa */
+                linhasTabela.push({ campo: 'Possui anexos', de: null, para: mAnexos[1].trim(), info: true });
+                return;
+            }
+            const m = linha.match(RE_CAMPO_SETA);
+            if (m) {
+                linhasTabela.push({ campo: m[1].trim(), de: limparAspas(m[2].trim()), para: limparAspas(m[3].trim()), info: false });
+            } else {
+                linhasAviso.push(linha.trim());
+            }
+        });
+
+        /* Renderiza tabela de comparação para campos alterados */
+        if (linhasTabela.length > 0) {
+            const tbl = document.createElement('table');
+            tbl.className = 'modal-alteracoes-table mb-2';
+            tbl.innerHTML = `<thead><tr>
+                <th>Campo</th>
+                <th>Valor anterior</th>
+                <th></th>
+                <th>Novo valor</th>
+            </tr></thead>`;
+            const tbody = document.createElement('tbody');
+            linhasTabela.forEach(r => {
+                const tr = document.createElement('tr');
+                if (r.info) {
+                    /* Linha informativa (ex: Possui anexos) — itálico, sem seta */
+                    tr.innerHTML = `
+                        <td class="td-campo">${escHtml(r.campo)}</td>
+                        <td colspan="3" class="td-info"><em>${escHtml(r.para)}</em></td>`;
+                } else {
+                    tr.innerHTML = `
+                        <td class="td-campo">${escHtml(r.campo)}</td>
+                        <td class="td-de">${escHtml(r.de)}</td>
+                        <td class="td-seta"><i class="bi bi-arrow-right"></i></td>
+                        <td class="td-para">${escHtml(r.para)}</td>`;
+                }
+                tbody.appendChild(tr);
+            });
+            tbl.appendChild(tbody);
+            corpo.appendChild(tbl);
+        }
+
+        /* Renderiza avisos genéricos (linhas sem padrão campo → valor) */
+        linhasAviso.forEach(av => {
+            const d = document.createElement('div');
+            d.className = 'ctx-aviso';
+            d.innerHTML = '<i class="bi bi-info-circle me-1"></i>' + escHtml(av);
+            corpo.appendChild(d);
+        });
+    });
+
+    /* Remove aspas simples ao redor do valor: 'foo' → foo */
+    function limparAspas(s) {
+        return s.replace(/^'(.*)'$/, '$1');
+    }
+
+    function escHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+});
+</script>
+{% endblock scripts %}
