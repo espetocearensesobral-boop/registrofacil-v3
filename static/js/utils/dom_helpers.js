@@ -1,60 +1,98 @@
 // registrofacil/static/js/utils/dom_helpers.js
 
 /**
- * Exibe uma mensagem Toast personalizada.
- * @param {string} type - Tipo do toast (success, danger, warning, info).
- * @param {string} message - Mensagem a ser exibida.
+ * Motor global de notificações.
+ * Aceita o contrato novo (showToast(message, {type, title})) e as duas
+ * assinaturas legadas: showToast(type, message) e showToast(message, type).
  */
-export function showToast(type, message) {
+const NOTIFICATION_TYPES = new Set(['success', 'danger', 'warning', 'info']);
+const NOTIFICATION_META = {
+    success: { label: 'Sucesso', icon: 'check-circle-fill', fallback: 'Operação concluída com sucesso.' },
+    danger: { label: 'Erro', icon: 'x-circle-fill', fallback: 'Não foi possível concluir a operação. Tente novamente.' },
+    warning: { label: 'Atenção', icon: 'exclamation-triangle-fill', fallback: 'Atenção: verifique os dados e tente novamente.' },
+    info: { label: 'Informação', icon: 'info-circle-fill', fallback: 'Informação do sistema.' }
+};
+
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, (char) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[char]));
+}
+
+export function normalizeNotification(first, second, third) {
+    let payload = first;
+    let type = third || 'info';
+    let title = '';
+    let message = '';
+
+    if (first && typeof first === 'object') {
+        payload = first;
+        type = payload.type || (payload.success === false ? 'danger' : 'info');
+        title = payload.title || '';
+        message = payload.message || payload.error || '';
+    } else if (NOTIFICATION_TYPES.has(String(first))) {
+        // Contrato legado: (type, message)
+        type = String(first);
+        message = second;
+    } else if (NOTIFICATION_TYPES.has(String(second))) {
+        // Assinatura invertida existente: (message, type)
+        message = first;
+        type = String(second);
+    } else {
+        // Contrato preferencial: (message, {type, title})
+        message = first;
+        if (second && typeof second === 'object') {
+            type = second.type || type;
+            title = second.title || '';
+        }
+    }
+
+    type = NOTIFICATION_TYPES.has(String(type)) ? String(type) : 'info';
+    const meta = NOTIFICATION_META[type];
+    message = String(message || '').trim() || meta.fallback;
+    title = String(title || '').trim() || meta.label;
+    return { type, title, message, ...meta };
+}
+
+export function showToast(first, second, third) {
+    const notification = normalizeNotification(first, second, third);
     const toastContainer = document.querySelector('.toast-container');
     if (!toastContainer) {
-        console.error('showToast: Elemento .toast-container não encontrado! Fallback para alert.');
-        alert(`Mensagem Toast: ${message}`);
-        return;
+        console.warn('showToast: container ausente; notificação:', notification);
+        return notification;
     }
 
-    let backgroundColor;
-    switch(type) {
-        case 'success':
-            backgroundColor = '#00A86B';
-            break;
-        case 'danger':
-            backgroundColor = '#C5282F';
-            break;
-        case 'warning':
-            backgroundColor = '#FF8C00';
-            break;
-        case 'info':
-            backgroundColor = '#1E88E5';
-            break;
-        default:
-            backgroundColor = '#6C757D';
-    }
-
-    const toastHtml = `
-        <div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" style="background-color: ${backgroundColor};">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="bi bi-${type === 'success' ? 'check-circle-fill' : (type === 'danger' ? 'x-circle-fill' : (type === 'warning' ? 'exclamation-triangle-fill' : 'info-circle-fill'))} me-2"></i>
-                    ${message}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
+    const toast = document.createElement('div');
+    toast.className = `toast notification-toast notification-${notification.type}`;
+    toast.setAttribute('role', notification.type === 'danger' ? 'alert' : 'status');
+    toast.setAttribute('aria-live', notification.type === 'danger' ? 'assertive' : 'polite');
+    toast.innerHTML = `
+        <div class="toast-header">
+            <i class="bi bi-${notification.icon} notification-icon" aria-hidden="true"></i>
+            <strong class="me-auto">${escapeHtml(notification.title)}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Fechar notificação"></button>
         </div>
-    `;
-    const toastElement = document.createElement('div');
-    toastElement.innerHTML = toastHtml;
-    const newToast = toastElement.firstElementChild;
-    toastContainer.appendChild(newToast);
+        <div class="toast-body">${escapeHtml(notification.message)}</div>`;
+    toastContainer.appendChild(toast);
 
-    const toast = new bootstrap.Toast(newToast);
-    toast.show();
+    if (window.bootstrap?.Toast) {
+        const instance = new bootstrap.Toast(toast, { delay: notification.type === 'danger' ? 8000 : 5000 });
+        instance.show();
+        toast.addEventListener('hidden.bs.toast', () => toast.remove(), { once: true });
+    } else {
+        toast.classList.add('show');
+        setTimeout(() => toast.remove(), 5000);
+    }
+    return notification;
+}
 
-    newToast.addEventListener('hidden.bs.toast', function () {
-        newToast.remove();
+export function showResponseToast(response, fallbackMessage = '') {
+    const data = response?.data || response || {};
+    return showToast({
+        type: data.type || (data.success === false || response?.status >= 400 ? 'danger' : 'success'),
+        title: data.title,
+        message: data.message || data.error || fallbackMessage
     });
-
-    console.log(`showToast: Exibindo toast de tipo '${type}' com mensagem: '${message}'`);
 }
 
 /**

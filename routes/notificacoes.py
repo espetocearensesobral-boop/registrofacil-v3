@@ -6,6 +6,7 @@ from models import (executar_query, criar_notificacao, listar_notificacoes_pende
                     marcar_notificacao_lida, marcar_todas_lidas)
 from routes.auth import login_status_required
 from utils.logger import logger
+from utils.notification_contract import success, error, warning, info
 from datetime import datetime
 
 notificacoes_bp = Blueprint('notificacoes', __name__, url_prefix='/notificacoes')
@@ -90,6 +91,7 @@ def api_pendentes():
         todas_notificacoes.sort(key=sort_key)
         
         return jsonify({
+            **info('Notificações carregadas.'),
             'success': True,
             'notificacoes': todas_notificacoes,
             'total': len(todas_notificacoes),
@@ -99,8 +101,8 @@ def api_pendentes():
     except Exception as e:
         logger.error(f"Erro ao buscar notificações pendentes: {e}", exc_info=True)
         return jsonify({
+            **error('Não foi possível carregar suas notificações agora. Tente novamente.'),
             'success': False,
-            'message': 'Erro ao carregar notificações'
         }), 500
 
 
@@ -113,15 +115,15 @@ def api_marcar_lida(notificacao_id):
         resultado = marcar_notificacao_lida(notificacao_id, usuario_id)
         
         return jsonify({
-            'success': True if resultado else False,
-            'message': 'Notificação marcada como lida' if resultado else 'Notificação não encontrada'
+            **(success('Notificação marcada como lida.') if resultado else warning('A notificação não foi encontrada ou já foi removida.')),
+            'success': bool(resultado),
         })
         
     except Exception as e:
         logger.error(f"Erro ao marcar notificação como lida: {e}", exc_info=True)
         return jsonify({
+            **error('Não foi possível marcar a notificação como lida.'),
             'success': False,
-            'message': 'Erro ao atualizar notificação'
         }), 500
 
 
@@ -134,15 +136,15 @@ def api_marcar_todas_lidas():
         resultado = marcar_todas_lidas(usuario_id)
         
         return jsonify({
+            **success('Todas as suas notificações foram marcadas como lidas.'),
             'success': True,
-            'message': 'Todas as notificações foram marcadas como lidas'
         })
         
     except Exception as e:
         logger.error(f"Erro ao marcar todas notificações como lidas: {e}", exc_info=True)
         return jsonify({
+            **error('Não foi possível atualizar suas notificações.'),
             'success': False,
-            'message': 'Erro ao atualizar notificações'
         }), 500
 
 
@@ -163,8 +165,8 @@ def api_criar_notificacao():
         
         if not user or user['role'] != 'admin':
             return jsonify({
+                **error('Você não tem permissão para criar notificações.'),
                 'success': False,
-                'message': 'Sem permissão para criar notificações'
             }), 403
         
         # Validar dados
@@ -172,8 +174,8 @@ def api_criar_notificacao():
         for campo in campos_obrigatorios:
             if not data.get(campo):
                 return jsonify({
+                    **warning(f'Informe o campo obrigatório: {campo}.'),
                     'success': False,
-                    'message': f'Campo obrigatório: {campo}'
                 }), 400
         
         # Criar notificação
@@ -188,15 +190,15 @@ def api_criar_notificacao():
         )
         
         return jsonify({
-            'success': True if resultado else False,
-            'message': 'Notificação criada com sucesso' if resultado else 'Erro ao criar notificação'
+            **(success('Notificação criada e encaminhada ao usuário.') if resultado else error('Não foi possível criar a notificação.')),
+            'success': bool(resultado),
         })
         
     except Exception as e:
         logger.error(f"Erro ao criar notificação: {e}", exc_info=True)
         return jsonify({
+            **error('Não foi possível criar a notificação devido a um erro interno.'),
             'success': False,
-            'message': 'Erro ao criar notificação'
         }), 500
 
 
@@ -247,6 +249,7 @@ def api_stats_notificacoes():
         ) or []
         
         return jsonify({
+            **info('Estatísticas de notificações carregadas.'),
             'success': True,
             'stats': {
                 'total': total,
@@ -260,8 +263,8 @@ def api_stats_notificacoes():
     except Exception as e:
         logger.error(f"Erro ao buscar estatísticas de notificações: {e}", exc_info=True)
         return jsonify({
+            **error('Não foi possível carregar as estatísticas de notificações.'),
             'success': False,
-            'message': 'Erro ao carregar estatísticas'
         }), 500
 
 
@@ -278,6 +281,7 @@ def api_configuracoes():
             prefs = obter_preferencias_usuario(usuario_id)
             
             return jsonify({
+                **info('Preferências de notificações carregadas.'),
                 'success': True,
                 'configuracoes': {
                     'notificacoes_push': prefs.get('notificacoes_push', 1),
@@ -295,13 +299,13 @@ def api_configuracoes():
             })
             
             return jsonify({
-                'success': True if resultado else False,
-                'message': 'Configurações atualizadas' if resultado else 'Erro ao atualizar'
+                **(success('Preferências de notificações atualizadas.') if resultado else error('Não foi possível atualizar suas preferências.')),
+                'success': bool(resultado),
             })
         
     except Exception as e:
         logger.error(f"Erro ao processar configurações: {e}", exc_info=True)
         return jsonify({
+            **error('Não foi possível processar as preferências de notificações.'),
             'success': False,
-            'message': 'Erro ao processar configurações'
         }), 500

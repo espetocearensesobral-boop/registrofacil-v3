@@ -495,3 +495,32 @@ a.btn:focus-visible,
 .system-update-error { margin-top: 1rem; padding: .75rem; color: #fff; background: #7f1d1d; border-radius: .5rem; }
 html.system-update-active { overflow: hidden; }
 html.system-update-active body > *:not(#system-update-overlay) { pointer-events: none; user-select: none; }
+
+
+/* Motor global de notificações: contexto visual semântico e consistente. */
+.notification-toast {
+    min-width: min(92vw, 22rem);
+    overflow: hidden;
+    color: #111827;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-left: 4px solid #111827;
+    border-radius: .65rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .16);
+}
+.notification-toast .toast-header {
+    gap: .5rem;
+    color: #111827;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+.notification-toast .toast-body { color: #374151; line-height: 1.45; }
+.notification-toast .notification-icon { color: #111827; }
+.notification-toast.notification-success { border-left-color: #166534; }
+.notification-toast.notification-success .notification-icon { color: #166534; }
+.notification-toast.notification-danger { border-left-color: #b91c1c; }
+.notification-toast.notification-danger .notification-icon { color: #b91c1c; }
+.notification-toast.notification-warning { border-left-color: #a16207; }
+.notification-toast.notification-warning .notification-icon { color: #a16207; }
+.notification-toast.notification-info { border-left-color: #1d4ed8; }
+.notification-toast.notification-info .notification-icon { color: #1d4ed8; }
