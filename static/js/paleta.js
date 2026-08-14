@@ -175,22 +175,29 @@ async function salvarPaleta() {
         
         const data = await response.json();
         
-        if (data.success) {
+        if (response.ok && data.success) {
             paletaOriginal = paletaSelecionada;
-            if (typeof showToast === 'function') {
-                showToast('success', data.mensagem);
-            } else {
-                alert('Salvo com sucesso!');
+            if (typeof window.showToast === 'function') {
+                window.showToast({
+                    type: data.type || 'success',
+                    title: data.title,
+                    message: data.message || data.mensagem || 'Paleta salva com sucesso.'
+                });
             }
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalPaletas'));
             if (modal) modal.hide();
         } else {
-            throw new Error(data.erro || 'Erro ao salvar');
+            const message = data.message || data.error || data.erro || 'Não foi possível salvar a paleta.';
+            throw Object.assign(new Error(message), { type: data.type || 'danger', title: data.title });
         }
     } catch (error) {
         console.error('Erro ao salvar tema:', error);
-        if (typeof showToast === 'function') {
-            showToast('danger', 'Erro ao salvar preferência: ' + error.message);
+        if (typeof window.showToast === 'function') {
+            window.showToast({
+                type: error.type || 'danger',
+                title: error.title || 'Erro ao salvar paleta',
+                message: error.message || 'Não foi possível salvar a paleta. Tente novamente.'
+            });
         }
     } finally {
         btnSalvar.disabled = false;

@@ -22,6 +22,7 @@ from models import (
 from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token, admin_required, gerar_csrf_token
 from routes.permissoes import permission_required
 from utils.logger import logger
+from utils.notification_contract import success, error, warning
 from config import Config
 from utils.file_uploads import get_image_url_for_display, handle_image_upload, remove_image_file, PROFILE_UPLOAD_FOLDER
 
@@ -331,31 +332,31 @@ def edit_user(user_id):
                 updated_photo_url = get_image_url_for_display(imagem_final_para_db, email, is_company_logo=False)
                 session['usuario_foto_url'] = updated_photo_url
 
-                return jsonify(
-                    success=True,
-                    message='Seu perfil foi atualizado com sucesso!',
-                    redirect=url_for('auth.dashboard'),
-                    user_id=current_user_id,
-                    updated_user_data={
+                return jsonify({
+                    **success('Seu perfil foi atualizado com sucesso!'),
+                    'success': True,
+                    'redirect': url_for('auth.dashboard'),
+                    'user_id': current_user_id,
+                    'updated_user_data': {
                         'nome': nome,
                         'email': email,
                         'role': role,
                         'is_active': ativo,
                         'usuario_foto_url': updated_photo_url
                     }
-                )
+                })
 
-            return jsonify(success=True, message='Usuário atualizado com sucesso!', redirect=url_for('admin_users.users_list'))
+            return jsonify(**success('Usuário atualizado com sucesso!'), redirect=url_for('admin_users.users_list'))
 
         except ValueError as e:
             logger.warning(f"Erro de validação ao editar usuário (ID: {user_id}): {e}. User ID: {current_user_id}, IP: {get_client_ip()}")
-            return jsonify(success=False, message=str(e), type='danger'), 400
+            return jsonify(**warning(str(e)), success=False), 400
         except sqlite3.Error as e:
             logger.exception(f"Erro de banco de dados ao atualizar usuário: {e}", exc_info=True)
-            return jsonify(success=False, message=f'Erro de banco de dados ao atualizar usuário: {e}', type='danger'), 500
+            return jsonify(**error('Não foi possível salvar o usuário no banco de dados.'), success=False), 500
         except Exception as e:
             logger.exception(f"Erro inesperado ao atualizar usuário: {e}", exc_info=True)
-            return jsonify(success=False, message=f'Erro inesperado ao atualizar usuário: {e}', type='danger'), 500
+            return jsonify(**error('Não foi possível concluir a alteração do usuário. Tente novamente.'), success=False), 500
         
     csrf_token_val = gerar_csrf_token()
     return render_template('admin/editar_usuario.html',
