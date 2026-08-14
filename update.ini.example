@@ -1,0 +1,7 @@
+[update]
+; Pode ser alterado na instalação sem recompilar o aplicativo.
+; O arquivo efetivo fica em DATA_DIR/update.ini.
+manifest_url = https://github.com/espetocearensesobral-boop/registrofacil-v3/releases/latest/download/manifest.json
+fallback_manifest_url = https://raw.githubusercontent.com/espetocearensesobral-boop/registrofacil-v3/main/updates/manifest.json
+channel = stable
+timeout_seconds = 20

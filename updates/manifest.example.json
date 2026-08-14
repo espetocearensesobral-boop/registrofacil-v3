@@ -1,0 +1,15 @@
+{
+  "product": "registrofacil",
+  "channel": "stable",
+  "version": "3.19.0",
+  "minimum_supported_version": "3.18.0",
+  "package_url": "https://github.com/espetocearensesobral-boop/registrofacil-v3/releases/download/v3.19.0/RegistroFacil-3.19.0.zip",
+  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "size": 0,
+  "requires_restart": true,
+  "release_notes": [
+    "Descreva aqui as principais alterações da versão.",
+    "Informe se há migração de banco.",
+    "Informe se o backup é obrigatório."
+  ]
+}

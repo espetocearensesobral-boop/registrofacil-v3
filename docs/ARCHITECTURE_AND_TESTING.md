@@ -56,3 +56,80 @@ Para executar apenas os testes HTTP:
 ```bash
 python -m pytest tests/test_http_auth.py tests/test_http_authorization.py -q
 ```
+
+## Atualização coordenada do sistema
+
+A primeira etapa do atualizador usa a tabela `configuracoes` para persistir o estado `system_update_state` em JSON. Isso evita criar uma tabela nova apenas para o controle inicial e mantém compatibilidade com bancos existentes.
+
+Os estados principais são `idle`, `update_available`, `awaiting_confirmation`, `maintenance_pending`, `failed` e `ready`. O estado inclui versão de origem, versão de destino, progresso, mensagem, erro e indicação de recarga. Todos os terminais autenticados consultam `GET /api/system/update/status` e exibem o modo de manutenção quando há uma atualização em andamento.
+
+As rotas administrativas são `POST /api/system/update/check`, `POST /api/system/update/confirm` e `POST /api/system/update/cancel`. Confirmação e cancelamento exigem autenticação administrativa e CSRF. O servidor retorna HTTP `423 Locked` para operações mutáveis enquanto o estado está em manutenção; bloquear apenas os botões do navegador não é suficiente.
+
+Nesta etapa, `REGISTROFACIL_UPDATE_VERSION` pode ser usado em homologação para simular uma nova versão. O download, a conferência de assinatura, o backup, a troca atômica de diretórios e o reinício devem ser executados por um launcher externo, que será integrado em uma etapa posterior. O Flask não deve substituir os próprios arquivos enquanto estiver atendendo requisições.
+
+## Canal externo de atualização pelo GitHub
+
+O endereço do manifesto não fica fixo exclusivamente no código. Cada instalação pode possuir `DATA_DIR/update.ini`, copiado a partir de `update.ini.example`. O arquivo permite alterar `manifest_url`, `fallback_manifest_url`, `channel` e `timeout_seconds` sem recompilar o aplicativo.
+
+A configuração usa como padrão um manifesto em um GitHub Release:
+
+```ini
+[update]
+manifest_url = https://github.com/espetocearensesobral-boop/registrofacil-v3/releases/latest/download/manifest.json
+fallback_manifest_url = https://raw.githubusercontent.com/espetocearensesobral-boop/registrofacil-v3/main/updates/manifest.json
+channel = stable
+timeout_seconds = 20
+```
+
+O Release é a fonte principal porque permite manter o endereço estável `releases/latest/download/manifest.json`, enquanto o nome do pacote pode variar por versão. O arquivo Raw fica como fallback caso o asset principal seja removido ou o endereço do Release seja alterado. A documentação do GitHub descreve esse padrão de link para o asset da release mais recente [1] e também disponibiliza `browser_download_url` para assets de releases via API [2].
+
+O manifesto precisa conter pelo menos `version`, `package_url` e `sha256`. O sistema aceita somente URLs HTTPS e rejeita manifesto incompleto ou pacote sem hash SHA-256 válido. O exemplo está em `updates/manifest.example.json`.
+
+As variáveis `REGISTROFACIL_UPDATE_CONFIG`, `REGISTROFACIL_UPDATE_MANIFEST_URL`, `REGISTROFACIL_UPDATE_FALLBACK_URL`, `REGISTROFACIL_UPDATE_CHANNEL` e `REGISTROFACIL_UPDATE_TIMEOUT` podem substituir o arquivo INI em ambientes automatizados.
+
+### Referências
+
+[1]: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases "GitHub Docs — Linking to releases"
+[2]: https://docs.github.com/en/rest/releases/assets "GitHub Docs — REST API endpoints for release assets"
+
+## Launcher externo de releases
+
+O módulo `data/update_launcher.py` prepara releases fora do diretório ativo. A estrutura usada é:
+
+```text
+DATA_DIR/updates/
+├── downloads/
+├── staging/
+├── releases/
+├── backups/
+└── current.json
+```
+
+O launcher aceita somente pacotes HTTPS, exige SHA-256 com 64 caracteres hexadecimais, rejeita entradas ZIP com `..` ou caminhos absolutos e grava o ponteiro `current.json` com `os.replace`, evitando um arquivo parcialmente escrito.
+
+Comandos disponíveis:
+
+```bash
+python -m data.update_launcher prepare caminho/manifest.json
+python -m data.update_launcher backup
+python -m data.update_launcher activate 3.19.0
+```
+
+O comando `prepare` somente baixa, valida e prepara a release. O comando `backup` copia banco, uploads e chaves. A ativação deve ser executada pelo supervisor externo depois que o Flask estiver bloqueando novas operações e o backup tiver sido confirmado. Ainda não é recomendado chamar `activate` diretamente a partir de uma requisição web.
+
+## Integração com o worker externo
+
+Depois da confirmação administrativa, o endpoint inicia `python -m data.update_worker` em um subprocesso separado. Durante testes, o subprocesso é desabilitado automaticamente para evitar efeitos colaterais. Em uma instalação empacotada, o comando pode ser substituído por `REGISTROFACIL_UPDATE_WORKER_COMMAND`.
+
+O worker valida que o estado está em `maintenance_pending`, cria o backup, prepara a release, persiste o progresso e só ativa a versão quando existe `REGISTROFACIL_RESTART_COMMAND`. Sem esse comando, o estado fica em `ready_to_restart`, mantendo os terminais bloqueados em vez de liberar uma atualização que ainda não foi reiniciada e verificada.
+
+As variáveis operacionais são:
+
+```text
+REGISTROFACIL_UPDATE_WORKER_COMMAND
+REGISTROFACIL_RESTART_COMMAND
+REGISTROFACIL_HEALTH_URL
+REGISTROFACIL_UPDATE_ROOT
+```
+
+O health check padrão é `/api/system/update/health`. Em produção, o supervisor deve iniciar o novo processo, aguardar HTTP 200, confirmar a versão retornada e somente então marcar o estado como `ready`, permitindo a recarga dos terminais.
