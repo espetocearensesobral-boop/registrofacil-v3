@@ -1,0 +1,317 @@
+/* ============================================================
+   mobile.css — Responsividade Mobile — Registro Fácil v3.17
+   Estratégia: additive-only — só adiciona, nunca quebra desktop.
+   Breakpoints:
+     ≤991px  → tablet  (sidebar drawer, conteúdo 100%)
+     ≤767px  → mobile  (tipografia, tabelas, formulários)
+     ≤480px  → xs      (compressões extras)
+   ============================================================ */
+
+/* ── OVERLAY (fundo ao abrir sidebar no mobile) ─────────────── */
+#sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.50);
+    z-index: 1029;
+    transition: opacity .25s;
+}
+#sidebar-overlay.active { display: block; }
+
+/* ── BOTÃO HAMBURGUER MOBILE ─────────────────────────────────── */
+#mobile-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--text-color-primary);
+    font-size: var(--font-xl);
+    border-radius: 7px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .15s;
+    padding: 0;
+}
+#mobile-menu-btn:hover { background: var(--background-color-body); }
+
+/* ════════════════════════════════════════════════════════════════
+   TABLET E ABAIXO (≤991px)
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 991px) {
+
+    /* ── Sidebar: drawer fora da tela por padrão ── */
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform .28s cubic-bezier(.4,0,.2,1);
+        width: 230px !important;
+        z-index: 1031;
+        overflow-y: auto;
+    }
+
+    /* Sidebar aberta: desliza para dentro */
+    .sidebar.mobile-open {
+        transform: translateX(0) !important;
+    }
+
+    /* ── CRÍTICO: quando a sidebar está aberta no mobile, anula
+       todos os efeitos visuais do estado "collapsed" do desktop ── */
+    .sidebar.mobile-open.collapsed .menu-text,
+    .sidebar.mobile-open .menu-text {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    .sidebar.mobile-open.collapsed .sidebar-group-label,
+    .sidebar.mobile-open .sidebar-group-label {
+        opacity: 1 !important;
+        height: auto !important;
+        padding: 10px 14px 3px !important;
+        pointer-events: auto !important;
+    }
+    .sidebar.mobile-open.collapsed .section-title-toggle .menu-text,
+    .sidebar.mobile-open .section-title-toggle .menu-text {
+        opacity: 1 !important;
+    }
+    .sidebar.mobile-open.collapsed .section-title-toggle .toggle-icon {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    .sidebar.mobile-open.collapsed .sidebar-company-logo {
+        max-height: 48px !important;
+        width: auto !important;
+        max-width: 150px !important;
+    }
+    /* Itens do menu: altura touch-friendly */
+    .sidebar.mobile-open .menu-item { height: 44px; }
+
+    /* ── Conteúdo: 100% sem margem da sidebar ── */
+    #page-content-wrapper {
+        margin-left: 0 !important;
+    }
+    #wrapper.toggled #page-content-wrapper {
+        margin-left: 0 !important;
+    }
+
+    /* ── Navbar ── */
+    #mobile-menu-btn { display: flex; }
+
+    #page-content-wrapper .navbar {
+        padding: .55rem .85rem;
+        flex-wrap: nowrap;
+        gap: 6px;
+    }
+
+    /* Título da página: compacto mas legível */
+    #page-content-wrapper .navbar .navbar-brand {
+        font-size: var(--font-sm);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 1;
+        min-width: 0;
+        max-width: 180px;
+    }
+
+    /* Botões da navbar: esconde texto mantendo ícone via font-size 0 */
+    #page-content-wrapper .navbar .nav-btn {
+        font-size: 0 !important; /* esconde texto (nó de texto direto) */
+        padding: 7px 10px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        gap: 0;
+    }
+    #page-content-wrapper .navbar .nav-btn i {
+        font-size: var(--font-base)!important; /* restaura tamanho do ícone */
+    }
+    #page-content-wrapper .navbar .nav-btn::after {
+        font-size: var(--font-xs)!important; /* seta do dropdown */
+    }
+
+    /* Container de ações: nunca comprime, botões não cortam */
+    #page-content-wrapper .navbar .ms-auto.d-flex {
+        flex-shrink: 0;
+        gap: 4px !important;
+        flex-wrap: nowrap;
+        overflow: visible;
+    }
+
+    /* Navbar brand: flex 1 para preencher espaço disponível sem forçar tamanho */
+    #page-content-wrapper .navbar .navbar-brand {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    /* Conteúdo: padding menor */
+    .container-fluid.py-4 { padding: .85rem !important; }
+
+    /* KPI bar: 2 colunas */
+    .kpi-bar { flex-wrap: wrap; }
+    .kpi-bar-item { flex: 1 1 calc(50% - 1px); }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE (≤767px)
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+    /* Padding geral */
+    .container-fluid.py-4 { padding: .65rem !important; }
+
+    /* Navbar: título menor */
+    #page-content-wrapper .navbar .navbar-brand {
+        font-size: var(--font-sm);
+    }
+
+    /* Escala levemente todos os elementos de conteúdo */
+    body { font-size: 13.5px; }
+
+    /* Formulários: 1 coluna */
+    .rf-form-grid.col-2,
+    .rf-form-grid.col-3,
+    .rf-form-grid.col-4 { grid-template-columns: 1fr !important; }
+
+    /* KPI: coluna única */
+    .kpi-bar { flex-direction: column; }
+    .kpi-bar-item { flex: 1 1 100%; }
+    .kpi-bar-num { font-size: var(--font-xl); }
+    .kpi-grid { grid-template-columns: 1fr !important; }
+
+    /* Filter bar: empilha campos */
+    .filter-bar-body .row > [class*="col-"] {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .filter-bar-body .d-flex { flex-wrap: wrap; gap: 6px; }
+
+    /* Tabelas: font reduzida + scroll */
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table { font-size: var(--font-sm); }
+    .table th, .table td {
+        padding: .3rem .45rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 160px;
+    }
+
+    /* Oculta colunas secundárias das tabelas de processos */
+    .table-processos th:nth-child(3), .table-processos td:nth-child(3), /* Matrícula */
+    .table-processos th:nth-child(4), .table-processos td:nth-child(4), /* Tipo */
+    .table-processos th:nth-child(5), .table-processos td:nth-child(5)  /* Entrada */
+    { display: none !important; }
+
+    /* Titulares: oculta CPF e e-mail */
+    .table-titulares th:nth-child(3), .table-titulares td:nth-child(3),
+    .table-titulares th:nth-child(4), .table-titulares td:nth-child(4)
+    { display: none !important; }
+
+    /* Usuários: oculta colunas secundárias */
+    .rf-table.table-usuarios th:nth-child(3), .rf-table.table-usuarios td:nth-child(3),
+    .rf-table.table-usuarios th:nth-child(4), .rf-table.table-usuarios td:nth-child(4)
+    { display: none !important; }
+
+    /* Garante que ID e Ações sempre apareçam */
+    .table th:first-child, .table td:first-child,
+    .table th:last-child,  .table td:last-child,
+    .rf-table th:first-child, .rf-table td:first-child,
+    .rf-table th:last-child,  .rf-table td:last-child
+    { display: table-cell !important; }
+
+    /* Badges compactos */
+    .badge { font-size: var(--font-xs); padding: .2em .45em; }
+
+    /* Paginação */
+    .pagination .page-link { padding: .28rem .5rem; font-size: var(--font-sm); }
+
+    /* Modais */
+    .modal-dialog {
+        margin: .4rem;
+        max-width: calc(100vw - .8rem);
+    }
+    .modal-dialog.modal-lg,
+    .modal-dialog.modal-xl { max-width: calc(100vw - .8rem); }
+
+    /* Configurações */
+    .cfg-form-2 { grid-template-columns: 1fr !important; }
+
+    /* Abas: scroll horizontal */
+    #settingsTabs, .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    #settingsTabs::-webkit-scrollbar, .nav-tabs::-webkit-scrollbar { display: none; }
+    #settingsTabs .nav-link, .nav-tabs .nav-link {
+        white-space: nowrap;
+        font-size: var(--font-sm);
+        padding: .35rem .7rem;
+    }
+
+    /* Perfil de usuário */
+    .perfil-header { flex-direction: column; align-items: center; text-align: center; }
+
+    /* Botões de formulário: empilham */
+    .page-header,
+    .d-flex.gap-2.justify-content-end { flex-wrap: wrap; gap: 6px !important; }
+
+    .form-footer-actions {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    .form-footer-actions .btn,
+    .form-footer-actions a { width: 100% !important; text-align: center; }
+
+    /* Anexos */
+    #anexos-list .file-badge { width: 100%; justify-content: space-between; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   EXTRA SMALL (≤480px)
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+    body { font-size: var(--font-sm); }
+
+    #page-content-wrapper .navbar { padding: .45rem .65rem; }
+    #page-content-wrapper .navbar .navbar-brand { font-size: 12.5px; }
+
+    .kpi-bar-num { font-size: var(--font-lg)!important; }
+    .kpi-bar-lbl { font-size: var(--font-xs)!important; }
+    .kpi-bar-icon { width: 30px; height: 30px; font-size: var(--font-sm); }
+    .kpi-bar-item { padding: 10px 12px; }
+
+    /* Inputs: 16px evita zoom automático no iOS */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea { font-size: var(--font-base)!important; }
+
+    .table { font-size: 11.5px; }
+    .table th, .table td { max-width: 120px; }
+
+    .modal-body { padding: .85rem; }
+    .modal-footer { padding: .6rem .85rem; gap: 6px; }
+
+    /* Paginação simplificada */
+    .pagination li:not(.active):not(:first-child):not(:last-child) { display: none; }
+}
+
+/* ── UTILITÁRIOS ─────────────────────────────────────────────── */
+@media (max-width: 991px)  { .hidden-mobile { display: none !important; } }
+@media (min-width: 992px)  { .only-mobile   { display: none !important; } }
+
+/* Touch: área mínima de toque */
+@media (hover: none) and (pointer: coarse) {
+    .btn-action-square, .btn-action { min-width: 38px; min-height: 38px; }
+    .menu-item { height: 44px; }
+}
+
+/* Dashboard stats grid */
+@media (max-width: 991px) { .dashboard-stats-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (max-width: 575px) { .dashboard-stats-grid { grid-template-columns: 1fr !important; } }

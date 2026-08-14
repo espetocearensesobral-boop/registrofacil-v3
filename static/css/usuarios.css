@@ -1,0 +1,129 @@
+/* registrofacil/static/css/usuarios.css */
+
+/* Estilos para os cards de estatísticas (específicos para esta tela) */
+.stats-card {
+    background: var(--background-color-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+    color: var(--text-color-primary);
+    margin-bottom: 1.5rem;
+    border-left: 4px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+
+.stats-card .card-title {
+    font-size: var(--font-sm);
+    color: var(--text-color-secondary); /* Usa variável de tema */
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+.stats-card h2,
+.stats-card p.card-text {
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.stats-card .bi {
+    font-size: 2.5rem;
+    opacity: 0.3;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    color: inherit;
+}
+
+/* Cores específicas para cada tipo de card de usuário */
+/* Ajustadas para usar as variáveis de tema de forma consistente */
+.stats-card.usuarios-total {
+    background-color: var(--color-pastel-gold);
+    border-left-color: var(--color-gold-dark);
+    color: var(--color-gold-dark);
+}
+.stats-card.usuarios-total .card-title {
+    color: var(--color-gold-dark);
+}
+
+.stats-card.usuarios-ativos {
+    background-color: var(--color-pastel-info);
+    border-left-color: var(--color-info);
+    color: var(--color-info);
+}
+.stats-card.usuarios-ativos .card-title {
+    color: var(--color-info);
+}
+
+.stats-card.usuarios-inativos {
+    background-color: var(--color-pastel-error);
+    border-left-color: var(--color-error);
+    color: var(--color-error);
+}
+.stats-card.usuarios-inativos .card-title {
+    color: var(--color-error);
+}
+
+.stats-card.usuarios-hoje {
+    background-color: var(--color-pastel-warning);
+    border-left-color: var(--color-warning);
+    color: var(--color-warning);
+}
+.stats-card.usuarios-hoje .card-title {
+    color: var(--color-warning);
+}
+
+
+/* Estilos de badges para status de usuário */
+.badge.bg-success {
+    background-color: var(--color-success) !important;
+    color: var(--color-white-pure) !important;
+}
+.badge.bg-secondary {
+    background-color: var(--color-gray-medium) !important;
+    color: var(--color-white-pure) !important;
+}
+
+/* Estilo para linhas de tabela de usuários inativos */
+.status-inativo {
+    opacity: 0.7;
+    filter: grayscale(50%);
+    background-color: var(--color-gray-light);
+}
+
+/* Estilos para o estado vazio da tabela */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-color-secondary);
+}
+
+.empty-state i {
+    font-size: 5rem;
+    color: var(--border-color-default);
+    margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+    color: var(--text-color-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Ícones de ordenação na tabela */
+.filter-icon {
+    font-size: 0.8em;
+    margin-left: 5px;
+    vertical-align: middle;
+}

@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação - Registro Fácil v3.17.6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="static/img" href="{{ url_for('static', filename='img/certificate.png') }}">
+    <style>
+        :root {
+            --bg-primary: #F8F8F8;
+            --bg-container: #FFFFFF;
+            --text-primary: #121212;
+            --text-secondary: #6B6B6B;
+            --accent-primary: #CDA865;
+            --accent-hover: #8B6332;
+            --border-color: #E6D4B5;
+            --error-color: #C5282F;
+            --success-color: #00A86B;
+            --info-color: #1E88E5;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+            --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.7; margin: 0; }
+        .header { background: var(--bg-container); border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; font-size: 1.5rem; color: var(--accent-primary); text-decoration: none; }
+        .logo i { font-size: 2rem; color: var(--accent-hover); }
+        .main-container { display: flex; max-width: 1400px; margin: 0 auto; }
+        .sidebar { width: 300px; flex-shrink: 0; background: var(--bg-container); border-right: 1px solid var(--border-color); padding: 2rem 0; position: sticky; top: 77px; height: calc(100vh - 77px); overflow-y: auto; }
+        .nav-section-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); padding: 0 1.5rem; margin: 1.5rem 0 0.75rem 0; }
+        .nav-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: var(--text-primary); text-decoration: none; transition: all 0.2s ease; border-left: 3px solid transparent; font-weight: 500; }
+        .nav-link:hover { background: rgba(205, 168, 101, 0.1); color: var(--accent-hover); border-left-color: var(--accent-hover); }
+        .nav-link.active { background: rgba(205, 168, 101, 0.15); color: var(--accent-hover); border-left-color: var(--accent-primary); font-weight: 600; }
+        .content { flex: 1; padding: 2rem 3rem; max-width: calc(100% - 300px); }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .card { background: var(--bg-container); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .card-header { background: transparent; padding: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .card-body { padding: 1.5rem; }
+        h1, h2, h3, h4 { font-weight: 700; color: var(--text-primary); }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent-hover); }
+        h2 { font-size: 2rem; margin-top: 3rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
+        h3 { font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--accent-primary); }
+        h4 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        p.lead { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 2rem; }
+        code { background: var(--border-color); color: var(--accent-hover); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.9em; }
+        kbd { background-color: var(--text-primary); color: var(--bg-container); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--accent-primary); box-shadow: 1px 1px 0 var(--text-secondary); }
+        .alert { border-radius: 8px; padding: 1.5rem; border-left-width: 4px; }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+        img.screenshot { border: 1px solid var(--border-color); border-radius: 8px; box-shadow: var(--shadow); }
+        table.table th { background-color: rgba(205, 168, 101, 0.1); font-weight: 600; }
+        .badge-role { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .badge-admin { background: rgba(197, 40, 47, 0.1); color: var(--error-color); }
+        .badge-user { background: rgba(30, 136, 229, 0.1); color: var(--info-color); }
+        .badge-suporte { background: rgba(0, 168, 107, 0.1); color: var(--success-color); }
+        .perm-category { font-weight: 700; color: var(--accent-hover); margin-top: 1rem; margin-bottom: 0.25rem; }
+        @media (max-width: 992px) { .main-container { flex-direction: column; } .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border-color); } .content { max-width: 100%; padding: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Registro Fácil &nbsp;|&nbsp; Manual do Usuário</span>
+            </a>
+            <span style="font-size:0.85rem; color: var(--text-secondary);">v3.17.6 &nbsp;·&nbsp; 2026</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <nav class="sidebar">
+            <a href="#introduction" class="nav-link active" onclick="showSection('introduction')"><i class="bi bi-book"></i><span>Introdução</span></a>
+
+            <div class="nav-section-title">Guia de Início Rápido</div>
+            <a href="#requirements" class="nav-link" onclick="showSection('requirements')"><i class="bi bi-pc-display"></i><span>Requisitos Mínimos</span></a>
+            <a href="#access" class="nav-link" onclick="showSection('access')"><i class="bi bi-plug"></i><span>Instalação e Acesso</span></a>
+            <a href="#initial-setup" class="nav-link" onclick="showSection('initial-setup')"><i class="bi bi-sliders"></i><span>Configuração Inicial</span></a>
+
+            <div class="nav-section-title">Manual dos Módulos</div>
+            <a href="#dashboard" class="nav-link" onclick="showSection('dashboard')"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+            <a href="#processes" class="nav-link" onclick="showSection('processes')"><i class="bi bi-folder"></i><span>Processos</span></a>
+            <a href="#titulares" class="nav-link" onclick="showSection('titulares')"><i class="bi bi-person-lines-fill"></i><span>Titulares</span></a>
+            <a href="#metrics" class="nav-link" onclick="showSection('metrics')"><i class="bi bi-bar-chart-line"></i><span>Métricas e Relatórios</span></a>
+            <a href="#users" class="nav-link" onclick="showSection('users')"><i class="bi bi-people"></i><span>Usuários e Permissões</span></a>
+            <a href="#settings" class="nav-link" onclick="showSection('settings')"><i class="bi bi-gear-wide-connected"></i><span>Configurações</span></a>
+            <a href="#audit" class="nav-link" onclick="showSection('audit')"><i class="bi bi-clipboard-check"></i><span>Auditoria e Logs</span></a>
+            <a href="#backup" class="nav-link" onclick="showSection('backup')"><i class="bi bi-cloud-arrow-up"></i><span>Backup</span></a>
+
+            <div class="nav-section-title">Recursos Adicionais</div>
+            <a href="#notifications" class="nav-link" onclick="showSection('notifications')"><i class="bi bi-bell"></i><span>Notificações</span></a>
+            <a href="#shortcuts" class="nav-link" onclick="showSection('shortcuts')"><i class="bi bi-keyboard"></i><span>Atalhos de Teclado</span></a>
+            <a href="#security" class="nav-link" onclick="showSection('security')"><i class="bi bi-shield-lock"></i><span>Segurança</span></a>
+            <a href="#changelog" class="nav-link" onclick="showSection('changelog')"><i class="bi bi-clock-history"></i><span>Histórico de Versões</span></a>
+        </nav>
+
+        <main class="content">
+
+            <!-- ===== INTRODUÇÃO ===== -->
+            <section id="introduction" class="content-section active">
+                <h1>Bem-vindo ao Registro Fácil</h1>
+                <p class="lead">Sistema completo para gerenciamento de processos, titulares e documentos. Este manual cobre todas as funcionalidades da versão atual.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <h3>O que é o Registro Fácil?</h3>
+                        <p>O <strong>Registro Fácil</strong> é um sistema web voltado para cartórios, escritórios e instituições que gerenciam grande volume de processos e documentos. Oferece ferramentas para registrar, acompanhar, auditar e gerar relatórios de cada processo de forma segura, com controle de acesso granular por usuário.</p>
+                        <p>O sistema roda localmente na rede interna da empresa (sem necessidade de internet), com arquitetura cliente-servidor: um computador executa o servidor e todos os demais acessam pelo navegador.</p>
+
+                        <h4 class="mt-4">Informações da Versão</h4>
+                        <table class="table table-sm" style="width:auto;">
+                            <tbody>
+                                <tr><td><strong>Versão</strong></td><td>3.17.6</td></tr>
+                                <tr><td><strong>Desenvolvido por</strong></td><td>Tauan Pires</td></tr>
+                                <tr><td><strong>Ano</strong></td><td>2026</td></tr>
+                                <tr><td><strong>Stack</strong></td><td>Python 3.12 · Flask 3.0 · SQLite · Waitress</td></tr>
+                                <tr><td><strong>Banco de dados</strong></td><td><code>registrofacil.db</code> (SQLite)</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3 class="mt-4">Como usar esta documentação?</h3>
+                        <p>Use o menu de navegação à esquerda para ir diretamente à seção de interesse. Novos usuários devem começar pelo <strong>Guia de Início Rápido</strong>. Administradores devem ler também as seções de <strong>Usuários e Permissões</strong>, <strong>Configurações</strong> e <strong>Backup</strong>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== REQUISITOS ===== -->
+            <section id="requirements" class="content-section">
+                <h2>Requisitos Mínimos do Servidor</h2>
+                <p>O computador que hospeda o sistema (servidor) deve atender às seguintes especificações:</p>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead><tr><th>Componente</th><th>Mínimo</th><th>Recomendado</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Sistema Operacional</strong></td><td>Windows 10</td><td>Windows 10/11 64-bit</td></tr>
+                                <tr><td><strong>Processador</strong></td><td>2 núcleos (Intel i3 / Ryzen 3)</td><td>4+ núcleos</td></tr>
+                                <tr><td><strong>Memória RAM</strong></td><td>2 GB</td><td>4 GB ou mais</td></tr>
+                                <tr><td><strong>Espaço em Disco</strong></td><td>10 GB livres</td><td>20 GB+ (para anexos e backups)</td></tr>
+                                <tr><td><strong>Rede</strong></td><td>Wi-Fi local</td><td>Ethernet (mais estável)</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="alert alert-info mt-3">
+                            <strong><i class="bi bi-info-circle"></i> Armazenamento de dados:</strong> Todos os dados persistentes (banco de dados, logs, backups, uploads) ficam em <code>C:\ProgramData\RegistroFacil\</code>, separados do diretório de instalação em <code>C:\Program Files\Registro Facil\</code>. Isso garante que atualizações não apaguem dados.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== INSTALAÇÃO E ACESSO ===== -->
+            <section id="access" class="content-section">
+                <h2>Instalação e Acesso ao Sistema</h2>
+                <div class="card">
+                    <div class="card-header"><h3>Instalação via Instalador (.exe)</h3></div>
+                    <div class="card-body">
+                        <p>Execute o arquivo <code>RegistroFacil_v3.17.6_Setup.exe</code> como administrador e siga o assistente de instalação. O instalador:</p>
+                        <ul>
+                            <li>Instala o sistema em <code>C:\Program Files\Registro Facil\</code></li>
+                            <li>Cria atalho na área de trabalho e no menu Iniciar</li>
+                            <li>Cria os diretórios de dados em <code>C:\ProgramData\RegistroFacil\</code></li>
+                            <li>Registra o programa para desinstalação via Painel de Controle</li>
+                        </ul>
+                        <p>Após a instalação, inicie o sistema pelo atalho criado. Uma janela de console aparecerá indicando que o servidor está ativo. <strong>Não feche esta janela</strong> enquanto o sistema estiver em uso.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Acessando o Sistema</h3></div>
+                    <div class="card-body">
+                        <h4>No próprio servidor</h4>
+                        <p>Abra qualquer navegador moderno (Chrome, Firefox, Edge) e acesse:</p>
+                        <pre><code>http://localhost:5000</code></pre>
+                        <p>O sistema também abre o navegador automaticamente ao iniciar.</p>
+
+                        <h4>De outros computadores na rede</h4>
+                        <p>Descubra o IP do servidor: abra o Prompt de Comando (CMD) no servidor e digite <code>ipconfig</code>. Copie o <strong>Endereço IPv4</strong> (ex: <code>192.168.1.10</code>). Nos outros computadores, acesse:</p>
+                        <pre><code>http://192.168.1.10:5000</code></pre>
+
+                        <div class="alert alert-warning">
+                            <h4 class="alert-heading"><i class="bi bi-fire"></i> Firewall do Windows</h4>
+                            <p class="mb-0">Se outros computadores não acessarem o sistema, crie uma regra de entrada no Firewall do Windows para liberar a porta <strong>5000 (TCP)</strong> no computador servidor.</p>
+                        </div>
+
+                        <h4>Configurações técnicas do servidor</h4>
+                        <ul>
+                            <li><strong>Servidor HTTP:</strong> Waitress 3.0 (multi-threaded, 8 threads)</li>
+                            <li><strong>Host:</strong> <code>0.0.0.0</code> (aceita conexões de qualquer IP na rede)</li>
+                            <li><strong>Porta padrão:</strong> <code>5000</code></li>
+                            <li><strong>Sessão:</strong> expira após 30 minutos de inatividade</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CONFIGURAÇÃO INICIAL ===== -->
+            <section id="initial-setup" class="content-section">
+                <h2>Configuração Inicial (Para Administradores)</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <h4 class="alert-heading"><i class="bi bi-key"></i> Credenciais de Primeiro Acesso</h4>
+                            <p class="mb-0"><strong>Usuário:</strong> <code>admin</code> &nbsp; | &nbsp; <strong>Senha:</strong> <code>admin123</code></p>
+                        </div>
+
+                        <div class="alert alert-danger">
+                            <strong><i class="bi bi-exclamation-triangle"></i> Importante:</strong> No primeiro acesso, o sistema exigirá a troca obrigatória da senha padrão antes de prosseguir.
+                        </div>
+
+                        <h4>Passos Recomendados após o Primeiro Acesso:</h4>
+                        <ol>
+                            <li><strong>Trocar a senha do administrador</strong> – exigido automaticamente no primeiro login.</li>
+                            <li><strong>Configurar os dados da empresa</strong> – acesse <em>Menu → Empresa</em> e preencha nome, CNPJ, endereço e faça upload da logo. Ela aparecerá nos relatórios e PDFs gerados.</li>
+                            <li><strong>Definir os Status de Processo</strong> – em <em>Configurações → Status</em>, crie os estágios do seu fluxo (ex: "Em Análise", "Com Exigência", "Concluído"), cada um com uma cor identificadora.</li>
+                            <li><strong>Definir os Tipos de Serviço</strong> – em <em>Configurações → Tipos de Serviço</em>, cadastre as categorias de processos com seus prazos padrão em dias.</li>
+                            <li><strong>Configurar o e-mail SMTP</strong> – em <em>Configurações → E-mail</em>, para habilitar recuperação de senha pelos usuários.</li>
+                            <li><strong>Cadastrar usuários</strong> – em <em>Administração → Usuários</em>, crie contas para cada operador e defina suas permissões.</li>
+                            <li><strong>Configurar o backup automático</strong> – em <em>Configurações → Backup</em>, defina pasta local e/ou servidor SFTP e o agendamento.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== DASHBOARD ===== -->
+            <section id="dashboard" class="content-section">
+                <h2><i class="bi bi-speedometer2 me-2"></i>Módulo: Dashboard</h2>
+                <p>O Dashboard é a tela inicial exibida logo após o login, oferecendo uma visão geral do estado atual do sistema.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Cards de Estatísticas Rápidas</h4>
+                        <p>Os quatro cards no topo funcionam como atalhos visuais:</p>
+                        <table class="table">
+                            <thead><tr><th>Card</th><th>O que exibe</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Processos Concluídos</strong></td><td>Total com status de conclusão</td></tr>
+                                <tr><td><strong>Processos Hoje</strong></td><td>Processos com prazo final para o dia atual</td></tr>
+                                <tr><td><strong>Processos Pendentes</strong></td><td>Total em andamento (ainda não concluídos)</td></tr>
+                                <tr><td><strong>Meus Processos</strong></td><td>Processos onde o usuário logado é o responsável</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Tabelas de Acesso Rápido</h4>
+                        <ul>
+                            <li><strong>Processos Recentes:</strong> Últimos processos cadastrados e ainda abertos.</li>
+                            <li><strong>Prazos Críticos:</strong> Processos com prazo mais próximo ou já vencido, com destaque visual por cor.</li>
+                        </ul>
+
+                        <h4>Gráficos (via API)</h4>
+                        <p>O dashboard consome uma API interna (<code>/api/graficos</code>, <code>/api/stats/resumo</code>, <code>/api/stats/performance</code>) para exibir gráficos dinâmicos de distribuição de processos por status, tipo e período.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROCESSOS ===== -->
+            <section id="processes" class="content-section">
+                <h2><i class="bi bi-folder me-2"></i>Módulo: Processos</h2>
+                <p>O coração do sistema. Gerencia todo o ciclo de vida dos processos, da abertura à conclusão.</p>
+
+                <div class="card">
+                    <div class="card-header"><h3>Visualizações de Processos</h3></div>
+                    <div class="card-body">
+                        <p>O menu lateral oferece filtros pré-configurados para facilitar o trabalho diário:</p>
+                        <table class="table">
+                            <thead><tr><th>Visualização</th><th>Atalho</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Todos os Processos</strong></td><td><kbd>Alt</kbd>+<kbd>T</kbd></td><td>Listagem completa de todos os registros com filtros avançados</td></tr>
+                                <tr><td><strong>Processos do Dia</strong></td><td><kbd>Alt</kbd>+<kbd>H</kbd></td><td>Processos com prazo final para hoje</td></tr>
+                                <tr><td><strong>Pendentes</strong></td><td><kbd>Alt</kbd>+<kbd>E</kbd></td><td>Todos os processos ainda não concluídos</td></tr>
+                                <tr><td><strong>Meus Processos</strong></td><td><kbd>Alt</kbd>+<kbd>F</kbd></td><td>Processos nos quais o usuário logado é responsável</td></tr>
+                                <tr><td><strong>Em Andamento</strong></td><td>—</td><td>Processos em status de andamento ativo</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Em todas as listagens é possível usar <strong>filtros avançados</strong> por titular, status, tipo de serviço, período e responsável. Os resultados podem ser <strong>exportados para Excel (.xlsx)</strong> ou <strong>impressos em PDF</strong>, preservando as cores de status.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Campos do Processo</h3></div>
+                    <div class="card-body">
+                        <p>Ao criar ou editar um processo, os seguintes campos estão disponíveis:</p>
+                        <table class="table">
+                            <thead><tr><th>Campo</th><th>Obrigatório</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Número do Processo</strong></td><td>Sim (gerado automaticamente)</td><td>Identificador único do processo no sistema</td></tr>
+                                <tr><td><strong>Titular</strong></td><td>Sim</td><td>Nome do titular principal. Auto-completa a partir dos titulares cadastrados. Digite <code>%</code> para listar todos.</td></tr>
+                                <tr><td><strong>Tipo de Serviço</strong></td><td>Sim</td><td>Categoria do processo (configurável em Configurações)</td></tr>
+                                <tr><td><strong>Status</strong></td><td>Sim</td><td>Estágio atual do processo (configurável em Configurações)</td></tr>
+                                <tr><td><strong>Prazo Final</strong></td><td>Sim</td><td>Data limite. Preenchido automaticamente se o tipo de serviço possuir prazo padrão.</td></tr>
+                                <tr><td><strong>Matrícula / Nº da Ordem</strong></td><td>Não</td><td>Exibido apenas quando a opção "Possui matrícula?" está marcada. Campo livre (até 50 caracteres).</td></tr>
+                                <tr><td><strong>Apresentante</strong></td><td>Não</td><td>Nome do apresentante do processo</td></tr>
+                                <tr><td><strong>Telefone do Apresentante</strong></td><td>Não</td><td>Validado para unicidade no sistema</td></tr>
+                                <tr><td><strong>E-mail do Apresentante</strong></td><td>Não</td><td>Validado para unicidade no sistema</td></tr>
+                                <tr><td><strong>Responsável</strong></td><td>Não</td><td>Usuário do sistema responsável pelo processo</td></tr>
+                                <tr><td><strong>Envolvido em Notas</strong></td><td>Não</td><td>Indicador booleano de envolvimento em notas</td></tr>
+                                <tr><td><strong>Observações</strong></td><td>Não</td><td>Campo de texto livre para anotações</td></tr>
+                                <tr><td><strong>Anexos</strong></td><td>Não</td><td>Arquivos vinculados ao processo (ver seção Anexos)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Criando um Novo Processo <kbd>Alt</kbd>+<kbd>N</kbd></h3></div>
+                    <div class="card-body">
+                        <ol>
+                            <li>Acesse o menu <strong>Processos → Novo Processo</strong> ou use o atalho <kbd>Alt</kbd>+<kbd>N</kbd>.</li>
+                            <li>Preencha os campos obrigatórios (marcados com <strong>*</strong>): Titular, Tipo de Serviço, Status e Prazo Final.</li>
+                            <li>Selecionar um <strong>Tipo de Serviço</strong> com prazo padrão preencherá o campo <strong>Prazo Final</strong> automaticamente.</li>
+                            <li>Para processos com matrícula, marque <strong>"Possui matrícula?"</strong> para exibir o campo correspondente.</li>
+                            <li>Arraste e solte arquivos na área de anexos ou clique para selecionar. O sistema valida tipo e tamanho antes do envio.</li>
+                            <li>Clique em <strong>Salvar</strong>. O titular será criado automaticamente nos Titulares caso ainda não exista.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Editando um Processo</h3></div>
+                    <div class="card-body">
+                        <p>Ao abrir um processo para edição, o sistema ativa um <strong>bloqueio de registro (Record Locking)</strong>. Isso impede que dois usuários editem o mesmo processo simultaneamente, garantindo a integridade dos dados. Outros usuários verão um aviso informando quem está editando e poderão apenas visualizar.</p>
+                        <p>O lock expira automaticamente após inatividade. Ao sair da tela de edição, o lock é liberado via AJAX.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Visualizando um Processo</h3></div>
+                    <div class="card-body">
+                        <p>A tela de visualização exibe todos os dados do processo, incluindo:</p>
+                        <ul>
+                            <li><strong>Dados principais</strong> com destaque visual para status e prazo.</li>
+                            <li><strong>Lista de Anexos</strong> com ícones por tipo de arquivo e opção de download.</li>
+                            <li><strong>Histórico de Alterações</strong> em formato de linha do tempo, registrando cada modificação com o usuário responsável, campo alterado, valor anterior e novo, e data/hora.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Anexos de Processos</h3></div>
+                    <div class="card-body">
+                        <p>O sistema aceita os seguintes tipos de arquivo como anexos:</p>
+                        <p><code>PDF</code> &nbsp; <code>DOC / DOCX</code> &nbsp; <code>XLS / XLSX</code> &nbsp; <code>CSV</code> &nbsp; <code>TXT</code> &nbsp; <code>JPG / JPEG</code> &nbsp; <code>PNG</code> &nbsp; <code>GIF</code></p>
+                        <ul>
+                            <li><strong>Tamanho máximo por arquivo:</strong> 50 MB</li>
+                            <li>O tipo real do arquivo é validado via <strong>python-magic</strong> (análise de bytes), não apenas pela extensão.</li>
+                            <li>Arquivos são armazenados em <code>C:\ProgramData\RegistroFacil\uploads\processos\</code> com nomes UUID únicos para evitar conflitos.</li>
+                            <li>O download exige autenticação — arquivos de processos não são acessíveis sem login.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Exportação e Relatórios</h3></div>
+                    <div class="card-body">
+                        <p>A partir das listagens de processos, é possível:</p>
+                        <ul>
+                            <li><strong>Exportar para Excel (.xlsx):</strong> Exporta todos os processos filtrados, com cores de status preservadas.</li>
+                            <li><strong>Imprimir lista:</strong> Gera uma página HTML formatada para impressão.</li>
+                            <li><strong>Gerar PDF da lista:</strong> Gera um PDF via WeasyPrint com a lista atual.</li>
+                            <li><strong>Relatório individual do processo:</strong> Na tela de visualização, é possível gerar relatórios em diferentes formatos para um processo específico.</li>
+                            <li><strong>Histórico impresso:</strong> Imprime o histórico de alterações de um processo.</li>
+                        </ul>
+                        <p><em>Requer as permissões: <code>processos_exportar</code>, <code>processos_pdf</code>, <code>processos_imprimir</code>, <code>processos_relatorio</code>.</em></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== TITULARES ===== -->
+            <section id="titulares" class="content-section">
+                <h2><i class="bi bi-person-lines-fill me-2"></i>Módulo: Titulares</h2>
+                <p>Gerencia o cadastro de pessoas físicas ou jurídicas que são titulares de processos.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Campos do Titular</h4>
+                        <table class="table">
+                            <thead><tr><th>Campo</th><th>Obrigatório</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Nome</strong></td><td>Sim</td><td>Nome completo do titular</td></tr>
+                                <tr><td><strong>Telefone</strong></td><td>Não</td><td>Validado para unicidade entre titulares diferentes</td></tr>
+                                <tr><td><strong>E-mail</strong></td><td>Não</td><td>Validado para unicidade entre titulares diferentes</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Criação Automática</h4>
+                        <p>Ao criar um processo com um nome de titular ainda não cadastrado, o sistema cria automaticamente o registro de titular correspondente. Isso agiliza o fluxo sem exigir cadastro prévio.</p>
+
+                        <h4>Ações Disponíveis</h4>
+                        <ul>
+                            <li><strong>Visualizar:</strong> Exibe os dados do titular e todos os processos vinculados a ele.</li>
+                            <li><strong>Editar:</strong> Atualiza nome, telefone e e-mail.</li>
+                            <li><strong>Excluir:</strong> Só é possível excluir titulares sem processos vinculados.</li>
+                            <li><strong>Exportar para Excel:</strong> Exporta a lista completa de titulares.</li>
+                            <li><strong>Imprimir lista:</strong> Gera página formatada para impressão.</li>
+                            <li><strong>Busca via API:</strong> A busca de titulares no formulário de processos usa uma API interna (<code>/titulares/api/buscar</code>).</li>
+                        </ul>
+
+                        <h4>Permissões necessárias</h4>
+                        <p><code>titulares_visualizar</code> · <code>titulares_criar</code> · <code>titulares_editar</code> · <code>titulares_excluir</code> · <code>titulares_exportar</code> · <code>titulares_imprimir</code></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== MÉTRICAS ===== -->
+            <section id="metrics" class="content-section">
+                <h2><i class="bi bi-bar-chart-line me-2"></i>Módulo: Métricas e Relatórios</h2>
+                <p>Painel analítico com indicadores de desempenho do cartório/escritório.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Painel de Métricas (<code>/metricas</code>)</h4>
+                        <p>Exibe gráficos e indicadores como:</p>
+                        <ul>
+                            <li>Volume de processos por período (diário, semanal, mensal)</li>
+                            <li>Distribuição por status e por tipo de serviço</li>
+                            <li>Taxa de conclusão dentro do prazo</li>
+                            <li>Performance por usuário responsável</li>
+                            <li>Processos em atraso</li>
+                        </ul>
+                        <p>Os dados são carregados via APIs internas: <code>/api/metricas/usuario</code>, <code>/api/stats/performance</code>.</p>
+
+                        <h4>Permissões necessárias</h4>
+                        <p><code>metricas_visualizar</code> · <code>relatorios_geral</code> · <code>relatorios_exportar</code></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== USUÁRIOS E PERMISSÕES ===== -->
+            <section id="users" class="content-section">
+                <h2><i class="bi bi-people me-2"></i>Módulo: Usuários e Permissões</h2>
+                <p>Controle completo sobre quem acessa o sistema e o que cada pessoa pode fazer.</p>
+
+                <div class="card">
+                    <div class="card-header"><h3>Perfis (Roles) de Acesso</h3></div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead><tr><th>Role</th><th>Acesso</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge-role badge-admin">admin</span></td>
+                                    <td>Acesso total e irrestrito a todas as funcionalidades do sistema. Não pode ser limitado por permissões.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge-role badge-suporte">suporte</span></td>
+                                    <td>Acesso equivalente ao admin para fins de manutenção. Não pode ser limitado por permissões.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge-role badge-user">user</span></td>
+                                    <td>Acesso restrito às permissões explicitamente concedidas pelo administrador.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p><strong>Admins e usuários de suporte</strong> sempre têm acesso a todos os módulos, independentemente das permissões configuradas.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Gerenciamento de Usuários</h3></div>
+                    <div class="card-body">
+                        <p>Acesse em <em>Menu → Usuários</em>. As ações disponíveis para administradores são:</p>
+                        <ul>
+                            <li><strong>Criar usuário:</strong> Defina nome, usuário, e-mail, senha e role. A senha pode ser marcada como "deve ser trocada no próximo login".</li>
+                            <li><strong>Editar usuário:</strong> Atualiza dados cadastrais.</li>
+                            <li><strong>Ativar / Desativar:</strong> Suspende o acesso sem excluir o cadastro.</li>
+                            <li><strong>Resetar senha:</strong> Gera nova senha temporária para o usuário.</li>
+                            <li><strong>Excluir usuário:</strong> Remoção definitiva (soft-delete).</li>
+                            <li><strong>Gerenciar permissões:</strong> Concede ou revoga permissões individuais.</li>
+                            <li><strong>Atribuir perfil de permissão:</strong> Aplica um conjunto pré-configurado de permissões.</li>
+                        </ul>
+                        <p>Todas as ações administrativas sobre usuários são registradas na tabela <strong>auditoria_admin</strong>, incluindo campo alterado, valor anterior/novo e justificativa.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Sistema de Permissões Granulares</h3></div>
+                    <div class="card-body">
+                        <p>O sistema usa uma tabela <code>modulos_sistema</code> com <strong>38 permissões individuais</strong>, organizadas por categoria:</p>
+
+                        <div class="perm-category">Processos</div>
+                        <p><code>processos_visualizar</code> · <code>processos_criar</code> · <code>processos_editar</code> · <code>processos_excluir</code> · <code>processos_anexos</code> · <code>processos_historico</code> · <code>processos_exportar</code> · <code>processos_imprimir</code> · <code>processos_pdf</code> · <code>processos_relatorio</code></p>
+
+                        <div class="perm-category">Titulares</div>
+                        <p><code>titulares_visualizar</code> · <code>titulares_criar</code> · <code>titulares_editar</code> · <code>titulares_excluir</code> · <code>titulares_exportar</code> · <code>titulares_imprimir</code></p>
+
+                        <div class="perm-category">Atividades</div>
+                        <p><code>atividades_visualizar</code> · <code>atividades_exportar</code></p>
+
+                        <div class="perm-category">Métricas</div>
+                        <p><code>metricas_visualizar</code> · <code>relatorios_geral</code> · <code>relatorios_exportar</code></p>
+
+                        <div class="perm-category">Configurações</div>
+                        <p><code>config_geral</code> · <code>config_status</code> · <code>config_tipos_servicos</code> · <code>config_email</code> · <code>config_empresa</code></p>
+
+                        <div class="perm-category">Backup</div>
+                        <p><code>backup_visualizar</code> · <code>backup_criar</code> · <code>backup_download</code> · <code>backup_excluir</code> · <code>backup_config</code></p>
+
+                        <div class="perm-category">Empresa</div>
+                        <p><code>empresa_visualizar</code> · <code>empresa_editar</code></p>
+
+                        <div class="perm-category">Administração de Usuários</div>
+                        <p><code>admin_usuarios_visualizar</code> · <code>admin_usuarios_criar</code> · <code>admin_usuarios_editar</code> · <code>admin_usuarios_excluir</code> · <code>admin_usuarios_ativar</code> · <code>admin_usuarios_senha</code> · <code>admin_permissoes</code> · <code>admin_perfis</code> · <code>admin_logs</code></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Perfis de Permissão</h3></div>
+                    <div class="card-body">
+                        <p>É possível criar <strong>Perfis de Permissão</strong> (conjuntos reutilizáveis de permissões) e aplicá-los a vários usuários de uma vez. Exemplo: criar um perfil "Atendente" com permissões básicas de processos e titulares, e aplicá-lo a todos os atendentes.</p>
+                        <p>Gerencie em <em>Menu → Perfis de Permissão</em>. Requer permissão <code>admin_perfis</code>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CONFIGURAÇÕES ===== -->
+            <section id="settings" class="content-section">
+                <h2><i class="bi bi-gear-wide-connected me-2"></i>Módulo: Configurações</h2>
+                <p>Acesso via <kbd>Alt</kbd>+<kbd>S</kbd>. Exclusivo para administradores (requer permissão <code>config_geral</code>). A tela é organizada em abas:</p>
+
+                <div class="card">
+                    <div class="card-header"><h3>Aba: Status</h3></div>
+                    <div class="card-body">
+                        <p>Crie e gerencie os estágios do fluxo de trabalho de processos. Cada status possui:</p>
+                        <ul>
+                            <li><strong>Nome:</strong> identificador do estágio (ex: "Com Exigência")</li>
+                            <li><strong>Cor:</strong> usada como badge/etiqueta colorida em todas as listas e relatórios</li>
+                            <li><strong>Ativo/Inativo:</strong> desativa o status sem excluí-lo</li>
+                        </ul>
+                        <p><em>Requer: <code>config_status</code></em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Aba: Tipos de Serviço</h3></div>
+                    <div class="card-body">
+                        <p>Define as categorias de processos. Cada tipo pode ter um <strong>Prazo Padrão em dias</strong> — ao selecionar o tipo em um novo processo, o prazo final é calculado automaticamente a partir da data de entrada.</p>
+                        <p><em>Requer: <code>config_tipos_servicos</code></em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Aba: E-mail (SMTP)</h3></div>
+                    <div class="card-body">
+                        <p>Configure o servidor de e-mail para habilitar recuperação de senha pelos usuários. Parâmetros:</p>
+                        <table class="table table-sm">
+                            <thead><tr><th>Campo</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Servidor SMTP</strong></td><td>Ex: <code>smtp.gmail.com</code></td></tr>
+                                <tr><td><strong>Porta</strong></td><td>Ex: <code>587</code> (TLS) ou <code>465</code> (SSL)</td></tr>
+                                <tr><td><strong>Usuário</strong></td><td>E-mail de autenticação</td></tr>
+                                <tr><td><strong>Senha</strong></td><td>Senha ou App Password</td></tr>
+                                <tr><td><strong>Remetente padrão</strong></td><td>Ex: <code>no-reply@empresa.com</code></td></tr>
+                                <tr><td><strong>TLS / SSL</strong></td><td>Marque conforme o servidor exige</td></tr>
+                                <tr><td><strong>Ativo</strong></td><td>Habilita/desabilita o envio de e-mails</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Use o botão <strong>"Testar Envio"</strong> para verificar as configurações antes de salvar.</p>
+                        <p><em>Requer: <code>config_email</code></em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Aba: Backup</h3></div>
+                    <div class="card-body">
+                        <p>Configure o backup automático do sistema (ver também a seção completa do <a href="#backup" onclick="showSection('backup')">Módulo de Backup</a>).</p>
+                        <ul>
+                            <li><strong>Pasta de backup local:</strong> caminho onde os arquivos .zip serão salvos (padrão: <code>C:\ProgramData\RegistroFacil\backups\</code>).</li>
+                            <li><strong>Pasta de uploads:</strong> exibida como informação apenas (gerenciada automaticamente pelo sistema).</li>
+                            <li><strong>Backup automático:</strong> ativar/desativar o agendamento.</li>
+                            <li><strong>Frequência:</strong> Diária, Semanal (com seleção de dias) ou Mensal (com seleção do dia do mês).</li>
+                            <li><strong>Horário:</strong> Horário de execução (padrão: 02:00).</li>
+                            <li><strong>SFTP:</strong> Configurar envio para servidor remoto (host, porta, usuário, senha, caminho remoto).</li>
+                        </ul>
+                        <p><em>Requer: <code>backup_config</code></em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Aba: Estabelecimento</h3></div>
+                    <div class="card-body">
+                        <p>Configura os dados institucionais que aparecem nos cabeçalhos de relatórios e PDFs gerados pelo sistema: nome, CNPJ, endereço, telefone e logo.</p>
+                        <p><em>Requer: <code>config_empresa</code> ou <code>empresa_editar</code></em></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== AUDITORIA ===== -->
+            <section id="audit" class="content-section">
+                <h2><i class="bi bi-clipboard-check me-2"></i>Módulo: Auditoria e Logs</h2>
+                <p>O sistema registra todas as ações relevantes em múltiplas camadas, garantindo rastreabilidade completa.</p>
+
+                <div class="card">
+                    <div class="card-header"><h3>1. Histórico de Alterações de Processos</h3></div>
+                    <div class="card-body">
+                        <p>Armazenado permanentemente no banco de dados. Visível na tela de <strong>Visualizar Processo</strong>, em formato de linha do tempo. Registra:</p>
+                        <ul>
+                            <li>Criação do processo</li>
+                            <li>Edição de qualquer campo (campo alterado, valor anterior, valor novo)</li>
+                            <li>Adição e remoção de anexos</li>
+                            <li>Usuário responsável pela ação e data/hora</li>
+                        </ul>
+                        <p><em>Requer: <code>processos_historico</code></em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>2. Log de Atividades Gerais</h3></div>
+                    <div class="card-body">
+                        <p>Acessível em <em>Menu → Atividades</em> (<kbd>Alt</kbd>+<kbd>A</kbd>). Exibe um histórico paginado com filtros por usuário, tipo de ação e data. Registra:</p>
+                        <ul>
+                            <li>Logins e logouts (com sucesso ou falha)</li>
+                            <li>Criação, edição e inativação de usuários</li>
+                            <li>Geração de backups e exportações</li>
+                            <li>Acesso às principais seções do sistema</li>
+                        </ul>
+                        <p>Exportável para Excel. <em>Requer: <code>atividades_visualizar</code> / <code>atividades_exportar</code></em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>3. Logs por Domínio (Arquivos de Texto)</h3></div>
+                    <div class="card-body">
+                        <p>O sistema mantém arquivos de log diários segregados por domínio em <code>C:\ProgramData\RegistroFacil\logs\</code>:</p>
+                        <table class="table">
+                            <thead><tr><th>Domínio</th><th>Pasta</th><th>Conteúdo</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>auth</code></td><td><code>logs/auth/</code></td><td>Autenticação, logins, tentativas bloqueadas</td></tr>
+                                <tr><td><code>operacional</code></td><td><code>logs/operacional/</code></td><td>Operações de processos e titulares</td></tr>
+                                <tr><td><code>sistema</code></td><td><code>logs/sistema/</code></td><td>Inicialização, scheduler, configurações</td></tr>
+                                <tr><td><code>manutencao</code></td><td><code>logs/manutencao/</code></td><td>Backups, limpezas automáticas, migrações</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Os logs antigos são limpos automaticamente a cada 90 dias (job agendado para 03:00 diariamente).</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>4. Auditoria Administrativa</h3></div>
+                    <div class="card-body">
+                        <p>Tabela <code>auditoria_admin</code> no banco de dados registra todas as ações administrativas sobre usuários, incluindo:</p>
+                        <ul>
+                            <li>Quem fez a ação (admin), quem foi afetado (usuário alvo)</li>
+                            <li>Campo alterado, valor anterior e novo</li>
+                            <li>Justificativa (quando exigida pela ação)</li>
+                            <li>IP e User-Agent do administrador</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== BACKUP ===== -->
+            <section id="backup" class="content-section">
+                <h2><i class="bi bi-cloud-arrow-up me-2"></i>Módulo: Backup</h2>
+                <p>Acesso via <kbd>Alt</kbd>+<kbd>B</kbd>. Garante a segurança dos dados com backup local e/ou em nuvem via SFTP.</p>
+
+                <div class="card">
+                    <div class="card-header"><h3>Backup Manual</h3></div>
+                    <div class="card-body">
+                        <p>Qualquer administrador com a permissão <code>backup_criar</code> pode gerar um backup completo a qualquer momento. O arquivo gerado é um <strong>.zip</strong> contendo:</p>
+                        <ul>
+                            <li>Uma cópia segura do banco de dados (<code>registrofacil.db</code>)</li>
+                            <li>Todos os arquivos de upload vinculados aos processos</li>
+                        </ul>
+                        <p>Os arquivos gerados ficam listados na tela com opções de <strong>download</strong> e <strong>exclusão</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Backup Automático (Scheduler)</h3></div>
+                    <div class="card-body">
+                        <p>Configure em <em>Configurações → Backup</em>. O agendador (<strong>APScheduler</strong>) executa em background no fuso horário <code>America/Fortaleza</code>.</p>
+                        <table class="table">
+                            <thead><tr><th>Opção</th><th>Detalhes</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Frequência</strong></td><td>Diária, Semanal (dias específicos) ou Mensal (dia do mês)</td></tr>
+                                <tr><td><strong>Horário</strong></td><td>Qualquer hora (padrão: 02:00)</td></tr>
+                                <tr><td><strong>Destino local</strong></td><td>Pasta configurável no servidor (padrão: <code>C:\ProgramData\RegistroFacil\backups\</code>)</td></tr>
+                                <tr><td><strong>Destino SFTP</strong></td><td>Servidor remoto via SSH/SFTP (host, porta, usuário, senha, caminho)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Ferramentas do Banco de Dados</h3></div>
+                    <div class="card-body">
+                        <p>Disponíveis na página de Backup para administradores:</p>
+                        <ul>
+                            <li><strong>Testar integridade do banco:</strong> Executa <code>PRAGMA integrity_check</code> no SQLite.</li>
+                            <li><strong>Otimizar banco (VACUUM):</strong> Libera espaço e desfragmenta o banco de dados.</li>
+                            <li><strong>Reparar banco:</strong> Tenta corrigir inconsistências detectadas.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Estratégia de Restauração</h3></div>
+                    <div class="card-body">
+                        <p>Para restaurar um backup:</p>
+                        <ol>
+                            <li>Encerre o sistema (feche a janela do servidor).</li>
+                            <li>Extraia o arquivo <code>.zip</code> de backup.</li>
+                            <li>Substitua o arquivo <code>C:\ProgramData\RegistroFacil\registrofacil.db</code> pelo banco contido no backup.</li>
+                            <li>Substitua o conteúdo de <code>C:\ProgramData\RegistroFacil\uploads\</code> pelos uploads do backup.</li>
+                            <li>Reinicie o sistema.</li>
+                        </ol>
+                        <div class="alert alert-danger">
+                            <strong><i class="bi bi-exclamation-triangle"></i> Atenção:</strong> A restauração substitui todos os dados atuais pelos dados do backup. Faça sempre um backup do estado atual antes de restaurar.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== NOTIFICAÇÕES ===== -->
+            <section id="notifications" class="content-section">
+                <h2><i class="bi bi-bell me-2"></i>Notificações</h2>
+                <p>O sistema possui um módulo de notificações em tempo real exibido no sino (<i class="bi bi-bell"></i>) na barra superior.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Funcionamento</h4>
+                        <ul>
+                            <li>Notificações são consultadas periodicamente via <code>/notificacoes/api/pendentes</code>.</li>
+                            <li>Cada notificação possui tipo, título, mensagem, prioridade (<code>normal</code>, <code>alta</code>) e pode ter um link para um processo específico.</li>
+                            <li>Podem ser marcadas como lidas individualmente ou todas de uma vez.</li>
+                        </ul>
+
+                        <h4>Preferências de Notificação</h4>
+                        <p>Cada usuário pode configurar suas preferências de notificação em seu perfil:</p>
+                        <ul>
+                            <li><strong>Notificações push (in-app):</strong> Ativar/desativar alertas no sistema.</li>
+                            <li><strong>Notificações por e-mail:</strong> Ativar/desativar envio por e-mail (requer SMTP configurado).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== ATALHOS ===== -->
+            <section id="shortcuts" class="content-section">
+                <h2><i class="bi bi-keyboard me-2"></i>Atalhos de Teclado</h2>
+                <p>Use <kbd>Alt</kbd> + a tecla indicada para acesso rápido. Em alguns sistemas pode ser necessário usar <kbd>Alt</kbd>+<kbd>Shift</kbd>.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>Processos</h3>
+                                <table class="table">
+                                    <tbody>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>Busca rápida</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>N</kbd></td><td>Novo Processo</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>T</kbd></td><td>Todos os Processos</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>H</kbd></td><td>Processos do Dia</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>E</kbd></td><td>Pendentes</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>F</kbd></td><td>Meus Processos</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Sistema</h3>
+                                <table class="table">
+                                    <tbody>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>S</kbd></td><td>Configurações</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>U</kbd></td><td>Usuários</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>A</kbd></td><td>Atividades</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>B</kbd></td><td>Backup</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>J</kbd></td><td>Exibir este modal de atalhos</td></tr>
+                                        <tr><td><kbd>Alt</kbd> + <kbd>X</kbd></td><td>Sair (logout)</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== SEGURANÇA ===== -->
+            <section id="security" class="content-section">
+                <h2><i class="bi bi-shield-lock me-2"></i>Segurança</h2>
+                <p>O sistema implementa múltiplas camadas de proteção.</p>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Autenticação e Sessão</h4>
+                        <ul>
+                            <li><strong>Senhas criptografadas</strong> com <code>bcrypt</code>.</li>
+                            <li><strong>Sessão expira</strong> após 30 minutos de inatividade.</li>
+                            <li><strong>Troca de senha obrigatória</strong> no primeiro login (ou quando definido pelo admin).</li>
+                            <li><strong>Bloqueio por tentativas:</strong> Após <strong>5 tentativas falhas</strong> consecutivas, o IP é bloqueado temporariamente.</li>
+                            <li><strong>Recuperação de senha</strong> por e-mail com token temporário (requer SMTP configurado).</li>
+                        </ul>
+
+                        <h4>Proteção de Formulários</h4>
+                        <ul>
+                            <li><strong>CSRF Token</strong> em todos os formulários POST.</li>
+                            <li><strong>Sanitização de inputs</strong> (<code>proteger_input()</code>) em todos os campos de texto.</li>
+                            <li><strong>Cookies de sessão:</strong> <code>HttpOnly</code> e <code>SameSite=Lax</code>.</li>
+                        </ul>
+
+                        <h4>Validação de Arquivos</h4>
+                        <ul>
+                            <li>Tipo real do arquivo validado via <strong>python-magic</strong> (análise dos bytes do arquivo, não apenas a extensão).</li>
+                            <li>Lista de tipos permitidos restrita (<code>pdf</code>, <code>doc/docx</code>, <code>xls/xlsx</code>, <code>csv</code>, <code>txt</code>, <code>jpg/png/gif</code>).</li>
+                            <li>Tamanho máximo de <strong>25 MB</strong> por arquivo.</li>
+                            <li>Nomes de arquivo gerados com UUID para evitar colisões e path traversal.</li>
+                        </ul>
+
+                        <h4>Proteção de Banco de Dados</h4>
+                        <ul>
+                            <li><strong>Lock de arquivo:</strong> Ao iniciar, o sistema adquire um lock no arquivo <code>.db</code> para evitar corrupção por acesso concorrente.</li>
+                            <li><strong>Chave secreta persistente:</strong> A <code>SECRET_KEY</code> do Flask é gerada uma vez e salva em arquivo oculto (<code>.secret_key</code>), evitando invalidação de sessões a cada reinício.</li>
+                            <li>Todas as queries usam <strong>parâmetros parametrizados</strong> (proteção contra SQL Injection).</li>
+                        </ul>
+
+                        <h4>Controle de Acesso a Arquivos de Upload</h4>
+                        <ul>
+                            <li>Arquivos de <strong>processos</strong> e <strong>perfil</strong> exigem autenticação para download.</li>
+                            <li>Arquivos de <strong>empresa</strong> (logo) são públicos (necessário para exibição nas páginas de login).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CHANGELOG ===== -->
+            <section id="changelog" class="content-section">
+                <h2><i class="bi bi-clock-history me-2"></i>Histórico de Versões (Changelog)</h2>
+
+                <div class="card">
+                    <div class="card-header"><h3>v3.17.6 — Abril 2026 <span style="font-size:0.8rem;font-weight:400;color:var(--text-secondary);">(versão atual)</span></h3></div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Campo <strong>matrícula</strong> tornado opcional e não-único — aceita valores repetidos ou ausentes.</li>
+                            <li>Correção no backfill de busca (campo de pesquisa global).</li>
+                            <li>Ajustes de estabilidade no módulo de processos.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>v3.16.x — Março/Abril 2026</h3></div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Implementação do sistema de <strong>Auditoria Administrativa</strong> (<code>auditoria_admin</code> + <code>tentativas_acesso_nao_autorizado</code>).</li>
+                            <li>Segregação de logs por domínio: <code>auth</code>, <code>operacional</code>, <code>sistema</code>, <code>manutencao</code>.</li>
+                            <li>Limpeza automática de logs com mais de 90 dias (job diário às 03:00).</li>
+                            <li>Suporte a múltiplos destinos de backup (local + SFTP simultâneos).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>v3.x.x — Versões Anteriores</h3></div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Introdução do sistema de <strong>Record Locking</strong> para edição de processos.</li>
+                            <li>Módulo de <strong>Notificações</strong> em tempo real.</li>
+                            <li>Sistema de <strong>Perfis de Permissão</strong> reutilizáveis.</li>
+                            <li>Geração de PDF com <strong>WeasyPrint</strong> (substituição do xhtml2pdf).</li>
+                            <li>Validação de uploads com <strong>python-magic</strong>.</li>
+                            <li>Suporte a execução como <strong>.exe</strong> via PyInstaller com separação de <code>BASE_DIR</code> e <code>DATA_DIR</code>.</li>
+                            <li>Histórico de alterações de processos em linha do tempo.</li>
+                            <li>Módulo de Titulares independente com criação automática via processo.</li>
+                            <li>Instalador profissional via <strong>Inno Setup</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const section = document.getElementById(id);
+            if (section) section.classList.add('active');
+            document.querySelectorAll('a.nav-link').forEach(link => {
+                if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        document.querySelectorAll('a.nav-link').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

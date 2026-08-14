@@ -1,0 +1,319 @@
+/* ============================================================
+   THEME.CSS - Identidade visual do Registro Fácil
+   Define a COR DE DESTAQUE do sistema (cor primária).
+   
+   Os neutros (fundos, textos, bordas) ficam no themes.css
+   ============================================================ */
+
+:root {
+    /* As cores primárias agora são injetadas dinamicamente via [data-cor] no body
+       Definimos fallbacks aqui apenas por segurança. */
+    --color-primary: #8B6F47;
+    --color-primary-dark: #6B5334;
+    --color-primary-light: #A88558;
+    --color-primary-subtle: rgba(139, 111, 71, 0.12);
+
+    /* ──────────────────────────────────────────────────────────
+       ALTERNATIVAS DE PALETA (descomente a que preferir):
+       
+       ▸ VINHO JURÍDICO:
+       --color-primary: #6B1F2E;
+       --color-primary-dark: #4A1421;
+       --color-primary-light: #8B2D3E;
+       --color-primary-subtle: rgba(107, 31, 46, 0.1);
+       
+       ▸ DOURADO INSTITUCIONAL (versão mais sóbria):
+       --color-primary: #8B6F47;
+       --color-primary-dark: #6B5334;
+       --color-primary-light: #A88558;
+       --color-primary-subtle: rgba(139, 111, 71, 0.1);
+       ────────────────────────────────────────────────────────── */
+
+    /* Neutros: Base para texto, fundo, bordas */
+    --color-black-premium: #121212;
+    --color-gray-dark: #2A2A2A;
+    --color-gray-medium: #6B6B6B;
+    --color-gray-light: #F8F8F8;
+    --color-white-pure: #FFFFFF;
+
+    /* Sistema: Feedback (sucesso, erro, aviso, info) */
+    --color-success: #2E7D32;           /* Verde sóbrio */
+    --color-warning: #F59E0B;           /* Âmbar */
+    --color-error: #DC2626;             /* Vermelho sóbrio */
+    --color-info: #3B82F6;              /* Azul claro */
+
+    /* Tons pastéis para fundos de alerta */
+    --color-pastel-success: rgba(46, 125, 50, 0.12);
+    --color-pastel-warning: rgba(245, 158, 11, 0.12);
+    --color-pastel-error: rgba(220, 38, 38, 0.12);
+    --color-pastel-info: rgba(59, 130, 246, 0.12);
+    --color-pastel-primary: var(--color-primary-subtle);
+
+    /* Variáveis de Tema (Tema Claro - padrão) */
+    --background-color-body: #F8F9FA;
+    --background-color-card: var(--color-white-pure);
+    --background-color-header: var(--color-white-pure);
+    --background-color-sidebar: var(--color-black-premium);
+    --background-color-sidebar-hover: var(--color-gray-dark);
+    --background-color-input-bg: var(--color-white-pure);
+
+    --text-color-primary: #343a40;
+    --text-color-secondary: var(--color-gray-medium);
+    --text-color-light: var(--color-white-pure);
+    --text-color-link: var(--color-primary);
+
+    --border-color-default: #e9ecef;
+    --border-color-dark: rgba(255, 255, 255, 0.1);
+    --border-color-input: #ced4da;
+
+    /* Cores de sistema aplicadas como backgrounds de botões */
+    --system-success-bg: var(--color-success);
+    --system-warning-bg: var(--color-warning);
+    --system-error-bg: var(--color-error);
+    --system-info-bg: var(--color-info);
+
+    /* Altura do cabeçalho da sidebar */
+    --sidebar-header-height: 70px;
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       ESCALA TIPOGRÁFICA PADRONIZADA
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    --font-xs: 0.8125rem;    /* 12px - captions, timestamps */
+    --font-sm: 0.9375rem;   /* 14px - corpo, labels */
+    --font-base: 1rem;     /* 16px - corpo principal */
+    --font-lg: 1.125rem;   /* 18px - subtítulos */
+    --font-xl: 1.25rem;    /* 20px - títulos de seção */
+    --font-2xl: 1.5rem;    /* 24px - títulos de página */
+    --font-3xl: 1.875rem;  /* 30px - hero */
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BOTÕES PRIMÁRIOS (Bootstrap override)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-primary-contrast, var(--text-color-light));
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    color: var(--text-color-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(27, 58, 92, 0.2);
+}
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-outline-primary {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 500;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--text-color-light);
+}
+
+/* Botões de sistema */
+.btn-success {
+    background-color: var(--system-success-bg);
+    border-color: var(--system-success-bg);
+    color: var(--text-color-light);
+}
+.btn-success:hover {
+    background-color: #256629;
+    border-color: #256629;
+}
+
+.btn-danger {
+    background-color: var(--system-error-bg);
+    border-color: var(--system-error-bg);
+    color: var(--text-color-light);
+}
+.btn-danger:hover {
+    background-color: #B91C1C;
+    border-color: #B91C1C;
+}
+
+.btn-warning {
+    background-color: var(--system-warning-bg);
+    border-color: var(--system-warning-bg);
+    color: #78350F;  /* Texto escuro para melhor contraste */
+}
+.btn-warning:hover {
+    background-color: #D97706;
+    border-color: #D97706;
+    color: #78350F;
+}
+
+.btn-info {
+    background-color: var(--system-info-bg);
+    border-color: var(--system-info-bg);
+    color: var(--text-color-light);
+}
+.btn-info:hover {
+    background-color: #2563EB;
+    border-color: #2563EB;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TIPOGRAFIA - Hierarquia visual
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+h1, .h1 {
+    font-size: var(--font-2xl);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-color-primary);
+    margin-bottom: 1rem;
+}
+
+h2, .h2 {
+    font-size: var(--font-xl);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-color-primary);
+    margin-bottom: 0.75rem;
+}
+
+h3, .h3 {
+    font-size: var(--font-lg);
+    font-weight: 500;
+    color: var(--text-color-primary);
+    margin-bottom: 0.5rem;
+}
+
+h4, .h4 {
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--text-color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.card-title {
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--text-color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.text-muted {
+    font-size: var(--font-sm);
+    color: var(--text-color-secondary);
+}
+
+.text-caption {
+    font-size: var(--font-xs);
+    color: var(--text-color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FORMULÁRIOS - Foco customizado
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem var(--color-primary-subtle);
+    outline: none;
+}
+
+.form-control:focus-visible,
+.form-select:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.form-label {
+    font-size: var(--font-sm);
+    font-weight: 500;
+    color: var(--text-color-primary);
+    margin-bottom: 0.375rem;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BADGES - Status de processos
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.35em 0.75em;
+    font-size: var(--font-xs);
+    font-weight: 500;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.badge-success {
+    background-color: var(--color-pastel-success);
+    color: var(--color-success);
+}
+
+.badge-warning {
+    background-color: var(--color-pastel-warning);
+    color: #92400E;
+}
+
+.badge-error {
+    background-color: var(--color-pastel-error);
+    color: var(--color-error);
+}
+
+.badge-info {
+    background-color: var(--color-pastel-info);
+    color: #1E40AF;
+}
+
+.badge-primary {
+    background-color: var(--color-pastel-primary);
+    color: var(--color-primary);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ALERTAS - Versão pastel (menos agressiva)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.alert-success {
+    background-color: var(--color-pastel-success);
+    color: #1B4332;
+    border-left: 4px solid var(--color-success);
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.alert-warning {
+    background-color: var(--color-pastel-warning);
+    color: #78350F;
+    border-left: 4px solid var(--color-warning);
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.alert-danger {
+    background-color: var(--color-pastel-error);
+    color: #7F1D1D;
+    border-left: 4px solid var(--color-error);
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.alert-info {
+    background-color: var(--color-pastel-info);
+    color: #1E40AF;
+    border-left: 4px solid var(--color-info);
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
