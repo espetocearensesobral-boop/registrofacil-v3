@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 packages = ["routes", "utils"]
-excluded = {"routes.representantes"}
+excluded = set()
 loaded = []
 skipped = []
 for package_name in packages:

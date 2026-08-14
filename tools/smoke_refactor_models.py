@@ -32,6 +32,7 @@ logging_module = importlib.import_module("data.logging")
 admin_queries = importlib.import_module("data.admin_queries")
 indexes = importlib.import_module("data.indexes")
 validators = importlib.import_module("data.validators")
+representatives = importlib.import_module("data.representatives")
 
 assert models.get_sqlite_connection is database.get_sqlite_connection
 assert models.executar_query is database.executar_query
@@ -103,6 +104,8 @@ assert models.get_users_for_admin_list is admin_queries.get_users_for_admin_list
 assert models.criar_indices_performance is indexes.criar_indices_performance
 for name in ("validar_formato_matricula", "validar_telefone_unico", "validar_email_unico"):
     assert getattr(models, name) is getattr(validators, name), name
+for name in ("listar_representantes", "get_representante_by_id", "get_historico_servicos_representante", "buscar_representantes_json", "representante_tem_processos", "editar_representante", "excluir_representante"):
+    assert getattr(models, name) is getattr(representatives, name), name
 for name in (
     "get_upload_folder", "test_db_connection", "optimize_database",
     "check_and_repair_database", "reconstruct_database", "rebuild_fts_index",
@@ -130,8 +133,22 @@ with tempfile.TemporaryDirectory() as temp_dir:
                 "SELECT name FROM sqlite_master WHERE type = 'table'"
             )
         }
-    assert {"usuarios", "processos", "titulares"}.issubset(tables)
+    assert {"usuarios", "processos", "titulares", "representantes"}.issubset(tables)
     assert processes.get_total_processes_count() == 0
+    representante_id = representatives.excluir_representante(999999)
+    assert representante_id is not None
+    representative_result = representatives.executar_query if hasattr(representatives, "executar_query") else None
+    assert representative_result is not None
+    inserted_representative = representative_result(
+        "INSERT INTO representantes (nome, telefone, email) VALUES (?, ?, ?)",
+        ["Representante Smoke", "(88) 99999-5555", "representante-smoke@example.com"],
+    )
+    assert inserted_representative
+    representative = representatives.get_representante_by_id(inserted_representative)
+    assert representative["nome"] == "Representante Smoke"
+    assert representatives.buscar_representantes_json("Smoke")
+    assert representatives.listar_representantes()["total_records"] == 1
+    assert representatives.representante_tem_processos(inserted_representative) is False
     titular_id = registries.upsert_titular_from_processo(
         "Titular Smoke", "88999990000", "titular-smoke@example.com", None
     )
@@ -168,6 +185,17 @@ with tempfile.TemporaryDirectory() as temp_dir:
     catalog.update_tipo_servico(service_id, "Serviço Smoke Atualizado", "Teste", True, 20)
     assert catalog.obter_tipos_servico()
     catalog.toggle_tipo_servico(service_id)
+    status_id = processes.get_status_id_by_name("Pendente Análise") or processes.get_status_id_by_name("Prenotado")
+    assert status_id
+    linked_process_id = representatives.executar_query(
+        "INSERT INTO processos (numero_processo, titular, tipo_id, status_id, representante, matricula) VALUES (?, ?, ?, ?, ?, ?)",
+        ["PROC-REP-SMOKE", "Titular Smoke", service_id, status_id, "Representante Smoke", "MAT-REP-SMOKE"],
+    )
+    assert linked_process_id
+    assert representatives.representante_tem_processos(inserted_representative) is True
+    representative_with_process = representatives.get_representante_by_id(inserted_representative)
+    assert representative_with_process["total_processos"] == 1
+    assert representatives.get_historico_servicos_representante("Representante Smoke")
     company.save_empresa_info({
         "cartorio": "Cartório Smoke",
         "oficial": "Oficial Smoke",
@@ -176,7 +204,7 @@ with tempfile.TemporaryDirectory() as temp_dir:
         "telefone": "(88) 99999-4444",
     }, is_new_record=True)
     assert company.get_empresa_info()["cartorio"] == "Cartório Smoke"
-    assert search.busca_tradicional("Smoke") == []
+    assert search.busca_tradicional("Smoke")
     assert templates.mascarar_email("usuario@example.com") == "u***@example.com"
     temporary_password = templates.gerar_senha_temporaria(16)
     assert len(temporary_password) == 16
