@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Cadastrar Representante - Registro Fácil{% endblock %}
-{% block page_title %}Cadastrar Novo Representante{% endblock %}
+{% block title %}Cadastrar Apresentante - Registro Fácil{% endblock %}
+{% block page_title %}Cadastrar Novo Apresentante{% endblock %}
 
 {% block page_actions %}
     <a href="{{ url_for('representantes.index') }}" class="nav-btn nav-btn-secondary">
-        <i class="bi bi-people"></i> Representantes
+        <i class="bi bi-people"></i> Apresentantes
     </a>
 {% endblock %}
 
@@ -77,8 +77,8 @@
         <div class="nt-header">
             <div class="nt-header-icon"><i class="bi bi-person-plus-fill"></i></div>
             <div>
-                <h5>Dados do Representante</h5>
-                <small>Preencha as informações para cadastrar um novo representante</small>
+                <h5>Dados do Apresentante</h5>
+                <small>Preencha as informações para cadastrar um novo apresentante</small>
             </div>
         </div>
         <form id="form-representante" method="post" novalidate action="{{ url_for('representantes.novo') }}">
@@ -88,7 +88,7 @@
                     <label>Nome Completo <span class="req">*</span></label>
                     <input type="text" name="nome" id="nome" required autocomplete="off" placeholder="Ex: João da Silva">
                     <div class="invalid-feedback" style="font-size:12px;color:var(--color-error);margin-top:3px;display:none;" id="nome-error">
-                        Por favor, informe o nome do representante.
+                        Por favor, informe o nome do apresentante.
                     </div>
                 </div>
                 <div class="nt-row-2">
@@ -108,7 +108,7 @@
                     <i class="bi bi-x"></i> Cancelar
                 </a>
                 <button type="submit" class="nt-btn-save" id="btn-submit">
-                    <i class="bi bi-check-lg"></i> Cadastrar Representante
+                    <i class="bi bi-check-lg"></i> Cadastrar Apresentante
                 </button>
             </div>
         </form>
@@ -178,7 +178,7 @@
         if (!val || !PHONE_REGEX.test(val)) return; // formato inválido tratado no submit
         const res = await checkDuplicate('telefone', val);
         if (res && res.duplicado) {
-            showErr(this, 'tel-error', `Este telefone já está cadastrado para o representante "${res.representante}".`);
+            showErr(this, 'tel-error', `Este telefone já está cadastrado para o apresentante "${res.representante}".`);
         }
     });
 
@@ -187,7 +187,7 @@
         if (!val || !EMAIL_REGEX.test(val)) return;
         const res = await checkDuplicate('email', val);
         if (res && res.duplicado) {
-            showErr(this, 'email-error', `Este e-mail já está cadastrado para o representante "${res.representante}".`);
+            showErr(this, 'email-error', `Este e-mail já está cadastrado para o apresentante "${res.representante}".`);
         }
     });
 
@@ -223,7 +223,7 @@
 
         // --- Nome ---
         if (!nomeInput.value.trim()) {
-            showErr(nomeInput, 'nome-error', 'Por favor, informe o nome do representante.');
+            showErr(nomeInput, 'nome-error', 'Por favor, informe o nome do apresentante.');
             firstFocus = firstFocus || nomeInput;
             valid = false;
         } else {
@@ -242,7 +242,7 @@
             } else {
                 const res = await checkDuplicate('telefone', telVal);
                 if (res && res.duplicado) {
-                    showErr(telInput, 'tel-error', `Este telefone já está cadastrado para o representante "${res.representante}".`);
+                    showErr(telInput, 'tel-error', `Este telefone já está cadastrado para o apresentante "${res.representante}".`);
                     firstFocus = firstFocus || telInput; valid = false;
                 } else {
                     clearErr(telInput, 'tel-error');
@@ -262,7 +262,7 @@
             } else {
                 const res = await checkDuplicate('email', emailVal);
                 if (res && res.duplicado) {
-                    showErr(emailInput, 'email-error', `Este e-mail já está cadastrado para o representante "${res.representante}".`);
+                    showErr(emailInput, 'email-error', `Este e-mail já está cadastrado para o apresentante "${res.representante}".`);
                     firstFocus = firstFocus || emailInput; valid = false;
                 } else {
                     clearErr(emailInput, 'email-error');
