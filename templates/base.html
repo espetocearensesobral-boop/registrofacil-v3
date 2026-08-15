@@ -138,7 +138,7 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
 </head>
-<body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}" style="--sidebar-selection-color: {{ sidebar_selection_color or '#1B4368' }};">
+<body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}">
     <!-- Overlay para fechar sidebar no mobile -->
     <div id="sidebar-overlay"></div>
     <div class="loader-overlay"></div>

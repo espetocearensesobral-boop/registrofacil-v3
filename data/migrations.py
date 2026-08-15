@@ -159,6 +159,23 @@ def executar_migracoes_dados(connection=None):
 
         migracoes.append(migracao_008)
 
+        def migracao_009(cursor):
+            """Normaliza preferências existentes para os seis temas institucionais."""
+            tabela = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
+            ).fetchone()
+            if not tabela:
+                logger.info("[Migração 009] user_preferences ausente; nada a migrar.")
+                return
+            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06')"
+            cursor.execute(
+                f"UPDATE user_preferences SET tema_cor = 'paleta-01' "
+                f"WHERE tema_cor IS NULL OR tema_cor NOT IN {validos}"
+            )
+            logger.info("[Migração 009] Preferências visuais normalizadas para seis temas.")
+
+        migracoes.append(migracao_009)
+
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]
 

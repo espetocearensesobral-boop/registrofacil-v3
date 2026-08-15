@@ -1,7 +1,7 @@
 /*
  * Camada final de identidade visual.
  * Deve ser carregada depois dos estilos locais dos templates.
- * As variáveis semânticas são fornecidas pelas Paletas 01–03 do usuário.
+ * As variáveis semânticas são fornecidas pelos seis temas do usuário.
  */
 /* Base institucional */
 body,
@@ -291,20 +291,21 @@ html body .auth-panel-right .panel-brand .gold-line { background: var(--color-go
 html body .auth-panel-left .auth-icon-badge { background: rgba(122,31,43,.20) !important; border-color: rgba(201,138,149,.55) !important; color: #C98A95 !important; }
 
 
-/* A única personalização individual permitida: seleção dos itens da sidebar. */
+/* A sidebar é definida integralmente pelo tema selecionado. */
+.sidebar { background: var(--background-color-sidebar) !important; color: var(--sidebar-text) !important; }
+html body .sidebar .menu-item,
+html body .sidebar .menu-item .menu-icon,
+html body .sidebar .menu-item .menu-text,
+html body .sidebar .sidebar-group-label { color: var(--sidebar-text) !important; }
+html body .sidebar .menu-item:hover,
+html body .sidebar .menu-item:focus-visible { background: var(--background-color-sidebar-hover) !important; color: var(--sidebar-text) !important; }
 html body .sidebar .menu-item.active,
 html body .sidebar .menu-item.active:hover,
 html body .sidebar .menu-item.active:focus-visible {
-  background: var(--sidebar-selection-color, var(--color-primary)) !important;
-  border-left-color: var(--sidebar-selection-color, var(--color-primary)) !important;
-  color: #FFFFFF !important;
+  background: var(--color-gold-primary) !important;
+  border-left-color: var(--color-gold-primary) !important;
+  color: var(--sidebar-active-text) !important;
 }
 html body .sidebar .menu-item.active .menu-icon,
 html body .sidebar .menu-item.active .menu-text,
-html body .sidebar .menu-item.active i {
-  color: #FFFFFF !important;
-}
-html body .sidebar .menu-item:hover:not(.active),
-html body .sidebar .menu-item:focus-visible:not(.active) {
-  background: color-mix(in srgb, var(--color-primary-light) 55%, transparent) !important;
-}
+html body .sidebar .menu-item.active i { color: var(--sidebar-active-text) !important; }

@@ -1,91 +1,59 @@
-/* Preferências visuais por usuário: três temas institucionais + seleção da sidebar. */
-
 let temaSelecionado = null;
-let corSidebarSelecionada = null;
 let temaOriginal = null;
-let corSidebarOriginal = null;
 
-function aplicarPreferenciasVisuais(tema, corSidebar) {
-    if (tema) {
-        document.body.setAttribute('data-cor', tema);
-        temaSelecionado = tema;
-        const badge = document.getElementById('paleta-atual-badge');
-        if (badge) badge.style.backgroundColor = 'var(--color-primary)';
-    }
-    if (corSidebar) {
-        corSidebarSelecionada = corSidebar;
-        document.documentElement.style.setProperty('--sidebar-selection-color', corSidebar);
-        const badge = document.getElementById('sidebar-cor-atual-badge');
-        if (badge) badge.style.backgroundColor = corSidebar;
-    }
-}
-
-function selecionarTema(tema) {
+function aplicarTema(tema) {
+    if (!tema) return;
+    document.body.setAttribute('data-cor', tema);
     temaSelecionado = tema;
+    const badge = document.getElementById('paleta-atual-badge');
+    if (badge) badge.style.backgroundColor = 'var(--color-primary)';
     document.querySelectorAll('.theme-choice').forEach((choice) => {
-        choice.classList.toggle('selected', choice.dataset.theme === tema);
+        const selected = choice.dataset.theme === tema;
+        choice.classList.toggle('selected', selected);
+        choice.setAttribute('aria-checked', selected ? 'true' : 'false');
     });
-    aplicarPreferenciasVisuais(tema, corSidebarSelecionada);
 }
 
-function selecionarCorSidebar(cor) {
-    corSidebarSelecionada = cor;
-    document.querySelectorAll('.sidebar-color-choice').forEach((choice) => {
-        choice.classList.toggle('selected', choice.dataset.sidebarColor === cor);
-    });
-    aplicarPreferenciasVisuais(temaSelecionado, cor);
-}
-
-async function carregarPreferenciasVisuais() {
+async function carregarTema() {
     try {
         const response = await fetch('/perfil/tema');
         if (!response.ok) return;
         const data = await response.json();
         temaOriginal = data.tema_cor || 'paleta-01';
-        corSidebarOriginal = data.sidebar_selection_color || '#1B4368';
-        temaSelecionado = temaOriginal;
-        corSidebarSelecionada = corSidebarOriginal;
-        aplicarPreferenciasVisuais(temaOriginal, corSidebarOriginal);
+        aplicarTema(temaOriginal);
     } catch (error) {
-        console.error('Erro ao carregar preferências visuais:', error);
+        console.error('Erro ao carregar tema:', error);
     }
 }
 
-async function salvarAparencia() {
+async function salvarTema() {
     const button = document.getElementById('btn-salvar-aparencia');
-    if (!temaSelecionado || !corSidebarSelecionada || !button) return;
+    if (!temaSelecionado || !button) return;
     const originalHtml = button.innerHTML;
     button.disabled = true;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Aplicando...';
     try {
         const csrf = document.querySelector('[name="csrf_token"]')?.value || '';
-        const headers = {'Content-Type': 'application/json', 'X-CSRFToken': csrf};
-        const temaResponse = await fetch('/perfil/salvar-tema', {
-            method: 'POST', headers, body: JSON.stringify({tema: temaSelecionado})
+        const response = await fetch('/perfil/salvar-tema', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrf},
+            body: JSON.stringify({tema: temaSelecionado})
         });
-        const temaData = await temaResponse.json();
-        if (!temaResponse.ok || !temaData.success) throw new Error(temaData.message || 'Não foi possível salvar o tema.');
-
-        const sidebarResponse = await fetch('/perfil/salvar-sidebar-cor', {
-            method: 'POST', headers, body: JSON.stringify({sidebar_selection_color: corSidebarSelecionada})
-        });
-        const sidebarData = await sidebarResponse.json();
-        if (!sidebarResponse.ok || !sidebarData.success) throw new Error(sidebarData.message || 'Não foi possível salvar a cor da sidebar.');
-
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Não foi possível salvar o tema.');
         temaOriginal = temaSelecionado;
-        corSidebarOriginal = corSidebarSelecionada;
         if (typeof window.showToast === 'function') {
-            window.showToast({type: 'success', title: 'Aparência salva', message: 'Tema e seleção da sidebar atualizados.'});
+            window.showToast({type: 'success', title: 'Tema aplicado', message: 'A aparência completa do sistema foi atualizada.'});
         }
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalPaletas'));
         if (modal) modal.hide();
     } catch (error) {
         if (typeof window.showToast === 'function') {
-            window.showToast({type: 'danger', title: 'Erro ao salvar aparência', message: error.message});
+            window.showToast({type: 'danger', title: 'Erro ao aplicar tema', message: error.message});
         } else {
             alert(error.message);
         }
-        aplicarPreferenciasVisuais(temaOriginal, corSidebarOriginal);
+        aplicarTema(temaOriginal || 'paleta-01');
     } finally {
         button.disabled = false;
         button.innerHTML = originalHtml;
@@ -93,13 +61,10 @@ async function salvarAparencia() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    carregarPreferenciasVisuais();
+    carregarTema();
     document.querySelectorAll('.theme-choice').forEach((choice) => {
-        choice.addEventListener('click', () => selecionarTema(choice.dataset.theme));
-    });
-    document.querySelectorAll('.sidebar-color-choice').forEach((choice) => {
-        choice.addEventListener('click', () => selecionarCorSidebar(choice.dataset.sidebarColor));
+        choice.addEventListener('click', () => aplicarTema(choice.dataset.theme));
     });
     const saveButton = document.getElementById('btn-salvar-aparencia');
-    if (saveButton) saveButton.addEventListener('click', salvarAparencia);
+    if (saveButton) saveButton.addEventListener('click', salvarTema);
 });

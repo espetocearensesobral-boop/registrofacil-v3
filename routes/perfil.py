@@ -323,8 +323,8 @@ def index(user_id=None):
     
     # ===== RENDERIZAR TEMPLATE =====
     csrf_token_val = gerar_csrf_token()
-    from data.themes import listar_paletas_institucionais, listar_cores_sidebar, obter_cor_sidebar
-    preferencias_visuais = {'tema_cor': 'paleta-01', 'sidebar_selection_color': obter_cor_sidebar(None)}
+    from data.themes import listar_paletas_institucionais
+    preferencias_visuais = {'tema_cor': 'paleta-01'}
     if current_user_id:
         from models import obter_preferencia_visual_usuario
         preferencias_visuais = obter_preferencia_visual_usuario(current_user_id)
@@ -339,7 +339,6 @@ def index(user_id=None):
                              contexto=contexto,
                              csrf_token=csrf_token_val,
                              institutional_palettes=listar_paletas_institucionais(),
-                             sidebar_selection_colors=listar_cores_sidebar(),
                              visual_preferences=preferencias_visuais)
     else:  # gerenciamento_admin
         return render_template('admin/perfil_admin.html',
@@ -360,41 +359,7 @@ def obter_tema():
     
     from models import obter_preferencia_visual_usuario
     preferencias = obter_preferencia_visual_usuario(usuario_id)
-    return jsonify({
-        'tema_cor': preferencias.get('tema_cor') or 'paleta-01',
-        'sidebar_selection_color': preferencias.get('sidebar_selection_color') or '#1B4368',
-    })
-
-
-@perfil_bp.route('/salvar-sidebar-cor', methods=['POST'])
-@login_status_required
-def salvar_cor_sidebar():
-    """Salva a cor de seleção dos itens ativos da sidebar."""
-    try:
-        csrf_token_header = request.headers.get('X-CSRFToken')
-        if not verificar_csrf_token(csrf_token_header):
-            return jsonify({**error('Sua sessão de segurança expirou. Recarregue a página e tente novamente.'), 'success': False}), 403
-        data = request.get_json() or {}
-        cor = data.get('sidebar_selection_color') or data.get('cor')
-        from data.themes import cor_sidebar_valida
-        if not cor_sidebar_valida(cor):
-            return jsonify({**warning('A cor selecionada não está disponível para a sidebar.'), 'success': False}), 400
-        usuario_id = session.get('usuario_id')
-        from models import salvar_cor_sidebar_usuario
-        if salvar_cor_sidebar_usuario(usuario_id, cor) is False:
-            return jsonify({**error('Não foi possível salvar a cor da sidebar.'), 'success': False}), 500
-        session['usuario_sidebar_selection_color'] = cor
-        gravar_log(
-            acao='Alteração da cor de seleção da sidebar',
-            processo_id=None,
-            usuario_id=usuario_id,
-            ip=get_client_ip(),
-            descricao=f'Cor selecionada: {cor}',
-        )
-        return jsonify({**success('Cor de seleção da sidebar salva.'), 'success': True, 'sidebar_selection_color': cor})
-    except Exception as e:
-        logger.error(f'Erro ao salvar cor da sidebar: {e}', exc_info=True)
-        return jsonify({**error('Não foi possível salvar a cor da sidebar.'), 'success': False}), 500
+    return jsonify({'tema_cor': preferencias.get('tema_cor') or 'paleta-01'})
 
 
 @perfil_bp.route('/salvar-tema', methods=['POST'])
@@ -412,15 +377,15 @@ def salvar_tema():
         tema = data.get('tema') or data.get('tema_cor')
         
         if not tema:
-            return jsonify({**warning('Selecione uma paleta antes de salvar.'), 'success': False}), 400
+            return jsonify({**warning('Selecione um tema antes de salvar.'), 'success': False}), 400
             
         from data.themes import tema_institucional_valido
         if not tema_institucional_valido(tema):
-            return jsonify({**warning('A paleta selecionada não está disponível. Escolha uma das opções exibidas.'), 'success': False}), 400
+            return jsonify({**warning('O tema selecionado não está disponível. Escolha uma das seis opções exibidas.'), 'success': False}), 400
 
         usuario_id = session.get('usuario_id')
         if not usuario_id:
-            return jsonify({**error('Sua sessão expirou. Entre novamente para salvar a paleta.'), 'success': False}), 401
+            return jsonify({**error('Sua sessão expirou. Entre novamente para salvar o tema.'), 'success': False}), 401
             
         from models import salvar_tema_usuario
         sucesso = salvar_tema_usuario(usuario_id, tema)
@@ -438,10 +403,10 @@ def salvar_tema():
                 descricao=f"Usuário alterou o tema visual corporativo para '{tema}'."
             )
             
-            return jsonify({**success('Paleta salva com sucesso.'), 'success': True, 'sucesso': True})
+            return jsonify({**success('Tema salvo com sucesso.'), 'success': True, 'sucesso': True})
         else:
-            return jsonify({**error('Não foi possível salvar a paleta no banco de dados.'), 'success': False}), 500
+            return jsonify({**error('Não foi possível salvar o tema no banco de dados.'), 'success': False}), 500
             
     except Exception as e:
         logger.error(f"Erro ao salvar tema do usuário: {e}", exc_info=True)
-        return jsonify({**error('Não foi possível salvar a paleta. Consulte os logs para obter detalhes.'), 'success': False}), 500
+        return jsonify({**error('Não foi possível salvar o tema. Consulte os logs para obter detalhes.'), 'success': False}), 500

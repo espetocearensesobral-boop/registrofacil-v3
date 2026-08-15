@@ -4,8 +4,7 @@ import models
 from config import Config
 
 
-PALETAS_DA_INTERFACE = ['paleta-01', 'paleta-02', 'paleta-03']
-CORES_SIDEBAR = ['#7A1F2B', '#8B6F47', '#1B3A5C', '#006064']
+PALETAS_DA_INTERFACE = [f'paleta-{numero:02d}' for numero in range(1, 7)]
 
 
 def _admin_password():
@@ -73,28 +72,25 @@ def test_all_institutional_palette_ids_are_accepted(app_client):
     assert current.get_json()['tema_cor'] == PALETAS_DA_INTERFACE[-1]
 
 
-def test_profile_exposes_only_institutional_themes_and_sidebar_selector(app_client):
+def test_profile_exposes_six_institutional_themes_without_sidebar_palette(app_client):
     _login(app_client)
     response = app_client.get('/perfil/')
     assert response.status_code == 200
     body = response.get_data(as_text=True)
-    assert 'Paleta 01' in body
-    assert 'Paleta 02' in body
-    assert 'Paleta 03' in body
+    assert 'Tema 01' in body
+    assert 'Tema 02' in body
+    for numero in range(1, 7):
+        assert f'Tema {numero:02d}' in body
     assert '30 paletas profissionais' not in body
-    assert 'sidebar-color-grid' in body
+    assert 'sidebar-color-grid' not in body
+    assert 'Cor de seleção da sidebar' not in body
 
 
-def test_sidebar_selection_color_is_saved_independently(app_client):
+def test_sidebar_palette_endpoint_is_removed(app_client):
     csrf = _login(app_client)
-    for color in CORES_SIDEBAR:
-        response = app_client.post(
-            '/perfil/salvar-sidebar-cor',
-            json={'sidebar_selection_color': color},
-            headers={'X-CSRFToken': csrf},
-        )
-        assert response.status_code == 200, (color, response.get_json())
-        assert response.get_json()['sidebar_selection_color'] == color
-
-    current = app_client.get('/perfil/tema')
-    assert current.get_json()['sidebar_selection_color'] == CORES_SIDEBAR[-1]
+    response = app_client.post(
+        '/perfil/salvar-sidebar-cor',
+        json={'sidebar_selection_color': '#7A1F2B'},
+        headers={'X-CSRFToken': csrf},
+    )
+    assert response.status_code == 404

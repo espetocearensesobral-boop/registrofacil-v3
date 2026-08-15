@@ -1,6 +1,6 @@
 # Arquitetura e testes do RegistroFácil
 
-**Versão documentada:** 3.18.0
+**Versão documentada:** 3.19.0
 
 ## Visão geral
 
@@ -32,11 +32,11 @@ A aplicação não deve ser exposta diretamente à Internet sem TLS no proxy rev
 
 ## Atualização de uma instalação existente
 
-A versão 3.18.0 mantém o SQLite como banco compatível com a instalação anterior. Na inicialização, `data/schema.py` verifica e cria colunas e tabelas ausentes de forma idempotente, enquanto `data/migrations.py` aplica as migrações de dados pendentes usando `PRAGMA user_version`. As migrações atuais levam bancos antigos até a versão de esquema 6 e preservam os registros existentes.
+A versão 3.19.0 mantém o SQLite como banco compatível com a instalação anterior. Na inicialização, `data/schema.py` verifica e cria colunas e tabelas ausentes de forma idempotente, enquanto `data/migrations.py` aplica as migrações de dados pendentes usando `PRAGMA user_version`. As migrações atuais levam bancos antigos até a versão de esquema 6 e preservam os registros existentes.
 
 Antes de atualizar uma instalação com dados reais, faça uma cópia do arquivo `registrofacil.db`, da pasta de uploads e das chaves `.secret_key` e `.encryption_key` — ou forneça as mesmas chaves por variáveis de ambiente. A atualização deve ser executada primeiro em uma cópia de homologação. Não substitua as chaves ao migrar, pois isso pode impedir a leitura de dados criptografados e invalidar sessões existentes.
 
-O procedimento recomendado é parar a versão antiga, copiar o banco para o ambiente de homologação, iniciar a versão 3.18.0 uma vez, verificar os logs de migração e executar um smoke test. Só depois dessa validação a cópia deve ser promovida para produção. A aplicação não deve ser iniciada sobre o banco de produção sem backup verificável.
+O procedimento recomendado é parar a versão antiga, copiar o banco para o ambiente de homologação, iniciar a versão 3.19.0 uma vez, verificar os logs de migração e executar um smoke test. Só depois dessa validação a cópia deve ser promovida para produção. A aplicação não deve ser iniciada sobre o banco de produção sem backup verificável.
 
 ## Instalação e testes
 
@@ -145,7 +145,7 @@ A convenção para ações é a seguinte: operações concluídas usam `success`
 
 ## Política de anexos e imagens
 
-A versão 3.18.0 aceita anexos de processos somente nos formatos **PDF, JPG/JPEG e PNG**, com limite máximo de 50 MB por arquivo. A extensão informada pelo usuário não é considerada suficiente: o arquivo é salvo inicialmente com nome temporário, inspecionado por `python-magic` e somente é promovido ao nome final quando o MIME real corresponde à extensão permitida.
+A versão 3.19.0 aceita anexos de processos somente nos formatos **PDF, JPG/JPEG e PNG**, com limite máximo de 50 MB por arquivo. A extensão informada pelo usuário não é considerada suficiente: o arquivo é salvo inicialmente com nome temporário, inspecionado por `python-magic` e somente é promovido ao nome final quando o MIME real corresponde à extensão permitida.
 
 | Fluxo | Formatos permitidos | Limite | Validação adicional |
 | --- | --- | --- | --- |
@@ -261,8 +261,8 @@ A migração não usa `ADD COLUMN IF NOT EXISTS` nem a referência PostgreSQL `s
 
 ## Identidade visual e preferências por usuário
 
-O sistema dispõe de três temas institucionais completos, conforme o guia visual do cartório: **Paleta 01 — Confiança Institucional**, **Paleta 02 — Verde Cartorial Contemporâneo** e **Paleta 03 — Grafite & Vinho — Minimalista**. A Paleta 01 é o padrão inicial para usuários sem preferência registrada. A escolha do tema é persistida por usuário na tabela `user_preferences.tema_cor` e controla superfícies, sidebar, tipografia, bordas, botões, formulários, tabelas, modais, alertas e telas públicas.
+O sistema dispõe de seis temas institucionais completos, conforme o contexto de escritórios de advocacia e cartórios: **Confiança Institucional**, **Verde Cartorial Contemporâneo**, **Grafite & Vinho — Minimalista**, **Preto Jurídico**, **Marfim Cartorial** e **Dourado de Ofício**. A Paleta 01 é o padrão inicial para usuários sem preferência registrada. A escolha do tema é persistida por usuário na tabela `user_preferences.tema_cor` e controla superfícies, sidebar, tipografia, bordas, botões, formulários, tabelas, modais, alertas, autenticação e telas públicas.
 
-A antiga lógica de 30 paletas gerais foi removida. As cores desse catálogo foram reaproveitadas somente como opções de destaque para a seleção de itens ativos da sidebar, armazenadas em `user_preferences.sidebar_selection_color`. Essa cor não altera o corpo da sidebar nem qualquer componente fora do estado selecionado; o corpo da sidebar permanece sob controle da Paleta institucional escolhida.
+A antiga lógica de 30 paletas gerais e a personalização independente da sidebar foram removidas. Não existe mais seletor, API ou preferência separada para a sidebar. Cada tema define integralmente o corpo da sidebar, o hover, o item ativo e o contraste da navegação. O **Preto Jurídico** utiliza sidebar preta pura; o **Marfim Cartorial** utiliza sidebar branca equilibrada com o restante da identidade; o **Dourado de Ofício** combina dourado institucional com azul petróleo.
 
-A camada `palette03-final.css` mantém o padrão de contraste e hierarquia visual, mas usa exclusivamente tokens semânticos fornecidos por `color-themes.css`. Portanto, modais, cards, tabelas, formulários, alertas, botões, autenticação e estados de foco acompanham corretamente as três Paletas sem regras hardcoded da Paleta 03.
+A camada `palette03-final.css` mantém a hierarquia visual global, mas usa tokens semânticos fornecidos por `color-themes.css`. Portanto, modais, cards, tabelas, formulários, alertas, botões, autenticação e estados de foco acompanham corretamente os seis temas sem regras fixas da antiga Paleta 03.
