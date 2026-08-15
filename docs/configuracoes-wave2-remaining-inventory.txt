@@ -1,0 +1,67 @@
+=== remaining count ===
+64
+=== remaining lines ===
+213:                            <span class="cswatch selected" data-color="#0d6efd" style="background:#0d6efd" title="Azul"></span>
+214:                            <span class="cswatch" data-color="#198754" style="background:#198754" title="Verde"></span>
+215:                            <span class="cswatch" data-color="#dc3545" style="background:#dc3545" title="Vermelho"></span>
+216:                            <span class="cswatch" data-color="#fd7e14" style="background:#fd7e14" title="Laranja"></span>
+217:                            <span class="cswatch" data-color="#ffc107" style="background:#ffc107" title="Amarelo"></span>
+218:                            <span class="cswatch" data-color="#6f42c1" style="background:#6f42c1" title="Roxo"></span>
+219:                            <span class="cswatch" data-color="#20c997" style="background:#20c997" title="Teal"></span>
+220:                            <span class="cswatch" data-color="#0dcaf0" style="background:#0dcaf0" title="Ciano"></span>
+221:                            <span class="cswatch" data-color="#6c757d" style="background:#6c757d" title="Cinza"></span>
+222:                            <span class="cswatch" data-color="#212529" style="background:#212529" title="Preto"></span>
+235:                    <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;">{{ status_list|length }}</span>
+239:                        <thead><tr><th>Nome</th><th>Cor</th><th>Processos</th><th>Situação</th><th style="text-align:right;">Ações</th></tr></thead>
+245:                                    <span style="display:inline-flex;align-items:center;gap:6px;">
+246:                                        <span style="width:9px;height:9px;border-radius:50%;background:{{s.hex_color}};flex-shrink:0;display:inline-block;"></span>
+250:                                <td><code style="font-size: .75rem;background:var(--background-color-body);padding:2px 6px;border-radius:4px;">{{s.hex_color}}</code></td>
+253:                                    <span style="font-size: .75rem;background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+263:                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+276:                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum status cadastrado.</td></tr>
+298:                    <div class="cfg-fg" style="flex:1.5;">
+302:                    <div class="cfg-fg" style="width:110px;">
+303:                        <label>Dias <span title="Prazo padrão em dias" style="cursor:help;color:var(--text-color-secondary);">ⓘ</span></label>
+312:                    <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;">{{ tipos_processo|length }}</span>
+316:                        <thead><tr><th>Nome</th><th>Descrição</th><th>Dias</th><th>Situação</th><th style="text-align:right;">Ações</th></tr></thead>
+322:                                <td style="color:var(--text-color-secondary);">{{sv.descricao or '—'}}</td>
+325:                                    <span style="font-size: .75rem;background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+335:                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+348:                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum serviço cadastrado.</td></tr>
+376:                            <div class="cfg-fld" style="width:85px;">
+391:                        <div class="cfg-fld" style="margin-bottom:12px;">
+395:                        <div class="cfg-switches" style="margin-bottom:14px;">
+400:                        <div style="display:flex;gap:8px;justify-content:flex-end;">
+436:                            <label>Caminho dos Anexos <small style="font-weight:400;color:var(--text-color-secondary);">(definido automaticamente pelo sistema)</small></label>
+455:                        <div id="sftp-settings" style="display:{% if backup_config and backup_config.cloud_provider == 'sftp' %}block{% else %}none{% endif %};">
+459:                                <div class="cfg-fld"><label>Senha <small style="font-weight:400;">(vazia mantém a atual)</small></label><input type="password" name="sftp_password" autocomplete="new-password"></div>
+476:                    <div id="auto-backup-settings" class="cfg-auto-body" style="padding:14px;display:{% if backup_config and backup_config.auto_backup_enabled %}block{% else %}none{% endif %};">
+491:                        <div id="weekly-settings" style="display:{% if backup_config and backup_config.backup_frequency == 'weekly' %}block{% else %}none{% endif %};">
+504:                        <div id="monthly-settings" class="cfg-margin-top-8" style="display:{% if backup_config and backup_config.backup_frequency == 'monthly' %}block{% else %}none{% endif %};">
+614:                                <div class="logo-preview-container-cfg position-relative cfg-logo-preview" style="cursor:{% if session.get('usuario_role') == 'admin' %}pointer{% else %}default{% endif %};">
+677:            <div class="modal-header" style="padding:12px 16px;">
+685:                <div class="modal-body" style="padding:14px 16px;">
+686:                    <div class="cfg-fld" style="margin-bottom:10px;">
+688:                        <input type="text" id="edit_status_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+690:                    <div style="display:flex;gap:10px;align-items:flex-start;">
+695:                                <span class="cswatch" data-color="#0d6efd" style="background:#0d6efd"></span>
+696:                                <span class="cswatch" data-color="#198754" style="background:#198754"></span>
+697:                                <span class="cswatch" data-color="#dc3545" style="background:#dc3545"></span>
+698:                                <span class="cswatch" data-color="#fd7e14" style="background:#fd7e14"></span>
+699:                                <span class="cswatch" data-color="#ffc107" style="background:#ffc107"></span>
+700:                                <span class="cswatch" data-color="#6f42c1" style="background:#6f42c1"></span>
+701:                                <span class="cswatch" data-color="#20c997" style="background:#20c997"></span>
+702:                                <span class="cswatch" data-color="#0dcaf0" style="background:#0dcaf0"></span>
+703:                                <span class="cswatch" data-color="#6c757d" style="background:#6c757d"></span>
+704:                                <span class="cswatch" data-color="#212529" style="background:#212529"></span>
+711:                        <label class="cfg-sw" style="padding-top:20px;text-transform:none;letter-spacing:normal;">
+717:                <div class="modal-footer" style="padding:10px 16px;gap:8px;">
+729:            <div class="modal-header" style="padding:12px 16px;">
+737:                <div class="modal-body" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+740:                        <input type="text" id="edit_service_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+744:                        <input type="text" id="edit_service_descricao" name="descricao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+746:                    <div class="cfg-fld" style="max-width:160px;">
+748:                        <input type="number" id="edit_service_prazo_padrao" name="prazo_padrao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+751:                <div class="modal-footer" style="padding:10px 16px;gap:8px;">
+773:                <div class="form-text text-muted" style="margin-top:4px;font-size: .75rem;">
+777:                <div class="list-group" id="dir-list" style="max-height:340px;overflow-y:auto;">

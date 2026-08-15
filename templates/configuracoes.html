@@ -168,7 +168,7 @@
 </style>
 
 <div class="rf-card">
-    <div class="rf-card-body" style="padding: 14px 16px 0;">
+    <div class="rf-card-body cfg-card-body-tight">
         <div class="rf-tabs" id="cfg-tabs">
             <button class="rf-tab-btn{% if not active_tab or active_tab == 'status' %} active{% endif %}" data-panel="status" onclick="cfgSwitch(this)">
                 <i class="bi bi-palette-fill"></i> Status
@@ -202,8 +202,8 @@
                 <input type="hidden" name="action" value="add_status">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="cfg-add-row">
-                    <div class="cfg-fg" style="flex:1;">
-                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+                    <div class="cfg-fg cfg-flex-1">
+                        <label>Nome <span class="cfg-required">*</span></label>
                         <input type="text" name="nome" id="status_nome" required placeholder="Ex: Em análise">
                     </div>
                     <div class="cfg-fg">
@@ -242,15 +242,15 @@
                             {% for s in status_list %}
                             <tr class="{% if not s.ativo %}row-off{% endif %}">
                                 <td>
-                                    <span style="display:inline-flex;align-items:center;gap:6px;">
-                                        <span style="width:9px;height:9px;border-radius:50%;background:{{s.hex_color}};flex-shrink:0;display:inline-block;"></span>
+                                    <span class="cfg-status-inline">
+                                        <span class="cfg-status-dot" style="background:{{s.hex_color}};"></span>
                                         <strong>{{s.nome}}</strong>
                                     </span>
                                 </td>
-                                <td><code style="font-size: .75rem;background:var(--background-color-body);padding:2px 6px;border-radius:4px;">{{s.hex_color}}</code></td>
-                                <td style="font-weight:600;">{{s.total_processos|default(0)}}</td>
+                                <td><code class="cfg-status-code">{{s.hex_color}}</code></td>
+                                <td class="cfg-value-strong">{{s.total_processos|default(0)}}</td>
                                 <td>
-                                    <span style="font-size: .75rem;background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+                                    <span class="cfg-status-badge" style="background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};">
                                         {% if s.ativo %}Ativo{% else %}Inativo{% endif %}
                                     </span>
                                 </td>
@@ -260,7 +260,7 @@
                                                 data-id="{{s.id}}" data-nome="{{s.nome}}" data-hex_color="{{s.hex_color}}" data-ativo="{{s.ativo}}" title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+                                        <form method="post" class="cfg-inline" action="{{ url_for('configuracoes.index') }}">
                                             <input type="hidden" name="action" value="toggle_status">
                                             <input type="hidden" name="id" value="{{s.id}}">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -291,8 +291,8 @@
                 <input type="hidden" name="action" value="add_service">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="cfg-add-row">
-                    <div class="cfg-fg" style="flex:1;">
-                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+                    <div class="cfg-fg cfg-flex-1">
+                        <label>Nome <span class="cfg-required">*</span></label>
                         <input type="text" name="nome" id="service_nome" required placeholder="Ex: Registro de Imóvel">
                     </div>
                     <div class="cfg-fg" style="flex:1.5;">
@@ -320,9 +320,9 @@
                             <tr class="{% if not sv.ativo %}row-off{% endif %}">
                                 <td><strong>{{sv.nome}}</strong></td>
                                 <td style="color:var(--text-color-secondary);">{{sv.descricao or '—'}}</td>
-                                <td style="font-weight:600;">{{sv.prazo_padrao or '—'}}</td>
+                                <td class="cfg-value-strong">{{sv.prazo_padrao or '—'}}</td>
                                 <td>
-                                    <span style="font-size: .75rem;background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+                                    <span class="cfg-status-badge" style="background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};">
                                         {% if sv.ativo %}Ativo{% else %}Inativo{% endif %}
                                     </span>
                                 </td>
@@ -332,7 +332,7 @@
                                                 data-id="{{sv.id}}" data-nome="{{sv.nome}}" data-descricao="{{sv.descricao or ''}}" data-prazo="{{sv.prazo_padrao or ''}}" title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+                                        <form method="post" class="cfg-inline" action="{{ url_for('configuracoes.index') }}">
                                             <input type="hidden" name="action" value="toggle_service">
                                             <input type="hidden" name="id" value="{{sv.id}}">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -368,19 +368,19 @@
                         <input type="hidden" name="action" value="update_email_config">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="id" value="{{ email_config.id if email_config else '' }}">
-                        <div class="cfg-form-3" style="margin-bottom:10px;">
+                        <div class="cfg-form-3 cfg-form-3-gap">
                             <div class="cfg-fld">
-                                <label>Servidor SMTP <span style="color:var(--color-error)">*</span></label>
+                                <label>Servidor SMTP <span class="cfg-required">*</span></label>
                                 <input type="text" name="mail_server" id="mail_server" value="{{ email_config.mail_server if email_config else '' }}" required placeholder="smtp.gmail.com">
                             </div>
                             <div class="cfg-fld" style="width:85px;">
-                                <label>Porta <span style="color:var(--color-error)">*</span></label>
+                                <label>Porta <span class="cfg-required">*</span></label>
                                 <input type="number" name="mail_port" id="mail_port" value="{{ email_config.mail_port if email_config else 587 }}" required>
                             </div>
                         </div>
-                        <div class="cfg-form-2" style="margin-bottom:10px;">
+                        <div class="cfg-form-2 cfg-form-2-gap">
                             <div class="cfg-fld">
-                                <label>Usuário / E-mail <span style="color:var(--color-error)">*</span></label>
+                                <label>Usuário / E-mail <span class="cfg-required">*</span></label>
                                 <input type="email" name="mail_username" id="mail_username" value="{{ email_config.mail_username if email_config else '' }}" required placeholder="usuario@email.com">
                             </div>
                             <div class="cfg-fld">
@@ -389,7 +389,7 @@
                             </div>
                         </div>
                         <div class="cfg-fld" style="margin-bottom:12px;">
-                            <label>E-mail Remetente <span style="color:var(--color-error)">*</span></label>
+                            <label>E-mail Remetente <span class="cfg-required">*</span></label>
                             <input type="email" name="mail_default_sender" id="mail_default_sender" value="{{ email_config.mail_default_sender if email_config else '' }}" required placeholder="no-reply@empresa.com">
                         </div>
                         <div class="cfg-switches" style="margin-bottom:14px;">
@@ -422,30 +422,30 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <input type="hidden" name="id" value="{{ backup_config.id if backup_config else '' }}">
 
-                <div class="cfg-card" style="margin-bottom:10px;">
+                <div class="cfg-card cfg-card-gap-sm">
                     <div class="cfg-card-header">Caminhos</div>
-                    <div class="cfg-card-body" style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="cfg-card-body cfg-section-stack-tight">
                         <div class="cfg-fld">
                             <label>Caminho dos Backups</label>
-                            <div style="display:flex;gap:0;height:34px;">
-                                <input type="text" id="local_backup_path" name="local_path" value="{{ backup_config.local_path | default(DEFAULT_BACKUP_PATH) }}" required style="flex:1;border-radius:6px 0 0 6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);border-right:0;padding:0 9px;background:var(--background-color-card);color:var(--text-color-primary);">
-                                <button class="btn-browse-dir" type="button" data-target="#local_backup_path" style="width:38px;height:34px;border-radius:0 6px 6px 0;border:1px solid var(--border-color-input);background:var(--background-color-body);color:var(--text-color-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0;" onmouseover="this.style.background='var(--color-black-premium)';this.style.color='#fff'" onmouseout="this.style.background='var(--background-color-body)';this.style.color='var(--text-color-secondary)'"><i class="bi bi-folder2-open"></i></button>
+                            <div class="cfg-path-row">
+                                <input type="text" id="local_backup_path" name="local_path" value="{{ backup_config.local_path | default(DEFAULT_BACKUP_PATH) }}" required class="cfg-path-input">
+                                <button class="btn-browse-dir cfg-browse-dir" type="button" data-target="#local_backup_path" onmouseover="this.style.background='var(--color-black-premium)';this.style.color='#fff'" onmouseout="this.style.background='var(--background-color-body)';this.style.color='var(--text-color-secondary)'"><i class="bi bi-folder2-open"></i></button>
                             </div>
                         </div>
                         <div class="cfg-fld">
                             <label>Caminho dos Anexos <small style="font-weight:400;color:var(--text-color-secondary);">(definido automaticamente pelo sistema)</small></label>
-                            <input type="text" readonly value="{{ UPLOAD_PROCESSOS_DIR }}" title="Este caminho é gerenciado pelo sistema e não pode ser alterado manualmente." style="flex:1;border-radius:6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);padding:0 9px;background:var(--background-color-body);color:var(--text-color-secondary);cursor:not-allowed;width:100%;box-sizing:border-box;">
+                            <input type="text" readonly value="{{ UPLOAD_PROCESSOS_DIR }}" title="Este caminho é gerenciado pelo sistema e não pode ser alterado manualmente." class="cfg-managed-path">
                         </div>
                     </div>
                 </div>
 
-                <div class="cfg-card" style="margin-bottom:10px;">
+                <div class="cfg-card cfg-card-gap-sm">
                     <div class="cfg-card-header">Destino remoto opcional</div>
                     <div class="cfg-card-body">
-                        <div class="cfg-form-2" style="margin-bottom:10px;">
+                        <div class="cfg-form-2 cfg-form-2-gap">
                             <div class="cfg-fld">
                                 <label>Provedor remoto</label>
-                                <select id="cloud_provider" name="cloud_provider" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+                                <select id="cloud_provider" name="cloud_provider" class="cfg-select">
                                     <option value="none" {% if not backup_config or backup_config.cloud_provider != 'sftp' %}selected{% endif %}>Somente local</option>
                                     <option value="sftp" {% if backup_config and backup_config.cloud_provider == 'sftp' %}selected{% endif %}>SFTP</option>
                                 </select>
@@ -453,31 +453,31 @@
                             <div class="cfg-fld"><label>Host SFTP</label><input type="text" name="sftp_host" value="{{ backup_config.sftp_host|default('') }}" placeholder="ex.: backup.exemplo.com"></div>
                         </div>
                         <div id="sftp-settings" style="display:{% if backup_config and backup_config.cloud_provider == 'sftp' %}block{% else %}none{% endif %};">
-                            <div class="cfg-form-3" style="margin-bottom:10px;">
+                            <div class="cfg-form-3 cfg-form-3-gap">
                                 <div class="cfg-fld"><label>Usuário</label><input type="text" name="sftp_username" value="{{ backup_config.sftp_username|default('') }}"></div>
-                                <div class="cfg-fld"><label>Porta</label><input type="number" name="sftp_port" min="1" max="65535" value="{{ backup_config.sftp_port|default(22) }}" style="width:90px;"></div>
+                                <div class="cfg-fld"><label>Porta</label><input type="number" name="sftp_port" min="1" max="65535" value="{{ backup_config.sftp_port|default(22) }}" class="cfg-port"></div>
                                 <div class="cfg-fld"><label>Senha <small style="font-weight:400;">(vazia mantém a atual)</small></label><input type="password" name="sftp_password" autocomplete="new-password"></div>
                             </div>
                             <div class="cfg-fld"><label>Caminho remoto</label><input type="text" name="sftp_remote_path" value="{{ backup_config.sftp_remote_path|default('/backups/') }}" placeholder="/backups/"></div>
-                            <div class="form-text text-muted mt-2" style="font-size: .75rem;"><i class="bi bi-shield-lock"></i> A senha é armazenada criptografada. O sistema confirma o tamanho do arquivo remoto após o envio.</div>
+                            <div class="form-text text-muted mt-2 cfg-help-text"><i class="bi bi-shield-lock"></i> A senha é armazenada criptografada. O sistema confirma o tamanho do arquivo remoto após o envio.</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="cfg-card" style="margin-bottom:12px;">
+                <div class="cfg-card cfg-card-gap-md">
                     <div class="cfg-card-header">
                         <span>Backup Automático</span>
-                        <label class="cfg-sw" style="text-transform:none;letter-spacing:normal;font-weight:600;font-size:12px;margin:0;">
+                        <label class="cfg-sw cfg-switch-header">
                             <input class="form-check-input" type="checkbox" id="auto_backup_enabled" name="auto_backup_enabled" value="1" role="switch"
                                    {% if backup_config and backup_config.auto_backup_enabled %}checked{% endif %}>
                             Ativado
                         </label>
                     </div>
-                    <div id="auto-backup-settings" style="padding:14px;display:{% if backup_config and backup_config.auto_backup_enabled %}block{% else %}none{% endif %};">
-                        <div class="cfg-form-2" style="margin-bottom:10px;">
+                    <div id="auto-backup-settings" class="cfg-auto-body" style="padding:14px;display:{% if backup_config and backup_config.auto_backup_enabled %}block{% else %}none{% endif %};">
+                        <div class="cfg-form-2 cfg-form-2-gap">
                             <div class="cfg-fld">
                                 <label>Frequência</label>
-                                <select id="backup_frequency" name="backup_frequency" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+                                <select id="backup_frequency" name="backup_frequency" class="cfg-select">
                                     <option value="daily" {% if backup_config and backup_config.backup_frequency == 'daily' %}selected{% endif %}>Diário</option>
                                     <option value="weekly" {% if backup_config and backup_config.backup_frequency == 'weekly' %}selected{% endif %}>Semanal</option>
                                     <option value="monthly" {% if backup_config and backup_config.backup_frequency == 'monthly' %}selected{% endif %}>Mensal</option>
@@ -485,11 +485,11 @@
                             </div>
                             <div class="cfg-fld">
                                 <label>Hora</label>
-                                <input type="time" name="backup_time" value="{{ backup_config.backup_time | default('02:00') }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+                                <input type="time" name="backup_time" value="{{ backup_config.backup_time | default('02:00') }}" class="cfg-time">
                             </div>
                         </div>
                         <div id="weekly-settings" style="display:{% if backup_config and backup_config.backup_frequency == 'weekly' %}block{% else %}none{% endif %};">
-                            <div class="cfg-fld" style="margin-bottom:6px;"><label>Dias da Semana</label></div>
+                            <div class="cfg-fld cfg-margin-bottom-6"><label>Dias da Semana</label></div>
                             <div class="week-chips">
                                 {% set days_of_week = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] %}
                                 {% set day_pt = {'Monday':'Seg','Tuesday':'Ter','Wednesday':'Qua','Thursday':'Qui','Friday':'Sex','Saturday':'Sáb','Sunday':'Dom'} %}
@@ -501,15 +501,15 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <div id="monthly-settings" style="display:{% if backup_config and backup_config.backup_frequency == 'monthly' %}block{% else %}none{% endif %};margin-top:8px;">
-                            <div class="cfg-fld" style="max-width:140px;">
+                        <div id="monthly-settings" class="cfg-margin-top-8" style="display:{% if backup_config and backup_config.backup_frequency == 'monthly' %}block{% else %}none{% endif %};">
+                            <div class="cfg-fld cfg-field-compact">
                                 <label>Dia do Mês</label>
-                                <input type="number" name="backup_day_of_month" min="1" max="31" value="{{ backup_config.backup_day_of_month | default(1) }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+                                <input type="number" name="backup_day_of_month" min="1" max="31" value="{{ backup_config.backup_day_of_month | default(1) }}" class="cfg-time">
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                <div class="cfg-inline-end">
                     <button type="submit" name="action" value="test_sftp_connection" class="cfg-sbtn blue"><i class="bi bi-plug"></i> Testar SFTP</button>
                     <button type="submit" name="action" value="update_backup_settings" class="cfg-sbtn green"><i class="bi bi-save"></i> Salvar Backup</button>
                 </div>
@@ -535,9 +535,9 @@
                             <div class="cfg-card-header">
                                 <span><i class="bi bi-building me-1"></i> Informações da Organização</span>
                             </div>
-                            <div class="cfg-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                            <div class="cfg-card-body cfg-section-stack">
                                 <div class="cfg-fld">
-                                    <label>Nome da Organização <span style="color:var(--color-error);">*</span></label>
+                                    <label>Nome da Organização <span class="cfg-required">*</span></label>
                                     <input type="text" id="cfg-cartorio" name="cartorio"
                                            value="{{ empresa.cartorio | default('') }}" required
                                            placeholder="Ex: Cartório de Registro de Imóveis"
@@ -545,7 +545,7 @@
                                 </div>
                                 <div class="cfg-form-2">
                                     <div class="cfg-fld">
-                                        <label>Responsável Principal <span style="color:var(--color-error);">*</span></label>
+                                        <label>Responsável Principal <span class="cfg-required">*</span></label>
                                         <input type="text" id="cfg-oficial" name="oficial"
                                                value="{{ empresa.oficial | default('') }}" required
                                                placeholder="Nome do Oficial/Responsável"
@@ -560,7 +560,7 @@
                                     </div>
                                 </div>
                                 <div class="cfg-fld">
-                                    <label>Endereço Completo <span style="color:var(--color-error);">*</span></label>
+                                    <label>Endereço Completo <span class="cfg-required">*</span></label>
                                     <input type="text" id="cfg-endereco" name="endereco" required
                                            value="{{ empresa.endereco | default('') }}"
                                            placeholder="Rua, número, complemento, bairro, cidade - UF, CEP"
@@ -577,14 +577,14 @@
                             <div class="cfg-card-body">
                                 <div class="cfg-form-2">
                                     <div class="cfg-fld">
-                                        <label>Telefone <span style="color:var(--color-error);">*</span></label>
+                                        <label>Telefone <span class="cfg-required">*</span></label>
                                         <input type="text" id="cfg-telefone" name="telefone"
                                                value="{{ empresa.telefone | default('') }}" required
                                                placeholder="(00) 0000-0000"
                                                {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
                                     </div>
                                     <div class="cfg-fld">
-                                        <label>E-mail <span style="color:var(--color-error);">*</span></label>
+                                        <label>E-mail <span class="cfg-required">*</span></label>
                                         <input type="email" id="cfg-email-emp" name="email"
                                                value="{{ empresa.email | default('') }}" required
                                                placeholder="contato@organizacao.com.br"
@@ -595,7 +595,7 @@
                         </div>
 
                         {% if session.get('usuario_role') == 'admin' %}
-                        <div style="display:flex;gap:10px;justify-content:flex-end;">
+                        <div class="cfg-actions-end">
                             <button type="reset" class="nav-btn nav-btn-danger">
                                 <i class="bi bi-x"></i> Restaurar
                             </button>
@@ -610,16 +610,16 @@
                     <div class="col-lg-4">
                         <div class="cfg-card mb-3">
                             <div class="cfg-card-header"><span><i class="bi bi-image me-1"></i> Logo</span></div>
-                            <div class="cfg-card-body" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
-                                <div class="logo-preview-container-cfg position-relative" style="width:140px;height:140px;border-radius:50%;overflow:hidden;border:3px solid var(--border-color-default);cursor:{% if session.get('usuario_role') == 'admin' %}pointer{% else %}default{% endif %};transition:all .2s;">
-                                    <img src="{{ display_logo_url }}" class="logo-preview-image-cfg" id="cfgLogoPreview"
-                                         alt="Logo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"
+                            <div class="cfg-card-body cfg-logo-body">
+                                <div class="logo-preview-container-cfg position-relative cfg-logo-preview" style="cursor:{% if session.get('usuario_role') == 'admin' %}pointer{% else %}default{% endif %};">
+                                    <img src="{{ display_logo_url }}" class="logo-preview-image-cfg cfg-logo-image" id="cfgLogoPreview"
+                                         alt="Logo"
                                          onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default_avatar.png') }}';">
                                     {% if session.get('usuario_role') == 'admin' %}
-                                    <div class="logo-overlay-cfg" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
-                                        <div style="text-align:center;color:#fff;">
-                                            <i class="bi bi-camera-fill" style="font-size:1.4rem;display:block;margin-bottom:4px;"></i>
-                                            <span style="font-size: .75rem;font-weight:600;">Alterar</span>
+                                    <div class="logo-overlay-cfg cfg-logo-overlay">
+                                        <div class="cfg-logo-overlay-content">
+                                            <i class="bi bi-camera-fill cfg-logo-camera"></i>
+                                            <span class="cfg-label-upper">Alterar</span>
                                         </div>
                                     </div>
                                     {% endif %}
@@ -627,7 +627,7 @@
                                 <input class="d-none" type="file" id="cfg-logo" name="logo" accept="image/jpeg,image/png,image/svg+xml"
                                        {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
                                 {% if empresa.logo and session.get('usuario_role') == 'admin' %}
-                                <button type="button" class="nav-btn nav-btn-danger" id="cfgBtnRemoverLogo" style="width:100%;justify-content:center;font-size:12px;">
+                                <button type="button" class="nav-btn nav-btn-danger cfg-logo-action" id="cfgBtnRemoverLogo">
                                     <i class="bi bi-trash me-1"></i>Remover Logo
                                 </button>
                                 {% endif %}
@@ -635,7 +635,7 @@
                                 <input type="checkbox" class="d-none" id="cfg-remover_logo" name="remover_logo" value="1"
                                        {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
                                 {% endif %}
-                                <p style="font-size: .75rem;color:var(--text-color-secondary);text-align:center;margin:0;">
+                                <p class="cfg-logo-help">
                                     JPG, PNG ou SVG · máx. 2MB
                                 </p>
                             </div>
@@ -643,17 +643,17 @@
 
                         <div class="cfg-card">
                             <div class="cfg-card-header"><span><i class="bi bi-info-circle me-1"></i> Registro</span></div>
-                            <div class="cfg-card-body" style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+                            <div class="cfg-card-body cfg-record-body">
                                 <div>
-                                    <div style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Cadastrado em</div>
-                                    <div style="font-weight:600;">{% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+                                    <div class="cfg-label-upper">Cadastrado em</div>
+                                    <div class="cfg-value-strong">{% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span class="cfg-muted">—</span>{% endif %}</div>
                                 </div>
-                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;">
-                                    <div style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Última Atualização</div>
-                                    <div style="font-weight:600;">{% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+                                <div class="cfg-divider-row">
+                                    <div class="cfg-label-upper">Última Atualização</div>
+                                    <div class="cfg-value-strong">{% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span class="cfg-muted">—</span>{% endif %}</div>
                                 </div>
                                 {% if not session.get('usuario_role') == 'admin' %}
-                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;color:var(--color-warning);font-size: .75rem;">
+                                <div class="cfg-warning-note">
                                     <i class="bi bi-lock-fill me-1"></i> Apenas administradores podem editar.
                                 </div>
                                 {% endif %}
@@ -674,7 +674,7 @@
 <div class="modal fade" id="editStatusModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="padding:12px 16px;">
+            <div class="modal-header cfg-modal-header-tight">
                 <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Status</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -682,12 +682,12 @@
                 <input type="hidden" name="action" value="edit_status">
                 <input type="hidden" name="id" id="edit_status_id">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <div class="modal-body" style="padding:14px 16px;">
+                <div class="modal-body cfg-modal-body-tight">
                     <div class="cfg-fld" style="margin-bottom:10px;">
-                        <label>Nome <span style="color:var(--color-error)">*</span></label>
-                        <input type="text" id="edit_status_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                        <label>Nome <span class="cfg-required">*</span></label>
+                        <input type="text" id="edit_status_nome" name="nome" required class="cfg-modal-input">
                     </div>
-                    <div style="display:flex;gap:10px;align-items:flex-start;">
+                    <div class="cfg-modal-row">
                         <div class="cfg-fld">
                             <label>Cor</label>
                             <input type="hidden" id="edit_status_hex" name="hex_color" value="#0d6efd">
@@ -708,13 +708,13 @@
                                 </label>
                             </div>
                         </div>
-                        <label class="cfg-sw" style="padding-top:20px;text-transform:none;letter-spacing:normal;">
+                        <label class="cfg-sw cfg-switch-offset">
                             <input class="form-check-input" type="checkbox" id="edit_status_ativo" name="ativo" value="1">
                             Ativo
                         </label>
                     </div>
                 </div>
-                <div class="modal-footer" style="padding:10px 16px;gap:8px;">
+                <div class="modal-footer cfg-modal-footer">
                     <button type="button" class="cfg-obtn" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="cfg-sbtn">Salvar</button>
                 </div>
@@ -726,7 +726,7 @@
 <div class="modal fade" id="editServiceModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="padding:12px 16px;">
+            <div class="modal-header cfg-modal-header-tight">
                 <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Serviço</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -734,21 +734,21 @@
                 <input type="hidden" name="action" value="edit_service">
                 <input type="hidden" name="id" id="edit_service_id">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <div class="modal-body" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+                <div class="modal-body cfg-modal-body-tight cfg-modal-fields-stack">
                     <div class="cfg-fld">
-                        <label>Nome <span style="color:var(--color-error)">*</span></label>
-                        <input type="text" id="edit_service_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                        <label>Nome <span class="cfg-required">*</span></label>
+                        <input type="text" id="edit_service_nome" name="nome" required class="cfg-modal-input">
                     </div>
                     <div class="cfg-fld">
                         <label>Descrição</label>
-                        <input type="text" id="edit_service_descricao" name="descricao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                        <input type="text" id="edit_service_descricao" name="descricao" class="cfg-modal-input">
                     </div>
                     <div class="cfg-fld" style="max-width:160px;">
                         <label>Prazo Padrão (dias)</label>
-                        <input type="number" id="edit_service_prazo_padrao" name="prazo_padrao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+                        <input type="number" id="edit_service_prazo_padrao" name="prazo_padrao" class="cfg-modal-input">
                     </div>
                 </div>
-                <div class="modal-footer" style="padding:10px 16px;gap:8px;">
+                <div class="modal-footer cfg-modal-footer">
                     <button type="button" class="cfg-obtn" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="cfg-sbtn">Salvar</button>
                 </div>
@@ -770,11 +770,11 @@
                     <input type="text" class="form-control" id="current-dir-path" placeholder="Digite ou navegue até o caminho desejado...">
                     <button class="btn btn-outline-secondary" type="button" id="btn-dir-go" title="Navegar para o caminho digitado"><i class="bi bi-arrow-right-circle"></i></button>
                 </div>
-                <div class="form-text text-muted" style="margin-top:4px;font-size: .75rem;">
+                <div class="form-text text-muted cfg-help-text">
                     <i class="bi bi-info-circle"></i> Você pode digitar qualquer caminho diretamente (ex: <code>D:\Backups</code>) e pressionar Enter ou clicar <i class="bi bi-arrow-right-circle"></i> para navegar.
                 </div>
                 </div>
-                <div class="list-group" id="dir-list" style="max-height:340px;overflow-y:auto;">
+                <div class="list-group cfg-dir-list" id="dir-list">
                     <div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>
                 </div>
             </div>

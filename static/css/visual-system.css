@@ -1173,3 +1173,68 @@ html body:has(.auth-panel-left) .auth-panel-left .auth-btn { background: var(--r
 .rf-backup-primary-action { height: 38px; padding: 0 20px; font-size: var(--rf-font-sm); }
 .rf-backup-info-action { height: 38px; padding: 0 16px; font-size: var(--rf-font-sm); background: var(--rf-info); color: var(--rf-text-on-primary); border: 0; border-radius: var(--rf-radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; box-shadow: 0 0 0 3px color-mix(in srgb, var(--rf-info) 25%, transparent); }
 .rf-backup-warning-action { height: 38px; padding: 0 16px; font-size: var(--rf-font-sm); background: var(--rf-warning); color: var(--rf-text-on-primary); border: 0; border-radius: var(--rf-radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+
+/* Onda v3.22.2: componentes estáticos de configurações. */
+.cfg-card-body-tight { padding: 14px 16px 0; }
+.cfg-flex-1 { flex: 1; }
+.cfg-required { color: var(--rf-danger); }
+.cfg-swatch { background: var(--rf-surface-body); }
+.cfg-backup-frequency { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.cfg-inline-end { display: flex; justify-content: flex-end; margin-top: 8px; }
+.cfg-section-stack { display: flex; flex-direction: column; gap: 12px; }
+.cfg-section-stack-tight { display: flex; flex-direction: column; gap: 8px; }
+.cfg-label-upper { font-size: var(--rf-font-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--rf-text-secondary); }
+.cfg-value-strong { font-weight: 600; }
+.cfg-divider-row { border-top: 1px solid var(--rf-border); padding-top: 8px; }
+.cfg-warning-note { border-top: 1px solid var(--rf-border); padding-top: 8px; color: var(--rf-warning); font-size: var(--rf-font-xs); }
+.cfg-logo-body { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.cfg-logo-preview { width: 140px; height: 140px; border-radius: 50%; overflow: hidden; border: 3px solid var(--rf-border); transition: all .2s; }
+.cfg-logo-image { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+.cfg-logo-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.65); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
+.cfg-logo-overlay-content { text-align: center; color: #fff; }
+.cfg-logo-camera { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+.cfg-logo-action { width: 100%; justify-content: center; font-size: var(--rf-font-sm); }
+.cfg-logo-help { font-size: var(--rf-font-xs); color: var(--rf-text-secondary); text-align: center; margin: 0; }
+.cfg-modal-header { padding: 12px 16px; }
+.cfg-modal-body { padding: 14px 16px; }
+.cfg-modal-footer { padding: 10px 16px; gap: 8px; }
+.cfg-modal-fields { display: flex; gap: 10px; align-items: flex-start; }
+.cfg-modal-fields-stack { display: flex; flex-direction: column; gap: 10px; }
+.cfg-field-spaced { margin-bottom: 10px; }
+.cfg-field-compact { max-width: 160px; }
+.cfg-field-input { height: 34px; font-size: var(--rf-font-sm); border-radius: var(--rf-radius-sm); border: 1px solid var(--rf-border-input); background: var(--rf-surface-card); color: var(--rf-text-primary); padding: 0 9px; width: 100%; }
+.cfg-switch-offset { padding-top: 20px; text-transform: none; letter-spacing: normal; }
+.cfg-help-text { margin-top: 4px; font-size: var(--rf-font-xs); }
+.cfg-directory-list { max-height: 340px; overflow-y: auto; }
+.cfg-card-gap-sm { margin-bottom: 10px; }
+.cfg-card-gap-md { margin-bottom: 12px; }
+.cfg-path-row { display: flex; gap: 0; height: 34px; }
+.cfg-path-input { flex: 1; border-radius: 6px 0 0 6px; height: 34px; font-size: var(--rf-font-sm); border: 1px solid var(--rf-border-input); border-right: 0; padding: 0 9px; background: var(--rf-surface-card); color: var(--rf-text-primary); }
+.cfg-browse-dir { width: 38px; height: 34px; border-radius: 0 6px 6px 0; border: 1px solid var(--rf-border-input); background: var(--rf-surface-body); color: var(--rf-text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: var(--rf-font-base); flex-shrink: 0; }
+.cfg-managed-path { height: 34px; font-size: var(--rf-font-sm); border-radius: var(--rf-radius-sm); border: 1px solid var(--rf-border-input); padding: 0 9px; background: var(--rf-surface-body); color: var(--rf-text-secondary); cursor: not-allowed; width: 100%; box-sizing: border-box; }
+.cfg-select, .cfg-time { height: 34px; font-size: var(--rf-font-sm); border-radius: var(--rf-radius-sm); border: 1px solid var(--rf-border-input); background: var(--rf-surface-card); color: var(--rf-text-primary); padding: 0 9px; }
+.cfg-select { width: 100%; }
+.cfg-form-2-gap { margin-bottom: 10px; }
+.cfg-form-3-gap { margin-bottom: 10px; }
+.cfg-port { width: 90px; }
+.cfg-conditional { display: block; }
+.cfg-conditional-hidden { display: none; }
+.cfg-auto-body { padding: 14px; }
+.cfg-switch-header { text-transform: none; letter-spacing: normal; font-weight: 600; font-size: var(--rf-font-sm); margin: 0; }
+.cfg-margin-bottom-6 { margin-bottom: 6px; }
+.cfg-margin-top-8 { margin-top: 8px; }
+.cfg-margin-bottom-14 { margin-bottom: 14px; }
+.cfg-actions-end { display: flex; gap: 10px; justify-content: flex-end; }
+.cfg-record-body { font-size: var(--rf-font-sm); display: flex; flex-direction: column; gap: 8px; }
+.cfg-muted { color: var(--rf-text-secondary); }
+.cfg-status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+.cfg-status-code { font-size: var(--rf-font-xs); background: var(--rf-surface-body); padding: 2px 6px; border-radius: var(--rf-radius-xs); }
+.cfg-status-badge { font-size: var(--rf-font-xs); color: #fff; padding: 2px 8px; border-radius: 99px; }
+.cfg-inline { display: inline; }
+.cfg-empty-cell { color: var(--rf-text-secondary); padding: 22px; }
+.cfg-modal-header-tight { padding: 12px 16px; }
+.cfg-modal-body-tight { padding: 14px 16px; }
+.cfg-modal-input { height: 34px; font-size: var(--rf-font-sm); border-radius: var(--rf-radius-sm); border: 1px solid var(--rf-border-input); background: var(--rf-surface-card); color: var(--rf-text-primary); padding: 0 9px; width: 100%; }
+.cfg-modal-row { display: flex; gap: 10px; align-items: flex-start; }
+.cfg-modal-footer { padding: 10px 16px; gap: 8px; }
+.cfg-dir-list { max-height: 340px; overflow-y: auto; }

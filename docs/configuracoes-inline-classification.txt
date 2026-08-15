@@ -1,0 +1,186 @@
+=== inline property frequencies ===
+     96
+     38 background
+     32 color
+     27 font-size
+     25 padding
+     21 display
+     19 border-radius
+     15 height
+     13 width
+     13 margin-bottom
+     12 gap
+     12 border
+     10 font-weight
+      6 text-align
+      6 justify-content
+      5 flex-direction
+      5 flex
+      5 align-items
+      4 text-transform
+      4 letter-spacing
+      4 cursor
+      3 transition
+      3 padding-top
+      3 margin-top
+      2 max-width
+      2 margin
+      2 flex-shrink
+      2 border-top
+      1 top
+      1 right
+      1 position
+      1 overflow-y
+      1 overflow
+      1 opacity
+      1 object-fit
+      1 max-height
+      1 left
+      1 box-sizing
+      1 bottom
+      1 border-right
+=== dynamic inline expressions ===
+206:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+235:                    <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;">{{ status_list|length }}</span>
+246:                                        <span style="width:9px;height:9px;border-radius:50%;background:{{s.hex_color}};flex-shrink:0;display:inline-block;"></span>
+250:                                <td><code style="font-size: .75rem;background:var(--background-color-body);padding:2px 6px;border-radius:4px;">{{s.hex_color}}</code></td>
+253:                                    <span style="font-size: .75rem;background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+276:                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum status cadastrado.</td></tr>
+295:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+303:                        <label>Dias <span title="Prazo padrão em dias" style="cursor:help;color:var(--text-color-secondary);">ⓘ</span></label>
+312:                    <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;">{{ tipos_processo|length }}</span>
+322:                                <td style="color:var(--text-color-secondary);">{{sv.descricao or '—'}}</td>
+325:                                    <span style="font-size: .75rem;background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+348:                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum serviço cadastrado.</td></tr>
+373:                                <label>Servidor SMTP <span style="color:var(--color-error)">*</span></label>
+377:                                <label>Porta <span style="color:var(--color-error)">*</span></label>
+383:                                <label>Usuário / E-mail <span style="color:var(--color-error)">*</span></label>
+392:                            <label>E-mail Remetente <span style="color:var(--color-error)">*</span></label>
+431:                                <input type="text" id="local_backup_path" name="local_path" value="{{ backup_config.local_path | default(DEFAULT_BACKUP_PATH) }}" required style="flex:1;border-radius:6px 0 0 6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);border-right:0;padding:0 9px;background:var(--background-color-card);color:var(--text-color-primary);">
+432:                                <button class="btn-browse-dir" type="button" data-target="#local_backup_path" style="width:38px;height:34px;border-radius:0 6px 6px 0;border:1px solid var(--border-color-input);background:var(--background-color-body);color:var(--text-color-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0;" onmouseover="this.style.background='var(--color-black-premium)';this.style.color='#fff'" onmouseout="this.style.background='var(--background-color-body)';this.style.color='var(--text-color-secondary)'"><i class="bi bi-folder2-open"></i></button>
+436:                            <label>Caminho dos Anexos <small style="font-weight:400;color:var(--text-color-secondary);">(definido automaticamente pelo sistema)</small></label>
+437:                            <input type="text" readonly value="{{ UPLOAD_PROCESSOS_DIR }}" title="Este caminho é gerenciado pelo sistema e não pode ser alterado manualmente." style="flex:1;border-radius:6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);padding:0 9px;background:var(--background-color-body);color:var(--text-color-secondary);cursor:not-allowed;width:100%;box-sizing:border-box;">
+448:                                <select id="cloud_provider" name="cloud_provider" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+480:                                <select id="backup_frequency" name="backup_frequency" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+488:                                <input type="time" name="backup_time" value="{{ backup_config.backup_time | default('02:00') }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+507:                                <input type="number" name="backup_day_of_month" min="1" max="31" value="{{ backup_config.backup_day_of_month | default(1) }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+540:                                    <label>Nome da Organização <span style="color:var(--color-error);">*</span></label>
+548:                                        <label>Responsável Principal <span style="color:var(--color-error);">*</span></label>
+563:                                    <label>Endereço Completo <span style="color:var(--color-error);">*</span></label>
+580:                                        <label>Telefone <span style="color:var(--color-error);">*</span></label>
+587:                                        <label>E-mail <span style="color:var(--color-error);">*</span></label>
+614:                                <div class="logo-preview-container-cfg position-relative" style="width:140px;height:140px;border-radius:50%;overflow:hidden;border:3px solid var(--border-color-default);cursor:{% if session.get('usuario_role') == 'admin' %}pointer{% else %}default{% endif %};transition:all .2s;">
+638:                                <p style="font-size: .75rem;color:var(--text-color-secondary);text-align:center;margin:0;">
+648:                                    <div style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Cadastrado em</div>
+649:                                    <div style="font-weight:600;">{% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+651:                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;">
+652:                                    <div style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Última Atualização</div>
+653:                                    <div style="font-weight:600;">{% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+656:                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;color:var(--color-warning);font-size: .75rem;">
+687:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+688:                        <input type="text" id="edit_status_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+739:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+740:                        <input type="text" id="edit_service_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+744:                        <input type="text" id="edit_service_descricao" name="descricao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+748:                        <input type="number" id="edit_service_prazo_padrao" name="prazo_padrao" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+=== static inline sample ===
+171:    <div class="rf-card-body" style="padding: 14px 16px 0;">
+205:                    <div class="cfg-fg" style="flex:1;">
+206:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+213:                            <span class="cswatch selected" data-color="#0d6efd" style="background:#0d6efd" title="Azul"></span>
+214:                            <span class="cswatch" data-color="#198754" style="background:#198754" title="Verde"></span>
+215:                            <span class="cswatch" data-color="#dc3545" style="background:#dc3545" title="Vermelho"></span>
+216:                            <span class="cswatch" data-color="#fd7e14" style="background:#fd7e14" title="Laranja"></span>
+217:                            <span class="cswatch" data-color="#ffc107" style="background:#ffc107" title="Amarelo"></span>
+218:                            <span class="cswatch" data-color="#6f42c1" style="background:#6f42c1" title="Roxo"></span>
+219:                            <span class="cswatch" data-color="#20c997" style="background:#20c997" title="Teal"></span>
+220:                            <span class="cswatch" data-color="#0dcaf0" style="background:#0dcaf0" title="Ciano"></span>
+221:                            <span class="cswatch" data-color="#6c757d" style="background:#6c757d" title="Cinza"></span>
+222:                            <span class="cswatch" data-color="#212529" style="background:#212529" title="Preto"></span>
+235:                    <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;">{{ status_list|length }}</span>
+239:                        <thead><tr><th>Nome</th><th>Cor</th><th>Processos</th><th>Situação</th><th style="text-align:right;">Ações</th></tr></thead>
+245:                                    <span style="display:inline-flex;align-items:center;gap:6px;">
+246:                                        <span style="width:9px;height:9px;border-radius:50%;background:{{s.hex_color}};flex-shrink:0;display:inline-block;"></span>
+250:                                <td><code style="font-size: .75rem;background:var(--background-color-body);padding:2px 6px;border-radius:4px;">{{s.hex_color}}</code></td>
+251:                                <td style="font-weight:600;">{{s.total_processos|default(0)}}</td>
+253:                                    <span style="font-size: .75rem;background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+263:                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+276:                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum status cadastrado.</td></tr>
+294:                    <div class="cfg-fg" style="flex:1;">
+295:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+298:                    <div class="cfg-fg" style="flex:1.5;">
+302:                    <div class="cfg-fg" style="width:110px;">
+303:                        <label>Dias <span title="Prazo padrão em dias" style="cursor:help;color:var(--text-color-secondary);">ⓘ</span></label>
+312:                    <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;">{{ tipos_processo|length }}</span>
+316:                        <thead><tr><th>Nome</th><th>Descrição</th><th>Dias</th><th>Situação</th><th style="text-align:right;">Ações</th></tr></thead>
+322:                                <td style="color:var(--text-color-secondary);">{{sv.descricao or '—'}}</td>
+323:                                <td style="font-weight:600;">{{sv.prazo_padrao or '—'}}</td>
+325:                                    <span style="font-size: .75rem;background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+335:                                        <form method="post" style="display:inline;" action="{{ url_for('configuracoes.index') }}">
+348:                            <tr><td colspan="5" style="text-align:center;color:var(--text-color-secondary);padding:22px;">Nenhum serviço cadastrado.</td></tr>
+371:                        <div class="cfg-form-3" style="margin-bottom:10px;">
+373:                                <label>Servidor SMTP <span style="color:var(--color-error)">*</span></label>
+376:                            <div class="cfg-fld" style="width:85px;">
+377:                                <label>Porta <span style="color:var(--color-error)">*</span></label>
+381:                        <div class="cfg-form-2" style="margin-bottom:10px;">
+383:                                <label>Usuário / E-mail <span style="color:var(--color-error)">*</span></label>
+391:                        <div class="cfg-fld" style="margin-bottom:12px;">
+392:                            <label>E-mail Remetente <span style="color:var(--color-error)">*</span></label>
+395:                        <div class="cfg-switches" style="margin-bottom:14px;">
+400:                        <div style="display:flex;gap:8px;justify-content:flex-end;">
+425:                <div class="cfg-card" style="margin-bottom:10px;">
+427:                    <div class="cfg-card-body" style="display:flex;flex-direction:column;gap:10px;">
+430:                            <div style="display:flex;gap:0;height:34px;">
+431:                                <input type="text" id="local_backup_path" name="local_path" value="{{ backup_config.local_path | default(DEFAULT_BACKUP_PATH) }}" required style="flex:1;border-radius:6px 0 0 6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);border-right:0;padding:0 9px;background:var(--background-color-card);color:var(--text-color-primary);">
+432:                                <button class="btn-browse-dir" type="button" data-target="#local_backup_path" style="width:38px;height:34px;border-radius:0 6px 6px 0;border:1px solid var(--border-color-input);background:var(--background-color-body);color:var(--text-color-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0;" onmouseover="this.style.background='var(--color-black-premium)';this.style.color='#fff'" onmouseout="this.style.background='var(--background-color-body)';this.style.color='var(--text-color-secondary)'"><i class="bi bi-folder2-open"></i></button>
+436:                            <label>Caminho dos Anexos <small style="font-weight:400;color:var(--text-color-secondary);">(definido automaticamente pelo sistema)</small></label>
+437:                            <input type="text" readonly value="{{ UPLOAD_PROCESSOS_DIR }}" title="Este caminho é gerenciado pelo sistema e não pode ser alterado manualmente." style="flex:1;border-radius:6px;height:34px;font-size:13px;border:1px solid var(--border-color-input);padding:0 9px;background:var(--background-color-body);color:var(--text-color-secondary);cursor:not-allowed;width:100%;box-sizing:border-box;">
+442:                <div class="cfg-card" style="margin-bottom:10px;">
+445:                        <div class="cfg-form-2" style="margin-bottom:10px;">
+448:                                <select id="cloud_provider" name="cloud_provider" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+455:                        <div id="sftp-settings" style="display:{% if backup_config and backup_config.cloud_provider == 'sftp' %}block{% else %}none{% endif %};">
+456:                            <div class="cfg-form-3" style="margin-bottom:10px;">
+458:                                <div class="cfg-fld"><label>Porta</label><input type="number" name="sftp_port" min="1" max="65535" value="{{ backup_config.sftp_port|default(22) }}" style="width:90px;"></div>
+459:                                <div class="cfg-fld"><label>Senha <small style="font-weight:400;">(vazia mantém a atual)</small></label><input type="password" name="sftp_password" autocomplete="new-password"></div>
+462:                            <div class="form-text text-muted mt-2" style="font-size: .75rem;"><i class="bi bi-shield-lock"></i> A senha é armazenada criptografada. O sistema confirma o tamanho do arquivo remoto após o envio.</div>
+467:                <div class="cfg-card" style="margin-bottom:12px;">
+470:                        <label class="cfg-sw" style="text-transform:none;letter-spacing:normal;font-weight:600;font-size:12px;margin:0;">
+476:                    <div id="auto-backup-settings" style="padding:14px;display:{% if backup_config and backup_config.auto_backup_enabled %}block{% else %}none{% endif %};">
+477:                        <div class="cfg-form-2" style="margin-bottom:10px;">
+480:                                <select id="backup_frequency" name="backup_frequency" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+488:                                <input type="time" name="backup_time" value="{{ backup_config.backup_time | default('02:00') }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+491:                        <div id="weekly-settings" style="display:{% if backup_config and backup_config.backup_frequency == 'weekly' %}block{% else %}none{% endif %};">
+492:                            <div class="cfg-fld" style="margin-bottom:6px;"><label>Dias da Semana</label></div>
+504:                        <div id="monthly-settings" style="display:{% if backup_config and backup_config.backup_frequency == 'monthly' %}block{% else %}none{% endif %};margin-top:8px;">
+505:                            <div class="cfg-fld" style="max-width:140px;">
+507:                                <input type="number" name="backup_day_of_month" min="1" max="31" value="{{ backup_config.backup_day_of_month | default(1) }}" style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;">
+512:                <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+538:                            <div class="cfg-card-body" style="display:flex;flex-direction:column;gap:12px;">
+540:                                    <label>Nome da Organização <span style="color:var(--color-error);">*</span></label>
+548:                                        <label>Responsável Principal <span style="color:var(--color-error);">*</span></label>
+563:                                    <label>Endereço Completo <span style="color:var(--color-error);">*</span></label>
+580:                                        <label>Telefone <span style="color:var(--color-error);">*</span></label>
+587:                                        <label>E-mail <span style="color:var(--color-error);">*</span></label>
+598:                        <div style="display:flex;gap:10px;justify-content:flex-end;">
+613:                            <div class="cfg-card-body" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+614:                                <div class="logo-preview-container-cfg position-relative" style="width:140px;height:140px;border-radius:50%;overflow:hidden;border:3px solid var(--border-color-default);cursor:{% if session.get('usuario_role') == 'admin' %}pointer{% else %}default{% endif %};transition:all .2s;">
+616:                                         alt="Logo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"
+619:                                    <div class="logo-overlay-cfg" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
+620:                                        <div style="text-align:center;color:#fff;">
+621:                                            <i class="bi bi-camera-fill" style="font-size:1.4rem;display:block;margin-bottom:4px;"></i>
+622:                                            <span style="font-size: .75rem;font-weight:600;">Alterar</span>
+630:                                <button type="button" class="nav-btn nav-btn-danger" id="cfgBtnRemoverLogo" style="width:100%;justify-content:center;font-size:12px;">
+638:                                <p style="font-size: .75rem;color:var(--text-color-secondary);text-align:center;margin:0;">
+646:                            <div class="cfg-card-body" style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+648:                                    <div style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Cadastrado em</div>
+649:                                    <div style="font-weight:600;">{% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+651:                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;">
+652:                                    <div style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Última Atualização</div>
+653:                                    <div style="font-weight:600;">{% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">—</span>{% endif %}</div>
+656:                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;color:var(--color-warning);font-size: .75rem;">
+677:            <div class="modal-header" style="padding:12px 16px;">
+685:                <div class="modal-body" style="padding:14px 16px;">
+686:                    <div class="cfg-fld" style="margin-bottom:10px;">
+687:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+688:                        <input type="text" id="edit_status_nome" name="nome" required style="height:34px;font-size:13px;border-radius:6px;border:1px solid var(--border-color-input);background:var(--background-color-card);padding:0 9px;width:100%;">
+690:                    <div style="display:flex;gap:10px;align-items:flex-start;">
