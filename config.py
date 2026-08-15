@@ -27,6 +27,10 @@ class Config:
     IS_PRODUCTION = ENVIRONMENT in {'production', 'prod'}
     INITIAL_ADMIN_PASSWORD = os.environ.get('INITIAL_ADMIN_PASSWORD')
     TRUST_PROXY_HEADERS = os.environ.get('TRUST_PROXY_HEADERS', 'false').strip().lower() == 'true'
+    # Defina false quando o Agendador de Tarefas/cron externo assumir os backups.
+    INTERNAL_BACKUP_SCHEDULER_ENABLED = os.environ.get(
+        'REGISTROFACIL_INTERNAL_BACKUP_SCHEDULER', 'true'
+    ).strip().lower() == 'true'
     # SECRET_KEY persistente: gerado uma vez e salvo em arquivo oculto.
     # Sem persistência, toda reinicialização invalida as sessões ativas dos usuários.
     _secret_key_file = os.path.join(DATA_DIR, '.secret_key')
@@ -90,18 +94,13 @@ class Config:
         ENCRYPTION_KEY = Fernet.generate_key().decode()
 
     MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
+    # Formatos permitidos para anexos de processos.
+    # A validação final também confere o conteúdo real via libmagic.
     ALLOWED_EXTENSIONS = {
         'pdf': 'application/pdf',
-        'doc': 'application/msword',
-        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'jpg': 'image/jpeg',
         'jpeg': 'image/jpeg',
         'png': 'image/png',
-        'gif': 'image/gif',
-        'txt': 'text/plain',
-        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'xls': 'application/vnd.ms-excel',
-        'csv': 'text/csv'
     }
 
     # Configurações de E-mail

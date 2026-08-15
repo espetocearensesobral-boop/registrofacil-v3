@@ -37,6 +37,35 @@
     </div>
 </div>
 
+{% set status_label = {
+    'success_local': 'Concluído localmente',
+    'success_remote': 'Concluído local e remotamente',
+    'partial': 'Concluído parcialmente',
+    'failed': 'Falhou',
+    'verification_failed': 'Falha na verificação',
+    'never_run': 'Ainda não executado',
+    'invalid': 'Status indisponível'
+}.get(backup_status.status, backup_status.status) %}
+<div class="rf-card mb-4">
+    <div class="rf-card-header">
+        <h5 class="m-0"><i class="bi bi-shield-check me-2" style="color:var(--color-gold-primary);"></i>Última execução</h5>
+        <span class="badge {% if backup_status.status in ['success_local', 'success_remote'] %}bg-success{% elif backup_status.status in ['failed', 'verification_failed'] %}bg-danger{% elif backup_status.status == 'partial' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">{{ status_label }}</span>
+    </div>
+    <div class="rf-card-body" style="font-size:13px;">
+        {% if backup_status.updated_at %}
+        <div class="row g-2">
+            <div class="col-md-4"><strong>Data:</strong> {{ backup_status.updated_at }}</div>
+            <div class="col-md-4"><strong>Origem:</strong> {{ backup_status.source or '—' }}</div>
+            <div class="col-md-4"><strong>Arquivo:</strong> {{ backup_status.filename or '—' }}</div>
+        </div>
+        {% else %}
+        <span class="text-muted">Nenhuma execução registrada.</span>
+        {% endif %}
+        {% if backup_status.sha256 %}<div class="mt-2 text-muted"><strong>SHA-256:</strong> <code style="word-break:break-all;">{{ backup_status.sha256 }}</code></div>{% endif %}
+        {% if backup_status.error %}<div class="alert alert-danger mt-3 mb-0 py-2">{{ backup_status.error }}</div>{% endif %}
+    </div>
+</div>
+
 <div class="row g-4">
     <div class="col-12">
         <!-- Gerar Backup -->
@@ -117,6 +146,15 @@
                                                 data-bs-toggle="tooltip" title="Excluir">
                                             <i class="bi bi-trash"></i>
                                         </button>
+                                        {% if session.get('usuario_role') in ['admin', 'suporte'] %}
+                                        <form method="post" action="{{ url_for('backup.restore_backup') }}" onsubmit="return confirmarRestauracao('{{ backup.name|e }}');" style="display:inline;">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <input type="hidden" name="filename" value="{{ backup.name }}">
+                                            <button type="submit" class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:12px;" title="Restaurar">
+                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                            </button>
+                                        </form>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>
@@ -207,6 +245,14 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.setAttribute('data-bs-target', '#confirmDeleteBackupModal');
     });
 });
+
+function confirmarRestauracao(filename) {
+    return confirm(
+        'Restaurar o backup "' + filename + '"?\\n\\n' +
+        'O sistema criará um pré-backup do estado atual, bloqueará as operações, substituirá o banco e os uploads e preservará as chaves da instalação.\\n\\n' +
+        'Confirme somente se todos os usuários puderem aguardar a conclusão.'
+    );
+}
 
 function confirmarReparo() {
     if (confirm(

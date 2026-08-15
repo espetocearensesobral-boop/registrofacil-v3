@@ -17,6 +17,7 @@ from models import (
 from config import Config
 from utils.logger import logger
 from utils.scheduler import configure_and_start_scheduler
+from utils.sftp_backup import test_sftp_connection
 
 configuracoes_bp = Blueprint('configuracoes', __name__, url_prefix='/configuracoes')
 
@@ -144,6 +145,23 @@ def index():
                 else:
                     raise ValueError("Falha ao salvar as configurações de e-mail no banco de dados.")
             
+            elif action == 'test_sftp_connection':
+                active_tab = 'backup'
+                if usuario_role != 'admin':
+                    raise ValueError("Acesso restrito a administradores.")
+                current_backup = get_backup_config()
+                sftp_config = {
+                    **current_backup,
+                    'cloud_provider': 'sftp',
+                    'sftp_host': proteger_input(request.form.get('sftp_host')),
+                    'sftp_port': request.form.get('sftp_port') or 22,
+                    'sftp_username': proteger_input(request.form.get('sftp_username')),
+                    'sftp_password': request.form.get('sftp_password') or current_backup.get('sftp_password', ''),
+                    'sftp_remote_path': proteger_input(request.form.get('sftp_remote_path') or '/backups/'),
+                }
+                result = test_sftp_connection(sftp_config)
+                flash(result['message'], 'success')
+
             elif action == 'update_backup_settings':
                 active_tab = 'backup'
                 if usuario_role != 'admin':
@@ -157,6 +175,22 @@ def index():
                 backup_days = request.form.getlist('backup_days[]')
                 backup_day_of_month_raw = request.form.get('backup_day_of_month')
                 backup_day_of_month = int(backup_day_of_month_raw) if backup_day_of_month_raw and backup_day_of_month_raw.isdigit() else 1
+                cloud_provider = proteger_input(request.form.get('cloud_provider') or 'none').lower()
+                if cloud_provider not in {'none', 'sftp'}:
+                    raise ValueError("Provedor remoto inválido.")
+                sftp_host = proteger_input(request.form.get('sftp_host'))
+                sftp_port_raw = request.form.get('sftp_port') or '22'
+                sftp_username = proteger_input(request.form.get('sftp_username'))
+                sftp_password = request.form.get('sftp_password') or ''
+                sftp_remote_path = proteger_input(request.form.get('sftp_remote_path') or '/backups/')
+                try:
+                    sftp_port = int(sftp_port_raw)
+                except ValueError:
+                    raise ValueError("A porta SFTP precisa ser numérica.")
+                if not 1 <= sftp_port <= 65535:
+                    raise ValueError("A porta SFTP deve estar entre 1 e 65535.")
+                if cloud_provider == 'sftp' and not all([sftp_host, sftp_username, sftp_remote_path]):
+                    raise ValueError("Host, usuário e caminho remoto são obrigatórios para SFTP.")
 
                 if not local_path:
                     raise ValueError("O caminho local para o backup é obrigatório.")
@@ -178,7 +212,12 @@ def index():
                     'backup_time': backup_time,
                     'backup_days': backup_days,
                     'backup_day_of_month': backup_day_of_month,
-                    'cloud_provider': 'none'
+                    'cloud_provider': cloud_provider,
+                    'sftp_host': sftp_host,
+                    'sftp_port': sftp_port,
+                    'sftp_username': sftp_username,
+                    'sftp_password': sftp_password,
+                    'sftp_remote_path': sftp_remote_path,
                 }
 
                 if save_backup_config(backup_config_data):

@@ -25,9 +25,6 @@ IMAGE_MIME_ALIASES = {
     'jpg':  {'image/jpeg'},
     'jpeg': {'image/jpeg'},
     'png':  {'image/png'},
-    'gif':  {'image/gif'},
-    # SVG é XML: aceitamos os MIMEs que o python-magic costuma reportar para SVG.
-    'svg':  {'image/svg+xml', 'text/xml', 'text/plain', 'application/xml'},
 }
 
 

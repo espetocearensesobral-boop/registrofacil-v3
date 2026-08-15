@@ -175,7 +175,7 @@
                                        type="file" 
                                        id="imagem_perfil" 
                                        name="imagem_perfil" 
-                                       accept="image/jpeg,image/png,image/gif">
+                                       accept="image/jpeg,image/png,.jpg,.jpeg,.png">
 
                                 <div class="logo-actions">
                                     {% if user_data.foto and 'default_avatar.png' not in user_data.foto and 'gravatar.com' not in user_data.foto %}
@@ -205,7 +205,7 @@
                                     
                                     <div class="logo-requirements">
                                         <small class="text-muted">
-                                            Formatos: JPG, PNG, GIF<br>
+                                            Formatos: JPG/JPEG e PNG<br>
                                             Tam. máximo: 2MB<br>
                                             Dim. recomendadas: 200x200px
                                         </small>
@@ -539,9 +539,9 @@
         function processSelectedFile(file) {
             console.log("DEBUG: processSelectedFile chamado para arquivo:", file.name);
             // Validar tipo de arquivo
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            const allowedTypes = ['image/jpeg', 'image/png'];
             if (!allowedTypes.includes(file.type)) {
-                alert('Tipo de arquivo não suportado. Use JPG, PNG ou GIF.');
+                alert('Tipo de arquivo não suportado. Use JPG/JPEG ou PNG.');
                 console.warn("DEBUG: Tipo de arquivo não suportado:", file.type);
                 return;
             }

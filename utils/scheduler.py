@@ -2,6 +2,7 @@
 # Gerado por Gemini em 2025-07-14 14:25:00 -03 - Versão FINAL para o caminho do backup agendado
 
 import os
+import posixpath
 import zipfile
 import shutil
 import sqlite3
@@ -17,6 +18,7 @@ from models import DATABASE_PATH, gravar_log, get_backup_config, update_last_bac
 from config import Config 
 from utils.logger import logger, manutencao_logger
 from utils.logger_config import limpar_logs_antigos
+from utils.backup_service import create_backup_archive, validate_backup_archive, write_backup_status, apply_retention
 
 # === Configuração do Scheduler (APScheduler) ===
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -33,13 +35,20 @@ _scheduler_initialized = False
 def configure_and_start_scheduler(app_context_callback):
     global _scheduler_initialized
 
-    if scheduler.running:
-        logger.info("Scheduler já está rodando. Removendo jobs existentes para reconfigurar.")
-        scheduler.remove_all_jobs()
-    else:
+    if not scheduler.running:
         logger.info("Scheduler não está rodando. Iniciando e configurando.")
         scheduler.start()
         _scheduler_initialized = True
+
+    job_id = 'registrofacil_auto_backup_job'
+    try:
+        scheduler.remove_job(job_id)
+    except Exception:
+        pass
+
+    if not Config.INTERNAL_BACKUP_SCHEDULER_ENABLED:
+        logger.info("Scheduler interno de backup desativado; use python -m utils.backup_runner.")
+        return
     
     backup_config = None
     try:
@@ -51,11 +60,9 @@ def configure_and_start_scheduler(app_context_callback):
 
     if not backup_config or not backup_config.get('auto_backup_enabled'):
         logger.info("Backup automático desativado nas configurações. Nenhum job de backup agendado.")
-        scheduler.remove_all_jobs()
         return
 
     logger.info("Configurando job de backup automático...")
-    job_id = 'registrofacil_auto_backup_job'
 
     try:
         backup_frequency = backup_config['backup_frequency']
@@ -75,7 +82,10 @@ def configure_and_start_scheduler(app_context_callback):
                 minute=backup_minute,
                 id=job_id,
                 replace_existing=True,
-                args=[app_context_callback]
+                args=[app_context_callback],
+                max_instances=1,
+                coalesce=True,
+                misfire_grace_time=3600,
             )
             logger.info(f"Job de backup diário agendado para {backup_time_str} (Horário de Fortaleza).")
         
@@ -108,7 +118,10 @@ def configure_and_start_scheduler(app_context_callback):
                 minute=backup_minute,
                 id=job_id,
                 replace_existing=True,
-                args=[app_context_callback]
+                args=[app_context_callback],
+                max_instances=1,
+                coalesce=True,
+                misfire_grace_time=3600,
             )
             logger.info(f"Job de backup semanal agendado para {backup_time_str} nos dias {backup_days} (Horário de Fortaleza).")
 
@@ -126,7 +139,10 @@ def configure_and_start_scheduler(app_context_callback):
                 minute=backup_minute,
                 id=job_id,
                 replace_existing=True,
-                args=[app_context_callback]
+                args=[app_context_callback],
+                max_instances=1,
+                coalesce=True,
+                misfire_grace_time=3600,
             )
             logger.info(f"Job de backup mensal agendado para o dia {backup_day_of_month} às {backup_time_str} (Horário de Fortaleza).")
         
@@ -225,41 +241,31 @@ def perform_scheduled_backup(app_context_callback):
 
         final_zip_path = None
         db_temp_path = None
+        remote_status = "not_configured"
+        remote_error = None
         
         try:
             backup_config = get_backup_config()
-            local_backup_root_path_from_config = backup_config.get('local_path', Config.BACKUP_ROOT_DIR) 
-
-            # Unificando diretório e nomenclatura
-            scheduled_backup_dir = local_backup_root_path_from_config
-            os.makedirs(scheduled_backup_dir, exist_ok=True) 
-            
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            backup_file_name = f"registrofacil_bkp_{timestamp}.zip"
-            full_backup_path = os.path.join(scheduled_backup_dir, backup_file_name) 
-            
-            temp_zip_buffer = BytesIO()
-
-            with zipfile.ZipFile(temp_zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                db_temp_path = create_temp_db_backup(scheduled_backup_dir) 
-                zipf.write(db_temp_path, f"database/{os.path.basename(DATABASE_PATH)}")
-                logger.info(f"Backup do DB adicionado ao ZIP ({os.path.getsize(db_temp_path)} bytes)")
-
-                # Inclusão de anexos e pastas do sistema
-                add_folder_to_zip(zipf, get_upload_folder(), 'uploads/processos')
-                add_folder_to_zip(zipf, Config.EMPRESA_UPLOAD_FOLDER, 'uploads/empresa')
-                add_folder_to_zip(zipf, Config.PROFILE_UPLOAD_FOLDER, 'uploads/perfil')
-                add_folder_to_zip(zipf, Config.LOG_DIR, 'logs')
-
-            if temp_zip_buffer.tell() == 0:
-                logger.error("Buffer ZIP está vazio. Backup não será salvo fisicamente.")
-                raise ValueError("Conteúdo do backup vazio.")
-
-            with open(full_backup_path, 'wb') as f:
-                temp_zip_buffer.seek(0)
-                f.write(temp_zip_buffer.read())
-            
-            logger.info(f"Backup automático '{backup_file_name}' salvo localmente em '{scheduled_backup_dir}'.")
+            scheduled_backup_dir = backup_config.get('local_path', Config.BACKUP_ROOT_DIR)
+            result = create_backup_archive(
+                destination_dir=scheduled_backup_dir,
+                database_path=DATABASE_PATH,
+                upload_processos=get_upload_folder(),
+                upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
+                upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
+                log_dir=Config.LOG_DIR,
+                source="scheduled",
+            )
+            backup_file_name = result['filename']
+            full_backup_path = result['path']
+            final_zip_path = full_backup_path
+            validate_backup_archive(full_backup_path)
+            apply_retention(scheduled_backup_dir)
+            write_backup_status(scheduled_backup_dir, status="success_local", source="scheduled", result=result)
+            logger.info(
+                f"Backup automático '{backup_file_name}' salvo e verificado em "
+                f"'{scheduled_backup_dir}' (SHA-256: {result['sha256']})."
+            )
 
             if backup_config.get('cloud_provider') == 'sftp':
                 logger.info("Iniciando upload SFTP do backup automático...")
@@ -307,20 +313,37 @@ def perform_scheduled_backup(app_context_callback):
                             
                             sftp_mkdir_p(sftp, sftp_remote_path) 
 
-                            sftp.put(full_backup_path, os.path.join(sftp_remote_path, backup_file_name))
-                            logger.info(f"Backup '{backup_file_name}' enviado para SFTP em '{sftp_remote_path}'.")
+                            remote_target = posixpath.join(sftp_remote_path, backup_file_name)
+                            sftp.put(full_backup_path, remote_target)
+                            remote_stat = sftp.stat(remote_target)
+                            if int(remote_stat.st_size) != int(result['size']):
+                                raise IOError("O tamanho remoto diverge do backup local.")
+                            remote_status = "success_remote"
+                            write_backup_status(scheduled_backup_dir, status=remote_status, source="scheduled", result=result)
+                            logger.info(f"Backup '{backup_file_name}' enviado e verificado no SFTP em '{remote_target}'.")
                             gravar_log("Backup Automático SFTP", None, user_id, "Scheduler", f"Upload SFTP concluído: {backup_file_name}")
 
                 except Exception as sftp_e:
+                    remote_status = "partial"
+                    remote_error = str(sftp_e)
+                    write_backup_status(scheduled_backup_dir, status=remote_status, source="scheduled", result=result, error=remote_error)
                     logger.error(f"Falha no upload SFTP do backup automático: {sftp_e}", exc_info=True)
                     gravar_log("Backup Automático SFTP", None, user_id, "Scheduler", f"Falha no upload SFTP: {sftp_e}")
 
             update_last_backup_time()
-            gravar_log("Backup Automático", None, user_id, "Scheduler", f"Backup completo concluído: {backup_file_name}")
+            gravar_log(
+                "Backup Automático", None, user_id, "Scheduler",
+                f"Backup local concluído: {backup_file_name} | status={remote_status} | "
+                f"SHA-256: {result['sha256']}" + (f" | erro remoto: {remote_error}" if remote_error else "")
+            )
             logger.info("Backup automático agendado concluído com sucesso.")
 
         except Exception as e:
             logger.critical(f"Erro CRÍTICO durante execução do backup automático: {e}", exc_info=True)
+            try:
+                write_backup_status(locals().get('scheduled_backup_dir', Config.BACKUP_ROOT_DIR), status="failed", source="scheduled", error=str(e))
+            except Exception:
+                logger.warning("Falha ao persistir status de erro do backup agendado.", exc_info=True)
             gravar_log("Backup Automático", None, user_id, "Scheduler", f"Falha CRÍTICA: {e}")
         finally:
             if db_temp_path and os.path.exists(db_temp_path):

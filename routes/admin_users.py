@@ -269,7 +269,7 @@ def edit_user(user_id):
                         uploaded_file=uploaded_file,
                         current_filename=imagem_final_para_db,
                         target_folder=PROFILE_UPLOAD_FOLDER,
-                        allowed_extensions=['jpg', 'jpeg', 'png', 'gif'],
+                        allowed_extensions=['jpg', 'jpeg', 'png'],
                         max_size_mb=2,
                         prefix=f'usuario_{user_id}'
                     )

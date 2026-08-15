@@ -19,7 +19,20 @@ from routes.auth import login_status_required, admin_required, verificar_csrf_to
 from routes.permissoes import permission_required
 from models import gravar_log, DATABASE_PATH, get_backup_config, get_upload_folder
 from config import Config 
+from data.system_updates import begin_restore_maintenance, end_restore_maintenance
 from utils.logger import logger
+from utils.backup_service import (
+    BACKUP_PREFIX,
+    create_backup_archive,
+    validate_backup_archive,
+    write_backup_status,
+    read_backup_status,
+    apply_retention,
+    apply_rollback_retention,
+    stage_backup_restore,
+    promote_staged_restore,
+    rollback_promoted_restore,
+)
 
 backup_bp = Blueprint('backup', __name__, url_prefix='/backup')
 
@@ -109,6 +122,7 @@ def index():
     backups_list = []
     backup_config = get_backup_config()
     local_backup_root = backup_config.get('local_path', Config.BACKUP_ROOT_DIR)
+    backup_status = read_backup_status(local_backup_root)
 
     try:
         os.makedirs(local_backup_root, exist_ok=True) 
@@ -151,7 +165,8 @@ def index():
                          machine_ip=machine_ip,
                          has_database=has_database,
                          is_server=is_server,
-                         db_config=db_config)
+                         db_config=db_config,
+                         backup_status=backup_status)
 
 
 @backup_bp.route('/manual', methods=['POST'])
@@ -161,47 +176,126 @@ def manual_backup():
     if not verificar_csrf_token(request.form.get('csrf_token')):
         return jsonify(success=False, message="Token de segurança inválido.", type='danger'), 403
 
-    db_temp_path = None 
     try:
         backup_config = get_backup_config()
         local_backup_root = backup_config.get('local_path', Config.BACKUP_ROOT_DIR)
-        os.makedirs(local_backup_root, exist_ok=True)
-        
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        final_zip_name = f"registrofacil_bkp_{timestamp}.zip"
-        final_zip_path = os.path.join(local_backup_root, final_zip_name)
-
-        temp_zip_buffer = BytesIO() 
-        with zipfile.ZipFile(temp_zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            # 1. Backup do banco de dados
-            db_temp_path = create_temp_db_backup(local_backup_root) 
-            zipf.write(db_temp_path, f"database/{os.path.basename(DATABASE_PATH)}")
-            
-            # 2. Adicionar Diretórios de Uploads e Logs
-            add_folder_to_zip(zipf, get_upload_folder(), 'uploads/processos')
-            add_folder_to_zip(zipf, Config.EMPRESA_UPLOAD_FOLDER, 'uploads/empresa')
-            add_folder_to_zip(zipf, Config.PROFILE_UPLOAD_FOLDER, 'uploads/perfil')
-            add_folder_to_zip(zipf, Config.LOG_DIR, 'logs')
-
-        with open(final_zip_path, 'wb') as f:
-            temp_zip_buffer.seek(0)
-            f.write(temp_zip_buffer.read())
-
-        gravar_log("Backup Manual", None, session.get('usuario_id'), get_client_ip(), f"Backup unificado gerado: {final_zip_name}")
-        return jsonify(success=True, message=f"Backup '{final_zip_name}' gerado com sucesso!",
-                       download_url=url_for('backup.download_backup', filename=final_zip_name), type='success'), 200
+        result = create_backup_archive(
+            destination_dir=local_backup_root,
+            database_path=DATABASE_PATH,
+            upload_processos=get_upload_folder(),
+            upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
+            upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
+            log_dir=Config.LOG_DIR,
+            source="manual",
+        )
+        validate_backup_archive(result["path"])
+        apply_retention(local_backup_root)
+        write_backup_status(local_backup_root, status="success_local", source="manual", result=result)
+        gravar_log(
+            "Backup Manual", None, session.get('usuario_id'), get_client_ip(),
+            f"Backup unificado gerado: {result['filename']} | SHA-256: {result['sha256']}",
+        )
+        return jsonify(
+            success=True,
+            message=f"Backup '{result['filename']}' gerado e verificado com sucesso!",
+            download_url=url_for('backup.download_backup', filename=result['filename']),
+            filename=result['filename'],
+            sha256=result['sha256'],
+            size=result['size'],
+            type='success',
+        ), 200
 
     except Exception as e:
         logger.exception(f"Erro ao criar backup manual: {e}")
-        return jsonify(success=False, message=f"Erro ao criar backup: {str(e)}", type='danger'), 500
-    finally: 
-        if db_temp_path and os.path.exists(db_temp_path):
-            for i in range(5): 
-                try:
-                    os.remove(db_temp_path)
-                    break
-                except:
-                    time.sleep(0.5)
+        try:
+            write_backup_status(locals().get('local_backup_root', Config.BACKUP_ROOT_DIR), status="failed", source="manual", error=str(e))
+        except Exception:
+            logger.warning("Falha ao persistir status de erro do backup manual.", exc_info=True)
+        return jsonify(success=False, message=f"Erro ao criar backup: {e}", type='danger'), 500
+
+@backup_bp.route('/restore', methods=['POST'])
+@login_status_required
+@admin_required
+def restore_backup():
+    """Restaura um backup completo após pré-backup e validação em staging."""
+    if not verificar_csrf_token(request.form.get('csrf_token')):
+        flash("Token de segurança inválido.", 'danger')
+        return redirect(url_for('backup.index'))
+
+    backup_config = get_backup_config()
+    local_backup_root = os.path.abspath(backup_config.get('local_path', Config.BACKUP_ROOT_DIR))
+    filename = os.path.basename((request.form.get('filename') or '').strip())
+    if not filename.startswith(BACKUP_PREFIX) or not filename.endswith('.zip') or filename != (request.form.get('filename') or '').strip():
+        flash("Nome de backup inválido.", 'danger')
+        return redirect(url_for('backup.index'))
+    archive_path = os.path.abspath(os.path.join(local_backup_root, filename))
+    if os.path.commonpath([local_backup_root, archive_path]) != local_backup_root or not os.path.isfile(archive_path):
+        flash("Backup selecionado não foi encontrado.", 'danger')
+        return redirect(url_for('backup.index'))
+
+    maintenance_started = False
+    promoted = None
+    try:
+        validate_backup_archive(archive_path)
+        pre_restore = create_backup_archive(
+            destination_dir=local_backup_root,
+            database_path=DATABASE_PATH,
+            upload_processos=get_upload_folder(),
+            upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
+            upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
+            log_dir=Config.LOG_DIR,
+            source="pre_restore",
+        )
+        staged = stage_backup_restore(archive_path)
+        begin_restore_maintenance()
+        maintenance_started = True
+        promoted = promote_staged_restore(
+            staged,
+            database_path=DATABASE_PATH,
+            upload_processos=get_upload_folder(),
+            upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
+            upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
+            rollback_root=os.path.join(Config.DATA_DIR, 'restore_rollbacks'),
+            preserve_keys=True,
+        )
+        from models import init_db, rebuild_fts_index, test_db_connection
+        init_db()
+        rebuild_fts_index()
+        if not test_db_connection():
+            raise RuntimeError("O health check do banco restaurado falhou.")
+        apply_rollback_retention(os.path.join(Config.DATA_DIR, 'restore_rollbacks'))
+        end_restore_maintenance()
+        maintenance_started = False
+        write_backup_status(local_backup_root, status="restore_success", source="restore", result={"filename": filename, "sha256": staged["sha256"], "size": os.path.getsize(archive_path)})
+        gravar_log(
+            "Restauração de backup", None, session.get('usuario_id'), get_client_ip(),
+            f"{filename} restaurado. Pré-backup: {pre_restore['filename']}. Rollback: {promoted['rollback_dir']}"
+        )
+        flash(
+            f"Backup '{filename}' restaurado com sucesso. As chaves da instalação foram preservadas. "
+            f"Pré-backup: {pre_restore['filename']}",
+            'success',
+        )
+    except Exception as e:
+        logger.exception("Erro ao restaurar backup: %s", e)
+        if promoted:
+            try:
+                rollback_promoted_restore(
+                    promoted['rollback_dir'],
+                    database_path=DATABASE_PATH,
+                    upload_processos=get_upload_folder(),
+                    upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
+                    upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
+                )
+                logger.warning("Restauração revertida automaticamente após falha no health check.")
+            except Exception:
+                logger.critical("Falha ao reverter restauração após erro.", exc_info=True)
+        if maintenance_started:
+            end_restore_maintenance()
+        write_backup_status(local_backup_root, status="restore_failed", source="restore", error=str(e))
+        flash(f"Restauração não concluída: {e}", 'danger')
+    return redirect(url_for('backup.index'))
+
 
 @backup_bp.route('/download/<filename>', methods=['GET'], endpoint='download_backup')
 @login_status_required
