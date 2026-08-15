@@ -49,7 +49,9 @@ from data.notifications import (
     obter_notificacoes_usuario,
     marcar_notificacao_usuario_lida,
     obter_tema_usuario,
+    obter_preferencia_visual_usuario,
     salvar_tema_usuario,
+    salvar_cor_sidebar_usuario,
 )
 from data.backup import (
     get_upload_folder,

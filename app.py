@@ -142,28 +142,23 @@ def create_app():
         return dict(has_permission=check_permission)
     @app.context_processor
     def inject_tema_cor():
-        from data.configuration import get_config
-        from data.themes import APPEARANCE_DEFAULT, APPEARANCE_DEFAULT_KEY, tema_institucional_valido
+        from data.themes import APPEARANCE_DEFAULT, tema_institucional_valido, obter_cor_sidebar
 
         usuario_id = session.get("usuario_id")
-        tema_padrao = get_config(APPEARANCE_DEFAULT_KEY) or APPEARANCE_DEFAULT
-        if not tema_institucional_valido(tema_padrao):
-            tema_padrao = APPEARANCE_DEFAULT
-
-        # A escolha individual feita no Perfil continua tendo precedência.
-        # O valor legado grafite-vinho é tratado como ausência de escolha
-        # explícita para permitir que o administrador defina um novo padrão.
-        tema_cor = tema_padrao
+        tema_cor = APPEARANCE_DEFAULT
+        sidebar_selection_color = obter_cor_sidebar(None)
         if usuario_id:
-            if session.get("usuario_tema_explicit") and session.get("usuario_tema_cor"):
-                tema_cor = session.get("usuario_tema_cor")
-            else:
-                from models import obter_tema_usuario
-                tema_usuario = obter_tema_usuario(usuario_id)
-                # O valor legado grafite-vinho representa a ausência de
-                # preferência explícita para fins do padrão institucional.
-                tema_cor = tema_padrao if tema_usuario in (None, "grafite-vinho") else tema_usuario
-        return dict(tema_cor_usuario=tema_cor, tema_padrao_usuario=tema_padrao)
+            from models import obter_preferencia_visual_usuario
+            preferencias = obter_preferencia_visual_usuario(usuario_id)
+            tema_cor = preferencias.get('tema_cor') or APPEARANCE_DEFAULT
+            sidebar_selection_color = obter_cor_sidebar(preferencias.get('sidebar_selection_color'))
+        if not tema_institucional_valido(tema_cor):
+            tema_cor = APPEARANCE_DEFAULT
+        return dict(
+            tema_cor_usuario=tema_cor,
+            tema_padrao_usuario=tema_cor,
+            sidebar_selection_color=sidebar_selection_color,
+        )
 
     # -----------------------------------------------------------------------
     # Inicialização do sistema de logs por domínio

@@ -1,216 +1,105 @@
-// ============================================================
-// SISTEMA DE PALETAS DE CORES (30 Cores Profissionais)
-// ============================================================
+/* Preferências visuais por usuário: três temas institucionais + seleção da sidebar. */
 
-const PALETAS = [
-    { id: 'grafite-vinho', nome: 'Grafite & Vinho — Minimalista', cor: '#7A1F2B', descricao: 'Foco, autoridade e baixa fadiga visual' },
-    { id: 'dourado', nome: 'Dourado Institucional', cor: '#8B6F47', descricao: 'Elegância e tradição' },
-    { id: 'azul-marinho', nome: 'Azul Marinho', cor: '#1B3A5C', descricao: 'Seriedade jurídica' },
-    { id: 'vinho', nome: 'Vinho Jurídico', cor: '#6B1F2E', descricao: 'Sobriedade e autoridade' },
-    { id: 'verde-esmeralda', nome: 'Verde Esmeralda', cor: '#1B5E20', descricao: 'Prosperidade e vigor' },
-    { id: 'azul-petroleo', nome: 'Azul Petróleo', cor: '#006064', descricao: 'Profissionalismo moderno' },
-    { id: 'roxo-real', nome: 'Roxo Real', cor: '#4A148C', descricao: 'Elegância e luxo' },
-    { id: 'azul-royal', nome: 'Azul Royal', cor: '#1A237E', descricao: 'Autoridade e confiança' },
-    { id: 'verde-oliva', nome: 'Verde Oliva', cor: '#556B2F', descricao: 'Tradição e equilíbrio' },
-    { id: 'terracota', nome: 'Terracota', cor: '#8B4513', descricao: 'Calidez e estabilidade' },
-    { id: 'azul-cobalto', nome: 'Azul Cobalto', cor: '#1565C0', descricao: 'Energia e inovação' },
-    { id: 'magenta', nome: 'Magenta Sóbrio', cor: '#880E4F', descricao: 'Criatividade e foco' },
-    { id: 'cinza-grafite', nome: 'Cinza Grafite', cor: '#37474F', descricao: 'Minimalismo e foco' },
-    { id: 'teal', nome: 'Teal Institucional', cor: '#00695C', descricao: 'Equilíbrio e calma' },
-    { id: 'indigo', nome: 'Índigo Profundo', cor: '#283593', descricao: 'Sabedoria e clareza' },
-    { id: 'ambar', nome: 'Âmbar Escuro', cor: '#B45309', descricao: 'Determinação e brilho' },
-    { id: 'verde-floresta', nome: 'Verde Floresta', cor: '#1B4332', descricao: 'Estabilidade e calma' },
-    { id: 'azul-aco', nome: 'Azul Aço', cor: '#2C5F7C', descricao: 'Precisão e técnica' },
-    { id: 'coral', nome: 'Coral Terroso', cor: '#A0522D', descricao: 'Acolhimento e força' },
-    { id: 'lavanda', nome: 'Lavanda Escura', cor: '#5D4E8C', descricao: 'Serenidade e paz' },
-    { id: 'preto-classico', nome: 'Preto Clássico', cor: '#1A1A1A', descricao: 'Sofisticação e poder' },
-    { id: 'vermelho-rubi', nome: 'Vermelho Rubi', cor: '#991B1B', descricao: 'Paixão e intensidade' },
-    { id: 'rosa-antigo', nome: 'Rosa Antigo', cor: '#9D174D', descricao: 'Delicadeza e história' },
-    { id: 'laranja-queimado', nome: 'Laranja Queimado', cor: '#9A3412', descricao: 'Energia terrosa' },
-    { id: 'verde-jade', nome: 'Verde Jade', cor: '#065F46', descricao: 'Harmonia e saúde' },
-    { id: 'azul-meia-noite', nome: 'Azul Meia-Noite', cor: '#0F172A', descricao: 'Profundidade e mistério' },
-    { id: 'violeta-ametista', nome: 'Violeta Ametista', cor: '#4C1D95', descricao: 'Espiritualidade' },
-    { id: 'marrom-cafe', nome: 'Marrom Café', cor: '#451A03', descricao: 'Robustez e foco' },
-    { id: 'cinza-carvao', nome: 'Cinza Carvão', cor: '#1F2937', descricao: 'Modernidade e força' },
-    { id: 'verde-salvia', nome: 'Verde Sálvia', cor: '#3F6212', descricao: 'Naturalidade e calma' },
-    { id: 'azul-oceano', nome: 'Azul Oceano', cor: '#075985', descricao: 'Liberdade e expansão' }
-];
+let temaSelecionado = null;
+let corSidebarSelecionada = null;
+let temaOriginal = null;
+let corSidebarOriginal = null;
 
-let paletaSelecionada = null;
-let paletaOriginal = null;
-
-document.addEventListener('DOMContentLoaded', function() {
-    carregarPaletaAtual();
-    gerarGridPaletas();
-    
-    const btnSalvar = document.getElementById('btn-salvar-paleta');
-    if (btnSalvar) {
-        btnSalvar.addEventListener('click', salvarPaleta);
-    }
-    
-    const modal = document.getElementById('modalPaletas');
-    if (modal) {
-        modal.addEventListener('hidden.bs.modal', function() {
-            if (paletaSelecionada !== paletaOriginal) {
-                aplicarPaleta(paletaOriginal, false);
-            }
-            document.getElementById('paleta-preview').style.display = 'none';
-        });
-    }
-});
-
-function gerarGridPaletas() {
-    const grid = document.getElementById('grid-paletas');
-    if (!grid) return;
-    
-    grid.innerHTML = PALETAS.map(paleta => `
-        <div class="col-md-6 col-lg-4">
-            <div class="paleta-card ${paletaSelecionada === paleta.id ? 'selecionada' : ''}" 
-                 data-paleta="${paleta.id}"
-                 onclick="selecionarPaleta('${paleta.id}')">
-                <div class="paleta-preview-visual">
-                    <div class="paleta-cor-principal" style="background-color: ${paleta.cor};"></div>
-                    <div class="paleta-cor-derivadas">
-                        <div style="background-color: ${ajustarCor(paleta.cor, -20)};"></div>
-                        <div style="background-color: ${ajustarCor(paleta.cor, 20)};"></div>
-                        <div style="background-color: ${paleta.cor}20;"></div>
-                    </div>
-                </div>
-                <div class="paleta-info">
-                    <div class="paleta-nome">${paleta.nome}</div>
-                    <div class="paleta-descricao">${paleta.descricao}</div>
-                </div>
-                <div class="paleta-check">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-window.selecionarPaleta = function(paletaId) {
-    paletaSelecionada = paletaId;
-    
-    document.querySelectorAll('.paleta-card').forEach(card => {
-        card.classList.remove('selecionada');
-    });
-    
-    const cardSelecionado = document.querySelector(`[data-paleta="${paletaId}"]`);
-    if (cardSelecionado) {
-        cardSelecionado.classList.add('selecionada');
-    }
-    
-    aplicarPaleta(paletaId, true);
-    document.getElementById('paleta-preview').style.display = 'block';
-}
-
-function calcularContraste(hex) {
-    if (!hex) return '#FFFFFF';
-    hex = hex.replace('#', '');
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
-    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-    return yiq >= 128 ? '#121212' : '#FFFFFF';
-}
-
-function aplicarPaleta(paletaId, salvarLocalStorage = true) {
-    document.body.setAttribute('data-cor', paletaId);
-    
-    if (salvarLocalStorage) {
-        localStorage.setItem('registrofacil_tema_cor', paletaId);
-    }
-    
-    const paleta = PALETAS.find(p => p.id === paletaId);
-    if (paleta) {
-        const contrastColor = calcularContraste(paleta.cor);
-        document.documentElement.style.setProperty('--color-primary-contrast', contrastColor);
-
-        const nomeElement = document.getElementById('paleta-atual-nome');
-        if (nomeElement) {
-            nomeElement.textContent = paleta.nome;
-        }
+function aplicarPreferenciasVisuais(tema, corSidebar) {
+    if (tema) {
+        document.body.setAttribute('data-cor', tema);
+        temaSelecionado = tema;
         const badge = document.getElementById('paleta-atual-badge');
-        if (badge) {
-            badge.style.backgroundColor = 'var(--color-primary)';
-        }
+        if (badge) badge.style.backgroundColor = 'var(--color-primary)';
+    }
+    if (corSidebar) {
+        corSidebarSelecionada = corSidebar;
+        document.documentElement.style.setProperty('--sidebar-selection-color', corSidebar);
+        const badge = document.getElementById('sidebar-cor-atual-badge');
+        if (badge) badge.style.backgroundColor = corSidebar;
     }
 }
 
-async function carregarPaletaAtual() {
+function selecionarTema(tema) {
+    temaSelecionado = tema;
+    document.querySelectorAll('.theme-choice').forEach((choice) => {
+        choice.classList.toggle('selected', choice.dataset.theme === tema);
+    });
+    aplicarPreferenciasVisuais(tema, corSidebarSelecionada);
+}
+
+function selecionarCorSidebar(cor) {
+    corSidebarSelecionada = cor;
+    document.querySelectorAll('.sidebar-color-choice').forEach((choice) => {
+        choice.classList.toggle('selected', choice.dataset.sidebarColor === cor);
+    });
+    aplicarPreferenciasVisuais(temaSelecionado, cor);
+}
+
+async function carregarPreferenciasVisuais() {
     try {
         const response = await fetch('/perfil/tema');
+        if (!response.ok) return;
         const data = await response.json();
-        
-        if (data.tema_cor) {
-            paletaOriginal = data.tema_cor;
-            paletaSelecionada = data.tema_cor;
-            aplicarPaleta(data.tema_cor, false);
-        }
+        temaOriginal = data.tema_cor || 'paleta-01';
+        corSidebarOriginal = data.sidebar_selection_color || '#1B4368';
+        temaSelecionado = temaOriginal;
+        corSidebarSelecionada = corSidebarOriginal;
+        aplicarPreferenciasVisuais(temaOriginal, corSidebarOriginal);
     } catch (error) {
-        console.error('Erro ao carregar tema:', error);
-        paletaOriginal = 'grafite-vinho';
+        console.error('Erro ao carregar preferências visuais:', error);
     }
 }
 
-async function salvarPaleta() {
-    if (!paletaSelecionada) {
-        alert('Selecione uma paleta primeiro.');
-        return;
-    }
-    
-    const btnSalvar = document.getElementById('btn-salvar-paleta');
-    const oldHtml = btnSalvar.innerHTML;
-    btnSalvar.disabled = true;
-    btnSalvar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
-    
+async function salvarAparencia() {
+    const button = document.getElementById('btn-salvar-aparencia');
+    if (!temaSelecionado || !corSidebarSelecionada || !button) return;
+    const originalHtml = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
     try {
-        const response = await fetch('/perfil/salvar-tema', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name="csrf_token"]')?.value || ''
-            },
-            body: JSON.stringify({ tema: paletaSelecionada })
+        const csrf = document.querySelector('[name="csrf_token"]')?.value || '';
+        const headers = {'Content-Type': 'application/json', 'X-CSRFToken': csrf};
+        const temaResponse = await fetch('/perfil/salvar-tema', {
+            method: 'POST', headers, body: JSON.stringify({tema: temaSelecionado})
         });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.success) {
-            paletaOriginal = paletaSelecionada;
-            if (typeof window.showToast === 'function') {
-                window.showToast({
-                    type: data.type || 'success',
-                    title: data.title,
-                    message: data.message || data.mensagem || 'Paleta salva com sucesso.'
-                });
-            }
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalPaletas'));
-            if (modal) modal.hide();
-        } else {
-            const message = data.message || data.error || data.erro || 'Não foi possível salvar a paleta.';
-            throw Object.assign(new Error(message), { type: data.type || 'danger', title: data.title });
-        }
-    } catch (error) {
-        console.error('Erro ao salvar tema:', error);
+        const temaData = await temaResponse.json();
+        if (!temaResponse.ok || !temaData.success) throw new Error(temaData.message || 'Não foi possível salvar o tema.');
+
+        const sidebarResponse = await fetch('/perfil/salvar-sidebar-cor', {
+            method: 'POST', headers, body: JSON.stringify({sidebar_selection_color: corSidebarSelecionada})
+        });
+        const sidebarData = await sidebarResponse.json();
+        if (!sidebarResponse.ok || !sidebarData.success) throw new Error(sidebarData.message || 'Não foi possível salvar a cor da sidebar.');
+
+        temaOriginal = temaSelecionado;
+        corSidebarOriginal = corSidebarSelecionada;
         if (typeof window.showToast === 'function') {
-            window.showToast({
-                type: error.type || 'danger',
-                title: error.title || 'Erro ao salvar paleta',
-                message: error.message || 'Não foi possível salvar a paleta. Tente novamente.'
-            });
+            window.showToast({type: 'success', title: 'Aparência salva', message: 'Tema e seleção da sidebar atualizados.'});
         }
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalPaletas'));
+        if (modal) modal.hide();
+    } catch (error) {
+        if (typeof window.showToast === 'function') {
+            window.showToast({type: 'danger', title: 'Erro ao salvar aparência', message: error.message});
+        } else {
+            alert(error.message);
+        }
+        aplicarPreferenciasVisuais(temaOriginal, corSidebarOriginal);
     } finally {
-        btnSalvar.disabled = false;
-        btnSalvar.innerHTML = '<i class="bi bi-check-lg me-1"></i>Confirmar Seleção';
+        button.disabled = false;
+        button.innerHTML = originalHtml;
     }
 }
 
-function ajustarCor(hex, percent) {
-    const num = parseInt(hex.replace('#', ''), 16);
-    const amt = Math.round(2.55 * percent);
-    const R = Math.max(0, Math.min(255, (num >> 16) + amt));
-    const G = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amt));
-    const B = Math.max(0, Math.min(255, (num & 0x0000FF) + amt));
-    return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
-}
+document.addEventListener('DOMContentLoaded', function() {
+    carregarPreferenciasVisuais();
+    document.querySelectorAll('.theme-choice').forEach((choice) => {
+        choice.addEventListener('click', () => selecionarTema(choice.dataset.theme));
+    });
+    document.querySelectorAll('.sidebar-color-choice').forEach((choice) => {
+        choice.addEventListener('click', () => selecionarCorSidebar(choice.dataset.sidebarColor));
+    });
+    const saveButton = document.getElementById('btn-salvar-aparencia');
+    if (saveButton) saveButton.addEventListener('click', salvarAparencia);
+});

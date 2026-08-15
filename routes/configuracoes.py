@@ -18,13 +18,6 @@ from config import Config
 from utils.logger import logger
 from utils.scheduler import configure_and_start_scheduler
 from utils.sftp_backup import test_sftp_connection
-from data.configuration import get_config, set_config
-from data.themes import (
-    APPEARANCE_DEFAULT,
-    APPEARANCE_DEFAULT_KEY,
-    listar_paletas_institucionais,
-    tema_institucional_valido,
-)
 
 configuracoes_bp = Blueprint('configuracoes', __name__, url_prefix='/configuracoes')
 
@@ -58,26 +51,7 @@ def index():
         action = request.form.get('action')
         
         try:
-            if action == 'update_default_appearance':
-                active_tab = 'appearance'
-                if usuario_role != 'admin':
-                    raise ValueError("Acesso restrito a administradores.")
-                tema_padrao = proteger_input(request.form.get('default_theme'))
-                if not tema_institucional_valido(tema_padrao):
-                    raise ValueError("A aparência selecionada não está disponível.")
-                if not set_config(APPEARANCE_DEFAULT_KEY, tema_padrao):
-                    raise ValueError("Não foi possível salvar a aparência padrão.")
-                gravar_log(
-                    "Alterou aparência padrão do sistema",
-                    None,
-                    usuario_id,
-                    get_client_ip(),
-                    f"Paleta institucional selecionada: {tema_padrao}",
-                    contexto="Configurações > Aparência padrão",
-                )
-                flash("Aparência padrão atualizada com sucesso.", 'success')
-
-            elif action == 'update_db_settings':
+            if action == 'update_db_settings':
                 active_tab = 'db'
                 if usuario_role != 'admin':
                     raise ValueError("Acesso restrito a administradores.")
@@ -360,9 +334,6 @@ def index():
 
         from utils.helpers import get_contrast_color
         csrf_token_val = gerar_csrf_token()
-        default_theme = get_config(APPEARANCE_DEFAULT_KEY) or APPEARANCE_DEFAULT
-        if not tema_institucional_valido(default_theme):
-            default_theme = APPEARANCE_DEFAULT
 
         return render_template('configuracoes.html',
                                email_config=email_config,
@@ -376,9 +347,7 @@ def index():
                                csrf_token=csrf_token_val,
                                get_contrast_color=get_contrast_color,
                                empresa=empresa_data,
-                               display_logo_url=display_logo_url,
-                               default_theme=default_theme,
-                               institutional_palettes=listar_paletas_institucionais())
+                               display_logo_url=display_logo_url)
     except Exception as e:
         logger.exception(f"Erro ao carregar página de configurações: {e}")
         flash(f"Erro ao carregar configurações: {str(e)}", 'danger')

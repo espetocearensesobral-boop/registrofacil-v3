@@ -20,21 +20,21 @@
                     <i class="bi bi-palette-fill me-2"></i>Aparência do Sistema
                 </h5>
                 <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPaletas">
-                    <i class="bi bi-droplet-fill me-1"></i>
-                    Personalizar Cores
+                    <i class="bi bi-brush-fill me-1"></i>
+                    Aparência
                 </button>
             </div>
             <div class="rf-card-body">
                 <p class="text-muted mb-2">
-                    Escolha uma paleta de cores para personalizar sua experiência.
-                    A alteração é salva automaticamente no seu perfil.
+                    O tema institucional controla todo o sistema. A única personalização individual permitida é a cor de seleção dos itens da sidebar.
                 </p>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <span class="text-muted">Paleta atual:</span>
+                    <span class="text-muted">Tema atual:</span>
                     <span class="badge badge-primary" id="paleta-atual-badge" style="background-color: var(--color-primary); color: white;">
                         <i class="bi bi-check-circle-fill me-1"></i>
-                        <span id="paleta-atual-nome">Dourado Institucional</span>
+                        <span id="paleta-atual-nome">Paleta 01</span>
                     </span>
+                    <span class="badge" id="sidebar-cor-atual-badge" style="background-color: {{ visual_preferences.sidebar_selection_color or '#1B4368' }}; color: #fff;">Seleção da sidebar</span>
                 </div>
             </div>
         </div>
@@ -274,51 +274,62 @@
     </div>
 </div>
 
-<!-- Modal de Seleção de Paletas -->
+<style>
+.theme-choice { position: relative; display: flex; flex-direction: column; gap: 7px; min-height: 150px; padding: 14px; border: 1px solid var(--border-color-default); border-radius: 10px; background: var(--background-color-card); color: var(--text-color-primary); cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.theme-choice:hover { border-color: var(--color-primary-light); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+.theme-choice.selected { border: 2px solid var(--color-primary); padding: 13px; box-shadow: 0 0 0 3px var(--color-primary-subtle); }
+.theme-choice-check { position: absolute; top: 12px; right: 12px; width: 21px; height: 21px; display: grid; place-items: center; border: 1px solid var(--border-color-default); border-radius: 50%; color: transparent; font-size: 12px; }
+.theme-choice.selected .theme-choice-check { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.theme-choice-number { color: var(--color-primary); font: 600 10px 'IBM Plex Mono', monospace; letter-spacing: .08em; text-transform: uppercase; }
+.theme-choice strong { padding-right: 26px; font-size: 14px; line-height: 1.25; }
+.theme-choice small { color: var(--text-color-secondary); font-size: 11px; line-height: 1.35; }
+.theme-choice-swatches { display: flex; gap: 4px; }
+.theme-choice-swatches i { width: 25%; height: 20px; border: 1px solid rgba(0,0,0,.08); border-radius: 4px; }
+.sidebar-color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 9px; }
+.sidebar-color-choice { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 5px; border: 1px solid var(--border-color-default); border-radius: 8px; background: var(--background-color-card); color: var(--text-color-secondary); cursor: pointer; }
+.sidebar-color-choice:hover { border-color: var(--sidebar-choice-color); }
+.sidebar-color-choice > span { width: 26px; height: 26px; border-radius: 50%; background: var(--sidebar-choice-color); border: 2px solid var(--background-color-card); box-shadow: 0 0 0 1px var(--border-color-default); }
+.sidebar-color-choice.selected { border-color: var(--sidebar-choice-color); box-shadow: 0 0 0 2px color-mix(in srgb, var(--sidebar-choice-color) 25%, transparent); color: var(--text-color-primary); }
+.sidebar-color-choice.selected > span { box-shadow: 0 0 0 2px var(--sidebar-choice-color); }
+.sidebar-color-choice small { overflow: hidden; max-width: 100%; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+</style>
+
+<!-- Modal de Aparência institucional e seleção da sidebar -->
 <div class="modal fade" id="modalPaletas" tabindex="-1" aria-labelledby="modalPaletasLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPaletasLabel">
-                    <i class="bi bi-palette-fill me-2 text-primary"></i>
-                    Escolha sua Paleta de Cores
-                </h5>
+                <h5 class="modal-title" id="modalPaletasLabel"><i class="bi bi-brush-fill me-2 text-primary"></i>Aparência do sistema</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted mb-4">
-                    Selecione uma das <strong>30 paletas profissionais</strong> abaixo. 
-                    O sistema aplica a cor instantaneamente para você visualizar.
-                </p>
-                
-                <!-- Grid de paletas -->
-                <div class="row g-3" id="grid-paletas">
-                    <!-- Paletas serão geradas via JavaScript -->
+                <div class="alert alert-info mb-4"><i class="bi bi-info-circle me-2"></i>O tema escolhido controla toda a aplicação. A cor abaixo altera somente a seleção dos itens ativos da sidebar.</div>
+                <h6 class="fw-bold mb-3">Tema institucional</h6>
+                <div class="row g-3 mb-4" id="grid-paletas">
+                    {% for palette in institutional_palettes %}
+                    <div class="col-md-4">
+                        <button type="button" class="theme-choice w-100 text-start{% if visual_preferences.tema_cor == palette.id %} selected{% endif %}" data-theme="{{ palette.id }}">
+                            <span class="theme-choice-check"><i class="bi bi-check-lg"></i></span>
+                            <span class="theme-choice-number">Paleta {{ palette.numero }}</span>
+                            <strong>{{ palette.nome }}</strong>
+                            <span class="theme-choice-swatches"><i style="background:{{ palette.primary }}"></i><i style="background:{{ palette.primary_light }}"></i><i style="background:{{ palette.accent }}"></i><i style="background:{{ palette.background }}"></i></span>
+                            <small>{{ palette.descricao }}</small>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <h6 class="fw-bold mb-3">Cor de seleção da sidebar</h6>
+                <div class="sidebar-color-grid" id="sidebar-color-grid">
+                    {% for color in sidebar_selection_colors %}
+                    <button type="button" class="sidebar-color-choice{% if visual_preferences.sidebar_selection_color == color.hex %} selected{% endif %}" data-sidebar-color="{{ color.hex }}" title="{{ color.nome }}" aria-label="{{ color.nome }}" style="--sidebar-choice-color:{{ color.hex }}"><span></span><small>{{ color.nome }}</small></button>
+                    {% endfor %}
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Cancelar
-                </button>
-                <button type="button" class="btn btn-primary" id="btn-salvar-paleta">
-                    <i class="bi bi-check-lg me-1"></i>
-                    Confirmar Seleção
-                </button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btn-salvar-aparencia"><i class="bi bi-check-lg me-1"></i>Salvar aparência</button>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Preview da paleta (fixo no canto durante seleção) -->
-<div class="paleta-preview" id="paleta-preview" style="display: none;">
-    <div class="preview-header">
-        <i class="bi bi-eye-fill me-1"></i>
-        Preview
-    </div>
-    <div class="preview-buttons">
-        <button class="btn btn-primary btn-sm">Botão Primário</button>
-        <button class="btn btn-outline-primary btn-sm">Secundário</button>
-        <span class="badge" style="background-color: var(--color-primary); color: white;">Badge</span>
     </div>
 </div>
 {% endblock content %}

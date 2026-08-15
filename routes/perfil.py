@@ -323,6 +323,11 @@ def index(user_id=None):
     
     # ===== RENDERIZAR TEMPLATE =====
     csrf_token_val = gerar_csrf_token()
+    from data.themes import listar_paletas_institucionais, listar_cores_sidebar, obter_cor_sidebar
+    preferencias_visuais = {'tema_cor': 'paleta-01', 'sidebar_selection_color': obter_cor_sidebar(None)}
+    if current_user_id:
+        from models import obter_preferencia_visual_usuario
+        preferencias_visuais = obter_preferencia_visual_usuario(current_user_id)
     
     # Template apropriado por contexto
     if contexto == 'proprio_perfil':
@@ -332,7 +337,10 @@ def index(user_id=None):
                              current_user_id=current_user_id,
                              current_user_role=current_user_role,
                              contexto=contexto,
-                             csrf_token=csrf_token_val)
+                             csrf_token=csrf_token_val,
+                             institutional_palettes=listar_paletas_institucionais(),
+                             sidebar_selection_colors=listar_cores_sidebar(),
+                             visual_preferences=preferencias_visuais)
     else:  # gerenciamento_admin
         return render_template('admin/perfil_admin.html',
                              user_data=user_data,
@@ -350,10 +358,43 @@ def obter_tema():
     if not usuario_id:
         return jsonify({'erro': 'Não autenticado'}), 401
     
-    from models import obter_tema_usuario
-    tema = obter_tema_usuario(usuario_id)
-    
-    return jsonify({'tema_cor': tema})
+    from models import obter_preferencia_visual_usuario
+    preferencias = obter_preferencia_visual_usuario(usuario_id)
+    return jsonify({
+        'tema_cor': preferencias.get('tema_cor') or 'paleta-01',
+        'sidebar_selection_color': preferencias.get('sidebar_selection_color') or '#1B4368',
+    })
+
+
+@perfil_bp.route('/salvar-sidebar-cor', methods=['POST'])
+@login_status_required
+def salvar_cor_sidebar():
+    """Salva a cor de seleção dos itens ativos da sidebar."""
+    try:
+        csrf_token_header = request.headers.get('X-CSRFToken')
+        if not verificar_csrf_token(csrf_token_header):
+            return jsonify({**error('Sua sessão de segurança expirou. Recarregue a página e tente novamente.'), 'success': False}), 403
+        data = request.get_json() or {}
+        cor = data.get('sidebar_selection_color') or data.get('cor')
+        from data.themes import cor_sidebar_valida
+        if not cor_sidebar_valida(cor):
+            return jsonify({**warning('A cor selecionada não está disponível para a sidebar.'), 'success': False}), 400
+        usuario_id = session.get('usuario_id')
+        from models import salvar_cor_sidebar_usuario
+        if salvar_cor_sidebar_usuario(usuario_id, cor) is False:
+            return jsonify({**error('Não foi possível salvar a cor da sidebar.'), 'success': False}), 500
+        session['usuario_sidebar_selection_color'] = cor
+        gravar_log(
+            acao='Alteração da cor de seleção da sidebar',
+            processo_id=None,
+            usuario_id=usuario_id,
+            ip=get_client_ip(),
+            descricao=f'Cor selecionada: {cor}',
+        )
+        return jsonify({**success('Cor de seleção da sidebar salva.'), 'success': True, 'sidebar_selection_color': cor})
+    except Exception as e:
+        logger.error(f'Erro ao salvar cor da sidebar: {e}', exc_info=True)
+        return jsonify({**error('Não foi possível salvar a cor da sidebar.'), 'success': False}), 500
 
 
 @perfil_bp.route('/salvar-tema', methods=['POST'])
@@ -373,19 +414,8 @@ def salvar_tema():
         if not tema:
             return jsonify({**warning('Selecione uma paleta antes de salvar.'), 'success': False}), 400
             
-        # Validação de temas permitidos contra injeção de parâmetros
-        temas_validos = [
-            'grafite-vinho', 'dourado', 'azul-marinho', 'vinho', 'verde-esmeralda',
-            'azul-petroleo', 'roxo-real', 'azul-royal', 'verde-oliva',
-            'terracota', 'azul-cobalto', 'magenta',             'cinza-grafite',
-            'teal', 'indigo', 'ambar', 'verde-floresta', 'azul-aco',
-            'coral', 'lavanda', 'preto-classico', 'vermelho-rubi',
-            'rosa-antigo', 'laranja-queimado', 'verde-jade',
-            'azul-meia-noite', 'violeta-ametista', 'marrom-cafe',
-            'cinza-carvao', 'verde-salvia', 'azul-oceano'
-
-        ]
-        if tema not in temas_validos:
+        from data.themes import tema_institucional_valido
+        if not tema_institucional_valido(tema):
             return jsonify({**warning('A paleta selecionada não está disponível. Escolha uma das opções exibidas.'), 'success': False}), 400
 
         usuario_id = session.get('usuario_id')

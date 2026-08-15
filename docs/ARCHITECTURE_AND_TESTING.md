@@ -259,10 +259,10 @@ A migração 007 trata o pacote opcional de avaliações de forma compatível co
 A migração não usa `ADD COLUMN IF NOT EXISTS` nem a referência PostgreSQL `services(id)`, pois essas construções não correspondem ao banco atual do Registro Fácil. A instalação continua compatível com bancos legados e a migração é idempotente.
 
 
-## Identidade visual padrão — Grafite & Vinho
+## Identidade visual e preferências por usuário
 
-O padrão institucional do sistema interno passou a ser **Grafite & Vinho — Minimalista, Paleta 03**, conforme o guia visual do cartório. Os tokens principais são grafite `#2B2B2E`, grafite claro `#45454A`, grafite ativo `#18181A`, vinho `#7A1F2B`, fundo `#F5F5F4`, texto `#1A1A1B`, superfícies brancas e bordas `#DEDEDC`.
+O sistema dispõe de três temas institucionais completos, conforme o guia visual do cartório: **Paleta 01 — Confiança Institucional**, **Paleta 02 — Verde Cartorial Contemporâneo** e **Paleta 03 — Grafite & Vinho — Minimalista**. A Paleta 01 é o padrão inicial para usuários sem preferência registrada. A escolha do tema é persistida por usuário na tabela `user_preferences.tema_cor` e controla superfícies, sidebar, tipografia, bordas, botões, formulários, tabelas, modais, alertas e telas públicas.
 
-A tipografia utiliza `Source Sans 3` para corpo e formulários, `Fraunces` com uso comedido em títulos de seção e `IBM Plex Mono` para protocolos, identificadores e informações técnicas. Botões primários usam grafite, o hover usa grafite claro, o estado pressionado usa grafite ativo, ações secundárias usam contorno e ações destrutivas usam vinho. Tabelas adotam zebra discreto; vinho é reservado para prazos, vencimentos e ações irreversíveis.
+A antiga lógica de 30 paletas gerais foi removida. As cores desse catálogo foram reaproveitadas somente como opções de destaque para a seleção de itens ativos da sidebar, armazenadas em `user_preferences.sidebar_selection_color`. Essa cor não altera o corpo da sidebar nem qualquer componente fora do estado selecionado; o corpo da sidebar permanece sob controle da Paleta institucional escolhida.
 
-A seleção de paletas individuais permanece disponível. Usuários que já escolheram uma paleta continuam com sua preferência; o novo fallback institucional e os novos usuários utilizam `grafite-vinho`.
+A camada `palette03-final.css` mantém o padrão de contraste e hierarquia visual, mas usa exclusivamente tokens semânticos fornecidos por `color-themes.css`. Portanto, modais, cards, tabelas, formulários, alertas, botões, autenticação e estados de foco acompanham corretamente as três Paletas sem regras hardcoded da Paleta 03.

@@ -132,7 +132,7 @@ def atualizar_preferencias_usuario(usuario_id, dados):
     campos = []
     valores = []
     
-    campos_permitidos = ['tema', 'notificacoes_push', 'notificacoes_email', 
+    campos_permitidos = ['tema', 'sidebar_selection_color', 'notificacoes_push', 'notificacoes_email',
                         'dashboard_layout', 'filtros_salvos']
     
     for campo in campos_permitidos:
@@ -244,31 +244,43 @@ def marcar_notificacao_usuario_lida(notificacao_id, usuario_id):
         logger.error(f"Erro ao marcar notificação de usuário como lida: {e}", exc_info=True)
         return False
 
-def obter_tema_usuario(usuario_id):
-    """Retorna o tema de cor do usuário."""
+def obter_preferencia_visual_usuario(usuario_id):
+    """Retorna o tema institucional e a seleção da sidebar do usuário."""
     query = """
-        SELECT tema_cor FROM user_preferences 
+        SELECT tema_cor, sidebar_selection_color FROM user_preferences
         WHERE usuario_id = ?
     """
     result = executar_query(query, [usuario_id], fetch_one=True)
-    return result['tema_cor'] if result and result.get('tema_cor') else 'grafite-vinho'
+    return {
+        'tema_cor': result.get('tema_cor') if result else 'paleta-01',
+        'sidebar_selection_color': result.get('sidebar_selection_color') if result else '#1B4368',
+    }
+
+
+def obter_tema_usuario(usuario_id):
+    """Compatibilidade: retorna somente uma das três Paletas institucionais."""
+    return obter_preferencia_visual_usuario(usuario_id)['tema_cor'] or 'paleta-01'
+
 
 def salvar_tema_usuario(usuario_id, tema_cor):
-    """Salva o tema de cor do usuário."""
-    query_check = "SELECT id FROM user_preferences WHERE usuario_id = ?"
-    existe = executar_query(query_check, [usuario_id], fetch_one=True)
-    
-    if existe:
-        query = """
-            UPDATE user_preferences 
-            SET tema_cor = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
-            WHERE usuario_id = ?
-        """
-        return executar_query(query, [tema_cor, usuario_id])
-    else:
-        query = """
-            INSERT INTO user_preferences (usuario_id, tema_cor)
-            VALUES (?, ?)
-        """
-        return executar_query(query, [usuario_id, tema_cor])
+    """Salva uma Paleta institucional por usuário."""
+    query = """
+        INSERT INTO user_preferences (usuario_id, tema_cor, sidebar_selection_color)
+        VALUES (?, ?, '#1B4368')
+        ON CONFLICT(usuario_id) DO UPDATE SET
+            tema_cor = excluded.tema_cor,
+            updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
+    """
+    return executar_query(query, [usuario_id, tema_cor])
 
+
+def salvar_cor_sidebar_usuario(usuario_id, sidebar_selection_color):
+    """Salva somente a cor de destaque dos itens da sidebar."""
+    query = """
+        INSERT INTO user_preferences (usuario_id, tema_cor, sidebar_selection_color)
+        VALUES (?, 'paleta-01', ?)
+        ON CONFLICT(usuario_id) DO UPDATE SET
+            sidebar_selection_color = excluded.sidebar_selection_color,
+            updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
+    """
+    return executar_query(query, [usuario_id, sidebar_selection_color])

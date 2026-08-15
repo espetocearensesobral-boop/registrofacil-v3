@@ -4,15 +4,8 @@ import models
 from config import Config
 
 
-PALETAS_DA_INTERFACE = [
-    'dourado', 'azul-marinho', 'vinho', 'verde-esmeralda', 'azul-petroleo',
-    'roxo-real', 'azul-royal', 'verde-oliva', 'terracota', 'azul-cobalto',
-    'magenta', 'cinza-grafite', 'teal', 'indigo', 'ambar', 'verde-floresta',
-    'azul-aco', 'coral', 'lavanda', 'preto-classico', 'vermelho-rubi',
-    'rosa-antigo', 'laranja-queimado', 'verde-jade', 'azul-meia-noite',
-    'violeta-ametista', 'marrom-cafe', 'cinza-carvao', 'verde-salvia',
-    'azul-oceano',
-]
+PALETAS_DA_INTERFACE = ['paleta-01', 'paleta-02', 'paleta-03']
+CORES_SIDEBAR = ['#7A1F2B', '#8B6F47', '#1B3A5C', '#006064']
 
 
 def _admin_password():
@@ -60,7 +53,7 @@ def test_admin_can_change_own_password_with_contextual_response(app_client):
     assert check_password_hash(stored['senha'], new_password)
 
 
-def test_all_palette_ids_exposed_by_ui_are_accepted(app_client):
+def test_all_institutional_palette_ids_are_accepted(app_client):
     csrf = _login(app_client)
 
     for palette_id in PALETAS_DA_INTERFACE:
@@ -78,3 +71,30 @@ def test_all_palette_ids_exposed_by_ui_are_accepted(app_client):
     current = app_client.get('/perfil/tema')
     assert current.status_code == 200
     assert current.get_json()['tema_cor'] == PALETAS_DA_INTERFACE[-1]
+
+
+def test_profile_exposes_only_institutional_themes_and_sidebar_selector(app_client):
+    _login(app_client)
+    response = app_client.get('/perfil/')
+    assert response.status_code == 200
+    body = response.get_data(as_text=True)
+    assert 'Paleta 01' in body
+    assert 'Paleta 02' in body
+    assert 'Paleta 03' in body
+    assert '30 paletas profissionais' not in body
+    assert 'sidebar-color-grid' in body
+
+
+def test_sidebar_selection_color_is_saved_independently(app_client):
+    csrf = _login(app_client)
+    for color in CORES_SIDEBAR:
+        response = app_client.post(
+            '/perfil/salvar-sidebar-cor',
+            json={'sidebar_selection_color': color},
+            headers={'X-CSRFToken': csrf},
+        )
+        assert response.status_code == 200, (color, response.get_json())
+        assert response.get_json()['sidebar_selection_color'] == color
+
+    current = app_client.get('/perfil/tema')
+    assert current.get_json()['sidebar_selection_color'] == CORES_SIDEBAR[-1]

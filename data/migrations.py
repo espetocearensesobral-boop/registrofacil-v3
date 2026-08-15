@@ -131,6 +131,34 @@ def executar_migracoes_dados(connection=None):
 
         migracoes.append(migracao_007)
 
+        def migracao_008(cursor):
+            """Migra preferências visuais antigas para o modelo institucional."""
+            tabela = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
+            ).fetchone()
+            if not tabela:
+                logger.info("[Migração 008] user_preferences ausente; nada a migrar.")
+                return
+            colunas = {
+                row[1] for row in cursor.execute("PRAGMA table_info(user_preferences)").fetchall()
+            }
+            if "sidebar_selection_color" not in colunas:
+                cursor.execute(
+                    "ALTER TABLE user_preferences ADD COLUMN sidebar_selection_color TEXT DEFAULT '#1B4368'"
+                )
+            cursor.execute(
+                "UPDATE user_preferences SET tema_cor = 'paleta-01' "
+                "WHERE tema_cor IS NULL OR tema_cor = 'grafite-vinho' "
+                "OR tema_cor NOT IN ('paleta-01', 'paleta-02', 'paleta-03')"
+            )
+            cursor.execute(
+                "UPDATE user_preferences SET sidebar_selection_color = '#1B4368' "
+                "WHERE sidebar_selection_color IS NULL OR sidebar_selection_color = ''"
+            )
+            logger.info("[Migração 008] Preferências visuais convertidas para Paletas 01–03.")
+
+        migracoes.append(migracao_008)
+
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]
 

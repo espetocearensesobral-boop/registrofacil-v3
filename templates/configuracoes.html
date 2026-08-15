@@ -186,66 +186,11 @@
             <button class="rf-tab-btn{% if active_tab == 'estabelecimento' %} active{% endif %}" data-panel="estabelecimento" onclick="cfgSwitch(this)">
                 <i class="bi bi-building-fill"></i> Estabelecimento
             </button>
-            <button class="rf-tab-btn{% if active_tab == 'appearance' %} active{% endif %}" data-panel="appearance" onclick="cfgSwitch(this)">
-                <i class="bi bi-brush-fill"></i> Aparência padrão
-            </button>
             {% endif %}
         </div>
     </div>
     <div class="rf-card-body">
     <div>
-
-        <!-- APARÊNCIA PADRÃO -->
-        {% if session.get('usuario_role') == 'admin' %}
-        <div class="cfg-panel{% if active_tab == 'appearance' %} active{% endif %}" id="panel-appearance">
-            <div class="cfg-panel-header">
-                <div class="cfg-ph-icon"><i class="bi bi-brush-fill"></i></div>
-                <div>
-                    <h5>Aparência padrão do sistema</h5>
-                    <p class="cfg-appearance-intro">Escolha uma das três direções cromáticas do guia. A aplicação é global e cobre navegação, superfícies, tipografia, botões, formulários, tabelas, modais e estados de feedback.</p>
-                </div>
-            </div>
-            <form method="post" action="{{ url_for('configuracoes.index') }}" id="form-default-appearance">
-                <input type="hidden" name="action" value="update_default_appearance">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <div class="appearance-grid" role="radiogroup" aria-label="Paletas institucionais">
-                    {% for palette in institutional_palettes %}
-                    <label class="appearance-card{% if default_theme == palette.id %} selected{% endif %}" data-appearance-card="{{ palette.id }}">
-                        <input type="radio" name="default_theme" value="{{ palette.id }}"{% if default_theme == palette.id %} checked{% endif %}>
-                        <span class="appearance-card-check"><i class="bi bi-check-lg"></i></span>
-                        <span class="appearance-card-head">
-                            <span class="appearance-number">Paleta {{ palette.numero }}</span>
-                            <strong>{{ palette.nome }}</strong>
-                        </span>
-                        <span class="appearance-swatch-row" aria-hidden="true">
-                            <span style="background:{{ palette.primary }}"></span>
-                            <span style="background:{{ palette.primary_light }}"></span>
-                            <span style="background:{{ palette.accent }}"></span>
-                            <span style="background:{{ palette.background }}"></span>
-                            <span style="background:{{ palette.text }}"></span>
-                            <span style="background:{{ palette.line }}"></span>
-                        </span>
-                        <span class="appearance-preview" style="--preview-primary:{{ palette.primary }};--preview-primary-light:{{ palette.primary_light }};--preview-accent:{{ palette.accent }};--preview-bg:{{ palette.background }};--preview-text:{{ palette.text }};--preview-line:{{ palette.line }};">
-                            <span class="appearance-preview-sidebar"></span>
-                            <span class="appearance-preview-body">
-                                <span class="appearance-preview-nav"></span>
-                                <span class="appearance-preview-title"></span>
-                                <span class="appearance-preview-lines"><i></i><i></i><i></i></span>
-                                <span class="appearance-preview-actions"><b></b><b></b></span>
-                            </span>
-                        </span>
-                        <span class="appearance-description">{{ palette.descricao }}</span>
-                        <span class="appearance-use"><i class="bi bi-check2-circle"></i> Aplicação completa no sistema</span>
-                    </label>
-                    {% endfor %}
-                </div>
-                <div class="appearance-actions">
-                    <span><i class="bi bi-info-circle"></i> A escolha individual feita em Perfil continua prevalecendo para usuários que já selecionaram uma paleta pessoal.</span>
-                    <button type="submit" class="cfg-sbtn"><i class="bi bi-check2-circle"></i> Aplicar aparência padrão</button>
-                </div>
-            </form>
-        </div>
-        {% endif %}
 
         <!-- STATUS -->
         <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status">
