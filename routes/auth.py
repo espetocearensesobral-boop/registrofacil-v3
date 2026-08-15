@@ -41,7 +41,14 @@ from utils.messages import GREETING_PHRASES
 auth_bp = Blueprint('auth', __name__, url_prefix='/')
 
 def gerar_csrf_token():
-    session['csrf_token'] = secrets.token_hex(32)
+    """Retorna o token da sessão, criando-o apenas quando necessário.
+
+    A função é segura para ser chamada durante a renderização de qualquer
+    view: abrir outra tela não invalida formulários que o usuário já abriu.
+    A rotação após autenticação continua explícita no fluxo de login.
+    """
+    if not session.get('csrf_token'):
+        session['csrf_token'] = secrets.token_hex(32)
     return session['csrf_token']
 
 def verificar_csrf_token(token):

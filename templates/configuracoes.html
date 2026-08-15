@@ -866,7 +866,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnTE = document.getElementById('btn-test-email');
     const fE = document.getElementById('form-email-config');
 
-    function showToast(msg, ok=true) {
+    function showConfigToast(msg, ok=true) {
         const c = document.querySelector('.toast-container');
         const d = document.createElement('div');
         d.innerHTML = `<div class="toast align-items-center text-white bg-${ok?'success':'danger'} border-0" role="alert">
@@ -879,7 +879,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function handleEmail(isTest=false) {
-        if (fE && !fE.checkValidity()) { fE.classList.add('was-validated'); showToast("Preencha os campos obrigatórios.", false); return; }
+        if (fE && !fE.checkValidity()) { fE.classList.add('was-validated'); showConfigToast("Preencha os campos obrigatórios.", false); return; }
         const btn = isTest ? btnTE : btnSE, other = isTest ? btnSE : btnTE;
         const sp = btn?.querySelector('.spinner-border'), ic = btn?.querySelector('i');
         if (btn) btn.disabled = true;
@@ -892,9 +892,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const r = await fetch("{{ url_for('configuracoes.index') }}", {method:'POST',body:fd,headers:{'X-Requested-With':'XMLHttpRequest'}});
             if (!r.ok) throw new Error("Erro no servidor.");
             const res = await r.json();
-            showToast(res.message, res.success);
+            window.showToast({ message: res.message, type: res.type || (res.success ? 'success' : 'danger'), title: res.title });
             if (res.success && !isTest && fE) fE.classList.remove('was-validated');
-        } catch(err) { showToast("Erro: "+err.message, false); }
+        } catch(err) { showConfigToast("Erro: "+err.message, false); }
         finally {
             if (btn) btn.disabled = false;
             if (other) other.disabled = false;
