@@ -397,6 +397,7 @@ def salvar_tema():
         
         if sucesso is not False:
             session['usuario_tema_cor'] = tema
+            session['usuario_tema_explicit'] = True
             
             # Auditoria corporativa formal
             gravar_log(

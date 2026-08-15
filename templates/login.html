@@ -65,9 +65,10 @@
         .honeypot-field{position:absolute;left:-9999px;visibility:hidden;height:1px;width:1px;pointer-events:none;opacity:0}
         .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
     </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
 </head>
-<body>
+<body data-cor="{{ tema_cor_usuario }}">
     <!-- Painel esquerdo: formulário -->
     <div class="auth-panel-left">
         <div class="auth-form-wrap">

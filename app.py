@@ -142,16 +142,28 @@ def create_app():
         return dict(has_permission=check_permission)
     @app.context_processor
     def inject_tema_cor():
+        from data.configuration import get_config
+        from data.themes import APPEARANCE_DEFAULT, APPEARANCE_DEFAULT_KEY, tema_institucional_valido
+
         usuario_id = session.get("usuario_id")
-        tema_cor = "grafite-vinho"
+        tema_padrao = get_config(APPEARANCE_DEFAULT_KEY) or APPEARANCE_DEFAULT
+        if not tema_institucional_valido(tema_padrao):
+            tema_padrao = APPEARANCE_DEFAULT
+
+        # A escolha individual feita no Perfil continua tendo precedência.
+        # O valor legado grafite-vinho é tratado como ausência de escolha
+        # explícita para permitir que o administrador defina um novo padrão.
+        tema_cor = tema_padrao
         if usuario_id:
-            if "usuario_tema_cor" in session:
+            if session.get("usuario_tema_explicit") and session.get("usuario_tema_cor"):
                 tema_cor = session.get("usuario_tema_cor")
             else:
                 from models import obter_tema_usuario
-                tema_cor = obter_tema_usuario(usuario_id)
-                session["usuario_tema_cor"] = tema_cor
-        return dict(tema_cor_usuario=tema_cor)
+                tema_usuario = obter_tema_usuario(usuario_id)
+                # O valor legado grafite-vinho representa a ausência de
+                # preferência explícita para fins do padrão institucional.
+                tema_cor = tema_padrao if tema_usuario in (None, "grafite-vinho") else tema_usuario
+        return dict(tema_cor_usuario=tema_cor, tema_padrao_usuario=tema_padrao)
 
     # -----------------------------------------------------------------------
     # Inicialização do sistema de logs por domínio

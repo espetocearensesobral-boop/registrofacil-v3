@@ -66,9 +66,10 @@
         .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
         .field-hint{font-size:.73rem;color:#555;margin-top:.35rem}
     </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
 </head>
-<body>
+<body data-cor="{{ tema_cor_usuario }}">
     <!-- Painel esquerdo: formulário -->
     <div class="auth-panel-left">
         <div class="auth-form-wrap">

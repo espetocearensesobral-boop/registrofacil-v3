@@ -131,6 +131,40 @@
 .cswatch-custom input[type=color] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: none; padding: 0; }
 .cswatch-custom:hover { border-color: var(--color-black-premium); color: var(--color-black-premium); }
 
+.cfg-appearance-intro { margin: 3px 0 0; color: var(--text-color-secondary); font-size: 13px; line-height: 1.45; max-width: 780px; }
+.appearance-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.appearance-card { position: relative; display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 15px; border: 1px solid var(--border-color-default); border-radius: 12px; background: var(--background-color-card); cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.appearance-card:hover { border-color: var(--color-primary-light); box-shadow: 0 5px 16px rgba(0,0,0,.08); }
+.appearance-card.selected { border: 2px solid var(--color-primary); padding: 14px; box-shadow: 0 0 0 3px var(--color-primary-subtle); }
+.appearance-card input { position: absolute; opacity: 0; pointer-events: none; }
+.appearance-card-check { position: absolute; right: 13px; top: 13px; width: 23px; height: 23px; display: grid; place-items: center; border: 1px solid var(--border-color-default); border-radius: 50%; color: transparent; font-size: 13px; }
+.appearance-card.selected .appearance-card-check { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.appearance-card-head { display: flex; flex-direction: column; gap: 3px; padding-right: 28px; color: var(--text-color-primary); }
+.appearance-card-head strong { font-size: 15px; line-height: 1.2; }
+.appearance-number { color: var(--color-primary); font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.appearance-swatch-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.appearance-swatch-row span { height: 24px; border: 1px solid rgba(0,0,0,.08); border-radius: 4px; }
+.appearance-preview { display: flex; height: 98px; overflow: hidden; border: 1px solid var(--preview-line); border-radius: 8px; background: var(--preview-bg); }
+.appearance-preview-sidebar { width: 21%; background: var(--preview-primary); }
+.appearance-preview-body { display: flex; flex: 1; flex-direction: column; gap: 8px; padding: 10px; background: var(--preview-bg); }
+.appearance-preview-nav { width: 100%; height: 8px; border-radius: 3px; background: var(--preview-line); }
+.appearance-preview-title { width: 54%; height: 8px; border-radius: 3px; background: var(--preview-text); opacity: .8; }
+.appearance-preview-lines { display: flex; flex-direction: column; gap: 5px; }
+.appearance-preview-lines i { display: block; width: 88%; height: 5px; border-radius: 3px; background: var(--preview-line); }
+.appearance-preview-lines i:nth-child(2) { width: 72%; }
+.appearance-preview-lines i:nth-child(3) { width: 62%; }
+.appearance-preview-actions { display: flex; gap: 5px; margin-top: auto; }
+.appearance-preview-actions b { display: block; width: 34px; height: 10px; border-radius: 3px; background: var(--preview-primary); }
+.appearance-preview-actions b:last-child { background: var(--preview-accent); }
+.appearance-description { min-height: 55px; color: var(--text-color-secondary); font-size: 12px; line-height: 1.4; }
+.appearance-use { display: flex; align-items: center; gap: 5px; color: var(--color-primary); font-size: 11px; font-weight: 600; }
+.appearance-use i { font-size: 14px; }
+.appearance-actions { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 18px; padding: 13px 15px; border: 1px solid var(--border-color-default); border-radius: 8px; background: var(--background-color-body); color: var(--text-color-secondary); font-size: 12px; line-height: 1.4; }
+.appearance-actions > span { display: flex; align-items: flex-start; gap: 6px; }
+.appearance-actions > span i { color: var(--color-primary); margin-top: 1px; }
+@media (max-width: 1100px) { .appearance-grid { grid-template-columns: 1fr; } .appearance-card { display: grid; grid-template-columns: minmax(145px, .8fr) minmax(190px, 1.2fr); align-items: center; } .appearance-card-head, .appearance-description, .appearance-use { grid-column: 1; } .appearance-swatch-row, .appearance-preview { grid-column: 2; grid-row: 1 / span 3; } .appearance-actions { align-items: stretch; flex-direction: column; } }
+@media (max-width: 600px) { .appearance-card { display: flex; } .appearance-swatch-row, .appearance-preview { order: 2; } .appearance-description { order: 3; min-height: 0; } .appearance-use { order: 4; } }
+
 </style>
 
 <div class="rf-card">
@@ -152,11 +186,66 @@
             <button class="rf-tab-btn{% if active_tab == 'estabelecimento' %} active{% endif %}" data-panel="estabelecimento" onclick="cfgSwitch(this)">
                 <i class="bi bi-building-fill"></i> Estabelecimento
             </button>
+            <button class="rf-tab-btn{% if active_tab == 'appearance' %} active{% endif %}" data-panel="appearance" onclick="cfgSwitch(this)">
+                <i class="bi bi-brush-fill"></i> Aparência padrão
+            </button>
             {% endif %}
         </div>
     </div>
     <div class="rf-card-body">
     <div>
+
+        <!-- APARÊNCIA PADRÃO -->
+        {% if session.get('usuario_role') == 'admin' %}
+        <div class="cfg-panel{% if active_tab == 'appearance' %} active{% endif %}" id="panel-appearance">
+            <div class="cfg-panel-header">
+                <div class="cfg-ph-icon"><i class="bi bi-brush-fill"></i></div>
+                <div>
+                    <h5>Aparência padrão do sistema</h5>
+                    <p class="cfg-appearance-intro">Escolha uma das três direções cromáticas do guia. A aplicação é global e cobre navegação, superfícies, tipografia, botões, formulários, tabelas, modais e estados de feedback.</p>
+                </div>
+            </div>
+            <form method="post" action="{{ url_for('configuracoes.index') }}" id="form-default-appearance">
+                <input type="hidden" name="action" value="update_default_appearance">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="appearance-grid" role="radiogroup" aria-label="Paletas institucionais">
+                    {% for palette in institutional_palettes %}
+                    <label class="appearance-card{% if default_theme == palette.id %} selected{% endif %}" data-appearance-card="{{ palette.id }}">
+                        <input type="radio" name="default_theme" value="{{ palette.id }}"{% if default_theme == palette.id %} checked{% endif %}>
+                        <span class="appearance-card-check"><i class="bi bi-check-lg"></i></span>
+                        <span class="appearance-card-head">
+                            <span class="appearance-number">Paleta {{ palette.numero }}</span>
+                            <strong>{{ palette.nome }}</strong>
+                        </span>
+                        <span class="appearance-swatch-row" aria-hidden="true">
+                            <span style="background:{{ palette.primary }}"></span>
+                            <span style="background:{{ palette.primary_light }}"></span>
+                            <span style="background:{{ palette.accent }}"></span>
+                            <span style="background:{{ palette.background }}"></span>
+                            <span style="background:{{ palette.text }}"></span>
+                            <span style="background:{{ palette.line }}"></span>
+                        </span>
+                        <span class="appearance-preview" style="--preview-primary:{{ palette.primary }};--preview-primary-light:{{ palette.primary_light }};--preview-accent:{{ palette.accent }};--preview-bg:{{ palette.background }};--preview-text:{{ palette.text }};--preview-line:{{ palette.line }};">
+                            <span class="appearance-preview-sidebar"></span>
+                            <span class="appearance-preview-body">
+                                <span class="appearance-preview-nav"></span>
+                                <span class="appearance-preview-title"></span>
+                                <span class="appearance-preview-lines"><i></i><i></i><i></i></span>
+                                <span class="appearance-preview-actions"><b></b><b></b></span>
+                            </span>
+                        </span>
+                        <span class="appearance-description">{{ palette.descricao }}</span>
+                        <span class="appearance-use"><i class="bi bi-check2-circle"></i> Aplicação completa no sistema</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                <div class="appearance-actions">
+                    <span><i class="bi bi-info-circle"></i> A escolha individual feita em Perfil continua prevalecendo para usuários que já selecionaram uma paleta pessoal.</span>
+                    <button type="submit" class="cfg-sbtn"><i class="bi bi-check2-circle"></i> Aplicar aparência padrão</button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
 
         <!-- STATUS -->
         <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status">
@@ -769,6 +858,15 @@ window.cfgSwitch = function(btn) {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    // Aparência padrão: seleção visual instantânea antes de salvar.
+    document.querySelectorAll('.appearance-card input[name="default_theme"]').forEach(function(input) {
+        input.addEventListener('change', function() {
+            document.querySelectorAll('.appearance-card').forEach(function(card) { card.classList.remove('selected'); });
+            const card = input.closest('.appearance-card');
+            if (card) card.classList.add('selected');
+        });
+    });
 
     // Backup automático
     const remoteProvider = document.getElementById('cloud_provider');
