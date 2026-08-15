@@ -142,23 +142,17 @@ def create_app():
         return dict(has_permission=check_permission)
     @app.context_processor
     def inject_tema_cor():
-        from data.themes import APPEARANCE_DEFAULT, tema_institucional_valido, obter_cor_sidebar
+        from data.themes import APPEARANCE_DEFAULT, tema_institucional_valido
 
         usuario_id = session.get("usuario_id")
         tema_cor = APPEARANCE_DEFAULT
-        sidebar_selection_color = obter_cor_sidebar(None)
         if usuario_id:
             from models import obter_preferencia_visual_usuario
             preferencias = obter_preferencia_visual_usuario(usuario_id)
             tema_cor = preferencias.get('tema_cor') or APPEARANCE_DEFAULT
-            sidebar_selection_color = obter_cor_sidebar(preferencias.get('sidebar_selection_color'))
         if not tema_institucional_valido(tema_cor):
             tema_cor = APPEARANCE_DEFAULT
-        return dict(
-            tema_cor_usuario=tema_cor,
-            tema_padrao_usuario=tema_cor,
-            sidebar_selection_color=sidebar_selection_color,
-        )
+        return dict(tema_cor_usuario=tema_cor, tema_padrao_usuario=tema_cor)
 
     # -----------------------------------------------------------------------
     # Inicialização do sistema de logs por domínio
