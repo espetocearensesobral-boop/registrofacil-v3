@@ -251,7 +251,7 @@ def obter_tema_usuario(usuario_id):
         WHERE usuario_id = ?
     """
     result = executar_query(query, [usuario_id], fetch_one=True)
-    return result['tema_cor'] if result and result.get('tema_cor') else 'dourado'
+    return result['tema_cor'] if result and result.get('tema_cor') else 'grafite-vinho'
 
 def salvar_tema_usuario(usuario_id, tema_cor):
     """Salva o tema de cor do usuário."""

@@ -250,3 +250,19 @@ O status parcial mantém o backup local disponível, mas deixa claro que a redun
 A aba de backup das configurações possui o botão **Testar SFTP**. O teste usa os valores preenchidos no formulário; se a senha estiver vazia, utiliza a credencial já armazenada. Ele valida host, porta, usuário, senha, caminho absoluto e existência de um diretório remoto acessível.
 
 O teste não salva as alterações nem cria diretórios remotos. Para ativar o destino, o administrador deve executar o teste com sucesso e depois salvar a configuração. O scheduler só considera o envio remoto concluído depois de confirmar o tamanho do arquivo enviado.
+
+
+## Migração opcional de avaliações no SQLite
+
+A migração 007 trata o pacote opcional de avaliações de forma compatível com SQLite. Ela primeiro verifica se a tabela `reviews` existe; quando o recurso não está instalado, a migração é ignorada sem falha. Quando a tabela existe, cada coluna é adicionada separadamente após consulta a `PRAGMA table_info(reviews)`, e o índice `reviews_service_id_idx` é criado com `CREATE INDEX IF NOT EXISTS`.
+
+A migração não usa `ADD COLUMN IF NOT EXISTS` nem a referência PostgreSQL `services(id)`, pois essas construções não correspondem ao banco atual do Registro Fácil. A instalação continua compatível com bancos legados e a migração é idempotente.
+
+
+## Identidade visual padrão — Grafite & Vinho
+
+O padrão institucional do sistema interno passou a ser **Grafite & Vinho — Minimalista, Paleta 03**, conforme o guia visual do cartório. Os tokens principais são grafite `#2B2B2E`, grafite claro `#45454A`, grafite ativo `#18181A`, vinho `#7A1F2B`, fundo `#F5F5F4`, texto `#1A1A1B`, superfícies brancas e bordas `#DEDEDC`.
+
+A tipografia utiliza `Source Sans 3` para corpo e formulários, `Fraunces` com uso comedido em títulos de seção e `IBM Plex Mono` para protocolos, identificadores e informações técnicas. Botões primários usam grafite, o hover usa grafite claro, o estado pressionado usa grafite ativo, ações secundárias usam contorno e ações destrutivas usam vinho. Tabelas adotam zebra discreto; vinho é reservado para prazos, vencimentos e ações irreversíveis.
+
+A seleção de paletas individuais permanece disponível. Usuários que já escolheram uma paleta continuam com sua preferência; o novo fallback institucional e os novos usuários utilizam `grafite-vinho`.

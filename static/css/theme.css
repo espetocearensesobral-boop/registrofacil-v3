@@ -3,18 +3,18 @@
 /* Definição das variáveis de cores da paleta oficial */
 :root {
     /* Core: Identidade visual (Dourados) - Mapeados para o tema ativo */
-    --color-gold-primary: #CDA865; 
-    --color-gold-dark: #8B6332; 
-    --color-gold-light: #E6D4B5; 
+    --color-gold-primary: #7A1F2B;
+    --color-gold-dark: #5E1721;
+    --color-gold-light: #F6E7E9;
     --color-primary: var(--color-primary);
     --color-primary-dark: var(--color-primary-dark);
     --color-primary-light: var(--color-primary-light);
 
     /* Neutros: Base para texto, fundo, bordas */
-    --color-black-premium: #121212; /* Preto Premium */
-    --color-gray-dark: #2A2A2A; /* Cinza Escuro */
-    --color-gray-medium: #6B6B6B; /* Cinza Médio */
-    --color-gray-light: #F8F8F8; /* Cinza Claro (da sua paleta neutra) */
+    --color-black-premium: #2B2B2E; /* Grafite */
+    --color-gray-dark: #45454A; /* Grafite claro */
+    --color-gray-medium: #6B665C; /* Texto auxiliar */
+    --color-gray-light: #F5F5F4; /* Fundo institucional */
     --color-white-pure: #FFFFFF; /* Branco Puro */
 
     /* Sistema: Feedback (sucesso, erro, aviso, info) */

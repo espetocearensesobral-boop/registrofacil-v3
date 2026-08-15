@@ -375,7 +375,7 @@ def salvar_tema():
             
         # Validação de temas permitidos contra injeção de parâmetros
         temas_validos = [
-            'dourado', 'azul-marinho', 'vinho', 'verde-esmeralda',
+            'grafite-vinho', 'dourado', 'azul-marinho', 'vinho', 'verde-esmeralda',
             'azul-petroleo', 'roxo-real', 'azul-royal', 'verde-oliva',
             'terracota', 'azul-cobalto', 'magenta',             'cinza-grafite',
             'teal', 'indigo', 'ambar', 'verde-floresta', 'azul-aco',

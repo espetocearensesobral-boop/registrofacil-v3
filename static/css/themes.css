@@ -8,10 +8,15 @@
 :root {
     /* As cores primárias agora são injetadas dinamicamente via [data-cor] no body
        Definimos fallbacks aqui apenas por segurança. */
-    --color-primary: #8B6F47;
-    --color-primary-dark: #6B5334;
-    --color-primary-light: #A88558;
-    --color-primary-subtle: rgba(139, 111, 71, 0.12);
+    --color-primary: #2B2B2E;
+    --color-primary-dark: #18181A;
+    --color-primary-light: #45454A;
+    --color-primary-subtle: rgba(122, 31, 43, 0.12);
+    --color-primary-rgb: 43, 43, 46;
+    --color-primary-contrast: #FFFFFF;
+    --color-gold-primary: #7A1F2B;
+    --color-gold-dark: #5E1721;
+    --color-gold-rgb: 122, 31, 43;
 
     /* ──────────────────────────────────────────────────────────
        ALTERNATIVAS DE PALETA (descomente a que preferir):
@@ -30,17 +35,17 @@
        ────────────────────────────────────────────────────────── */
 
     /* Neutros: Base para texto, fundo, bordas */
-    --color-black-premium: #121212;
-    --color-gray-dark: #2A2A2A;
+    --color-black-premium: #2B2B2E;
+    --color-gray-dark: #45454A;
     --color-gray-medium: #6B6B6B;
-    --color-gray-light: #F8F8F8;
+    --color-gray-light: #F5F5F4;
     --color-white-pure: #FFFFFF;
 
     /* Sistema: Feedback (sucesso, erro, aviso, info) */
-    --color-success: #2E7D32;           /* Verde sóbrio */
-    --color-warning: #F59E0B;           /* Âmbar */
-    --color-error: #DC2626;             /* Vermelho sóbrio */
-    --color-info: #3B82F6;              /* Azul claro */
+    --color-success: #2C5C36;           /* Registrado */
+    --color-warning: #6E5A16;           /* Requer assinatura */
+    --color-error: #7A1F2B;             /* Vinho institucional */
+    --color-info: #3A3A3C;              /* Arquivado/informativo */
 
     /* Tons pastéis para fundos de alerta */
     --color-pastel-success: rgba(46, 125, 50, 0.12);
@@ -50,21 +55,21 @@
     --color-pastel-primary: var(--color-primary-subtle);
 
     /* Variáveis de Tema (Tema Claro - padrão) */
-    --background-color-body: #F8F9FA;
+    --background-color-body: #F5F5F4;
     --background-color-card: var(--color-white-pure);
     --background-color-header: var(--color-white-pure);
-    --background-color-sidebar: var(--color-black-premium);
-    --background-color-sidebar-hover: var(--color-gray-dark);
+    --background-color-sidebar: #2B2B2E;
+    --background-color-sidebar-hover: #45454A;
     --background-color-input-bg: var(--color-white-pure);
 
-    --text-color-primary: #343a40;
+    --text-color-primary: #1A1A1B;
     --text-color-secondary: var(--color-gray-medium);
     --text-color-light: var(--color-white-pure);
     --text-color-link: var(--color-primary);
 
-    --border-color-default: #e9ecef;
+    --border-color-default: #DEDEDC;
     --border-color-dark: rgba(255, 255, 255, 0.1);
-    --border-color-input: #ced4da;
+    --border-color-input: #BFC0BD;
 
     /* Cores de sistema aplicadas como backgrounds de botões */
     --system-success-bg: var(--color-success);
