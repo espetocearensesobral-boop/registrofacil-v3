@@ -100,6 +100,37 @@ def executar_migracoes_dados(connection=None):
 
         migracoes.append(migracao_006)
 
+        def migracao_007(cursor):
+            """Atualiza avaliações opcionais sem usar sintaxe PostgreSQL no SQLite."""
+            tabela = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'reviews'"
+            ).fetchone()
+            if not tabela:
+                logger.info("[Migração 007] Tabela 'reviews' ausente; recurso opcional não instalado.")
+                return
+
+            colunas = {
+                row[1] for row in cursor.execute("PRAGMA table_info(reviews)").fetchall()
+            }
+            definicoes = {
+                "service_id": "TEXT",
+                "service_title": "TEXT",
+                "service_experience": "TEXT",
+            }
+            adicionadas = 0
+            for nome, tipo in definicoes.items():
+                if nome not in colunas:
+                    cursor.execute(f"ALTER TABLE reviews ADD COLUMN {nome} {tipo}")
+                    adicionadas += 1
+
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS reviews_service_id_idx "
+                "ON reviews(service_id)"
+            )
+            logger.info("[Migração 007] %s coluna(s) de avaliação adicionada(s).", adicionadas)
+
+        migracoes.append(migracao_007)
+
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]
 
@@ -117,6 +148,7 @@ def executar_migracoes_dados(connection=None):
             cursor.execute(f"PRAGMA user_version = {total}")
             conn.commit()
             logger.info(f"Migrações concluídas. Banco atualizado para versão {total}.")
+
         except Exception as e:
             conn.rollback()
             logger.error(

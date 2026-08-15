@@ -143,7 +143,7 @@ def create_app():
     @app.context_processor
     def inject_tema_cor():
         usuario_id = session.get("usuario_id")
-        tema_cor = "dourado"
+        tema_cor = "grafite-vinho"
         if usuario_id:
             if "usuario_tema_cor" in session:
                 tema_cor = session.get("usuario_tema_cor")

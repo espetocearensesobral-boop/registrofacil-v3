@@ -2,6 +2,19 @@
    COLOR-THEMES.CSS - Sistema de Paletas Personalizáveis (30 Cores)
    ============================================================ */
 
+/* 0. PADRÃO INSTITUCIONAL — GRAFITE & VINHO */
+[data-cor="grafite-vinho"] {
+    --color-primary: #2B2B2E;
+    --color-primary-dark: #18181A;
+    --color-primary-light: #45454A;
+    --color-primary-subtle: rgba(122, 31, 43, 0.12);
+    --color-primary-rgb: 43, 43, 46;
+    --color-primary-contrast: #FFFFFF;
+    --color-gold-primary: #7A1F2B;
+    --color-gold-dark: #5E1721;
+    --color-gold-rgb: 122, 31, 43;
+}
+
 /* 1. DOURADO INSTITUCIONAL */
 [data-cor="dourado"] {
     --color-primary: #8B6F47;

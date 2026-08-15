@@ -576,7 +576,7 @@ def init_db(criar_indices_performance, init_fts):
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     usuario_id INTEGER NOT NULL UNIQUE,
                     tema TEXT DEFAULT 'light',
-                    tema_cor TEXT DEFAULT 'dourado',
+                    tema_cor TEXT DEFAULT 'grafite-vinho',
                     notificacoes_push INTEGER DEFAULT 1,
                     notificacoes_email INTEGER DEFAULT 1,
                     dashboard_layout TEXT,
@@ -588,7 +588,7 @@ def init_db(criar_indices_performance, init_fts):
             ''')
             logger.info("Tabela 'user_preferences' criada no SQLite.")
         else:
-            add_column_if_not_exists_sqlite("user_preferences", "tema_cor", "TEXT", "dourado")
+            add_column_if_not_exists_sqlite("user_preferences", "tema_cor", "TEXT", "grafite-vinho")
 
             logger.info("Tabela 'user_preferences' já existe.")
 

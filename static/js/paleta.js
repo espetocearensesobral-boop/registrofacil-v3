@@ -3,6 +3,7 @@
 // ============================================================
 
 const PALETAS = [
+    { id: 'grafite-vinho', nome: 'Grafite & Vinho — Minimalista', cor: '#7A1F2B', descricao: 'Foco, autoridade e baixa fadiga visual' },
     { id: 'dourado', nome: 'Dourado Institucional', cor: '#8B6F47', descricao: 'Elegância e tradição' },
     { id: 'azul-marinho', nome: 'Azul Marinho', cor: '#1B3A5C', descricao: 'Seriedade jurídica' },
     { id: 'vinho', nome: 'Vinho Jurídico', cor: '#6B1F2E', descricao: 'Sobriedade e autoridade' },
@@ -148,7 +149,7 @@ async function carregarPaletaAtual() {
         }
     } catch (error) {
         console.error('Erro ao carregar tema:', error);
-        paletaOriginal = 'dourado';
+        paletaOriginal = 'grafite-vinho';
     }
 }
 
