@@ -31,7 +31,7 @@
     </div>
     <div class="kpi-card kpi-info">
         <div class="kpi-label">IP da Máquina</div>
-        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family:monospace;">{{ machine_ip }}</div>
+        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family: var(--rf-font-mono);">{{ machine_ip }}</div>
         <div class="kpi-sub">Endereço de rede</div>
         <i class="bi bi-hdd-network kpi-bg-icon"></i>
     </div>
@@ -104,7 +104,7 @@
                 <!-- Caminho do banco inline -->
                 <div style="display:flex;align-items:center;gap:10px;background:var(--background-color-body);border:1px solid var(--border-color-default);border-radius:8px;padding:10px 14px;">
                     <i class="bi bi-database" style="color:var(--text-color-secondary);font-size:14px;flex-shrink:0;"></i>
-                    <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);white-space:nowrap;flex-shrink:0;">Caminho do Arquivo</span>
+                    <span style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);white-space:nowrap;flex-shrink:0;">Caminho do Arquivo</span>
                     <code style="font-size:12px;word-break:break-all;color:var(--color-info);flex:1;">{{ db_config.path_completo }}</code>
                 </div>
             </div>
@@ -114,7 +114,7 @@
         <div class="rf-card">
             <div class="rf-card-header">
                 <h5 class="m-0"><i class="bi bi-folder-fill me-2" style="color:var(--color-gold-primary);"></i>Backups Existentes</h5>
-                <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ backups | length }}</span>
+                <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ backups | length }}</span>
             </div>
             <div class="card-body p-0">
                 {% if backups %}
@@ -122,10 +122,10 @@
                     <table class="table table-hover align-middle mb-0" style="font-size:13px;">
                         <thead>
                             <tr style="background:var(--background-color-body);">
-                                <th class="ps-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Nome do Arquivo</th>
-                                <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data</th>
-                                <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tamanho</th>
-                                <th class="text-center pe-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+                                <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Nome do Arquivo</th>
+                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data</th>
+                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tamanho</th>
+                                <th class="text-center pe-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
                             </tr>
                         </thead>
                         <tbody>

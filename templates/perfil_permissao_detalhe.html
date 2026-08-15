@@ -21,11 +21,11 @@
     <div class="card-body" style="padding:16px 20px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <div>
-                <label style="font-size:11px;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Nome do Perfil</label>
+                <label style="font-size: .75rem;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Nome do Perfil</label>
                 <input id="perfilNome" type="text" class="form-control form-control-sm mt-1" value="{{ perfil.nome }}">
             </div>
             <div>
-                <label style="font-size:11px;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Descrição</label>
+                <label style="font-size: .75rem;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Descrição</label>
                 <input id="perfilDesc" type="text" class="form-control form-control-sm mt-1" value="{{ perfil.descricao or '' }}">
             </div>
         </div>
@@ -56,7 +56,7 @@
             <div style="font-size:13px;font-weight:700;color:var(--text-color-primary);">
                 <i class="bi bi-chevron-down me-2" id="icon-cat-{{ loop.index }}"></i>{{ categoria }}
             </div>
-            <div style="font-size:11px;color:var(--text-color-secondary);">
+            <div style="font-size: .75rem;color:var(--text-color-secondary);">
                 {% set ativas = modulos|selectattr('concedido','eq',1)|list|length %}
                 {{ ativas }}/{{ modulos|length }}
             </div>
@@ -72,7 +72,7 @@
                        style="margin-top:2px;flex-shrink:0;" onchange="atualizarContador()">
                 <div>
                     <div style="font-weight:600;color:var(--text-color-primary);">{{ modulo.descricao }}</div>
-                    <code style="font-size:10px;color:var(--text-color-secondary);">{{ modulo.nome }}</code>
+                    <code style="font-size: .75rem;color:var(--text-color-secondary);">{{ modulo.nome }}</code>
                 </div>
             </label>
             {% endfor %}
@@ -96,10 +96,10 @@
             </div>
             <div style="flex:1;">
                 <div style="font-size:12px;font-weight:600;">{{ u.nome }}</div>
-                <div style="font-size:11px;color:var(--text-color-secondary);">@{{ u.usuario }}</div>
+                <div style="font-size: .75rem;color:var(--text-color-secondary);">@{{ u.usuario }}</div>
             </div>
             <a href="{{ url_for('permissoes.visualizar_permissoes', usuario_id=u.id) }}"
-               class="nav-btn nav-btn-secondary" style="height:26px;padding:0 8px;font-size:11px;">
+               class="nav-btn nav-btn-secondary" style="height:26px;padding:0 8px;font-size: .75rem;">
                 <i class="bi bi-eye"></i>
             </a>
         </div>

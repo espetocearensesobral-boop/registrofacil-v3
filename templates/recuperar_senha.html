@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Senha - Registro Fácil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+        body{font-family: var(--rf-font-sans);min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
         /* Painel esquerdo = formulário */
         .auth-panel-left{width:100%;max-width:480px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0}
         @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
@@ -37,14 +37,14 @@
         .auth-icon-badge{width:64px;height:64px;border-radius:50%;background:rgba(205,168,101,.1);border:1.5px solid rgba(205,168,101,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.8rem;color:#CDA865}
         .auth-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em;text-align:center}
         .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem;text-align:center;line-height:1.6}
-        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+        .auth-label{display:block;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
         .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
         .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
         .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
-        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family: var(--rf-font-sans)}
         .auth-input-group input::placeholder{color:#444}
         .auth-field{margin-bottom:1.2rem}
-        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family: var(--rf-font-sans);cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
         .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
         .auth-btn:active{transform:translateY(1px)}
         .auth-btn i{font-size:16px}
@@ -60,7 +60,7 @@
         .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
         .auth-alert .close-btn:hover{opacity:1}
         .honeypot-field{position:absolute;left:-9999px;visibility:hidden;height:1px;width:1px;pointer-events:none;opacity:0}
-        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family: var(--rf-font-mono)}
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css') }}">

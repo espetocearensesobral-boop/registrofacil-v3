@@ -1,0 +1,34 @@
+static/css/compact.css:562:    font-family: 'Segoe UI', sans-serif;
+static/css/main.css:10:    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+static/documentacao.html:26:        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.7; margin: 0; }
+templates/apresentantes/visualizar.html:101:                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+templates/atividades.html:317:    font-family: inherit;
+templates/backup.html:34:        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family:monospace;">{{ machine_ip }}</div>
+templates/base.html:348:                .gs-kbd { background:var(--background-color-body); border:1px solid var(--border-color-default); border-radius:5px; padding:2px 7px; font-size:11px; color:var(--text-color-secondary); font-family:monospace; }
+templates/dashboard.html:117:                                        <div style="font-family:monospace;font-size:11px;font-weight:600;margin-top:2px;color:var(--text-color-secondary);">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+templates/dashboard.html:186:                                        <div style="font-size:11px;margin-top:2px;font-family:monospace;font-weight:600;">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+templates/login.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8;overflow:hidden}
+templates/login.html:43:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+templates/login.html:48:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+templates/login.html:66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/novo_usuario.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/novo_usuario.html:44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit;min-width:0}
+templates/novo_usuario.html:49:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.6rem}
+templates/novo_usuario.html:66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/permissoes_usuario.html:163:                        <div style="font-size:10px;color:var(--text-color-secondary);margin-top:2px;font-family:monospace;">{{ perm.nome }}</div>
+templates/processos/visualizar.html:133:                <div class="det-val fw-bold" style="font-family:monospace;">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</div>
+templates/recuperar_senha.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/recuperar_senha.html:44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+templates/recuperar_senha.html:47:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+templates/recuperar_senha.html:63:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/relatorios/_cadastros_print_styles.html:4:        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+templates/relatorios/historico_processo_print.html:10:        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1a1a1a; background: #fff; font-size: 10pt; line-height: 1.4; }
+templates/relatorios/processos_print.html:10:        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #222; background: #fff; font-size: 8.5pt; }
+templates/relatorios/relatorio_processo_print.html:11:            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+templates/representantes/visualizar.html:101:                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+templates/reset_password.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/reset_password.html:44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+templates/reset_password.html:47:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+templates/reset_password.html:64:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/titulares/visualizar.html:101:                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+templates/visualizar.html:133:                <div class="det-val fw-bold" style="font-family:monospace;">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</div>

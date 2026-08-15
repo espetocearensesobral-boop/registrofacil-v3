@@ -1,0 +1,191 @@
+static/css/compact.css:562:    font-family: 'Segoe UI', sans-serif;
+static/css/main.css:10:    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+static/css/processos.css:406:    font-size: 0.7rem;
+templates/apresentantes/editar.html:41:    display: block; font-size: 10px; font-weight: 700;
+templates/apresentantes/editar.html:77:.nt-required-note { margin-left: auto; font-size: 11px; color: var(--text-color-secondary); }
+templates/apresentantes/index.html:58:                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Apresentante</label>
+templates/apresentantes/index.html:65:                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
+templates/apresentantes/index.html:84:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+templates/apresentantes/index.html:91:                        {% set th_style = "padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);" %}
+templates/apresentantes/index.html:112:                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/apresentantes/index.html:123:                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+templates/apresentantes/index.html:127:                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/apresentantes/novo.html:38:    display: block; font-size: 10px; font-weight: 700;
+templates/apresentantes/novo.html:71:.nt-required-note { margin-left: auto; font-size: 11px; color: var(--text-color-secondary); }
+templates/apresentantes/visualizar.html:76:                    <code style="font-size:10px;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % apresentante.id }}</code>
+templates/apresentantes/visualizar.html:78:                    <span style="font-size:11px;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
+templates/apresentantes/visualizar.html:83:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+templates/apresentantes/visualizar.html:90:                        <th class="ps-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
+templates/apresentantes/visualizar.html:91:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
+templates/apresentantes/visualizar.html:92:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
+templates/apresentantes/visualizar.html:93:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
+templates/apresentantes/visualizar.html:94:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
+templates/apresentantes/visualizar.html:95:                        <th class="text-end pe-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+templates/apresentantes/visualizar.html:106:                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size:11px;border-radius:6px;padding:3px 8px;">
+templates/backup.html:107:                    <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);white-space:nowrap;flex-shrink:0;">Caminho do Arquivo</span>
+templates/backup.html:117:                <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ backups | length }}</span>
+templates/backup.html:125:                                <th class="ps-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Nome do Arquivo</th>
+templates/backup.html:126:                                <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data</th>
+templates/backup.html:127:                                <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tamanho</th>
+templates/backup.html:128:                                <th class="text-center pe-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+templates/base.html:348:                .gs-kbd { background:var(--background-color-body); border:1px solid var(--border-color-default); border-radius:5px; padding:2px 7px; font-size:11px; color:var(--text-color-secondary); font-family:monospace; }
+templates/base.html:350:                .gs-section-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-color-secondary); padding:10px 16px 4px; }
+templates/base.html:356:                .gs-item-sub { font-size:11px; color:var(--text-color-secondary); margin-top:1px; }
+templates/base.html:362:                .gs-footer { display:flex; align-items:center; gap:12px; padding:8px 16px; border-top:1px solid var(--border-color-default); background:var(--background-color-body); font-size:11px; color:var(--text-color-secondary); }
+templates/base.html:368:                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size:11px;opacity:.5;"></button>
+templates/base.html:374:                            <p style="font-size:10px;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
+templates/configuracoes.html:31:    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-color-secondary);
+templates/configuracoes.html:43:.cfg-add-row .cfg-fg label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-color-secondary); margin: 0; }
+templates/configuracoes.html:62:.cfg-tbl th { padding: 8px 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-color-secondary); text-align: left; white-space: nowrap; }
+templates/configuracoes.html:82:.cfg-info-lbl { width: 130px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-secondary); flex-shrink: 0; }
+templates/configuracoes.html:86:.cfg-fld label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-secondary); margin-bottom: 4px; }
+templates/configuracoes.html:144:.appearance-number { color: var(--color-primary); font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+templates/configuracoes.html:160:.appearance-use { display: flex; align-items: center; gap: 5px; color: var(--color-primary); font-size: 11px; font-weight: 600; }
+templates/configuracoes.html:235:                    <span style="background:var(--color-black-premium);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ status_list|length }}</span>
+templates/configuracoes.html:250:                                <td><code style="font-size:11px;background:var(--background-color-body);padding:2px 6px;border-radius:4px;">{{s.hex_color}}</code></td>
+templates/configuracoes.html:253:                                    <span style="font-size:11px;background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+templates/configuracoes.html:312:                    <span style="background:var(--color-black-premium);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ tipos_processo|length }}</span>
+templates/configuracoes.html:325:                                    <span style="font-size:11px;background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+templates/configuracoes.html:462:                            <div class="form-text text-muted mt-2" style="font-size:11px;"><i class="bi bi-shield-lock"></i> A senha é armazenada criptografada. O sistema confirma o tamanho do arquivo remoto após o envio.</div>
+templates/configuracoes.html:622:                                            <span style="font-size:11px;font-weight:600;">Alterar</span>
+templates/configuracoes.html:638:                                <p style="font-size:11px;color:var(--text-color-secondary);text-align:center;margin:0;">
+templates/configuracoes.html:648:                                    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Cadastrado em</div>
+templates/configuracoes.html:652:                                    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);">Última Atualização</div>
+templates/configuracoes.html:656:                                <div style="border-top:1px solid var(--border-color-default);padding-top:8px;color:var(--color-warning);font-size:11px;">
+templates/configuracoes.html:773:                <div class="form-text text-muted" style="margin-top:4px;font-size:11px;">
+templates/dashboard.html:49:            border-radius: 99px; padding: 4px 12px; font-size: 11px; font-weight: 600;
+templates/dashboard.html:98:                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size:11px;">
+templates/dashboard.html:108:                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
+templates/dashboard.html:109:                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Status</th>
+templates/dashboard.html:117:                                        <div style="font-family:monospace;font-size:11px;font-weight:600;margin-top:2px;color:var(--text-color-secondary);">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+templates/dashboard.html:120:                                        <span class="badge rounded-pill" style="background-color:{{ processo['status_hex'] }};color:{{ get_contrast_color(processo['status_hex']) }};font-size:10px;">
+templates/dashboard.html:146:                        <span class="badge ms-1" style="background:var(--color-error);color:#fff;font-size:10px;border-radius:99px;padding:2px 7px;vertical-align:middle;">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
+templates/dashboard.html:149:                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size:11px;">
+templates/dashboard.html:159:                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
+templates/dashboard.html:160:                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Prazo</th>
+templates/dashboard.html:186:                                        <div style="font-size:11px;margin-top:2px;font-family:monospace;font-weight:600;">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+templates/dashboard.html:189:                                        <span style="display:inline-flex;align-items:center;gap:4px;background:{{ prazo_color }}18;color:{{ prazo_color }};border:1px solid {{ prazo_color }}55;border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700;white-space:nowrap;">
+templates/empresa.html:15:    font-size: 10px; font-weight: 700; text-transform: uppercase;
+templates/empresa.html:19:    display: block; font-size: 10px; font-weight: 700;
+templates/empresa.html:34:.emp-fld .invalid-feedback { font-size: 11px; color: var(--color-error); margin-top: 3px; display: none; }
+templates/empresa.html:144:                                <span style="font-size:11px;font-weight:600;">Alterar</span>
+templates/empresa.html:155:                        <button type="button" id="btnCancelarUpload" style="font-size:11px;color:var(--color-error);background:none;border:none;padding:2px 0;cursor:pointer;margin-top:3px;">
+templates/empresa.html:168:                    <p style="font-size:11px;color:var(--text-color-secondary);text-align:center;margin:0;">
+templates/login.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8;overflow:hidden}
+templates/login.html:39:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+templates/metricas.html:92:        font-size: 11px;
+templates/metricas.html:149:        font-size: 11px;
+templates/metricas.html:175:        font-size: 10px;
+templates/metricas.html:252:        font-size: 11px;
+templates/novo_usuario.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/novo_usuario.html:40:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+templates/perfil.html:50:                        <label class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Foto de Perfil</label>
+templates/perfil.html:86:                        <label for="nome" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">
+templates/perfil.html:100:                        <label for="email" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">
+templates/perfil.html:127:                        <label for="senha_atual" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Senha Atual</label>
+templates/perfil.html:144:                        <label for="nova_senha" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Nova Senha</label>
+templates/perfil.html:162:                        <label for="confirmar_senha" class="form-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Confirmar Nova Senha</label>
+templates/perfil.html:284:.theme-choice small { color: var(--text-color-secondary); font-size: 11px; line-height: 1.35; }
+templates/perfil_permissao_detalhe.html:24:                <label style="font-size:11px;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Nome do Perfil</label>
+templates/perfil_permissao_detalhe.html:28:                <label style="font-size:11px;font-weight:600;color:var(--text-color-secondary);text-transform:uppercase;">Descrição</label>
+templates/perfil_permissao_detalhe.html:59:            <div style="font-size:11px;color:var(--text-color-secondary);">
+templates/perfil_permissao_detalhe.html:75:                    <code style="font-size:10px;color:var(--text-color-secondary);">{{ modulo.nome }}</code>
+templates/perfil_permissao_detalhe.html:99:                <div style="font-size:11px;color:var(--text-color-secondary);">@{{ u.usuario }}</div>
+templates/perfil_permissao_detalhe.html:102:               class="nav-btn nav-btn-secondary" style="height:26px;padding:0 8px;font-size:11px;">
+templates/perfis_permissao.html:47:                    <div style="font-size:11px;color:var(--text-color-secondary);">{{ perfil.descricao }}</div>
+templates/perfis_permissao.html:59:                       class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:11px;">
+templates/perfis_permissao.html:63:                            class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:11px;color:#dc2626;"
+templates/permissoes_usuario.html:24:                    <code style="font-size:11px;background:var(--background-color-body);padding:1px 7px;border-radius:4px;color:var(--text-color-secondary);">@{{ usuario.usuario }}</code>
+templates/permissoes_usuario.html:25:                    <span class="badge" style="background:var(--color-gold-dark);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ usuario.role|upper }}</span>
+templates/permissoes_usuario.html:27:                    <span class="badge" style="background:#198754;color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;"><i class="bi bi-shield-fill-check me-1"></i>Acesso Total</span>
+templates/permissoes_usuario.html:34:                <div style="font-size:11px;color:var(--text-color-secondary);">permissões ativas</div>
+templates/permissoes_usuario.html:74:        <div style="font-size:11px;color:#f59e0b;margin-top:8px;background:#fff8e1;border-radius:6px;padding:6px 10px;">
+templates/permissoes_usuario.html:100:            <span id="contador-pct" style="font-size:11px;color:var(--text-color-secondary);white-space:nowrap;">0%</span>
+templates/permissoes_usuario.html:130:                <div style="font-size:11px;color:var(--text-color-secondary);margin-top:1px;">
+templates/permissoes_usuario.html:140:                    style="height:26px;padding:0 10px;font-size:11px;flex-shrink:0;"
+templates/permissoes_usuario.html:163:                        <div style="font-size:10px;color:var(--text-color-secondary);margin-top:2px;font-family:monospace;">{{ perm.nome }}</div>
+templates/processos/editar.html:631:                    <div style="font-size:11px;color:var(--text-color-secondary);">${formatBytes(file.size)}</div>
+templates/processos/editar.html:633:                <button type="button" data-idx="${idx}" class="btn-remove-file nav-btn nav-btn-danger" style="height:26px;padding:0 8px;font-size:11px;flex-shrink:0;"><i class="bi bi-x"></i></button>`;
+templates/processos/novo.html:578:                    <div style="font-size:11px;color:var(--text-color-secondary);">${formatBytes(file.size)}</div>
+templates/processos/novo.html:580:                <button type="button" data-idx="${idx}" class="btn-remove-file nav-btn nav-btn-danger" style="height:26px;padding:0 8px;font-size:11px;flex-shrink:0;">
+templates/processos/todos.html:158:                            {% macro sort_icon_p(col) %}{% if ordenar == col + '_asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;font-size:10px;"></i>{% elif ordenar == col + '_desc' %}<i class="bi bi-sort-down ms-1" style="opacity:.8;font-size:10px;"></i>{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;font-size:10px;"></i>{% endif %}{% endmacro %}
+templates/processos/visualizar.html:122:            <span style="background:var(--background-color-body);border:1px solid var(--border-color-default);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 10px;font-weight:600;">#{{ '%04d' % processo.id }}</span>
+templates/processos/visualizar.html:169:                <div class="det-val" style="font-size: 11px; color: var(--text-color-secondary);">{{ processo.numero_processo }}</div>
+templates/processos/visualizar.html:188:    font-size: 10px;
+templates/processos/visualizar.html:226:                <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ anexos_do_processo | length }}</span>
+templates/processos/visualizar.html:239:                                        <small style="color:var(--text-color-secondary);font-size:10px;">
+templates/processos/visualizar.html:372:    font-size: 11px; font-weight: 700; padding: 2px 8px;
+templates/processos/visualizar.html:380:.htl-meta { font-size: 11px; color: var(--text-color-secondary); }
+templates/processos/visualizar.html:383:.htl-change .field-name { font-weight: 700; color: var(--text-color-secondary); text-transform: uppercase; font-size: 10px; }
+templates/recuperar_senha.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/recuperar_senha.html:40:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+templates/relatorios/_cadastros_print_styles.html:4:        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+templates/relatorios/_cadastros_print_styles.html:57:    .sum-value.small { font-size: 9pt; color: #555; font-weight: 600; }
+templates/relatorios/_cadastros_print_styles.html:64:        font-size: 8pt;
+templates/relatorios/_cadastros_print_styles.html:88:        font-size: 8pt;
+templates/relatorios/historico_processo_print.html:10:        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1a1a1a; background: #fff; font-size: 10pt; line-height: 1.4; }
+templates/relatorios/historico_processo_print.html:20:        .generation-date { font-size: 8pt; color: #999; font-style: italic; margin-top: 2px; }
+templates/relatorios/historico_processo_print.html:41:        .hist-obs { background: #fffdf5 !important; font-style: italic; color: #7a6035; font-size: 8pt; }
+templates/relatorios/historico_processo_print.html:49:        .empty-hist { text-align: center; padding: 28px 16px; color: #bbb; font-style: italic; font-size: 10pt; }
+templates/relatorios/historico_processo_print.html:75:            <div style="font-size:9pt;color:#999;margin-top:2px;">Titular: {{ processo.titular }}</div>
+templates/relatorios/processos_print.html:10:        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #222; background: #fff; font-size: 8.5pt; }
+templates/relatorios/processos_print.html:19:        .report-sub { font-size: 8pt; color: #999; font-style: italic; }
+templates/relatorios/processos_print.html:27:        .sum-value.small { font-size: 8pt; color: #555; font-weight: 600; }
+templates/relatorios/relatorio_processo_print.html:11:            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+templates/relatorios/relatorio_processo_print.html:12:            line-height: 1.4; color: #1a1a1a; background: #fff; font-size: 10pt;
+templates/relatorios/relatorio_processo_print.html:23:        .generation-date { font-size: 8pt; color: #999; font-style: italic; margin-top: 2px; }
+templates/relatorios/relatorio_processo_print.html:107:                        <span class="field-value" style="font-size: 11pt; font-weight: 700;">{{ processo.titular | default('—') }}</span>
+templates/relatorios/relatorio_processo_print.html:183:                        <span class="field-value" style="font-size: 8pt; color: #999;">{{ processo.numero_processo }}</span>
+templates/representantes/editar.html:41:    display: block; font-size: 10px; font-weight: 700;
+templates/representantes/editar.html:77:.nt-required-note { margin-left: auto; font-size: 11px; color: var(--text-color-secondary); }
+templates/representantes/index.html:58:                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Representante</label>
+templates/representantes/index.html:65:                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
+templates/representantes/index.html:84:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+templates/representantes/index.html:91:                        {% set th_style = "padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);" %}
+templates/representantes/index.html:112:                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/representantes/index.html:123:                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+templates/representantes/index.html:127:                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/representantes/novo.html:38:    display: block; font-size: 10px; font-weight: 700;
+templates/representantes/novo.html:71:.nt-required-note { margin-left: auto; font-size: 11px; color: var(--text-color-secondary); }
+templates/representantes/visualizar.html:76:                    <code style="font-size:10px;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % representante.id }}</code>
+templates/representantes/visualizar.html:78:                    <span style="font-size:11px;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
+templates/representantes/visualizar.html:83:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+templates/representantes/visualizar.html:90:                        <th class="ps-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
+templates/representantes/visualizar.html:91:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
+templates/representantes/visualizar.html:92:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
+templates/representantes/visualizar.html:93:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
+templates/representantes/visualizar.html:94:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
+templates/representantes/visualizar.html:95:                        <th class="text-end pe-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+templates/representantes/visualizar.html:106:                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size:11px;border-radius:6px;padding:3px 8px;">
+templates/reset_password.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/reset_password.html:38:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+templates/titulares/editar.html:41:    display: block; font-size: 10px; font-weight: 700;
+templates/titulares/editar.html:77:.nt-required-note { margin-left: auto; font-size: 11px; color: var(--text-color-secondary); }
+templates/titulares/index.html:58:                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Titular</label>
+templates/titulares/index.html:65:                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
+templates/titulares/index.html:84:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+templates/titulares/index.html:91:                        {% set th_style = "padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);" %}
+templates/titulares/index.html:112:                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/titulares/index.html:123:                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+templates/titulares/index.html:127:                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/titulares/novo.html:38:    display: block; font-size: 10px; font-weight: 700;
+templates/titulares/novo.html:71:.nt-required-note { margin-left: auto; font-size: 11px; color: var(--text-color-secondary); }
+templates/titulares/visualizar.html:76:                    <code style="font-size:10px;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % titular.id }}</code>
+templates/titulares/visualizar.html:78:                    <span style="font-size:11px;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
+templates/titulares/visualizar.html:83:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+templates/titulares/visualizar.html:90:                        <th class="ps-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
+templates/titulares/visualizar.html:91:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
+templates/titulares/visualizar.html:92:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
+templates/titulares/visualizar.html:93:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
+templates/titulares/visualizar.html:94:                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
+templates/titulares/visualizar.html:95:                        <th class="text-end pe-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+templates/titulares/visualizar.html:106:                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size:11px;border-radius:6px;padding:3px 8px;">
+templates/todos.html:159:                            {% macro sort_icon_p(col) %}{% if ordenar == col + '_asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;font-size:10px;"></i>{% elif ordenar == col + '_desc' %}<i class="bi bi-sort-down ms-1" style="opacity:.8;font-size:10px;"></i>{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;font-size:10px;"></i>{% endif %}{% endmacro %}
+templates/visualizar.html:122:            <span style="background:var(--background-color-body);border:1px solid var(--border-color-default);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 10px;font-weight:600;">#{{ '%04d' % processo.id }}</span>
+templates/visualizar.html:169:                <div class="det-val" style="font-size: 11px; color: var(--text-color-secondary);">{{ processo.numero_processo }}</div>
+templates/visualizar.html:188:    font-size: 10px;
+templates/visualizar.html:226:                <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ anexos_do_processo | length }}</span>
+templates/visualizar.html:239:                                        <small style="color:var(--text-color-secondary);font-size:10px;">
+templates/visualizar.html:372:    font-size: 11px; font-weight: 700; padding: 2px 8px;
+templates/visualizar.html:380:.htl-meta { font-size: 11px; color: var(--text-color-secondary); }
+templates/visualizar.html:383:.htl-change .field-name { font-weight: 700; color: var(--text-color-secondary); text-transform: uppercase; font-size: 10px; }

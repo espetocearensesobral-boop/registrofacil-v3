@@ -119,7 +119,7 @@
             <span class="badge rounded-pill" style="background-color: {{ processo.status_hex_original | default('#6c757d') }}; color: {{ get_contrast_color(processo.status_hex_original | default('#6c757d')) }}; font-size:12px;padding:4px 12px;">
                 {{ (processo.status_nome_original | default('Desconhecido')) | replace('_', ' ') | capitalize }}
             </span>
-            <span style="background:var(--background-color-body);border:1px solid var(--border-color-default);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 10px;font-weight:600;">#{{ '%04d' % processo.id }}</span>
+            <span style="background:var(--background-color-body);border:1px solid var(--border-color-default);color:var(--text-color-secondary);font-size: .75rem;border-radius:6px;padding:3px 10px;font-weight:600;">#{{ '%04d' % processo.id }}</span>
         </div>
     </div>
     <div class="rf-card-body" style="padding:0;">
@@ -130,7 +130,7 @@
             </div>
             <div class="det-item">
                 <div class="det-lbl">Matrícula / Nº Ordem</div>
-                <div class="det-val fw-bold" style="font-family:monospace;">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</div>
+                <div class="det-val fw-bold" style="font-family: var(--rf-font-mono);">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</div>
             </div>
             <div class="det-item">
                 <div class="det-lbl">Responsável</div>
@@ -166,7 +166,7 @@
             </div>
             <div class="det-item" style="border-bottom: none;">
                 <div class="det-lbl">Identificador Único</div>
-                <div class="det-val" style="font-size: 11px; color: var(--text-color-secondary);">{{ processo.numero_processo }}</div>
+                <div class="det-val" style="font-size: .75rem; color: var(--text-color-secondary);">{{ processo.numero_processo }}</div>
             </div>
         </div>
     </div>
@@ -185,7 +185,7 @@
     border-left: 1px solid var(--border-color-default);
 }
 .det-lbl {
-    font-size: 10px;
+    font-size: .75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .05em;
@@ -223,7 +223,7 @@
         <div class="rf-card h-100">
             <div class="rf-card-header d-flex justify-content-between align-items-center">
                 <h5 class="m-0"><i class="bi bi-paperclip me-2" style="color:var(--color-gold-primary);"></i>Anexos</h5>
-                <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ anexos_do_processo | length }}</span>
+                <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ anexos_do_processo | length }}</span>
             </div>
             <div class="rf-card-body p-0">
                 {% if anexos_do_processo %}
@@ -236,7 +236,7 @@
                                     <i class="bi {{ get_icone_anexo(anexo.tipo) }}" style="font-size:16px;color:var(--color-gold-primary);"></i>
                                     <div>
                                         <div class="fw-semibold text-truncate" style="max-width: 180px;">{{ anexo.nome_original }}</div>
-                                        <small style="color:var(--text-color-secondary);font-size:10px;">
+                                        <small style="color:var(--text-color-secondary);font-size: .75rem;">
                                             {{ formatar_tamanho_arquivo(anexo.tamanho) }}
                                         </small>
                                     </div>
@@ -369,7 +369,7 @@
 .htl-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
 .htl-badge {
     display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11px; font-weight: 700; padding: 2px 8px;
+    font-size: .75rem; font-weight: 700; padding: 2px 8px;
     border-radius: 99px; white-space: nowrap;
 }
 .htl-badge.criacao  { background: rgba(25,135,84,.12); color: var(--color-success); }
@@ -377,10 +377,10 @@
 .htl-badge.exclusao { background: rgba(220,53,69,.12); color: var(--color-error); }
 .htl-badge.status   { background: rgba(184,142,67,.1); color: var(--color-gold-dark); }
 .htl-badge.sistema  { background: var(--background-color-body); color: var(--text-color-secondary); }
-.htl-meta { font-size: 11px; color: var(--text-color-secondary); }
+.htl-meta { font-size: .75rem; color: var(--text-color-secondary); }
 .htl-detail { font-size: 13px; color: var(--text-color-primary); }
 .htl-change { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: var(--background-color-body); padding: 6px 10px; border-radius: 6px; margin-top: 4px; border: 1px solid var(--border-color-default); }
-.htl-change .field-name { font-weight: 700; color: var(--text-color-secondary); text-transform: uppercase; font-size: 10px; }
+.htl-change .field-name { font-weight: 700; color: var(--text-color-secondary); text-transform: uppercase; font-size: .75rem; }
 .htl-change .val-old { color: var(--color-error); text-decoration: line-through; opacity: 0.7; }
 .htl-change .arr { color: var(--text-color-secondary); }
 .htl-change .val-new { color: var(--color-success); font-weight: 600; }

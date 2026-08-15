@@ -403,7 +403,7 @@
     margin-right: 0.5rem;
 }
 .file-badge .btn-close {
-    font-size: 0.7rem;
+    font-size: .75rem;
     margin-left: 0.5rem;
     opacity: 0.7;
     transition: opacity 0.2s;

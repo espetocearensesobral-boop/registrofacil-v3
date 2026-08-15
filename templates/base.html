@@ -112,19 +112,6 @@
         .navbar .dropdown + .nav-btn,
         .navbar .dropdown + .dropdown { margin-left: 0; } /* gap-2 do flex cuida disso */
 
-        /* Botão Editar no cabeçalho — preto padrão do sistema (sobrepõe dourado) */
-        .navbar .nav-btn-gold,
-        .navbar .nav-btn.nav-btn-gold {
-            background-color: var(--rf-action-primary) !important;
-            border-color: var(--rf-action-primary) !important;
-            color: var(--rf-text-on-primary) !important;
-        }
-        .navbar .nav-btn-gold:hover,
-        .navbar .nav-btn.nav-btn-gold:hover {
-            background-color: var(--rf-action-primary-hover) !important;
-            border-color: var(--rf-action-primary-hover) !important;
-            color: var(--rf-text-on-primary) !important;
-        }
     </style>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
@@ -358,33 +345,33 @@
                 .gs-input-bar i.gs-icon { font-size:17px; color:var(--text-color-secondary); flex-shrink:0; }
                 .gs-input-bar input { flex:1; border:none; background:transparent; font-size:15px; color:var(--text-color-primary); outline:none; }
                 .gs-input-bar input::placeholder { color:var(--text-color-secondary); }
-                .gs-kbd { background:var(--background-color-body); border:1px solid var(--border-color-default); border-radius:5px; padding:2px 7px; font-size:11px; color:var(--text-color-secondary); font-family:monospace; }
+                .gs-kbd { background:var(--background-color-body); border:1px solid var(--border-color-default); border-radius:5px; padding:2px 7px; font-size: .75rem; color:var(--text-color-secondary); font-family: var(--rf-font-mono); }
                 .gs-body { max-height:380px; overflow-y:auto; background:var(--background-color-card); }
-                .gs-section-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-color-secondary); padding:10px 16px 4px; }
+                .gs-section-lbl { font-size: .75rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-color-secondary); padding:10px 16px 4px; }
                 .gs-item { display:flex; align-items:center; gap:12px; padding:10px 16px; cursor:pointer; transition:background .1s; text-decoration:none; color:inherit; border:none; background:transparent; width:100%; }
                 .gs-item:hover, .gs-item.gs-active { background:var(--background-color-body); }
                 .gs-item-icon { width:34px; height:34px; border-radius:8px; background:var(--background-color-body); border:1px solid var(--border-color-default); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; color:var(--color-gold-dark); }
                 .gs-item-text { flex:1; min-width:0; text-align:left; }
                 .gs-item-title { font-size:13px; font-weight:600; color:var(--text-color-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-                .gs-item-sub { font-size:11px; color:var(--text-color-secondary); margin-top:1px; }
+                .gs-item-sub { font-size: .75rem; color:var(--text-color-secondary); margin-top:1px; }
                 .gs-item-arrow { font-size:12px; color:var(--text-color-secondary); }
                 .gs-empty { padding:36px 16px; text-align:center; }
                 .gs-empty i { font-size:2rem; opacity:.2; display:block; margin-bottom:8px; }
                 .gs-empty p { font-size:13px; color:var(--text-color-secondary); margin:0; }
                 .gs-loading { padding:24px; text-align:center; color:var(--text-color-secondary); font-size:13px; }
-                .gs-footer { display:flex; align-items:center; gap:12px; padding:8px 16px; border-top:1px solid var(--border-color-default); background:var(--background-color-body); font-size:11px; color:var(--text-color-secondary); }
+                .gs-footer { display:flex; align-items:center; gap:12px; padding:8px 16px; border-top:1px solid var(--border-color-default); background:var(--background-color-body); font-size: .75rem; color:var(--text-color-secondary); }
                 </style>
                 <div class="gs-wrap">
                     <div class="gs-input-bar">
                         <i class="bi bi-search gs-icon"></i>
                         <input type="text" id="modal-global-search-input" placeholder="Buscar processos por titular, matrícula ou ID..." autofocus autocomplete="off">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size:11px;opacity:.5;"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size: .75rem;opacity:.5;"></button>
                     </div>
                     <div class="gs-body" id="modal-search-results-list">
                         <div class="gs-empty" id="modal-search-no-results">
                             <i class="bi bi-search"></i>
                             <p>Digite para buscar processos no sistema</p>
-                            <p style="font-size:10px;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
+                            <p style="font-size: .75rem;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
                         </div>
                     </div>
                     <div class="gs-footer">

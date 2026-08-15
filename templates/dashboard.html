@@ -46,7 +46,7 @@
         .greeting-sub { font-size: 13px; color: var(--text-color-secondary); line-height: 1.4; margin:0; }
         .greeting-time-badge {
             background: var(--background-color-body); border: 1px solid var(--border-color-default);
-            border-radius: 99px; padding: 4px 12px; font-size: 11px; font-weight: 600;
+            border-radius: 99px; padding: 4px 12px; font-size: .75rem; font-weight: 600;
             color: var(--text-color-secondary); white-space: nowrap; flex-shrink: 0;
             display:flex; align-items:center; gap:5px;
         }
@@ -95,7 +95,7 @@
             <div class="rf-card h-100" style="display:flex;flex-direction:column;">
                 <div class="rf-card-header" style="display:flex;align-items:center;justify-content:space-between;">
                     <h6 class="rf-card-title mb-0"><i class="bi bi-clock-history me-1"></i> Processos Recentes</h6>
-                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size:11px;">
+                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size: .75rem;">
                         <i class="bi bi-list-ul"></i> Ver todos
                     </a>
                 </div>
@@ -105,8 +105,8 @@
                         <table class="table table-hover align-middle mb-0" style="font-size:13px;">
                             <thead style="background:var(--background-color-body);">
                                 <tr>
-                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
-                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Status</th>
+                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
+                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -114,10 +114,10 @@
                                 <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" style="cursor:pointer;" title="Clique para visualizar">
                                     <td style="padding:9px 14px;">
                                         <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">{{ processo['titular'] }}</div>
-                                        <div style="font-family:monospace;font-size:11px;font-weight:600;margin-top:2px;color:var(--text-color-secondary);">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+                                        <div style="font-family: var(--rf-font-mono);font-size: .75rem;font-weight:600;margin-top:2px;color:var(--text-color-secondary);">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
                                     </td>
                                     <td style="padding:9px 14px;text-align:right;white-space:nowrap;">
-                                        <span class="badge rounded-pill" style="background-color:{{ processo['status_hex'] }};color:{{ get_contrast_color(processo['status_hex']) }};font-size:10px;">
+                                        <span class="badge rounded-pill" style="background-color:{{ processo['status_hex'] }};color:{{ get_contrast_color(processo['status_hex']) }};font-size: .75rem;">
                                             {{ (processo['status_nome'] | default('—')) | replace('_',' ') | capitalize }}
                                         </span>
                                     </td>
@@ -143,10 +143,10 @@
                     <h6 class="rf-card-title mb-0">
                         <i class="bi bi-exclamation-triangle-fill me-1" style="color:var(--color-error);"></i> Prazos Críticos
                         {% if dashboard_info.processos_com_prazo_critico %}
-                        <span class="badge ms-1" style="background:var(--color-error);color:#fff;font-size:10px;border-radius:99px;padding:2px 7px;vertical-align:middle;">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
+                        <span class="badge ms-1" style="background:var(--color-error);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 7px;vertical-align:middle;">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
                         {% endif %}
                     </h6>
-                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size:11px;">
+                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size: .75rem;">
                         <i class="bi bi-clock-history"></i> Pendentes
                     </a>
                 </div>
@@ -156,8 +156,8 @@
                         <table class="table table-hover align-middle mb-0" style="font-size:13px;">
                             <thead style="background:var(--background-color-body);">
                                 <tr>
-                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
-                                    <th style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Prazo</th>
+                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
+                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Prazo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -183,10 +183,10 @@
                                 <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}" style="cursor:pointer;" title="Clique para visualizar">
                                     <td style="padding:9px 14px;max-width:180px;">
                                         <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ processo['titular'] }}</div>
-                                        <div style="font-size:11px;margin-top:2px;font-family:monospace;font-weight:600;">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+                                        <div style="font-size: .75rem;margin-top:2px;font-family: var(--rf-font-mono);font-weight:600;">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
                                     </td>
                                     <td style="padding:9px 14px;text-align:right;white-space:nowrap;">
-                                        <span style="display:inline-flex;align-items:center;gap:4px;background:{{ prazo_color }}18;color:{{ prazo_color }};border:1px solid {{ prazo_color }}55;border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700;white-space:nowrap;">
+                                        <span style="display:inline-flex;align-items:center;gap:4px;background:{{ prazo_color }}18;color:{{ prazo_color }};border:1px solid {{ prazo_color }}55;border-radius:99px;padding:2px 9px;font-size: .75rem;font-weight:700;white-space:nowrap;">
                                             <i class="bi {{ prazo_icon }}"></i>{{ prazo_texto }}
                                         </span>
                                     </td>

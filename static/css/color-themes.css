@@ -78,6 +78,7 @@
     --rf-font-xl: 1.375rem;
     --rf-control-height: 2.75rem;
     --rf-sidebar-width: 15rem;
+    --rf-sidebar-collapsed-width: 4rem;
     --rf-p3-grafite: var(--color-primary);
     --rf-p3-grafite-claro: var(--color-primary-light);
     --rf-p3-grafite-ativo: var(--color-primary-dark);
@@ -121,4 +122,37 @@
     --color-primary:#244353; --color-primary-light:#3C6878; --color-primary-dark:#142B36; --color-primary-subtle:rgba(36,67,83,.12); --color-primary-rgb:36,67,83; --color-gold-primary:#B58A3A; --color-gold-dark:#896526;
     --background-color-body:#F6F1E6; --background-color-card:#FFFDFC; --background-color-header:#FFFDFC; --background-color-hover:#EEE7D9; --background-color-input-bg:#FFFDFC; --sidebar:#244353; --sidebar-hover:#3C6878; --sidebar-text:#FFFFFF; --sidebar-active-text:#FFFFFF;
     --text-color-primary:#29251F; --text-color-secondary:#766E61; --text-color-link:#244353; --border-color-default:#DDD2BF; --border-color-input:#C7BDAA; --border-color-dark:#142B36; --color-success:#356044; --color-error:#963F32; --color-warning:#765A13; --color-info:#315B6C; --danger-bg:#F9E9E5; --danger-text:#963F32; --warning-bg:#FCF1D5; --warning-text:#765A13; --info-bg:#E8EFF1; --info-text:#315B6C;
+}
+
+/* Paleta 05: claro institucional, sem branco absoluto na sidebar. */
+[data-cor="paleta-05"] {
+    --sidebar: #F1F4F3;
+    --sidebar-hover: #E3EBE9;
+    --sidebar-text: #274C5E;
+    --sidebar-active-text: #FFFFFF;
+}
+
+/* Dark mode: preserva a cor de ação de cada paleta e troca superfícies, textos e bordas. */
+html[data-theme="dark"] [data-cor^="paleta-"] {
+    --background-color-body: #11181C;
+    --background-color-card: #1A2429;
+    --background-color-header: #1A2429;
+    --background-color-hover: #26343A;
+    --background-color-input-bg: #1A2429;
+    --text-color-primary: #F1F5F4;
+    --text-color-secondary: #B6C2C0;
+    --text-color-link: var(--color-primary-light);
+    --border-color-default: #405158;
+    --border-color-input: #63747A;
+    --border-color-dark: #0A1013;
+    --sidebar: color-mix(in srgb, var(--color-primary) 72%, #000000);
+    --sidebar-hover: color-mix(in srgb, var(--color-primary-light) 62%, #000000);
+    --sidebar-text: #F6FAF9;
+    --sidebar-active-text: #FFFFFF;
+    --danger-bg: color-mix(in srgb, var(--color-error) 20%, #1A2429);
+    --danger-text: #FFB4AA;
+    --warning-bg: color-mix(in srgb, var(--color-warning) 18%, #1A2429);
+    --warning-text: #F4D38A;
+    --info-bg: color-mix(in srgb, var(--color-info) 20%, #1A2429);
+    --info-text: #A9D0E3;
 }

@@ -156,7 +156,7 @@
                     <thead>
                         <tr>
                             {% set th_sort = "cursor:pointer;user-select:none;" %}
-                            {% macro sort_icon_p(col) %}{% if ordenar == col + '_asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;font-size:10px;"></i>{% elif ordenar == col + '_desc' %}<i class="bi bi-sort-down ms-1" style="opacity:.8;font-size:10px;"></i>{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;font-size:10px;"></i>{% endif %}{% endmacro %}
+                            {% macro sort_icon_p(col) %}{% if ordenar == col + '_asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;font-size: .75rem;"></i>{% elif ordenar == col + '_desc' %}<i class="bi bi-sort-down ms-1" style="opacity:.8;font-size: .75rem;"></i>{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;font-size: .75rem;"></i>{% endif %}{% endmacro %}
                             {% macro sort_url_p(col) %}{% set cur_args = request.args.to_dict() %}{% if ordenar == col + '_asc' %}{{ url_for('processos.todos', **(cur_args | combine({'ordenar': col + '_desc', 'pagina': 1}))) }}{% else %}{{ url_for('processos.todos', **(cur_args | combine({'ordenar': col + '_asc', 'pagina': 1}))) }}{% endif %}{% endmacro %}
                             <th style="{{ th_sort }}" onclick="window.location='{{ sort_url_p('id') }}'">ID{{ sort_icon_p('id') }}</th>
                             <th style="{{ th_sort }}" onclick="window.location='{{ sort_url_p('titular') }}'">Titular{{ sort_icon_p('titular') }}</th>

@@ -73,37 +73,37 @@
                     {% endif %}
                 </div>
                 <div style="margin-top:4px;">
-                    <code style="font-size:10px;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % apresentante.id }}</code>
+                    <code style="font-size: .75rem;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % apresentante.id }}</code>
                     {% if not apresentante.telefone and not apresentante.email %}
-                    <span style="font-size:11px;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
+                    <span style="font-size: .75rem;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
                     {% endif %}
                 </div>
             </div>
         </div>
-        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+        <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0" style="font-size:13px;">
                 <thead>
                     <tr style="background:var(--background-color-body);">
-                        <th class="ps-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
-                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
-                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
-                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
-                        <th style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
-                        <th class="text-end pe-4" style="padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+                        <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
+                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
+                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
+                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
+                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
+                        <th class="text-end pe-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for processo in historico %}
                     <tr>
-                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family: var(--rf-font-mono);">{{ processo.matricula }}</td>
                         <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ processo.tipo_servico_nome }}</td>
                         <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.data_entrada) }}</td>
                         <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.prazo_final) if processo.prazo_final else '—' }}</td>
                         <td style="padding:10px 12px;">
-                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size:11px;border-radius:6px;padding:3px 8px;">
+                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size: .75rem;border-radius:6px;padding:3px 8px;">
                                 {{ processo.status_nome }}
                             </span>
                         </td>

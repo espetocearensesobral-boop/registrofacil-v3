@@ -559,7 +559,7 @@
     text-decoration: none;
     cursor: pointer;
     transition: background-color .18s, border-color .18s, color .18s, box-shadow .18s;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: var(--rf-font-sans);
     background: none;
     -webkit-appearance: none;
 }
@@ -645,14 +645,14 @@
 }
 
 /* Dourado — cor dourada premium do sistema (para botões de edição) */
-.nav-btn.nav-btn-gold,
-.nav-btn-gold {
+.nav-btn.nav-btn-primary,
+.nav-btn-primary {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
     color: #fff !important;
 }
-.nav-btn.nav-btn-gold:hover,
-.nav-btn-gold:hover {
+.nav-btn.nav-btn-primary:hover,
+.nav-btn-primary:hover {
     background-color: var(--color-primary-dark);
     border-color: var(--color-primary-dark);
     color: #fff !important;

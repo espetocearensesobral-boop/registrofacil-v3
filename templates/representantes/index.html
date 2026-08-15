@@ -55,14 +55,14 @@
             <input type="hidden" name="ordenar" value="{{ ordenar | default('nome') }}">
             <input type="hidden" name="direcao" value="{{ direcao | default('asc') }}">
             <div class="col-md-7">
-                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Representante</label>
+                <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Representante</label>
                 <div class="input-group">
                     <span class="input-group-text" style="background:var(--background-color-body);border-color:var(--border-color-input);"><i class="bi bi-search text-muted"></i></span>
                     <input type="text" name="busca" class="form-control" placeholder="Nome, E-mail ou Telefone..." value="{{ busca | default('') }}" style="border-left:none;font-size:13px;">
                 </div>
             </div>
             <div class="col-md-2">
-                <label class="form-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
+                <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
                 <select name="registros_por_pagina" class="form-select form-select-sm" style="font-size:13px;">
                     {% for n in [10, 25, 50, 100] %}
                     <option value="{{ n }}" {% if registros_por_pagina == n %}selected{% endif %}>{{ n }}</option>
@@ -81,14 +81,14 @@
 <div class="rf-card">
     <div class="rf-card-header">
         <h5 class="m-0"><i class="bi bi-people me-2" style="color:var(--color-gold-primary);"></i>Lista de Representantes</h5>
-        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+        <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table-representantes table table-hover align-middle mb-0" style="font-size:13px;">
                 <thead>
                     <tr style="background:var(--background-color-body);">
-                        {% set th_style = "padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);" %}
+                        {% set th_style = "padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);" %}
                         {% set th_sort_style = th_style + "cursor:pointer;user-select:none;" %}
                         {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;"></i>{% else %}<i class="bi bi-sort-down ms-1" style="opacity:.8;"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;"></i>{% endif %}{% endmacro %}
                         {% macro sort_url(col) %}{{ url_for('representantes.index', busca=busca, registros_por_pagina=registros_por_pagina, ordenar=col, direcao='desc' if (ordenar == col and direcao == 'asc') else 'asc', pagina=1) }}{% endmacro %}
@@ -109,7 +109,7 @@
                         <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ representante.email or '—' }}</td>
                         <td style="padding:11px 12px;">
                             {% if tem_vinculo %}
-                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
                                 <i class="bi bi-folder me-1"></i>{{ representante.total_processos }}
                             </span>
                             {% else %}
@@ -120,11 +120,11 @@
                             {% if representante.ultimo_registro_id %}
                             <a href="{{ url_for('processos.visualizar', processo_id=representante.ultimo_registro_id) }}" class="text-decoration-none">
                                 {% if representante.ultimo_registro_matricula == 'Sem Matrícula' %}
-                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
                                     <i class="bi bi-file-earmark me-1"></i>Sem Matrícula
                                 </span>
                                 {% else %}
-                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
                                     <i class="bi bi-file-earmark-text me-1"></i>{{ representante.ultimo_registro_matricula }}
                                 </span>
                                 {% endif %}
@@ -143,7 +143,7 @@
                                 </a>
                                 {% if tem_vinculo %}
                                 {# Botões visíveis mas inativos quando há vínculo #}
-                                <span class="nav-btn nav-btn-gold"
+                                <span class="nav-btn nav-btn-primary"
                                    style="height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;"
                                    title="Não é possível editar: representante possui {{ representante.total_processos }} processo(s) vinculado(s)">
                                     <i class="bi bi-pencil"></i>
@@ -155,7 +155,7 @@
                                 </span>
                                 {% else %}
                                 <a href="{{ url_for('representantes.editar', representante_id=representante.id) }}"
-                                   class="nav-btn nav-btn-gold"
+                                   class="nav-btn nav-btn-primary"
                                    style="height:28px;padding:0 10px;font-size:12px;"
                                    title="Editar Representante">
                                     <i class="bi bi-pencil"></i>

@@ -7,7 +7,7 @@
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 body {
     overflow-x: hidden;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--rf-font-sans), -apple-system, sans-serif;
     background-color: var(--background-color-body);
     color: var(--text-color-primary);
     scroll-behavior: smooth;
@@ -52,7 +52,7 @@ body {
    SIDEBAR
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .sidebar {
-    width: 220px;
+    width: var(--rf-sidebar-width);
     height: 100vh;
     background-color: var(--background-color-sidebar);
     display: flex;
@@ -70,7 +70,7 @@ body {
 }
 
 .sidebar.collapsed {
-    width: 60px;
+    width: var(--rf-sidebar-collapsed-width);
 }
 
 .sidebar::-webkit-scrollbar-track {
@@ -413,7 +413,7 @@ body {
 #page-content-wrapper {
     width: 100%;
     min-height: 100vh;
-    margin-left: 220px;
+    margin-left: var(--rf-sidebar-width);
     transition: margin-left 0.3s ease-in-out;
     flex: 1;
     display: flex;
@@ -421,7 +421,7 @@ body {
 }
 
 #wrapper.toggled #page-content-wrapper {
-    margin-left: 60px;
+    margin-left: var(--rf-sidebar-collapsed-width);
 }
 
 #page-content-wrapper .navbar {
@@ -787,7 +787,7 @@ body.auth-page {
 
 /* Estado inicial: sidebar colapsada (aplicada via JS no head) */
 .sidebar-collapsed-initial .sidebar {
-    width: 60px !important;
+    width: var(--rf-sidebar-collapsed-width) !important;
 }
 
 .sidebar-collapsed-initial .sidebar .menu-text {
@@ -809,7 +809,7 @@ body.auth-page {
 }
 
 .sidebar-collapsed-initial #page-content-wrapper {
-    margin-left: 60px !important;
+    margin-left: var(--rf-sidebar-collapsed-width) !important;
 }
 
 .sidebar-collapsed-initial .sidebar .section-title-toggle .menu-text {

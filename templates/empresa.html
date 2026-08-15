@@ -12,11 +12,11 @@
 {% block content %}
 <style>
 .emp-section-lbl {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    font-size: .75rem; font-weight: 700; text-transform: uppercase;
     letter-spacing: .06em; color: var(--text-color-secondary); margin-bottom: 6px;
 }
 .emp-fld label {
-    display: block; font-size: 10px; font-weight: 700;
+    display: block; font-size: .75rem; font-weight: 700;
     text-transform: uppercase; letter-spacing: .05em;
     color: var(--text-color-secondary); margin-bottom: 5px;
 }
@@ -31,7 +31,7 @@
 .emp-fld textarea { height: 82px; resize: vertical; }
 .emp-fld input:focus, .emp-fld textarea:focus { outline: none; border-color: var(--color-gold-primary); box-shadow: 0 0 0 3px rgba(184,142,67,.12); }
 .emp-fld input:disabled, .emp-fld textarea:disabled { opacity: .6; cursor: not-allowed; }
-.emp-fld .invalid-feedback { font-size: 11px; color: var(--color-error); margin-top: 3px; display: none; }
+.emp-fld .invalid-feedback { font-size: .75rem; color: var(--color-error); margin-top: 3px; display: none; }
 .emp-fld input.is-invalid, .emp-fld textarea.is-invalid { border-color: var(--color-error); }
 .emp-fld input.is-invalid ~ .invalid-feedback, .emp-fld textarea.is-invalid ~ .invalid-feedback { display: block; }
 .emp-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -141,7 +141,7 @@
                         <div class="logo-overlay" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
                             <div style="text-align:center;color:#fff;">
                                 <i class="bi bi-camera-fill" style="font-size:1.4rem;display:block;margin-bottom:4px;"></i>
-                                <span style="font-size:11px;font-weight:600;">Alterar</span>
+                                <span style="font-size: .75rem;font-weight:600;">Alterar</span>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                             <span id="logoFileName" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;"></span>
                             <span id="logoFileSize" style="color:var(--text-color-secondary);flex-shrink:0;margin-left:6px;"></span>
                         </div>
-                        <button type="button" id="btnCancelarUpload" style="font-size:11px;color:var(--color-error);background:none;border:none;padding:2px 0;cursor:pointer;margin-top:3px;">
+                        <button type="button" id="btnCancelarUpload" style="font-size: .75rem;color:var(--color-error);background:none;border:none;padding:2px 0;cursor:pointer;margin-top:3px;">
                             <i class="bi bi-x-circle me-1"></i>Cancelar seleção
                         </button>
                     </div>
@@ -165,7 +165,7 @@
                     <input type="checkbox" class="d-none" id="remover_logo" name="remover_logo" value="1"
                            {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
                     {% endif %}
-                    <p style="font-size:11px;color:var(--text-color-secondary);text-align:center;margin:0;">
+                    <p style="font-size: .75rem;color:var(--text-color-secondary);text-align:center;margin:0;">
                         JPG, PNG ou SVG · máx. 2MB<br>Recomendado: 200×200px
                     </p>
                 </div>

@@ -1,0 +1,26 @@
+templates/apresentantes/index.html:146:                                <span class="nav-btn nav-btn-gold"
+templates/apresentantes/index.html:158:                                   class="nav-btn nav-btn-gold"
+templates/base.html:116:        .navbar .nav-btn-gold,
+templates/base.html:117:        .navbar .nav-btn.nav-btn-gold {
+templates/base.html:122:        .navbar .nav-btn-gold:hover,
+templates/base.html:123:        .navbar .nav-btn.nav-btn-gold:hover {
+templates/representantes/index.html:146:                                <span class="nav-btn nav-btn-gold"
+templates/representantes/index.html:158:                                   class="nav-btn nav-btn-gold"
+templates/titulares/index.html:146:                                <span class="nav-btn nav-btn-gold"
+templates/titulares/index.html:158:                                   class="nav-btn nav-btn-gold"
+static/css/compact.css:648:.nav-btn.nav-btn-gold,
+static/css/compact.css:649:.nav-btn-gold {
+static/css/compact.css:654:.nav-btn.nav-btn-gold:hover,
+static/css/compact.css:655:.nav-btn-gold:hover {
+static/css/visual-system.css:269:body .navbar .nav-btn-gold,
+static/css/visual-system.css:270:body .nav-btn-gold { background: var(--color-primary) !important; border-color: var(--color-primary) !important; color: var(--rf-text-on-primary) !important; }
+static/css/visual-system.css:273:body .navbar .nav-btn-gold:hover,
+static/css/visual-system.css:274:body .nav-btn-gold:hover { background: var(--color-primary-dark) !important; border-color: var(--color-primary-dark) !important; color: var(--rf-text-on-primary) !important; }
+static/css/visual-system.css:607:.nav-btn-gold,
+static/css/visual-system.css:619:.nav-btn-gold:hover,
+static/css/visual-system.css:633:.nav-btn-gold:active,
+static/css/visual-system.css:768:body .nav-btn-gold,
+static/css/visual-system.css:786:body .nav-btn-gold:hover,
+static/css/visual-system.css:803:body .nav-btn-gold:active,
+static/css/visual-system.css:914:html body .navbar .nav-btn-gold {
+static/css/visual-system.css:930:html body .navbar .nav-btn-gold:hover {

@@ -1,0 +1,3 @@
+Etapa 2: fontes de UI abaixo de 12px foram normalizadas para .75rem fora dos relatórios de impressão; as famílias Inter e Segoe UI foram removidas da interface ativa e o Chart.js foi alinhado a Source Sans 3.
+
+Etapa 3/4 checkpoint: a sidebar expandida usa --rf-sidebar-width de 15rem, a colapsada usa --rf-sidebar-collapsed-width de 4rem e main.css/visual-system.css compartilham os mesmos tokens. A Paleta 05 deixou de usar #FFFFFF na sidebar e passou a usar #F1F4F3 com hover #E3EBE9. No navegador, Paleta 05 clara computou body rgb(245, 241, 232), card #FFFFFF, texto rgb(36, 48, 56), sidebar #F1F4F3; em dark mode computou body rgb(17, 24, 28), card #1A2429, texto rgb(241, 245, 244) e secondary #B6C2C0. O seletor data-theme=dark foi detectado na folha carregada.

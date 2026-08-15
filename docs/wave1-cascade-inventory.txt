@@ -1,0 +1,198 @@
+=== important by file ===
+ 464 static/css/visual-system.css
+ 145 static/css/compact.css
+  43 static/css/mobile.css
+  26 static/css/main.css
+  24 templates/base.html
+   4 templates/permissoes_usuario.html
+   4 static/css/usuarios.css
+   2 static/css/processos.css
+=== visual-system important contexts ===
+71:.text-muted { color: var(--rf-text-muted) !important; }
+77:.page-title-text { font-size: clamp(1.25rem, 1.05rem + .45vw, 1.625rem) !important; font-weight: 700 !important; }
+228:    #page-content-wrapper { margin-left: 0 !important; }
+247:    min-height: 2.625rem !important;
+248:    height: 2.625rem !important;
+249:    padding: .55rem .95rem !important;
+250:    border-width: 1px !important;
+251:    border-style: solid !important;
+252:    border-radius: var(--rf-radius-sm) !important;
+253:    font-size: .9375rem !important;
+254:    font-weight: 650 !important;
+255:    line-height: 1.2 !important;
+256:    transform: none !important;
+257:    box-shadow: none !important;
+258:    transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease !important;
+262:    transform: none !important;
+263:    box-shadow: none !important;
+266:body .nav-btn:active { transform: none !important; box-shadow: none !important; }
+270:body .nav-btn-gold { background: var(--color-primary) !important; border-color: var(--color-primary) !important; color: var(--rf-text-on-primary) !important; }
+274:body .nav-btn-gold:hover { background: var(--color-primary-dark) !important; border-color: var(--color-primary-dark) !important; color: var(--rf-text-on-primary) !important; }
+276:body .nav-btn-secondary { background: var(--rf-action-secondary) !important; border-color: var(--rf-border) !important; color: var(--rf-action-primary) !important; }
+278:body .nav-btn-secondary:hover { background: var(--rf-action-secondary-hover) !important; border-color: var(--rf-action-primary) !important; color: var(--rf-action-primary) !important; }
+280:body .nav-btn-success { background: var(--rf-success) !important; border-color: var(--rf-success) !important; color: var(--rf-text-on-primary) !important; }
+282:body .nav-btn-success:hover { background: var(--rf-success-hover) !important; border-color: var(--rf-success-hover) !important; color: var(--rf-text-on-primary) !important; }
+284:body .nav-btn-danger { background: var(--rf-danger) !important; border-color: var(--rf-danger) !important; color: var(--rf-text-on-primary) !important; }
+286:body .nav-btn-danger:hover { background: var(--rf-danger-hover) !important; border-color: var(--rf-danger-hover) !important; color: var(--rf-text-on-primary) !important; }
+288:body .nav-btn-warning { background: var(--rf-warning) !important; border-color: var(--rf-warning) !important; color: var(--rf-text-on-primary) !important; }
+290:body .nav-btn-warning:hover { background: var(--rf-warning-hover) !important; border-color: var(--rf-warning-hover) !important; color: var(--rf-text-on-primary) !important; }
+292:body .nav-btn-info { background: var(--rf-info) !important; border-color: var(--rf-info) !important; color: var(--rf-text-on-primary) !important; }
+294:body .nav-btn-info:hover { background: var(--rf-info-hover) !important; border-color: var(--rf-info-hover) !important; color: var(--rf-text-on-primary) !important; }
+297:.nt-wrap { max-width: 760px !important; }
+298:.nt-header { padding: 1.25rem 1.5rem !important; }
+299:.nt-header h5 { font-size: 1.125rem !important; }
+300:.nt-header small { font-size: .9375rem !important; line-height: 1.5 !important; }
+301:.nt-body { padding: 1.5rem !important; gap: 1.25rem !important; }
+302:.nt-fld label { font-size: .9375rem !important; text-transform: none !important; letter-spacing: normal !important; color: var(--rf-text-strong) !important; margin-bottom: .45rem !important; }
+303:.nt-fld input { height: 2.75rem !important; font-size: 1rem !important; padding: 0 .875rem !important; }
+304:.nt-row-2 { gap: 1.25rem !important; }
+305:.nt-footer { padding: 1rem 1.5rem !important; }
+306:.nt-btn-save, .nt-btn-cancel { min-height: 2.625rem !important; height: 2.625rem !important; font-size: .9375rem !important; border-radius: var(--rf-radius-sm) !important; transition: background-color .18s ease, transform .18s ease, box-shadow .18s ease !important; }
+307:.nt-btn-save:hover, .nt-btn-cancel:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 10px rgba(15, 23, 42, .14) !important; }
+308:.nt-required-note { font-size: .875rem !important; }
+311:.cfg-panel-header h5 { font-size: 1.125rem !important; }
+312:.cfg-ph-icon { width: 2.5rem !important; height: 2.5rem !important; font-size: 1.125rem !important; }
+313:.cfg-card-header { padding: .875rem 1rem !important; font-size: .8125rem !important; }
+314:.cfg-card-body { padding: 1rem !important; }
+315:.cfg-add-row { padding: 1rem !important; gap: .75rem !important; }
+316:.cfg-add-row .cfg-fg label, .cfg-fld label { font-size: .875rem !important; text-transform: none !important; letter-spacing: normal !important; color: var(--rf-text-strong) !important; }
+317:.cfg-add-row .cfg-fg input[type=text], .cfg-add-row .cfg-fg input[type=number], .cfg-fld input, .cfg-fld select { height: 2.75rem !important; font-size: .9375rem !important; }
+318:.cfg-tbl { font-size: .9375rem !important; }
+319:.cfg-tbl th { padding: .75rem 1rem !important; font-size: .8125rem !important; }
+320:.cfg-tbl td { padding: .8rem 1rem !important; }
+321:.cfg-info-row, .cfg-sw { font-size: .9375rem !important; }
+322:.cfg-info-lbl { width: 150px !important; font-size: .8125rem !important; }
+323:.cfg-sbtn, .cfg-obtn, .cfg-btn-add { min-height: 2.625rem !important; height: 2.625rem !important; font-size: .9375rem !important; border-radius: var(--rf-radius-sm) !important; transition: background-color .18s ease, transform .18s ease, box-shadow .18s ease !important; }
+324:.cfg-sbtn:hover, .cfg-obtn:hover, .cfg-btn-add:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 10px rgba(15, 23, 42, .14) !important; }
+325:.cfg-fld input:focus, .cfg-fld select:focus, .cfg-add-row input:focus { border-color: var(--color-primary) !important; box-shadow: var(--rf-focus-ring) !important; outline: none !important; }
+329:.det-lbl { font-size: .8125rem !important; font-weight: 700 !important; letter-spacing: .04em !important; color: var(--rf-text-muted) !important; margin-bottom: .4rem !important; }
+330:.det-val { font-size: 1rem !important; line-height: 1.5 !important; color: var(--rf-text-body) !important; }
+331:.det-item { padding: 1.125rem 1.25rem !important; }
+332:.htl-body, .htl-detail { font-size: .9375rem !important; line-height: 1.55 !important; }
+333:.htl-meta { font-size: .8125rem !important; }
+335:.process-detail h5, .process-view h5, .det-wrapper h5 { font-size: 1.125rem !important; }
+336:.process-detail p, .process-view p, .det-wrapper p, .det-grid p { font-size: .9375rem !important; line-height: 1.55 !important; }
+337:.process-detail .text-muted, .process-view .text-muted, .det-wrapper .text-muted { color: var(--rf-text-muted) !important; }
+338:.process-detail .card, .process-view .card, .det-wrapper .card { margin-bottom: 1.25rem !important; }
+339:.process-detail .card-body, .process-view .card-body, .det-wrapper .card-body { padding: 1.25rem !important; }
+340:.process-detail .badge, .process-view .badge, .det-wrapper .badge { font-size: .8125rem !important; padding: .35rem .65rem !important; }
+343:.profile-appearance-card { margin-bottom: 1.25rem !important; }
+345:#form-perfil .form-label { font-size: .9375rem !important; text-transform: none !important; letter-spacing: normal !important; color: var(--rf-text-strong) !important; }
+348:    .nt-row-2 { grid-template-columns: 1fr !important; }
+350:    .nt-required-note { width: 100%; margin: 0 !important; }
+351:    .cfg-form-2, .cfg-form-3 { grid-template-columns: 1fr !important; }
+352:    .cfg-info-lbl { width: 120px !important; }
+356:    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+378:    background: #111827 !important;
+379:    background-image: none !important;
+380:    border-color: #111827 !important;
+381:    color: #ffffff !important;
+382:    box-shadow: none !important;
+383:    filter: none !important;
+384:    opacity: 1 !important;
+385:    transform: none !important;
+386:    transition: none !important;
+419:    background: #111827 !important;
+420:    background-image: none !important;
+421:    border-color: #111827 !important;
+422:    color: #ffffff !important;
+423:    box-shadow: none !important;
+424:    filter: none !important;
+425:    opacity: 1 !important;
+426:    transform: none !important;
+435:    background: #111827 !important;
+436:    border-color: #111827 !important;
+437:    color: #ffffff !important;
+438:    opacity: .55 !important;
+456:    outline: 3px solid #111827 !important;
+463:.btn-close:active { opacity: .8; box-shadow: none !important; transform: none !important; }
+466:    button, a, input, select, textarea { transition: none !important; }
+565:.modal-title { color: var(--rf-text-strong) !important; }
+581:.page-header .text-muted { color: var(--rf-text-muted) !important; }
+584:.sidebar { background: var(--rf-sidebar-surface) !important; }
+586:.menu-item:focus-visible { background: var(--rf-sidebar-hover) !important; }
+587:.menu-item.active { background: var(--rf-sidebar-active) !important; color: var(--rf-sidebar-active-text) !important; }
+599:    border-radius: 6px !important;
+600:    box-shadow: none !important;
+601:    transform: none !important;
+602:    transition: background-color .15s ease, border-color .15s ease, color .15s ease !important;
+613:    background: var(--color-primary) !important;
+614:    border-color: var(--color-primary) !important;
+615:    color: var(--rf-text-on-primary) !important;
+625:    background: var(--color-primary-light) !important;
+626:    border-color: var(--color-primary-light) !important;
+627:    color: var(--rf-text-on-primary) !important;
+634:button[type="submit"]:not(.btn-outline-primary):active { background: var(--color-primary-dark) !important; }
+640:    background: var(--rf-action-secondary) !important;
+641:    border-color: var(--rf-border) !important;
+642:    color: var(--rf-action-primary) !important;
+647:.nt-btn-cancel:hover { background: var(--rf-action-secondary-hover) !important; border-color: var(--rf-action-primary) !important; }
+652:    color: var(--color-primary) !important;
+=== duplicated semantic button selectors ===
+static/css/visual-system.css:188:.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--rf-text-on-primary); }
+static/css/visual-system.css:189:.btn-primary:hover, .btn-primary:focus { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: var(--rf-text-on-primary); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 24%, transparent); }
+static/css/visual-system.css:190:.btn-secondary { background: var(--rf-action-secondary); border-color: var(--rf-border); color: var(--rf-action-primary); }
+static/css/visual-system.css:191:.btn-secondary:hover { background: var(--rf-action-secondary-hover); border-color: var(--rf-action-primary); color: var(--rf-action-primary); }
+static/css/visual-system.css:267:body .navbar .nav-btn-primary,
+static/css/visual-system.css:268:body .nav-btn-primary,
+static/css/visual-system.css:269:body .navbar .nav-btn-gold,
+static/css/visual-system.css:270:body .nav-btn-gold { background: var(--color-primary) !important; border-color: var(--color-primary) !important; color: var(--rf-text-on-primary) !important; }
+static/css/visual-system.css:271:body .navbar .nav-btn-primary:hover,
+static/css/visual-system.css:272:body .nav-btn-primary:hover,
+static/css/visual-system.css:273:body .navbar .nav-btn-gold:hover,
+static/css/visual-system.css:274:body .nav-btn-gold:hover { background: var(--color-primary-dark) !important; border-color: var(--color-primary-dark) !important; color: var(--rf-text-on-primary) !important; }
+static/css/visual-system.css:275:body .navbar .nav-btn-secondary,
+static/css/visual-system.css:276:body .nav-btn-secondary { background: var(--rf-action-secondary) !important; border-color: var(--rf-border) !important; color: var(--rf-action-primary) !important; }
+static/css/visual-system.css:277:body .navbar .nav-btn-secondary:hover,
+static/css/visual-system.css:278:body .nav-btn-secondary:hover { background: var(--rf-action-secondary-hover) !important; border-color: var(--rf-action-primary) !important; color: var(--rf-action-primary) !important; }
+static/css/visual-system.css:605:.btn-primary,
+static/css/visual-system.css:606:.nav-btn-primary,
+static/css/visual-system.css:607:.nav-btn-gold,
+static/css/visual-system.css:617:.btn-primary:hover,
+static/css/visual-system.css:618:.nav-btn-primary:hover,
+static/css/visual-system.css:619:.nav-btn-gold:hover,
+static/css/visual-system.css:632:.nav-btn-primary:active,
+static/css/visual-system.css:633:.nav-btn-gold:active,
+static/css/visual-system.css:636:.btn-secondary,
+static/css/visual-system.css:637:.nav-btn-secondary,
+static/css/visual-system.css:644:.btn-secondary:hover,
+static/css/visual-system.css:645:.nav-btn-secondary:hover,
+static/css/visual-system.css:764:body .btn-primary,
+static/css/visual-system.css:767:body .nav-btn-primary,
+static/css/visual-system.css:768:body .nav-btn-gold,
+static/css/visual-system.css:782:body .btn-primary:hover,
+static/css/visual-system.css:785:body .nav-btn-primary:hover,
+static/css/visual-system.css:786:body .nav-btn-gold:hover,
+static/css/visual-system.css:800:body .btn-primary:active,
+static/css/visual-system.css:802:body .nav-btn-primary:active,
+static/css/visual-system.css:803:body .nav-btn-gold:active,
+static/css/visual-system.css:806:body .btn-secondary,
+static/css/visual-system.css:808:body .nav-btn-secondary,
+static/css/visual-system.css:818:body .btn-secondary:hover,
+static/css/visual-system.css:820:body .nav-btn-secondary:hover,
+static/css/visual-system.css:913:html body .navbar .nav-btn-primary,
+static/css/visual-system.css:914:html body .navbar .nav-btn-gold {
+static/css/visual-system.css:919:html body .navbar .nav-btn-secondary {
+static/css/visual-system.css:929:html body .navbar .nav-btn-primary:hover,
+static/css/visual-system.css:930:html body .navbar .nav-btn-gold:hover {
+static/css/visual-system.css:935:html body .navbar .nav-btn-secondary:hover {
+templates/base.html:65:        .navbar .nav-btn-primary,
+templates/base.html:66:        .navbar .nav-btn.nav-btn-primary {
+templates/base.html:71:        .navbar .nav-btn-primary:hover,
+templates/base.html:72:        .navbar .nav-btn.nav-btn-primary:hover {
+templates/base.html:79:        .navbar .nav-btn-secondary,
+templates/base.html:80:        .navbar .nav-btn.nav-btn-secondary {
+templates/base.html:85:        .navbar .nav-btn-secondary:hover,
+templates/base.html:86:        .navbar .nav-btn.nav-btn-secondary:hover {
+templates/base.html:116:        .navbar .nav-btn-gold,
+templates/base.html:117:        .navbar .nav-btn.nav-btn-gold {
+templates/base.html:122:        .navbar .nav-btn-gold:hover,
+templates/base.html:123:        .navbar .nav-btn.nav-btn-gold:hover {
+templates/base.html:336:                    <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal">
+templates/base.html:424:                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+templates/base.html:539:                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
+=== wave 1 checkpoint ===
+O primeiro grupo removeu 82 usos de `!important` do bloco de normalização de cadastros, configurações, processos e perfil. O total do `visual-system.css` caiu de 464 para 382, sem falhas no validador dos 6 temas ou nos 60 testes.
+
+O smoke test no login v3.20.0 confirmou Paleta 01, Source Sans 3 no corpo, Fraunces no título, fundo rgb(245, 242, 234), texto rgb(29, 27, 24), label rgb(107, 102, 92) e botão rgb(15, 42, 67) com texto branco. Não houve regressão visual computada nesse grupo.
