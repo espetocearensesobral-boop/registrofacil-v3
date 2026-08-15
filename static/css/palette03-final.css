@@ -1,0 +1,306 @@
+/*
+ * Camada final de identidade visual.
+ * Deve ser carregada depois dos estilos locais dos templates.
+ * As variáveis --color-primary continuam permitindo paletas do usuário.
+ */
+:root {
+  --rf-p3-grafite: #2B2B2E;
+  --rf-p3-grafite-claro: #45454A;
+  --rf-p3-grafite-ativo: #18181A;
+  --rf-p3-vinho: #7A1F2B;
+  --rf-p3-vinho-escuro: #5E1721;
+  --rf-p3-fundo: #F5F5F4;
+  --rf-p3-papel: #FFFFFF;
+  --rf-p3-texto: #1A1A1B;
+  --rf-p3-muted: #6B665C;
+  --rf-p3-linha: #DEDEDC;
+  --rf-p3-sucesso: #2C5C36;
+  --rf-p3-aviso: #6E5A16;
+}
+
+/* Base institucional */
+body,
+#page-content-wrapper,
+#page-content-wrapper > main,
+#page-content-wrapper > .container-fluid { background: var(--rf-p3-fundo) !important; color: var(--rf-p3-texto) !important; }
+#page-content-wrapper .navbar { background: var(--rf-p3-papel) !important; border-bottom: 1px solid var(--rf-p3-linha) !important; }
+.sidebar { background: var(--rf-p3-grafite) !important; }
+.menu-item:hover, .menu-item:focus-visible { background: var(--rf-p3-grafite-claro) !important; }
+.menu-item.active { background: var(--color-primary, var(--rf-p3-grafite)) !important; color: #FFFFFF !important; }
+
+/* Tipografia e superfícies */
+h1, h2, h3, .page-title-text, .card-title, .rf-card-title, .modal-title { color: var(--rf-p3-texto) !important; }
+.card, .rf-card, .kpi-card, .modal-content, .cfg-card, .filter-bar { background: var(--rf-p3-papel) !important; border-color: var(--rf-p3-linha) !important; }
+.card-header, .rf-card-header, .modal-header, .cfg-card-header { background: var(--rf-p3-fundo) !important; border-color: var(--rf-p3-linha) !important; color: var(--rf-p3-texto) !important; }
+.text-muted, .form-text, .section-subtitle, .kpi-sub, .cfg-info-row, .cfg-info-lbl { color: var(--rf-p3-muted) !important; }
+
+/* KPIs: neutros por padrão; sem azul ou dourado decorativo. */
+.kpi-card::before { background: var(--rf-p3-grafite) !important; }
+.kpi-card.kpi-success::before { background: var(--rf-p3-sucesso) !important; }
+.kpi-card.kpi-warning::before, .kpi-card.kpi-danger::before { background: var(--rf-p3-vinho) !important; }
+.kpi-card.kpi-info::before { background: var(--rf-p3-grafite-claro) !important; }
+.kpi-value.kpi-gold, .kpi-value.kpi-info { color: var(--rf-p3-grafite) !important; }
+.kpi-value.kpi-success { color: var(--rf-p3-sucesso) !important; }
+.kpi-value.kpi-warning, .kpi-value.kpi-danger { color: var(--rf-p3-vinho) !important; }
+
+/* Botões Bootstrap e botões de navegação. Estilos inline antigos são vencidos intencionalmente. */
+body .btn-primary,
+body .btn-dark,
+body .btn-filter-apply,
+body .nav-btn-primary,
+body .nav-btn-gold,
+body .cfg-sbtn,
+body .cfg-btn-add,
+body .nt-btn-save,
+body .auth-btn,
+body .btn-acao-clicavel,
+body .btn-browse-dir,
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger) {
+  background: var(--color-primary, var(--rf-p3-grafite)) !important;
+  border: 1px solid var(--color-primary, var(--rf-p3-grafite)) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+body .btn-primary:hover,
+body .btn-dark:hover,
+body .btn-filter-apply:hover,
+body .nav-btn-primary:hover,
+body .nav-btn-gold:hover,
+body .cfg-sbtn:hover,
+body .cfg-btn-add:hover,
+body .nt-btn-save:hover,
+body .auth-btn:hover,
+body .btn-acao-clicavel:hover,
+body .btn-browse-dir:hover,
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):hover {
+  background: var(--color-primary-light, var(--rf-p3-grafite-claro)) !important;
+  border-color: var(--color-primary-light, var(--rf-p3-grafite-claro)) !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+body .btn-primary:active,
+body .btn-dark:active,
+body .nav-btn-primary:active,
+body .nav-btn-gold:active,
+body button[type="submit"]:active { background: var(--color-primary-dark, var(--rf-p3-grafite-ativo)) !important; }
+
+body .btn-secondary,
+body .btn-outline-secondary,
+body .nav-btn-secondary,
+body .nt-btn-cancel,
+body .btn-filter-clear,
+body .btn-limpar {
+  background: transparent !important;
+  border: 1px solid var(--color-primary, var(--rf-p3-grafite)) !important;
+  color: var(--color-primary, var(--rf-p3-grafite)) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+body .btn-secondary:hover,
+body .btn-outline-secondary:hover,
+body .nav-btn-secondary:hover,
+body .nt-btn-cancel:hover,
+body .btn-filter-clear:hover,
+body .btn-limpar:hover {
+  background: var(--color-primary, var(--rf-p3-grafite)) !important;
+  border-color: var(--color-primary, var(--rf-p3-grafite)) !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body .btn-danger,
+body .btn-outline-danger:hover,
+body .nav-btn-danger,
+body .btn-delete-backup,
+body .btn-excluir-titular,
+body .btn-excluir-apresentante,
+body .btn-excluir-representante,
+body .btn-revoke,
+body .cfg-obtn {
+  background: var(--rf-p3-vinho) !important;
+  border: 1px solid var(--rf-p3-vinho) !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+body .btn-danger:hover,
+body .nav-btn-danger:hover,
+body .btn-delete-backup:hover,
+body .btn-excluir-titular:hover,
+body .btn-excluir-apresentante:hover,
+body .btn-excluir-representante:hover,
+body .btn-revoke:hover,
+body .cfg-obtn:hover { background: var(--rf-p3-vinho-escuro) !important; border-color: var(--rf-p3-vinho-escuro) !important; color: #FFFFFF !important; }
+body .btn-outline-danger { background: transparent !important; border-color: var(--rf-p3-vinho) !important; color: var(--rf-p3-vinho) !important; }
+
+/* Ações auxiliares: não usar azul/verde/orange Bootstrap como identidade. */
+body .btn-success { background: var(--rf-p3-sucesso) !important; border-color: var(--rf-p3-sucesso) !important; color: #FFFFFF !important; }
+body .btn-warning { background: var(--rf-p3-vinho) !important; border-color: var(--rf-p3-vinho) !important; color: #FFFFFF !important; }
+body .btn-info, body .nav-btn-info { background: var(--rf-p3-grafite-claro) !important; border-color: var(--rf-p3-grafite-claro) !important; color: #FFFFFF !important; }
+body .btn-success:hover { background: #21462A !important; border-color: #21462A !important; }
+body .btn-warning:hover, body .nav-btn-warning:hover { background: var(--rf-p3-vinho-escuro) !important; border-color: var(--rf-p3-vinho-escuro) !important; }
+body .btn-info:hover, body .nav-btn-info:hover { background: var(--rf-p3-grafite) !important; border-color: var(--rf-p3-grafite) !important; }
+
+/* Botões compactos de tabelas e abas. */
+body .tbl-btn, body .rf-tab-btn, body .metricas-tab-btn, body .cat-toggle-btn, body .cfg-ibtn {
+  background: var(--rf-p3-papel) !important;
+  border-color: var(--rf-p3-linha) !important;
+  color: var(--rf-p3-grafite) !important;
+  box-shadow: none !important;
+}
+body .tbl-btn:hover, body .rf-tab-btn:hover, body .metricas-tab-btn:hover, body .cat-toggle-btn:hover, body .cfg-ibtn:hover,
+body .rf-tab-btn.active, body .metricas-tab-btn.active { background: var(--rf-p3-fundo) !important; border-color: var(--color-primary, var(--rf-p3-grafite)) !important; color: var(--color-primary, var(--rf-p3-grafite)) !important; }
+body .tbl-btn.del, body .tbl-btn.delete { color: var(--rf-p3-vinho) !important; }
+
+/* Campos e tabelas */
+body .form-control, body .form-select, body .input-group-text, body input, body select, body textarea {
+  background-color: var(--rf-p3-papel) !important;
+  border-color: #BFC0BD !important;
+  color: var(--rf-p3-texto) !important;
+}
+body .form-control:focus, body .form-select:focus, body input:focus, body select:focus, body textarea:focus { border-color: var(--color-primary, var(--rf-p3-grafite)) !important; box-shadow: 0 0 0 .2rem var(--color-primary-subtle, rgba(122,31,43,.12)) !important; }
+body .table, body .rf-table, body .cfg-tbl { color: var(--rf-p3-texto) !important; }
+body .table thead th, body .rf-table th, body .cfg-tbl th { background: var(--rf-p3-fundo) !important; color: var(--rf-p3-muted) !important; border-color: var(--rf-p3-linha) !important; }
+body .table tbody tr:nth-child(even) td, body .rf-table tbody tr:nth-child(even) td, body .cfg-tbl tbody tr:nth-child(even) td { background: var(--rf-p3-fundo) !important; }
+body .table tbody tr:hover td, body .rf-table tbody tr:hover td, body .cfg-tbl tbody tr:hover td { background: #ECECEB !important; }
+
+/* Feedback */
+body .alert-danger, body .badge-danger, body .badge-error { background: #F6E7E9 !important; color: var(--rf-p3-vinho) !important; border-color: #E9C4C9 !important; }
+body .alert-warning, body .badge-warning { background: #F3EEDD !important; color: var(--rf-p3-aviso) !important; border-color: #E4D8A8 !important; }
+body .alert-success, body .badge-success { background: #E9EFE9 !important; color: var(--rf-p3-sucesso) !important; border-color: #C7DBC9 !important; }
+body .alert-info, body .badge-info { background: #ECECEB !important; color: #3A3A3C !important; border-color: #D6D6D3 !important; }
+body .deadline-alert, body .prazo-alerta { border-left: 4px solid var(--rf-p3-vinho) !important; }
+
+/* Modais e overlays */
+body .modal-content { background: var(--rf-p3-papel) !important; border-color: var(--rf-p3-linha) !important; }
+body .modal-header, body .modal-footer { background: var(--rf-p3-fundo) !important; border-color: var(--rf-p3-linha) !important; }
+body .modal-header[style*="var(--color-error)"] { background: var(--rf-p3-vinho) !important; color: #FFFFFF !important; }
+body .toast, body .toast-container .toast { border-color: var(--rf-p3-linha) !important; }
+
+/* Autenticação independente do base.html */
+.auth-panel-left { background: var(--rf-p3-grafite) !important; }
+.auth-panel-right { background: linear-gradient(145deg, #1A1A1B 0%, var(--rf-p3-grafite) 52%, #18181A 100%) !important; }
+.auth-panel-left::before { background: linear-gradient(90deg, var(--rf-p3-vinho), var(--rf-p3-grafite-claro), var(--rf-p3-vinho)) !important; }
+.auth-btn { background: var(--rf-p3-vinho) !important; color: #FFFFFF !important; }
+.auth-btn:hover { background: var(--rf-p3-vinho-escuro) !important; }
+.auth-link:hover, .panel-feature-item i, .auth-input-group:focus-within { color: var(--rf-p3-vinho) !important; border-color: var(--rf-p3-vinho) !important; }
+
+/* Acessibilidade e ausência de efeitos conflitantes */
+body .btn:hover, body button:hover, body a.btn:hover, body .nav-btn:hover { transform: none !important; box-shadow: none !important; }
+body :focus-visible { outline: 3px solid color-mix(in srgb, var(--rf-p3-vinho) 55%, #FFFFFF) !important; outline-offset: 2px; }
+
+/* Guardas de especificidade: vencem o bloco legado inline do cabeçalho. */
+html body .navbar .nav-btn-primary,
+html body .navbar .nav-btn-gold {
+  background: var(--color-primary, var(--rf-p3-grafite)) !important;
+  border-color: var(--color-primary, var(--rf-p3-grafite)) !important;
+  color: #FFFFFF !important;
+}
+html body .navbar .nav-btn-secondary {
+  background: transparent !important;
+  border-color: var(--color-primary, var(--rf-p3-grafite)) !important;
+  color: var(--color-primary, var(--rf-p3-grafite)) !important;
+}
+html body .navbar .nav-btn-danger {
+  background: var(--rf-p3-vinho) !important;
+  border-color: var(--rf-p3-vinho) !important;
+  color: #FFFFFF !important;
+}
+html body .navbar .nav-btn-primary:hover,
+html body .navbar .nav-btn-gold:hover {
+  background: var(--color-primary-light, var(--rf-p3-grafite-claro)) !important;
+  border-color: var(--color-primary-light, var(--rf-p3-grafite-claro)) !important;
+  color: #FFFFFF !important;
+}
+html body .navbar .nav-btn-secondary:hover {
+  background: var(--color-primary, var(--rf-p3-grafite)) !important;
+  border-color: var(--color-primary, var(--rf-p3-grafite)) !important;
+  color: #FFFFFF !important;
+}
+html body .navbar .nav-btn-danger:hover {
+  background: var(--rf-p3-vinho-escuro) !important;
+  border-color: var(--rf-p3-vinho-escuro) !important;
+  color: #FFFFFF !important;
+}
+
+/* Componentes sem classe Bootstrap: mesma hierarquia institucional. */
+html body .btn-filtrar,
+html body .btn-action,
+html body .btn-action-square,
+html body .btn-browse-dir,
+html body .btn-acao-clicavel,
+html body .cfg-btn-add,
+html body .cfg-sbtn,
+html body .nt-btn-save {
+  background: var(--color-primary, var(--rf-p3-grafite)) !important;
+  border-color: var(--color-primary, var(--rf-p3-grafite)) !important;
+  color: #FFFFFF !important;
+}
+html body .btn-filtrar:hover,
+html body .btn-action:hover,
+html body .btn-action-square:hover,
+html body .btn-browse-dir:hover,
+html body .btn-acao-clicavel:hover,
+html body .cfg-btn-add:hover,
+html body .cfg-sbtn:hover,
+html body .nt-btn-save:hover {
+  background: var(--color-primary-light, var(--rf-p3-grafite-claro)) !important;
+  border-color: var(--color-primary-light, var(--rf-p3-grafite-claro)) !important;
+  color: #FFFFFF !important;
+}
+html body .btn-remove-file,
+html body .btn-delete-backup,
+html body .btn-excluir-titular,
+html body .btn-excluir-apresentante,
+html body .btn-excluir-representante { background: var(--rf-p3-vinho) !important; border-color: var(--rf-p3-vinho) !important; color: #FFFFFF !important; }
+
+/* Variáveis legadas usadas por estilos inline passam a apontar para a Paleta 03. */
+body {
+  --color-black-premium: var(--rf-p3-grafite);
+  --color-gold-primary: var(--rf-p3-vinho);
+  --color-gold-dark: var(--rf-p3-vinho-escuro);
+  --color-info: var(--rf-p3-grafite-claro);
+  --color-warning: var(--rf-p3-vinho);
+  --color-error: var(--rf-p3-vinho);
+  --text-color-primary: var(--rf-p3-texto);
+  --text-color-secondary: var(--rf-p3-muted);
+  --background-color-body: var(--rf-p3-fundo);
+  --background-color-card: var(--rf-p3-papel);
+  --border-color-default: var(--rf-p3-linha);
+}
+
+/* Cards de estatística e cabeçalhos que ainda recebem classes semânticas antigas. */
+html body .kpi-card.kpi-gold,
+html body .kpi-card.kpi-info { border-top-color: var(--rf-p3-grafite-claro) !important; }
+html body .kpi-card.kpi-success { border-top-color: var(--rf-p3-sucesso) !important; }
+html body .kpi-card.kpi-warning,
+html body .kpi-card.kpi-danger { border-top-color: var(--rf-p3-vinho) !important; }
+html body .kpi-card .kpi-bg-icon { color: var(--rf-p3-grafite) !important; }
+
+/* Contraste das telas públicas escuras. */
+html body .auth-panel-left .auth-title,
+html body .auth-panel-right .panel-brand h1 { color: #FFFFFF !important; }
+html body .auth-panel-left .auth-subtitle,
+html body .auth-panel-left .auth-label,
+html body .auth-panel-left .field-hint,
+html body .auth-panel-left .auth-links,
+html body .auth-panel-right .panel-brand p,
+html body .auth-panel-right .panel-feature-item,
+html body .auth-panel-right .step-info span,
+html body .auth-panel-right .step-info strong { color: #D6D2CA !important; }
+html body .auth-panel-left .auth-input-group { background: #1A1A1B !important; border-color: #45454A !important; }
+html body .auth-panel-left .auth-input-group input { background: transparent !important; color: #FFFFFF !important; }
+html body .auth-panel-left .auth-input-group input::placeholder { color: #A7A39B !important; }
+html body .auth-panel-left .auth-input-group .input-icon,
+html body .auth-panel-left .auth-input-group .toggle-pw { color: #BDB8AE !important; }
+html body .auth-panel-left .auth-input-group:focus-within { border-color: var(--rf-p3-vinho) !important; box-shadow: 0 0 0 .2rem rgba(122,31,43,.28) !important; }
+html body .auth-panel-left .auth-link,
+html body .auth-panel-right .panel-feature-item i,
+html body .auth-panel-right .step-num,
+html body .auth-panel-right .panel-info-box h3,
+html body .auth-panel-right .panel-info-step i { color: #C98A95 !important; }
+html body .auth-panel-right .panel-brand .gold-line { background: var(--rf-p3-vinho) !important; }
+html body .auth-panel-left .auth-icon-badge { background: rgba(122,31,43,.20) !important; border-color: rgba(201,138,149,.55) !important; color: #C98A95 !important; }

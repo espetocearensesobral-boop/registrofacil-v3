@@ -645,6 +645,8 @@
     });
     </script>
     {% block scripts %}{% endblock %}
+    <!-- Identidade visual final: carregada após estilos locais dos templates -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
     <!-- Toast Container Global -->
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;"></div>
 
