@@ -23,7 +23,7 @@
     </div>
     <div class="kpi-card {% if is_server %}kpi-success{% else %}kpi-warning{% endif %}">
         <div class="kpi-label">Status do Servidor</div>
-        <div class="kpi-value {% if is_server %}kpi-success{% else %}kpi-warning{% endif %}" style="font-size:15px;padding-top:6px;">
+        <div class="kpi-value {% if is_server %}kpi-success{% else %}kpi-warning{% endif %} rf-kpi-status">
             {% if is_server %}<i class="bi bi-check-circle-fill me-1"></i>Online{% else %}<i class="bi bi-exclamation-triangle-fill me-1"></i>Alerta{% endif %}
         </div>
         <div class="kpi-sub">{% if is_server %}Servidor principal{% else %}BD não encontrado{% endif %}</div>
@@ -31,7 +31,7 @@
     </div>
     <div class="kpi-card kpi-info">
         <div class="kpi-label">IP da Máquina</div>
-        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family: var(--rf-font-mono);">{{ machine_ip }}</div>
+        <div class="kpi-value kpi-info rf-kpi-address">{{ machine_ip }}</div>
         <div class="kpi-sub">Endereço de rede</div>
         <i class="bi bi-hdd-network kpi-bg-icon"></i>
     </div>
@@ -48,10 +48,10 @@
 }.get(backup_status.status, backup_status.status) %}
 <div class="rf-card mb-4">
     <div class="rf-card-header">
-        <h5 class="m-0"><i class="bi bi-shield-check me-2" style="color:var(--color-gold-primary);"></i>Última execução</h5>
+        <h5 class="m-0"><i class="bi bi-shield-check me-2 rf-backup-section-icon"></i>Última execução</h5>
         <span class="badge {% if backup_status.status in ['success_local', 'success_remote'] %}bg-success{% elif backup_status.status in ['failed', 'verification_failed'] %}bg-danger{% elif backup_status.status == 'partial' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">{{ status_label }}</span>
     </div>
-    <div class="rf-card-body" style="font-size:13px;">
+    <div class="rf-card-body rf-backup-card-body">
         {% if backup_status.updated_at %}
         <div class="row g-2">
             <div class="col-md-4"><strong>Data:</strong> {{ backup_status.updated_at }}</div>
@@ -61,7 +61,7 @@
         {% else %}
         <span class="text-muted">Nenhuma execução registrada.</span>
         {% endif %}
-        {% if backup_status.sha256 %}<div class="mt-2 text-muted"><strong>SHA-256:</strong> <code style="word-break:break-all;">{{ backup_status.sha256 }}</code></div>{% endif %}
+        {% if backup_status.sha256 %}<div class="mt-2 text-muted"><strong>SHA-256:</strong> <code class="rf-backup-sha">{{ backup_status.sha256 }}</code></div>{% endif %}
         {% if backup_status.error %}<div class="alert alert-danger mt-3 mb-0 py-2">{{ backup_status.error }}</div>{% endif %}
     </div>
 </div>
@@ -71,41 +71,41 @@
         <!-- Gerar Backup -->
         <div class="rf-card mb-4">
             <div class="rf-card-header">
-                <h5 class="m-0"><i class="bi bi-cloud-arrow-up me-2" style="color:var(--color-gold-primary);"></i>Gerar Novo Backup</h5>
+                <h5 class="m-0"><i class="bi bi-cloud-arrow-up me-2 rf-backup-section-icon"></i>Gerar Novo Backup</h5>
             </div>
             <div class="rf-card-body">
-                <p style="font-size:13px;color:var(--text-color-secondary);margin-bottom:16px;">
+                <p class="rf-backup-description">
                     Gere um backup completo do banco de dados e de todos os arquivos de upload (anexos de processos, fotos de perfil, logos). 
                     Use os botões ao lado para verificar ou otimizar o banco antes do backup.
                 </p>
 
                 <!-- Ações principais em linha -->
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+                <div class="rf-backup-toolbar">
                     <form id="form-create-backup" method="post" action="{{ url_for('backup.manual_backup') }}">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <button type="submit" class="nav-btn nav-btn-primary" style="height:38px;padding:0 20px;font-size:13px;">
+                        <button type="submit" class="nav-btn nav-btn-primary rf-backup-primary-action">
                             <i class="bi bi-file-earmark-zip me-1"></i>Gerar Backup Agora
                         </button>
                     </form>
                     <form method="post" action="{{ url_for('backup.test_db') }}">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <button type="submit" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-info);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 0 0 3px rgba(23,162,184,.25);">
+                        <button type="submit" class="nav-btn rf-backup-info-action">
                             <i class="bi bi-arrow-repeat me-1"></i>Testar Banco
                         </button>
                     </form>
                     <form method="post" action="{{ url_for('backup.repair_db') }}" id="form-repair-db">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <button type="button" onclick="confirmarReparo()" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-warning);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;">
+                        <button type="button" onclick="confirmarReparo()" class="nav-btn rf-backup-warning-action">
                             <i class="bi bi-tools"></i>Reparar BD
                         </button>
                     </form>
                 </div>
 
                 <!-- Caminho do banco inline -->
-                <div style="display:flex;align-items:center;gap:10px;background:var(--background-color-body);border:1px solid var(--border-color-default);border-radius:8px;padding:10px 14px;">
-                    <i class="bi bi-database" style="color:var(--text-color-secondary);font-size:14px;flex-shrink:0;"></i>
-                    <span style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);white-space:nowrap;flex-shrink:0;">Caminho do Arquivo</span>
-                    <code style="font-size:12px;word-break:break-all;color:var(--color-info);flex:1;">{{ db_config.path_completo }}</code>
+                <div class="rf-backup-path-box">
+                    <i class="bi bi-database rf-backup-path-icon"></i>
+                    <span class="rf-backup-label">Caminho do Arquivo</span>
+                    <code class="rf-backup-path">{{ db_config.path_completo }}</code>
                 </div>
             </div>
         </div>
@@ -113,44 +113,44 @@
         <!-- Backups Existentes -->
         <div class="rf-card">
             <div class="rf-card-header">
-                <h5 class="m-0"><i class="bi bi-folder-fill me-2" style="color:var(--color-gold-primary);"></i>Backups Existentes</h5>
-                <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ backups | length }}</span>
+                <h5 class="m-0"><i class="bi bi-folder-fill me-2 text-accent"></i>Backups Existentes</h5>
+                <span class="rf-backup-count">{{ backups | length }}</span>
             </div>
             <div class="card-body p-0">
                 {% if backups %}
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+                    <table class="table table-hover align-middle mb-0 rf-backup-table">
                         <thead>
-                            <tr style="background:var(--background-color-body);">
-                                <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Nome do Arquivo</th>
-                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data</th>
-                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tamanho</th>
-                                <th class="text-center pe-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+                            <tr class="rf-backup-table-head">
+                                <th class="ps-4">Nome do Arquivo</th>
+                                <th>Data</th>
+                                <th>Tamanho</th>
+                                <th class="text-center pe-4">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for backup in backups %}
                             <tr>
-                                <td class="ps-4" style="padding:11px 12px;">
-                                    <code style="font-size:12px;background:var(--background-color-body);padding:2px 6px;border-radius:4px;color:var(--color-info);">{{ backup.name }}</code>
+                                <td class="ps-4 rf-backup-table-cell">
+                                    <code class="rf-backup-name">{{ backup.name }}</code>
                                 </td>
-                                <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ backup.created_at }}</td>
-                                <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ backup.size }}</td>
-                                <td class="text-center pe-4" style="padding:11px 12px;">
-                                    <div style="display:flex;gap:6px;justify-content:center;">
-                                        <a href="{{ backup.download_url }}" class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:12px;" title="Baixar">
+                                <td class="rf-backup-meta">{{ backup.created_at }}</td>
+                                <td class="rf-backup-meta">{{ backup.size }}</td>
+                                <td class="text-center pe-4 rf-backup-table-cell">
+                                    <div class="rf-backup-actions">
+                                        <a href="{{ backup.download_url }}" class="nav-btn nav-btn-secondary rf-backup-action" title="Baixar">
                                             <i class="bi bi-download"></i>
                                         </a>
-                                        <button type="button" class="nav-btn nav-btn-danger btn-delete-backup" style="height:28px;padding:0 10px;font-size:12px;"
+                                        <button type="button" class="nav-btn nav-btn-danger btn-delete-backup rf-backup-action"
                                                 data-filename="{{ backup.name }}"
                                                 data-bs-toggle="tooltip" title="Excluir">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                         {% if session.get('usuario_role') in ['admin', 'suporte'] %}
-                                        <form method="post" action="{{ url_for('backup.restore_backup') }}" onsubmit="return confirmarRestauracao('{{ backup.name|e }}');" style="display:inline;">
+                                        <form method="post" action="{{ url_for('backup.restore_backup') }}" onsubmit="return confirmarRestauracao('{{ backup.name|e }}');" class="rf-inline-form">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                             <input type="hidden" name="filename" value="{{ backup.name }}">
-                                            <button type="submit" class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:12px;" title="Restaurar">
+                                            <button type="submit" class="nav-btn nav-btn-secondary rf-backup-action" title="Restaurar">
                                                 <i class="bi bi-arrow-counterclockwise"></i>
                                             </button>
                                         </form>
@@ -163,9 +163,9 @@
                     </table>
                 </div>
                 {% else %}
-                <div class="text-center py-5" style="color:var(--text-color-secondary);">
-                    <i class="bi bi-archive d-block mb-2" style="font-size:2rem;opacity:.3;"></i>
-                    <span style="font-size:13px;">Nenhum backup encontrado.</span>
+                <div class="text-center py-5 rf-backup-empty">
+                    <i class="bi bi-archive d-block mb-2 rf-backup-empty-icon"></i>
+                    <span class="rf-backup-empty-text">Nenhum backup encontrado.</span>
                 </div>
                 {% endif %}
             </div>
@@ -177,17 +177,17 @@
 <div class="modal fade" id="confirmDeleteBackupModal" tabindex="-1" aria-labelledby="confirmDeleteBackupModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+            <div class="modal-header rf-modal-danger-header">
                 <h5 class="modal-title fw-bold" id="confirmDeleteBackupModalLabel"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body" style="font-size:14px;">
+            <div class="modal-body rf-modal-body">
                 Tem certeza que deseja excluir o backup "<strong id="backupFileNameToDelete"></strong>"?
-                <br><small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+                <br><small class="rf-modal-note">Esta ação não pode ser desfeita.</small>
             </div>
             <div class="modal-footer">
                 <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <form id="deleteBackupForm" method="POST" action="" style="display:inline;">
+                <form id="deleteBackupForm" method="POST" action="" class="rf-inline-form">
                     <input type="hidden" name="filename" id="deleteBackupFilename">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <button type="submit" class="nav-btn nav-btn-danger">Excluir Permanentemente</button>

@@ -1,0 +1,20 @@
+=== release ===
+[33m864a0b6[m feat: refine visual cascade and theme accessibility
+[33m1addc4f[m feat: consolidate visual system and release 3.20.0
+[33m3a675cb[m fix: remover contexto legado da sidebar
+25:    VERSION = '3.21.0'
+=== important ===
+css_total=568
+visual_system=348
+=== inline ===
+style_attrs=938
+inline_files=46
+=== typography ===
+small_ui=0
+legacy_fonts=7
+=== aliases/themes ===
+nav_gold=0
+dark_rules=1
+palette05_sidebar=123:    --background-color-body:#F6F1E6; --background-color-card:#FFFDFC; --background-color-header:#FFFDFC; --background-color-hover:#EEE7D9; --background-color-input-bg:#FFFDFC; --sidebar:#244353; --sidebar-hover:#3C6878; --sidebar-text:#FFFFFF; --sidebar-active-text:#FFFFFF;
+129:    --sidebar: #F1F4F3;
+148:    --sidebar: color-mix(in srgb, var(--color-primary) 72%, #000000);

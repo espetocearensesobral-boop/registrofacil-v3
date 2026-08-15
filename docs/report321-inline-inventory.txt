@@ -1,0 +1,159 @@
+=== inline por template ===
+ 124 templates/configuracoes.html
+  57 templates/permissoes_usuario.html
+  54 templates/titulares/index.html
+  54 templates/representantes/index.html
+  54 templates/apresentantes/index.html
+  46 templates/visualizar.html
+  46 templates/processos/visualizar.html
+  40 templates/dashboard.html
+  40 templates/backup.html
+  37 templates/titulares/visualizar.html
+  37 templates/representantes/visualizar.html
+  37 templates/apresentantes/visualizar.html
+  34 templates/perfis_permissao.html
+  30 templates/perfil_permissao_detalhe.html
+  28 templates/empresa.html
+  18 templates/base.html
+  16 templates/perfil.html
+  13 templates/todos.html
+  13 templates/processos/todos.html
+  12 templates/relatorios/processos_print.html
+  12 templates/processos/novo.html
+  12 templates/processos/editar.html
+  11 templates/relatorios/titulares_print.html
+  11 templates/relatorios/representantes_print.html
+  11 templates/relatorios/apresentantes_print.html
+  10 templates/metricas.html
+   9 templates/relatorios/relatorio_processo_print.html
+   7 templates/relatorios/historico_processo_print.html
+   5 templates/admin/usuarios.html
+   4 templates/titulares/novo.html
+=== important por folha ===
+ 348 static/css/visual-system.css
+ 145 static/css/compact.css
+  43 static/css/mobile.css
+  26 static/css/main.css
+   4 static/css/usuarios.css
+   2 static/css/processos.css
+=== inline candidate patterns ===
+templates/admin/usuarios.html:47:        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
+templates/admin/usuarios.html:88:<div style="background:rgba(30,136,229,.08);border:1px solid rgba(30,136,229,.2);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--color-info);margin-bottom:1rem;">
+templates/apresentantes/editar.html:98:                    <div class="invalid-feedback" style="font-size:12px;color:var(--color-error);margin-top:3px;display:none;" id="nome-error">
+templates/apresentantes/editar.html:118:                <span class="nt-required-note" style="margin-left:0; margin-right:auto;"><span style="color:var(--color-error);">*</span> Campo obrigatório</span>
+templates/apresentantes/index.html:58:                <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Apresentante</label>
+templates/apresentantes/index.html:60:                    <span class="input-group-text" style="background:var(--background-color-body);border-color:var(--border-color-input);"><i class="bi bi-search text-muted"></i></span>
+templates/apresentantes/index.html:61:                    <input type="text" name="busca" class="form-control" placeholder="Nome, E-mail ou Telefone..." value="{{ busca | default('') }}" style="border-left:none;font-size:13px;">
+templates/apresentantes/index.html:65:                <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
+templates/apresentantes/index.html:66:                <select name="registros_por_pagina" class="form-select form-select-sm" style="font-size:13px;">
+templates/apresentantes/index.html:83:        <h5 class="m-0"><i class="bi bi-people me-2" style="color:var(--color-gold-primary);"></i>Lista de Apresentantes</h5>
+templates/apresentantes/index.html:84:        <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+templates/apresentantes/index.html:88:            <table class="table-apresentantes table table-hover align-middle mb-0" style="font-size:13px;">
+templates/apresentantes/index.html:90:                    <tr style="background:var(--background-color-body);">
+templates/apresentantes/index.html:108:                        <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ apresentante.telefone or '—' }}</td>
+templates/apresentantes/index.html:109:                        <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ apresentante.email or '—' }}</td>
+templates/apresentantes/index.html:112:                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/apresentantes/index.html:116:                            <span style="color:var(--text-color-secondary);">0</span>
+templates/apresentantes/index.html:123:                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+templates/apresentantes/index.html:127:                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/apresentantes/index.html:133:                            <span style="color:var(--text-color-secondary);">—</span>
+templates/apresentantes/index.html:140:                                   style="height:28px;padding:0 10px;font-size:12px;"
+templates/apresentantes/index.html:147:                                   style="height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;"
+templates/apresentantes/index.html:152:                                   style="height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;"
+templates/apresentantes/index.html:159:                                   style="height:28px;padding:0 10px;font-size:12px;"
+templates/apresentantes/index.html:165:                                        style="height:28px;padding:0 10px;font-size:12px;"
+templates/apresentantes/index.html:177:                        <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
+templates/apresentantes/index.html:178:                            <i class="bi bi-people mb-2 d-block" style="font-size:2rem;opacity:.3;"></i>
+templates/apresentantes/index.html:179:                            <span style="font-size:13px;">Nenhum apresentante encontrado.</span>
+templates/apresentantes/index.html:191:    <div style="padding:10px 16px;border-top:1px solid var(--border-color-default);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
+templates/apresentantes/index.html:196:                    <a class="page-link" href="{{ url_for('apresentantes.index', pagina=pagina_atual-1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">Anterior</a>
+templates/apresentantes/index.html:203:                    <li class="page-item"><a class="page-link" href="{{ url_for('apresentantes.index', pagina=1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">1</a></li>
+templates/apresentantes/index.html:204:                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link" style="border-radius:6px;font-size:13px;">…</span></li>{% endif %}
+templates/apresentantes/index.html:208:                    <a class="page-link" href="{{ url_for('apresentantes.index', pagina=p, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">{{ p }}</a>
+templates/apresentantes/index.html:212:                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link" style="border-radius:6px;font-size:13px;">…</span></li>{% endif %}
+templates/apresentantes/index.html:213:                    <li class="page-item"><a class="page-link" href="{{ url_for('apresentantes.index', pagina=total_paginas, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">{{ total_paginas }}</a></li>
+templates/apresentantes/index.html:216:                    <a class="page-link" href="{{ url_for('apresentantes.index', pagina=pagina_atual+1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">Próximo</a>
+templates/apresentantes/index.html:220:        <div style="text-align:right;font-size:12px;color:var(--text-color-secondary);white-space:nowrap;">
+templates/apresentantes/index.html:231:            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/apresentantes/index.html:235:            <div class="modal-body" style="font-size:14px;">
+templates/apresentantes/index.html:237:                <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+templates/apresentantes/novo.html:90:                    <div class="invalid-feedback" style="font-size:12px;color:var(--color-error);margin-top:3px;display:none;" id="nome-error">
+templates/apresentantes/novo.html:106:                <span class="nt-required-note" style="margin-left:0; margin-right:auto;"><span style="color:var(--color-error);">*</span> Campo obrigatório</span>
+templates/apresentantes/visualizar.html:36:        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.created_at) }}</div>
+templates/apresentantes/visualizar.html:42:        <div class="kpi-value kpi-success" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.updated_at) }}</div>
+templates/apresentantes/visualizar.html:58:            <div style="width:40px;height:40px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;">
+templates/apresentantes/visualizar.html:63:                    <h5 class="m-0" style="font-size:15px;font-weight:700;">{{ apresentante.nome }}</h5>
+templates/apresentantes/visualizar.html:65:                    <a href="https://wa.me/55{{ apresentante.telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" style="font-size:12px;color:var(--color-success);text-decoration:none;display:flex;align-items:center;gap:3px;">
+templates/apresentantes/visualizar.html:70:                    <a href="mailto:{{ apresentante.email }}" style="font-size:12px;color:var(--color-info);text-decoration:none;display:flex;align-items:center;gap:3px;">
+templates/apresentantes/visualizar.html:76:                    <code style="font-size: .75rem;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % apresentante.id }}</code>
+templates/apresentantes/visualizar.html:78:                    <span style="font-size: .75rem;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
+templates/apresentantes/visualizar.html:83:        <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+templates/apresentantes/visualizar.html:87:            <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+templates/apresentantes/visualizar.html:89:                    <tr style="background:var(--background-color-body);">
+templates/apresentantes/visualizar.html:90:                        <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
+templates/apresentantes/visualizar.html:91:                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
+templates/apresentantes/visualizar.html:92:                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
+templates/apresentantes/visualizar.html:93:                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
+templates/apresentantes/visualizar.html:94:                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
+templates/apresentantes/visualizar.html:95:                        <th class="text-end pe-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+templates/apresentantes/visualizar.html:102:                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ processo.tipo_servico_nome }}</td>
+templates/apresentantes/visualizar.html:103:                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.data_entrada) }}</td>
+templates/apresentantes/visualizar.html:104:                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.prazo_final) if processo.prazo_final else '—' }}</td>
+templates/apresentantes/visualizar.html:106:                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size: .75rem;border-radius:6px;padding:3px 8px;">
+templates/apresentantes/visualizar.html:113:                               style="height:28px;padding:0 10px;font-size:12px;"
+templates/apresentantes/visualizar.html:121:                        <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
+templates/apresentantes/visualizar.html:122:                            <i class="bi bi-folder2 d-block mb-2" style="font-size:2rem;opacity:.3;"></i>
+templates/apresentantes/visualizar.html:123:                            <span style="font-size:13px;">Nenhum processo encontrado para este apresentante.</span>
+templates/apresentantes/visualizar.html:139:            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/apresentantes/visualizar.html:143:            <div class="modal-body" style="font-size:14px;">
+templates/apresentantes/visualizar.html:145:                <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+templates/atividades.html:40:        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
+templates/backup.html:26:        <div class="kpi-value {% if is_server %}kpi-success{% else %}kpi-warning{% endif %}" style="font-size:15px;padding-top:6px;">
+templates/backup.html:34:        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family: var(--rf-font-mono);">{{ machine_ip }}</div>
+templates/backup.html:51:        <h5 class="m-0"><i class="bi bi-shield-check me-2" style="color:var(--color-gold-primary);"></i>Última execução</h5>
+templates/backup.html:54:    <div class="rf-card-body" style="font-size:13px;">
+templates/backup.html:74:                <h5 class="m-0"><i class="bi bi-cloud-arrow-up me-2" style="color:var(--color-gold-primary);"></i>Gerar Novo Backup</h5>
+templates/backup.html:77:                <p style="font-size:13px;color:var(--text-color-secondary);margin-bottom:16px;">
+templates/backup.html:86:                        <button type="submit" class="nav-btn nav-btn-primary" style="height:38px;padding:0 20px;font-size:13px;">
+templates/backup.html:92:                        <button type="submit" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-info);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 0 0 3px rgba(23,162,184,.25);">
+templates/backup.html:98:                        <button type="button" onclick="confirmarReparo()" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-warning);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;">
+templates/backup.html:105:                <div style="display:flex;align-items:center;gap:10px;background:var(--background-color-body);border:1px solid var(--border-color-default);border-radius:8px;padding:10px 14px;">
+templates/backup.html:106:                    <i class="bi bi-database" style="color:var(--text-color-secondary);font-size:14px;flex-shrink:0;"></i>
+templates/backup.html:107:                    <span style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);white-space:nowrap;flex-shrink:0;">Caminho do Arquivo</span>
+templates/backup.html:108:                    <code style="font-size:12px;word-break:break-all;color:var(--color-info);flex:1;">{{ db_config.path_completo }}</code>
+templates/backup.html:116:                <h5 class="m-0"><i class="bi bi-folder-fill me-2" style="color:var(--color-gold-primary);"></i>Backups Existentes</h5>
+templates/backup.html:117:                <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ backups | length }}</span>
+templates/backup.html:122:                    <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+templates/backup.html:124:                            <tr style="background:var(--background-color-body);">
+templates/backup.html:125:                                <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Nome do Arquivo</th>
+templates/backup.html:126:                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data</th>
+templates/backup.html:127:                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tamanho</th>
+templates/backup.html:128:                                <th class="text-center pe-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+templates/backup.html:135:                                    <code style="font-size:12px;background:var(--background-color-body);padding:2px 6px;border-radius:4px;color:var(--color-info);">{{ backup.name }}</code>
+templates/backup.html:137:                                <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ backup.created_at }}</td>
+templates/backup.html:138:                                <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ backup.size }}</td>
+templates/backup.html:141:                                        <a href="{{ backup.download_url }}" class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:12px;" title="Baixar">
+templates/backup.html:144:                                        <button type="button" class="nav-btn nav-btn-danger btn-delete-backup" style="height:28px;padding:0 10px;font-size:12px;"
+templates/backup.html:153:                                            <button type="submit" class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:12px;" title="Restaurar">
+templates/backup.html:166:                <div class="text-center py-5" style="color:var(--text-color-secondary);">
+templates/backup.html:167:                    <i class="bi bi-archive d-block mb-2" style="font-size:2rem;opacity:.3;"></i>
+templates/backup.html:168:                    <span style="font-size:13px;">Nenhum backup encontrado.</span>
+templates/backup.html:180:            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/backup.html:184:            <div class="modal-body" style="font-size:14px;">
+templates/backup.html:186:                <br><small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+templates/base.html:246:                    <span class="menu-text" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;">
+templates/base.html:314:                <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/base.html:318:                <div class="modal-body" style="font-size:14px;">
+templates/base.html:320:                    <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+templates/base.html:341:            <div class="modal-content" style="border-radius:14px;overflow:hidden;border:1px solid var(--border-color-default);box-shadow:0 20px 60px rgba(0,0,0,.2);">
+templates/base.html:368:                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size: .75rem;opacity:.5;"></button>
+templates/base.html:374:                            <p style="font-size: .75rem;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
+templates/base.html:421:                <div class="modal-header" style="background: var(--color-black-premium); color: #fff;">
+templates/base.html:429:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Navegação Principal</h6>
+templates/base.html:457:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+templates/base.html:473:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Configurações e Sistema</h6>
+templates/base.html:489:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+templates/base.html:505:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Opções do Usuário</h6>
+templates/configuracoes.html:206:                        <label>Nome <span style="color:var(--color-error)">*</span></label>
+templates/configuracoes.html:213:                            <span class="cswatch selected" data-color="#0d6efd" style="background:#0d6efd" title="Azul"></span>
+templates/configuracoes.html:214:                            <span class="cswatch" data-color="#198754" style="background:#198754" title="Verde"></span>

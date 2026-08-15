@@ -243,7 +243,7 @@
                         <img src="{{ session.get('usuario_foto_url', url_for('static', filename='img/default_avatar.png')) }}"
                              alt="Avatar" class="sidebar-avatar">
                     </div>
-                    <span class="menu-text" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;">
+                    <span class="menu-text rf-profile-name">
                         {{ session.get('usuario_nome', 'Meu Perfil') | truncate(18) }}
                     </span>
                     <i class="bi bi-chevron-down toggle-icon"></i>
@@ -311,19 +311,19 @@
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background:var(--color-error);color:#fff;">
+                <div class="modal-header rf-modal-danger-header">
                     <h5 class="modal-title fw-bold" id="confirmDeleteModalLabel"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body" style="font-size:14px;">
+                <div class="modal-body rf-modal-body">
                     Tem certeza que deseja excluir este processo?<br>
-                    <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+                    <small class="rf-modal-note">Esta ação não pode ser desfeita.</small>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x"></i> Cancelar
                     </button>
-                    <form id="deleteForm" method="POST" action="" style="display:inline;">
+                    <form id="deleteForm" method="POST" action="" class="rf-inline-form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="id" id="deleteProcessId" value="">
                         <button type="submit" class="nav-btn nav-btn-danger">
@@ -337,8 +337,8 @@
 
     {# Modal de Busca Global - Modernizado #}
     <div class="modal fade" id="globalSearchModal" tabindex="-1" aria-labelledby="globalSearchModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width:620px;">
-            <div class="modal-content" style="border-radius:14px;overflow:hidden;border:1px solid var(--border-color-default);box-shadow:0 20px 60px rgba(0,0,0,.2);">
+        <div class="modal-dialog modal-dialog-centered rf-search-dialog">
+            <div class="modal-content rf-search-modal">
                 <style>
                 .gs-wrap { padding:0; }
                 .gs-input-bar { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border-color-default); background:var(--background-color-card); }
@@ -365,13 +365,13 @@
                     <div class="gs-input-bar">
                         <i class="bi bi-search gs-icon"></i>
                         <input type="text" id="modal-global-search-input" placeholder="Buscar processos por titular, matrícula ou ID..." autofocus autocomplete="off">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size: .75rem;opacity:.5;"></button>
+                        <button type="button" class="btn-close rf-search-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="gs-body" id="modal-search-results-list">
                         <div class="gs-empty" id="modal-search-no-results">
                             <i class="bi bi-search"></i>
                             <p>Digite para buscar processos no sistema</p>
-                            <p style="font-size: .75rem;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
+                            <p class="rf-search-hint">Busca por titular, matrícula ou ID do processo</p>
                         </div>
                     </div>
                     <div class="gs-footer">
@@ -396,7 +396,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center mb-3">
-                        <img src="{{ url_for('static', filename='img/registrofacil.png') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 150px;">
+                        <img src="{{ url_for('static', filename='img/registrofacil.png') }}" alt="Logo" class="img-fluid mb-3 rf-logo">
                         <h4>Registro Fácil</h4>
                         <p class="text-muted">Sistema de Gestão de Processos</p>
                     </div>
@@ -418,15 +418,15 @@
     <div class="modal fade" id="shortcutsModal" tabindex="-1" aria-labelledby="shortcutsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header" style="background: var(--color-black-premium); color: #fff;">
+                <div class="modal-header rf-about-header">
                     <h5 class="modal-title" id="shortcutsModalLabel">
                         <i class="bi bi-keyboard me-2"></i>Atalhos do Sistema
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" style="filter: invert(1) brightness(2);"></button>
+                    <button type="button" class="btn-close btn-close-white rf-about-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
                     <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
-                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Navegação Principal</h6>
+                        <h6 class="mb-2 fw-bold rf-about-section-title">Navegação Principal</h6>
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
                             <span class="text-secondary">Expandir/Recolher Menu Lateral</span>
                             <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>I</kbd></span>
@@ -454,7 +454,7 @@
                     </div>
 
                     <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
-                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+                        <h6 class="mb-2 fw-bold rf-about-section-title">Atalhos de Processos</h6>
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
                             <span class="text-secondary">Processos Hoje</span>
                             <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>H</kbd></span>
@@ -470,7 +470,7 @@
                     </div>
 
                     <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
-                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Configurações e Sistema</h6>
+                        <h6 class="mb-2 fw-bold rf-about-section-title">Configurações e Sistema</h6>
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
                             <span class="text-secondary">Configurações do Sistema</span>
                             <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>S</kbd></span>
@@ -486,7 +486,7 @@
                     </div>
 
                     <div class="list-group list-group-flush border rounded-3 p-3 mb-3">
-                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+                        <h6 class="mb-2 fw-bold rf-about-section-title">Atalhos de Processos</h6>
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
                             <span class="text-secondary">Processos do Dia</span>
                             <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>H</kbd></span>
@@ -502,7 +502,7 @@
                     </div>
 
                     <div class="list-group list-group-flush border rounded-3 p-3">
-                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Opções do Usuário</h6>
+                        <h6 class="mb-2 fw-bold rf-about-section-title">Opções do Usuário</h6>
                         <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-dashed">
                             <span class="text-secondary">Meu Perfil</span>
                             <span class="badge bg-light text-dark shadow-sm py-2 px-3"><kbd>Alt</kbd> + <kbd>M</kbd></span>
@@ -620,7 +620,7 @@
     {% block scripts %}{% endblock %}
     <!-- Identidade visual semântica consolidada após estilos locais dos templates -->
     <!-- Toast Container Global -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;"></div>
+    <div class="toast-container position-fixed top-0 end-0 p-3 rf-toast-container"></div>
 
 <script>
     // Garantir que a sidebar está no estado correto

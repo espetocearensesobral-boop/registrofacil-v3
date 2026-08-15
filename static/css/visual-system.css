@@ -1131,3 +1131,45 @@ html body:has(.auth-panel-left) .auth-panel-left .auth-btn { background: var(--r
         transition-duration: .01ms !important;
     }
 }
+
+/* Onda v3.22: estilos estáticos extraídos dos templates base e backup. */
+.rf-profile-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--rf-font-sm); }
+.rf-modal-danger-header { background: var(--rf-danger); color: var(--rf-text-on-primary); }
+.rf-modal-body { font-size: var(--rf-font-base); }
+.rf-modal-note { color: var(--rf-text-secondary); }
+.rf-inline-form { display: inline; }
+.rf-search-dialog { max-width: 38.75rem; }
+.rf-search-modal { border-radius: var(--rf-radius-lg); overflow: hidden; border: 1px solid var(--rf-border); box-shadow: var(--rf-shadow-lg); }
+.rf-search-close { font-size: var(--rf-font-xs); opacity: .5; }
+.rf-search-hint { font-size: var(--rf-font-xs); margin-top: .25rem; opacity: .6; }
+.rf-backup-path-icon { color: var(--rf-text-secondary); font-size: var(--rf-font-base); flex-shrink: 0; }
+.rf-backup-label { font-size: var(--rf-font-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--rf-text-secondary); white-space: nowrap; flex-shrink: 0; }
+.rf-backup-path { font-size: var(--rf-font-base); word-break: break-all; color: var(--rf-info); flex: 1; }
+.rf-backup-count { background: var(--color-primary-dark); color: var(--rf-text-on-primary); font-size: var(--rf-font-xs); border-radius: 999px; padding: 3px 10px; font-weight: 700; }
+.rf-backup-table { font-size: var(--rf-font-sm); }
+.rf-backup-table thead tr { background: var(--rf-surface-body); }
+.rf-backup-table th { padding: 10px 12px; font-size: var(--rf-font-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--rf-text-secondary); border-bottom: 2px solid var(--rf-border); }
+.rf-backup-table td { padding: 11px 12px; }
+.rf-backup-name { font-size: var(--rf-font-base); background: var(--rf-surface-body); padding: 2px 6px; border-radius: var(--rf-radius-xs); color: var(--rf-info); }
+.rf-backup-meta { padding: 11px 12px; color: var(--rf-text-secondary); }
+.rf-backup-actions { display: flex; gap: 6px; justify-content: center; }
+.rf-backup-action { height: 28px; padding: 0 10px; font-size: var(--rf-font-base); }
+.rf-backup-empty { color: var(--rf-text-secondary); }
+.rf-backup-empty-icon { font-size: 2rem; opacity: .3; }
+.rf-backup-empty-text { font-size: var(--rf-font-sm); }
+.rf-backup-path-box { display: flex; align-items: center; gap: 10px; background: var(--rf-surface-body); border: 1px solid var(--rf-border); border-radius: var(--rf-radius-sm); padding: 10px 14px; }
+.rf-logo { max-width: 9.375rem; }
+.rf-about-header { background: var(--color-primary-dark); color: var(--rf-text-on-primary); }
+.rf-about-close { filter: invert(1) brightness(2); }
+.rf-about-section-title { color: var(--color-primary-dark); }
+.rf-toast-container { z-index: 9999; }
+.rf-kpi-status { font-size: var(--rf-font-base); padding-top: .375rem; }
+.rf-kpi-address { font-size: var(--rf-font-lg); padding-top: .375rem; font-family: var(--rf-font-mono); }
+.rf-backup-section-icon { color: var(--rf-accent); }
+.rf-backup-card-body { font-size: var(--rf-font-sm); }
+.rf-backup-description { font-size: var(--rf-font-sm); color: var(--rf-text-secondary); margin-bottom: 1rem; }
+.rf-backup-sha { word-break: break-all; }
+.rf-backup-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.rf-backup-primary-action { height: 38px; padding: 0 20px; font-size: var(--rf-font-sm); }
+.rf-backup-info-action { height: 38px; padding: 0 16px; font-size: var(--rf-font-sm); background: var(--rf-info); color: var(--rf-text-on-primary); border: 0; border-radius: var(--rf-radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; box-shadow: 0 0 0 3px color-mix(in srgb, var(--rf-info) 25%, transparent); }
+.rf-backup-warning-action { height: 38px; padding: 0 16px; font-size: var(--rf-font-sm); background: var(--rf-warning); color: var(--rf-text-on-primary); border: 0; border-radius: var(--rf-radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }

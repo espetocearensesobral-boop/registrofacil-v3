@@ -1,0 +1,140 @@
+=== base inline ===
+246:                    <span class="menu-text" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;">
+314:                <div class="modal-header" style="background:var(--color-error);color:#fff;">
+318:                <div class="modal-body" style="font-size:14px;">
+320:                    <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+326:                    <form id="deleteForm" method="POST" action="" style="display:inline;">
+340:        <div class="modal-dialog modal-dialog-centered" style="max-width:620px;">
+341:            <div class="modal-content" style="border-radius:14px;overflow:hidden;border:1px solid var(--border-color-default);box-shadow:0 20px 60px rgba(0,0,0,.2);">
+368:                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size: .75rem;opacity:.5;"></button>
+374:                            <p style="font-size: .75rem;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
+399:                        <img src="{{ url_for('static', filename='img/registrofacil.png') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 150px;">
+421:                <div class="modal-header" style="background: var(--color-black-premium); color: #fff;">
+425:                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" style="filter: invert(1) brightness(2);"></button>
+429:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Navegação Principal</h6>
+457:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+473:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Configurações e Sistema</h6>
+489:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+505:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Opções do Usuário</h6>
+623:    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;"></div>
+=== backup inline ===
+26:        <div class="kpi-value {% if is_server %}kpi-success{% else %}kpi-warning{% endif %}" style="font-size:15px;padding-top:6px;">
+34:        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family: var(--rf-font-mono);">{{ machine_ip }}</div>
+51:        <h5 class="m-0"><i class="bi bi-shield-check me-2" style="color:var(--color-gold-primary);"></i>Última execução</h5>
+54:    <div class="rf-card-body" style="font-size:13px;">
+64:        {% if backup_status.sha256 %}<div class="mt-2 text-muted"><strong>SHA-256:</strong> <code style="word-break:break-all;">{{ backup_status.sha256 }}</code></div>{% endif %}
+74:                <h5 class="m-0"><i class="bi bi-cloud-arrow-up me-2" style="color:var(--color-gold-primary);"></i>Gerar Novo Backup</h5>
+77:                <p style="font-size:13px;color:var(--text-color-secondary);margin-bottom:16px;">
+83:                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+86:                        <button type="submit" class="nav-btn nav-btn-primary" style="height:38px;padding:0 20px;font-size:13px;">
+92:                        <button type="submit" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-info);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 0 0 3px rgba(23,162,184,.25);">
+98:                        <button type="button" onclick="confirmarReparo()" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-warning);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;">
+105:                <div style="display:flex;align-items:center;gap:10px;background:var(--background-color-body);border:1px solid var(--border-color-default);border-radius:8px;padding:10px 14px;">
+106:                    <i class="bi bi-database" style="color:var(--text-color-secondary);font-size:14px;flex-shrink:0;"></i>
+107:                    <span style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);white-space:nowrap;flex-shrink:0;">Caminho do Arquivo</span>
+108:                    <code style="font-size:12px;word-break:break-all;color:var(--color-info);flex:1;">{{ db_config.path_completo }}</code>
+116:                <h5 class="m-0"><i class="bi bi-folder-fill me-2" style="color:var(--color-gold-primary);"></i>Backups Existentes</h5>
+117:                <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ backups | length }}</span>
+122:                    <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+124:                            <tr style="background:var(--background-color-body);">
+125:                                <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Nome do Arquivo</th>
+126:                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data</th>
+127:                                <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tamanho</th>
+128:                                <th class="text-center pe-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+134:                                <td class="ps-4" style="padding:11px 12px;">
+135:                                    <code style="font-size:12px;background:var(--background-color-body);padding:2px 6px;border-radius:4px;color:var(--color-info);">{{ backup.name }}</code>
+137:                                <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ backup.created_at }}</td>
+138:                                <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ backup.size }}</td>
+139:                                <td class="text-center pe-4" style="padding:11px 12px;">
+140:                                    <div style="display:flex;gap:6px;justify-content:center;">
+141:                                        <a href="{{ backup.download_url }}" class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:12px;" title="Baixar">
+144:                                        <button type="button" class="nav-btn nav-btn-danger btn-delete-backup" style="height:28px;padding:0 10px;font-size:12px;"
+150:                                        <form method="post" action="{{ url_for('backup.restore_backup') }}" onsubmit="return confirmarRestauracao('{{ backup.name|e }}');" style="display:inline;">
+153:                                            <button type="submit" class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:12px;" title="Restaurar">
+166:                <div class="text-center py-5" style="color:var(--text-color-secondary);">
+167:                    <i class="bi bi-archive d-block mb-2" style="font-size:2rem;opacity:.3;"></i>
+168:                    <span style="font-size:13px;">Nenhum backup encontrado.</span>
+180:            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+184:            <div class="modal-body" style="font-size:14px;">
+186:                <br><small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+190:                <form id="deleteBackupForm" method="POST" action="" style="display:inline;">
+=== existing related classes ===
+static/css/visual-system.css:55:.modal,
+static/css/visual-system.css:99:.menu-text { font-size: .9375rem; }
+static/css/visual-system.css:201:.modal-content { border: 1px solid var(--rf-border); border-radius: var(--rf-radius-lg); box-shadow: var(--rf-shadow-md); overflow: hidden; }
+static/css/visual-system.css:202:.modal-header { padding: 1rem 1.25rem; background: var(--rf-surface-muted); border-bottom: 1px solid var(--rf-border); }
+static/css/visual-system.css:203:.modal-title { color: var(--rf-text-strong); font-size: 1.125rem; font-weight: 700; }
+static/css/visual-system.css:204:.modal-body { padding: 1.25rem; }
+static/css/visual-system.css:205:.modal-footer { padding: .875rem 1.25rem; background: var(--rf-surface-muted); border-top: 1px solid var(--rf-border); }
+static/css/visual-system.css:217:.table, .rf-table { color: var(--rf-text-body); font-size: .9375rem; }
+static/css/visual-system.css:218:.table thead th, .rf-table th { padding: .75rem .875rem; color: var(--rf-text-strong); font-size: .8125rem; letter-spacing: .04em; }
+static/css/visual-system.css:219:.table tbody td, .rf-table td { padding: .8rem .875rem; vertical-align: middle; }
+static/css/visual-system.css:220:.table tbody tr:hover, .rf-table tbody tr:hover td { background: var(--rf-surface-hover); }
+static/css/visual-system.css:236:    .modal-body { padding: 1rem; }
+static/css/visual-system.css:565:.modal-title { color: var(--rf-text-strong) !important; }
+static/css/visual-system.css:680:.modal-content,
+static/css/visual-system.css:686:.modal-header,
+static/css/visual-system.css:688:.modal-footer { background: var(--rf-surface-body); border-color: var(--rf-border); }
+static/css/visual-system.css:700:.table,
+static/css/visual-system.css:701:.rf-table,
+static/css/visual-system.css:703:.table tbody tr:nth-child(even) td,
+static/css/visual-system.css:704:.rf-table tbody tr:nth-child(even) td,
+static/css/visual-system.css:706:.table tbody tr:hover td,
+static/css/visual-system.css:707:.rf-table tbody tr:hover td,
+static/css/visual-system.css:749:h1, h2, h3, .page-title-text, .card-title, .rf-card-title, .modal-title { color: var(--text-color-primary) !important; }
+static/css/visual-system.css:750:.card, .rf-card, .kpi-card, .modal-content, .cfg-card, .filter-bar { background: var(--background-color-card) !important; border-color: var(--border-color-default) !important; }
+static/css/visual-system.css:751:.card-header, .rf-card-header, .modal-header, .cfg-card-header { background: var(--background-color-body) !important; border-color: var(--border-color-default) !important; color: var(--text-color-primary) !important; }
+static/css/visual-system.css:831:body .btn-delete-backup,
+static/css/visual-system.css:845:body .btn-delete-backup:hover,
+static/css/visual-system.css:879:body .table, body .rf-table, body .cfg-tbl { color: var(--text-color-primary) !important; }
+static/css/visual-system.css:880:body .table thead th, body .rf-table th, body .cfg-tbl th { background: var(--background-color-body) !important; color: var(--text-color-secondary) !important; border-color: var(--border-color-default) !important; }
+static/css/visual-system.css:881:body .table tbody tr:nth-child(even) td, body .rf-table tbody tr:nth-child(even) td, body .cfg-tbl tbody tr:nth-child(even) td { background: var(--background-color-body) !important; }
+static/css/visual-system.css:882:body .table tbody tr:hover td, body .rf-table tbody tr:hover td, body .cfg-tbl tbody tr:hover td { background: var(--background-color-hover) !important; }
+static/css/visual-system.css:892:body .modal-content { background: var(--background-color-card) !important; border-color: var(--border-color-default) !important; }
+static/css/visual-system.css:893:body .modal-header, body .modal-footer { background: var(--background-color-body) !important; border-color: var(--border-color-default) !important; }
+static/css/visual-system.css:894:body .modal-header[style*="var(--color-error)"] { background: var(--color-gold-primary) !important; color: #FFFFFF !important; }
+static/css/visual-system.css:967:html body .btn-delete-backup,
+static/css/visual-system.css:1025:html body .sidebar .menu-item .menu-text,
+static/css/visual-system.css:1037:html body .sidebar .menu-item.active .menu-text,
+static/css/main.css:250:.menu-text {
+static/css/main.css:259:.sidebar.collapsed .menu-text {
+static/css/main.css:342:.sidebar.collapsed .section-title-toggle .menu-text {
+static/css/main.css:406:.logout-menu-item:hover .menu-text.menu-text-logout {
+static/css/main.css:462:.modal-content {
+static/css/main.css:470:.modal-header {
+static/css/main.css:476:.modal-body .input-group-text {
+static/css/main.css:482:.modal-body .form-control {
+static/css/main.css:488:.modal-body .form-control::placeholder {
+static/css/main.css:492:#modal-search-results-container {
+static/css/main.css:496:#modal-search-results-list .list-group-item {
+static/css/main.css:503:#modal-search-results-list .list-group-item:hover {
+static/css/main.css:507:#modal-search-no-results {
+static/css/main.css:668:.table {
+static/css/main.css:673:.table thead th {
+static/css/main.css:684:.table tbody tr {
+static/css/main.css:688:.table tbody tr:hover {
+static/css/main.css:692:.table tbody td {
+static/css/main.css:700:.table-striped tbody tr:nth-of-type(even) {
+static/css/main.css:704:.table-striped tbody tr:nth-of-type(even):hover {
+static/css/main.css:793:.sidebar-collapsed-initial .sidebar .menu-text {
+static/css/main.css:815:.sidebar-collapsed-initial .sidebar .section-title-toggle .menu-text {
+static/css/compact.css:178:.rf-table { width: 100%; border-collapse: collapse; font-size: var(--font-sm); }
+static/css/compact.css:179:.rf-table thead { background: var(--background-color-body); }
+static/css/compact.css:180:.rf-table th {
+static/css/compact.css:188:.rf-table th a { color: var(--text-color-secondary); text-decoration: none; }
+static/css/compact.css:189:.rf-table th a:hover { color: var(--color-black-premium); }
+static/css/compact.css:190:.rf-table td {
+static/css/compact.css:196:.rf-table tbody tr:last-child td { border-bottom: none; }
+static/css/compact.css:197:.rf-table tbody tr:hover td { background: rgba(0,0,0,.018); }
+static/css/compact.css:198:.rf-table .col-actions { text-align: right; white-space: nowrap; }
+static/css/compact.css:449:.table th { padding: 8px 12px !important; font-size: var(--font-xs)!important; }
+static/css/compact.css:450:.table td { padding: 8px 12px !important; font-size: var(--font-sm)!important; }
+static/css/compact.css:543:   BOTÕES GLOBAIS DO SISTEMA — nav-btn, tbl-acoes, rf-table
+static/css/compact.css:725:/* ── Tabela padrão do sistema — rf-table ───────────────────────────────── */
+static/css/compact.css:726:.rf-table {
+static/css/compact.css:731:.rf-table thead {
+static/css/compact.css:734:.rf-table th {
+static/css/compact.css:744:.rf-table td {
+static/css/compact.css:749:.rf-table tbody tr:last-child td { border-bottom: none; }
+static/css/compact.css:750:.rf-table tbody tr:hover td { background: rgba(0,0,0,.018); }
+static/css/compact.css:753:/* (As regras .tbl-acoes e .rf-table adicionadas nos templates serão
