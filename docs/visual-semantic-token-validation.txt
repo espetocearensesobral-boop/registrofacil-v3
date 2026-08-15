@@ -1,0 +1,80 @@
+=== circular/self aliases ===
+=== semantic token coverage ===
+72
+--rf-accent-hover:
+--rf-accent-subtle:
+--rf-accent:
+--rf-action-primary-active:
+--rf-action-primary-hover:
+--rf-action-primary:
+--rf-action-secondary-hover:
+--rf-action-secondary:
+--rf-border-input:
+--rf-border-strong:
+--rf-border-subtle:
+--rf-border:
+--rf-control-height:
+--rf-danger-hover:
+--rf-danger-surface:
+--rf-danger-text:
+--rf-danger:
+--rf-info-hover:
+--rf-info-surface:
+--rf-info-text:
+--rf-info:
+--rf-p3-aviso:
+--rf-p3-fundo:
+--rf-p3-grafite-ativo:
+--rf-p3-grafite-claro:
+--rf-p3-grafite:
+--rf-p3-linha:
+--rf-p3-muted:
+--rf-p3-papel:
+--rf-p3-sucesso:
+--rf-p3-texto:
+--rf-p3-vinho-escuro:
+--rf-p3-vinho:
+--rf-page:
+--rf-sidebar-active-text:
+--rf-sidebar-active:
+--rf-sidebar-border:
+--rf-sidebar-hover:
+--rf-sidebar-surface:
+--rf-sidebar-text:
+--rf-sidebar-width:
+--rf-success-hover:
+--rf-success-surface:
+--rf-success-text:
+--rf-success:
+--rf-surface-body:
+--rf-surface-card:
+--rf-surface-hover:
+--rf-surface-input:
+--rf-surface-muted:
+--rf-surface-overlay:
+--rf-surface:
+--rf-text-body:
+--rf-text-link:
+--rf-text-muted:
+--rf-text-on-primary:
+--rf-text-on-sidebar:
+--rf-text-primary:
+--rf-text-secondary:
+--rf-text-strong:
+--rf-theme-accent-dark:
+--rf-theme-accent:
+--rf-theme-danger-bg:
+--rf-theme-danger-text:
+--rf-theme-info-bg:
+--rf-theme-info-text:
+--rf-theme-warning-bg:
+--rf-theme-warning-text:
+--rf-warning-hover:
+--rf-warning-surface:
+--rf-warning-text:
+--rf-warning:
+=== diff stat ===
+ static/css/color-themes.css  | 53 [32m++++++++++++++++++++++++++++++++++++++++++++[m
+ static/css/visual-system.css | 24 [32m++++++++++++[m[31m--------[m
+ 2 files changed, 68 insertions(+), 9 deletions(-)
+=== diff check ===

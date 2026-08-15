@@ -2033,7 +2033,7 @@ def release_lock_ajax():
 
     except Exception as e:
         logger.error(f"Erro ao libertar lock via AJAX/Beacon: {e}", exc_info=True)
-        return jsonify({'success': False, 'error': 'Erro interno do servidor'}), 500
+        return jsonify({'success': False, 'error': 'Não foi possível concluir a liberação do registro agora. Tente novamente.'}), 500
         
 @processos_bp.route('/gerar_pdf/<int:processo_id>')
 @login_status_required

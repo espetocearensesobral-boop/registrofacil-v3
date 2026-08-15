@@ -1,0 +1,126 @@
+=== CSS files ===
+color-themes.css
+compact.css
+main.css
+mobile.css
+palette03-final.css
+processos.css
+theme.css
+themes.css
+usuarios.css
+visual-system.css
+=== stylesheet references in templates ===
+templates/base.html:35:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+templates/base.html:36:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+templates/base.html:37:    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600&display=swap" rel="stylesheet">
+templates/base.html:39:    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+templates/base.html:40:<link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+templates/base.html:41:<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+templates/base.html:42:<link rel="stylesheet" href="{{ url_for('static', filename='css/processos.css') }}">
+templates/base.html:43:<link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
+templates/base.html:44:<link rel="stylesheet" href="{{ url_for('static', filename='css/compact.css') }}">
+templates/base.html:45:<link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+templates/base.html:136:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+templates/base.html:137:    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css') }}">
+templates/base.html:640:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+templates/login.html:7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+templates/login.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/login.html:9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+templates/login.html:68:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+templates/login.html:69:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+templates/novo_usuario.html:7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+templates/novo_usuario.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/novo_usuario.html:9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+templates/novo_usuario.html:69:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+templates/novo_usuario.html:70:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+templates/recuperar_senha.html:7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+templates/recuperar_senha.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/recuperar_senha.html:9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+templates/recuperar_senha.html:65:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+templates/recuperar_senha.html:66:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+templates/reset_password.html:7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+templates/reset_password.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/reset_password.html:9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+templates/reset_password.html:66:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+templates/reset_password.html:67:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+=== JS theme references ===
+templates/base.html:141:<body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}">
+templates/login.html:71:<body data-cor="{{ tema_cor_usuario }}">
+templates/novo_usuario.html:72:<body data-cor="{{ tema_cor_usuario }}">
+templates/perfil.html:33:                    <span class="badge badge-primary" id="paleta-atual-badge" style="background-color: var(--color-primary); color: white;">
+templates/perfil.html:35:                        <span id="paleta-atual-nome">Tema 01</span>
+templates/perfil.html:299:                <div class="row g-3" id="grid-paletas" role="radiogroup" aria-label="Temas institucionais">
+templates/perfil.html:302:                        <button type="button" class="theme-choice w-100 text-start{% if visual_preferences.tema_cor == palette.id %} selected{% endif %}" data-theme="{{ palette.id }}" role="radio" aria-checked="{{ 'true' if visual_preferences.tema_cor == palette.id else 'false' }}">
+templates/perfil.html:323:<script src="{{ url_for('static', filename='js/paleta.js') }}"></script>
+templates/recuperar_senha.html:68:<body data-cor="{{ tema_cor_usuario }}">
+templates/reset_password.html:69:<body data-cor="{{ tema_cor_usuario }}">
+static/js/paleta.js:6:    document.body.setAttribute('data-cor', tema);
+static/js/paleta.js:8:    const badge = document.getElementById('paleta-atual-badge');
+static/js/paleta.js:22:        temaOriginal = data.tema_cor || 'paleta-01';
+static/js/paleta.js:56:        aplicarTema(temaOriginal || 'paleta-01');
+static/js/theme-toggle.js:1:// static/js/theme-toggle.js
+static/js/theme-toggle.js:50:        this.toggleBtn = document.getElementById('theme-toggle-btn');
+static/js/theme-toggle.js:55:            this.toggleBtn.id = 'theme-toggle-btn';
+static/js/theme-toggle.js:56:            this.toggleBtn.className = 'btn btn-sm theme-toggle ms-2';
+static/js/theme-toggle.js:125:        // Aplicar atributo data-theme no HTML
+static/js/theme-toggle.js:126:        document.documentElement.setAttribute('data-theme', theme);
+static/js/theme-toggle.js:238:    .theme-toggle.pulse {
+static/js/theme-toggle.js:242:    .theme-toggle {
+static/js/theme-toggle.js:246:    .theme-toggle:active {
+routes/perfil.py:326:    from data.themes import listar_paletas_institucionais
+routes/perfil.py:327:    preferencias_visuais = {'tema_cor': 'paleta-01'}
+routes/perfil.py:341:                             institutional_palettes=listar_paletas_institucionais(),
+routes/perfil.py:362:    return jsonify({'tema_cor': preferencias.get('tema_cor') or 'paleta-01'})
+routes/processos.py:1682:        header_fill = PatternFill(start_color="8B6332", end_color="8B6332", fill_type="solid") # Dourado Escuro da sua paleta
+=== base head ===
+            background-color: #a01f25 !important;
+            border-color: #a01f25 !important;
+            color: #fff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+
+        /* Dropdown toggle herda o estilo do pai */
+        .navbar .nav-btn.dropdown-toggle::after { margin-left: 4px; }
+
+        /* Remove espaçamentos avulsos antigos que causavam colagem */
+        .navbar .nav-btn + .nav-btn,
+        .navbar .nav-btn + .dropdown,
+        .navbar .dropdown + .nav-btn,
+        .navbar .dropdown + .dropdown { margin-left: 0; } /* gap-2 do flex cuida disso */
+
+        /* Botão Editar no cabeçalho — preto padrão do sistema (sobrepõe dourado) */
+        .navbar .nav-btn-gold,
+        .navbar .nav-btn.nav-btn-gold {
+            background-color: #1a1a1a !important;
+            border-color: #1a1a1a !important;
+            color: #fff !important;
+        }
+        .navbar .nav-btn-gold:hover,
+        .navbar .nav-btn.nav-btn-gold:hover {
+            background-color: #333 !important;
+            border-color: #333 !important;
+            color: #fff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+    </style>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css') }}">
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
+</head>
+<body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}">
+    <!-- Overlay para fechar sidebar no mobile -->
+    <div id="sidebar-overlay"></div>
+    <div class="loader-overlay"></div>
+    <div class="d-flex" id="wrapper">
+        <div class="sidebar" id="sidebar">
+
+            <div class="hamburger-menu" data-accesskey="i"
+                 title="Expandir/Recolher Menu (Alt+I)">
+                <img src="{{ session.get('empresa_logo_url', url_for('static', filename='img/registrofacil.png')) }}"
+                     alt="Logo" class="sidebar-company-logo" id="sidebar-company-logo"
+                     onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/registrofacil.png') }}'">
+            </div>
+
+            <div class="menu-section">

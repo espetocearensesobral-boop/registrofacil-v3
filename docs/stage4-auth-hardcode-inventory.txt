@@ -1,0 +1,505 @@
+=== public auth style blocks ===
+--- templates/login.html
+7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+11:    <style>
+12:        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8;overflow:hidden}
+15:        .auth-panel-left{width:100%;max-width:480px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0}
+16:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+17:        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
+19:        .auth-panel-right{display:none;flex:1;background:linear-gradient(145deg,#0f0f0f 0%,#1a1a1a 40%,#0d0d0d 100%);position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:3rem}
+21:        .auth-panel-right::before{content:'';position:absolute;top:-30%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(205,168,101,.12) 0%,transparent 65%);border-radius:50%}
+22:        .auth-panel-right::after{content:'';position:absolute;bottom:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(30,136,229,.08) 0%,transparent 65%);border-radius:50%}
+25:        .panel-brand img{width:90px;height:90px;object-fit:contain;border-radius:50%;background:#1a1a1a;border:2px solid rgba(205,168,101,.3);padding:10px;margin-bottom:2rem;box-shadow:0 4px 24px rgba(205,168,101,.15)}
+26:        .panel-brand h1{font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
+27:        .panel-brand .gold-line{display:inline-block;width:48px;height:3px;background:#CDA865;border-radius:2px;margin:1.2rem auto}
+28:        .panel-brand p{font-size:.95rem;color:#888;line-height:1.7;max-width:280px}
+30:        .panel-feature-item{display:flex;align-items:center;gap:.75rem;font-size:.82rem;color:#666}
+31:        .panel-feature-item i{color:#CDA865;font-size:1rem;flex-shrink:0}
+34:        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}
+37:        .auth-title{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em}
+38:        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem}
+39:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+40:        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+41:        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
+42:        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
+43:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+44:        .auth-input-group input::placeholder{color:#444}
+45:        .auth-input-group .toggle-pw{padding:0 14px;color:#555;cursor:pointer;font-size:15px;flex-shrink:0;transition:color .2s}
+46:        .auth-input-group .toggle-pw:hover{color:#CDA865}
+48:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+49:        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
+50:        .auth-btn:active{transform:translateY(1px)}
+51:        .auth-btn i{font-size:16px}
+53:        .auth-divider{color:#333;font-size:.8rem}
+54:        .auth-link{font-size:.83rem;color:#666;text-decoration:none;transition:color .2s}
+55:        .auth-link:hover{color:#CDA865}
+56:        .auth-alert{padding:12px 14px;border-radius:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.4rem;border:1.5px solid}
+57:        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
+58:        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
+59:        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
+60:        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
+61:        .auth-alert i{font-size:1rem;flex-shrink:0;margin-top:1px}
+62:        .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
+64:        .lock-warning{font-size:.75rem;color:#f07070;margin-top:5px;display:none}
+66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+68:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+69:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+--- templates/novo_usuario.html
+7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+11:    <style>
+12:        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+15:        .auth-panel-left{width:100%;max-width:520px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0;overflow-y:auto}
+16:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+17:        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
+19:        .auth-panel-right{display:none;flex:1;background:linear-gradient(145deg,#0f0f0f 0%,#1a1a1a 40%,#0d0d0d 100%);position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:3rem}
+21:        .auth-panel-right::before{content:'';position:absolute;top:-30%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(205,168,101,.12) 0%,transparent 65%);border-radius:50%}
+22:        .auth-panel-right::after{content:'';position:absolute;bottom:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(30,136,229,.08) 0%,transparent 65%);border-radius:50%}
+25:        .panel-brand img{width:90px;height:90px;object-fit:contain;border-radius:50%;background:#1a1a1a;border:2px solid rgba(205,168,101,.3);padding:10px;margin-bottom:2rem;box-shadow:0 4px 24px rgba(205,168,101,.15)}
+26:        .panel-brand h1{font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
+27:        .panel-brand .gold-line{display:inline-block;width:48px;height:3px;background:#CDA865;border-radius:2px;margin:1.2rem auto}
+28:        .panel-brand p{font-size:.95rem;color:#888;line-height:1.7;max-width:280px}
+31:        .step-num{width:28px;height:28px;border-radius:50%;background:rgba(205,168,101,.15);border:1px solid rgba(205,168,101,.4);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#CDA865;flex-shrink:0;margin-top:1px}
+32:        .step-info strong{display:block;font-size:.82rem;color:#aaa;font-weight:600;margin-bottom:.2rem}
+33:        .step-info span{font-size:.78rem;color:#555}
+36:        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}.auth-logo-sm .logo-circle img{width:58px;height:58px;object-fit:contain;}
+38:        .auth-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em}
+39:        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2rem}
+40:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+41:        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+42:        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
+43:        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
+44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit;min-width:0}
+45:        .auth-input-group input::placeholder{color:#444}
+46:        .auth-input-group .toggle-pw{padding:0 14px;color:#555;cursor:pointer;font-size:15px;flex-shrink:0;transition:color .2s}
+47:        .auth-input-group .toggle-pw:hover{color:#CDA865}
+49:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.6rem}
+50:        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
+51:        .auth-btn:active{transform:translateY(1px)}
+52:        .auth-btn i{font-size:16px}
+53:        .auth-links{text-align:center;margin-top:1.4rem;font-size:.83rem;color:#666}
+54:        .auth-link{color:#CDA865;text-decoration:none;font-weight:600}
+55:        .auth-link:hover{color:#b8913e}
+56:        .auth-alert{padding:12px 14px;border-radius:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.4rem;border:1.5px solid}
+57:        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
+58:        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
+59:        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
+60:        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
+61:        .auth-alert i{font-size:1rem;flex-shrink:0;margin-top:1px}
+62:        .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
+64:        .lock-warning{font-size:.75rem;color:#f07070;margin-top:5px;display:none}
+66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+67:        .field-hint{font-size:.73rem;color:#555;margin-top:.35rem}
+69:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+70:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+152:            <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:12px;line-height:1.5;">
+--- templates/recuperar_senha.html
+7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+11:    <style>
+12:        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+15:        .auth-panel-left{width:100%;max-width:480px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0}
+16:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+17:        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
+19:        .auth-panel-right{display:none;flex:1;background:linear-gradient(145deg,#0f0f0f 0%,#1a1a1a 40%,#0d0d0d 100%);position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:3rem}
+21:        .auth-panel-right::before{content:'';position:absolute;top:-30%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(205,168,101,.12) 0%,transparent 65%);border-radius:50%}
+22:        .auth-panel-right::after{content:'';position:absolute;bottom:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(30,136,229,.08) 0%,transparent 65%);border-radius:50%}
+25:        .panel-brand img{width:90px;height:90px;object-fit:contain;border-radius:50%;background:#1a1a1a;border:2px solid rgba(205,168,101,.3);padding:10px;margin-bottom:2rem;box-shadow:0 4px 24px rgba(205,168,101,.15)}
+26:        .panel-brand h1{font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
+27:        .panel-brand .gold-line{display:inline-block;width:48px;height:3px;background:#CDA865;border-radius:2px;margin:1.2rem auto}
+28:        .panel-brand p{font-size:.95rem;color:#888;line-height:1.7;max-width:280px}
+29:        .panel-info-box{position:relative;z-index:2;margin-top:3rem;background:rgba(205,168,101,.06);border:1px solid rgba(205,168,101,.15);border-radius:12px;padding:1.5rem}
+30:        .panel-info-box h3{font-size:.9rem;font-weight:700;color:#CDA865;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+31:        .panel-info-step{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;font-size:.8rem;color:#666}
+32:        .panel-info-step i{color:#CDA865;flex-shrink:0;margin-top:1px}
+35:        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}.auth-logo-sm .logo-circle img{width:58px;height:58px;object-fit:contain;}
+37:        .auth-icon-badge{width:64px;height:64px;border-radius:50%;background:rgba(205,168,101,.1);border:1.5px solid rgba(205,168,101,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.8rem;color:#CDA865}
+38:        .auth-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em;text-align:center}
+39:        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem;text-align:center;line-height:1.6}
+40:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+41:        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+42:        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
+43:        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
+44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+45:        .auth-input-group input::placeholder{color:#444}
+47:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+48:        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
+49:        .auth-btn:active{transform:translateY(1px)}
+50:        .auth-btn i{font-size:16px}
+51:        .auth-links{text-align:center;margin-top:1.4rem;font-size:.83rem;color:#666}
+52:        .auth-link{color:#CDA865;text-decoration:none;font-weight:600}
+53:        .auth-link:hover{color:#b8913e}
+54:        .auth-alert{padding:12px 14px;border-radius:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.4rem;border:1.5px solid}
+55:        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
+56:        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
+57:        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
+58:        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
+59:        .auth-alert i{font-size:1rem;flex-shrink:0;margin-top:1px}
+60:        .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
+63:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+65:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+66:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+--- templates/reset_password.html
+7:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+9:    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+11:    <style>
+12:        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+14:        .auth-panel-left{width:100%;max-width:480px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0}
+15:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+16:        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
+17:        .auth-panel-right{display:none;flex:1;background:linear-gradient(145deg,#0f0f0f 0%,#1a1a1a 40%,#0d0d0d 100%);position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:3rem}
+19:        .auth-panel-right::before{content:'';position:absolute;top:-30%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(205,168,101,.12) 0%,transparent 65%);border-radius:50%}
+20:        .auth-panel-right::after{content:'';position:absolute;bottom:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(30,136,229,.08) 0%,transparent 65%);border-radius:50%}
+23:        .panel-brand img{width:90px;height:90px;object-fit:contain;border-radius:50%;background:#1a1a1a;border:2px solid rgba(205,168,101,.3);padding:10px;margin-bottom:2rem;box-shadow:0 4px 24px rgba(205,168,101,.15)}
+24:        .panel-brand h1{font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
+25:        .panel-brand .gold-line{display:inline-block;width:48px;height:3px;background:#CDA865;border-radius:2px;margin:1.2rem auto}
+26:        .panel-brand p{font-size:.95rem;color:#888;line-height:1.7;max-width:280px}
+27:        .panel-info-box{position:relative;z-index:2;margin-top:3rem;background:rgba(205,168,101,.06);border:1px solid rgba(205,168,101,.15);border-radius:12px;padding:1.5rem}
+28:        .panel-info-box h3{font-size:.9rem;font-weight:700;color:#CDA865;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+29:        .panel-info-step{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;font-size:.8rem;color:#666}
+30:        .panel-info-step i{color:#CDA865;flex-shrink:0;margin-top:1px}
+33:        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}.auth-logo-sm .logo-circle img{width:58px;height:58px;object-fit:contain;}
+35:        .auth-icon-badge{width:64px;height:64px;border-radius:50%;background:rgba(205,168,101,.1);border:1.5px solid rgba(205,168,101,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.8rem;color:#CDA865}
+36:        .auth-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em;text-align:center}
+37:        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem;text-align:center;line-height:1.6}
+38:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+39:        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+40:        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
+41:        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
+42:        .auth-input-group .toggle-senha{padding:0 14px;color:#555;font-size:15px;flex-shrink:0;cursor:pointer;transition:color .2s}
+43:        .auth-input-group .toggle-senha:hover{color:#CDA865}
+44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+45:        .auth-input-group input::placeholder{color:#444}
+47:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+48:        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
+49:        .auth-btn:active{transform:translateY(1px)}
+50:        .auth-btn i{font-size:16px}
+51:        .auth-links{text-align:center;margin-top:1.4rem;font-size:.83rem;color:#666}
+52:        .auth-link{color:#CDA865;text-decoration:none;font-weight:600}
+53:        .auth-link:hover{color:#b8913e}
+54:        .auth-alert{padding:12px 14px;border-radius:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.4rem;border:1.5px solid}
+55:        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
+56:        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
+57:        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
+58:        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
+59:        .auth-alert i{font-size:1rem;flex-shrink:0;margin-top:1px}
+60:        .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
+62:        .password-strength{height:4px;border-radius:2px;margin-top:6px;transition:all .3s;background:#222}
+63:        .password-strength-text{font-size:.72rem;margin-top:4px;color:#666}
+64:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+66:    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
+67:    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+80:                {% if user_name %}Olá, <strong style="color:#CDA865">{{ user_name }}</strong>. Defina{% else %}Defina{% endif %}
+=== base inline color rules ===
+69:            background-color: #1a1a1a !important;
+70:            border-color: #1a1a1a !important;
+71:            color: #fff !important;
+75:            background-color: #333 !important;
+76:            border-color: #333 !important;
+77:            color: #fff !important;
+78:            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+84:            background-color: #2a2a2a !important;
+85:            border-color: #2a2a2a !important;
+86:            color: #e8e8e8 !important;
+90:            background-color: #3a3a3a !important;
+93:            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+101:            color: #fff !important;
+105:            background-color: #a01f25 !important;
+106:            border-color: #a01f25 !important;
+107:            color: #fff !important;
+108:            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+123:            background-color: #1a1a1a !important;
+124:            border-color: #1a1a1a !important;
+125:            color: #fff !important;
+129:            background-color: #333 !important;
+130:            border-color: #333 !important;
+131:            color: #fff !important;
+132:            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+264:                    <span class="menu-text" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;">
+332:                <div class="modal-header" style="background:var(--color-error);color:#fff;">
+336:                <div class="modal-body" style="font-size:14px;">
+338:                    <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+344:                    <form id="deleteForm" method="POST" action="" style="display:inline;">
+358:        <div class="modal-dialog modal-dialog-centered" style="max-width:620px;">
+359:            <div class="modal-content" style="border-radius:14px;overflow:hidden;border:1px solid var(--border-color-default);box-shadow:0 20px 60px rgba(0,0,0,.2);">
+386:                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="font-size:11px;opacity:.5;"></button>
+392:                            <p style="font-size:10px;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p>
+417:                        <img src="{{ url_for('static', filename='img/registrofacil.png') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 150px;">
+439:                <div class="modal-header" style="background: var(--color-black-premium); color: #fff;">
+443:                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" style="filter: invert(1) brightness(2);"></button>
+447:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Navegação Principal</h6>
+475:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+491:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Configurações e Sistema</h6>
+507:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Atalhos de Processos</h6>
+523:                        <h6 class="mb-2 fw-bold" style="color: var(--color-black-premium);">Opções do Usuário</h6>
+642:    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;"></div>
+=== destructive action hardcodes ===
+templates/admin/editar_usuario.html:323:    border-color: #0d6efd;
+templates/admin/editar_usuario.html:346:    background: rgba(0, 0, 0, 0.7);
+templates/admin/editar_usuario.html:386:    background: #f8f9fa;
+templates/admin/editar_usuario.html:401:    color: #495057;
+templates/admin/editar_usuario.html:413:    background: #f8f9fa;
+templates/admin/usuarios.html:88:<div style="background:rgba(30,136,229,.08);border:1px solid rgba(30,136,229,.2);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--color-info);margin-bottom:1rem;">
+templates/admin/usuarios.html:300:                    <button type="submit" class="btn btn-danger">Confirmar Inativação</button>
+templates/apresentantes/editar.html:33:    background: var(--color-gold-primary); color: #fff;
+templates/apresentantes/editar.html:55:.nt-fld input:focus { outline: none; border-color: var(--color-gold-primary); box-shadow: 0 0 0 3px rgba(184,142,67,.12); }
+templates/apresentantes/editar.html:66:    border-radius: 8px; border: none; background: var(--color-success); color: #fff;
+templates/apresentantes/editar.html:69:.nt-btn-save:hover { background: #008a57; }
+templates/apresentantes/editar.html:73:    color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all .15s;
+templates/apresentantes/editar.html:76:.nt-btn-cancel:hover { background: #a01f25; color: #fff; }
+templates/apresentantes/index.html:74:                <a href="{{ url_for('apresentantes.index') }}" class="nav-btn nav-btn-danger flex-fill" style="justify-content:center;"><i class="bi bi-x-circle"></i> Limpar</a>
+templates/apresentantes/index.html:84:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+templates/apresentantes/index.html:112:                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/apresentantes/index.html:123:                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+templates/apresentantes/index.html:127:                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size:11px;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+templates/apresentantes/index.html:151:                                <span class="nav-btn nav-btn-danger"
+templates/apresentantes/index.html:164:                                        class="nav-btn nav-btn-danger btn-excluir-apresentante"
+templates/apresentantes/index.html:231:            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/apresentantes/index.html:243:                    <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+templates/apresentantes/index.html:255:    document.querySelectorAll('.btn-excluir-apresentante').forEach(function(btn) {
+templates/apresentantes/novo.html:30:    background: var(--color-black-premium); color: #fff;
+templates/apresentantes/novo.html:49:.nt-fld input:focus { outline: none; border-color: var(--color-gold-primary); box-shadow: 0 0 0 3px rgba(184,142,67,.12); }
+templates/apresentantes/novo.html:60:    border-radius: 8px; border: none; background: var(--color-success); color: #fff;
+templates/apresentantes/novo.html:63:.nt-btn-save:hover { background: #008a57; }
+templates/apresentantes/novo.html:67:    color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all .15s;
+templates/apresentantes/novo.html:70:.nt-btn-cancel:hover { background: #a01f25; color: #fff; }
+templates/apresentantes/visualizar.html:23:    <button type="button" class="nav-btn nav-btn-danger"
+templates/apresentantes/visualizar.html:58:            <div style="width:40px;height:40px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;">
+templates/apresentantes/visualizar.html:76:                    <code style="font-size:10px;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % apresentante.id }}</code>
+templates/apresentantes/visualizar.html:83:        <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+templates/apresentantes/visualizar.html:139:            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/apresentantes/visualizar.html:151:                    <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+templates/atividades.html:296:                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+templates/atividades.html:327:.btn-acao-clicavel:hover { color: var(--color-primary, #0d6efd); }
+templates/atividades.html:337:    background: var(--color-bg-alt, #f8f9fa);
+templates/atividades.html:343:    background: var(--color-primary, #0d6efd);
+templates/atividades.html:344:    color: #fff;
+templates/atividades.html:359:    color: var(--color-muted, #6c757d);
+templates/atividades.html:373:    background: var(--color-bg-alt, #f0f2f5);
+templates/atividades.html:379:    color: var(--color-muted, #6c757d);
+templates/atividades.html:389:.modal-alteracoes-table tr:hover td { background: var(--color-bg-alt, #f8f9fa); }
+templates/atividades.html:390:.td-campo { font-weight: 600; width: 30%; color: var(--color-text, #212529); }
+templates/atividades.html:391:.td-de    { color: #dc3545; }
+templates/atividades.html:392:.td-para  { color: #198754; font-weight: 600; }
+templates/atividades.html:393:.td-seta  { text-align: center; color: var(--color-muted, #adb5bd); font-size: .8rem; width: 3%; }
+templates/atividades.html:394:.td-info  { color: var(--color-muted, #6c757d); font-style: italic; }
+templates/atividades.html:398:    color: var(--color-muted, #6c757d);
+templates/atividades.html:405:    color: var(--color-muted, #6c757d);
+templates/atividades.html:416:    background: var(--color-bg-alt, #f8f9fa);
+templates/atividades.html:429:    color: var(--color-muted, #6c757d);
+templates/backup.html:92:                        <button type="submit" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-info);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 0 0 3px rgba(23,162,184,.25);">
+templates/backup.html:98:                        <button type="button" onclick="confirmarReparo()" class="nav-btn" style="height:38px;padding:0 16px;font-size:13px;background:var(--color-warning);color:#fff;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;">
+templates/backup.html:117:                <span style="background:var(--color-black-premium);color:#fff;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:700;">{{ backups | length }}</span>
+templates/backup.html:144:                                        <button type="button" class="nav-btn nav-btn-danger btn-delete-backup" style="height:28px;padding:0 10px;font-size:12px;"
+templates/backup.html:180:            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/backup.html:193:                    <button type="submit" class="nav-btn nav-btn-danger">Excluir Permanentemente</button>
+templates/backup.html:243:    document.querySelectorAll('.btn-delete-backup').forEach(btn => {
+templates/base.html:69:            background-color: #1a1a1a !important;
+templates/base.html:70:            border-color: #1a1a1a !important;
+templates/base.html:71:            color: #fff !important;
+templates/base.html:75:            background-color: #333 !important;
+templates/base.html:76:            border-color: #333 !important;
+templates/base.html:77:            color: #fff !important;
+templates/base.html:84:            background-color: #2a2a2a !important;
+templates/base.html:85:            border-color: #2a2a2a !important;
+templates/base.html:86:            color: #e8e8e8 !important;
+templates/base.html:90:            background-color: #3a3a3a !important;
+templates/base.html:97:        .navbar .nav-btn-danger,
+templates/base.html:98:        .navbar .nav-btn.nav-btn-danger {
+templates/base.html:101:            color: #fff !important;
+templates/base.html:103:        .navbar .nav-btn-danger:hover,
+templates/base.html:104:        .navbar .nav-btn.nav-btn-danger:hover {
+templates/base.html:105:            background-color: #a01f25 !important;
+templates/base.html:106:            border-color: #a01f25 !important;
+templates/base.html:107:            color: #fff !important;
+templates/base.html:123:            background-color: #1a1a1a !important;
+templates/base.html:124:            border-color: #1a1a1a !important;
+templates/base.html:125:            color: #fff !important;
+templates/base.html:129:            background-color: #333 !important;
+templates/base.html:130:            border-color: #333 !important;
+templates/base.html:131:            color: #fff !important;
+templates/base.html:332:                <div class="modal-header" style="background:var(--color-error);color:#fff;">
+templates/base.html:347:                        <button type="submit" class="nav-btn nav-btn-danger">
+templates/base.html:439:                <div class="modal-header" style="background: var(--color-black-premium); color: #fff;">
+templates/configuracoes.html:21:    background: var(--color-black-premium); color: #fff;
+templates/configuracoes.html:54:    border-radius: 6px; border: none; background: var(--color-success); color: #fff;
+templates/configuracoes.html:58:.cfg-btn-add:hover { background: #008a57; }
+templates/configuracoes.html:65:.cfg-tbl tbody tr:hover td { background: rgba(0,0,0,.018); }
+templates/configuracoes.html:75:.cfg-ibtn:hover { background: var(--background-color-body); color: var(--text-color-primary); border-color: #bbb; }
+templates/configuracoes.html:76:.cfg-ibtn.edit:hover { color: #FF8C00; border-color: #FF8C00; }
+templates/configuracoes.html:96:    border-radius: 7px; border: none; background: var(--color-success); color: #fff;
+templates/configuracoes.html:99:.cfg-sbtn:hover { background: #008a57; }
+templates/configuracoes.html:101:.cfg-sbtn.green:hover { background: #008a57; }
+templates/configuracoes.html:102:.cfg-sbtn.blue { background: #0d6efd; }
+templates/configuracoes.html:103:.cfg-sbtn.blue:hover { background: #0b5ed7; }
+templates/configuracoes.html:106:    border-radius: 7px; border: none; background: var(--color-error); color: #fff;
+templates/configuracoes.html:109:.cfg-obtn:hover { background: #a01f25; }
+templates/configuracoes.html:114:.wchip:has(input:checked) { background: var(--color-black-premium); border-color: var(--color-black-premium); color: #fff; }
+templates/configuracoes.html:137:.appearance-card:hover { border-color: var(--color-primary-light); box-shadow: 0 5px 16px rgba(0,0,0,.08); }
+templates/configuracoes.html:141:.appearance-card.selected .appearance-card-check { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+templates/configuracoes.html:213:                            <span class="cswatch selected" data-color="#0d6efd" style="background:#0d6efd" title="Azul"></span>
+templates/configuracoes.html:214:                            <span class="cswatch" data-color="#198754" style="background:#198754" title="Verde"></span>
+templates/configuracoes.html:215:                            <span class="cswatch" data-color="#dc3545" style="background:#dc3545" title="Vermelho"></span>
+templates/configuracoes.html:216:                            <span class="cswatch" data-color="#fd7e14" style="background:#fd7e14" title="Laranja"></span>
+templates/configuracoes.html:217:                            <span class="cswatch" data-color="#ffc107" style="background:#ffc107" title="Amarelo"></span>
+templates/configuracoes.html:218:                            <span class="cswatch" data-color="#6f42c1" style="background:#6f42c1" title="Roxo"></span>
+templates/configuracoes.html:219:                            <span class="cswatch" data-color="#20c997" style="background:#20c997" title="Teal"></span>
+templates/configuracoes.html:220:                            <span class="cswatch" data-color="#0dcaf0" style="background:#0dcaf0" title="Ciano"></span>
+templates/configuracoes.html:221:                            <span class="cswatch" data-color="#6c757d" style="background:#6c757d" title="Cinza"></span>
+templates/configuracoes.html:222:                            <span class="cswatch" data-color="#212529" style="background:#212529" title="Preto"></span>
+templates/configuracoes.html:235:                    <span style="background:var(--color-black-premium);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ status_list|length }}</span>
+templates/configuracoes.html:253:                                    <span style="font-size:11px;background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+templates/configuracoes.html:312:                    <span style="background:var(--color-black-premium);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ tipos_processo|length }}</span>
+templates/configuracoes.html:325:                                    <span style="font-size:11px;background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};color:#fff;padding:2px 8px;border-radius:99px;">
+templates/configuracoes.html:432:                                <button class="btn-browse-dir" type="button" data-target="#local_backup_path" style="width:38px;height:34px;border-radius:0 6px 6px 0;border:1px solid var(--border-color-input);background:var(--background-color-body);color:var(--text-color-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0;" onmouseover="this.style.background='var(--color-black-premium)';this.style.color='#fff'" onmouseout="this.style.background='var(--background-color-body)';this.style.color='var(--text-color-secondary)'"><i class="bi bi-folder2-open"></i></button>
+templates/configuracoes.html:599:                            <button type="reset" class="nav-btn nav-btn-danger">
+templates/configuracoes.html:619:                                    <div class="logo-overlay-cfg" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
+templates/configuracoes.html:620:                                        <div style="text-align:center;color:#fff;">
+templates/configuracoes.html:630:                                <button type="button" class="nav-btn nav-btn-danger" id="cfgBtnRemoverLogo" style="width:100%;justify-content:center;font-size:12px;">
+templates/configuracoes.html:695:                                <span class="cswatch" data-color="#0d6efd" style="background:#0d6efd"></span>
+templates/configuracoes.html:696:                                <span class="cswatch" data-color="#198754" style="background:#198754"></span>
+templates/configuracoes.html:697:                                <span class="cswatch" data-color="#dc3545" style="background:#dc3545"></span>
+templates/configuracoes.html:698:                                <span class="cswatch" data-color="#fd7e14" style="background:#fd7e14"></span>
+templates/configuracoes.html:699:                                <span class="cswatch" data-color="#ffc107" style="background:#ffc107"></span>
+templates/configuracoes.html:700:                                <span class="cswatch" data-color="#6f42c1" style="background:#6f42c1"></span>
+templates/configuracoes.html:701:                                <span class="cswatch" data-color="#20c997" style="background:#20c997"></span>
+templates/configuracoes.html:702:                                <span class="cswatch" data-color="#0dcaf0" style="background:#0dcaf0"></span>
+templates/configuracoes.html:703:                                <span class="cswatch" data-color="#6c757d" style="background:#6c757d"></span>
+templates/configuracoes.html:704:                                <span class="cswatch" data-color="#212529" style="background:#212529"></span>
+templates/dashboard.html:38:            color:#fff; font-size:22px; font-weight:800; flex-shrink:0;
+templates/dashboard.html:146:                        <span class="badge ms-1" style="background:var(--color-error);color:#fff;font-size:10px;border-radius:99px;padding:2px 7px;vertical-align:middle;">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
+templates/empresa.html:32:.emp-fld input:focus, .emp-fld textarea:focus { outline: none; border-color: var(--color-gold-primary); box-shadow: 0 0 0 3px rgba(184,142,67,.12); }
+templates/empresa.html:141:                        <div class="logo-overlay" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
+templates/empresa.html:142:                            <div style="text-align:center;color:#fff;">
+templates/login.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8;overflow:hidden}
+templates/login.html:15:        .auth-panel-left{width:100%;max-width:480px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0}
+templates/login.html:17:        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
+templates/login.html:19:        .auth-panel-right{display:none;flex:1;background:linear-gradient(145deg,#0f0f0f 0%,#1a1a1a 40%,#0d0d0d 100%);position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:3rem}
+templates/login.html:21:        .auth-panel-right::before{content:'';position:absolute;top:-30%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(205,168,101,.12) 0%,transparent 65%);border-radius:50%}
+templates/login.html:22:        .auth-panel-right::after{content:'';position:absolute;bottom:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(30,136,229,.08) 0%,transparent 65%);border-radius:50%}
+templates/login.html:25:        .panel-brand img{width:90px;height:90px;object-fit:contain;border-radius:50%;background:#1a1a1a;border:2px solid rgba(205,168,101,.3);padding:10px;margin-bottom:2rem;box-shadow:0 4px 24px rgba(205,168,101,.15)}
+templates/login.html:26:        .panel-brand h1{font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
+templates/login.html:27:        .panel-brand .gold-line{display:inline-block;width:48px;height:3px;background:#CDA865;border-radius:2px;margin:1.2rem auto}
+templates/login.html:28:        .panel-brand p{font-size:.95rem;color:#888;line-height:1.7;max-width:280px}
+templates/login.html:30:        .panel-feature-item{display:flex;align-items:center;gap:.75rem;font-size:.82rem;color:#666}
+templates/login.html:31:        .panel-feature-item i{color:#CDA865;font-size:1rem;flex-shrink:0}
+templates/login.html:34:        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}
+templates/login.html:37:        .auth-title{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em}
+templates/login.html:38:        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem}
+templates/login.html:39:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+templates/login.html:40:        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+templates/login.html:41:        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
+templates/login.html:42:        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
+templates/login.html:43:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+templates/login.html:44:        .auth-input-group input::placeholder{color:#444}
+templates/login.html:45:        .auth-input-group .toggle-pw{padding:0 14px;color:#555;cursor:pointer;font-size:15px;flex-shrink:0;transition:color .2s}
+templates/login.html:46:        .auth-input-group .toggle-pw:hover{color:#CDA865}
+templates/login.html:48:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+templates/login.html:49:        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
+templates/login.html:53:        .auth-divider{color:#333;font-size:.8rem}
+templates/login.html:54:        .auth-link{font-size:.83rem;color:#666;text-decoration:none;transition:color .2s}
+templates/login.html:55:        .auth-link:hover{color:#CDA865}
+templates/login.html:57:        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
+templates/login.html:58:        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
+templates/login.html:59:        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
+templates/login.html:60:        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
+templates/login.html:64:        .lock-warning{font-size:.75rem;color:#f07070;margin-top:5px;display:none}
+templates/login.html:66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/logout.html:36:    background: linear-gradient(90deg, var(--color-black-premium), #444, var(--color-black-premium));
+templates/logout.html:42:    background: rgba(0,0,0,.06);
+templates/logout.html:52:    background: rgba(255,255,255,.06);
+templates/metricas.html:88:    .kpi-card.kpi-danger::before  { background: var(--color-error); }
+templates/metricas.html:108:    .kpi-value.kpi-danger  { color: var(--color-error); }
+templates/metricas.html:190:    .diff-up      { background: rgba(0,168,107,.15); color: var(--color-success); }
+templates/metricas.html:191:    .diff-down    { background: rgba(197,40,47,.12);  color: var(--color-error); }
+templates/metricas.html:210:    .mtr-progress-fill.danger  { background: var(--color-error); }
+templates/metricas.html:452:                x: { grid: { color: '#f0f0f0' }, ticks: { maxTicksLimit: 12 } },
+templates/metricas.html:453:                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+templates/metricas.html:518:                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+templates/metricas.html:564:                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 },
+templates/metricas.html:769:                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+templates/metricas.html:798:                x: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } },
+templates/metricas.html:841:                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, ticks: { precision: 0 } }
+templates/metricas.html:954:                y: { grid: { color: '#f0f0f0' }, beginAtZero: true, stacked: true, ticks: { precision: 0 } }
+templates/novo_usuario.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/novo_usuario.html:15:        .auth-panel-left{width:100%;max-width:520px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0;overflow-y:auto}
+templates/novo_usuario.html:17:        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
+templates/novo_usuario.html:19:        .auth-panel-right{display:none;flex:1;background:linear-gradient(145deg,#0f0f0f 0%,#1a1a1a 40%,#0d0d0d 100%);position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:3rem}
+templates/novo_usuario.html:21:        .auth-panel-right::before{content:'';position:absolute;top:-30%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(205,168,101,.12) 0%,transparent 65%);border-radius:50%}
+templates/novo_usuario.html:22:        .auth-panel-right::after{content:'';position:absolute;bottom:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(30,136,229,.08) 0%,transparent 65%);border-radius:50%}
+templates/novo_usuario.html:25:        .panel-brand img{width:90px;height:90px;object-fit:contain;border-radius:50%;background:#1a1a1a;border:2px solid rgba(205,168,101,.3);padding:10px;margin-bottom:2rem;box-shadow:0 4px 24px rgba(205,168,101,.15)}
+templates/novo_usuario.html:26:        .panel-brand h1{font-size:2rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
+templates/novo_usuario.html:27:        .panel-brand .gold-line{display:inline-block;width:48px;height:3px;background:#CDA865;border-radius:2px;margin:1.2rem auto}
+templates/novo_usuario.html:28:        .panel-brand p{font-size:.95rem;color:#888;line-height:1.7;max-width:280px}
+templates/novo_usuario.html:31:        .step-num{width:28px;height:28px;border-radius:50%;background:rgba(205,168,101,.15);border:1px solid rgba(205,168,101,.4);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#CDA865;flex-shrink:0;margin-top:1px}
+templates/novo_usuario.html:32:        .step-info strong{display:block;font-size:.82rem;color:#aaa;font-weight:600;margin-bottom:.2rem}
+templates/novo_usuario.html:33:        .step-info span{font-size:.78rem;color:#555}
+templates/novo_usuario.html:36:        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}.auth-logo-sm .logo-circle img{width:58px;height:58px;object-fit:contain;}
+templates/novo_usuario.html:38:        .auth-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em}
+templates/novo_usuario.html:39:        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2rem}
+templates/novo_usuario.html:40:        .auth-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
+templates/novo_usuario.html:41:        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+templates/novo_usuario.html:42:        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
+templates/novo_usuario.html:43:        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
+templates/novo_usuario.html:44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit;min-width:0}
+templates/novo_usuario.html:45:        .auth-input-group input::placeholder{color:#444}
+templates/novo_usuario.html:46:        .auth-input-group .toggle-pw{padding:0 14px;color:#555;cursor:pointer;font-size:15px;flex-shrink:0;transition:color .2s}
+templates/novo_usuario.html:47:        .auth-input-group .toggle-pw:hover{color:#CDA865}
+templates/novo_usuario.html:49:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.6rem}
+templates/novo_usuario.html:50:        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
+templates/novo_usuario.html:53:        .auth-links{text-align:center;margin-top:1.4rem;font-size:.83rem;color:#666}
+templates/novo_usuario.html:54:        .auth-link{color:#CDA865;text-decoration:none;font-weight:600}
+templates/novo_usuario.html:55:        .auth-link:hover{color:#b8913e}
+templates/novo_usuario.html:57:        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
+templates/novo_usuario.html:58:        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
+templates/novo_usuario.html:59:        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
+templates/novo_usuario.html:60:        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
+templates/novo_usuario.html:64:        .lock-warning{font-size:.75rem;color:#f07070;margin-top:5px;display:none}
+templates/novo_usuario.html:66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/novo_usuario.html:67:        .field-hint{font-size:.73rem;color:#555;margin-top:.35rem}
+templates/novo_usuario.html:152:            <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:12px;line-height:1.5;">
+templates/perfil.html:182:                        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-danger">
+templates/perfil.html:278:.theme-choice:hover { border-color: var(--color-primary-light); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+templates/perfil.html:281:.theme-choice.selected .theme-choice-check { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+templates/perfil_permissao_detalhe.html:94:            <div style="width:30px;height:30px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">
+templates/perfil_permissao_detalhe.html:159:            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+templates/perfil_permissao_detalhe.html:162:            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+templates/perfis_permissao.html:51:                    <span class="badge" style="background:var(--color-gold-dark);color:#fff;border-radius:99px;padding:3px 10px;">
+templates/perfis_permissao.html:63:                            class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size:11px;color:#dc2626;"
+templates/perfis_permissao.html:83:<div id="modalCriar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+templates/perfis_permissao.html:84:    <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-width:95vw;">
+templates/perfis_permissao.html:136:            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+templates/perfis_permissao.html:140:            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+templates/permissoes_usuario.html:18:            <div style="width:46px;height:46px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;">
+templates/permissoes_usuario.html:25:                    <span class="badge" style="background:var(--color-gold-dark);color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;">{{ usuario.role|upper }}</span>
+templates/permissoes_usuario.html:27:                    <span class="badge" style="background:#198754;color:#fff;font-size:10px;border-radius:99px;padding:2px 8px;"><i class="bi bi-shield-fill-check me-1"></i>Acesso Total</span>
+templates/permissoes_usuario.html:41:<div style="display:flex;align-items:center;gap:10px;background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;">
+templates/permissoes_usuario.html:42:    <i class="bi bi-shield-lock-fill" style="color:#f59e0b;font-size:18px;flex-shrink:0;"></i>
+templates/permissoes_usuario.html:74:        <div style="font-size:11px;color:#f59e0b;margin-top:8px;background:#fff8e1;border-radius:6px;padding:6px 10px;">
+templates/permissoes_usuario.html:175:                style="background:#198754;border-color:#198754;color:#fff;height:38px;padding:0 22px;font-size:13px;font-weight:700;border-radius:8px;">
+templates/permissoes_usuario.html:185:    border-color: #198754 !important;
+templates/permissoes_usuario.html:186:    background: #f0fdf4 !important;
+templates/permissoes_usuario.html:189:    background: #0d2b1a !important;
+templates/permissoes_usuario.html:191:.perm-item:hover { border-color: #198754 !important; }
+templates/permissoes_usuario.html:259:                el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+templates/permissoes_usuario.html:263:                el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+templates/permissoes_usuario.html:272:            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+templates/permissoes_usuario.html:333:            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;';
+templates/permissoes_usuario.html:337:            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;';
+templates/processos/editar.html:16:    <button type="button" class="nav-btn nav-btn-danger"
+templates/processos/editar.html:348:            <a href="{{ url_for('processos.todos') }}" class="btn btn-danger">
+templates/processos/editar.html:633:                <button type="button" data-idx="${idx}" class="btn-remove-file nav-btn nav-btn-danger" style="height:26px;padding:0 8px;font-size:11px;flex-shrink:0;"><i class="bi bi-x"></i></button>`;
+templates/processos/novo.html:264:            <a href="{{ url_for('processos.todos') }}" class="btn btn-danger">
+templates/processos/novo.html:580:                <button type="button" data-idx="${idx}" class="btn-remove-file nav-btn nav-btn-danger" style="height:26px;padding:0 8px;font-size:11px;flex-shrink:0;">
+templates/processos/todos.html:200:                                        <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="tbl-btn edit" title="Processo finalizado — edição registrada no histórico" style="color:var(--color-warning, #f59e0b);"><i class="bi bi-exclamation-triangle"></i></a>
+templates/processos/visualizar.html:24:    <button type="button" class="nav-btn nav-btn-danger"
+templates/processos/visualizar.html:38:            <div class="rf-card-header" style="background: rgba(var(--color-gold-rgb), 0.05);">

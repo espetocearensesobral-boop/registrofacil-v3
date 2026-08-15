@@ -1,0 +1,187 @@
+=== important por CSS ===
+static/css/color-themes.css                   0
+static/css/compact.css                        145
+static/css/main.css                           26
+static/css/mobile.css                         40
+static/css/palette03-final.css                174
+static/css/processos.css                      2
+static/css/theme.css                          2
+static/css/themes.css                         0
+static/css/usuarios.css                       4
+static/css/visual-system.css                  232
+=== important total ===
+666
+=== hex por CSS ===
+static/css/color-themes.css                   181
+static/css/compact.css                        67
+static/css/main.css                           1
+static/css/mobile.css                         0
+static/css/palette03-final.css                30
+static/css/processos.css                      3
+static/css/theme.css                          26
+static/css/themes.css                         43
+static/css/usuarios.css                       0
+static/css/visual-system.css                  150
+=== hex em templates ===
+564
+=== style inline em templates ===
+939
+=== font sizes pequenos ===
+9px: 67
+10px: 311
+11px: 143
+=== font families ===
+templates/apresentantes/visualizar.html:101:                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+templates/atividades.html:317:    font-family: inherit;
+templates/backup.html:34:        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family:monospace;">{{ machine_ip }}</div>
+templates/base.html:37:    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600&display=swap" rel="stylesheet">
+templates/base.html:62:            font-family: 'Segoe UI', sans-serif;
+templates/base.html:366:                .gs-kbd { background:var(--background-color-body); border:1px solid var(--border-color-default); border-radius:5px; padding:2px 7px; font-size:11px; color:var(--text-color-secondary); font-family:monospace; }
+templates/configuracoes.html:144:.appearance-number { color: var(--color-primary); font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+templates/dashboard.html:117:                                        <div style="font-family:monospace;font-size:11px;font-weight:600;margin-top:2px;color:var(--text-color-secondary);">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+templates/dashboard.html:186:                                        <div style="font-size:11px;margin-top:2px;font-family:monospace;font-weight:600;">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+templates/login.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/login.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8;overflow:hidden}
+templates/login.html:43:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+templates/login.html:48:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+templates/login.html:66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/novo_usuario.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/novo_usuario.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/novo_usuario.html:44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit;min-width:0}
+templates/novo_usuario.html:49:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.6rem}
+templates/novo_usuario.html:66:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/permissoes_usuario.html:163:                        <div style="font-size:10px;color:var(--text-color-secondary);margin-top:2px;font-family:monospace;">{{ perm.nome }}</div>
+templates/processos/visualizar.html:133:                <div class="det-val fw-bold" style="font-family:monospace;">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</div>
+templates/recuperar_senha.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/recuperar_senha.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/recuperar_senha.html:44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+templates/recuperar_senha.html:47:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+templates/recuperar_senha.html:63:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/relatorios/_cadastros_print_styles.html:4:        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+templates/relatorios/historico_processo_print.html:10:        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1a1a1a; background: #fff; font-size: 10pt; line-height: 1.4; }
+templates/relatorios/processos_print.html:10:        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #222; background: #fff; font-size: 8.5pt; }
+templates/relatorios/relatorio_processo_print.html:11:            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+templates/representantes/visualizar.html:101:                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+templates/reset_password.html:8:    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+templates/reset_password.html:13:        body{font-family:'Inter','Segoe UI',sans-serif;min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
+templates/reset_password.html:44:        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family:inherit}
+templates/reset_password.html:47:        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
+templates/reset_password.html:64:        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family:monospace}
+templates/titulares/visualizar.html:101:                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family:monospace;">{{ processo.matricula }}</td>
+templates/visualizar.html:133:                <div class="det-val fw-bold" style="font-family:monospace;">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</div>
+static/css/compact.css:562:    font-family: 'Segoe UI', sans-serif;
+static/css/main.css:10:    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+static/css/theme.css:71:    font-family: 'Inter', sans-serif;
+static/css/visual-system.css:1:@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+static/css/visual-system.css:52:    font-family: var(--rf-font-sans);
+static/css/visual-system.css:67:h1, .h1 { font-family: var(--rf-font-display); font-size: clamp(1.5rem, 1.25rem + .7vw, 2rem); line-height: 1.2; font-weight: 600; }
+static/css/visual-system.css:68:h2, .h2 { font-family: var(--rf-font-display); font-size: clamp(1.25rem, 1.1rem + .45vw, 1.625rem); line-height: 1.25; font-weight: 600; }
+static/css/visual-system.css:69:h3, .h3 { font-family: var(--rf-font-display); font-size: clamp(1.125rem, 1rem + .3vw, 1.375rem); line-height: 1.3; font-weight: 600; }
+static/css/visual-system.css:565:h1, h2, h3 { font-family: var(--rf-font-display); }
+static/css/visual-system.css:573:code { font-family: var(--rf-font-mono); }
+=== sidebar widths ===
+static/css/main.css:54:.sidebar {
+static/css/main.css:55:    width: 220px;
+static/css/main.css:72:.sidebar.collapsed {
+static/css/main.css:76:.sidebar::-webkit-scrollbar-track {
+static/css/main.css:80:.sidebar::-webkit-scrollbar-thumb {
+static/css/main.css:86:.sidebar::-webkit-scrollbar-thumb:hover {
+static/css/main.css:125:.sidebar-company-logo {
+static/css/main.css:137:.sidebar:not(.collapsed) .sidebar-company-logo {
+static/css/main.css:144:.sidebar:not(.collapsed) .hamburger-menu .hamburger {
+static/css/main.css:148:.sidebar.collapsed .sidebar-company-logo {
+static/css/main.css:156:.sidebar.collapsed .hamburger-menu .hamburger {
+static/css/main.css:166:.sidebar.collapsed .hamburger-menu:hover .hamburger {
+static/css/main.css:242:.menu-icon .sidebar-avatar {
+static/css/main.css:259:.sidebar.collapsed .menu-text {
+static/css/main.css:286:.sidebar-group-label {
+static/css/main.css:300:.sidebar.collapsed .sidebar-group-label {
+static/css/main.css:308:.sidebar.collapsed .sidebar-group-label::before {
+static/css/main.css:342:.sidebar.collapsed .section-title-toggle .menu-text {
+static/css/main.css:360:.sidebar.collapsed .section-title-toggle .menu-icon {
+static/css/main.css:377:.sidebar.collapsed .section-title-toggle .toggle-icon {
+static/css/main.css:759:    .sidebar {
+static/css/main.css:764:    .sidebar.active {
+static/css/main.css:789:.sidebar-collapsed-initial .sidebar {
+static/css/main.css:793:.sidebar-collapsed-initial .sidebar .menu-text {
+static/css/main.css:798:.sidebar-collapsed-initial .sidebar .sidebar-group-label {
+static/css/main.css:805:.sidebar-collapsed-initial .sidebar .sidebar-company-logo {
+static/css/main.css:811:.sidebar-collapsed-initial #page-content-wrapper {
+static/css/main.css:815:.sidebar-collapsed-initial .sidebar .section-title-toggle .menu-text {
+static/css/main.css:820:.sidebar-collapsed-initial .sidebar .section-title-toggle .toggle-icon {
+static/css/mobile.css:11:#sidebar-overlay {
+static/css/mobile.css:19:#sidebar-overlay.active { display: block; }
+static/css/mobile.css:46:    .sidebar {
+static/css/mobile.css:49:        width: 230px !important;
+static/css/mobile.css:55:    .sidebar.mobile-open {
+static/css/mobile.css:62:    .sidebar.mobile-open .menu-text {
+static/css/mobile.css:67:    .sidebar.mobile-open .sidebar-group-label {
+static/css/mobile.css:74:    .sidebar.mobile-open .section-title-toggle .menu-text {
+static/css/mobile.css:77:    .sidebar.mobile-open.collapsed .section-title-toggle .toggle-icon {
+static/css/mobile.css:81:    .sidebar.mobile-open.collapsed .sidebar-company-logo {
+static/css/mobile.css:87:    .sidebar.mobile-open .menu-item { height: 44px; }
+static/css/theme.css:203:    .sidebar {
+static/css/theme.css:207:        width: 220px;
+static/css/theme.css:210:    .sidebar.open {
+static/css/theme.css:213:    .sidebar.collapsed {
+static/css/visual-system.css:88:.sidebar { width: 240px; background: #2B2B2E; box-shadow: 2px 0 12px rgba(43, 43, 46, .12); }
+static/css/visual-system.css:91:.sidebar.collapsed { width: 64px; }
+static/css/visual-system.css:94:.sidebar-group-label { color: #b8c1cf; font-size: .75rem; letter-spacing: .1em; }
+static/css/visual-system.css:221:    .sidebar { width: 240px; }
+static/css/visual-system.css:581:.sidebar { background: var(--rf-grafite) !important; }
+static/css/palette03-final.css:12:.sidebar { background: var(--color-primary) !important; }
+static/css/palette03-final.css:295:.sidebar { background: var(--background-color-sidebar) !important; color: var(--sidebar-text) !important; }
+static/css/palette03-final.css:299:html body .sidebar .sidebar-group-label { color: var(--sidebar-text) !important; }
+static/css/palette03-final.css:301:html body .sidebar .menu-item:focus-visible { background: var(--background-color-sidebar-hover) !important; color: var(--sidebar-text) !important; }
+static/css/palette03-final.css:304:html body .sidebar .menu-item.active:focus-visible {
+static/css/palette03-final.css:311:html body .sidebar .menu-item.active i { color: var(--sidebar-active-text) !important; }
+templates/admin/editar_usuario.html:564:                if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
+templates/admin/editar_usuario.html:634:                    if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
+templates/admin/editar_usuario.html:642:                    if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
+templates/admin/editar_usuario.html:841:                            if (result.updated_user_data.usuario_foto_url && sidebarAvatar) {
+templates/admin/editar_usuario.html:843:                            } else if (sidebarAvatar) {
+templates/admin/editar_usuario.html:847:                            if (sidebarUserNameElement && result.updated_user_data.nome) {
+templates/base.html:16:            if (sidebarState === 'true') {
+templates/base.html:613:        document.querySelectorAll('#sidebar .menu-item[data-href]').forEach(function(item) {
+templates/base.html:652:        if (sidebar && wrapper && isCollapsed) {
+templates/configuracoes.html:148:.appearance-preview-sidebar { width: 21%; background: var(--preview-primary); }
+templates/perfil.html:401:                        if (sidebarAvatar && data.updated_user_data.usuario_foto_url) {
+templates/perfil.html:407:                        if (sidebarNome && data.updated_user_data.nome) {
+=== hamburger ===
+templates/base.html:148:            <div class="hamburger-menu" data-accesskey="i"
+templates/base.html:296:                    <button id="mobile-menu-btn" aria-label="Abrir menu" onclick="toggleMobileSidebar()">
+static/css/main.css:91:.hamburger-menu {
+static/css/main.css:104:.hamburger {
+static/css/main.css:111:.hamburger span {
+static/css/main.css:120:.hamburger span:last-child {
+static/css/main.css:144:.sidebar:not(.collapsed) .hamburger-menu .hamburger {
+static/css/main.css:156:.sidebar.collapsed .hamburger-menu .hamburger {
+static/css/main.css:166:.sidebar.collapsed .hamburger-menu:hover .hamburger {
+static/css/mobile.css:22:#mobile-menu-btn {
+static/css/mobile.css:38:#mobile-menu-btn:hover { background: var(--background-color-body); }
+static/css/mobile.css:98:    #mobile-menu-btn { display: flex; }
+static/css/theme.css:221:    .hamburger-menu {
+static/js/main.js:49:    // Configurar botão de toggle (hamburger)
+static/js/main.js:50:    const hamburger = document.querySelector('.hamburger-menu');
+static/js/main.js:51:    if (hamburger) {
+static/js/main.js:52:        hamburger.addEventListener('click', window.toggleSidebar);
+static/js/main.js:196:        const hamburgerMenu = document.querySelector('.hamburger-menu');
+static/js/main.js:208:        console.log("Hamburger Menu elemento:", hamburgerMenu);
+static/js/main.js:214:        if (!sidebar || !wrapper || !pageContentWrapper || !hamburgerMenu || !profileSectionToggle || !profileMenuItems) {
+static/js/main.js:220:        hamburgerMenu.addEventListener('click', window.toggleSidebar);
+static/js/main.js:226:                e.stopPropagation(); // Evita propagação para o hamburgerMenu
+static/js/main.js:306:                !event.target.closest('#mobile-menu-btn')) {
+=== tables ===
+table tags: 29
+table-responsive classes: 23
+=== theme toggle ===
+templates/perfil.html:302:                        <button type="button" class="theme-choice w-100 text-start{% if visual_preferences.tema_cor == palette.id %} selected{% endif %}" data-theme="{{ palette.id }}" role="radio" aria-checked="{{ 'true' if visual_preferences.tema_cor == palette.id else 'false' }}">
+static/js/theme-toggle.js:1:// static/js/theme-toggle.js
+static/js/theme-toggle.js:50:        this.toggleBtn = document.getElementById('theme-toggle-btn');
+static/js/theme-toggle.js:55:            this.toggleBtn.id = 'theme-toggle-btn';
+static/js/theme-toggle.js:56:            this.toggleBtn.className = 'btn btn-sm theme-toggle ms-2';
+static/js/theme-toggle.js:125:        // Aplicar atributo data-theme no HTML
+static/js/theme-toggle.js:126:        document.documentElement.setAttribute('data-theme', theme);
+static/js/theme-toggle.js:238:    .theme-toggle.pulse {
+static/js/theme-toggle.js:242:    .theme-toggle {
+static/js/theme-toggle.js:246:    .theme-toggle:active {

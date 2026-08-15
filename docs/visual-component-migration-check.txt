@@ -1,0 +1,94 @@
+=== legacy rf tokens still used ===
+var(--rf-accent
+var(--rf-action-primary
+var(--rf-action-secondary
+var(--rf-action-secondary-hover
+var(--rf-border
+var(--rf-border-input
+var(--rf-border-strong
+var(--rf-danger
+var(--rf-danger-hover
+var(--rf-danger-surface
+var(--rf-danger-text
+var(--rf-focus-ring
+var(--rf-font-display
+var(--rf-font-mono
+var(--rf-font-sans
+var(--rf-font-size
+var(--rf-font-sm
+var(--rf-fundo
+var(--rf-info
+var(--rf-info-surface
+var(--rf-info-text
+var(--rf-line-height
+var(--rf-linha-guia
+var(--rf-muted-guia
+var(--rf-page
+var(--rf-papel
+var(--rf-radius-lg
+var(--rf-radius-md
+var(--rf-radius-sm
+var(--rf-shadow-md
+var(--rf-shadow-sm
+var(--rf-sidebar-active
+var(--rf-sidebar-active-text
+var(--rf-sidebar-hover
+var(--rf-sidebar-surface
+var(--rf-sidebar-text
+var(--rf-sidebar-width
+var(--rf-space-4
+var(--rf-success
+var(--rf-success-surface
+var(--rf-success-text
+var(--rf-surface
+var(--rf-surface-body
+var(--rf-surface-card
+var(--rf-surface-hover
+var(--rf-surface-input
+var(--rf-surface-muted
+var(--rf-text-body
+var(--rf-text-muted
+var(--rf-text-on-primary
+var(--rf-text-primary
+var(--rf-text-secondary
+var(--rf-text-strong
+var(--rf-texto
+var(--rf-warning
+var(--rf-warning-surface
+var(--rf-warning-text
+=== hardcoded component colors still present ===
+175:.menu-item:focus-visible {         background: #45454A; color: #fff; }
+276:body .nav-btn-secondary { background: #526071 !important; border-color: #526071 !important; color: #fff !important; }
+278:body .nav-btn-secondary:hover { background: #3e4b5c !important; border-color: #3e4b5c !important; color: #fff !important; }
+280:body .nav-btn-success { background: #237a3b !important; border-color: #237a3b !important; color: #fff !important; }
+284:body .nav-btn-danger { background: #b4232c !important; border-color: #b4232c !important; color: #fff !important; }
+288:body .nav-btn-warning { background: #a85b00 !important; border-color: #a85b00 !important; color: #fff !important; }
+292:body .nav-btn-info { background: #1264a3 !important; border-color: #1264a3 !important; color: #fff !important; }
+548:    --rf-grafite: #2B2B2E;
+549:    --rf-grafite-claro: #45454A;
+=== diff/check ===
+ routes/__pycache__/admin_users.cpython-312.pyc     | Bin [31m25355[m -> [32m25747[m bytes
+ routes/__pycache__/apresentantes.cpython-312.pyc   | Bin [31m17091[m -> [32m17101[m bytes
+ routes/__pycache__/atividades.cpython-312.pyc      | Bin [31m6351[m -> [32m6346[m bytes
+ routes/__pycache__/auth.cpython-312.pyc            | Bin [31m40001[m -> [32m40452[m bytes
+ routes/__pycache__/backup.cpython-312.pyc          | Bin [31m25700[m -> [32m29783[m bytes
+ routes/__pycache__/configuracoes.cpython-312.pyc   | Bin [31m17657[m -> [32m20122[m bytes
+ routes/__pycache__/dashboard.cpython-312.pyc       | Bin [31m17713[m -> [32m17716[m bytes
+ routes/__pycache__/empresa.cpython-312.pyc         | Bin [31m8608[m -> [32m8617[m bytes
+ routes/__pycache__/notificacoes.cpython-312.pyc    | Bin [31m11099[m -> [32m12510[m bytes
+ routes/__pycache__/perfil.cpython-312.pyc          | Bin [31m16448[m -> [32m17544[m bytes
+ routes/__pycache__/permissoes.cpython-312.pyc      | Bin [31m24179[m -> [32m24210[m bytes
+ routes/__pycache__/processos.cpython-312.pyc       | Bin [31m96996[m -> [32m96698[m bytes
+ routes/__pycache__/search.cpython-312.pyc          | Bin [31m11449[m -> [32m11445[m bytes
+ routes/__pycache__/titulares.cpython-312.pyc       | Bin [31m18414[m -> [32m18422[m bytes
+ routes/__pycache__/utils_routes.cpython-312.pyc    | Bin [31m2650[m -> [32m2650[m bytes
+ static/css/color-themes.css                        |  53 [32m+++++++++++[m
+ static/css/visual-system.css                       | 102 [32m+++++++++++[m[31m----------[m
+ utils/__pycache__/file_uploads.cpython-312.pyc     | Bin [31m13499[m -> [32m13425[m bytes
+ utils/__pycache__/helpers.cpython-312.pyc          | Bin [31m6559[m -> [32m6554[m bytes
+ utils/__pycache__/logger.cpython-312.pyc           | Bin [31m700[m -> [32m698[m bytes
+ utils/__pycache__/logger_config.cpython-312.pyc    | Bin [31m13071[m -> [32m13080[m bytes
+ utils/__pycache__/messages.cpython-312.pyc         | Bin [31m62083[m -> [32m62081[m bytes
+ .../__pycache__/permissions_helper.cpython-312.pyc | Bin [31m6948[m -> [32m6948[m bytes
+ utils/__pycache__/scheduler.cpython-312.pyc        | Bin [31m21656[m -> [32m21973[m bytes
+ 24 files changed, 107 insertions(+), 48 deletions(-)

@@ -1,0 +1,546 @@
+=== breakpoints ===
+static/css/color-themes.css:72:    --rf-sidebar-width: 15rem;
+static/css/compact.css:62:@media (max-width: 768px) {
+static/css/compact.css:304:@media (max-width: 768px) {
+static/css/compact.css:837:@media (max-width: 768px) {
+static/css/compact.css:840:@media (max-width: 480px) {
+static/css/main.css:55:    width: 220px;
+static/css/main.css:91:.hamburger-menu {
+static/css/main.css:144:.sidebar:not(.collapsed) .hamburger-menu .hamburger {
+static/css/main.css:156:.sidebar.collapsed .hamburger-menu .hamburger {
+static/css/main.css:166:.sidebar.collapsed .hamburger-menu:hover .hamburger {
+static/css/main.css:758:@media (max-width: 768px) {
+static/css/mobile.css:22:#mobile-menu-btn {
+static/css/mobile.css:38:#mobile-menu-btn:hover { background: var(--background-color-body); }
+static/css/mobile.css:43:@media (max-width: 991px) {
+static/css/mobile.css:49:        width: 230px !important;
+static/css/mobile.css:98:    #mobile-menu-btn { display: flex; }
+static/css/mobile.css:157:@media (max-width: 767px) {
+static/css/mobile.css:189:    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+static/css/mobile.css:274:@media (max-width: 480px) {
+static/css/mobile.css:306:@media (max-width: 991px)  { .hidden-mobile { display: none !important; } }
+static/css/mobile.css:307:@media (min-width: 992px)  { .only-mobile   { display: none !important; } }
+static/css/mobile.css:310:@media (hover: none) and (pointer: coarse) {
+static/css/mobile.css:316:@media (max-width: 991px) { .dashboard-stats-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+static/css/mobile.css:317:@media (max-width: 575px) { .dashboard-stats-grid { grid-template-columns: 1fr !important; } }
+static/css/theme.css:202:@media (max-width: 768px) {
+static/css/theme.css:207:        width: 220px;
+static/css/theme.css:221:    .hamburger-menu {
+static/css/visual-system.css:94:.sidebar { width: var(--rf-sidebar-width); background: var(--rf-sidebar-surface); box-shadow: var(--rf-shadow-sm); }
+static/css/visual-system.css:95:#page-content-wrapper { margin-left: var(--rf-sidebar-width); }
+static/css/visual-system.css:226:@media (max-width: 991.98px) {
+static/css/visual-system.css:227:    .sidebar { width: var(--rf-sidebar-width); }
+static/css/visual-system.css:233:@media (max-width: 575.98px) {
+static/css/visual-system.css:347:@media (max-width: 767.98px) {
+static/css/visual-system.css:355:@media (prefers-reduced-motion: reduce) {
+static/css/visual-system.css:465:@media (prefers-reduced-motion: reduce) {
+static/css/visual-system.css:725:@media (max-width: 575.98px) {
+templates/admin/editar_usuario.html:423:@media (max-width: 576px) {
+templates/admin/usuarios.html:112:            <div class="table-responsive">
+templates/apresentantes/editar.html:78:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/apresentantes/index.html:87:        <div class="table-responsive">
+templates/apresentantes/novo.html:72:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/apresentantes/visualizar.html:86:        <div class="table-responsive">
+templates/atividades.html:124:            <div class="table-responsive">
+templates/atividades.html:435:@media (max-width: 480px) {
+templates/backup.html:121:                <div class="table-responsive">
+templates/base.html:144:            <div class="hamburger-menu" data-accesskey="i"
+templates/configuracoes.html:165:@media (max-width: 1100px) { .appearance-grid { grid-template-columns: 1fr; } .appearance-card { display: grid; grid-template-columns: minmax(145px, .8fr) minmax(190px, 1.2fr); align-items: center; } .appearance-card-head, .appearance-description, .appearance-use { grid-column: 1; } .appearance-swatch-row, .appearance-preview { grid-column: 2; grid-row: 1 / span 3; } .appearance-actions { align-items: stretch; flex-direction: column; } }
+templates/configuracoes.html:166:@media (max-width: 600px) { .appearance-card { display: flex; } .appearance-swatch-row, .appearance-preview { order: 2; } .appearance-description { order: 3; min-height: 0; } .appearance-use { order: 4; } }
+templates/configuracoes.html:237:                <div class="table-responsive">
+templates/configuracoes.html:314:                <div class="table-responsive">
+templates/dashboard.html:104:                    <div class="table-responsive">
+templates/dashboard.html:155:                    <div class="table-responsive">
+templates/em_andamento.html:153:            <div class="table-responsive">
+templates/empresa.html:38:@media (max-width: 576px) { .emp-row-2 { grid-template-columns: 1fr; } }
+templates/hoje.html:155:            <div class="table-responsive">
+templates/login.html:16:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+templates/login.html:20:        @media(min-width:992px){.auth-panel-right{display:flex}}
+templates/login.html:36:        @media(min-width:992px){.auth-logo-sm{display:none}}
+templates/metricas.html:281:    @media (max-width: 1100px) {
+templates/metricas.html:285:    @media (max-width: 768px) {
+templates/metricas.html:899:        <div class="table-responsive">
+templates/novo_usuario.html:16:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+templates/novo_usuario.html:20:        @media(min-width:992px){.auth-panel-right{display:flex}}
+templates/novo_usuario.html:37:        @media(min-width:992px){.auth-logo-sm{display:none}}
+templates/pendentes.html:155:            <div class="table-responsive">
+templates/processos/em_andamento.html:153:            <div class="table-responsive">
+templates/processos/hoje.html:155:            <div class="table-responsive">
+templates/processos/pendentes.html:155:            <div class="table-responsive">
+templates/processos/todos.html:153:            <div class="table-responsive">
+templates/processos/vinculados.html:155:            <div class="table-responsive">
+templates/processos/visualizar.html:200:@media (max-width: 768px) {
+templates/recuperar_senha.html:16:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+templates/recuperar_senha.html:20:        @media(min-width:992px){.auth-panel-right{display:flex}}
+templates/recuperar_senha.html:36:        @media(min-width:992px){.auth-logo-sm{display:none}}
+templates/relatorios/_cadastros_print_styles.html:109:    @media print {
+templates/relatorios/historico_processo_print.html:57:        @media print {
+templates/relatorios/processos_print.html:72:        @media print {
+templates/relatorios/relatorio_processo_print.html:58:        @media print {
+templates/representantes/editar.html:78:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/representantes/index.html:87:        <div class="table-responsive">
+templates/representantes/novo.html:72:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/representantes/visualizar.html:86:        <div class="table-responsive">
+templates/reset_password.html:15:        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
+templates/reset_password.html:18:        @media(min-width:992px){.auth-panel-right{display:flex}}
+templates/reset_password.html:34:        @media(min-width:992px){.auth-logo-sm{display:none}}
+templates/titulares/editar.html:78:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/titulares/index.html:87:        <div class="table-responsive">
+templates/titulares/novo.html:72:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/titulares/visualizar.html:86:        <div class="table-responsive">
+templates/todos.html:154:            <div class="table-responsive">
+templates/visualizar.html:200:@media (max-width: 768px) {
+static/js/main.js:50:    const hamburger = document.querySelector('.hamburger-menu');
+static/js/main.js:196:        const hamburgerMenu = document.querySelector('.hamburger-menu');
+static/js/main.js:306:                !event.target.closest('#mobile-menu-btn')) {
+=== KPI/grid selectors ===
+static/css/compact.css:7:.kpi-bar {
+static/css/compact.css:16:.kpi-bar-item {
+static/css/compact.css:28:.kpi-bar-item:hover { background: var(--background-color-body); }
+static/css/compact.css:29:.kpi-bar-item:hover .kpi-bar-num { color: var(--color-black-premium); }
+static/css/compact.css:30:.kpi-bar-icon {
+static/css/compact.css:37:.kpi-bar-icon.success { background: rgba(0,168,107,.12); color: var(--color-success); }
+static/css/compact.css:38:.kpi-bar-icon.danger  { background: rgba(197,40,47,.10);  color: var(--color-error); }
+static/css/compact.css:39:.kpi-bar-icon.warning { background: rgba(255,140,0,.12);  color: var(--color-warning); }
+static/css/compact.css:40:.kpi-bar-icon.info    { background: rgba(30,136,229,.10); color: var(--color-info); }
+static/css/compact.css:41:.kpi-bar-icon.dark    { background: rgba(18,18,18,.08);   color: var(--color-black-premium); }
+static/css/compact.css:42:.kpi-bar-icon.gold    { background: var(--color-primary-subtle);color: var(--color-primary-dark); }
+static/css/compact.css:43:.kpi-bar-body { min-width: 0; }
+static/css/compact.css:44:.kpi-bar-num {
+static/css/compact.css:51:.kpi-bar-lbl {
+static/css/compact.css:63:    .kpi-bar { flex-wrap: wrap; gap: 1px; }
+static/css/compact.css:64:    .kpi-bar-item { flex: 1 1 calc(50% - 1px); }
+static/css/compact.css:65:    .kpi-bar-num { font-size: var(--font-lg); }
+static/css/compact.css:240:    grid-template-columns: 1fr auto 1fr;
+static/css/compact.css:301:.rf-form-grid.col-2 { grid-template-columns: 1fr 1fr; }
+static/css/compact.css:302:.rf-form-grid.col-3 { grid-template-columns: 1fr 1fr 1fr; }
+static/css/compact.css:303:.rf-form-grid.col-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+static/css/compact.css:307:    .rf-form-grid.col-4 { grid-template-columns: 1fr; }
+static/css/compact.css:394:    flex-wrap: wrap;
+static/css/compact.css:764:.kpi-grid {
+static/css/compact.css:766:    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+static/css/compact.css:770:.kpi-card {
+static/css/compact.css:780:.kpi-card:hover {
+static/css/compact.css:784:.kpi-card::before {
+static/css/compact.css:790:.kpi-card.kpi-gold::before    { background: var(--color-primary); }
+static/css/compact.css:791:.kpi-card.kpi-success::before  { background: var(--color-success); }
+static/css/compact.css:792:.kpi-card.kpi-warning::before  { background: var(--color-warning); }
+static/css/compact.css:793:.kpi-card.kpi-danger::before   { background: var(--color-error); }
+static/css/compact.css:794:.kpi-card.kpi-info::before     { background: var(--color-info); }
+static/css/compact.css:796:.kpi-label {
+static/css/compact.css:804:.kpi-value {
+static/css/compact.css:810:.kpi-value.kpi-gold    { color: var(--color-primary-dark); }
+static/css/compact.css:811:.kpi-value.kpi-success { color: var(--color-success); }
+static/css/compact.css:812:.kpi-value.kpi-warning { color: var(--color-warning); }
+static/css/compact.css:813:.kpi-value.kpi-danger  { color: var(--color-error); }
+static/css/compact.css:814:.kpi-value.kpi-info    { color: var(--color-info); }
+static/css/compact.css:816:.kpi-sub {
+static/css/compact.css:821:.kpi-bg-icon {
+static/css/compact.css:830:a.kpi-card {
+static/css/compact.css:838:    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+static/css/compact.css:841:    .kpi-grid { grid-template-columns: 1fr; }
+static/css/mobile.css:102:        flex-wrap: nowrap;
+static/css/mobile.css:136:        flex-wrap: nowrap;
+static/css/mobile.css:150:    .kpi-bar { flex-wrap: wrap; }
+static/css/mobile.css:151:    .kpi-bar-item { flex: 1 1 calc(50% - 1px); }
+static/css/mobile.css:173:    .rf-form-grid.col-4 { grid-template-columns: 1fr !important; }
+static/css/mobile.css:176:    .kpi-bar { flex-direction: column; }
+static/css/mobile.css:177:    .kpi-bar-item { flex: 1 1 100%; }
+static/css/mobile.css:178:    .kpi-bar-num { font-size: var(--font-xl); }
+static/css/mobile.css:179:    .kpi-grid { grid-template-columns: 1fr !important; }
+static/css/mobile.css:186:    .filter-bar-body .d-flex { flex-wrap: wrap; gap: 6px; }
+static/css/mobile.css:237:    .cfg-form-2 { grid-template-columns: 1fr !important; }
+static/css/mobile.css:241:        flex-wrap: nowrap;
+static/css/mobile.css:258:    .d-flex.gap-2.justify-content-end { flex-wrap: wrap; gap: 6px !important; }
+static/css/mobile.css:281:    .kpi-bar-num { font-size: var(--font-lg)!important; }
+static/css/mobile.css:282:    .kpi-bar-lbl { font-size: var(--font-xs)!important; }
+static/css/mobile.css:283:    .kpi-bar-icon { width: 30px; height: 30px; font-size: var(--font-sm); }
+static/css/mobile.css:284:    .kpi-bar-item { padding: 10px 12px; }
+static/css/mobile.css:316:@media (max-width: 991px) { .dashboard-stats-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+static/css/mobile.css:317:@media (max-width: 575px) { .dashboard-stats-grid { grid-template-columns: 1fr !important; } }
+static/css/processos.css:371:    flex-wrap: wrap;
+static/css/visual-system.css:107:.kpi-bar,
+static/css/visual-system.css:348:    .nt-row-2 { grid-template-columns: 1fr !important; }
+static/css/visual-system.css:349:    .nt-footer { flex-wrap: wrap; }
+static/css/visual-system.css:351:    .cfg-form-2, .cfg-form-3 { grid-template-columns: 1fr !important; }
+static/css/palette03-final.css:18:.card, .rf-card, .kpi-card, .modal-content, .cfg-card, .filter-bar { background: var(--background-color-card) !important; border-color: var(--border-color-default) !important; }
+static/css/palette03-final.css:20:.text-muted, .form-text, .section-subtitle, .kpi-sub, .cfg-info-row, .cfg-info-lbl { color: var(--text-color-secondary) !important; }
+static/css/palette03-final.css:23:.kpi-card::before { background: var(--color-primary) !important; }
+static/css/palette03-final.css:24:.kpi-card.kpi-success::before { background: var(--color-success) !important; }
+static/css/palette03-final.css:25:.kpi-card.kpi-warning::before, .kpi-card.kpi-danger::before { background: var(--color-gold-primary) !important; }
+static/css/palette03-final.css:26:.kpi-card.kpi-info::before { background: var(--color-primary-light) !important; }
+static/css/palette03-final.css:27:.kpi-value.kpi-gold, .kpi-value.kpi-info { color: var(--color-primary) !important; }
+static/css/palette03-final.css:28:.kpi-value.kpi-success { color: var(--color-success) !important; }
+static/css/palette03-final.css:29:.kpi-value.kpi-warning, .kpi-value.kpi-danger { color: var(--color-gold-primary) !important; }
+static/css/palette03-final.css:133:body .tbl-btn, body .rf-tab-btn, body .metricas-tab-btn, body .cat-toggle-btn, body .cfg-ibtn {
+static/css/palette03-final.css:139:body .tbl-btn:hover, body .rf-tab-btn:hover, body .metricas-tab-btn:hover, body .cat-toggle-btn:hover, body .cfg-ibtn:hover,
+static/css/palette03-final.css:140:body .rf-tab-btn.active, body .metricas-tab-btn.active { background: var(--background-color-body) !important; border-color: var(--color-primary, var(--color-primary)) !important; color: var(--color-primary, var(--color-primary)) !important; }
+static/css/palette03-final.css:261:html body .kpi-card.kpi-gold,
+static/css/palette03-final.css:262:html body .kpi-card.kpi-info { border-top-color: var(--color-primary-light) !important; }
+static/css/palette03-final.css:263:html body .kpi-card.kpi-success { border-top-color: var(--color-success) !important; }
+static/css/palette03-final.css:264:html body .kpi-card.kpi-warning,
+static/css/palette03-final.css:265:html body .kpi-card.kpi-danger { border-top-color: var(--color-gold-primary) !important; }
+static/css/palette03-final.css:266:html body .kpi-card .kpi-bg-icon { color: var(--color-primary) !important; }
+templates/admin/editar_usuario.html:378:    flex-wrap: wrap;
+templates/admin/usuarios.html:23:<div class="kpi-grid">
+templates/admin/usuarios.html:24:    <div class="kpi-card kpi-info">
+templates/admin/usuarios.html:25:        <div class="kpi-label">Total de Usuários</div>
+templates/admin/usuarios.html:26:        <div class="kpi-value kpi-info">{{ contagem_total }}</div>
+templates/admin/usuarios.html:27:        <div class="kpi-sub">Cadastrados no sistema</div>
+templates/admin/usuarios.html:28:        <i class="bi bi-person-lines-fill kpi-bg-icon"></i>
+templates/admin/usuarios.html:30:    <div class="kpi-card kpi-success">
+templates/admin/usuarios.html:31:        <div class="kpi-label">Ativos</div>
+templates/admin/usuarios.html:32:        <div class="kpi-value kpi-success">{{ contagem_ativos }}</div>
+templates/admin/usuarios.html:33:        <div class="kpi-sub">Com acesso habilitado</div>
+templates/admin/usuarios.html:34:        <i class="bi bi-person-check kpi-bg-icon"></i>
+templates/admin/usuarios.html:36:    <div class="kpi-card kpi-danger">
+templates/admin/usuarios.html:37:        <div class="kpi-label">Inativos</div>
+templates/admin/usuarios.html:38:        <div class="kpi-value kpi-danger">{{ contagem_inativos }}</div>
+templates/admin/usuarios.html:39:        <div class="kpi-sub">Com acesso desabilitado</div>
+templates/admin/usuarios.html:40:        <i class="bi bi-person-x kpi-bg-icon"></i>
+templates/apresentantes/editar.html:57:.nt-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+templates/apresentantes/editar.html:78:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/apresentantes/index.html:30:<div class="kpi-grid">
+templates/apresentantes/index.html:31:    <div class="kpi-card kpi-gold">
+templates/apresentantes/index.html:32:        <div class="kpi-label">Total de Apresentantes</div>
+templates/apresentantes/index.html:33:        <div class="kpi-value kpi-gold">{{ total_registros }}</div>
+templates/apresentantes/index.html:34:        <div class="kpi-sub">Cadastrados no sistema</div>
+templates/apresentantes/index.html:35:        <i class="bi bi-people-fill kpi-bg-icon"></i>
+templates/apresentantes/index.html:37:    <div class="kpi-card kpi-info">
+templates/apresentantes/index.html:38:        <div class="kpi-label">Com Registros</div>
+templates/apresentantes/index.html:39:        <div class="kpi-value kpi-info">{{ apresentantes | selectattr('total_processos') | list | length }}</div>
+templates/apresentantes/index.html:40:        <div class="kpi-sub">Apresentantes com processos</div>
+templates/apresentantes/index.html:41:        <i class="bi bi-file-earmark-text kpi-bg-icon"></i>
+templates/apresentantes/index.html:43:    <div class="kpi-card kpi-success">
+templates/apresentantes/index.html:44:        <div class="kpi-label">Resultado da Busca</div>
+templates/apresentantes/index.html:45:        <div class="kpi-value kpi-success">{{ apresentantes | list | length }}</div>
+templates/apresentantes/index.html:46:        <div class="kpi-sub">{% if busca %}Filtrado por "{{ busca }}"{% else %}Exibindo todos{% endif %}</div>
+templates/apresentantes/index.html:47:        <i class="bi bi-funnel-fill kpi-bg-icon"></i>
+templates/apresentantes/index.html:137:                            <div style="display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap;">
+templates/apresentantes/index.html:191:    <div style="padding:10px 16px;border-top:1px solid var(--border-color-default);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
+templates/apresentantes/novo.html:51:.nt-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+templates/apresentantes/novo.html:72:@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
+templates/apresentantes/visualizar.html:33:<div class="kpi-grid">
+templates/apresentantes/visualizar.html:34:    <div class="kpi-card kpi-info">
+templates/apresentantes/visualizar.html:35:        <div class="kpi-label">Cadastrado em</div>
+templates/apresentantes/visualizar.html:36:        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.created_at) }}</div>
+templates/apresentantes/visualizar.html:37:        <div class="kpi-sub">Data de cadastro</div>
+templates/apresentantes/visualizar.html:38:        <i class="bi bi-calendar-event kpi-bg-icon"></i>
+templates/apresentantes/visualizar.html:40:    <div class="kpi-card kpi-success">
+templates/apresentantes/visualizar.html:41:        <div class="kpi-label">Última Atualização</div>
+templates/apresentantes/visualizar.html:42:        <div class="kpi-value kpi-success" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.updated_at) }}</div>
+templates/apresentantes/visualizar.html:43:        <div class="kpi-sub">Data de modificação</div>
+templates/apresentantes/visualizar.html:44:        <i class="bi bi-pencil-square kpi-bg-icon"></i>
+templates/apresentantes/visualizar.html:46:    <div class="kpi-card kpi-gold">
+templates/apresentantes/visualizar.html:47:        <div class="kpi-label">Processos Vinculados</div>
+templates/apresentantes/visualizar.html:48:        <div class="kpi-value kpi-gold">{{ historico | length }}</div>
+templates/apresentantes/visualizar.html:49:        <div class="kpi-sub">Total de registros</div>
+templates/apresentantes/visualizar.html:50:        <i class="bi bi-folder2-open kpi-bg-icon"></i>
+templates/apresentantes/visualizar.html:62:                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+templates/atividades.html:15:<div class="kpi-grid">
+templates/atividades.html:16:    <div class="kpi-card kpi-gold">
+templates/atividades.html:17:        <div class="kpi-label">Total de Registros</div>
+templates/atividades.html:18:        <div class="kpi-value kpi-gold">{{ contagem_total }}</div>
+templates/atividades.html:19:        <div class="kpi-sub">Atividades no sistema</div>
+templates/atividades.html:20:        <i class="bi bi-list-columns kpi-bg-icon"></i>
+templates/atividades.html:22:    <div class="kpi-card kpi-success">
+templates/atividades.html:23:        <div class="kpi-label">Usuários com Log</div>
+templates/atividades.html:24:        <div class="kpi-value kpi-success">{{ contagem_usuarios }}</div>
+templates/atividades.html:25:        <div class="kpi-sub">Usuários com atividades</div>
+templates/atividades.html:26:        <i class="bi bi-people-fill kpi-bg-icon"></i>
+templates/atividades.html:28:    <div class="kpi-card kpi-info">
+templates/atividades.html:29:        <div class="kpi-label">Atividades Hoje</div>
+templates/atividades.html:30:        <div class="kpi-value kpi-info">{{ contagem_hoje }}</div>
+templates/atividades.html:31:        <div class="kpi-sub">Registradas no dia atual</div>
+templates/atividades.html:32:        <i class="bi bi-clock kpi-bg-icon"></i>
+templates/atividades.html:249:                    <div class="d-flex align-items-center gap-2 flex-wrap">
+templates/atividades.html:412:    grid-template-columns: 1fr 1fr;
+templates/atividades.html:436:    .modal-meta-grid { grid-template-columns: 1fr; }
+templates/backup.html:17:<div class="kpi-grid">
+templates/backup.html:18:    <div class="kpi-card kpi-gold">
+templates/backup.html:19:        <div class="kpi-label">Backups Existentes</div>
+templates/backup.html:20:        <div class="kpi-value kpi-gold">{{ backups | length }}</div>
+templates/backup.html:21:        <div class="kpi-sub">Arquivos disponíveis</div>
+templates/backup.html:22:        <i class="bi bi-archive-fill kpi-bg-icon"></i>
+templates/backup.html:24:    <div class="kpi-card {% if is_server %}kpi-success{% else %}kpi-warning{% endif %}">
+templates/backup.html:25:        <div class="kpi-label">Status do Servidor</div>
+templates/backup.html:26:        <div class="kpi-value {% if is_server %}kpi-success{% else %}kpi-warning{% endif %}" style="font-size:15px;padding-top:6px;">
+templates/backup.html:29:        <div class="kpi-sub">{% if is_server %}Servidor principal{% else %}BD não encontrado{% endif %}</div>
+templates/backup.html:30:        <i class="bi bi-server kpi-bg-icon"></i>
+templates/backup.html:32:    <div class="kpi-card kpi-info">
+templates/backup.html:33:        <div class="kpi-label">IP da Máquina</div>
+templates/backup.html:34:        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;font-family:monospace;">{{ machine_ip }}</div>
+templates/backup.html:35:        <div class="kpi-sub">Endereço de rede</div>
+templates/backup.html:36:        <i class="bi bi-hdd-network kpi-bg-icon"></i>
+templates/backup.html:83:                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+templates/configuracoes.html:36:    display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap;
+templates/configuracoes.html:84:.cfg-form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+templates/configuracoes.html:85:.cfg-form-3 { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: end; }
+templates/configuracoes.html:90:.cfg-switches { display: flex; gap: 18px; flex-wrap: wrap; }
+templates/configuracoes.html:111:.week-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+templates/configuracoes.html:117:.color-swatches { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+templates/configuracoes.html:135:.appearance-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+templates/configuracoes.html:145:.appearance-swatch-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+templates/configuracoes.html:165:@media (max-width: 1100px) { .appearance-grid { grid-template-columns: 1fr; } .appearance-card { display: grid; grid-template-columns: minmax(145px, .8fr) minmax(190px, 1.2fr); align-items: center; } .appearance-card-head, .appearance-description, .appearance-use { grid-column: 1; } .appearance-swatch-row, .appearance-preview { grid-column: 2; grid-row: 1 / span 3; } .appearance-actions { align-items: stretch; flex-direction: column; } }
+templates/dashboard.html:11:    <a href="{{ url_for('dashboard.metricas') }}" class="nav-btn nav-btn-secondary">
+templates/dashboard.html:64:    <div class="kpi-grid mb-3">
+templates/dashboard.html:65:        <a class="kpi-card kpi-success" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}" style="text-decoration:none;">
+templates/dashboard.html:66:            <div class="kpi-label">Concluídos</div>
+templates/dashboard.html:67:            <div class="kpi-value kpi-success">{{ dashboard_info.processos_concluidos }}</div>
+templates/dashboard.html:68:            <div class="kpi-sub">Processos finalizados</div>
+templates/dashboard.html:69:            <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
+templates/dashboard.html:71:        <a class="kpi-card kpi-info" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}" style="text-decoration:none;">
+templates/dashboard.html:72:            <div class="kpi-label">Prenotados</div>
+templates/dashboard.html:73:            <div class="kpi-value kpi-info">{{ dashboard_info.processos_prenotados }}</div>
+templates/dashboard.html:74:            <div class="kpi-sub">Processos prenotados</div>
+templates/dashboard.html:75:            <i class="bi bi-pencil-square kpi-bg-icon"></i>
+templates/dashboard.html:77:        <a class="kpi-card kpi-warning" href="{{ url_for('processos.pendentes') }}" style="text-decoration:none;">
+templates/dashboard.html:78:            <div class="kpi-label">Pendentes</div>
+templates/dashboard.html:79:            <div class="kpi-value kpi-warning">{{ dashboard_info.processos_pendentes }}</div>
+templates/dashboard.html:80:            <div class="kpi-sub">Aguardando conclusão</div>
+templates/dashboard.html:81:            <i class="bi bi-hourglass-split kpi-bg-icon"></i>
+templates/dashboard.html:83:        <a class="kpi-card kpi-gold" href="{{ url_for('processos.em_andamento') }}" style="text-decoration:none;">
+templates/dashboard.html:84:            <div class="kpi-label">Em Andamento</div>
+templates/dashboard.html:85:            <div class="kpi-value kpi-gold">{{ dashboard_info.processos_em_andamento }}</div>
+templates/dashboard.html:86:            <div class="kpi-sub">Processos ativos</div>
+templates/dashboard.html:87:            <i class="bi bi-arrow-repeat kpi-bg-icon"></i>
+templates/em_andamento.html:29:<div class="kpi-grid">
+templates/em_andamento.html:30:    <div class="kpi-card kpi-danger">
+templates/em_andamento.html:31:        <div class="kpi-label">Atrasados</div>
+templates/em_andamento.html:32:        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
+templates/em_andamento.html:33:        <div class="kpi-sub">Com prazo vencido</div>
+templates/em_andamento.html:34:        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
+templates/em_andamento.html:36:    <div class="kpi-card kpi-gold">
+templates/em_andamento.html:37:        <div class="kpi-label">Em Andamento</div>
+templates/em_andamento.html:38:        <div class="kpi-value kpi-gold">{{ processos_andamento }}</div>
+templates/em_andamento.html:39:        <div class="kpi-sub">Processos ativos</div>
+templates/em_andamento.html:40:        <i class="bi bi-arrow-repeat kpi-bg-icon"></i>
+templates/em_andamento.html:42:    <div class="kpi-card kpi-success">
+templates/em_andamento.html:43:        <div class="kpi-label">Criados Hoje</div>
+templates/em_andamento.html:44:        <div class="kpi-value kpi-success">{{ processos_criados_hoje }}</div>
+templates/em_andamento.html:45:        <div class="kpi-sub">Novos no dia atual</div>
+templates/em_andamento.html:46:        <i class="bi bi-calendar-check kpi-bg-icon"></i>
+templates/empresa.html:37:.emp-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+templates/empresa.html:38:@media (max-width: 576px) { .emp-row-2 { grid-template-columns: 1fr; } }
+templates/hoje.html:30:<div class="kpi-grid">
+templates/hoje.html:31:    <div class="kpi-card kpi-danger">
+templates/hoje.html:32:        <div class="kpi-label">Atrasados</div>
+templates/hoje.html:33:        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
+templates/hoje.html:34:        <div class="kpi-sub">Com prazo vencido</div>
+templates/hoje.html:35:        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
+templates/hoje.html:37:    <div class="kpi-card kpi-warning">
+templates/hoje.html:38:        <div class="kpi-label">Em Andamento</div>
+templates/hoje.html:39:        <div class="kpi-value kpi-warning">{{ processos_andamento }}</div>
+templates/hoje.html:40:        <div class="kpi-sub">Aguardando conclusão</div>
+templates/hoje.html:41:        <i class="bi bi-hourglass kpi-bg-icon"></i>
+templates/hoje.html:43:    <div class="kpi-card kpi-success">
+templates/hoje.html:44:        <div class="kpi-label">Processos Hoje</div>
+templates/hoje.html:45:        <div class="kpi-value kpi-success">{{ processos_hoje }}</div>
+templates/hoje.html:46:        <div class="kpi-sub">Registrados no dia atual</div>
+templates/hoje.html:47:        <i class="bi bi-calendar-check kpi-bg-icon"></i>
+templates/metricas.html:23:    .metricas-tabs {
+templates/metricas.html:33:    .metricas-tab-btn {
+templates/metricas.html:47:    .metricas-tab-btn.active {
+templates/metricas.html:51:    .metricas-tab-btn:hover:not(.active) {
+templates/metricas.html:55:    .metricas-tab-panel { display: none; }
+templates/metricas.html:56:    .metricas-tab-panel.active { display: block; }
+templates/metricas.html:59:    .kpi-grid {
+templates/metricas.html:61:        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+templates/metricas.html:65:    .kpi-card {
+templates/metricas.html:75:    .kpi-card:hover {
+templates/metricas.html:79:    .kpi-card::before {
+templates/metricas.html:85:    .kpi-card.kpi-gold::before   { background: var(--color-gold-primary); }
+templates/metricas.html:86:    .kpi-card.kpi-success::before { background: var(--color-success); }
+templates/metricas.html:87:    .kpi-card.kpi-warning::before { background: var(--color-warning); }
+templates/metricas.html:88:    .kpi-card.kpi-danger::before  { background: var(--color-error); }
+templates/metricas.html:89:    .kpi-card.kpi-info::before    { background: var(--color-info); }
+templates/metricas.html:91:    .kpi-label {
+templates/metricas.html:99:    .kpi-value {
+templates/metricas.html:105:    .kpi-value.kpi-gold    { color: var(--color-gold-dark); }
+templates/metricas.html:106:    .kpi-value.kpi-success { color: var(--color-success); }
+templates/metricas.html:107:    .kpi-value.kpi-warning { color: var(--color-warning); }
+templates/metricas.html:108:    .kpi-value.kpi-danger  { color: var(--color-error); }
+templates/metricas.html:109:    .kpi-value.kpi-info    { color: var(--color-info); }
+templates/metricas.html:110:    .kpi-sub {
+templates/metricas.html:115:    .kpi-bg-icon {
+templates/metricas.html:128:        grid-template-columns: repeat(2, 1fr);
+templates/metricas.html:139:        grid-template-columns: repeat(3, 1fr);
+templates/metricas.html:282:        .charts-grid { grid-template-columns: 1fr; }
+templates/metricas.html:286:        .compare-grid { grid-template-columns: 1fr; }
+templates/metricas.html:287:        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+templates/metricas.html:325:    document.querySelectorAll('.metricas-tab-btn').forEach(b => b.classList.remove('active'));
+templates/metricas.html:326:    document.querySelectorAll('.metricas-tab-panel').forEach(p => p.classList.remove('active'));
+templates/metricas.html:364:        const data = await fetchJSON('/dashboard/api/metricas/usuario');
+templates/metricas.html:366:        renderKPIUsuario(data.kpis);
+templates/metricas.html:373:        setWrap('kpi-usuario', `<div class="mtr-error" style="grid-column:1/-1"><i class="bi bi-exclamation-triangle-fill"></i><p>Erro ao carregar indicadores.</p></div>`);
+templates/metricas.html:380:function renderKPIUsuario(kpis) {
+templates/metricas.html:381:    if (!kpis) { setWrap('kpi-usuario', errorHTML()); return; }
+templates/metricas.html:382:    setWrap('kpi-usuario', `
+templates/metricas.html:383:        <div class="kpi-card kpi-info">
+templates/metricas.html:384:            <div class="kpi-label">Total Processos (90d)</div>
+templates/metricas.html:385:            <div class="kpi-value kpi-info">${kpis.total_processos ?? 0}</div>
+templates/metricas.html:386:            <div class="kpi-sub">${kpis.em_andamento ?? 0} em andamento</div>
+templates/metricas.html:387:            <i class="bi bi-folder2-open kpi-bg-icon"></i>
+templates/metricas.html:389:        <div class="kpi-card kpi-success">
+templates/metricas.html:390:            <div class="kpi-label">Concluídos</div>
+templates/metricas.html:391:            <div class="kpi-value kpi-success">${kpis.concluidos ?? 0}</div>
+templates/metricas.html:392:            <div class="kpi-sub">Taxa: ${fmtPct(kpis.taxa_conclusao)}</div>
+templates/metricas.html:393:            <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
+templates/metricas.html:395:        <div class="kpi-card kpi-gold">
+templates/metricas.html:396:            <div class="kpi-label">No Prazo</div>
+templates/metricas.html:397:            <div class="kpi-value kpi-gold">${fmtPct(kpis.taxa_prazo)}</div>
+templates/metricas.html:398:            <div class="kpi-sub">Dos processos concluídos</div>
+templates/metricas.html:399:            <i class="bi bi-clock-fill kpi-bg-icon"></i>
+templates/metricas.html:401:        <div class="kpi-card kpi-danger">
+templates/metricas.html:402:            <div class="kpi-label">Atrasados</div>
+templates/metricas.html:403:            <div class="kpi-value kpi-danger">${kpis.atrasados ?? 0}</div>
+templates/metricas.html:404:            <div class="kpi-sub">Taxa: ${fmtPct(kpis.taxa_atraso)}</div>
+templates/metricas.html:405:            <i class="bi bi-exclamation-triangle-fill kpi-bg-icon"></i>
+templates/metricas.html:407:        <div class="kpi-card kpi-info">
+templates/metricas.html:408:            <div class="kpi-label">Tempo Médio</div>
+templates/metricas.html:409:            <div class="kpi-value kpi-info">${fmtDias(kpis.tempo_medio_dias)}</div>
+templates/metricas.html:410:            <div class="kpi-sub">Conclusão nos últimos 90d</div>
+templates/metricas.html:411:            <i class="bi bi-stopwatch-fill kpi-bg-icon"></i>
+templates/metricas.html:647:        setWrap('kpi-resumo', `<div class="mtr-error" style="grid-column:1/-1"><i class="bi bi-exclamation-triangle-fill"></i><p>Erro ao carregar dados.</p></div>`);
+templates/metricas.html:657:        const wrap = document.getElementById('kpi-resumo');
+templates/metricas.html:660:                <div class="kpi-card kpi-info">
+templates/metricas.html:661:                    <div class="kpi-label">Criados Hoje</div>
+templates/metricas.html:662:                    <div class="kpi-value kpi-info">${s.hoje ?? 0}</div>
+templates/metricas.html:663:                    <i class="bi bi-calendar-day kpi-bg-icon"></i>
+templates/metricas.html:671:    if (!stats) { setWrap('kpi-resumo', errorHTML()); return; }
+templates/metricas.html:672:    setWrap('kpi-resumo', `
+templates/metricas.html:673:        <div class="kpi-card kpi-info">
+templates/metricas.html:674:            <div class="kpi-label">Total Geral</div>
+templates/metricas.html:675:            <div class="kpi-value kpi-info">${stats.total ?? 0}</div>
+templates/metricas.html:676:            <div class="kpi-sub">todos os processos</div>
+templates/metricas.html:677:            <i class="bi bi-folder2-open kpi-bg-icon"></i>
+templates/metricas.html:679:        <div class="kpi-card kpi-warning">
+templates/metricas.html:680:            <div class="kpi-label">Em Andamento</div>
+templates/metricas.html:681:            <div class="kpi-value kpi-warning">${stats.ativos ?? 0}</div>
+templates/metricas.html:682:            <i class="bi bi-arrow-repeat kpi-bg-icon"></i>
+templates/metricas.html:684:        <div class="kpi-card kpi-success">
+templates/metricas.html:685:            <div class="kpi-label">Concluídos</div>
+templates/metricas.html:686:            <div class="kpi-value kpi-success">${stats.concluidos ?? 0}</div>
+templates/metricas.html:687:            <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
+templates/metricas.html:689:        <div class="kpi-card kpi-danger">
+templates/metricas.html:690:            <div class="kpi-label">Vencidos</div>
+templates/metricas.html:691:            <div class="kpi-value kpi-danger">${stats.vencidos ?? 0}</div>
+templates/metricas.html:692:            <i class="bi bi-exclamation-triangle-fill kpi-bg-icon"></i>
+templates/metricas.html:975:    setWrap('kpi-usuario', `<div class="mtr-loading" style="grid-column:1/-1"><div class="mtr-spinner"></div></div>`);
+templates/metricas.html:976:    setWrap('kpi-resumo',  `<div class="mtr-loading" style="grid-column:1/-1"><div class="mtr-spinner"></div></div>`);
+templates/metricas.html:1009:<div class="metricas-tabs">
+templates/metricas.html:1010:    <button class="metricas-tab-btn active" data-tab="meu-desempenho" onclick="switchTab(this)">
+templates/metricas.html:1013:    <button class="metricas-tab-btn" data-tab="visao-geral" onclick="switchTab(this)">
+templates/metricas.html:1016:    <button class="metricas-tab-btn" data-tab="equipe" onclick="switchTab(this)">
+templates/metricas.html:1022:<div class="metricas-tab-panel active" id="tab-meu-desempenho">
+templates/metricas.html:1024:    <div class="kpi-grid" id="kpi-usuario">
+templates/metricas.html:1094:<div class="metricas-tab-panel" id="tab-visao-geral">
+templates/metricas.html:1096:    <div class="kpi-grid" id="kpi-resumo">
+templates/metricas.html:1164:<div class="metricas-tab-panel" id="tab-equipe">
+templates/pendentes.html:30:<div class="kpi-grid">
+templates/pendentes.html:31:    <div class="kpi-card kpi-danger">
+templates/pendentes.html:32:        <div class="kpi-label">Atrasados</div>
+templates/pendentes.html:33:        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
+templates/pendentes.html:34:        <div class="kpi-sub">Com prazo vencido</div>
+templates/pendentes.html:35:        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
+templates/pendentes.html:37:    <div class="kpi-card kpi-warning">
+templates/pendentes.html:38:        <div class="kpi-label">Pendentes</div>
+templates/pendentes.html:39:        <div class="kpi-value kpi-warning">{{ processos_andamento }}</div>
+templates/pendentes.html:40:        <div class="kpi-sub">Aguardando conclusão</div>
+templates/pendentes.html:41:        <i class="bi bi-hourglass kpi-bg-icon"></i>
+templates/pendentes.html:43:    <div class="kpi-card kpi-success">
+templates/pendentes.html:44:        <div class="kpi-label">Criados Hoje</div>
+templates/pendentes.html:45:        <div class="kpi-value kpi-success">{{ processos_criados_hoje }}</div>
+templates/pendentes.html:46:        <div class="kpi-sub">Novos no dia atual</div>
+templates/pendentes.html:47:        <i class="bi bi-calendar-check kpi-bg-icon"></i>
+templates/perfil.html:31:                <div class="d-flex align-items-center gap-2 flex-wrap">
+templates/perfil_permissao_detalhe.html:22:        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+templates/perfil_permissao_detalhe.html:39:    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+templates/perfil_permissao_detalhe.html:65:            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;">
+templates/permissoes_usuario.html:17:        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+templates/permissoes_usuario.html:22:                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+templates/permissoes_usuario.html:55:        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+templates/permissoes_usuario.html:62:            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+templates/permissoes_usuario.html:87:    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+templates/permissoes_usuario.html:150:            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">
+templates/processos/em_andamento.html:29:<div class="kpi-grid">
+templates/processos/em_andamento.html:30:    <div class="kpi-card kpi-danger">
+templates/processos/em_andamento.html:31:        <div class="kpi-label">Atrasados</div>
+templates/processos/em_andamento.html:32:        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
+templates/processos/em_andamento.html:33:        <div class="kpi-sub">Com prazo vencido</div>
+templates/processos/em_andamento.html:34:        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
+templates/processos/em_andamento.html:36:    <div class="kpi-card kpi-gold">
+templates/processos/em_andamento.html:37:        <div class="kpi-label">Em Andamento</div>
+templates/processos/em_andamento.html:38:        <div class="kpi-value kpi-gold">{{ processos_andamento }}</div>
+templates/processos/em_andamento.html:39:        <div class="kpi-sub">Processos ativos</div>
+templates/processos/em_andamento.html:40:        <i class="bi bi-arrow-repeat kpi-bg-icon"></i>
+templates/processos/em_andamento.html:42:    <div class="kpi-card kpi-success">
+templates/processos/em_andamento.html:43:        <div class="kpi-label">Criados Hoje</div>
+templates/processos/em_andamento.html:44:        <div class="kpi-value kpi-success">{{ processos_criados_hoje }}</div>
+templates/processos/em_andamento.html:45:        <div class="kpi-sub">Novos no dia atual</div>
+templates/processos/em_andamento.html:46:        <i class="bi bi-calendar-check kpi-bg-icon"></i>
+templates/processos/hoje.html:30:<div class="kpi-grid">
+templates/processos/hoje.html:31:    <div class="kpi-card kpi-danger">
+templates/processos/hoje.html:32:        <div class="kpi-label">Atrasados</div>
+templates/processos/hoje.html:33:        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
+templates/processos/hoje.html:34:        <div class="kpi-sub">Com prazo vencido</div>
+templates/processos/hoje.html:35:        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
+templates/processos/hoje.html:37:    <div class="kpi-card kpi-warning">
+templates/processos/hoje.html:38:        <div class="kpi-label">Em Andamento</div>
+templates/processos/hoje.html:39:        <div class="kpi-value kpi-warning">{{ processos_andamento }}</div>
+templates/processos/hoje.html:40:        <div class="kpi-sub">Aguardando conclusão</div>
+templates/processos/hoje.html:41:        <i class="bi bi-hourglass kpi-bg-icon"></i>
+templates/processos/hoje.html:43:    <div class="kpi-card kpi-success">
+templates/processos/hoje.html:44:        <div class="kpi-label">Processos Hoje</div>
+templates/processos/hoje.html:45:        <div class="kpi-value kpi-success">{{ processos_hoje }}</div>
+templates/processos/hoje.html:46:        <div class="kpi-sub">Registrados no dia atual</div>
+=== table wrappers by template ===
+templates/admin/usuarios.html
+templates/apresentantes/index.html
+templates/apresentantes/visualizar.html
+templates/atividades.html
+templates/backup.html
+templates/configuracoes.html
+templates/dashboard.html
+templates/em_andamento.html
+templates/hoje.html
+templates/metricas.html
+templates/pendentes.html
+templates/perfis_permissao.html
+templates/processos/em_andamento.html
+templates/processos/hoje.html
+templates/processos/pendentes.html
+templates/processos/todos.html
+templates/processos/vinculados.html
+templates/relatorios/apresentantes_print.html
+templates/relatorios/historico_processo_print.html
+templates/relatorios/processos_print.html
+templates/relatorios/representantes_print.html
+templates/relatorios/titulares_print.html
+templates/representantes/index.html
+templates/representantes/visualizar.html
+templates/titulares/index.html
+templates/titulares/visualizar.html
+templates/todos.html
+=== mobile controls markup ===
+templates/base.html:139:    <div id="sidebar-overlay"></div>
+templates/base.html:144:            <div class="hamburger-menu" data-accesskey="i"
+templates/base.html:292:                    <button id="mobile-menu-btn" aria-label="Abrir menu" onclick="toggleMobileSidebar()">
+templates/base.html:588:    window.toggleMobileSidebar = function() {
+templates/base.html:590:        const overlay = document.getElementById('sidebar-overlay');
+templates/base.html:598:        const overlay = document.getElementById('sidebar-overlay');
+templates/base.html:605:    document.getElementById('sidebar-overlay').addEventListener('click', closeMobileSidebar);
+static/js/main.js:49:    // Configurar botão de toggle (hamburger)
+static/js/main.js:50:    const hamburger = document.querySelector('.hamburger-menu');
+static/js/main.js:51:    if (hamburger) {
+static/js/main.js:52:        hamburger.addEventListener('click', window.toggleSidebar);
+static/js/main.js:59:window.toggleSidebar = function() {
+static/js/main.js:196:        const hamburgerMenu = document.querySelector('.hamburger-menu');
+static/js/main.js:208:        console.log("Hamburger Menu elemento:", hamburgerMenu);
+static/js/main.js:214:        if (!sidebar || !wrapper || !pageContentWrapper || !hamburgerMenu || !profileSectionToggle || !profileMenuItems) {
+static/js/main.js:220:        hamburgerMenu.addEventListener('click', window.toggleSidebar);
+static/js/main.js:226:                e.stopPropagation(); // Evita propagação para o hamburgerMenu
+static/js/main.js:227:                window.toggleSidebar();
+static/js/main.js:277:                document.getElementById('sidebar-overlay').classList.remove('active');
+static/js/main.js:306:                !event.target.closest('#mobile-menu-btn')) {
+static/js/main.js:789:                    window.toggleSidebar();

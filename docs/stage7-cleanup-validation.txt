@@ -1,0 +1,4 @@
+=== stage7 final checks ===
+legacy_files_remaining=0
+legacy_imports_active=0
+generic_error_texts=0

@@ -1,0 +1,297 @@
+=== CSS inventory ===
+static/css/color-themes.css                lines=63    bytes=7155
+static/css/compact.css                     lines=1038  bytes=34683
+static/css/main.css                        lines=853   bytes=22630
+static/css/mobile.css                      lines=317   bytes=11657
+static/css/palette03-final.css             lines=311   bytes=17727
+static/css/processos.css                   lines=645   bytes=14030
+static/css/theme.css                       lines=226   bytes=8343
+static/css/themes.css                      lines=323   bytes=10872
+static/css/usuarios.css                    lines=128   bytes=3141
+static/css/visual-system.css               lines=726   bytes=30003
+=== imports and root selectors ===
+static/css/color-themes.css:6:[data-cor="paleta-01"], [data-cor="paleta-02"], [data-cor="paleta-03"],
+static/css/color-themes.css:7:[data-cor="paleta-04"], [data-cor="paleta-05"], [data-cor="paleta-06"] {
+static/css/color-themes.css:34:[data-cor="paleta-01"] {
+static/css/color-themes.css:39:[data-cor="paleta-02"] {
+static/css/color-themes.css:44:[data-cor="paleta-03"] {
+static/css/color-themes.css:49:[data-cor="paleta-04"] {
+static/css/color-themes.css:54:[data-cor="paleta-05"] {
+static/css/color-themes.css:59:[data-cor="paleta-06"] {
+static/css/compact.css:62:@media (max-width: 768px) {
+static/css/compact.css:132:.btn-filter-apply {
+static/css/compact.css:139:.btn-filter-apply:hover { background: #2c2c2c; }
+static/css/compact.css:140:.btn-filter-clear {
+static/css/compact.css:147:.btn-filter-clear:hover { border-color: var(--color-error); color: var(--color-error); }
+static/css/compact.css:304:@media (max-width: 768px) {
+static/css/compact.css:449:.table th { padding: 8px 12px !important; font-size: var(--font-xs)!important; }
+static/css/compact.css:450:.table td { padding: 8px 12px !important; font-size: var(--font-sm)!important; }
+static/css/compact.css:456:.form-control, .form-select { font-size: var(--font-sm)!important; }
+static/css/compact.css:526:.btn-action-square {
+static/css/compact.css:837:@media (max-width: 768px) {
+static/css/compact.css:840:@media (max-width: 480px) {
+static/css/compact.css:850:.btn-primary,
+static/css/compact.css:851:.btn.btn-primary {
+static/css/compact.css:859:.btn-primary:hover,
+static/css/compact.css:860:.btn.btn-primary:hover {
+static/css/compact.css:866:.btn-primary:focus,
+static/css/compact.css:867:.btn-primary:active {
+static/css/compact.css:874:.btn-secondary,
+static/css/compact.css:875:.btn.btn-secondary,
+static/css/compact.css:876:.btn-outline-secondary,
+static/css/compact.css:877:.btn.btn-outline-secondary {
+static/css/compact.css:886:.btn-secondary:hover,
+static/css/compact.css:887:.btn.btn-secondary:hover,
+static/css/compact.css:888:.btn-outline-secondary:hover,
+static/css/compact.css:889:.btn.btn-outline-secondary:hover {
+static/css/compact.css:896:.btn-success,
+static/css/compact.css:897:.btn.btn-success {
+static/css/compact.css:905:.btn-success:hover,
+static/css/compact.css:906:.btn.btn-success:hover {
+static/css/compact.css:914:.btn-danger,
+static/css/compact.css:915:.btn.btn-danger {
+static/css/compact.css:923:.btn-danger:hover,
+static/css/compact.css:924:.btn.btn-danger:hover {
+static/css/compact.css:930:.btn-outline-danger,
+static/css/compact.css:931:.btn.btn-outline-danger {
+static/css/compact.css:939:.btn-outline-danger:hover,
+static/css/compact.css:940:.btn.btn-outline-danger:hover {
+static/css/compact.css:946:.btn-warning,
+static/css/compact.css:947:.btn.btn-warning {
+static/css/compact.css:954:.btn-warning:hover,
+static/css/compact.css:955:.btn.btn-warning:hover {
+static/css/compact.css:962:.btn-info,
+static/css/compact.css:963:.btn.btn-info {
+static/css/compact.css:970:.btn-info:hover,
+static/css/compact.css:971:.btn.btn-info:hover {
+static/css/compact.css:978:.btn-dark,
+static/css/compact.css:979:.btn.btn-dark {
+static/css/compact.css:986:.btn-dark:hover,
+static/css/compact.css:987:.btn.btn-dark:hover {
+static/css/compact.css:994:.btn-link,
+static/css/compact.css:995:.btn.btn-link {
+static/css/compact.css:1004:.btn-sm {
+static/css/compact.css:1010:.btn-lg {
+static/css/compact.css:1017:.btn.w-100 { width: 100% !important; }
+static/css/compact.css:1020:.btn { border-radius: 7px; font-weight: 600; }
+static/css/compact.css:1023:.btn-limpar {
+static/css/compact.css:1034:.btn-limpar:hover {
+static/css/main.css:8:body {
+static/css/main.css:54:.sidebar {
+static/css/main.css:72:.sidebar.collapsed {
+static/css/main.css:76:.sidebar::-webkit-scrollbar-track {
+static/css/main.css:80:.sidebar::-webkit-scrollbar-thumb {
+static/css/main.css:86:.sidebar::-webkit-scrollbar-thumb:hover {
+static/css/main.css:125:.sidebar-company-logo {
+static/css/main.css:137:.sidebar:not(.collapsed) .sidebar-company-logo {
+static/css/main.css:144:.sidebar:not(.collapsed) .hamburger-menu .hamburger {
+static/css/main.css:148:.sidebar.collapsed .sidebar-company-logo {
+static/css/main.css:156:.sidebar.collapsed .hamburger-menu .hamburger {
+static/css/main.css:166:.sidebar.collapsed .hamburger-menu:hover .hamburger {
+static/css/main.css:259:.sidebar.collapsed .menu-text {
+static/css/main.css:286:.sidebar-group-label {
+static/css/main.css:300:.sidebar.collapsed .sidebar-group-label {
+static/css/main.css:308:.sidebar.collapsed .sidebar-group-label::before {
+static/css/main.css:342:.sidebar.collapsed .section-title-toggle .menu-text {
+static/css/main.css:360:.sidebar.collapsed .section-title-toggle .menu-icon {
+static/css/main.css:377:.sidebar.collapsed .section-title-toggle .toggle-icon {
+static/css/main.css:462:.modal-content {
+static/css/main.css:470:.modal-header {
+static/css/main.css:476:.modal-body .input-group-text {
+static/css/main.css:482:.modal-body .form-control {
+static/css/main.css:488:.modal-body .form-control::placeholder {
+static/css/main.css:627:.btn-action-square {
+static/css/main.css:640:.btn-action-square:hover {
+static/css/main.css:668:.table {
+static/css/main.css:673:.table thead th {
+static/css/main.css:684:.table tbody tr {
+static/css/main.css:688:.table tbody tr:hover {
+static/css/main.css:692:.table tbody td {
+static/css/main.css:700:.table-striped tbody tr:nth-of-type(even) {
+static/css/main.css:704:.table-striped tbody tr:nth-of-type(even):hover {
+static/css/main.css:758:@media (max-width: 768px) {
+static/css/main.css:789:.sidebar-collapsed-initial .sidebar {
+static/css/main.css:793:.sidebar-collapsed-initial .sidebar .menu-text {
+static/css/main.css:798:.sidebar-collapsed-initial .sidebar .sidebar-group-label {
+static/css/main.css:805:.sidebar-collapsed-initial .sidebar .sidebar-company-logo {
+static/css/main.css:811:.sidebar-collapsed-initial #page-content-wrapper {
+static/css/main.css:815:.sidebar-collapsed-initial .sidebar .section-title-toggle .menu-text {
+static/css/main.css:820:.sidebar-collapsed-initial .sidebar .section-title-toggle .toggle-icon {
+static/css/mobile.css:43:@media (max-width: 991px) {
+static/css/mobile.css:157:@media (max-width: 767px) {
+static/css/mobile.css:274:@media (max-width: 480px) {
+static/css/mobile.css:306:@media (max-width: 991px)  { .hidden-mobile { display: none !important; } }
+static/css/mobile.css:307:@media (min-width: 992px)  { .only-mobile   { display: none !important; } }
+static/css/mobile.css:310:@media (hover: none) and (pointer: coarse) {
+static/css/mobile.css:316:@media (max-width: 991px) { .dashboard-stats-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+static/css/mobile.css:317:@media (max-width: 575px) { .dashboard-stats-grid { grid-template-columns: 1fr !important; } }
+static/css/processos.css:75:.btn-filtrar {
+static/css/processos.css:83:.btn-filtrar:hover {
+static/css/processos.css:88:.btn-limpar {
+static/css/processos.css:97:.btn-limpar:hover {
+static/css/processos.css:108:.table thead th {
+static/css/processos.css:119:.table tbody td {
+static/css/processos.css:127:.table tbody td.break-word {
+static/css/processos.css:132:.table tbody tr:hover {
+static/css/processos.css:163:.btn-action {
+static/css/processos.css:174:.btn-action:hover {
+static/css/theme.css:4::root {
+static/css/theme.css:70:body {
+static/css/theme.css:120:.form-control, .form-select {
+static/css/theme.css:126:.form-control::placeholder, .form-select::placeholder {
+static/css/theme.css:129:.form-control:focus, .form-select:focus {
+static/css/theme.css:135:.btn-primary { background-color: var(--color-primary); border-color: var(--color-primary); color: var(--text-color-light); }
+static/css/theme.css:136:.btn-primary:hover { background-color: var(--color-primary-dark); border-color: var(--color-primary-dark); }
+static/css/theme.css:137:.btn-outline-primary { border-color: var(--color-primary); color: var(--color-primary); }
+static/css/theme.css:138:.btn-outline-primary:hover { background-color: var(--color-primary); color: var(--text-color-light); }
+static/css/theme.css:140:.btn-success { background-color: var(--system-success-bg); border-color: var(--system-success-bg); color: var(--text-color-light); }
+static/css/theme.css:141:.btn-success:hover { background-color: #008f5c; border-color: #008f5c; }
+static/css/theme.css:142:.btn-danger { background-color: var(--system-error-bg); border-color: var(--system-error-bg); color: var(--text-color-light); }
+static/css/theme.css:143:.btn-danger:hover { background-color: #a02028; border-color: #a02028; }
+static/css/theme.css:144:.btn-warning { background-color: var(--system-warning-bg); border-color: var(--system-warning-bg); color: var(--text-color-primary); }
+static/css/theme.css:145:.btn-warning:hover { background-color: #cc7000; border-color: #cc7000; }
+static/css/theme.css:146:.btn-info { background-color: var(--system-info-bg); border-color: var(--system-info-bg); color: var(--text-color-light); }
+static/css/theme.css:147:.btn-info:hover { background-color: #176bb8; border-color: #176bb8; }
+static/css/theme.css:175:.table tbody td {
+static/css/theme.css:178:.table thead th {
+static/css/theme.css:197:.btn-filtrar, .btn-limpar {
+static/css/theme.css:202:@media (max-width: 768px) {
+static/css/themes.css:8::root {
+static/css/themes.css:98:.btn-primary {
+static/css/themes.css:105:.btn-primary:hover,
+static/css/themes.css:106:.btn-primary:focus {
+static/css/themes.css:113:.btn-primary:active {
+static/css/themes.css:117:.btn-outline-primary {
+static/css/themes.css:122:.btn-outline-primary:hover,
+static/css/themes.css:123:.btn-outline-primary:focus {
+static/css/themes.css:130:.btn-success {
+static/css/themes.css:135:.btn-success:hover {
+static/css/themes.css:140:.btn-danger {
+static/css/themes.css:145:.btn-danger:hover {
+static/css/themes.css:150:.btn-warning {
+static/css/themes.css:155:.btn-warning:hover {
+static/css/themes.css:161:.btn-info {
+static/css/themes.css:166:.btn-info:hover {
+static/css/themes.css:227:.form-control:focus,
+static/css/themes.css:234:.form-control:focus-visible,
+static/css/visual-system.css:1:@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+static/css/visual-system.css:9::root {
+static/css/visual-system.css:49:.modal,
+static/css/visual-system.css:55:body {
+static/css/visual-system.css:88:.sidebar { width: 240px; background: #2B2B2E; box-shadow: 2px 0 12px rgba(43, 43, 46, .12); }
+static/css/visual-system.css:91:.sidebar.collapsed { width: 64px; }
+static/css/visual-system.css:94:.sidebar-group-label { color: #b8c1cf; font-size: .75rem; letter-spacing: .1em; }
+static/css/visual-system.css:121:.form-control,
+static/css/visual-system.css:131:.form-control::placeholder { color: #687588; opacity: 1; }
+static/css/visual-system.css:132:.form-control:focus,
+static/css/visual-system.css:139:.btn,
+static/css/visual-system.css:141:.btn-filter-apply,
+static/css/visual-system.css:142:.btn-filter-clear {
+static/css/visual-system.css:155:.btn:hover,
+static/css/visual-system.css:157:.btn-filter-apply:hover,
+static/css/visual-system.css:158:.btn-filter-clear:hover { transform: translateY(-1px); }
+static/css/visual-system.css:159:.btn:active,
+static/css/visual-system.css:161:.btn:focus-visible,
+static/css/visual-system.css:166:.form-control:focus-visible,
+static/css/visual-system.css:182:.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--rf-text-on-primary); }
+static/css/visual-system.css:183:.btn-primary:hover, .btn-primary:focus { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: var(--rf-text-on-primary); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 24%, transparent); }
+static/css/visual-system.css:184:.btn-secondary { background: #526071; border-color: #526071; color: #fff; }
+static/css/visual-system.css:185:.btn-secondary:hover { background: #3e4b5c; border-color: #3e4b5c; color: #fff; }
+static/css/visual-system.css:186:.btn-success { background: #237a3b; border-color: #237a3b; color: #fff; }
+static/css/visual-system.css:187:.btn-danger { background: #b4232c; border-color: #b4232c; color: #fff; }
+static/css/visual-system.css:188:.btn-warning { background: #a85b00; border-color: #a85b00; color: #fff; }
+static/css/visual-system.css:189:.btn-info { background: #1264a3; border-color: #1264a3; color: #fff; }
+static/css/visual-system.css:190:.btn-outline-primary { border-color: var(--color-primary); color: var(--color-primary-dark); background: transparent; }
+static/css/visual-system.css:191:.btn-outline-primary:hover { background: var(--color-primary); border-color: var(--color-primary); color: var(--rf-text-on-primary); }
+static/css/visual-system.css:192:.btn-link { min-height: auto; padding: 0; }
+static/css/visual-system.css:195:.modal-content { border: 1px solid var(--rf-border); border-radius: var(--rf-radius-lg); box-shadow: var(--rf-shadow-md); overflow: hidden; }
+static/css/visual-system.css:196:.modal-header { padding: 1rem 1.25rem; background: var(--rf-surface-muted); border-bottom: 1px solid var(--rf-border); }
+static/css/visual-system.css:197:.modal-title { color: var(--rf-text-strong); font-size: 1.125rem; font-weight: 700; }
+static/css/visual-system.css:198:.modal-body { padding: 1.25rem; }
+static/css/visual-system.css:199:.modal-footer { padding: .875rem 1.25rem; background: #fafbfc; border-top: 1px solid var(--rf-border); }
+static/css/visual-system.css:200:.btn-close:focus-visible { box-shadow: var(--rf-focus-ring); }
+static/css/visual-system.css:211:.table, .rf-table { color: var(--rf-text-body); font-size: .9375rem; }
+static/css/visual-system.css:212:.table thead th, .rf-table th { padding: .75rem .875rem; color: var(--rf-text-strong); font-size: .8125rem; letter-spacing: .04em; }
+static/css/visual-system.css:213:.table tbody td, .rf-table td { padding: .8rem .875rem; vertical-align: middle; }
+static/css/visual-system.css:214:.table tbody tr:hover, .rf-table tbody tr:hover td { background: #f6f8fa; }
+static/css/visual-system.css:220:@media (max-width: 991.98px) {
+static/css/visual-system.css:227:@media (max-width: 575.98px) {
+static/css/visual-system.css:341:@media (max-width: 767.98px) {
+static/css/visual-system.css:349:@media (prefers-reduced-motion: reduce) {
+static/css/visual-system.css:361:.btn:not(.btn-close),
+static/css/visual-system.css:387:.btn:not(.btn-close):hover,
+static/css/visual-system.css:402:.btn:not(.btn-close):active,
+static/css/visual-system.css:425:.btn:not(.btn-close):disabled,
+static/css/visual-system.css:439:.btn:not(.btn-close):focus-visible,
+static/css/visual-system.css:455:.btn-close:hover,
+static/css/visual-system.css:456:.btn-close:focus,
+static/css/visual-system.css:457:.btn-close:active { opacity: .8; box-shadow: none !important; transform: none !important; }
+static/css/visual-system.css:459:@media (prefers-reduced-motion: reduce) {
+static/css/visual-system.css:541::root {
+static/css/visual-system.css:554:body {
+static/css/visual-system.css:562:.modal-title { color: var(--rf-texto) !important; }
+static/css/visual-system.css:581:.sidebar { background: var(--rf-grafite) !important; }
+static/css/visual-system.css:588:.btn,
+static/css/visual-system.css:602:.btn-primary,
+static/css/visual-system.css:614:.btn-primary:hover,
+static/css/visual-system.css:633:.btn-secondary,
+static/css/visual-system.css:635:.btn-filter-clear,
+static/css/visual-system.css:641:.btn-secondary:hover,
+static/css/visual-system.css:643:.btn-filter-clear:hover,
+static/css/visual-system.css:646:.btn-outline-primary,
+static/css/visual-system.css:647:.btn-outline-secondary,
+static/css/visual-system.css:648:.btn-link {
+static/css/visual-system.css:653:.btn-outline-primary:hover,
+static/css/visual-system.css:654:.btn-outline-secondary:hover { background: var(--color-primary) !important; color: var(--rf-text-on-primary) !important; }
+static/css/visual-system.css:656:.btn-danger,
+static/css/visual-system.css:659:.btn-delete,
+static/css/visual-system.css:660:.btn-revoke { background: var(--rf-vinho) !important; border-color: var(--rf-vinho) !important; color: #FFFFFF !important; }
+static/css/visual-system.css:661:.btn-danger:hover,
+static/css/visual-system.css:664:.btn-delete:hover,
+static/css/visual-system.css:665:.btn-revoke:hover { background: var(--rf-vinho-escuro) !important; border-color: var(--rf-vinho-escuro) !important; }
+static/css/visual-system.css:667:.btn-success { background: #2C5C36 !important; border-color: #2C5C36 !important; color: #FFFFFF !important; }
+static/css/visual-system.css:668:.btn-warning { background: #6E5A16 !important; border-color: #6E5A16 !important; color: #FFFFFF !important; }
+static/css/visual-system.css:669:.btn-info { background: var(--rf-grafite-claro) !important; border-color: var(--rf-grafite-claro) !important; color: #FFFFFF !important; }
+static/css/visual-system.css:670:.btn:disabled,
+static/css/visual-system.css:672:.btn.disabled { background: var(--rf-linha-guia) !important; border-color: var(--rf-linha-guia) !important; color: #9A9A97 !important; opacity: 1 !important; }
+static/css/visual-system.css:677:.modal-content,
+static/css/visual-system.css:683:.modal-header,
+static/css/visual-system.css:685:.modal-footer { background: var(--rf-fundo); border-color: var(--rf-linha-guia); }
+static/css/visual-system.css:686:.form-control,
+static/css/visual-system.css:691:.form-control:focus,
+static/css/visual-system.css:697:.table,
+static/css/visual-system.css:700:.table tbody tr:nth-child(even) td,
+static/css/visual-system.css:703:.table tbody tr:hover td,
+static/css/visual-system.css:722:@media (max-width: 575.98px) {
+static/css/palette03-final.css:12:.sidebar { background: var(--color-primary) !important; }
+static/css/palette03-final.css:246:body {
+static/css/palette03-final.css:295:.sidebar { background: var(--background-color-sidebar) !important; color: var(--sidebar-text) !important; }
+=== overlapping selectors across CSS ===
+   1807
+=== template style blocks and CSS links ===
+templates/admin/editar_usuario.html
+templates/apresentantes/editar.html
+templates/apresentantes/novo.html
+templates/atividades.html
+templates/base.html
+templates/configuracoes.html
+templates/dashboard.html
+templates/empresa.html
+templates/login.html
+templates/logout.html
+templates/metricas.html
+templates/novo_usuario.html
+templates/perfil.html
+templates/permissoes_usuario.html
+templates/processos/visualizar.html
+templates/recuperar_senha.html
+templates/relatorios/_cadastros_print_styles.html
+templates/relatorios/historico_processo_print.html
+templates/relatorios/processos_print.html
+templates/relatorios/relatorio_processo_print.html
+templates/representantes/editar.html
+templates/representantes/novo.html
+templates/reset_password.html
+templates/titulares/editar.html
+templates/titulares/novo.html
+templates/visualizar.html

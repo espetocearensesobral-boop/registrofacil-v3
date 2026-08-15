@@ -1,0 +1,21 @@
+=== accessibility checks ===
+skip_link=templates/base.html:1
+static/css/palette03-final.css:2
+main_landmark=1
+sidebar_landmark=1
+mobile_aria=1
+focus_visible=8
+reduced_motion=1
+
+=== browser smoke ===
+A rota raiz redirecionou para /login por ausência de sessão autenticada no navegador disponível. A validação visual autenticada ficou coberta pela checagem estática do shell e pela suíte automatizada; o login público continuou carregando corretamente na versão v3.19.0.
+
+=== changes ===
+- Skip link global para #main-content.
+- Main landmark com tabindex=-1.
+- Sidebar como landmark aside com aria-label.
+- Botão mobile com type, aria-controls e aria-expanded.
+- Sincronização de aria-expanded/aria-hidden e retorno de foco após fechamento do drawer.
+- Escape fecha o drawer e devolve foco ao gatilho.
+- Menu items com aria-label derivado do texto e ativação por Enter/Espaço.
+- Focus-visible semântico, alvos de toque de 44px e prefers-reduced-motion.

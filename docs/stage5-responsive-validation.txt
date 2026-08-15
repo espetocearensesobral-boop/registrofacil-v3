@@ -1,0 +1,7 @@
+=== responsive checks ===
+mobile_menu_btn=templates/base.html:0
+static/css/mobile.css:3
+legacy_sidebar_hamburger_hidden=1
+sidebar_width_tokens=4
+table_responsive_rules=2
+kpi_mobile_rules=12

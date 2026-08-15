@@ -34,10 +34,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
 	<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/processos.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
@@ -58,54 +56,51 @@
             white-space: nowrap;
             text-decoration: none;
             cursor: pointer;
-            transition: background-color .18s, border-color .18s, color .18s, box-shadow .18s;
-            font-family: 'Segoe UI', sans-serif;
+            transition: background-color .18s, border-color .18s, color .18s;
+            font-family: var(--rf-font-sans, 'Source Sans 3', sans-serif);
         }
         .navbar .nav-btn i { font-size: 14px; }
 
         /* Primário — preto sólido */
         .navbar .nav-btn-primary,
         .navbar .nav-btn.nav-btn-primary {
-            background-color: #1a1a1a !important;
-            border-color: #1a1a1a !important;
-            color: #fff !important;
+            background-color: var(--rf-action-primary) !important;
+            border-color: var(--rf-action-primary) !important;
+            color: var(--rf-text-on-primary) !important;
         }
         .navbar .nav-btn-primary:hover,
         .navbar .nav-btn.nav-btn-primary:hover {
-            background-color: #333 !important;
-            border-color: #333 !important;
-            color: #fff !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            background-color: var(--rf-action-primary-hover) !important;
+            border-color: var(--rf-action-primary-hover) !important;
+            color: var(--rf-text-on-primary) !important;
         }
 
         /* Secundário — cinza escuro */
         .navbar .nav-btn-secondary,
         .navbar .nav-btn.nav-btn-secondary {
-            background-color: #2a2a2a !important;
-            border-color: #2a2a2a !important;
-            color: #e8e8e8 !important;
+            background-color: var(--rf-action-secondary) !important;
+            border-color: var(--rf-border) !important;
+            color: var(--rf-action-primary) !important;
         }
         .navbar .nav-btn-secondary:hover,
         .navbar .nav-btn.nav-btn-secondary:hover {
-            background-color: #3a3a3a !important;
-            border-color: var(--color-gold-primary) !important;
-            color: var(--color-gold-primary) !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            background-color: var(--rf-action-secondary-hover) !important;
+            border-color: var(--rf-action-primary) !important;
+            color: var(--rf-action-primary) !important;
         }
 
         /* Perigo — vermelho */
         .navbar .nav-btn-danger,
         .navbar .nav-btn.nav-btn-danger {
-            background-color: var(--color-error) !important;
-            border-color: var(--color-error) !important;
-            color: #fff !important;
+            background-color: var(--rf-danger) !important;
+            border-color: var(--rf-danger) !important;
+            color: var(--rf-text-on-primary) !important;
         }
         .navbar .nav-btn-danger:hover,
         .navbar .nav-btn.nav-btn-danger:hover {
-            background-color: #a01f25 !important;
-            border-color: #a01f25 !important;
-            color: #fff !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            background-color: var(--rf-danger-hover) !important;
+            border-color: var(--rf-danger-hover) !important;
+            color: var(--rf-text-on-primary) !important;
         }
 
         /* Dropdown toggle herda o estilo do pai */
@@ -120,16 +115,15 @@
         /* Botão Editar no cabeçalho — preto padrão do sistema (sobrepõe dourado) */
         .navbar .nav-btn-gold,
         .navbar .nav-btn.nav-btn-gold {
-            background-color: #1a1a1a !important;
-            border-color: #1a1a1a !important;
-            color: #fff !important;
+            background-color: var(--rf-action-primary) !important;
+            border-color: var(--rf-action-primary) !important;
+            color: var(--rf-text-on-primary) !important;
         }
         .navbar .nav-btn-gold:hover,
         .navbar .nav-btn.nav-btn-gold:hover {
-            background-color: #333 !important;
-            border-color: #333 !important;
-            color: #fff !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            background-color: var(--rf-action-primary-hover) !important;
+            border-color: var(--rf-action-primary-hover) !important;
+            color: var(--rf-text-on-primary) !important;
         }
     </style>
 
@@ -139,11 +133,12 @@
     <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
 </head>
 <body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}">
+    <a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
     <!-- Overlay para fechar sidebar no mobile -->
     <div id="sidebar-overlay"></div>
     <div class="loader-overlay"></div>
     <div class="d-flex" id="wrapper">
-        <div class="sidebar" id="sidebar">
+        <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
 
             <div class="hamburger-menu" data-accesskey="i"
                  title="Expandir/Recolher Menu (Alt+I)">
@@ -289,11 +284,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </aside>
         <div id="page-content-wrapper" class="flex-fill">
             <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
                 <div class="container-fluid">
-                    <button id="mobile-menu-btn" aria-label="Abrir menu" onclick="toggleMobileSidebar()">
+                    <button id="mobile-menu-btn" type="button" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false" onclick="toggleMobileSidebar()">
                         <i class="bi bi-list"></i>
                     </button>
                     <span class="navbar-brand mb-0 h1 fs-5 fw-bold ms-2 text-dark">{% block page_title %}Registro Fácil{% endblock %}</span>
@@ -303,7 +298,7 @@
                 </div>
             </nav>
 
-            <div class="container-fluid py-4">
+            <main id="main-content" class="container-fluid py-4" tabindex="-1">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         <script>
@@ -321,7 +316,7 @@
                 {% endwith %}
 
                 {% block content %}{% endblock %}
-            </div>
+            </main>
         </div>
     </div>
 
@@ -636,8 +631,7 @@
     });
     </script>
     {% block scripts %}{% endblock %}
-    <!-- Identidade visual final: carregada após estilos locais dos templates -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/palette03-final.css') }}">
+    <!-- Identidade visual semântica consolidada após estilos locais dos templates -->
     <!-- Toast Container Global -->
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;"></div>
 

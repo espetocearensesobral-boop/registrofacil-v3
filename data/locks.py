@@ -52,7 +52,7 @@ def acquire_lock(table_name, record_id, user_id, timeout_minutes):
             return acquire_lock(table_name, record_id, user_id, timeout_minutes)
         except Exception as e:
             logger.error(f"Erro inesperado ao adquirir lock para {table_name}:{record_id} por {user_id}: {e}", exc_info=True)
-            return {'error': 'Erro interno ao tentar bloquear o registro.', 'type': 'danger', 'code': 500}
+            return {'error': 'Não foi possível bloquear este registro agora. Atualize a página e tente novamente.', 'type': 'danger', 'code': 500}
 
 def release_lock(table_name, record_id, user_id):
     """
@@ -81,7 +81,7 @@ def release_lock(table_name, record_id, user_id):
 
     except Exception as e:
         logger.error(f"Erro inesperado ao libertar lock para {table_name}:{record_id}: {e}", exc_info=True)
-        return {'success': False, 'error': 'Erro interno do servidor ao tentar libertar o bloqueio.'}
+        return {'success': False, 'error': 'Não foi possível liberar o bloqueio agora. Tente novamente.'}
 
 def renew_lock(table_name, record_id, user_id, timeout_minutes):
     with get_sqlite_connection() as conn:

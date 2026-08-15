@@ -27,7 +27,7 @@
     height: 36px;
     border: none;
     background: transparent;
-    color: var(--text-color-primary);
+    color: var(--rf-text-primary);
     font-size: var(--font-xl);
     border-radius: 7px;
     cursor: pointer;
@@ -35,7 +35,7 @@
     transition: background .15s;
     padding: 0;
 }
-#mobile-menu-btn:hover { background: var(--background-color-body); }
+#mobile-menu-btn:hover { background: var(--rf-surface-hover); }
 
 /* ════════════════════════════════════════════════════════════════
    TABLET E ABAIXO (≤991px)
@@ -46,7 +46,7 @@
     .sidebar {
         transform: translateX(-100%);
         transition: transform .28s cubic-bezier(.4,0,.2,1);
-        width: 230px !important;
+        width: var(--rf-sidebar-width) !important;
         z-index: 1031;
         overflow-y: auto;
     }
@@ -86,6 +86,9 @@
     /* Itens do menu: altura touch-friendly */
     .sidebar.mobile-open .menu-item { height: 44px; }
 
+    /* O drawer mobile usa somente o controle da navbar; o hamburger legado da sidebar fica oculto. */
+    .sidebar .hamburger-menu { display: none !important; }
+
     /* ── Conteúdo: 100% sem margem da sidebar ── */
     #page-content-wrapper {
         margin-left: 0 !important;
@@ -95,7 +98,7 @@
     }
 
     /* ── Navbar ── */
-    #mobile-menu-btn { display: flex; }
+    #mobile-menu-btn { display: flex; width: 44px; height: 44px; min-width: 44px; }
 
     #page-content-wrapper .navbar {
         padding: .55rem .85rem;
@@ -186,10 +189,12 @@
     .filter-bar-body .d-flex { flex-wrap: wrap; gap: 6px; }
 
     /* Tabelas: font reduzida + scroll */
-    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .table { font-size: var(--font-sm); }
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--rf-radius-sm); }
+    .table-responsive > .table { min-width: 42rem; }
+    .table { font-size: var(--rf-font-sm); }
     .table th, .table td {
-        padding: .3rem .45rem;
+        min-height: 2.75rem;
+        padding: .45rem .55rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -220,10 +225,10 @@
     { display: table-cell !important; }
 
     /* Badges compactos */
-    .badge { font-size: var(--font-xs); padding: .2em .45em; }
+    .badge { font-size: max(var(--rf-font-sm), .75rem); padding: .2em .45em; }
 
     /* Paginação */
-    .pagination .page-link { padding: .28rem .5rem; font-size: var(--font-sm); }
+    .pagination .page-link { padding: .35rem .55rem; font-size: var(--rf-font-sm); min-width: 2.5rem; min-height: 2.75rem; }
 
     /* Modais */
     .modal-dialog {
@@ -292,8 +297,12 @@
     select,
     textarea { font-size: var(--font-base)!important; }
 
-    .table { font-size: 11.5px; }
-    .table th, .table td { max-width: 120px; }
+    .table { font-size: var(--rf-font-sm); }
+    .table th, .table td { max-width: 160px; }
+
+    .kpi-card, .card, .rf-card, .filter-bar { min-width: 0; }
+    .kpi-card { padding: 1rem; }
+    .kpi-value { font-size: clamp(1.35rem, 7vw, 1.8rem); }
 
     .modal-body { padding: .85rem; }
     .modal-footer { padding: .6rem .85rem; gap: 6px; }
@@ -313,5 +322,5 @@
 }
 
 /* Dashboard stats grid */
-@media (max-width: 991px) { .dashboard-stats-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-@media (max-width: 575px) { .dashboard-stats-grid { grid-template-columns: 1fr !important; } }
+@media (max-width: 991px) { .dashboard-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .75rem !important; } }
+@media (max-width: 575px) { .dashboard-stats-grid { grid-template-columns: 1fr !important; gap: .75rem !important; } }

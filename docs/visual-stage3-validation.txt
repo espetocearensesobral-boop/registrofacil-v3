@@ -1,0 +1,5 @@
+=== metrics after migration ===
+important=706
+visual_system_hex=13
+palette_final_hex=30
+theme_blocks=8

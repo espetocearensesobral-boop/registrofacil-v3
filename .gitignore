@@ -1,0 +1,25 @@
+# Segredos e dados locais
+.secret_key
+.encryption_key
+*.db
+*.sqlite
+*.sqlite3
+
+# Runtime e logs
+logs/
+*.log
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Ambientes locais
+.venv/
+venv/
+env/
+
+# Artefatos de build e sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+=== release checks ===
+version=25:    VERSION = '3.20.0'
+palette_compatibility_file=0
+active_palette_imports=0
+legacy_css_files=0
+tests=............................................................             [100%]
