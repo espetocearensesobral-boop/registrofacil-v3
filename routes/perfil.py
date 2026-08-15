@@ -152,7 +152,7 @@ def index(user_id=None):
                             uploaded_file=uploaded_file,
                             current_filename=imagem_final,
                             target_folder=PROFILE_UPLOAD_FOLDER,
-                            allowed_extensions=['jpg', 'jpeg', 'png', 'gif'],
+                            allowed_extensions=['jpg', 'jpeg', 'png'],
                             max_size_mb=2,
                             prefix=f'usuario_{current_user_id}'
                         )

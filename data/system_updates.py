@@ -16,11 +16,12 @@ from urllib.request import Request, urlopen
 
 from data.update_config import load_update_settings, manifest_urls
 
-from config import Config
+from config import Config, DATA_DIR
 from data.database import get_sqlite_connection
 from utils.logger import manutencao_logger
 
 STATE_KEY = "system_update_state"
+RESTORE_MAINTENANCE_MARKER = DATA_DIR + "/.restore_maintenance"
 
 IDLE_STATE = {
     "state": "idle",
@@ -246,7 +247,26 @@ def cancel_update() -> dict[str, Any]:
         )
 
 
+def begin_restore_maintenance(message: str = "Restauração em andamento. Aguarde a conclusão.") -> None:
+    import os
+    os.makedirs(Config.DATA_DIR, exist_ok=True)
+    with open(RESTORE_MAINTENANCE_MARKER, "w", encoding="utf-8") as stream:
+        stream.write(message)
+    manutencao_logger.warning(message)
+
+
+def end_restore_maintenance() -> None:
+    import os
+    try:
+        os.remove(RESTORE_MAINTENANCE_MARKER)
+    except FileNotFoundError:
+        pass
+
+
 def is_maintenance_active(state: dict[str, Any] | None = None) -> bool:
+    import os
+    if os.path.isfile(RESTORE_MAINTENANCE_MARKER):
+        return True
     state = state or get_update_state()
     return state.get("state") in {
         "preparing",

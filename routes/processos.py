@@ -79,8 +79,7 @@ def get_mime_type_from_file(filepath, filename):
         raise ImportError("Sistema de validação de arquivos indisponível. Contate o suporte.")
     except Exception as e:
         logger.error(f"Erro na detecção de MIME type com python-magic: {e}", exc_info=True)
-        ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
-        return ALLOWED_EXTENSIONS.get(ext, 'application/octet-stream')
+        raise ValueError('Não foi possível validar o conteúdo do arquivo enviado.') from e
 
 # Mapa de MIME types aceitos por extensão.
 # Necessário porque algumas bibliotecas (python-magic) detectam o tipo real do
@@ -89,27 +88,17 @@ def get_mime_type_from_file(filepath, filename):
 #   - CSV pode ser detectado como 'text/plain' em vez de 'text/csv'
 #   - TXT com BOM/encoding pode retornar 'text/plain; charset=utf-8'
 MIME_ALIASES = {
-    'docx': {'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'},
-    'xlsx': {'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip', 'application/octet-stream'},
-    'xls':  {'application/vnd.ms-excel', 'application/zip', 'application/octet-stream'},
-    'doc':  {'application/msword', 'application/zip', 'application/octet-stream'},
-    'csv':  {'text/csv', 'text/plain'},
-    'txt':  {'text/plain'},
     'pdf':  {'application/pdf'},
     'jpg':  {'image/jpeg'},
     'jpeg': {'image/jpeg'},
     'png':  {'image/png'},
-    'gif':  {'image/gif'},
 }
 
 def mime_valido_para_extensao(extensao, mime_type):
     """Verifica se o MIME type detectado e compativel com a extensao do arquivo."""
     mime_normalizado = mime_type.split(';')[0].strip().lower()  # Remove parametros como charset=utf-8
     mimes_aceitos = MIME_ALIASES.get(extensao, set())
-    if not mimes_aceitos:
-        # Extensao sem mapeamento: aceita qualquer MIME que esteja na lista global permitida
-        return mime_normalizado in ALLOWED_EXTENSIONS.values()
-    return mime_normalizado in mimes_aceitos
+    return bool(mimes_aceitos) and mime_normalizado in mimes_aceitos
 
 def processar_anexos_upload(files_dict, processo_id, usuario_id, conn):
     """Processa o upload de arquivos, salva-os e registra no DB.
@@ -175,12 +164,14 @@ def processar_anexos_upload(files_dict, processo_id, usuario_id, conn):
                 anexos_salvos.append(nome_original)
                 logger.info(f"Anexo '{nome_original}' salvo no DB para processo {processo_id}.")
             except Exception as e:
-                arquivos_rejeitados.append(f"{nome_original}: Falha ao salvar no servidor ou registrar no DB.")
+                arquivos_rejeitados.append(f"{nome_original}: Falha ao validar, salvar no servidor ou registrar no banco.")
                 logger.error(f"Erro ao salvar anexo '{nome_original}': {e}", exc_info=True)
-                # Tenta remover o arquivo temporário se algo deu errado após a gravação inicial
-                if os.path.exists(caminho_completo_temp):
-                    try: os.remove(caminho_completo_temp)
-                    except Exception as rm_e: logger.error(f"Falha ao remover arquivo físico temporário '{caminho_completo_temp}': {rm_e}")
+                for caminho_residual in (caminho_completo_temp, os.path.join(get_upload_folder(), secure_filename(nome_arquivo_servidor))):
+                    if os.path.exists(caminho_residual):
+                        try:
+                            os.remove(caminho_residual)
+                        except Exception as rm_e:
+                            logger.error(f"Falha ao remover arquivo residual '{caminho_residual}': {rm_e}")
                 continue
     return anexos_salvos, arquivos_rejeitados
 

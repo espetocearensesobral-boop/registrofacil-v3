@@ -333,10 +333,10 @@
                 <i class="bi bi-cloud-arrow-up upload-icon"></i>
                 <div class="upload-text">Arraste arquivos aqui ou clique para selecionar</div>
                 <div class="upload-hint">
-                    Formatos aceitos: PDF, DOC, DOCX, JPG, PNG, GIF (máx. 50MB por arquivo)
+                    Formatos aceitos: PDF, JPG/JPEG e PNG (máx. 50MB por arquivo)
                 </div>
                 <input type="file" class="file-input" id="anexos" name="anexos[]" multiple
-                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif">
+                       accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
             </div>
 
             <div id="file-preview" class="file-preview d-none"></div>
@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const MAX_FILE_MB  = 50;
     const MAX_TOTAL_MB = 50;
-    const ALL_EXT = ['pdf','doc','docx','jpg','jpeg','png','gif'];
+    const ALL_EXT = ['pdf','jpg','jpeg','png'];
 
     let selectedFiles = [];
 
@@ -596,8 +596,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function getFileIcon(name) {
         const ext = name.split('.').pop().toLowerCase();
         if (ext === 'pdf') return 'bi-file-earmark-pdf text-danger';
-        if (['doc','docx'].includes(ext)) return 'bi-file-earmark-word text-primary';
-        if (['jpg','jpeg','png','gif'].includes(ext)) return 'bi-file-earmark-image text-success';
+        if (['jpg','jpeg','png'].includes(ext)) return 'bi-file-earmark-image text-success';
         return 'bi-file-earmark';
     }
     function validateFile(file) {
