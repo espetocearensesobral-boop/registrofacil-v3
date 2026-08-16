@@ -10,6 +10,8 @@
     --color-primary-contrast: #FFFFFF;
     --color-gold-primary: #B08D3E;
     --color-gold-dark: #8E702F;
+    --rf-action-tertiary: #B08D3E;
+    --rf-action-tertiary-hover: #8E702F;
     --background-color-body: #F5F2EA;
     --background-color-card: #FFFFFF;
     --background-color-hover: #ECE8DE;
@@ -59,6 +61,8 @@
     --rf-action-primary-active: var(--color-primary-dark);
     --rf-action-secondary: var(--background-color-card);
     --rf-action-secondary-hover: var(--background-color-hover);
+    --rf-action-tertiary: var(--color-gold-primary);
+    --rf-action-tertiary-hover: var(--color-gold-dark);
     --rf-accent: var(--color-gold-primary);
     --rf-accent-hover: var(--color-gold-dark);
     --rf-accent-subtle: var(--color-primary-subtle);

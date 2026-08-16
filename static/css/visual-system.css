@@ -1579,3 +1579,61 @@ body .bg-info,
 body .bg-dark {
   color: #FFFFFF !important;
 }
+
+
+/* Terceira cor semântica para ações destrutivas e reversíveis — Onda tertiary-action-1. */
+body .nav-btn-danger,
+body .nav-btn-warning,
+body .btn-danger,
+body .btn-warning,
+body .btn-outline-danger,
+body .btn-outline-warning,
+body .btn-filter-clear,
+body .btn-limpar,
+body .nt-btn-cancel,
+body .cfg-obtn,
+body .btn-delete-backup,
+body .btn-remove-file,
+body .btn-excluir-titular,
+body .btn-excluir-apresentante,
+body .btn-excluir-representante,
+body .btn-revoke,
+body .btn-inativar,
+body .btn-desativar,
+body .btn-rejeitar,
+body .btn-descartar {
+  background-color: var(--rf-action-tertiary, #B08D3E) !important;
+  background-image: none !important;
+  border-color: var(--rf-action-tertiary, #B08D3E) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+
+body .nav-btn-danger:hover,
+body .nav-btn-warning:hover,
+body .btn-danger:hover,
+body .btn-warning:hover,
+body .btn-outline-danger:hover,
+body .btn-outline-warning:hover,
+body .btn-filter-clear:hover,
+body .btn-limpar:hover,
+body .nt-btn-cancel:hover,
+body .cfg-obtn:hover,
+body .btn-delete-backup:hover,
+body .btn-remove-file:hover,
+body .btn-excluir-titular:hover,
+body .btn-excluir-apresentante:hover,
+body .btn-excluir-representante:hover,
+body .btn-revoke:hover,
+body .btn-inativar:hover,
+body .btn-desativar:hover,
+body .btn-rejeitar:hover,
+body .btn-descartar:hover,
+body .nav-btn-danger:focus-visible,
+body .btn-danger:focus-visible,
+body .btn-filter-clear:focus-visible,
+body .btn-limpar:focus-visible,
+body .nt-btn-cancel:focus-visible {
+  background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
