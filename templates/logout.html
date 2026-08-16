@@ -101,7 +101,7 @@
         {% endif %}
 
         <div class="logout-actions">
-            <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary" style="height:40px;padding:0 22px;font-size:14px;">
+            <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary btn-cancel-action" style="height:40px;padding:0 22px;font-size:14px;">
                 <i class="bi bi-x-lg"></i> Cancelar
             </a>
             <form method="post" id="logoutForm" action="{{ url_for('auth.logout') }}">
