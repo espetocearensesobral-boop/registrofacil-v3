@@ -216,11 +216,56 @@ PALETAS_INSTITUCIONAIS = {
         'sidebar_text': '#F5F5F5',
         'sidebar_active_text': '#FFFFFF',
     },
+    'paleta-11': {
+        'id': 'paleta-11', 'numero': '11', 'nome': 'Ártico & Coral',
+        'descricao': 'Azul-coral equilibrado para uma identidade institucional contemporânea.',
+        'primary': '#2D3142', 'primary_light': '#4F5D75', 'primary_dark': '#1F2330',
+        'accent': '#EF8354', 'background': '#FAFBFC', 'paper': '#FFFFFF',
+        'text': '#1A1D28', 'muted': '#626A7D', 'line': '#D6D9E0',
+        'success_text': '#2E7D5E', 'danger_text': '#B03A3A', 'warning_text': '#9A6A0A', 'info_text': '#4F5D75',
+        'sidebar': '#2D3142', 'sidebar_hover': '#4F5D75', 'sidebar_text': '#F0F2F5', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-12': {
+        'id': 'paleta-12', 'numero': '12', 'nome': 'Musgo & Limão',
+        'descricao': 'Verde vivo com acento cítrico para uma presença natural e vibrante.',
+        'primary': '#132A13', 'primary_light': '#4F772D', 'primary_dark': '#0A180A',
+        'accent': '#8B9F3A', 'background': '#F5F8E8', 'paper': '#FAFBEA',
+        'text': '#1A2510', 'muted': '#5A6B48', 'line': '#D5D9B8',
+        'success_text': '#31572C', 'danger_text': '#8C2A2A', 'warning_text': '#7A5A0A', 'info_text': '#3A5A40',
+        'sidebar': '#132A13', 'sidebar_hover': '#31572C', 'sidebar_text': '#ECF3D8', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-13': {
+        'id': 'paleta-13', 'numero': '13', 'nome': 'Pêssego & Violeta',
+        'descricao': 'Violeta institucional com pêssego para uma identidade acolhedora e refinada.',
+        'primary': '#413C69', 'primary_light': '#6B6399', 'primary_dark': '#2E294E',
+        'accent': '#FFCBA4', 'background': '#FFF8F3', 'paper': '#FFFBF7',
+        'text': '#251F3D', 'muted': '#6A6380', 'line': '#E2D8D0',
+        'success_text': '#3E5C2A', 'danger_text': '#8C2A2A', 'warning_text': '#7A5A0A', 'info_text': '#5A4578',
+        'sidebar': '#413C69', 'sidebar_hover': '#6B6399', 'sidebar_text': '#F2EEF5', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-14': {
+        'id': 'paleta-14', 'numero': '14', 'nome': 'Terracota & Bronze',
+        'descricao': 'Terracota aquecida com bronze para uma identidade sólida e humana.',
+        'primary': '#5C2018', 'primary_light': '#9C4322', 'primary_dark': '#3D150F',
+        'accent': '#D4A574', 'background': '#FBF1E5', 'paper': '#FFFBF2',
+        'text': '#2A1810', 'muted': '#6E4B3C', 'line': '#DDD0B8',
+        'success_text': '#3E5C2A', 'danger_text': '#8C2A2A', 'warning_text': '#7A5A0A', 'info_text': '#5A3525',
+        'sidebar': '#5C2018', 'sidebar_hover': '#9C4322', 'sidebar_text': '#F8E8D4', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-15': {
+        'id': 'paleta-15', 'numero': '15', 'nome': 'Sépia & Marfim',
+        'descricao': 'Sépia monocromática inspirada em papel histórico e registros tradicionais.',
+        'primary': '#704214', 'primary_light': '#A67C52', 'primary_dark': '#4A2C0E',
+        'accent': '#C9A57B', 'background': '#EDE0D4', 'paper': '#FAF4EB',
+        'text': '#332415', 'muted': '#6B5740', 'line': '#C4B59A',
+        'success_text': '#4A5C2A', 'danger_text': '#8C2A2A', 'warning_text': '#7A5A0A', 'info_text': '#6B5A3A',
+        'sidebar': '#704214', 'sidebar_hover': '#A67C52', 'sidebar_text': '#F5EAD8', 'sidebar_active_text': '#FFFFFF',
+    },
 }
 
 
 def listar_paletas_institucionais() -> list[dict]:
-    """Retorna cópias seguras do catálogo dos 10 temas institucionais."""
+    """Retorna cópias seguras do catálogo dos 15 temas institucionais."""
     return [deepcopy(paleta) for paleta in PALETAS_INSTITUCIONAIS.values()]
 
 

@@ -137,31 +137,6 @@ class ThemeManager {
     
     saveTheme(theme) {
         localStorage.setItem(this.storageKey, theme);
-        
-        // Salvar também no servidor (se usuário estiver logado)
-        this.saveThemeToServer(theme);
-    }
-    
-    async saveThemeToServer(theme) {
-        try {
-            // Verificar se há rota de preferências disponível
-            const response = await fetch('/notificacoes/api/configuracoes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    tema: theme
-                })
-            });
-            
-            if (!response.ok) {
-                console.log('Preferência de tema não sincronizada com servidor');
-            }
-        } catch (error) {
-            // Ignorar erros de sincronização com servidor
-            console.log('Tema salvo apenas localmente');
-        }
     }
     
     updateIcon() {

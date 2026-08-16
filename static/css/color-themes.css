@@ -1,24 +1,12 @@
-/* ============================================================
-   COLOR-THEMES.CSS — Registro Fácil v3.22
-   10 temas institucionais · 10 famílias · contraste WCAG AA+
 
-   Famílias:
-   01 Olivar & Cobre      (oliva)    — tradição mediterrânea
-   02 Couro & Ouro Velho  (marrom)   — livro registral
-   03 Meia-Noite & Ouro   (azul)     — premium moderno
-   04 Índigo & Terracota  (índigo)   — serventia humanizada
-   05 Ameixa & Malva      (malva)    — minimalismo quente
-   06 Aço & Névoa         (azul-aço) — sóbrio corporativo
-   07 Vinho & Champanhe   (vinho)    — lacre & nobreza
-   08 Bosque & Sálvia     (verde)    — documento oficial
-   09 Petróleo & Âmbar    (teal)     — caneta & carimbo
-   10 Ônix & Dourado      (preto)    — luxo institucional
+/* ============================================================
+   COLOR-THEMES.CSS — Registro Fácil v3.24
+   15 temas institucionais · 15 famílias · dark mode harmonizado
    ============================================================ */
 
 
 /* ─────────────────────────────────────────────────────────────
-   FALLBACK :root — tema padrão antes da aplicação do atributo.
-   Usa "Olivar & Cobre" como identidade institucional base.
+   FALLBACK :root
    ───────────────────────────────────────────────────────────── */
 :root {
     --color-primary: #283618;
@@ -56,8 +44,7 @@
 
 
 /* ─────────────────────────────────────────────────────────────
-   BLOCO COMPARTILHADO — tokens semânticos e derivados.
-   Aplicado a qualquer tema cujo data-cor comece com "paleta-".
+   BLOCO SEMÂNTICO COMPARTILHADO
    ───────────────────────────────────────────────────────────── */
 [data-cor^="paleta-"] {
     --text-color-light: var(--sidebar-text);
@@ -75,7 +62,6 @@
     --rf-theme-info-bg: var(--info-bg);
     --rf-theme-info-text: var(--info-text);
 
-    /* Contrato semântico */
     --rf-text-primary: var(--text-color-primary);
     --rf-text-secondary: var(--text-color-secondary);
     --rf-text-muted: var(--text-color-secondary);
@@ -154,8 +140,7 @@
 
 
 /* ============================================================
-   01 · Olivar & Cobre (Olive Garden Feast)
-   Família: oliva · sensação: tradição mediterrânea
+   01 · Olivar & Cobre
    ============================================================ */
 [data-cor="paleta-01"] {
     --color-primary: #283618;
@@ -188,18 +173,13 @@
     --color-error: #8C2A2A;
     --color-warning: #7A5A0A;
     --color-info: #4A5A28;
-    --danger-bg: #FDECEC;
-    --danger-text: #8C2A2A;
-    --warning-bg: #FCF3DC;
-    --warning-text: #7A5A0A;
-    --info-bg: #EEF2E0;
-    --info-text: #4A5A28;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #EEF2E0; --info-text: #4A5A28;
 }
 
-
 /* ============================================================
-   02 · Couro & Ouro Velho (Autumn Harvest)
-   Família: marrom · sensação: livro registral encadernado
+   02 · Couro & Ouro Velho
    ============================================================ */
 [data-cor="paleta-02"] {
     --color-primary: #432818;
@@ -232,18 +212,13 @@
     --color-error: #8C2A2A;
     --color-warning: #7A5A0A;
     --color-info: #5A3525;
-    --danger-bg: #FDECEC;
-    --danger-text: #8C2A2A;
-    --warning-bg: #FCF3DC;
-    --warning-text: #7A5A0A;
-    --info-bg: #F2EAE0;
-    --info-text: #5A3525;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #F2EAE0; --info-text: #5A3525;
 }
 
-
 /* ============================================================
-   03 · Meia-Noite & Ouro (Golden Twilight)
-   Família: azul profundo · sensação: premium moderno
+   03 · Meia-Noite & Ouro
    ============================================================ */
 [data-cor="paleta-03"] {
     --color-primary: #001D3D;
@@ -276,18 +251,13 @@
     --color-error: #8C2A2A;
     --color-warning: #7A5A0A;
     --color-info: #26476B;
-    --danger-bg: #FDECEC;
-    --danger-text: #8C2A2A;
-    --warning-bg: #FCF3DC;
-    --warning-text: #7A5A0A;
-    --info-bg: #E7EEF5;
-    --info-text: #26476B;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #E7EEF5; --info-text: #26476B;
 }
 
-
 /* ============================================================
-   04 · Índigo & Terracota (Neutral Harmony Bliss)
-   Família: índigo quente · sensação: serventia humanizada
+   04 · Índigo & Terracota
    ============================================================ */
 [data-cor="paleta-04"] {
     --color-primary: #3D405B;
@@ -320,18 +290,13 @@
     --color-error: #8C2A2A;
     --color-warning: #7A5A0A;
     --color-info: #3A5A40;
-    --danger-bg: #FDECEC;
-    --danger-text: #8C2A2A;
-    --warning-bg: #FCF3DC;
-    --warning-text: #7A5A0A;
-    --info-bg: #E7EDE4;
-    --info-text: #3A5A40;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #E7EDE4; --info-text: #3A5A40;
 }
 
-
 /* ============================================================
-   05 · Ameixa & Malva (Soft Lavender)
-   Família: malva · sensação: minimalismo quente elegante
+   05 · Ameixa & Malva
    ============================================================ */
 [data-cor="paleta-05"] {
     --color-primary: #22223B;
@@ -364,18 +329,13 @@
     --color-error: #8C2A2A;
     --color-warning: #7A5A0A;
     --color-info: #5A3550;
-    --danger-bg: #FDECEC;
-    --danger-text: #8C2A2A;
-    --warning-bg: #FCF3DC;
-    --warning-text: #7A5A0A;
-    --info-bg: #F2E6EC;
-    --info-text: #5A3550;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #F2E6EC; --info-text: #5A3550;
 }
 
-
 /* ============================================================
-   06 · Aço & Névoa (Deep Sea)
-   Família: azul-aço · sensação: sóbrio corporativo
+   06 · Aço & Névoa
    ============================================================ */
 [data-cor="paleta-06"] {
     --color-primary: #1B263B;
@@ -408,18 +368,13 @@
     --color-error: #8C2A2A;
     --color-warning: #7A5A0A;
     --color-info: #26476B;
-    --danger-bg: #FDECEC;
-    --danger-text: #8C2A2A;
-    --warning-bg: #FCF3DC;
-    --warning-text: #7A5A0A;
-    --info-bg: #E7EEF5;
-    --info-text: #26476B;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #E7EEF5; --info-text: #26476B;
 }
 
-
 /* ============================================================
-   07 · Vinho & Champanhe (Bold Berry)
-   Família: vinho · sensação: lacre & nobreza
+   07 · Vinho & Champanhe
    ============================================================ */
 [data-cor="paleta-07"] {
     --color-primary: #450920;
@@ -452,18 +407,13 @@
     --color-error: #8C2A2A;
     --color-warning: #7A5A0A;
     --color-info: #5A3550;
-    --danger-bg: #FBE9E9;
-    --danger-text: #8C2A2A;
-    --warning-bg: #FCF3DC;
-    --warning-text: #7A5A0A;
-    --info-bg: #F2E6EC;
-    --info-text: #5A3550;
+    --danger-bg: #FBE9E9; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #F2E6EC; --info-text: #5A3550;
 }
 
-
 /* ============================================================
-   08 · Bosque & Sálvia (Earthy Forest Hues)
-   Família: verde · sensação: documento oficial, selo
+   08 · Bosque & Sálvia
    ============================================================ */
 [data-cor="paleta-08"] {
     --color-primary: #344E41;
@@ -496,18 +446,13 @@
     --color-error: #8C2A2A;
     --color-warning: #6E5A16;
     --color-info: #3A5A40;
-    --danger-bg: #FBE9E9;
-    --danger-text: #8C2A2A;
-    --warning-bg: #F3EEDD;
-    --warning-text: #6E5A16;
-    --info-bg: #E7EDE4;
-    --info-text: #3A5A40;
+    --danger-bg: #FBE9E9; --danger-text: #8C2A2A;
+    --warning-bg: #F3EEDD; --warning-text: #6E5A16;
+    --info-bg: #E7EDE4; --info-text: #3A5A40;
 }
 
-
 /* ============================================================
-   09 · Petróleo & Âmbar (Ocean Sunset)
-   Família: teal · sensação: caneta & carimbo
+   09 · Petróleo & Âmbar
    ============================================================ */
 [data-cor="paleta-09"] {
     --color-primary: #005F73;
@@ -540,18 +485,13 @@
     --color-error: #9A3E2F;
     --color-warning: #785B13;
     --color-info: #315B6B;
-    --danger-bg: #F9E9E4;
-    --danger-text: #9A3E2F;
-    --warning-bg: #FBF1D9;
-    --warning-text: #785B13;
-    --info-bg: #E3EEF0;
-    --info-text: #315B6B;
+    --danger-bg: #F9E9E4; --danger-text: #9A3E2F;
+    --warning-bg: #FBF1D9; --warning-text: #785B13;
+    --info-bg: #E3EEF0; --info-text: #315B6B;
 }
 
-
 /* ============================================================
-   10 · Ônix & Dourado (Black & Gold Elegance)
-   Família: preto · sensação: luxo institucional
+   10 · Ônix & Dourado
    ============================================================ */
 [data-cor="paleta-10"] {
     --color-primary: #101010;
@@ -584,38 +524,218 @@
     --color-error: #8C2525;
     --color-warning: #755A0A;
     --color-info: #33485C;
-    --danger-bg: #FBE8E8;
-    --danger-text: #8C2525;
-    --warning-bg: #FCF3DC;
-    --warning-text: #755A0A;
-    --info-bg: #E8EDF2;
-    --info-text: #33485C;
+    --danger-bg: #FBE8E8; --danger-text: #8C2525;
+    --warning-bg: #FCF3DC; --warning-text: #755A0A;
+    --info-bg: #E8EDF2; --info-text: #33485C;
+}
+
+/* ============================================================
+   11 · Ártico & Coral 🆕
+   ============================================================ */
+[data-cor="paleta-11"] {
+    --color-primary: #2D3142;
+    --color-primary-light: #4F5D75;
+    --color-primary-dark: #1F2330;
+    --color-primary-subtle: rgba(45, 49, 66, 0.12);
+    --color-primary-rgb: 45, 49, 66;
+    --color-gold-primary: #EF8354;
+    --color-gold-dark: #B8542F;
+
+    --background-color-body: #FAFBFC;
+    --background-color-card: #FFFFFF;
+    --background-color-header: #FFFFFF;
+    --background-color-hover: #EEF1F4;
+    --background-color-input-bg: #FFFFFF;
+
+    --sidebar: #2D3142;
+    --sidebar-hover: #4F5D75;
+    --sidebar-text: #F0F2F5;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #1A1D28;
+    --text-color-secondary: #626A7D;
+    --text-color-link: #B8542F;
+    --border-color-default: #D6D9E0;
+    --border-color-input: #BCC0C9;
+    --border-color-dark: #1F2330;
+
+    --color-success: #2E7D5E;
+    --color-error: #B03A3A;
+    --color-warning: #9A6A0A;
+    --color-info: #4F5D75;
+    --danger-bg: #FDEAE7; --danger-text: #B03A3A;
+    --warning-bg: #FFF3DC; --warning-text: #9A6A0A;
+    --info-bg: #E6EBF2; --info-text: #4F5D75;
+}
+
+/* ============================================================
+   12 · Musgo & Limão 🆕
+   ============================================================ */
+[data-cor="paleta-12"] {
+    --color-primary: #132A13;
+    --color-primary-light: #4F772D;
+    --color-primary-dark: #0A180A;
+    --color-primary-subtle: rgba(19, 42, 19, 0.12);
+    --color-primary-rgb: 19, 42, 19;
+    --color-gold-primary: #8B9F3A;
+    --color-gold-dark: #5E6C24;
+
+    --background-color-body: #F5F8E8;
+    --background-color-card: #FAFBEA;
+    --background-color-header: #FAFBEA;
+    --background-color-hover: #E8EFD2;
+    --background-color-input-bg: #FAFBEA;
+
+    --sidebar: #132A13;
+    --sidebar-hover: #31572C;
+    --sidebar-text: #ECF3D8;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #1A2510;
+    --text-color-secondary: #5A6B48;
+    --text-color-link: #5E6C24;
+    --border-color-default: #D5D9B8;
+    --border-color-input: #BBBF9C;
+    --border-color-dark: #0A180A;
+
+    --color-success: #31572C;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #3A5A40;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #E7EDE4; --info-text: #3A5A40;
+}
+
+/* ============================================================
+   13 · Pêssego & Violeta 🆕
+   ============================================================ */
+[data-cor="paleta-13"] {
+    --color-primary: #413C69;
+    --color-primary-light: #6B6399;
+    --color-primary-dark: #2E294E;
+    --color-primary-subtle: rgba(65, 60, 105, 0.12);
+    --color-primary-rgb: 65, 60, 105;
+    --color-gold-primary: #FFCBA4;
+    --color-gold-dark: #B87A44;
+
+    --background-color-body: #FFF8F3;
+    --background-color-card: #FFFBF7;
+    --background-color-header: #FFFBF7;
+    --background-color-hover: #FCEADE;
+    --background-color-input-bg: #FFFBF7;
+
+    --sidebar: #413C69;
+    --sidebar-hover: #6B6399;
+    --sidebar-text: #F2EEF5;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #251F3D;
+    --text-color-secondary: #6A6380;
+    --text-color-link: #B87A44;
+    --border-color-default: #E2D8D0;
+    --border-color-input: #CABFB5;
+    --border-color-dark: #2E294E;
+
+    --color-success: #3E5C2A;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #5A4578;
+    --danger-bg: #FDE9E9; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #ECE7F2; --info-text: #5A4578;
+}
+
+/* ============================================================
+   14 · Terracota & Bronze 🆕
+   ============================================================ */
+[data-cor="paleta-14"] {
+    --color-primary: #5C2018;
+    --color-primary-light: #9C4322;
+    --color-primary-dark: #3D150F;
+    --color-primary-subtle: rgba(92, 32, 24, 0.12);
+    --color-primary-rgb: 92, 32, 24;
+    --color-gold-primary: #D4A574;
+    --color-gold-dark: #8B6B3C;
+
+    --background-color-body: #FBF1E5;
+    --background-color-card: #FFFBF2;
+    --background-color-header: #FFFBF2;
+    --background-color-hover: #F0E1CA;
+    --background-color-input-bg: #FFFBF2;
+
+    --sidebar: #5C2018;
+    --sidebar-hover: #9C4322;
+    --sidebar-text: #F8E8D4;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #2A1810;
+    --text-color-secondary: #6E4B3C;
+    --text-color-link: #8B6B3C;
+    --border-color-default: #DDD0B8;
+    --border-color-input: #C2B59A;
+    --border-color-dark: #3D150F;
+
+    --color-success: #3E5C2A;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #5A3525;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #F2EAE0; --info-text: #5A3525;
+}
+
+/* ============================================================
+   15 · Sépia & Marfim 🆕
+   ============================================================ */
+[data-cor="paleta-15"] {
+    --color-primary: #704214;
+    --color-primary-light: #A67C52;
+    --color-primary-dark: #4A2C0E;
+    --color-primary-subtle: rgba(112, 66, 20, 0.12);
+    --color-primary-rgb: 112, 66, 20;
+    --color-gold-primary: #C9A57B;
+    --color-gold-dark: #7A5F3A;
+
+    --background-color-body: #EDE0D4;
+    --background-color-card: #FAF4EB;
+    --background-color-header: #FAF4EB;
+    --background-color-hover: #DDD0B8;
+    --background-color-input-bg: #FAF4EB;
+
+    --sidebar: #704214;
+    --sidebar-hover: #A67C52;
+    --sidebar-text: #F5EAD8;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #332415;
+    --text-color-secondary: #6B5740;
+    --text-color-link: #7A5F3A;
+    --border-color-default: #C4B59A;
+    --border-color-input: #A89878;
+    --border-color-dark: #4A2C0E;
+
+    --color-success: #4A5C2A;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #6B5A3A;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC; --warning-text: #7A5A0A;
+    --info-bg: #F2E8D8; --info-text: #6B5A3A;
 }
 
 
-/* ─────────────────────────────────────────────────────────────
-   DARK MODE — único bloco para as 10 paletas.
-   Preserva primary/acento de cada tema, troca superfícies e textos.
-   ───────────────────────────────────────────────────────────── */
+/* ============================================================
+   DARK MODE — BASE COMPARTILHADA
+   ============================================================ */
 html[data-theme="dark"] [data-cor^="paleta-"] {
-    --background-color-body: #11181C;
-    --background-color-card: #1A2429;
-    --background-color-header: #1A2429;
-    --background-color-hover: #26343A;
-    --background-color-input-bg: #1A2429;
-
     --text-color-primary: #F1F5F4;
     --text-color-secondary: #B6C2C0;
     --text-color-link: var(--color-primary-light);
 
-    --border-color-default: #405158;
-    --border-color-input: #63747A;
-    --border-color-dark: #0A1013;
-
-    --sidebar: color-mix(in srgb, var(--color-primary) 72%, #000000);
-    --sidebar-hover: color-mix(in srgb, var(--color-primary-light) 62%, #000000);
-    --sidebar-text: #F6FAF9;
-    --sidebar-active-text: #FFFFFF;
+    --border-color-default: color-mix(in srgb, var(--color-primary) 30%, #2A3439);
+    --border-color-input: color-mix(in srgb, var(--color-primary) 40%, #3A4A52);
+    --border-color-dark: color-mix(in srgb, var(--color-primary-dark) 80%, #000000);
 
     --danger-bg: color-mix(in srgb, var(--color-error) 20%, #1A2429);
     --danger-text: #FFB4AA;
@@ -623,6 +743,206 @@ html[data-theme="dark"] [data-cor^="paleta-"] {
     --warning-text: #F4D38A;
     --info-bg: color-mix(in srgb, var(--color-info) 20%, #1A2429);
     --info-text: #A9D0E3;
+    --success-bg: color-mix(in srgb, var(--color-success) 15%, #1A2429);
+    --success-text: #A8E6CF;
+
+    --rf-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --rf-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ============================================================
+   DARK MODE — SUPERFÍCIES POR PALETA (identidade preservada)
+   ============================================================ */
+
+html[data-theme="dark"][data-cor="paleta-01"] {
+    --background-color-body: #1A2410;
+    --background-color-card: #242F1A;
+    --background-color-header: #242F1A;
+    --background-color-hover: #303C22;
+    --background-color-input-bg: #242F1A;
+    --sidebar: #1A2410;
+    --sidebar-hover: #3A4F25;
+    --sidebar-text: #F6F0D8;
+}
+
+html[data-theme="dark"][data-cor="paleta-02"] {
+    --background-color-body: #2B1A0F;
+    --background-color-card: #38241A;
+    --background-color-header: #38241A;
+    --background-color-hover: #442F22;
+    --background-color-input-bg: #38241A;
+    --sidebar: #2B1A0F;
+    --sidebar-hover: #6B3E24;
+    --sidebar-text: #F4E8D0;
+}
+
+html[data-theme="dark"][data-cor="paleta-03"] {
+    --background-color-body: #000814;
+    --background-color-card: #0A1A2E;
+    --background-color-header: #0A1A2E;
+    --background-color-hover: #142540;
+    --background-color-input-bg: #0A1A2E;
+    --sidebar: #000814;
+    --sidebar-hover: #003566;
+    --sidebar-text: #E8EDF2;
+}
+
+html[data-theme="dark"][data-cor="paleta-04"] {
+    --background-color-body: #1A1B2E;
+    --background-color-card: #24253A;
+    --background-color-header: #24253A;
+    --background-color-hover: #2F3148;
+    --background-color-input-bg: #24253A;
+    --sidebar: #1A1B2E;
+    --sidebar-hover: #585C7A;
+    --sidebar-text: #EDEAF2;
+}
+
+html[data-theme="dark"][data-cor="paleta-05"] {
+    --background-color-body: #15152A;
+    --background-color-card: #1E1E36;
+    --background-color-header: #1E1E36;
+    --background-color-hover: #282842;
+    --background-color-input-bg: #1E1E36;
+    --sidebar: #15152A;
+    --sidebar-hover: #4A4E69;
+    --sidebar-text: #ECE7E5;
+}
+
+html[data-theme="dark"][data-cor="paleta-06"] {
+    --background-color-body: #0D1B2A;
+    --background-color-card: #17263A;
+    --background-color-header: #17263A;
+    --background-color-hover: #22324A;
+    --background-color-input-bg: #17263A;
+    --sidebar: #0D1B2A;
+    --sidebar-hover: #415A77;
+    --sidebar-text: #E0E3E8;
+}
+
+html[data-theme="dark"][data-cor="paleta-07"] {
+    --background-color-body: #2D0615;
+    --background-color-card: #3C0E20;
+    --background-color-header: #3C0E20;
+    --background-color-hover: #4B152B;
+    --background-color-input-bg: #3C0E20;
+    --sidebar: #2D0615;
+    --sidebar-hover: #6A1130;
+    --sidebar-text: #F9E9EF;
+}
+
+html[data-theme="dark"][data-cor="paleta-08"] {
+    --background-color-body: #1A2822;
+    --background-color-card: #24342D;
+    --background-color-header: #24342D;
+    --background-color-hover: #2F4038;
+    --background-color-input-bg: #24342D;
+    --sidebar: #1A2822;
+    --sidebar-hover: #588157;
+    --sidebar-text: #F0F2EA;
+}
+
+html[data-theme="dark"][data-cor="paleta-09"] {
+    --background-color-body: #001219;
+    --background-color-card: #0A2028;
+    --background-color-header: #0A2028;
+    --background-color-hover: #142E38;
+    --background-color-input-bg: #0A2028;
+    --sidebar: #001219;
+    --sidebar-hover: #0A9396;
+    --sidebar-text: #E8F1F0;
+}
+
+html[data-theme="dark"][data-cor="paleta-10"] {
+    --background-color-body: #000000;
+    --background-color-card: #0A0A0A;
+    --background-color-header: #0A0A0A;
+    --background-color-hover: #1A1A1A;
+    --background-color-input-bg: #0A0A0A;
+    --sidebar: #000000;
+    --sidebar-hover: #1A1A1A;
+    --sidebar-text: #F5F5F5;
+}
+
+html[data-theme="dark"][data-cor="paleta-11"] {
+    --background-color-body: #1A1E2A;
+    --background-color-card: #232836;
+    --background-color-header: #232836;
+    --background-color-hover: #2E3442;
+    --background-color-input-bg: #232836;
+    --sidebar: #1A1E2A;
+    --sidebar-hover: #4F5D75;
+    --sidebar-text: #F0F2F5;
+}
+
+html[data-theme="dark"][data-cor="paleta-12"] {
+    --background-color-body: #0A180A;
+    --background-color-card: #142414;
+    --background-color-header: #142414;
+    --background-color-hover: #1E341E;
+    --background-color-input-bg: #142414;
+    --sidebar: #0A180A;
+    --sidebar-hover: #31572C;
+    --sidebar-text: #ECF3D8;
+}
+
+html[data-theme="dark"][data-cor="paleta-13"] {
+    --background-color-body: #1E1B2E;
+    --background-color-card: #282438;
+    --background-color-header: #282438;
+    --background-color-hover: #322F44;
+    --background-color-input-bg: #282438;
+    --sidebar: #1E1B2E;
+    --sidebar-hover: #6B6399;
+    --sidebar-text: #F2EEF5;
+}
+
+html[data-theme="dark"][data-cor="paleta-14"] {
+    --background-color-body: #2A1510;
+    --background-color-card: #38201A;
+    --background-color-header: #38201A;
+    --background-color-hover: #462A22;
+    --background-color-input-bg: #38201A;
+    --sidebar: #2A1510;
+    --sidebar-hover: #9C4322;
+    --sidebar-text: #F8E8D4;
+}
+
+html[data-theme="dark"][data-cor="paleta-15"] {
+    --background-color-body: #2A1F14;
+    --background-color-card: #382B1E;
+    --background-color-header: #382B1E;
+    --background-color-hover: #463728;
+    --background-color-input-bg: #382B1E;
+    --sidebar: #2A1F14;
+    --sidebar-hover: #A67C52;
+    --sidebar-text: #F5EAD8;
+}
+
+
+/* ============================================================
+   AUTO-DETECT DO SISTEMA
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) [data-cor^="paleta-"] {
+        --text-color-primary: #F1F5F4;
+        --text-color-secondary: #B6C2C0;
+        --text-color-link: var(--color-primary-light);
+
+        --background-color-body: color-mix(in srgb, var(--color-primary-dark) 85%, #0A0A0A);
+        --background-color-card: color-mix(in srgb, var(--color-primary-dark) 75%, #141414);
+        --background-color-header: color-mix(in srgb, var(--color-primary-dark) 75%, #141414);
+        --background-color-hover: color-mix(in srgb, var(--color-primary) 30%, #1A1A1A);
+        --background-color-input-bg: color-mix(in srgb, var(--color-primary-dark) 75%, #141414);
+
+        --border-color-default: color-mix(in srgb, var(--color-primary) 30%, #2A3439);
+        --border-color-input: color-mix(in srgb, var(--color-primary) 40%, #3A4A52);
+
+        --sidebar: color-mix(in srgb, var(--color-primary-dark) 85%, #000000);
+        --sidebar-hover: color-mix(in srgb, var(--color-primary) 60%, #000000);
+        --sidebar-text: #F0F0F0;
+    }
 }
 
 

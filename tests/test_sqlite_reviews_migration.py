@@ -6,7 +6,7 @@ from data import database, migrations
 def test_reviews_migration_is_skipped_when_optional_table_is_absent(temp_database):
     with sqlite3.connect(temp_database) as connection:
         version = connection.execute("PRAGMA user_version").fetchone()[0]
-    assert version == 10
+    assert version == 11
 
 
 def test_reviews_migration_adds_optional_columns_idempotently(temp_database):
@@ -24,7 +24,7 @@ def test_reviews_migration_adds_optional_columns_idempotently(temp_database):
 
     assert {"service_id", "service_title", "service_experience"}.issubset(columns)
     assert "reviews_service_id_idx" in indexes
-    assert version == 10
+    assert version == 11
 
     migrations.executar_migracoes_dados()
 

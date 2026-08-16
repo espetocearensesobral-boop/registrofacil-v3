@@ -18,7 +18,7 @@ required = {
     '--rf-sidebar-active-text', '--rf-sidebar-border', '--rf-control-height', '--rf-sidebar-width',
 }
 
-for number in range(1, 11):
+for number in range(1, 16):
     theme = f'paleta-{number:02d}'
     match = re.search(rf'^\[data-cor="{theme}"\]\s*\{{(?P<body>.*?)\n\}}', css, re.S | re.M)
     assert match, f'{theme}: bloco não encontrado'
@@ -31,4 +31,4 @@ for line in css.splitlines():
     for name, value in declarations:
         assert f'var({name}' not in value, f'alias circular: {name}: {value}'
 
-print('semantic-token-validation: ok; themes=10; required_tokens=', len(required))
+print('semantic-token-validation: ok; themes=15; required_tokens=', len(required))
