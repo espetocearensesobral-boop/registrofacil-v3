@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600;700&display=swap');
 
 /* ============================================================
-   VISUAL SYSTEM - RegistroFácil 3.18
+   VISUAL SYSTEM - RegistroFácil 3.24.7
    Camada final de normalização visual.
    Mantém as cores primárias dinâmicas de color-themes.css.
    ============================================================ */
@@ -706,7 +706,7 @@ button:disabled,
 .prazo-alerta,
 tr[data-vencido="true"] td:first-child { border-left: 4px solid var(--rf-accent) !important; }
 
-/* Feedback da Paleta 03. */
+/* Feedback semântico compartilhado pelos 20 temas. */
 .alert-danger,
 .badge-error { background: var(--rf-danger-surface) !important; color: var(--rf-danger-text) !important; border-color: color-mix(in srgb, var(--rf-danger) 30%, var(--rf-surface-card)) !important; }
 .alert-warning,
@@ -725,11 +725,11 @@ tr[data-vencido="true"] td:first-child { border-left: 4px solid var(--rf-accent)
 }
 
 
-/* Compatibilidade absorvida da antiga palette03-final.css — manter apenas tokens semânticos. */
+/* Compatibilidade absorvida de camadas visuais antigas — manter apenas tokens semânticos. */
 /*
  * Camada final de identidade visual.
  * Deve ser carregada depois dos estilos locais dos templates.
- * As variáveis semânticas são fornecidas pelos seis temas do usuário.
+ * As variáveis semânticas são fornecidas pelos vinte temas institucionais.
  */
 /* Base institucional */
 body,
@@ -969,19 +969,9 @@ html body .btn-excluir-titular,
 html body .btn-excluir-apresentante,
 html body .btn-excluir-representante { background: var(--color-gold-primary) !important; border-color: var(--color-gold-primary) !important; color: #FFFFFF !important; }
 
-/* Variáveis legadas usadas por estilos inline passam a apontar para a Paleta 03. */
+/* Compatibilidade para estilos inline antigos; os tokens semânticos do tema permanecem intactos. */
 body {
   --color-black-premium: var(--color-primary);
-  --color-gold-primary: var(--color-gold-primary);
-  --color-gold-dark: var(--color-gold-dark);
-  --color-info: var(--color-primary-light);
-  --color-warning: var(--color-gold-primary);
-  --color-error: var(--color-gold-primary);
-  --text-color-primary: var(--text-color-primary);
-  --text-color-secondary: var(--text-color-secondary);
-  --background-color-body: var(--background-color-body);
-  --background-color-card: var(--background-color-card);
-  --border-color-default: var(--border-color-default);
 }
 
 /* Cards de estatística e cabeçalhos que ainda recebem classes semânticas antigas. */
@@ -1957,7 +1947,7 @@ html body .toast {
 /* ============================================================
    LAYOUT STANDARD — régua institucional única
    Corrige o desalinhamento lateral e centraliza o conteúdo
-   sem alterar os tokens de cor dos seis temas.
+   sem alterar os tokens de cor dos vinte temas.
    ============================================================ */
 :root {
   --rf-gutter-x: clamp(1.25rem, 3vw, 2.5rem);

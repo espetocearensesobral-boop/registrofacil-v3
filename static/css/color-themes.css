@@ -1,7 +1,7 @@
 
 /* ============================================================
    COLOR-THEMES.CSS — Registro Fácil v3.24
-   15 temas institucionais · 15 famílias · dark mode harmonizado
+   20 temas institucionais · experiência clara de alto contraste
    ============================================================ */
 
 
@@ -40,6 +40,16 @@
     --sidebar-hover: #606C38;
     --sidebar-text: #FEFAE0;
     --sidebar-active-text: #FFFFFF;
+
+    /* Aliases de compatibilidade para folhas estruturais legadas. */
+    --font-xs: .75rem;
+    --font-sm: .875rem;
+    --font-base: 1rem;
+    --font-lg: 1.125rem;
+    --font-xl: 1.375rem;
+    --color-gray-light: var(--background-color-hover);
+    --color-gray-medium: var(--border-color-input);
+    --sidebar-header-height: 4.25rem;
 }
 
 
@@ -136,6 +146,16 @@
 
     --rf-control-height: 2.75rem;
     --rf-sidebar-width: 15rem;
+
+    /* Aliases mantidos somente para componentes antigos ainda ativos. */
+    --font-xs: var(--rf-font-xs);
+    --font-sm: var(--rf-font-sm);
+    --font-base: var(--rf-font-base);
+    --font-lg: var(--rf-font-lg);
+    --font-xl: var(--rf-font-xl);
+    --color-gray-light: var(--background-color-hover);
+    --color-gray-medium: var(--border-color-input);
+    --sidebar-header-height: 4.25rem;
 }
 
 
