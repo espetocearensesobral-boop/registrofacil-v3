@@ -615,3 +615,32 @@ body {
   }
   #main-content .nt-body { padding-block: 1.5rem !important; }
 }
+
+/* ------------------------------------------------------------
+   Dashboard: régua única compacta
+   Todos os intervalos externos do dashboard usam o mesmo valor.
+   ------------------------------------------------------------ */
+#page-content-wrapper > main:has(.dashboard-panel) {
+  --rf-dashboard-gap: .75rem;
+  padding-block-start: 1.25rem !important;
+  padding-block-end: 1.25rem !important;
+}
+#main-content:has(.dashboard-panel) > * + * {
+  margin-top: var(--rf-dashboard-gap) !important;
+}
+#main-content:has(.dashboard-panel) > .greeting-banner,
+#main-content:has(.dashboard-panel) > .kpi-grid,
+#main-content:has(.dashboard-panel) > .row { margin-bottom: 0 !important; }
+#main-content:has(.dashboard-panel) > .greeting-banner + .kpi-grid,
+#main-content:has(.dashboard-panel) > .kpi-grid + .row { margin-top: var(--rf-dashboard-gap) !important; }
+#main-content:has(.dashboard-panel) > .kpi-grid { gap: var(--rf-dashboard-gap); }
+#main-content:has(.dashboard-panel) > .row {
+  --bs-gutter-x: var(--rf-dashboard-gap);
+  --bs-gutter-y: var(--rf-dashboard-gap);
+}
+@media (max-width: 575.98px) {
+  #page-content-wrapper > main:has(.dashboard-panel) {
+    padding-block-start: 1rem !important;
+    padding-block-end: 1rem !important;
+  }
+}
