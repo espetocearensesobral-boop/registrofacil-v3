@@ -194,10 +194,6 @@
 
         <!-- STATUS -->
         <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status">
-            <div class="cfg-panel-header">
-                <div class="cfg-ph-icon"><i class="bi bi-palette-fill"></i></div>
-                <h5>Gerenciar Status</h5>
-            </div>
             <form method="post" novalidate id="form-add-status" action="{{ url_for('configuracoes.index') }}">
                 <input type="hidden" name="action" value="add_status">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -264,7 +260,7 @@
                                             <input type="hidden" name="action" value="toggle_status">
                                             <input type="hidden" name="id" value="{{s.id}}">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                            <button type="submit" class="cfg-ibtn {% if s.ativo %}{% else %}act-on{% endif %}" title="{% if s.ativo %}Desativar{% else %}Ativar{% endif %}">
+                                            <button type="submit" class="cfg-ibtn {% if s.ativo %}cfg-destructive-toggle{% else %}act-on{% endif %}" title="{% if s.ativo %}Desativar{% else %}Ativar{% endif %}">
                                                 <i class="bi bi-power"></i>
                                             </button>
                                         </form>
@@ -283,10 +279,6 @@
 
         <!-- SERVIÇOS -->
         <div class="cfg-panel{% if active_tab == 'services' %} active{% endif %}" id="panel-services">
-            <div class="cfg-panel-header">
-                <div class="cfg-ph-icon"><i class="bi bi-list-check"></i></div>
-                <h5>Tipos de Serviço</h5>
-            </div>
             <form method="post" novalidate id="form-add-service" action="{{ url_for('configuracoes.index') }}">
                 <input type="hidden" name="action" value="add_service">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -336,7 +328,7 @@
                                             <input type="hidden" name="action" value="toggle_service">
                                             <input type="hidden" name="id" value="{{sv.id}}">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                            <button type="submit" class="cfg-ibtn {% if sv.ativo %}{% else %}act-on{% endif %}" title="{% if sv.ativo %}Desativar{% else %}Ativar{% endif %}">
+                                            <button type="submit" class="cfg-ibtn {% if sv.ativo %}cfg-destructive-toggle{% else %}act-on{% endif %}" title="{% if sv.ativo %}Desativar{% else %}Ativar{% endif %}">
                                                 <i class="bi bi-power"></i>
                                             </button>
                                         </form>
@@ -357,10 +349,6 @@
 
         <!-- E-MAIL -->
         <div class="cfg-panel{% if active_tab == 'email' %} active{% endif %}" id="panel-email">
-            <div class="cfg-panel-header">
-                <div class="cfg-ph-icon"><i class="bi bi-envelope"></i></div>
-                <h5>E-mail / SMTP</h5>
-            </div>
             <div class="cfg-card">
                 <div class="cfg-card-header">Configurações SMTP</div>
                 <div class="cfg-card-body">
@@ -414,10 +402,6 @@
 
         <!-- BACKUP -->
         <div class="cfg-panel{% if active_tab == 'backup' %} active{% endif %}" id="panel-backup">
-            <div class="cfg-panel-header">
-                <div class="cfg-ph-icon"><i class="bi bi-cloud-arrow-up"></i></div>
-                <h5>Backup do Sistema</h5>
-            </div>
             <form id="form-all-backup-settings" method="post" novalidate action="{{ url_for('configuracoes.index') }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <input type="hidden" name="id" value="{{ backup_config.id if backup_config else '' }}">
@@ -518,10 +502,6 @@
 
         {# ── ABA: ESTABELECIMENTO (conteúdo de empresa.html integrado) ── #}
         <div class="cfg-panel{% if active_tab == 'estabelecimento' %} active{% endif %}" id="panel-estabelecimento">
-            <div class="cfg-panel-header">
-                <div class="cfg-ph-icon"><i class="bi bi-building-fill"></i></div>
-                <h5>Dados do Estabelecimento</h5>
-            </div>
 
             <form id="form-empresa-cfg" method="post" action="{{ url_for('empresa.index') }}" enctype="multipart/form-data" novalidate>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">

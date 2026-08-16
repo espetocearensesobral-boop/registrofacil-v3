@@ -1669,3 +1669,36 @@ html body .nt-btn-cancel:focus-visible {
   border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
   color: var(--rf-text-on-primary, #FFFFFF) !important;
 }
+
+
+/* Ajuste fino de Configurações: desativar é destrutivo; o filtro preserva sua superfície. */
+html body .cfg-ibtn.cfg-destructive-toggle {
+  background-color: var(--rf-action-tertiary, #B08D3E) !important;
+  background-image: none !important;
+  border-color: var(--rf-action-tertiary, #B08D3E) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+
+html body .cfg-ibtn.cfg-destructive-toggle:hover,
+html body .cfg-ibtn.cfg-destructive-toggle:focus-visible {
+  background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+
+html body .filter-bar-toggle:hover,
+html body .filter-bar-toggle:focus-visible,
+html body .filter-bar.active-filters .filter-bar-toggle {
+  background-color: var(--rf-surface-card, #FFFFFF) !important;
+  background-image: none !important;
+  color: var(--rf-text-primary, #1D1B18) !important;
+}
+
+html body .filter-bar-toggle:hover strong,
+html body .filter-bar-toggle:hover i,
+html body .filter-bar-toggle:focus-visible strong,
+html body .filter-bar-toggle:focus-visible i,
+html body .filter-bar.active-filters .filter-bar-toggle strong,
+html body .filter-bar.active-filters .filter-bar-toggle i {
+  color: var(--rf-text-primary, #1D1B18) !important;
+}
