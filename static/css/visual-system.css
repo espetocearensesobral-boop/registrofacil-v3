@@ -1287,3 +1287,99 @@ html body .dashboard-action-link.nav-btn-secondary:focus-visible {
   color: var(--color-primary-contrast, #FFFFFF) !important;
   text-decoration: none;
 }
+
+
+/* ============================================================
+   CONTRATO FINAL DE PREENCHIMENTO TEMÁTICO — Onda button-fill-1
+   Nenhum botão de ação deve depender do hover para receber cor.
+   ============================================================ */
+body .nav-btn-secondary,
+html body .navbar .nav-btn-secondary,
+body .btn-secondary,
+body .btn-outline-secondary,
+body .btn-filter-clear,
+body .btn-limpar,
+body .nt-btn-cancel {
+  background: var(--color-primary-light) !important;
+  border-color: var(--color-primary-light) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .nav-btn-secondary:hover,
+html body .navbar .nav-btn-secondary:hover,
+body .btn-secondary:hover,
+body .btn-outline-secondary:hover,
+body .btn-filter-clear:hover,
+body .btn-limpar:hover,
+body .nt-btn-cancel:hover,
+body .nav-btn-secondary:focus-visible,
+body .btn-secondary:focus-visible,
+body .btn-outline-secondary:focus-visible {
+  background: var(--color-primary-dark) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+/* Ações compactas também recebem preenchimento no estado repouso. */
+body .tbl-btn,
+body .rf-tab-btn,
+body .metricas-tab-btn,
+body .cat-toggle-btn,
+body .cfg-ibtn {
+  background: var(--color-primary-light) !important;
+  border-color: var(--color-primary-light) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .tbl-btn:hover,
+body .rf-tab-btn:hover,
+body .metricas-tab-btn:hover,
+body .cat-toggle-btn:hover,
+body .cfg-ibtn:hover,
+body .rf-tab-btn.active,
+body .metricas-tab-btn.active {
+  background: var(--color-primary-dark) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .tbl-btn.del,
+body .tbl-btn.delete {
+  background: var(--color-gold-primary) !important;
+  border-color: var(--color-gold-primary) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+/* Variantes outline são ações preenchidas para manter unidade visual global. */
+body .btn-outline-primary,
+body .btn-link {
+  background: var(--color-primary-light) !important;
+  border-color: var(--color-primary-light) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .btn-outline-primary:hover,
+body .btn-link:hover {
+  background: var(--color-primary-dark) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .btn-outline-danger {
+  background: var(--color-gold-primary) !important;
+  border-color: var(--color-gold-primary) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .btn-outline-danger:hover {
+  background: var(--color-gold-dark) !important;
+  border-color: var(--color-gold-dark) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+/* Ações do dashboard seguem o mesmo preenchimento desde o primeiro frame. */
+html body .dashboard-action-link.nav-btn-secondary {
+  background: var(--color-primary-light) !important;
+  border-color: var(--color-primary-light) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+html body .dashboard-action-link.nav-btn-secondary:hover,
+html body .dashboard-action-link.nav-btn-secondary:focus-visible {
+  background: var(--color-primary-dark) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
