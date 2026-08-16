@@ -2161,3 +2161,133 @@ html body .toast {
 #page-content-wrapper .row > [class*="col-"] {
   min-width: 0;
 }
+
+
+/* ============================================================
+   CORREÇÃO DE GUTTERS E JANELAS — mapeamento global
+   O Bootstrap aplica margens negativas em .row. Como o conteúdo
+   já possui gutter próprio, isso colava cards na sidebar.
+   ============================================================ */
+#main-content {
+  overflow-x: clip;
+}
+
+#main-content > .row,
+#main-content > .row.g-2,
+#main-content > .row.g-3,
+#main-content > .row.g-4,
+#main-content > .row.g-5 {
+  width: 100%;
+  max-width: 100%;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  --bs-gutter-x: var(--rf-layout-gap);
+  --bs-gutter-y: var(--rf-layout-gap);
+}
+
+#main-content > .row > [class*="col-"],
+#main-content .row > [class*="col-"] {
+  min-width: 0;
+}
+
+#main-content > .row > [class*="col-"] > .rf-card,
+#main-content > .row > [class*="col-"] > .card,
+#main-content > .row > [class*="col-"] > .form-card,
+#main-content > .row > [class*="col-"] > .filter-bar,
+#main-content > .row > [class*="col-"] > .filter-section {
+  width: 100%;
+  max-width: 100%;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+#main-content > .rf-card,
+#main-content > .card,
+#main-content > .form-card,
+#main-content > .filter-bar,
+#main-content > .filter-section,
+#main-content > .nt-wrap {
+  width: 100%;
+  max-width: 100%;
+}
+
+#main-content > .rf-card + .rf-card,
+#main-content > .card + .card,
+#main-content > .form-card + .form-card,
+#main-content > .filter-bar + .rf-card,
+#main-content > .filter-bar + .card,
+#main-content > .filter-section + .rf-card,
+#main-content > .filter-section + .card {
+  margin-top: var(--rf-space-4) !important;
+}
+
+#main-content .col-lg-8 > .rf-card + .rf-card,
+#main-content .col-lg-8 > .card + .card,
+#main-content .col-lg-4 > .rf-card + .rf-card,
+#main-content .col-lg-4 > .card + .card {
+  margin-top: var(--rf-space-4) !important;
+}
+
+#main-content .filter-bar,
+#main-content .filter-section {
+  margin-bottom: var(--rf-space-4) !important;
+}
+
+#main-content .filter-bar + .card,
+#main-content .filter-bar + .rf-card,
+#main-content .filter-section + .card,
+#main-content .filter-section + .rf-card {
+  margin-top: 0 !important;
+}
+
+#main-content .filter-bar-body,
+#main-content .filter-section {
+  padding-inline: var(--rf-card-padding);
+}
+
+#main-content .filter-bar-body > form,
+#main-content .filter-section > form {
+  width: 100%;
+  margin-inline: 0;
+}
+
+/* Formulários estreitos deixam de criar um vácuo excessivo em monitores largos. */
+#main-content .nt-wrap {
+  max-width: min(100%, 900px);
+  margin-inline: auto;
+}
+
+#main-content .nt-card {
+  width: 100%;
+  border-radius: var(--rf-radius-lg);
+  box-shadow: var(--rf-shadow-sm);
+}
+
+/* Cards de perfil, configurações e tabelas usam a mesma separação vertical. */
+#main-content .profile-appearance-card,
+#main-content .profile-appearance-card + .rf-card,
+#main-content .cfg-card,
+#main-content .stats-card,
+#main-content .kpi-card {
+  margin-bottom: var(--rf-space-4);
+}
+
+#main-content .cfg-card:last-child,
+#main-content .rf-card:last-child,
+#main-content .card:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 991.98px) {
+  #main-content > .row {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #main-content > .row {
+    --bs-gutter-x: .75rem;
+    --bs-gutter-y: .75rem;
+  }
+}
