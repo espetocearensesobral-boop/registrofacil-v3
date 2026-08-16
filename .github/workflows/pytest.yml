@@ -53,5 +53,10 @@ jobs:
           python -m pip install -r /tmp/requirements-ci.txt
           python -m pip install python-magic pytest
 
+      - name: Verify generated theme CSS
+        run: |
+          python tools/gerar_themes_css.py
+          git diff --exit-code -- static/css/color-themes.css
+
       - name: Run test suite
         run: python -m pytest -q
