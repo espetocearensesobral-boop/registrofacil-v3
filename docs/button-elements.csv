@@ -1,0 +1,368 @@
+arquivo,linha,tag,texto,href,classes,style_inline,disabled
+templates/admin/editar_usuario.html,1,a,Cancelar,{{ url_for('admin_users.users_list') }},btn btn-warning,-,False
+templates/admin/editar_usuario.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/admin/editar_usuario.html,1,a,Usuários,{{ url_for('admin_users.users_list') }},nav-btn nav-btn-secondary,-,False
+templates/admin/editar_usuario.html,1,button,Cancelar,-,btn btn-link btn-sm p-0 text-danger,-,False
+templates/admin/editar_usuario.html,1,button,Remover Foto,-,btn btn-outline-danger btn-sm,-,False
+templates/admin/editar_usuario.html,1,button,Salvar Alterações,-,btn btn-success,-,False
+templates/admin/gerenciar_usuario.html,1,a,Cancelar,{{ url_for('admin_users.users_list') }},btn btn-outline-secondary,-,False
+templates/admin/gerenciar_usuario.html,1,a,Voltar,{{ url_for('admin_users.users_list') }},nav-btn nav-btn-secondary,-,False
+templates/admin/gerenciar_usuario.html,1,button,-,-,btn btn-outline-secondary,-,False
+templates/admin/gerenciar_usuario.html,1,button,Salvar Alterações,-,btn btn-primary,-,False
+templates/admin/perfil_admin.html,1,a,Cancelar,{{ url_for('admin_users.users_list') }},btn btn-outline-secondary,-,False
+templates/admin/perfil_admin.html,1,a,Voltar,{{ url_for('admin_users.users_list') }},nav-btn nav-btn-secondary,-,False
+templates/admin/perfil_admin.html,1,button,-,-,btn btn-outline-secondary,-,False
+templates/admin/perfil_admin.html,1,button,Salvar Alterações,-,btn btn-primary,-,False
+templates/admin/usuarios.html,1,a,-,"{{ url_for('permissoes.visualizar_permissoes', usuario_id=user_item.id) }}",tbl-btn view,-,False
+templates/admin/usuarios.html,1,a,-,"{{ url_for('perfil.index', user_id=user_item.id) }}",tbl-btn edit,-,False
+templates/admin/usuarios.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/admin/usuarios.html,1,a,Limpar,{{ url_for('admin_users.users_list') }},btn btn-limpar ms-2,-,False
+templates/admin/usuarios.html,1,a,Limpar Filtros,{{ url_for('admin_users.users_list') }},nav-btn nav-btn-secondary,-,False
+templates/admin/usuarios.html,1,a,Novo Usuário,{{ url_for('auth.novo_usuario') }},nav-btn nav-btn-primary,-,False
+templates/admin/usuarios.html,1,a,Perfis de Permissão,{{ url_for('permissoes.listar_perfis') }},nav-btn nav-btn-secondary,-,False
+templates/admin/usuarios.html,1,button,-,-,tbl-btn del,-,False
+templates/admin/usuarios.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/admin/usuarios.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/admin/usuarios.html,1,button,Confirmar Inativação,-,btn btn-danger,-,False
+templates/admin/usuarios.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/admin/usuarios.html,1,span,-,-,tbl-btn,opacity:.35;cursor:default;,False
+templates/admin/usuarios.html,1,span,-,-,tbl-btn,opacity:.25;cursor:default;,False
+templates/apresentantes/editar.html,1,a,Apresentantes,{{ url_for('apresentantes.index') }},nav-btn nav-btn-secondary,-,False
+templates/apresentantes/editar.html,1,a,Cancelar,"{{ url_for('apresentantes.visualizar', apresentante_id=apresentante.id) }}",nt-btn-cancel,-,False
+templates/apresentantes/editar.html,1,a,Histórico,"{{ url_for('apresentantes.visualizar', apresentante_id=apresentante.id) }}",nav-btn nav-btn-secondary,-,False
+templates/apresentantes/editar.html,1,button,Salvar Alterações,-,nt-btn-save,-,False
+templates/apresentantes/index.html,1,a,-,"{{ url_for('apresentantes.editar', apresentante_id=apresentante.id) }}",nav-btn nav-btn-primary,height:28px;padding:0 10px;font-size:12px;,False
+templates/apresentantes/index.html,1,a,Histórico,"{{ url_for('apresentantes.visualizar', apresentante_id=apresentante.id) }}",nav-btn nav-btn-info,height:28px;padding:0 10px;font-size:12px;,False
+templates/apresentantes/index.html,1,a,Limpar,{{ url_for('apresentantes.index') }},nav-btn nav-btn-danger flex-fill,justify-content:center;,False
+templates/apresentantes/index.html,1,a,Novo Apresentante,{{ url_for('apresentantes.novo') }},nav-btn nav-btn-primary,-,False
+templates/apresentantes/index.html,1,button,-,-,nav-btn nav-btn-danger btn-excluir-apresentante,height:28px;padding:0 10px;font-size:12px;,False
+templates/apresentantes/index.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/apresentantes/index.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/apresentantes/index.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/apresentantes/index.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/apresentantes/index.html,1,button,Filtrar,-,nav-btn nav-btn-success flex-fill,-,False
+templates/apresentantes/index.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/apresentantes/index.html,1,span,-,-,nav-btn nav-btn-primary,height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;,False
+templates/apresentantes/index.html,1,span,-,-,nav-btn nav-btn-danger,height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;,False
+templates/apresentantes/novo.html,1,a,Apresentantes,{{ url_for('apresentantes.index') }},nav-btn nav-btn-secondary,-,False
+templates/apresentantes/novo.html,1,a,Cancelar,{{ url_for('apresentantes.index') }},nt-btn-cancel,-,False
+templates/apresentantes/novo.html,1,button,Cadastrar Apresentante,-,nt-btn-save,-,False
+templates/apresentantes/visualizar.html,1,a,Editar,"{{ url_for('apresentantes.editar', apresentante_id=apresentante.id) }}",nav-btn nav-btn-primary,-,False
+templates/apresentantes/visualizar.html,1,a,Ver,"{{ url_for('processos.visualizar', processo_id=processo.id) }}",nav-btn nav-btn-secondary,height:28px;padding:0 10px;font-size:12px;,False
+templates/apresentantes/visualizar.html,1,a,Voltar,{{ url_for('apresentantes.index') }},nav-btn nav-btn-secondary,-,False
+templates/apresentantes/visualizar.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/apresentantes/visualizar.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/apresentantes/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/apresentantes/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/apresentantes/visualizar.html,1,span,Editar,-,nav-btn nav-btn-secondary,opacity:.45;cursor:not-allowed;pointer-events:none;,False
+templates/atividades.html,1,a,Consultar Processo,#,btn btn-success,display:none;,False
+templates/atividades.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/atividades.html,1,a,Limpar,{{ url_for('atividades.historico') }},btn-filter-clear,-,False
+templates/atividades.html,1,a,Limpar Filtros,{{ url_for('atividades.historico') }},nav-btn nav-btn-secondary,-,False
+templates/atividades.html,1,button,-,-,btn-close,-,False
+templates/atividades.html,1,button,Fechar,-,btn btn-danger,-,False
+templates/atividades.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/atividades.html,1,button,{{ acao_tipo }} {% if acao_desc %} : {{ acao_desc }} {% endif %},-,btn-acao-clicavel,-,False
+templates/backup.html,1,a,-,{{ backup.download_url }},nav-btn nav-btn-secondary rf-backup-action,-,False
+templates/backup.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/backup.html,1,button,-,-,nav-btn nav-btn-danger btn-delete-backup rf-backup-action,-,False
+templates/backup.html,1,button,-,-,nav-btn nav-btn-secondary rf-backup-action,-,False
+templates/backup.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/backup.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/backup.html,1,button,Excluir Permanentemente,-,nav-btn nav-btn-danger,-,False
+templates/backup.html,1,button,Gerar Backup Agora,-,nav-btn nav-btn-primary rf-backup-primary-action,-,False
+templates/backup.html,1,button,Reparar BD,-,nav-btn rf-backup-warning-action,-,False
+templates/backup.html,1,button,Testar Banco,-,nav-btn rf-backup-info-action,-,False
+templates/base.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/base.html,1,button,-,-,btn-close rf-search-close,-,False
+templates/base.html,1,button,-,-,btn-close,-,False
+templates/base.html,1,button,-,-,btn-close btn-close-white rf-about-close,-,False
+templates/base.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/base.html,1,button,Excluir Permanentemente,-,nav-btn nav-btn-danger,-,False
+templates/base.html,1,button,Fechar,-,btn btn-secondary,-,False
+templates/base.html,1,button,Fechar,-,btn btn-secondary,-,False
+templates/configuracoes.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/configuracoes.html,1,button,-,-,cfg-ibtn edit,-,False
+templates/configuracoes.html,1,button,-,-,cfg-ibtn {% if s.ativo %}{% else %}act-on{% endif %},-,False
+templates/configuracoes.html,1,button,-,-,cfg-ibtn edit,-,False
+templates/configuracoes.html,1,button,-,-,cfg-ibtn {% if sv.ativo %}{% else %}act-on{% endif %},-,False
+templates/configuracoes.html,1,button,-,-,btn-browse-dir cfg-browse-dir,-,False
+templates/configuracoes.html,1,button,-,-,btn-close,-,False
+templates/configuracoes.html,1,button,-,-,btn-close,-,False
+templates/configuracoes.html,1,button,-,-,btn-close,-,False
+templates/configuracoes.html,1,button,-,-,btn btn-outline-secondary,-,False
+templates/configuracoes.html,1,button,-,-,btn btn-outline-secondary,-,False
+templates/configuracoes.html,1,button,Adicionar,-,cfg-btn-add,-,False
+templates/configuracoes.html,1,button,Adicionar,-,cfg-btn-add,-,False
+templates/configuracoes.html,1,button,Cancelar,-,cfg-obtn,-,False
+templates/configuracoes.html,1,button,Cancelar,-,cfg-obtn,-,False
+templates/configuracoes.html,1,button,Cancelar,-,cfg-obtn,-,False
+templates/configuracoes.html,1,button,Remover Logo,-,nav-btn nav-btn-danger cfg-logo-action,-,False
+templates/configuracoes.html,1,button,Restaurar,-,nav-btn nav-btn-danger,-,False
+templates/configuracoes.html,1,button,Salvar,-,cfg-sbtn,-,False
+templates/configuracoes.html,1,button,Salvar,-,cfg-sbtn,-,False
+templates/configuracoes.html,1,button,Salvar,-,cfg-sbtn,-,False
+templates/configuracoes.html,1,button,Salvar Alterações,-,nav-btn nav-btn-success,-,False
+templates/configuracoes.html,1,button,Salvar Backup,-,cfg-sbtn green,-,False
+templates/configuracoes.html,1,button,Selecionar,-,cfg-sbtn,-,False
+templates/configuracoes.html,1,button,Testar,-,cfg-sbtn blue,-,False
+templates/configuracoes.html,1,button,Testar SFTP,-,cfg-sbtn blue,-,False
+templates/configuracoes.html,1,input,-,-,cfg-modal-input,-,False
+templates/configuracoes.html,1,input,-,-,cfg-modal-input,-,False
+templates/configuracoes.html,1,input,-,-,cfg-modal-input,-,False
+templates/configuracoes.html,1,input,-,-,cfg-modal-input,-,False
+templates/configuracoes.html,1,input,{{ UPLOAD_PROCESSOS_DIR }},-,cfg-managed-path,-,False
+templates/configuracoes.html,1,input,{{ backup_config.backup_day_of_month | default(1) }},-,cfg-time,-,False
+templates/configuracoes.html,1,input,{{ backup_config.backup_time | default('02:00') }},-,cfg-time,-,False
+templates/configuracoes.html,1,input,{{ backup_config.local_path | default(DEFAULT_BACKUP_PATH) }},-,cfg-path-input,-,False
+templates/configuracoes.html,1,input,{{ backup_config.sftp_port|default(22) }},-,cfg-port,-,False
+templates/configuracoes.html,1,span,-,-,cfg-status-dot,background:{{s.hex_color}};,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,*,-,cfg-required,-,False
+templates/configuracoes.html,1,span,Alterar,-,cfg-label-upper,-,False
+templates/configuracoes.html,1,span,{% if s.ativo %}Ativo{% else %}Inativo{% endif %},-,cfg-status-badge,background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};,False
+templates/configuracoes.html,1,span,{% if sv.ativo %}Ativo{% else %}Inativo{% endif %},-,cfg-status-badge,background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};,False
+templates/configuracoes.html,1,span,{{s.nome}},-,cfg-status-inline,-,False
+templates/configuracoes.html,1,span,—,-,cfg-muted,-,False
+templates/configuracoes.html,1,span,—,-,cfg-muted,-,False
+templates/dashboard.html,1,a,Métricas,{{ url_for('dashboard.metricas') }},nav-btn nav-btn-secondary,-,False
+templates/dashboard.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/dashboard.html,1,a,Pendentes,{{ url_for('processos.pendentes') }},nav-btn nav-btn-secondary dashboard-action-link,height:26px;padding:0 10px;font-size: .75rem;,False
+templates/dashboard.html,1,a,Ver todos,{{ url_for('processos.todos') }},nav-btn nav-btn-secondary dashboard-action-link,height:26px;padding:0 10px;font-size: .75rem;,False
+templates/em_andamento.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/em_andamento.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/em_andamento.html,1,a,Limpar,{{ url_for('processos.em_andamento') }},btn-filter-clear,-,False
+templates/em_andamento.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/em_andamento.html,1,button,-,-,btn-close,-,False
+templates/em_andamento.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/em_andamento.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/em_andamento.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/em_andamento.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/empresa.html,1,a,Cancelar,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/empresa.html,1,a,Voltar,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/empresa.html,1,button,Remover Logo,-,nav-btn nav-btn-secondary,width:100%;justify-content:center;font-size:12px;,False
+templates/empresa.html,1,button,Salvar Alterações,-,nav-btn nav-btn-success,-,False
+templates/hoje.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/hoje.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/hoje.html,1,a,Limpar Filtros do Dia,{{ url_for('processos.hoje') }},btn-filter-clear,-,False
+templates/hoje.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/hoje.html,1,button,-,-,btn-close,-,False
+templates/hoje.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/hoje.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/hoje.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/hoje.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/login.html,1,button,Entrar,-,auth-btn,-,False
+templates/logout.html,1,a,Cancelar,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,height:40px;padding:0 22px;font-size:14px;,False
+templates/logout.html,1,a,Voltar,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/logout.html,1,button,Confirmar Saída,-,nav-btn nav-btn-primary,height:40px;padding:0 22px;font-size:14px;,False
+templates/metricas.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/metricas.html,1,button,Atualizar,-,nav-btn nav-btn-secondary,-,False
+templates/metricas.html,1,button,Equipe,-,metricas-tab-btn,-,False
+templates/metricas.html,1,button,Meu Desempenho,-,metricas-tab-btn active,-,False
+templates/metricas.html,1,button,Visão Geral,-,metricas-tab-btn,-,False
+templates/novo_usuario.html,1,button,Criar Conta,-,auth-btn,-,False
+templates/pendentes.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/pendentes.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/pendentes.html,1,a,Limpar,{{ url_for('processos.pendentes') }},btn-filter-clear,-,False
+templates/pendentes.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/pendentes.html,1,button,-,-,btn-close,-,False
+templates/pendentes.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/pendentes.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/pendentes.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/pendentes.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/perfil.html,1,a,Cancelar,{{ url_for('auth.dashboard') }},btn btn-danger,-,False
+templates/perfil.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/perfil.html,1,button,-,-,btn btn-outline-secondary,-,False
+templates/perfil.html,1,button,-,-,btn btn-outline-secondary,-,False
+templates/perfil.html,1,button,-,-,btn btn-outline-secondary,-,False
+templates/perfil.html,1,button,-,-,btn-close,-,False
+templates/perfil.html,1,button,Aparência,-,btn btn-outline-primary btn-sm,-,False
+templates/perfil.html,1,button,Aplicar tema,-,btn btn-primary,-,False
+templates/perfil.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/perfil.html,1,button,Salvar Alterações,-,btn btn-success,-,False
+templates/perfil_permissao_detalhe.html,1,a,-,"{{ url_for('permissoes.visualizar_permissoes', usuario_id=u.id) }}",nav-btn nav-btn-secondary,height:26px;padding:0 8px;font-size: .75rem;,False
+templates/perfil_permissao_detalhe.html,1,a,Voltar,{{ url_for('permissoes.listar_perfis') }},nav-btn nav-btn-secondary,-,False
+templates/perfil_permissao_detalhe.html,1,button,Limpar Tudo,-,nav-btn nav-btn-secondary,height:30px;padding:0 12px;font-size:12px;,False
+templates/perfil_permissao_detalhe.html,1,button,Salvar Alterações,-,nav-btn nav-btn-primary,-,False
+templates/perfil_permissao_detalhe.html,1,button,Selecionar Tudo,-,nav-btn nav-btn-secondary,height:30px;padding:0 12px;font-size:12px;,False
+templates/perfis_permissao.html,1,a,Editar,"{{ url_for('permissoes.visualizar_perfil', perfil_id=perfil.id) }}",nav-btn nav-btn-secondary,height:28px;padding:0 10px;font-size: .75rem;,False
+templates/perfis_permissao.html,1,a,Voltar,{{ url_for('admin_users.users_list') }},nav-btn nav-btn-secondary,-,False
+templates/perfis_permissao.html,1,button,-,-,nav-btn nav-btn-secondary,height:28px;padding:0 10px;font-size: .75rem;color:#dc2626;,False
+templates/perfis_permissao.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/perfis_permissao.html,1,button,Criar Perfil,-,nav-btn nav-btn-primary,-,False
+templates/perfis_permissao.html,1,button,Novo Perfil,-,nav-btn nav-btn-primary,-,False
+templates/permissoes_usuario.html,1,a,Gerir Perfis,{{ url_for('permissoes.listar_perfis') }},nav-btn nav-btn-secondary,height:30px;padding:0 12px;font-size:12px;,False
+templates/permissoes_usuario.html,1,a,Voltar,{{ url_for('admin_users.users_list') }},nav-btn nav-btn-secondary,-,False
+templates/permissoes_usuario.html,1,button,Alternar,-,nav-btn nav-btn-secondary cat-toggle-btn,height:26px;padding:0 10px;font-size: .75rem;flex-shrink:0;,False
+templates/permissoes_usuario.html,1,button,Aplicar Perfil,-,nav-btn nav-btn-primary,height:30px;padding:0 12px;font-size:12px;,False
+templates/permissoes_usuario.html,1,button,Limpar Tudo,-,nav-btn nav-btn-secondary,height:30px;padding:0 12px;font-size:12px;,False
+templates/permissoes_usuario.html,1,button,Salvar Alterações,-,nav-btn,background:#198754;border-color:#198754;color:#fff;height:38px;padding:0 22px;font-size:13px;font-weight:700;border-radius:8px;,False
+templates/permissoes_usuario.html,1,button,Selecionar Tudo,-,nav-btn nav-btn-secondary,height:30px;padding:0 12px;font-size:12px;,False
+templates/processos/editar.html,1,a,-,"{{ url_for('processos.download_anexo', anexo_id=anexo.id) }}",btn btn-sm btn-outline-primary,-,False
+templates/processos/editar.html,1,a,Cancelar,{{ url_for('processos.todos') }},btn btn-danger,-,False
+templates/processos/editar.html,1,a,Todos,{{ url_for('processos.todos') }},nav-btn nav-btn-secondary,-,False
+templates/processos/editar.html,1,a,Visualizar,"{{ url_for('processos.visualizar', processo_id=processo.id) }}",nav-btn nav-btn-secondary,-,False
+templates/processos/editar.html,1,button,-,-,btn-close ms-auto,-,False
+templates/processos/editar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/processos/editar.html,1,button,Salvar Alterações,-,btn btn-success,-,False
+templates/processos/em_andamento.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/processos/em_andamento.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/processos/em_andamento.html,1,a,Limpar,{{ url_for('processos.em_andamento') }},btn-filter-clear,-,False
+templates/processos/em_andamento.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/processos/em_andamento.html,1,button,-,-,btn-close,-,False
+templates/processos/em_andamento.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/processos/em_andamento.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/processos/em_andamento.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/processos/em_andamento.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/processos/hoje.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/processos/hoje.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/processos/hoje.html,1,a,Limpar Filtros do Dia,{{ url_for('processos.hoje') }},btn-filter-clear,-,False
+templates/processos/hoje.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/processos/hoje.html,1,button,-,-,btn-close,-,False
+templates/processos/hoje.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/processos/hoje.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/processos/hoje.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/processos/hoje.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/processos/novo.html,1,a,Cancelar,{{ url_for('processos.todos') }},btn btn-danger,-,False
+templates/processos/novo.html,1,a,Dashboard,{{ url_for('auth.dashboard') }},nav-btn nav-btn-secondary,-,False
+templates/processos/novo.html,1,a,Processos,{{ url_for('processos.todos') }},nav-btn nav-btn-secondary,-,False
+templates/processos/novo.html,1,button,Cadastrar Processo,-,btn btn-success,-,False
+templates/processos/pendentes.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/processos/pendentes.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/processos/pendentes.html,1,a,Limpar,{{ url_for('processos.pendentes') }},btn-filter-clear,-,False
+templates/processos/pendentes.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/processos/pendentes.html,1,button,-,-,btn-close,-,False
+templates/processos/pendentes.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/processos/pendentes.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/processos/pendentes.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/processos/pendentes.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/processos/todos.html,1,a,-,"{{ url_for('processos.visualizar', processo_id=processo.id) }}",tbl-btn view,-,False
+templates/processos/todos.html,1,a,-,"{{ url_for('processos.editar', processo_id=processo.id) }}",tbl-btn edit,"color:var(--color-warning, #f59e0b);",False
+templates/processos/todos.html,1,a,-,"{{ url_for('processos.editar', processo_id=processo.id) }}",tbl-btn edit,-,False
+templates/processos/todos.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/processos/todos.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/processos/todos.html,1,a,Limpar,{{ url_for('processos.todos') }},btn-filter-clear,-,False
+templates/processos/todos.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/processos/todos.html,1,button,-,-,tbl-btn del,-,False
+templates/processos/todos.html,1,button,-,-,btn-close,-,False
+templates/processos/todos.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/processos/todos.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/processos/todos.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/processos/todos.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/processos/vinculados.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/processos/vinculados.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/processos/vinculados.html,1,a,Limpar,{{ url_for('processos.vinculados') }},btn-filter-clear,-,False
+templates/processos/vinculados.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/processos/vinculados.html,1,button,-,-,btn-close,-,False
+templates/processos/vinculados.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/processos/vinculados.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/processos/vinculados.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/processos/vinculados.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/processos/visualizar.html,1,a,Baixar como PDF,"{{ url_for('processos.gerar_pdf', processo_id=processo.id) }}",btn btn-dark btn-lg,-,False
+templates/processos/visualizar.html,1,a,Editar,"{{ url_for('processos.editar', processo_id=processo.id) }}",nav-btn nav-btn-warning,-,False
+templates/processos/visualizar.html,1,a,Editar,"{{ url_for('processos.editar', processo_id=processo.id) }}",nav-btn nav-btn-primary,-,False
+templates/processos/visualizar.html,1,a,Todos,{{ url_for('processos.todos') }},nav-btn nav-btn-secondary,-,False
+templates/processos/visualizar.html,1,button,-,-,btn-close,-,False
+templates/processos/visualizar.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/processos/visualizar.html,1,button,Cancelar,-,btn btn-outline-secondary,-,False
+templates/processos/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/processos/visualizar.html,1,button,Excluir Permanentemente,-,btn btn-danger,-,False
+templates/processos/visualizar.html,1,button,Exibir,-,btn btn-sm btn-outline-secondary,-,False
+templates/processos/visualizar.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/processos/visualizar.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/processos/visualizar.html,1,button,Imprimir Página,-,btn btn-dark btn-lg,-,False
+templates/recuperar_senha.html,1,button,Enviar Link de Recuperação,-,auth-btn,-,False
+templates/representantes/editar.html,1,a,Cancelar,"{{ url_for('representantes.visualizar', representante_id=representante.id) }}",nt-btn-cancel,-,False
+templates/representantes/editar.html,1,a,Histórico,"{{ url_for('representantes.visualizar', representante_id=representante.id) }}",nav-btn nav-btn-secondary,-,False
+templates/representantes/editar.html,1,a,Representantes,{{ url_for('representantes.index') }},nav-btn nav-btn-secondary,-,False
+templates/representantes/editar.html,1,button,Salvar Alterações,-,nt-btn-save,-,False
+templates/representantes/index.html,1,a,-,"{{ url_for('representantes.editar', representante_id=representante.id) }}",nav-btn nav-btn-primary,height:28px;padding:0 10px;font-size:12px;,False
+templates/representantes/index.html,1,a,Histórico,"{{ url_for('representantes.visualizar', representante_id=representante.id) }}",nav-btn nav-btn-info,height:28px;padding:0 10px;font-size:12px;,False
+templates/representantes/index.html,1,a,Limpar,{{ url_for('representantes.index') }},nav-btn nav-btn-danger flex-fill,justify-content:center;,False
+templates/representantes/index.html,1,a,Novo Representante,{{ url_for('representantes.novo') }},nav-btn nav-btn-primary,-,False
+templates/representantes/index.html,1,button,-,-,nav-btn nav-btn-danger btn-excluir-representante,height:28px;padding:0 10px;font-size:12px;,False
+templates/representantes/index.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/representantes/index.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/representantes/index.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/representantes/index.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/representantes/index.html,1,button,Filtrar,-,nav-btn nav-btn-success flex-fill,-,False
+templates/representantes/index.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/representantes/index.html,1,span,-,-,nav-btn nav-btn-primary,height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;,False
+templates/representantes/index.html,1,span,-,-,nav-btn nav-btn-danger,height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;,False
+templates/representantes/novo.html,1,a,Apresentantes,{{ url_for('representantes.index') }},nav-btn nav-btn-secondary,-,False
+templates/representantes/novo.html,1,a,Cancelar,{{ url_for('representantes.index') }},nt-btn-cancel,-,False
+templates/representantes/novo.html,1,button,Cadastrar Apresentante,-,nt-btn-save,-,False
+templates/representantes/visualizar.html,1,a,Editar,"{{ url_for('representantes.editar', representante_id=representante.id) }}",nav-btn nav-btn-primary,-,False
+templates/representantes/visualizar.html,1,a,Ver,"{{ url_for('processos.visualizar', processo_id=processo.id) }}",nav-btn nav-btn-secondary,height:28px;padding:0 10px;font-size:12px;,False
+templates/representantes/visualizar.html,1,a,Voltar,{{ url_for('representantes.index') }},nav-btn nav-btn-secondary,-,False
+templates/representantes/visualizar.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/representantes/visualizar.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/representantes/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/representantes/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/representantes/visualizar.html,1,span,Editar,-,nav-btn nav-btn-secondary,opacity:.45;cursor:not-allowed;pointer-events:none;,False
+templates/reset_password.html,1,button,Redefinir Senha,-,auth-btn,-,False
+templates/titulares/editar.html,1,a,Cancelar,"{{ url_for('titulares.visualizar', titular_id=titular.id) }}",nt-btn-cancel,-,False
+templates/titulares/editar.html,1,a,Histórico,"{{ url_for('titulares.visualizar', titular_id=titular.id) }}",nav-btn nav-btn-secondary,-,False
+templates/titulares/editar.html,1,a,Titulares,{{ url_for('titulares.index') }},nav-btn nav-btn-secondary,-,False
+templates/titulares/editar.html,1,button,Salvar Alterações,-,nt-btn-save,-,False
+templates/titulares/index.html,1,a,-,"{{ url_for('titulares.editar', titular_id=titular.id) }}",nav-btn nav-btn-primary,height:28px;padding:0 10px;font-size:12px;,False
+templates/titulares/index.html,1,a,Histórico,"{{ url_for('titulares.visualizar', titular_id=titular.id) }}",nav-btn nav-btn-info,height:28px;padding:0 10px;font-size:12px;,False
+templates/titulares/index.html,1,a,Limpar,{{ url_for('titulares.index') }},nav-btn nav-btn-danger flex-fill,justify-content:center;,False
+templates/titulares/index.html,1,a,Novo Titular,{{ url_for('titulares.novo') }},nav-btn nav-btn-primary,-,False
+templates/titulares/index.html,1,button,-,-,nav-btn nav-btn-danger btn-excluir-titular,height:28px;padding:0 10px;font-size:12px;,False
+templates/titulares/index.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/titulares/index.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/titulares/index.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/titulares/index.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/titulares/index.html,1,button,Filtrar,-,nav-btn nav-btn-success flex-fill,-,False
+templates/titulares/index.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/titulares/index.html,1,span,-,-,nav-btn nav-btn-primary,height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;,False
+templates/titulares/index.html,1,span,-,-,nav-btn nav-btn-danger,height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;,False
+templates/titulares/novo.html,1,a,Cancelar,{{ url_for('titulares.index') }},nt-btn-cancel,-,False
+templates/titulares/novo.html,1,a,Titulares,{{ url_for('titulares.index') }},nav-btn nav-btn-secondary,-,False
+templates/titulares/novo.html,1,button,Cadastrar Titular,-,nt-btn-save,-,False
+templates/titulares/visualizar.html,1,a,Editar,"{{ url_for('titulares.editar', titular_id=titular.id) }}",nav-btn nav-btn-primary,-,False
+templates/titulares/visualizar.html,1,a,Ver,"{{ url_for('processos.visualizar', processo_id=processo.id) }}",nav-btn nav-btn-secondary,height:28px;padding:0 10px;font-size:12px;,False
+templates/titulares/visualizar.html,1,a,Voltar,{{ url_for('titulares.index') }},nav-btn nav-btn-secondary,-,False
+templates/titulares/visualizar.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/titulares/visualizar.html,1,button,Cancelar,-,nav-btn nav-btn-secondary,-,False
+templates/titulares/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/titulares/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/titulares/visualizar.html,1,span,Editar,-,nav-btn nav-btn-secondary,opacity:.45;cursor:not-allowed;pointer-events:none;,False
+templates/todos.html,1,a,-,"{{ url_for('processos.visualizar', processo_id=processo.id) }}",tbl-btn view,-,False
+templates/todos.html,1,a,-,"{{ url_for('processos.editar', processo_id=processo.id) }}",tbl-btn edit,"color:var(--color-warning, #f59e0b);",False
+templates/todos.html,1,a,-,"{{ url_for('processos.editar', processo_id=processo.id) }}",tbl-btn edit,-,False
+templates/todos.html,1,a,Baixar como PDF,#,btn btn-dark btn-lg,-,False
+templates/todos.html,1,a,Imprimir,#,btn btn-dark btn-lg,-,False
+templates/todos.html,1,a,Limpar,{{ url_for('processos.todos') }},btn-filter-clear,-,False
+templates/todos.html,1,a,Novo Processo,{{ url_for('processos.novo') }},nav-btn nav-btn-primary,-,False
+templates/todos.html,1,button,-,-,tbl-btn del,-,False
+templates/todos.html,1,button,-,-,btn-close,-,False
+templates/todos.html,1,button,Exportar,-,nav-btn nav-btn-secondary dropdown-toggle,-,False
+templates/todos.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/todos.html,1,button,Filtrar,-,btn-filter-apply,-,False
+templates/todos.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/visualizar.html,1,a,Baixar como PDF,"{{ url_for('processos.gerar_pdf', processo_id=processo.id) }}",btn btn-dark btn-lg,-,False
+templates/visualizar.html,1,a,Editar,"{{ url_for('processos.editar', processo_id=processo.id) }}",nav-btn nav-btn-warning,-,False
+templates/visualizar.html,1,a,Editar,"{{ url_for('processos.editar', processo_id=processo.id) }}",nav-btn nav-btn-primary,-,False
+templates/visualizar.html,1,a,Todos,{{ url_for('processos.todos') }},nav-btn nav-btn-secondary,-,False
+templates/visualizar.html,1,button,-,-,btn-close,-,False
+templates/visualizar.html,1,button,-,-,btn-close btn-close-white,-,False
+templates/visualizar.html,1,button,Cancelar,-,btn btn-outline-secondary,-,False
+templates/visualizar.html,1,button,Excluir,-,nav-btn nav-btn-danger,-,False
+templates/visualizar.html,1,button,Excluir Permanentemente,-,btn btn-danger,-,False
+templates/visualizar.html,1,button,Exibir,-,btn btn-sm btn-outline-secondary,-,False
+templates/visualizar.html,1,button,Fechar,-,btn btn-outline-secondary,-,False
+templates/visualizar.html,1,button,Imprimir,-,nav-btn nav-btn-secondary,-,False
+templates/visualizar.html,1,button,Imprimir Página,-,btn btn-dark btn-lg,-,False
