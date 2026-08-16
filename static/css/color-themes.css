@@ -1,41 +1,81 @@
 /* ============================================================
-   COLOR-THEMES.CSS - Seis temas institucionais completos
+   COLOR-THEMES.CSS — Registro Fácil v3.22
+   10 temas institucionais · 10 famílias · contraste WCAG AA+
+
+   Famílias:
+   01 Olivar & Cobre      (oliva)    — tradição mediterrânea
+   02 Couro & Ouro Velho  (marrom)   — livro registral
+   03 Meia-Noite & Ouro   (azul)     — premium moderno
+   04 Índigo & Terracota  (índigo)   — serventia humanizada
+   05 Ameixa & Malva      (malva)    — minimalismo quente
+   06 Aço & Névoa         (azul-aço) — sóbrio corporativo
+   07 Vinho & Champanhe   (vinho)    — lacre & nobreza
+   08 Bosque & Sálvia     (verde)    — documento oficial
+   09 Petróleo & Âmbar    (teal)     — caneta & carimbo
+   10 Ônix & Dourado      (preto)    — luxo institucional
    ============================================================ */
 
-/* Fallback institucional: garante uma cor válida mesmo antes da aplicação do atributo data-cor. */
+
+/* ─────────────────────────────────────────────────────────────
+   FALLBACK :root — tema padrão antes da aplicação do atributo.
+   Usa "Olivar & Cobre" como identidade institucional base.
+   ───────────────────────────────────────────────────────────── */
 :root {
-    --color-primary: #0F2A43;
-    --color-primary-light: #1B4368;
-    --color-primary-dark: #0A1E30;
+    --color-primary: #283618;
+    --color-primary-light: #606C38;
+    --color-primary-dark: #1A2410;
+    --color-primary-subtle: rgba(40, 54, 24, 0.12);
+    --color-primary-rgb: 40, 54, 24;
     --color-primary-contrast: #FFFFFF;
-    --color-gold-primary: #B08D3E;
-    --color-gold-dark: #8E702F;
-    --rf-action-tertiary: #B08D3E;
-    --rf-action-tertiary-hover: #8E702F;
-    --background-color-body: #F5F2EA;
-    --background-color-card: #FFFFFF;
-    --background-color-hover: #ECE8DE;
-    --text-color-primary: #1D1B18;
-    --text-color-secondary: #6B665C;
-    --border-color-default: #D9D2C2;
+
+    --color-gold-primary: #BC6C25;
+    --color-gold-dark: #8F511C;
+
+    --rf-action-tertiary: #BC6C25;
+    --rf-action-tertiary-hover: #8F511C;
+
+    --background-color-body: #FEFAE0;
+    --background-color-card: #FFFDF5;
+    --background-color-header: #FFFDF5;
+    --background-color-hover: #F1ECD8;
+    --background-color-input-bg: #FFFDF5;
+
+    --text-color-primary: #26221A;
+    --text-color-secondary: #6E6754;
+    --text-color-link: #8F511C;
+
+    --border-color-default: #DDD6B8;
+    --border-color-input: #C4BC9C;
+    --border-color-dark: #1A2410;
+
+    --sidebar: #283618;
+    --sidebar-hover: #606C38;
+    --sidebar-text: #FEFAE0;
+    --sidebar-active-text: #FFFFFF;
 }
 
-/* Cada tema controla o sistema inteiro; não existe cor visual independente da sidebar. */
-[data-cor="paleta-01"], [data-cor="paleta-02"], [data-cor="paleta-03"],
-[data-cor="paleta-04"], [data-cor="paleta-05"], [data-cor="paleta-06"] {
+
+/* ─────────────────────────────────────────────────────────────
+   BLOCO COMPARTILHADO — tokens semânticos e derivados.
+   Aplicado a qualquer tema cujo data-cor comece com "paleta-".
+   ───────────────────────────────────────────────────────────── */
+[data-cor^="paleta-"] {
     --text-color-light: var(--sidebar-text);
     --background-color-sidebar: var(--sidebar);
     --background-color-sidebar-hover: var(--sidebar-hover);
     --color-primary-contrast: #FFFFFF;
+
     --rf-theme-accent: var(--color-gold-primary);
     --rf-theme-accent-dark: var(--color-gold-dark);
+
     --rf-theme-danger-bg: var(--danger-bg);
     --rf-theme-danger-text: var(--danger-text);
     --rf-theme-warning-bg: var(--warning-bg);
     --rf-theme-warning-text: var(--warning-text);
     --rf-theme-info-bg: var(--info-bg);
     --rf-theme-info-text: var(--info-text);
-    /* Contrato semântico compartilhado pelos componentes. */
+
+    /* Contrato semântico */
     --rf-text-primary: var(--text-color-primary);
     --rf-text-secondary: var(--text-color-secondary);
     --rf-text-muted: var(--text-color-secondary);
@@ -44,6 +84,7 @@
     --rf-text-on-primary: var(--color-primary-contrast, #FFFFFF);
     --rf-text-on-sidebar: var(--sidebar-text);
     --rf-text-link: var(--text-color-link);
+
     --rf-surface-body: var(--background-color-body);
     --rf-surface-card: var(--background-color-card);
     --rf-surface-muted: var(--background-color-hover);
@@ -52,10 +93,12 @@
     --rf-surface-overlay: color-mix(in srgb, var(--background-color-body) 88%, #000000);
     --rf-surface: var(--background-color-card);
     --rf-page: var(--background-color-body);
+
     --rf-border: var(--border-color-default);
     --rf-border-subtle: color-mix(in srgb, var(--border-color-default) 60%, transparent);
     --rf-border-input: var(--border-color-input);
     --rf-border-strong: var(--border-color-dark);
+
     --rf-action-primary: var(--color-primary);
     --rf-action-primary-hover: var(--color-primary-light);
     --rf-action-primary-active: var(--color-primary-dark);
@@ -63,41 +106,538 @@
     --rf-action-secondary-hover: var(--background-color-hover);
     --rf-action-tertiary: var(--color-gold-primary);
     --rf-action-tertiary-hover: var(--color-gold-dark);
+
     --rf-accent: var(--color-gold-primary);
     --rf-accent-hover: var(--color-gold-dark);
     --rf-accent-subtle: var(--color-primary-subtle);
+
     --rf-danger: var(--color-error);
     --rf-danger-hover: color-mix(in srgb, var(--color-error) 82%, #000000);
     --rf-danger-surface: var(--danger-bg);
     --rf-danger-text: var(--danger-text);
+
     --rf-success: var(--color-success);
     --rf-success-hover: color-mix(in srgb, var(--color-success) 82%, #000000);
     --rf-success-surface: color-mix(in srgb, var(--color-success) 12%, var(--background-color-card));
     --rf-success-text: var(--color-success);
+
     --rf-warning: var(--color-warning);
     --rf-warning-hover: color-mix(in srgb, var(--color-warning) 82%, #000000);
     --rf-warning-surface: var(--warning-bg);
     --rf-warning-text: var(--warning-text);
+
     --rf-info: var(--color-info);
     --rf-info-hover: color-mix(in srgb, var(--color-info) 82%, #000000);
     --rf-info-surface: var(--info-bg);
     --rf-info-text: var(--info-text);
-    --rf-sidebar-surface: var(--background-color-sidebar);
-    --rf-sidebar-hover: var(--background-color-sidebar-hover);
+
+    --rf-sidebar-surface: var(--sidebar);
+    --rf-sidebar-hover: var(--sidebar-hover);
     --rf-sidebar-active: var(--color-gold-primary);
     --rf-sidebar-text: var(--sidebar-text);
     --rf-sidebar-active-text: var(--sidebar-active-text);
     --rf-sidebar-border: var(--border-color-dark);
-    --rf-font-sans: 'Source Sans 3', sans-serif;
-    --rf-font-display: 'Fraunces', Georgia, serif;
-    --rf-font-mono: 'IBM Plex Mono', monospace;
+
+    --rf-font-sans: "Source Sans 3", sans-serif;
+    --rf-font-display: "Fraunces", Georgia, serif;
+    --rf-font-mono: "IBM Plex Mono", monospace;
+
     --rf-font-xs: .75rem;
     --rf-font-sm: .875rem;
     --rf-font-base: 1rem;
     --rf-font-lg: 1.125rem;
     --rf-font-xl: 1.375rem;
+
     --rf-control-height: 2.75rem;
     --rf-sidebar-width: 15rem;
+}
+
+
+/* ============================================================
+   01 · Olivar & Cobre (Olive Garden Feast)
+   Família: oliva · sensação: tradição mediterrânea
+   ============================================================ */
+[data-cor="paleta-01"] {
+    --color-primary: #283618;
+    --color-primary-light: #606C38;
+    --color-primary-dark: #1A2410;
+    --color-primary-subtle: rgba(40, 54, 24, 0.12);
+    --color-primary-rgb: 40, 54, 24;
+    --color-gold-primary: #BC6C25;
+    --color-gold-dark: #8F511C;
+
+    --background-color-body: #FEFAE0;
+    --background-color-card: #FFFDF5;
+    --background-color-header: #FFFDF5;
+    --background-color-hover: #F1ECD8;
+    --background-color-input-bg: #FFFDF5;
+
+    --sidebar: #283618;
+    --sidebar-hover: #3A4F25;
+    --sidebar-text: #F6F0D8;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #26221A;
+    --text-color-secondary: #6E6754;
+    --text-color-link: #8F511C;
+    --border-color-default: #DDD6B8;
+    --border-color-input: #C4BC9C;
+    --border-color-dark: #1A2410;
+
+    --color-success: #3E5C2A;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #4A5A28;
+    --danger-bg: #FDECEC;
+    --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC;
+    --warning-text: #7A5A0A;
+    --info-bg: #EEF2E0;
+    --info-text: #4A5A28;
+}
+
+
+/* ============================================================
+   02 · Couro & Ouro Velho (Autumn Harvest)
+   Família: marrom · sensação: livro registral encadernado
+   ============================================================ */
+[data-cor="paleta-02"] {
+    --color-primary: #432818;
+    --color-primary-light: #99582A;
+    --color-primary-dark: #2B1A0F;
+    --color-primary-subtle: rgba(67, 40, 24, 0.12);
+    --color-primary-rgb: 67, 40, 24;
+    --color-gold-primary: #BB9457;
+    --color-gold-dark: #96743D;
+
+    --background-color-body: #F8F1E2;
+    --background-color-card: #FFFBF2;
+    --background-color-header: #FFFBF2;
+    --background-color-hover: #EFE6D2;
+    --background-color-input-bg: #FFFBF2;
+
+    --sidebar: #432818;
+    --sidebar-hover: #6B3E24;
+    --sidebar-text: #F4E8D0;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #2A1E14;
+    --text-color-secondary: #6B5748;
+    --text-color-link: #96743D;
+    --border-color-default: #DBD0B8;
+    --border-color-input: #C2B59A;
+    --border-color-dark: #2B1A0F;
+
+    --color-success: #3E5C2A;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #5A3525;
+    --danger-bg: #FDECEC;
+    --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC;
+    --warning-text: #7A5A0A;
+    --info-bg: #F2EAE0;
+    --info-text: #5A3525;
+}
+
+
+/* ============================================================
+   03 · Meia-Noite & Ouro (Golden Twilight)
+   Família: azul profundo · sensação: premium moderno
+   ============================================================ */
+[data-cor="paleta-03"] {
+    --color-primary: #001D3D;
+    --color-primary-light: #003566;
+    --color-primary-dark: #000814;
+    --color-primary-subtle: rgba(0, 29, 61, 0.12);
+    --color-primary-rgb: 0, 29, 61;
+    --color-gold-primary: #E3AC00;
+    --color-gold-dark: #8A6400;
+
+    --background-color-body: #F4F6F9;
+    --background-color-card: #FFFFFF;
+    --background-color-header: #FFFFFF;
+    --background-color-hover: #E8ECF2;
+    --background-color-input-bg: #FFFFFF;
+
+    --sidebar: #001D3D;
+    --sidebar-hover: #003566;
+    --sidebar-text: #E8EDF2;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #101820;
+    --text-color-secondary: #5C6876;
+    --text-color-link: #001D3D;
+    --border-color-default: #D5DCE5;
+    --border-color-input: #B9C2CF;
+    --border-color-dark: #000814;
+
+    --color-success: #1E5C3E;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #26476B;
+    --danger-bg: #FDECEC;
+    --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC;
+    --warning-text: #7A5A0A;
+    --info-bg: #E7EEF5;
+    --info-text: #26476B;
+}
+
+
+/* ============================================================
+   04 · Índigo & Terracota (Neutral Harmony Bliss)
+   Família: índigo quente · sensação: serventia humanizada
+   ============================================================ */
+[data-cor="paleta-04"] {
+    --color-primary: #3D405B;
+    --color-primary-light: #585C7A;
+    --color-primary-dark: #2A2C40;
+    --color-primary-subtle: rgba(61, 64, 91, 0.12);
+    --color-primary-rgb: 61, 64, 91;
+    --color-gold-primary: #E07A5F;
+    --color-gold-dark: #B5492F;
+
+    --background-color-body: #F4F1DE;
+    --background-color-card: #FFFDF4;
+    --background-color-header: #FFFDF4;
+    --background-color-hover: #EBE7D5;
+    --background-color-input-bg: #FFFDF4;
+
+    --sidebar: #3D405B;
+    --sidebar-hover: #585C7A;
+    --sidebar-text: #EDEAF2;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #22233A;
+    --text-color-secondary: #636481;
+    --text-color-link: #B5492F;
+    --border-color-default: #D7D2BC;
+    --border-color-input: #BCB6A0;
+    --border-color-dark: #2A2C40;
+
+    --color-success: #3E5C2A;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #3A5A40;
+    --danger-bg: #FDECEC;
+    --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC;
+    --warning-text: #7A5A0A;
+    --info-bg: #E7EDE4;
+    --info-text: #3A5A40;
+}
+
+
+/* ============================================================
+   05 · Ameixa & Malva (Soft Lavender)
+   Família: malva · sensação: minimalismo quente elegante
+   ============================================================ */
+[data-cor="paleta-05"] {
+    --color-primary: #22223B;
+    --color-primary-light: #4A4E69;
+    --color-primary-dark: #15152A;
+    --color-primary-subtle: rgba(34, 34, 59, 0.12);
+    --color-primary-rgb: 34, 34, 59;
+    --color-gold-primary: #9A8C98;
+    --color-gold-dark: #6E6070;
+
+    --background-color-body: #F2E9E4;
+    --background-color-card: #FFFBF8;
+    --background-color-header: #FFFBF8;
+    --background-color-hover: #EAE0DA;
+    --background-color-input-bg: #FFFBF8;
+
+    --sidebar: #22223B;
+    --sidebar-hover: #4A4E69;
+    --sidebar-text: #ECE7E5;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #1A1A2E;
+    --text-color-secondary: #6B6676;
+    --text-color-link: #4A4E69;
+    --border-color-default: #D5CDC7;
+    --border-color-input: #BBB3AD;
+    --border-color-dark: #15152A;
+
+    --color-success: #3E5C2A;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #5A3550;
+    --danger-bg: #FDECEC;
+    --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC;
+    --warning-text: #7A5A0A;
+    --info-bg: #F2E6EC;
+    --info-text: #5A3550;
+}
+
+
+/* ============================================================
+   06 · Aço & Névoa (Deep Sea)
+   Família: azul-aço · sensação: sóbrio corporativo
+   ============================================================ */
+[data-cor="paleta-06"] {
+    --color-primary: #1B263B;
+    --color-primary-light: #415A77;
+    --color-primary-dark: #0D1B2A;
+    --color-primary-subtle: rgba(27, 38, 59, 0.12);
+    --color-primary-rgb: 27, 38, 59;
+    --color-gold-primary: #778DA9;
+    --color-gold-dark: #46607E;
+
+    --background-color-body: #F2F4F3;
+    --background-color-card: #FFFFFF;
+    --background-color-header: #FFFFFF;
+    --background-color-hover: #E0E1DD;
+    --background-color-input-bg: #FFFFFF;
+
+    --sidebar: #1B263B;
+    --sidebar-hover: #415A77;
+    --sidebar-text: #E0E3E8;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #141A26;
+    --text-color-secondary: #5B6370;
+    --text-color-link: #46607E;
+    --border-color-default: #D2D6D9;
+    --border-color-input: #B5BBC0;
+    --border-color-dark: #0D1B2A;
+
+    --color-success: #1E5C3E;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #26476B;
+    --danger-bg: #FDECEC;
+    --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC;
+    --warning-text: #7A5A0A;
+    --info-bg: #E7EEF5;
+    --info-text: #26476B;
+}
+
+
+/* ============================================================
+   07 · Vinho & Champanhe (Bold Berry)
+   Família: vinho · sensação: lacre & nobreza
+   ============================================================ */
+[data-cor="paleta-07"] {
+    --color-primary: #450920;
+    --color-primary-light: #A53860;
+    --color-primary-dark: #2D0615;
+    --color-primary-subtle: rgba(69, 9, 32, 0.12);
+    --color-primary-rgb: 69, 9, 32;
+    --color-gold-primary: #DA627D;
+    --color-gold-dark: #A53860;
+
+    --background-color-body: #FAF0E6;
+    --background-color-card: #FFFBF7;
+    --background-color-header: #FFFBF7;
+    --background-color-hover: #F3E3D9;
+    --background-color-input-bg: #FFFBF7;
+
+    --sidebar: #450920;
+    --sidebar-hover: #6A1130;
+    --sidebar-text: #F9E9EF;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #2E141E;
+    --text-color-secondary: #7A5C69;
+    --text-color-link: #A53860;
+    --border-color-default: #E4CFC5;
+    --border-color-input: #CBA99D;
+    --border-color-dark: #2D0615;
+
+    --color-success: #1E5C3E;
+    --color-error: #8C2A2A;
+    --color-warning: #7A5A0A;
+    --color-info: #5A3550;
+    --danger-bg: #FBE9E9;
+    --danger-text: #8C2A2A;
+    --warning-bg: #FCF3DC;
+    --warning-text: #7A5A0A;
+    --info-bg: #F2E6EC;
+    --info-text: #5A3550;
+}
+
+
+/* ============================================================
+   08 · Bosque & Sálvia (Earthy Forest Hues)
+   Família: verde · sensação: documento oficial, selo
+   ============================================================ */
+[data-cor="paleta-08"] {
+    --color-primary: #344E41;
+    --color-primary-light: #588157;
+    --color-primary-dark: #263A30;
+    --color-primary-subtle: rgba(52, 78, 65, 0.12);
+    --color-primary-rgb: 52, 78, 65;
+    --color-gold-primary: #A3B18A;
+    --color-gold-dark: #5F7444;
+
+    --background-color-body: #F4F3ED;
+    --background-color-card: #FDFCF8;
+    --background-color-header: #FDFCF8;
+    --background-color-hover: #E9E8DE;
+    --background-color-input-bg: #FDFCF8;
+
+    --sidebar: #344E41;
+    --sidebar-hover: #588157;
+    --sidebar-text: #F0F2EA;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #1F2822;
+    --text-color-secondary: #667066;
+    --text-color-link: #5F7444;
+    --border-color-default: #D3D2C4;
+    --border-color-input: #B7B6A6;
+    --border-color-dark: #263A30;
+
+    --color-success: #2C5C36;
+    --color-error: #8C2A2A;
+    --color-warning: #6E5A16;
+    --color-info: #3A5A40;
+    --danger-bg: #FBE9E9;
+    --danger-text: #8C2A2A;
+    --warning-bg: #F3EEDD;
+    --warning-text: #6E5A16;
+    --info-bg: #E7EDE4;
+    --info-text: #3A5A40;
+}
+
+
+/* ============================================================
+   09 · Petróleo & Âmbar (Ocean Sunset)
+   Família: teal · sensação: caneta & carimbo
+   ============================================================ */
+[data-cor="paleta-09"] {
+    --color-primary: #005F73;
+    --color-primary-light: #0A9396;
+    --color-primary-dark: #003844;
+    --color-primary-subtle: rgba(0, 95, 115, 0.12);
+    --color-primary-rgb: 0, 95, 115;
+    --color-gold-primary: #EE9B00;
+    --color-gold-dark: #8F6400;
+
+    --background-color-body: #F7F3E5;
+    --background-color-card: #FFFDF4;
+    --background-color-header: #FFFDF4;
+    --background-color-hover: #EDE8D2;
+    --background-color-input-bg: #FFFDF4;
+
+    --sidebar: #003844;
+    --sidebar-hover: #0A9396;
+    --sidebar-text: #E8F1F0;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #10262B;
+    --text-color-secondary: #5C6E70;
+    --text-color-link: #005F73;
+    --border-color-default: #D8D2B4;
+    --border-color-input: #BDB795;
+    --border-color-dark: #001219;
+
+    --color-success: #216044;
+    --color-error: #9A3E2F;
+    --color-warning: #785B13;
+    --color-info: #315B6B;
+    --danger-bg: #F9E9E4;
+    --danger-text: #9A3E2F;
+    --warning-bg: #FBF1D9;
+    --warning-text: #785B13;
+    --info-bg: #E3EEF0;
+    --info-text: #315B6B;
+}
+
+
+/* ============================================================
+   10 · Ônix & Dourado (Black & Gold Elegance)
+   Família: preto · sensação: luxo institucional
+   ============================================================ */
+[data-cor="paleta-10"] {
+    --color-primary: #101010;
+    --color-primary-light: #2E2E33;
+    --color-primary-dark: #000000;
+    --color-primary-subtle: rgba(16, 16, 16, 0.12);
+    --color-primary-rgb: 16, 16, 16;
+    --color-gold-primary: #E5940A;
+    --color-gold-dark: #8A5A00;
+
+    --background-color-body: #F4F4F3;
+    --background-color-card: #FFFFFF;
+    --background-color-header: #FFFFFF;
+    --background-color-hover: #EAEAEA;
+    --background-color-input-bg: #FFFFFF;
+
+    --sidebar: #000000;
+    --sidebar-hover: #252525;
+    --sidebar-text: #F5F5F5;
+    --sidebar-active-text: #FFFFFF;
+
+    --text-color-primary: #171717;
+    --text-color-secondary: #686868;
+    --text-color-link: #101010;
+    --border-color-default: #D9D9D6;
+    --border-color-input: #BDBDB9;
+    --border-color-dark: #000000;
+
+    --color-success: #1E5C3E;
+    --color-error: #8C2525;
+    --color-warning: #755A0A;
+    --color-info: #33485C;
+    --danger-bg: #FBE8E8;
+    --danger-text: #8C2525;
+    --warning-bg: #FCF3DC;
+    --warning-text: #755A0A;
+    --info-bg: #E8EDF2;
+    --info-text: #33485C;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   DARK MODE — único bloco para as 10 paletas.
+   Preserva primary/acento de cada tema, troca superfícies e textos.
+   ───────────────────────────────────────────────────────────── */
+html[data-theme="dark"] [data-cor^="paleta-"] {
+    --background-color-body: #11181C;
+    --background-color-card: #1A2429;
+    --background-color-header: #1A2429;
+    --background-color-hover: #26343A;
+    --background-color-input-bg: #1A2429;
+
+    --text-color-primary: #F1F5F4;
+    --text-color-secondary: #B6C2C0;
+    --text-color-link: var(--color-primary-light);
+
+    --border-color-default: #405158;
+    --border-color-input: #63747A;
+    --border-color-dark: #0A1013;
+
+    --sidebar: color-mix(in srgb, var(--color-primary) 72%, #000000);
+    --sidebar-hover: color-mix(in srgb, var(--color-primary-light) 62%, #000000);
+    --sidebar-text: #F6FAF9;
+    --sidebar-active-text: #FFFFFF;
+
+    --danger-bg: color-mix(in srgb, var(--color-error) 20%, #1A2429);
+    --danger-text: #FFB4AA;
+    --warning-bg: color-mix(in srgb, var(--color-warning) 18%, #1A2429);
+    --warning-text: #F4D38A;
+    --info-bg: color-mix(in srgb, var(--color-info) 20%, #1A2429);
+    --info-text: #A9D0E3;
+}
+
+
+/* Compatibilidade estrutural com o layout e componentes existentes. */
+:root {
+    --rf-sidebar-collapsed-width: 4rem;
+    --sidebar: var(--color-primary);
+    --sidebar-hover: var(--color-primary-light);
+    --sidebar-text: var(--color-primary-contrast, #FFFFFF);
+    --sidebar-active-text: #FFFFFF;
+    --background-color-sidebar: var(--sidebar);
+    --background-color-sidebar-hover: var(--sidebar-hover);
+}
+
+[data-cor^="paleta-"] {
     --rf-sidebar-collapsed-width: 4rem;
     --rf-p3-grafite: var(--color-primary);
     --rf-p3-grafite-claro: var(--color-primary-light);
@@ -111,75 +651,4 @@
     --rf-p3-linha: var(--border-color-default);
     --rf-p3-sucesso: var(--color-success);
     --rf-p3-aviso: var(--color-warning);
-}
-
-[data-cor="paleta-01"] {
-    --color-primary:#0F2A43; --color-primary-light:#1B4368; --color-primary-dark:#0A1E30; --color-primary-subtle:rgba(15,42,67,.12); --color-primary-rgb:15,42,67; --color-gold-primary:#B08D3E; --color-gold-dark:#8E702F;
-    --background-color-body:#F5F2EA; --background-color-card:#FFFFFF; --background-color-header:#FFFFFF; --background-color-hover:#ECE8DE; --background-color-input-bg:#FFFFFF; --sidebar:#0F2A43; --sidebar-hover:#1B4368; --sidebar-text:#FFFFFF; --sidebar-active-text:#FFFFFF;
-    --text-color-primary:#1D1B18; --text-color-secondary:#6B665C; --text-color-link:#0F2A43; --border-color-default:#D9D2C2; --border-color-input:#BEB7A8; --border-color-dark:#0A1E30; --color-success:#1E5C3E; --color-error:#8C2A2A; --color-warning:#7A5A0A; --color-info:#26476B; --danger-bg:#FDECEC; --danger-text:#8C2A2A; --warning-bg:#FCF3DC; --warning-text:#7A5A0A; --info-bg:#E7EEF5; --info-text:#26476B;
-}
-[data-cor="paleta-02"] {
-    --color-primary:#123C31; --color-primary-light:#1E5C4A; --color-primary-dark:#0A251E; --color-primary-subtle:rgba(18,60,49,.12); --color-primary-rgb:18,60,49; --color-gold-primary:#A85C3A; --color-gold-dark:#7F4029;
-    --background-color-body:#F3F4F1; --background-color-card:#FFFFFF; --background-color-header:#FFFFFF; --background-color-hover:#E9EEEA; --background-color-input-bg:#FFFFFF; --sidebar:#123C31; --sidebar-hover:#1E5C4A; --sidebar-text:#FFFFFF; --sidebar-active-text:#FFFFFF;
-    --text-color-primary:#20261F; --text-color-secondary:#687168; --text-color-link:#123C31; --border-color-default:#D6DAD2; --border-color-input:#B9C1B9; --border-color-dark:#0A251E; --color-success:#155C42; --color-error:#9C4322; --color-warning:#7A5A0A; --color-info:#1E4A3A; --danger-bg:#FBEAE3; --danger-text:#9C4322; --warning-bg:#FCF3DC; --warning-text:#7A5A0A; --info-bg:#E9F0EC; --info-text:#1E4A3A;
-}
-[data-cor="paleta-03"] {
-    --color-primary:#2B2B2E; --color-primary-light:#45454A; --color-primary-dark:#18181A; --color-primary-subtle:rgba(122,31,43,.12); --color-primary-rgb:43,43,46; --color-gold-primary:#7A1F2B; --color-gold-dark:#5E1721;
-    --background-color-body:#F5F5F4; --background-color-card:#FFFFFF; --background-color-header:#FFFFFF; --background-color-hover:#ECECEB; --background-color-input-bg:#FFFFFF; --sidebar:#2B2B2E; --sidebar-hover:#45454A; --sidebar-text:#FFFFFF; --sidebar-active-text:#FFFFFF;
-    --text-color-primary:#1A1A1B; --text-color-secondary:#6B665C; --text-color-link:#7A1F2B; --border-color-default:#DEDEDC; --border-color-input:#BFC0BD; --border-color-dark:#18181A; --color-success:#2C5C36; --color-error:#7A1F2B; --color-warning:#6E5A16; --color-info:#3A3A3C; --danger-bg:#F6E7E9; --danger-text:#7A1F2B; --warning-bg:#F3EEDD; --warning-text:#6E5A16; --info-bg:#ECECEB; --info-text:#3A3A3C;
-}
-[data-cor="paleta-04"] {
-    --color-primary:#111111; --color-primary-light:#333333; --color-primary-dark:#000000; --color-primary-subtle:rgba(17,17,17,.12); --color-primary-rgb:17,17,17; --color-gold-primary:#B08D3E; --color-gold-dark:#8E702F;
-    --background-color-body:#F4F4F2; --background-color-card:#FFFFFF; --background-color-header:#FFFFFF; --background-color-hover:#EAEAE7; --background-color-input-bg:#FFFFFF; --sidebar:#000000; --sidebar-hover:#252525; --sidebar-text:#FFFFFF; --sidebar-active-text:#FFFFFF;
-    --text-color-primary:#171717; --text-color-secondary:#686868; --text-color-link:#111111; --border-color-default:#D9D9D6; --border-color-input:#BDBDB9; --border-color-dark:#000000; --color-success:#1E5C3E; --color-error:#8C2525; --color-warning:#755A0A; --color-info:#33485C; --danger-bg:#FBE8E8; --danger-text:#8C2525; --warning-bg:#FCF3DC; --warning-text:#755A0A; --info-bg:#E8EDF2; --info-text:#33485C;
-}
-[data-cor="paleta-05"] {
-    --color-primary:#274C5E; --color-primary-light:#4B7180; --color-primary-dark:#193542; --color-primary-subtle:rgba(39,76,94,.12); --color-primary-rgb:39,76,94; --color-gold-primary:#A87945; --color-gold-dark:#835D31;
-    --background-color-body:#F5F1E8; --background-color-card:#FFFFFF; --background-color-header:#FFFFFF; --background-color-hover:#EEF2F1; --background-color-input-bg:#FFFFFF; --sidebar:#FFFFFF; --sidebar-hover:#EEF2F1; --sidebar-text:#274C5E; --sidebar-active-text:#FFFFFF;
-    --text-color-primary:#243038; --text-color-secondary:#68747A; --text-color-link:#274C5E; --border-color-default:#D9D4C9; --border-color-input:#B9B6AE; --border-color-dark:#193542; --color-success:#216044; --color-error:#9A3E2F; --color-warning:#785B13; --color-info:#315B6B; --danger-bg:#F9E9E4; --danger-text:#9A3E2F; --warning-bg:#FBF1D9; --warning-text:#785B13; --info-bg:#E7EFF1; --info-text:#315B6B;
-}
-[data-cor="paleta-06"] {
-    --color-primary:#244353; --color-primary-light:#3C6878; --color-primary-dark:#142B36; --color-primary-subtle:rgba(36,67,83,.12); --color-primary-rgb:36,67,83; --color-gold-primary:#B58A3A; --color-gold-dark:#896526;
-    --background-color-body:#F6F1E6; --background-color-card:#FFFDFC; --background-color-header:#FFFDFC; --background-color-hover:#EEE7D9; --background-color-input-bg:#FFFDFC; --sidebar:#244353; --sidebar-hover:#3C6878; --sidebar-text:#FFFFFF; --sidebar-active-text:#FFFFFF;
-    --text-color-primary:#29251F; --text-color-secondary:#766E61; --text-color-link:#244353; --border-color-default:#DDD2BF; --border-color-input:#C7BDAA; --border-color-dark:#142B36; --color-success:#356044; --color-error:#963F32; --color-warning:#765A13; --color-info:#315B6C; --danger-bg:#F9E9E5; --danger-text:#963F32; --warning-bg:#FCF1D5; --warning-text:#765A13; --info-bg:#E8EFF1; --info-text:#315B6C;
-}
-
-/* Paleta 05: azul névoa institucional, sem branco absoluto na sidebar. */
-[data-cor="paleta-05"] {
-    --sidebar: #E7EEF2;
-    --sidebar-hover: #D6E2E8;
-    --sidebar-text: #274C5E;
-    --sidebar-active-text: #FFFFFF;
-    --background-color-body: #F3F6F7;
-    --background-color-card: #FBFCFD;
-    --background-color-header: #FBFCFD;
-    --background-color-hover: #EAF1F4;
-    --background-color-input-bg: #FFFFFF;
-    --border-color-default: #C9D7DE;
-    --border-color-input: #AFC2CC;
-}
-
-/* Dark mode: preserva a cor de ação de cada paleta e troca superfícies, textos e bordas. */
-html[data-theme="dark"] [data-cor^="paleta-"] {
-    --background-color-body: #11181C;
-    --background-color-card: #1A2429;
-    --background-color-header: #1A2429;
-    --background-color-hover: #26343A;
-    --background-color-input-bg: #1A2429;
-    --text-color-primary: #F1F5F4;
-    --text-color-secondary: #B6C2C0;
-    --text-color-link: var(--color-primary-light);
-    --border-color-default: #405158;
-    --border-color-input: #63747A;
-    --border-color-dark: #0A1013;
-    --sidebar: color-mix(in srgb, var(--color-primary) 72%, #000000);
-    --sidebar-hover: color-mix(in srgb, var(--color-primary-light) 62%, #000000);
-    --sidebar-text: #F6FAF9;
-    --sidebar-active-text: #FFFFFF;
-    --danger-bg: color-mix(in srgb, var(--color-error) 20%, #1A2429);
-    --danger-text: #FFB4AA;
-    --warning-bg: color-mix(in srgb, var(--color-warning) 18%, #1A2429);
-    --warning-text: #F4D38A;
-    --info-bg: color-mix(in srgb, var(--color-info) 20%, #1A2429);
-    --info-text: #A9D0E3;
 }

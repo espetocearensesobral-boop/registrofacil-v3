@@ -252,7 +252,7 @@ def obter_preferencia_visual_usuario(usuario_id):
 
 
 def obter_tema_usuario(usuario_id):
-    """Compatibilidade: retorna somente um dos seis temas institucionais."""
+    """Compatibilidade: retorna somente um dos dez temas institucionais."""
     return obter_preferencia_visual_usuario(usuario_id)['tema_cor'] or 'paleta-01'
 
 

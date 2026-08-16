@@ -25,5 +25,5 @@ def test_legacy_database_upgrade_preserves_data_and_reaches_current_schema(temp_
         ).fetchone()
 
     assert "representantes" in tables
-    assert user_version == 9
+    assert user_version == 10
     assert admin == ("admin", "admin")

@@ -160,21 +160,38 @@ def executar_migracoes_dados(connection=None):
         migracoes.append(migracao_008)
 
         def migracao_009(cursor):
-            """Normaliza preferências existentes para os seis temas institucionais."""
+            """Normaliza preferências existentes para os dez temas institucionais."""
             tabela = cursor.execute(
                 "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
             ).fetchone()
             if not tabela:
                 logger.info("[Migração 009] user_preferences ausente; nada a migrar.")
                 return
-            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06')"
+            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10')"
             cursor.execute(
                 f"UPDATE user_preferences SET tema_cor = 'paleta-01' "
                 f"WHERE tema_cor IS NULL OR tema_cor NOT IN {validos}"
             )
-            logger.info("[Migração 009] Preferências visuais normalizadas para seis temas.")
+            logger.info("[Migração 009] Preferências visuais normalizadas para dez temas.")
 
         migracoes.append(migracao_009)
+
+        def migracao_010(cursor):
+            """Garante que o catálogo atual de dez temas seja aceito no banco."""
+            tabela = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
+            ).fetchone()
+            if not tabela:
+                logger.info("[Migração 010] user_preferences ausente; nada a migrar.")
+                return
+            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10')"
+            cursor.execute(
+                f"UPDATE user_preferences SET tema_cor = 'paleta-01' "
+                f"WHERE tema_cor IS NULL OR tema_cor NOT IN {validos}"
+            )
+            logger.info("[Migração 010] Preferências visuais normalizadas para dez temas.")
+
+        migracoes.append(migracao_010)
 
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]
