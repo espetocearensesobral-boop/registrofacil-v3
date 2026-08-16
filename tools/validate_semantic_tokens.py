@@ -16,6 +16,7 @@ required = {
     '--rf-info', '--rf-info-hover', '--rf-info-surface', '--rf-info-text',
     '--rf-sidebar-surface', '--rf-sidebar-hover', '--rf-sidebar-active', '--rf-sidebar-text',
     '--rf-sidebar-active-text', '--rf-sidebar-border', '--rf-control-height', '--rf-sidebar-width',
+    '--rf-palette-color-1', '--rf-palette-color-2', '--rf-palette-color-3', '--rf-palette-color-4', '--rf-palette-color-5',
 }
 
 for number in range(1, 21):
@@ -25,6 +26,8 @@ for number in range(1, 21):
     body = match.group('body')
     assert re.search(r'--color-primary\s*:', body), f'{theme}: primary ausente'
     assert re.search(r'--sidebar\s*:', body), f'{theme}: sidebar ausente'
+    for index in range(1, 6):
+        assert re.search(rf'--rf-palette-color-{index}\s*:', body), f'{theme}: palette color {index} ausente'
 
 for line in css.splitlines():
     declarations = re.findall(r'(--[\w-]+)\s*:\s*([^;]+)', line)

@@ -317,7 +317,7 @@
                             <span class="theme-choice-check"><i class="bi bi-check-lg"></i></span>
                             <span class="theme-choice-number">Tema {{ palette.numero }}</span>
                             <strong>{{ palette.nome }}</strong>
-                            <span class="theme-choice-swatches"><i style="background:{{ palette.primary }}"></i><i style="background:{{ palette.primary_light }}"></i><i style="background:{{ palette.accent }}"></i><i style="background:{{ palette.background }}"></i><i style="background:{{ palette.sidebar }}"></i></span>
+                            <span class="theme-choice-swatches" aria-label="Cinco cores da paleta">{% for color in palette.cores %}<i style="background:{{ color }}" title="{{ color }}"></i>{% endfor %}</span>
                             <small>{{ palette.descricao }}</small>
                         </button>
                     </div>

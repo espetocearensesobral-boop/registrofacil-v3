@@ -145,6 +145,11 @@ def render_fallback(p: dict) -> str:
     --color-primary-subtle: {rgba(p['primary'], .12)};
     --color-primary-rgb: {rgb3(p['primary'])};
     --color-primary-contrast: #FFFFFF;
+    --rf-palette-color-1: {p['cores'][0]};
+    --rf-palette-color-2: {p['cores'][1]};
+    --rf-palette-color-3: {p['cores'][2]};
+    --rf-palette-color-4: {p['cores'][3]};
+    --rf-palette-color-5: {p['cores'][4]};
 
     --color-gold-primary: {p['accent']};
     --color-gold-dark: color-mix(in srgb, {p['accent']} 72%, #000);
@@ -193,6 +198,8 @@ def render_paleta(pid: str, p: dict) -> str:
 [data-cor="{pid}"] {{
     --color-primary: {p['primary']}; --color-primary-light: {p['primary_light']}; --color-primary-dark: {p['primary_dark']};
     --color-primary-subtle: {rgba(p['primary'], .12)}; --color-primary-rgb: {rgb3(p['primary'])};
+    --rf-palette-color-1: {p['cores'][0]}; --rf-palette-color-2: {p['cores'][1]}; --rf-palette-color-3: {p['cores'][2]};
+    --rf-palette-color-4: {p['cores'][3]}; --rf-palette-color-5: {p['cores'][4]};
     --color-gold-primary: {p['accent']}; --color-gold-dark: color-mix(in srgb, {p['accent']} 72%, #000);
     --background-color-body: {p['background']}; --background-color-card: {p['paper']}; --background-color-header: {p['paper']};
     --background-color-hover: color-mix(in srgb, {p['background']} 90%, {p['primary']}); --background-color-input-bg: {p['paper']};
