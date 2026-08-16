@@ -10,33 +10,6 @@
 {% endblock %}
 
 {% block content %}
-<style>
-.emp-section-lbl {
-    font-size: .75rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .06em; color: var(--text-color-secondary); margin-bottom: 6px;
-}
-.emp-fld label {
-    display: block; font-size: .75rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .05em;
-    color: var(--text-color-secondary); margin-bottom: 5px;
-}
-.emp-fld label .req { color: var(--color-error); }
-.emp-fld input, .emp-fld textarea {
-    width: 100%; font-size: 13px;
-    border-radius: 7px; border: 1px solid var(--border-color-input);
-    background: var(--background-color-card); color: var(--text-color-primary);
-    padding: 8px 11px; transition: border-color .15s, box-shadow .15s;
-}
-.emp-fld input { height: 38px; }
-.emp-fld textarea { height: 82px; resize: vertical; }
-.emp-fld input:focus, .emp-fld textarea:focus { outline: none; border-color: var(--color-gold-primary); box-shadow: 0 0 0 3px rgba(184,142,67,.12); }
-.emp-fld input:disabled, .emp-fld textarea:disabled { opacity: .6; cursor: not-allowed; }
-.emp-fld .invalid-feedback { font-size: .75rem; color: var(--color-error); margin-top: 3px; display: none; }
-.emp-fld input.is-invalid, .emp-fld textarea.is-invalid { border-color: var(--color-error); }
-.emp-fld input.is-invalid ~ .invalid-feedback, .emp-fld textarea.is-invalid ~ .invalid-feedback { display: block; }
-.emp-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 576px) { .emp-row-2 { grid-template-columns: 1fr; } }
-</style>
 
 <form id="form-empresa" method="post" enctype="multipart/form-data" novalidate>
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -48,9 +21,9 @@
             <!-- Informações da Organização -->
             <div class="rf-card mb-3">
                 <div class="rf-card-header">
-                    <h5 class="m-0"><i class="bi bi-building me-2" style="color:var(--color-gold-primary);"></i>Informações da Organização</h5>
+                    <h5 class="m-0"><i class="bi bi-building me-2 rf-heading-icon"></i>Informações da Organização</h5>
                 </div>
-                <div class="rf-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                <div class="rf-card-body emp-card-stack">
                     <div class="emp-fld">
                         <label>Nome da Organização <span class="req">*</span></label>
                         <input type="text" id="cartorio" name="cartorio"
@@ -89,7 +62,7 @@
             <!-- Dados de Contato -->
             <div class="rf-card mb-3">
                 <div class="rf-card-header">
-                    <h5 class="m-0"><i class="bi bi-telephone-fill me-2" style="color:var(--color-gold-primary);"></i>Dados de Contato</h5>
+                    <h5 class="m-0"><i class="bi bi-telephone-fill me-2 rf-heading-icon"></i>Dados de Contato</h5>
                 </div>
                 <div class="rf-card-body">
                     <div class="emp-row-2">
@@ -114,7 +87,7 @@
             </div>
 
             {% if session.get('usuario_role') == 'admin' %}
-            <div style="display:flex;gap:10px;justify-content:flex-end;">
+            <div class="rf-form-actions">
                 <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
                     <i class="bi bi-x"></i> Cancelar
                 </a>
@@ -131,33 +104,33 @@
             <!-- Logo -->
             <div class="rf-card mb-3">
                 <div class="rf-card-header">
-                    <h5 class="m-0"><i class="bi bi-image-fill me-2" style="color:var(--color-gold-primary);"></i>Logo</h5>
+                    <h5 class="m-0"><i class="bi bi-image-fill me-2 rf-heading-icon"></i>Logo</h5>
                 </div>
-                <div class="rf-card-body" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
-                    <div class="logo-preview-container position-relative" style="width:160px;height:160px;border-radius:50%;overflow:hidden;border:3px solid var(--border-color-default);cursor:pointer;transition:all .2s;">
+                <div class="rf-card-body emp-logo-body">
+                    <div class="logo-preview-container position-relative">
                         <img src="{{ display_logo_url }}" class="logo-preview-image" id="logoPreview"
-                             alt="Logo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"
+                             alt="Logo"
                              onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default_avatar.png') }}';">
-                        <div class="logo-overlay" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;">
-                            <div style="text-align:center;color:#fff;">
-                                <i class="bi bi-camera-fill" style="font-size:1.4rem;display:block;margin-bottom:4px;"></i>
-                                <span style="font-size: .75rem;font-weight:600;">Alterar</span>
+                        <div class="logo-overlay">
+                            <div class="logo-overlay-content">
+                                <i class="bi bi-camera-fill logo-overlay-icon"></i>
+                                <span class="logo-overlay-label">Alterar</span>
                             </div>
                         </div>
                     </div>
                     <input class="d-none" type="file" id="logo" name="logo" accept="image/jpeg,image/png,image/svg+xml"
                            {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
-                    <div id="logoFileInfo" class="d-none" style="width:100%;background:var(--background-color-body);border:1px solid var(--border-color-default);border-radius:8px;padding:8px 12px;font-size:12px;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span id="logoFileName" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;"></span>
-                            <span id="logoFileSize" style="color:var(--text-color-secondary);flex-shrink:0;margin-left:6px;"></span>
+                    <div id="logoFileInfo" class="d-none logo-file-info">
+                        <div class="logo-file-row">
+                            <span id="logoFileName" class="logo-file-name"></span>
+                            <span id="logoFileSize" class="logo-file-size"></span>
                         </div>
-                        <button type="button" id="btnCancelarUpload" style="font-size: .75rem;color:var(--color-error);background:none;border:none;padding:2px 0;cursor:pointer;margin-top:3px;">
+                        <button type="button" id="btnCancelarUpload" class="logo-cancel-upload">
                             <i class="bi bi-x-circle me-1"></i>Cancelar seleção
                         </button>
                     </div>
                     {% if empresa.logo and session.get('usuario_role') == 'admin' %}
-                    <button type="button" class="nav-btn nav-btn-secondary" id="btnRemoverLogo" style="width:100%;justify-content:center;font-size:12px;">
+                    <button type="button" class="nav-btn nav-btn-secondary btn-w-full" id="btnRemoverLogo">
                         <i class="bi bi-trash me-1"></i>Remover Logo
                     </button>
                     {% endif %}
@@ -165,7 +138,7 @@
                     <input type="checkbox" class="d-none" id="remover_logo" name="remover_logo" value="1"
                            {% if session.get('usuario_role') != 'admin' %}disabled{% endif %}>
                     {% endif %}
-                    <p style="font-size: .75rem;color:var(--text-color-secondary);text-align:center;margin:0;">
+                    <p class="emp-helper-text">
                         JPG, PNG ou SVG · máx. 2MB<br>Recomendado: 200×200px
                     </p>
                 </div>
@@ -174,24 +147,24 @@
             <!-- Informações do Sistema -->
             <div class="rf-card">
                 <div class="rf-card-header">
-                    <h5 class="m-0"><i class="bi bi-info-circle me-2" style="color:var(--color-gold-primary);"></i>Sistema</h5>
+                    <h5 class="m-0"><i class="bi bi-info-circle me-2 rf-heading-icon"></i>Sistema</h5>
                 </div>
-                <div class="rf-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                <div class="rf-card-body emp-card-stack">
                     <div>
                         <div class="emp-section-lbl"><i class="bi bi-calendar-plus me-1"></i>Cadastrado em</div>
-                        <div style="font-size:13px;font-weight:600;color:var(--text-color-primary);">
-                            {% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">Não registrado</span>{% endif %}
+                        <div class="emp-system-value">
+                            {% if empresa.criado_em %}{{ empresa.criado_em | format_datetime_full }}{% else %}<span class="rf-muted-value">Não registrado</span>{% endif %}
                         </div>
                     </div>
-                    <div style="border-top:1px solid var(--border-color-default);padding-top:12px;">
+                    <div class="emp-system-divider">
                         <div class="emp-section-lbl"><i class="bi bi-pencil-square me-1"></i>Última Atualização</div>
-                        <div style="font-size:13px;font-weight:600;color:var(--text-color-primary);">
-                            {% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span style="color:var(--text-color-secondary);">Nunca atualizado</span>{% endif %}
+                        <div class="emp-system-value">
+                            {% if empresa.atualizado_em %}{{ empresa.atualizado_em | format_datetime_full }}{% else %}<span class="rf-muted-value">Nunca atualizado</span>{% endif %}
                         </div>
                     </div>
                     {% if not session.get('usuario_role') == 'admin' %}
-                    <div style="border-top:1px solid var(--border-color-default);padding-top:12px;">
-                        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-warning);">
+                    <div class="emp-system-divider">
+                        <div class="emp-restriction-note">
                             <i class="bi bi-lock-fill"></i>
                             <span>Apenas administradores podem editar estas informações.</span>
                         </div>

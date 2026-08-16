@@ -9,8 +9,7 @@
         <i class="bi bi-arrow-left"></i> Voltar
     </a>
     {% if historico %}
-    <span class="nav-btn nav-btn-secondary"
-          style="opacity:.45;cursor:not-allowed;pointer-events:none;"
+    <span class="nav-btn nav-btn-secondary is-disabled"
           title="Não é possível editar um apresentante com processos vinculados">
         <i class="bi bi-pencil"></i> Editar
     </span>
@@ -33,13 +32,13 @@
 <div class="kpi-grid">
     <div class="kpi-card kpi-info">
         <div class="kpi-label">Cadastrado em</div>
-        <div class="kpi-value kpi-info" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.created_at) }}</div>
+        <div class="kpi-value kpi-info rf-kpi-meta">{{ formatar_data(apresentante.created_at) }}</div>
         <div class="kpi-sub">Data de cadastro</div>
         <i class="bi bi-calendar-event kpi-bg-icon"></i>
     </div>
     <div class="kpi-card kpi-success">
         <div class="kpi-label">Última Atualização</div>
-        <div class="kpi-value kpi-success" style="font-size:16px;padding-top:6px;">{{ formatar_data(apresentante.updated_at) }}</div>
+        <div class="kpi-value kpi-success rf-kpi-meta">{{ formatar_data(apresentante.updated_at) }}</div>
         <div class="kpi-sub">Data de modificação</div>
         <i class="bi bi-pencil-square kpi-bg-icon"></i>
     </div>
@@ -54,28 +53,28 @@
 <!-- Histórico de Serviços com dados do apresentante embutidos -->
 <div class="rf-card">
     <div class="rf-card-header">
-        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+        <div class="rf-entity-heading">
             <div class="rf-avatar">
                 {{ apresentante.nome[0] | upper }}
             </div>
-            <div style="min-width:0;">
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <h5 class="m-0" style="font-size:15px;font-weight:700;">{{ apresentante.nome }}</h5>
+            <div class="rf-entity-heading-main">
+                <div class="rf-entity-contact">
+                    <h5 class="m-0 rf-entity-title">{{ apresentante.nome }}</h5>
                     {% if apresentante.telefone %}
-                    <a href="https://wa.me/55{{ apresentante.telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" style="font-size:12px;color:var(--color-success);text-decoration:none;display:flex;align-items:center;gap:3px;">
+                    <a href="https://wa.me/55{{ apresentante.telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" class="rf-contact-link rf-contact-success">
                         <i class="bi bi-whatsapp"></i>{{ apresentante.telefone }}
                     </a>
                     {% endif %}
                     {% if apresentante.email %}
-                    <a href="mailto:{{ apresentante.email }}" style="font-size:12px;color:var(--color-info);text-decoration:none;display:flex;align-items:center;gap:3px;">
+                    <a href="mailto:{{ apresentante.email }}" class="rf-contact-link rf-contact-info">
                         <i class="bi bi-envelope"></i>{{ apresentante.email }}
                     </a>
                     {% endif %}
                 </div>
-                <div style="margin-top:4px;">
-                    <code style="font-size: .75rem;background:var(--background-color-body);padding:1px 6px;border-radius:4px;color:var(--text-color-secondary);">#{{ '%04d' % apresentante.id }}</code>
+                <div class="rf-entity-meta">
+                    <code class="rf-entity-id">#{{ '%04d' % apresentante.id }}</code>
                     {% if not apresentante.telefone and not apresentante.email %}
-                    <span style="font-size: .75rem;color:var(--text-color-secondary);margin-left:6px;">Sem dados de contato</span>
+                    <span class="rf-muted-inline">Sem dados de contato</span>
                     {% endif %}
                 </div>
             </div>
@@ -86,28 +85,28 @@
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead>
-                    <tr style="background:var(--background-color-body);">
-                        <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
-                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Tipo de Serviço</th>
-                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Data Entrada</th>
-                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Prazo</th>
-                        <th style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Status</th>
-                        <th class="text-end pe-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Ações</th>
+                    <tr class="rf-table-head-row">
+                        <th class="ps-4">Matrícula</th>
+                        <th>Tipo de Serviço</th>
+                        <th>Data Entrada</th>
+                        <th>Prazo</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for processo in historico %}
                     <tr>
-                        <td class="ps-4 fw-semibold" style="padding:10px 12px;font-family: var(--rf-font-mono);">{{ processo.matricula }}</td>
-                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ processo.tipo_servico_nome }}</td>
-                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.data_entrada) }}</td>
-                        <td style="padding:10px 12px;color:var(--text-color-secondary);">{{ formatar_data(processo.prazo_final) if processo.prazo_final else '—' }}</td>
-                        <td style="padding:10px 12px;">
-                            <span class="badge" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }}; font-size: .75rem;border-radius:6px;padding:3px 8px;">
+                        <td class="ps-4 fw-semibold">{{ processo.matricula }}</td>
+                        <td>{{ processo.tipo_servico_nome }}</td>
+                        <td>{{ formatar_data(processo.data_entrada) }}</td>
+                        <td>{{ formatar_data(processo.prazo_final) if processo.prazo_final else '—' }}</td>
+                        <td>
+                            <span class="badge rf-status-pill" style="background-color: {{ processo.hex_color }}; color: {{ get_contrast_color(processo.hex_color) }};">
                                 {{ processo.status_nome }}
                             </span>
                         </td>
-                        <td class="text-end pe-4" style="padding:10px 12px;">
+                        <td class="text-end pe-4">
                             <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}"
                                class="nav-btn nav-btn-secondary btn-xs"
                                title="Ver Processo">
@@ -117,8 +116,8 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
-                            <i class="bi bi-folder2 d-block mb-2" style="font-size:2rem;opacity:.3;"></i>
+                        <td colspan="6" class="text-center py-5 rf-empty-cell">
+                            <i class="bi bi-folder2 d-block mb-2 rf-empty-icon"></i>
                             <span>Nenhum processo encontrado para este apresentante.</span>
                         </td>
                     </tr>
@@ -135,17 +134,17 @@
 <div class="modal fade" id="confirmDeleteApresentanteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+            <div class="modal-header rf-modal-danger-header">
                 <h5 class="modal-title fw-bold"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body" style="font-size:14px;">
+            <div class="modal-body rf-modal-body">
                 Excluir o apresentante <strong id="apresentanteNomeParaExcluir"></strong>?<br>
-                <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+                <small class="rf-modal-note">Esta ação não pode ser desfeita.</small>
             </div>
             <div class="modal-footer">
                 <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Cancelar</button>
-                <form id="formExcluirApresentante" method="POST" action="" style="display:inline;">
+                <form id="formExcluirApresentante" method="POST" action="" class="rf-inline-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
                 </form>

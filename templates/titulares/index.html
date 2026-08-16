@@ -50,19 +50,19 @@
 
 <!-- Filtro -->
 <div class="rf-card mb-4">
-    <div class="rf-card-body" style="padding:12px 16px;">
+    <div class="rf-card-body" >
         <form method="get" class="row g-2 align-items-end">
             <input type="hidden" name="ordenar" value="{{ ordenar | default('nome') }}">
             <input type="hidden" name="direcao" value="{{ direcao | default('asc') }}">
             <div class="col-md-7">
-                <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Buscar Titular</label>
+                <label class="form-label rf-filter-label">Buscar Titular</label>
                 <div class="input-group">
-                    <span class="input-group-text" style="background:var(--background-color-body);border-color:var(--border-color-input);"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" name="busca" class="form-control" placeholder="Nome, E-mail ou Telefone..." value="{{ busca | default('') }}" style="border-left:none;font-size:13px;">
+                    <span class="input-group-text rf-filter-addon"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="busca" class="form-control rf-filter-input" placeholder="Nome, E-mail ou Telefone..." value="{{ busca | default('') }}">
                 </div>
             </div>
             <div class="col-md-2">
-                <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
+                <label class="form-label rf-filter-label">Por página</label>
                 <select name="registros_por_pagina" class="form-select form-select-sm">
                     {% for n in [10, 25, 50, 100] %}
                     <option value="{{ n }}" {% if registros_por_pagina == n %}selected{% endif %}>{{ n }}</option>
@@ -71,7 +71,7 @@
             </div>
             <div class="col-md-3 d-flex gap-2">
                 <button type="submit" class="nav-btn nav-btn-success flex-fill"><i class="bi bi-funnel"></i> Filtrar</button>
-                <a href="{{ url_for('titulares.index') }}" class="nav-btn nav-btn-danger flex-fill" style="justify-content:center;"><i class="bi bi-x-circle"></i> Limpar</a>
+                <a href="{{ url_for('titulares.index') }}" class="nav-btn nav-btn-danger flex-fill rf-action-center"><i class="bi bi-x-circle"></i> Limpar</a>
             </div>
         </form>
     </div>
@@ -80,15 +80,15 @@
 <!-- Tabela -->
 <div class="rf-card">
     <div class="rf-card-header">
-        <h5 class="m-0"><i class="bi bi-people me-2" style="color:var(--color-gold-primary);"></i>Lista de Titulares</h5>
+        <h5 class="m-0"><i class="bi bi-people me-2 rf-heading-icon"></i>Lista de Titulares</h5>
         <span class="rf-pill rf-pill-dark">{{ total_registros }}</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table-titulares table table-hover align-middle mb-0">
                 <thead>
-                    <tr style="background:var(--background-color-body);">
-                        {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;"></i>{% else %}<i class="bi bi-sort-down ms-1" style="opacity:.8;"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;"></i>{% endif %}{% endmacro %}
+                    <tr class="rf-table-head-row">
+                        {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1 rf-sort-active"></i>{% else %}<i class="bi bi-sort-down ms-1 rf-sort-active"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1 rf-sort-inactive"></i>{% endif %}{% endmacro %}
                         {% macro sort_url(col) %}{{ url_for('titulares.index', busca=busca, registros_por_pagina=registros_por_pagina, ordenar=col, direcao='desc' if (ordenar == col and direcao == 'asc') else 'asc', pagina=1) }}{% endmacro %}
                         <th class="ps-4 th-sort" onclick="window.location='{{ sort_url('nome') }}'">Nome do Titular{{ sort_icon('nome') }}</th>
                         <th class="th-sort" onclick="window.location='{{ sort_url('telefone') }}'">Telefone{{ sort_icon('telefone') }}</th>
@@ -102,19 +102,19 @@
                     {% for titular in titulares %}
                     {% set tem_vinculo = titular.total_processos and titular.total_processos > 0 %}
                     <tr>
-                        <td class="ps-4 fw-semibold" style="padding:11px 12px;">{{ titular.nome }}</td>
-                        <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ titular.telefone or '—' }}</td>
-                        <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ titular.email or '—' }}</td>
-                        <td style="padding:11px 12px;">
+                        <td class="ps-4 fw-semibold" >{{ titular.nome }}</td>
+                        <td class="rf-muted-cell">{{ titular.telefone or '—' }}</td>
+                        <td class="rf-muted-cell">{{ titular.email or '—' }}</td>
+                        <td >
                             {% if tem_vinculo %}
                             <span class="rf-pill-soft rf-badge-info">
                                 <i class="bi bi-folder me-1"></i>{{ titular.total_processos }}
                             </span>
                             {% else %}
-                            <span style="color:var(--text-color-secondary);">0</span>
+                            <span class="rf-muted-value">0</span>
                             {% endif %}
                         </td>
-                        <td style="padding:11px 12px;">
+                        <td >
                             {% if titular.ultimo_registro_id %}
                             <a href="{{ url_for('processos.visualizar', processo_id=titular.ultimo_registro_id) }}" class="text-decoration-none">
                                 {% if titular.ultimo_registro_matricula == 'Sem Matrícula' %}
@@ -128,11 +128,11 @@
                                 {% endif %}
                             </a>
                             {% else %}
-                            <span style="color:var(--text-color-secondary);">—</span>
+                            <span class="rf-muted-value">—</span>
                             {% endif %}
                         </td>
-                        <td class="text-end pe-4" style="padding:11px 12px;">
-                            <div style="display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap;">
+                        <td class="text-end pe-4" >
+                            <div class="rf-row-actions">
                                 <a href="{{ url_for('titulares.visualizar', titular_id=titular.id) }}"
                                    class="nav-btn nav-btn-info btn-xs"
                                    title="Ver Histórico">
@@ -167,8 +167,8 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
-                            <i class="bi bi-people mb-2 d-block" style="font-size:2rem;opacity:.3;"></i>
+                        <td colspan="6" class="text-center py-5 rf-empty-cell">
+                            <i class="bi bi-people mb-2 d-block rf-empty-icon"></i>
                             <span>Nenhum titular encontrado.</span>
                         </td>
                     </tr>
@@ -181,36 +181,36 @@
     {% if total_paginas > 1 %}
     {% set inicio = (pagina_atual - 1) * registros_por_pagina + 1 %}
     {% set fim = inicio + titulares|length - 1 %}
-    <div style="padding:10px 16px;border-top:1px solid var(--border-color-default);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
+    <div class="rf-pagination-bar">
         <div></div>
         <nav aria-label="Páginas">
-            <ul class="pagination justify-content-center mb-0" style="gap:4px;">
+            <ul class="pagination justify-content-center mb-0 rf-pagination">
                 <li class="page-item {{ 'disabled' if pagina_atual == 1 }}">
-                    <a class="page-link" href="{{ url_for('titulares.index', pagina=pagina_atual-1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">Anterior</a>
+                    <a class="page-link" href="{{ url_for('titulares.index', pagina=pagina_atual-1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}">Anterior</a>
                 </li>
                 {% set max_links = 7 %}
                 {% set start_p = [1, pagina_atual - (max_links // 2)] | max %}
                 {% set end_p = [total_paginas, start_p + max_links - 1] | min %}
                 {% set start_p = [1, end_p - max_links + 1] | max %}
                 {% if start_p > 1 %}
-                    <li class="page-item"><a class="page-link" href="{{ url_for('titulares.index', pagina=1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">1</a></li>
-                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link" style="border-radius:6px;font-size:13px;">…</span></li>{% endif %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('titulares.index', pagina=1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}">1</a></li>
+                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
                 {% endif %}
                 {% for p in range(start_p, end_p + 1) %}
                 <li class="page-item {{ 'active' if p == pagina_atual }}">
-                    <a class="page-link" href="{{ url_for('titulares.index', pagina=p, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">{{ p }}</a>
+                    <a class="page-link" href="{{ url_for('titulares.index', pagina=p, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}">{{ p }}</a>
                 </li>
                 {% endfor %}
                 {% if end_p < total_paginas %}
-                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link" style="border-radius:6px;font-size:13px;">…</span></li>{% endif %}
-                    <li class="page-item"><a class="page-link" href="{{ url_for('titulares.index', pagina=total_paginas, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">{{ total_paginas }}</a></li>
+                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('titulares.index', pagina=total_paginas, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}">{{ total_paginas }}</a></li>
                 {% endif %}
                 <li class="page-item {{ 'disabled' if pagina_atual == total_paginas }}">
-                    <a class="page-link" href="{{ url_for('titulares.index', pagina=pagina_atual+1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}" style="border-radius:6px;font-size:13px;">Próximo</a>
+                    <a class="page-link" href="{{ url_for('titulares.index', pagina=pagina_atual+1, busca=busca, registros_por_pagina=registros_por_pagina, ordenar=ordenar, direcao=direcao) }}">Próximo</a>
                 </li>
             </ul>
         </nav>
-        <div style="text-align:right;font-size:12px;color:var(--text-color-secondary);white-space:nowrap;">
+        <div class="rf-pagination-meta">
             Mostrando {{ inicio }}–{{ fim }} de {{ total_registros }} registro{{ 's' if total_registros != 1 }}
         </div>
     </div>
@@ -221,17 +221,17 @@
 <div class="modal fade" id="confirmDeleteTitularModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="background:var(--color-error);color:#fff;">
+            <div class="modal-header rf-modal-danger-header">
                 <h5 class="modal-title fw-bold"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body" style="font-size:14px;">
+            <div class="modal-body rf-modal-body">
                 Excluir o titular <strong id="titularNomeParaExcluir"></strong>?<br>
-                <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
+                <small class="rf-modal-note">Esta ação não pode ser desfeita.</small>
             </div>
             <div class="modal-footer">
                 <button type="button" class="nav-btn nav-btn-secondary btn-cancel-action" data-bs-dismiss="modal"><i class="bi bi-x"></i> Cancelar</button>
-                <form id="formExcluirTitular" method="POST" action="" style="display:inline;">
+                <form id="formExcluirTitular" method="POST" action="" class="rf-inline-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
                 </form>

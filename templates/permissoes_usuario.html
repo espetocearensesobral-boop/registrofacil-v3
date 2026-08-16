@@ -13,54 +13,53 @@
 
 {# ── Cabeçalho do utilizador ── #}
 <div class="rf-card mb-3">
-    <div class="card-body" style="padding:16px 20px;">
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-            <div style="width:46px;height:46px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;">
+    <div class="card-body rf-user-card-body">
+        <div class="rf-user-summary">
+            <div class="rf-avatar rf-avatar-lg">
                 {{ usuario.nome[0]|upper }}
             </div>
-            <div style="flex:1;min-width:0;">
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <span style="font-size:15px;font-weight:700;color:var(--text-color-primary);">{{ usuario.nome }}</span>
-                    <code style="font-size: .75rem;background:var(--background-color-body);padding:1px 7px;border-radius:4px;color:var(--text-color-secondary);">@{{ usuario.usuario }}</code>
-                    <span class="badge" style="background:var(--color-gold-dark);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;">{{ usuario.role|upper }}</span>
+            <div class="rf-user-summary-main">
+                <div class="rf-inline-meta">
+                    <span class="rf-row-title">{{ usuario.nome }}</span>
+                    <code class="rf-user-handle">@{{ usuario.usuario }}</code>
+                    <span class="badge rf-pill rf-pill-gold">{{ usuario.role|upper }}</span>
                     {% if usuario.role in ['admin','suporte'] %}
-                    <span class="badge" style="background:var(--color-success);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 8px;"><i class="bi bi-shield-fill-check me-1"></i>Acesso Total</span>
+                    <span class="badge rf-pill rf-pill-success"><i class="bi bi-shield-fill-check me-1"></i>Acesso Total</span>
                     {% endif %}
                 </div>
-                <div style="font-size:12px;color:var(--text-color-secondary);margin-top:3px;"><i class="bi bi-envelope me-1"></i>{{ usuario.email }}</div>
+                <div class="rf-row-subtitle rf-user-email"><i class="bi bi-envelope me-1"></i>{{ usuario.email }}</div>
             </div>
-            <div id="permissoes-summary" style="text-align:right;flex-shrink:0;">
-                <div style="font-size:22px;font-weight:800;color:var(--color-black-premium);" id="contador-num">0</div>
-                <div style="font-size: .75rem;color:var(--text-color-secondary);">permissões ativas</div>
+            <div id="permissoes-summary" class="rf-permission-summary">
+                <div class="rf-summary-number" id="contador-num">0</div>
+                <div class="rf-summary-label">permissões ativas</div>
             </div>
         </div>
     </div>
 </div>
 
 {% if usuario.role in ['admin','suporte'] %}
-<div style="display:flex;align-items:center;gap:10px;background:var(--rf-warning-surface);border:1px solid color-mix(in srgb, var(--rf-warning) 35%, var(--background-color-card));border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;">
-    <i class="bi bi-shield-lock-fill" style="color:var(--rf-warning-text);font-size:18px;flex-shrink:0;"></i>
+<div class="rf-role-warning">
+    <i class="bi bi-shield-lock-fill rf-warning-icon"></i>
     <span><strong>Administradores e suporte</strong> têm acesso irrestrito ao sistema. Permissões granulares não se aplicam a este perfil.</span>
 </div>
 {% endif %}
 
 {# Alerta de feedback #}
-<div id="feedbackAlert" class="d-none" role="alert"
-     style="border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;"></div>
+<div id="feedbackAlert" class="rf-feedback d-none" role="alert"></div>
 
 {% if usuario.role not in ['admin','suporte'] %}
 {# ── Seção: Perfil de Permissão ── #}
 <div class="rf-card mb-3">
-    <div class="card-body" style="padding:16px 20px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div class="card-body rf-user-card-body">
+        <div class="rf-profile-row">
             <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text-color-primary);margin-bottom:2px;">
-                    <i class="bi bi-person-badge me-1" style="color:var(--color-gold-dark);"></i>Perfil de Permissão
+                <div class="rf-row-title rf-profile-title">
+                    <i class="bi bi-person-badge me-1 rf-info-icon"></i>Perfil de Permissão
                 </div>
-                <div id="perfil-status" style="font-size:12px;color:var(--text-color-secondary);">Carregando...</div>
+                <div id="perfil-status" class="rf-row-subtitle">Carregando...</div>
             </div>
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <select id="selectPerfil" class="form-select form-select-sm" style="min-width:180px;font-size:12px;">
+            <div class="rf-profile-actions">
+                <select id="selectPerfil" class="form-select form-select-sm rf-profile-select">
                     <option value="">— Sem perfil (permissões manuais) —</option>
                 </select>
                 <button type="button" class="nav-btn nav-btn-primary btn-xs"  onclick="aplicarPerfil()">
@@ -71,7 +70,7 @@
                 </a>
             </div>
         </div>
-        <div style="font-size: .75rem;color:var(--rf-warning-text);margin-top:8px;background:var(--rf-warning-surface);border-radius:6px;padding:6px 10px;">
+        <div class="rf-inline-note">
             <i class="bi bi-info-circle me-1"></i>
             Ao aplicar um perfil, as permissões do usuário serão substituídas pelas permissões do perfil selecionado.
         </div>
@@ -84,20 +83,20 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
     {# Barra de ações rápidas #}
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+    <div class="rf-quick-actions">
         <button type="button" class="nav-btn nav-btn-secondary btn-xs"  onclick="selecionarTodas()">
             <i class="bi bi-check-all"></i> Selecionar Tudo
         </button>
         <button type="button" class="nav-btn nav-btn-secondary btn-xs"  onclick="desselecionarTodas()">
             <i class="bi bi-x-circle"></i> Limpar Tudo
         </button>
-        <div style="flex:1;"></div>
+        <div class="rf-flex-spacer"></div>
         {# Barra de progresso #}
-        <div style="display:flex;align-items:center;gap:8px;">
-            <div style="width:120px;height:6px;background:var(--border-color-default);border-radius:99px;overflow:hidden;">
-                <div id="progress-bar" style="height:100%;background:var(--color-success);border-radius:99px;transition:width .3s;width:0%;"></div>
+        <div class="rf-progress-wrap">
+            <div class="rf-progress-track">
+                <div id="progress-bar" class="rf-progress-bar"></div>
             </div>
-            <span id="contador-pct" style="font-size: .75rem;color:var(--text-color-secondary);white-space:nowrap;">0%</span>
+            <span id="contador-pct" class="rf-progress-pct">0%</span>
         </div>
     </div>
 
@@ -110,8 +109,7 @@
     <div class="perm-category-card rf-card mb-2" id="cat-{{ cat_id }}">
         {# Cabeçalho da categoria — clicável para expandir #}
         <div class="perm-cat-header"
-             onclick="toggleCategoria('body-{{ cat_id }}')"
-             style="display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;border-radius:8px;user-select:none;">
+             onclick="toggleCategoria('body-{{ cat_id }}')">
 
             {# Ícone de categoria #}
             {%- set cat_icon = {
@@ -121,13 +119,13 @@
                 'Administração': 'bi-shield-lock',
                 'Relatórios':    'bi-bar-chart-line'
             }.get(categoria, 'bi-puzzle') %}
-            <div style="width:32px;height:32px;border-radius:8px;background:var(--background-color-body);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <i class="bi {{ cat_icon }}" style="font-size:15px;color:var(--text-color-secondary);"></i>
+            <div class="perm-cat-icon">
+                <i class="bi {{ cat_icon }}"></i>
             </div>
 
-            <div style="flex:1;min-width:0;">
-                <div style="font-size:13px;font-weight:700;color:var(--text-color-primary);">{{ categoria }}</div>
-                <div style="font-size: .75rem;color:var(--text-color-secondary);margin-top:1px;">
+            <div class="perm-cat-info">
+                <div class="rf-row-title">{{ categoria }}</div>
+                <div class="rf-row-subtitle">
                     <span class="cat-ativas-{{ cat_id }}">{{ ativas_cat }}</span> de {{ total_cat }} permissões activas
                 </div>
             </div>
@@ -141,25 +139,24 @@
                 <i class="bi bi-toggle-on"></i> Alternar
             </button>
 
-            <i class="bi bi-chevron-down cat-chevron" id="chevron-{{ cat_id }}" style="font-size:13px;color:var(--text-color-secondary);transition:transform .2s;flex-shrink:0;"></i>
+            <i class="bi bi-chevron-down cat-chevron" id="chevron-{{ cat_id }}"></i>
         </div>
 
         {# Corpo da categoria — permissões #}
-        <div id="body-{{ cat_id }}" class="perm-cat-body" style="padding:4px 18px 14px;">
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">
+        <div id="body-{{ cat_id }}" class="perm-cat-body">
+            <div class="perm-grid">
                 {% for perm in permissoes %}
-                <label class="perm-item" for="perm_{{ perm.nome }}"
-                       style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:7px;border:1.5px solid var(--border-color-default);cursor:pointer;transition:border-color .15s,background .15s;">
+                <label class="perm-item" for="perm_{{ perm.nome }}">
                     <input class="perm-checkbox" type="checkbox"
                            name="permissoes[]"
                            value="{{ perm.nome }}"
                            id="perm_{{ perm.nome }}"
                            data-cat="{{ cat_id }}"
                            {% if perm.concedido == 1 %}checked{% endif %}
-                           style="width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--color-success);">
-                    <div style="min-width:0;">
-                        <div style="font-size:12px;font-weight:600;color:var(--text-color-primary);line-height:1.3;">{{ perm.descricao }}</div>
-                        <div style="font-size: .75rem;color:var(--text-color-secondary);margin-top:2px;font-family: var(--rf-font-mono);">{{ perm.nome }}</div>
+                           >
+                    <div class="perm-item-text">
+                        <div class="perm-item-title">{{ perm.descricao }}</div>
+                        <div class="perm-item-code">{{ perm.nome }}</div>
                     </div>
                 </label>
                 {% endfor %}
@@ -169,23 +166,14 @@
     {% endfor %}
 
     {# Botão Salvar #}
-    <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+    <div class="rf-form-actions">
         <button type="submit" class="nav-btn" id="btnSalvar"
-                style="background:#198754;border-color:#198754;color:#fff;height:38px;padding:0 22px;font-size:13px;font-weight:700;border-radius:8px;">
+                >
             <i class="bi bi-save me-1"></i> Salvar Alterações
         </button>
     </div>
 </form>
 
-<style>
-.perm-category-card { border-radius:9px; overflow:hidden; }
-.perm-cat-header:hover { background:var(--background-color-body); }
-.perm-item:has(.perm-checkbox:checked) {
-    border-color: var(--color-success) !important;
-    background: color-mix(in srgb, var(--color-success) 10%, var(--background-color-card)) !important;
-}
-.perm-item:hover { border-color: var(--color-primary-light) !important; }
-</style>
 
 <script>
 // ── Contador e barra de progresso ──
@@ -237,36 +225,37 @@ function desselecionarTodas() {
     atualizarContador();
 }
 
+function setPermissionFeedback(type, icon, message) {
+    const el = document.getElementById('feedbackAlert');
+    el.className = `rf-feedback rf-feedback-${type}`;
+    el.innerHTML = `<i class="${icon} rf-feedback-icon"></i><span>${message}</span>`;
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return el;
+}
+
 // ── Submit via fetch ──
 document.getElementById('formPermissoes').addEventListener('submit', function(e) {
     e.preventDefault();
     const btn = document.getElementById('btnSalvar');
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:14px;height:14px;" role="status"></span>Salvando...';
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2 rf-spinner" role="status"></span>Salvando...';
 
     fetch(this.action, { method: 'POST', body: new FormData(this) })
         .then(r => r.json())
         .then(data => {
             btn.disabled = false;
             btn.innerHTML = '<i class="bi bi-save me-1"></i> Salvar Alterações';
-            const el = document.getElementById('feedbackAlert');
-            el.className = '';
             if (data.success) {
-                el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:var(--rf-success-surface);border:1px solid color-mix(in srgb, var(--rf-success) 35%, var(--background-color-card));color:var(--rf-success-text);';
-                el.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size:16px;flex-shrink:0;"></i><span>' + (data.message || 'Permissões guardadas com sucesso!') + '</span>';
+                setPermissionFeedback('success', 'bi bi-check-circle-fill', data.message || 'Permissões guardadas com sucesso!');
                 setTimeout(() => window.location.reload(), 1800);
             } else {
-                el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:var(--rf-danger-surface);border:1px solid color-mix(in srgb, var(--rf-danger) 35%, var(--background-color-card));color:var(--rf-danger-text);';
-                el.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="font-size:16px;flex-shrink:0;"></i><span>' + (data.message || 'Erro ao guardar.') + '</span>';
+                setPermissionFeedback('danger', 'bi bi-exclamation-circle-fill', data.message || 'Erro ao guardar.');
             }
-            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         })
         .catch(() => {
             btn.disabled = false;
             btn.innerHTML = '<i class="bi bi-save me-1"></i> Salvar Alterações';
-            const el = document.getElementById('feedbackAlert');
-            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:var(--rf-danger-surface);border:1px solid color-mix(in srgb, var(--rf-danger) 35%, var(--background-color-card));color:var(--rf-danger-text);';
-            el.innerHTML = '<i class="bi bi-wifi-off" style="font-size:16px;flex-shrink:0;"></i><span>Erro de rede. Verifique a ligação.</span>';
+            setPermissionFeedback('danger', 'bi bi-wifi-off', 'Erro de rede. Verifique a ligação.');
         });
 });
 
@@ -323,17 +312,12 @@ async function aplicarPerfil() {
             method: 'POST', body: fd
         });
         const data = await res.json();
-        const el = document.getElementById('feedbackAlert');
-        el.className = '';
         if (data.success) {
-            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:var(--rf-success-surface);border:1px solid color-mix(in srgb, var(--rf-success) 35%, var(--background-color-card));color:var(--rf-success-text);';
-            el.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+            setPermissionFeedback('success', 'bi bi-check-circle-fill', data.message);
             setTimeout(() => window.location.reload(), 1800);
         } else {
-            el.style.cssText = 'border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;background:var(--rf-danger-surface);border:1px solid color-mix(in srgb, var(--rf-danger) 35%, var(--background-color-card));color:var(--rf-danger-text);';
-            el.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="font-size:16px;"></i><span>' + data.message + '</span>';
+            setPermissionFeedback('danger', 'bi bi-exclamation-circle-fill', data.message);
         }
-        el.scrollIntoView({ behavior:'smooth', block:'nearest' });
     } catch(e) {
         alert('Erro de rede ao aplicar perfil.');
     }

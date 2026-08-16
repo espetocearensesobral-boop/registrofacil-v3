@@ -13,70 +13,6 @@
 {% endblock %}
 
 {% block content %}
-<style>
-.nt-wrap { max-width: 620px; margin: 0 auto; }
-.nt-card {
-    background: var(--background-color-card);
-    border: 1px solid var(--border-color-default);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
-}
-.nt-header {
-    display: flex; align-items: center; gap: 12px;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color-default);
-    background: var(--background-color-body);
-}
-.nt-header-icon {
-    width: 38px; height: 38px; border-radius: 10px;
-    background: var(--color-gold-primary); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
-}
-.nt-header h5 { margin: 0; font-size: 15px; font-weight: 700; color: var(--text-color-primary); }
-.nt-header small { font-size: 12px; color: var(--text-color-secondary); }
-.nt-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-.nt-fld label {
-    display: block; font-size: .75rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .05em;
-    color: var(--text-color-secondary); margin-bottom: 5px;
-}
-.nt-fld label .req { color: var(--color-error); }
-.nt-fld input {
-    width: 100%; height: 38px; font-size: 13px;
-    border-radius: 7px; border: 1px solid var(--border-color-input);
-    background: var(--background-color-card); color: var(--text-color-primary);
-    padding: 0 11px; transition: border-color .15s, box-shadow .15s;
-    text-transform: uppercase;
-}
-.nt-fld input[type="email"], .nt-fld input[data-case="lower"] { text-transform: lowercase; }
-.nt-fld input[type="tel"] { text-transform: none; }
-.nt-fld input:focus { outline: none; border-color: var(--color-gold-primary); box-shadow: 0 0 0 3px rgba(184,142,67,.12); }
-.nt-fld input.is-invalid { border-color: var(--color-error); }
-.nt-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.nt-footer {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 20px;
-    border-top: 1px solid var(--border-color-default);
-    background: var(--background-color-body);
-}
-.nt-btn-save {
-    height: 38px; padding: 0 22px; font-size: 13px; font-weight: 600;
-    border-radius: 8px; border: none; background: var(--color-success); color: #fff;
-    cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: background .15s;
-}
-.nt-btn-save:hover { background: #008a57; }
-.nt-btn-cancel {
-    height: 38px; padding: 0 18px; font-size: 13px; font-weight: 600;
-    border-radius: 8px; border: none; background: var(--rf-action-tertiary);
-    color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all .15s;
-    text-decoration: none;
-}
-.nt-btn-cancel:hover { background: var(--rf-action-tertiary-hover); color: #fff; }
-.nt-required-note { margin-left: auto; font-size: .75rem; color: var(--text-color-secondary); }
-@media (max-width: 480px) { .nt-row-2 { grid-template-columns: 1fr; } }
-</style>
 
 <div class="nt-wrap">
     <div class="nt-card">
@@ -95,7 +31,7 @@
                     <input type="text" name="nome" id="nome" required autocomplete="off"
                            placeholder="Ex: JOÃO DA SILVA"
                            value="{{ representante.nome }}" tabindex="1">
-                    <div class="invalid-feedback" style="font-size:12px;color:var(--color-error);margin-top:3px;display:none;" id="nome-error">
+                    <div class="invalid-feedback rf-form-error" id="nome-error">
                         Por favor, informe o nome do representante.
                     </div>
                 </div>
@@ -114,8 +50,8 @@
                     </div>
                 </div>
             </div>
-            <div class="nt-footer" style="display:flex; justify-content:flex-end; gap:.5rem;">
-                <span class="nt-required-note" style="margin-left:0; margin-right:auto;"><span style="color:var(--color-error);">*</span> Campo obrigatório</span>
+            <div class="nt-footer">
+                <span class="nt-required-note"><span class="rf-required-mark">*</span> Campo obrigatório</span>
                 <a href="{{ url_for('representantes.visualizar', representante_id=representante.id) }}" class="nt-btn-cancel" tabindex="5">
                     <i class="bi bi-x"></i> Cancelar
                 </a>
@@ -146,16 +82,16 @@
         if (!el) {
             el = document.createElement('div');
             el.id = id;
-            el.style.cssText = 'font-size:12px;color:var(--color-error);margin-top:3px;';
+            el.className = 'invalid-feedback rf-form-error';
             inputEl.parentNode.appendChild(el);
         }
         el.textContent = msg;
-        el.style.display = 'block';
+        el.classList.add('is-visible');
     }
     function clearErr(inputEl, id) {
         inputEl.classList.remove('is-invalid');
         const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
+        if (el) el.classList.remove('is-visible');
     }
 
     async function checkDuplicate(campo, valor) {

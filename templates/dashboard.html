@@ -57,7 +57,7 @@
 
         {# Card: Processos Recentes — interativo #}
         <div class="col-lg-6">
-            <div class="rf-card h-100 dashboard-panel">
+            <div class="rf-card dashboard-panel">
                 <div class="rf-card-header">
                     <h6 class="rf-card-title mb-0"><i class="bi bi-clock-history me-1"></i> Processos Recentes</h6>
                     <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
@@ -103,10 +103,10 @@
 
         {# Card: Prazos Críticos — interativo #}
         <div class="col-lg-6">
-            <div class="rf-card h-100 dashboard-panel">
+            <div class="rf-card dashboard-panel">
                 <div class="rf-card-header">
                     <h6 class="rf-card-title mb-0">
-                        <i class="bi bi-exclamation-triangle-fill me-1" class="icon-danger"></i> Prazos Críticos
+                        <i class="bi bi-exclamation-triangle-fill me-1 icon-danger"></i> Prazos Críticos
                         {% if dashboard_info.processos_com_prazo_critico %}
                         <span class="count-danger">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
                         {% endif %}
@@ -158,7 +158,7 @@
                     </div>
                     {% else %}
                     <div class="empty-state-small">
-                        <i class="bi bi-patch-check" class="icon-success"></i>
+                        <i class="bi bi-patch-check icon-success"></i>
                         <p class="mb-0 text-center mt-2" >Nenhum prazo crítico. Tudo em dia!</p>
                     </div>
                     {% endif %}
