@@ -18,7 +18,7 @@ def _make_database(path):
 
 def _make_dirs(tmp_path):
     paths = {}
-    for name in ("processos", "empresa", "perfil", "logs"):
+    for name in ("processos", "empresa", "logs"):
         path = tmp_path / name
         path.mkdir()
         (path / f"{name}.txt").write_text(name, encoding="utf-8")
@@ -41,7 +41,6 @@ def test_create_backup_archive_is_atomic_and_contains_manifest(tmp_path, monkeyp
         database_path=str(database),
         upload_processos=dirs["processos"],
         upload_empresa=dirs["empresa"],
-        upload_perfil=dirs["perfil"],
         log_dir=dirs["logs"],
         source="test",
     )
@@ -128,7 +127,6 @@ def test_stage_backup_restore_validates_database_and_uses_staging(tmp_path, monk
         database_path=str(database),
         upload_processos=dirs["processos"],
         upload_empresa=dirs["empresa"],
-        upload_perfil=dirs["perfil"],
         log_dir=dirs["logs"],
         source="test",
     )
@@ -151,7 +149,6 @@ def test_promote_staged_restore_replaces_data_and_preserves_keys(tmp_path, monke
         database_path=str(database),
         upload_processos=dirs["processos"],
         upload_empresa=dirs["empresa"],
-        upload_perfil=dirs["perfil"],
         log_dir=dirs["logs"],
         source="test",
     )
@@ -169,7 +166,6 @@ def test_promote_staged_restore_replaces_data_and_preserves_keys(tmp_path, monke
         database_path=str(database),
         upload_processos=dirs["processos"],
         upload_empresa=dirs["empresa"],
-        upload_perfil=dirs["perfil"],
         rollback_root=str(tmp_path / "rollbacks"),
     )
 

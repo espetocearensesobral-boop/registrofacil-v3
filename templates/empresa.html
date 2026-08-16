@@ -110,7 +110,7 @@
                     <div class="logo-preview-container position-relative">
                         <img src="{{ display_logo_url }}" class="logo-preview-image" id="logoPreview"
                              alt="Logo"
-                             onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default_avatar.png') }}';">
+                             onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/registrofacil.png') }}';">
                         <div class="logo-overlay">
                             <div class="logo-overlay-content">
                                 <i class="bi bi-camera-fill logo-overlay-icon"></i>
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const removeLogoCheckbox = document.getElementById('remover_logo');
     const sidebarCompanyLogo = document.getElementById('sidebar-company-logo');
     const currentLogoUrl = "{{ display_logo_url }}";
-    const defaultLogoUrl = "{{ url_for('static', filename='img/default_avatar.png') }}";
+    const defaultLogoUrl = "{{ url_for('static', filename='img/registrofacil.png') }}";
 
     // Hover effect on logo container
     if (logoPreviewContainer) {

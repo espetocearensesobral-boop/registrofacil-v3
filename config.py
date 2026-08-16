@@ -137,7 +137,6 @@ class Config:
     # Uploads ficam em DATA_DIR quando frozen (C:\Program Files é somente leitura)
     UPLOAD_ROOT_FOLDER_NAME = 'uploads'
     PROCESSOS_UPLOAD_SUBFOLDER = 'processos'
-    PERFIL_UPLOAD_SUBFOLDER = 'perfil'
     EMPRESA_UPLOAD_SUBFOLDER = 'empresa'
     # Modo .py (dev): uploads dentro de static/ para Flask servir via url_for('static').
     # Modo .exe (frozen): static/ é read-only no bundle PyInstaller, usa DATA_DIR.
@@ -146,7 +145,6 @@ class Config:
     else:
         UPLOAD_ROOT_DIR = os.path.join(BASE_DIR, 'static', UPLOAD_ROOT_FOLDER_NAME)
     UPLOAD_PROCESSOS_DIR = os.path.join(UPLOAD_ROOT_DIR, PROCESSOS_UPLOAD_SUBFOLDER)
-    PROFILE_UPLOAD_FOLDER = os.path.join(UPLOAD_ROOT_DIR, PERFIL_UPLOAD_SUBFOLDER)
     EMPRESA_UPLOAD_FOLDER = os.path.join(UPLOAD_ROOT_DIR, EMPRESA_UPLOAD_SUBFOLDER)
 
     TEMP_FOLDER_NAME = 'temp'
@@ -162,7 +160,6 @@ class Config:
         os.makedirs(MANUTENCAO_LOG_DIR, exist_ok=True)
         
         os.makedirs(UPLOAD_PROCESSOS_DIR, exist_ok=True)
-        os.makedirs(PROFILE_UPLOAD_FOLDER, exist_ok=True)
         os.makedirs(EMPRESA_UPLOAD_FOLDER, exist_ok=True)
         os.makedirs(TEMP_DIR, exist_ok=True)
         

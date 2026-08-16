@@ -13,8 +13,6 @@ from models import (
 from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token, gerar_csrf_token
 from utils.logger import logger
 from utils.notification_contract import success, error, warning
-from config import Config
-from utils.file_uploads import get_image_url_for_display, handle_image_upload, remove_image_file, PROFILE_UPLOAD_FOLDER
 
 perfil_bp = Blueprint('perfil', __name__, url_prefix='/perfil')
 
@@ -66,7 +64,7 @@ def index(user_id=None):
     # Buscar dados do usuário alvo
     try:
         query = """
-            SELECT id, usuario, nome, email, ativo, role, foto, created_at, last_login_at
+            SELECT id, usuario, nome, email, ativo, role, created_at, last_login_at
             FROM usuarios 
             WHERE id = ?
         """
@@ -88,8 +86,6 @@ def index(user_id=None):
                 fetch_one=True
             )
             user_data['processos_count'] = processos_count['total'] if processos_count else 0
-        
-        display_foto_url = get_image_url_for_display(user_data['foto'], user_data['email'], is_company_logo=False)
         
     except Exception as e:
         logger.error(f"Erro ao carregar dados do usuário {target_user_id}: {e}", exc_info=True)
@@ -142,39 +138,16 @@ def index(user_id=None):
                     if len(nova_senha) < 8:
                         raise ValueError('A nova senha deve ter pelo menos 8 caracteres.')
                 
-                # Processar upload de imagem
-                imagem_final = user_data.get('foto')
-                
-                if 'imagem_perfil' in request.files:
-                    uploaded_file = request.files['imagem_perfil']
-                    try:
-                        new_filename = handle_image_upload(
-                            uploaded_file=uploaded_file,
-                            current_filename=imagem_final,
-                            target_folder=PROFILE_UPLOAD_FOLDER,
-                            allowed_extensions=['jpg', 'jpeg', 'png'],
-                            max_size_mb=2,
-                            prefix=f'usuario_{current_user_id}'
-                        )
-                        if new_filename:
-                            imagem_final = new_filename
-                    except ValueError as e:
-                        return jsonify(success=False, message=str(e), type='danger', field_error='imagem_perfil'), 400
-                
-                elif request.form.get('remove_current_image') == '1':
-                    if remove_image_file(imagem_final, PROFILE_UPLOAD_FOLDER):
-                        imagem_final = None
-                
                 # Atualizar banco
                 with get_sqlite_connection() as conn:
                     cursor = conn.cursor()
                     
                     sql = """
                         UPDATE usuarios 
-                        SET nome = ?, email = ?, foto = ?, 
+                        SET nome = ?, email = ?,
                             updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
                     """
-                    params = [nome, email, imagem_final]
+                    params = [nome, email]
                     
                     if nova_senha and senha_atual:
                         sql += ", senha = ?"
@@ -191,9 +164,6 @@ def index(user_id=None):
                 # Atualizar sessão
                 session['usuario_nome'] = nome
                 session['usuario_email'] = email
-                updated_photo_url = get_image_url_for_display(imagem_final, email, is_company_logo=False)
-                session['usuario_foto_url'] = updated_photo_url
-                
                 mensagem = 'Perfil atualizado com sucesso!'
                 if nova_senha:
                     mensagem = 'Perfil e senha atualizados com sucesso!'
@@ -212,8 +182,7 @@ def index(user_id=None):
                     redirect=url_for('perfil.index'),
                     updated_user_data={
                         'nome': nome,
-                        'email': email,
-                        'usuario_foto_url': updated_photo_url
+                        'email': email
                     }
                 )
             
@@ -333,7 +302,6 @@ def index(user_id=None):
     if contexto == 'proprio_perfil':
         return render_template('perfil.html',
                              user_data=user_data,
-                             display_foto_url=display_foto_url,
                              current_user_id=current_user_id,
                              current_user_role=current_user_role,
                              contexto=contexto,
@@ -343,7 +311,6 @@ def index(user_id=None):
     else:  # gerenciamento_admin
         return render_template('admin/perfil_admin.html',
                              user_data=user_data,
-                             display_foto_url=display_foto_url,
                              current_user_id=current_user_id,
                              current_user_role=current_user_role,
                              contexto=contexto,

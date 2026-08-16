@@ -15,7 +15,6 @@ from models import (
     executar_query, gravar_log, get_user_by_username,
     get_users_for_admin_list,
     get_sqlite_connection,
-    get_empresa_info, # Necessário para get_image_url_for_display indiretamente
     gravar_auditoria_admin, gravar_tentativa_nao_autorizada,
     criar_notificacao_usuario, mascarar_email
 )
@@ -23,8 +22,6 @@ from routes.auth import login_status_required, get_client_ip, proteger_input, ve
 from routes.permissoes import permission_required
 from utils.logger import logger
 from utils.notification_contract import success, error, warning
-from config import Config
-from utils.file_uploads import get_image_url_for_display, handle_image_upload, remove_image_file, PROFILE_UPLOAD_FOLDER
 
 admin_users_bp = Blueprint('admin_users', __name__, url_prefix='/admin')
 
@@ -173,12 +170,10 @@ def edit_user(user_id):
     current_user_role = session.get('usuario_role')
 
     user_data = None
-    display_foto_url = None
-
     try:
         # MODIFICADO: Inclui session_invalidate_at na consulta
         user_data_raw = executar_query(
-            "SELECT id, usuario, nome, email, ativo, foto, role, created_at, updated_at, deleted_at, last_login_at, session_invalidate_at FROM usuarios WHERE id = ?",
+            "SELECT id, usuario, nome, email, ativo, role, created_at, updated_at, deleted_at, last_login_at, session_invalidate_at FROM usuarios WHERE id = ?",
             [user_id], fetch_one=True
         )
         if not user_data_raw:
@@ -190,7 +185,6 @@ def edit_user(user_id):
             return redirect(url_for('admin_users.users_list'))
         
         user_data = user_data_raw
-        display_foto_url = get_image_url_for_display(user_data.get('foto'), user_data.get('email'), is_company_logo=False)
 
     except Exception as e:
         logger.exception(f"Erro ao carregar dados do usuário {user_id} para edição: {e}")
@@ -208,14 +202,13 @@ def edit_user(user_id):
         try:
             # MODIFICADO: Inclui session_invalidate_at na consulta
             user_data_raw = executar_query(
-                "SELECT id, usuario, nome, email, ativo, foto, role, created_at, updated_at, deleted_at, last_login_at, session_invalidate_at FROM usuarios WHERE id = ?",
+                "SELECT id, usuario, nome, email, ativo, role, created_at, updated_at, deleted_at, last_login_at, session_invalidate_at FROM usuarios WHERE id = ?",
                 [user_id], fetch_one=True
             )
             if not user_data_raw:
                 flash('Usuário não encontrado para atualização.', 'error')
                 return jsonify(success=False, message="Usuário não encontrado para atualização.", type='danger'), 404
             user_data = user_data_raw
-            display_foto_url = get_image_url_for_display(user_data.get('foto'), user_data.get('email'), is_company_logo=False)
         except Exception as e:
             logger.exception(f"Erro ao recarregar dados do usuário {user_id} para validação POST: {e}")
             return jsonify(success=False, message="Erro interno ao recarregar dados do usuário.", type='danger'), 500
@@ -261,44 +254,16 @@ def edit_user(user_id):
                 if nova_senha != confirmar_senha: raise ValueError('As senhas não coincidem.')
                 if len(nova_senha) < 8: raise ValueError('A nova senha deve ter pelo menos 8 caracteres.')
 
-            imagem_final_para_db = user_data.get('foto')
-            
-            if 'imagem_perfil' in request.files:
-                uploaded_file = request.files['imagem_perfil']
-                try:
-                    new_filename = handle_image_upload(
-                        uploaded_file=uploaded_file,
-                        current_filename=imagem_final_para_db,
-                        target_folder=PROFILE_UPLOAD_FOLDER,
-                        allowed_extensions=['jpg', 'jpeg', 'png'],
-                        max_size_mb=2,
-                        prefix=f'usuario_{user_id}'
-                    )
-                    if new_filename:
-                        imagem_final_para_db = new_filename
-                except ValueError as e:
-                    return jsonify(success=False, message=str(e), type='danger', field_error='imagem_perfil'), 400
-                except Exception as e:
-                    logger.error(f"Erro ao processar upload de imagem para usuário {user_id}: {e}", exc_info=True)
-                    return jsonify(success=False, message="Erro ao salvar nova imagem de perfil.", type='danger'), 500
-
-            elif request.form.get('remove_current_image') == '1': # The name of the checkbox value
-                if remove_image_file(imagem_final_para_db, PROFILE_UPLOAD_FOLDER):
-                    imagem_final_para_db = None
-                else:
-                    imagem_final_para_db = None
-                    logger.warning(f"Falha ao remover arquivo físico para usuário {user_id}, mas o DB será atualizado para nulo.")
-
             with get_sqlite_connection() as conn:
                 cursor = conn.cursor()
 
                 # ADICIONADO: Lógica para atualizar session_invalidate_at se o status ativo mudar para inativo
                 if user_data['ativo'] == 1 and ativo == 0: # Se o status antigo era ativo e o novo é inativo
-                    sql = "UPDATE usuarios SET nome = ?, email = ?, ativo = ?, foto = ?, role = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
+                    sql = "UPDATE usuarios SET nome = ?, email = ?, ativo = ?, role = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
                 else:
-                    sql = "UPDATE usuarios SET nome = ?, email = ?, ativo = ?, foto = ?, role = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
+                    sql = "UPDATE usuarios SET nome = ?, email = ?, ativo = ?, role = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
 
-                params = [nome, email, (1 if ativo else 0), imagem_final_para_db, role]
+                params = [nome, email, (1 if ativo else 0), role]
 
                 if nova_senha:
                     sql += ", senha = ?"
@@ -329,9 +294,6 @@ def edit_user(user_id):
                 session['usuario_role'] = role
                 session['is_active'] = ativo 
                 
-                updated_photo_url = get_image_url_for_display(imagem_final_para_db, email, is_company_logo=False)
-                session['usuario_foto_url'] = updated_photo_url
-
                 return jsonify({
                     **success('Seu perfil foi atualizado com sucesso!'),
                     'success': True,
@@ -341,8 +303,7 @@ def edit_user(user_id):
                         'nome': nome,
                         'email': email,
                         'role': role,
-                        'is_active': ativo,
-                        'usuario_foto_url': updated_photo_url
+                        'is_active': ativo
                     }
                 })
 
@@ -361,7 +322,6 @@ def edit_user(user_id):
     csrf_token_val = gerar_csrf_token()
     return render_template('admin/editar_usuario.html',
                            user_data=user_data,
-                           display_foto_url=display_foto_url,
                            current_user_id=current_user_id,
                            current_user_role=current_user_role,
                            csrf_token=csrf_token_val)

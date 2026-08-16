@@ -208,7 +208,6 @@ body {
     cursor: pointer;
     transition: background-color 0.15s ease;
     position: relative;
-    /* ✓ CORREÇÃO: Altura aumentada para 44px (touch-friendly) */
     height: 44px;
     color: var(--text-color-light);
     font-size: var(--font-sm);
@@ -237,14 +236,6 @@ body {
     justify-content: center;
     color: var(--text-color-light);
     font-size: 1.1rem;
-}
-
-.menu-icon .sidebar-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: none;
 }
 
 .menu-text {

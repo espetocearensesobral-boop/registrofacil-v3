@@ -184,7 +184,6 @@ def manual_backup():
             database_path=DATABASE_PATH,
             upload_processos=get_upload_folder(),
             upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
-            upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
             log_dir=Config.LOG_DIR,
             source="manual",
         )
@@ -242,7 +241,6 @@ def restore_backup():
             database_path=DATABASE_PATH,
             upload_processos=get_upload_folder(),
             upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
-            upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
             log_dir=Config.LOG_DIR,
             source="pre_restore",
         )
@@ -254,7 +252,6 @@ def restore_backup():
             database_path=DATABASE_PATH,
             upload_processos=get_upload_folder(),
             upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
-            upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
             rollback_root=os.path.join(Config.DATA_DIR, 'restore_rollbacks'),
             preserve_keys=True,
         )
@@ -285,7 +282,6 @@ def restore_backup():
                     database_path=DATABASE_PATH,
                     upload_processos=get_upload_folder(),
                     upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
-                    upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
                 )
                 logger.warning("Restauração revertida automaticamente após falha no health check.")
             except Exception:

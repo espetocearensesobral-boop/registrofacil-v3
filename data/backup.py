@@ -24,7 +24,7 @@ def get_upload_folder():
     DATA_DIR/uploads/processos no modo .exe (frozen). Não usamos mais o campo
     uploads_path do banco de dados para routing de arquivos — ele gerava
     inconsistências quando configurado manualmente para um caminho diferente
-    do usado por EMPRESA_UPLOAD_FOLDER e PROFILE_UPLOAD_FOLDER.
+    do usado pelos diretórios ativos de processos e logo do estabelecimento.
     """
     os.makedirs(Config.UPLOAD_PROCESSOS_DIR, exist_ok=True)
     return Config.UPLOAD_PROCESSOS_DIR

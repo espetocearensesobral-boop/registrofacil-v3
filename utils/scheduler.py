@@ -252,7 +252,6 @@ def perform_scheduled_backup(app_context_callback):
                 database_path=DATABASE_PATH,
                 upload_processos=get_upload_folder(),
                 upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
-                upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
                 log_dir=Config.LOG_DIR,
                 source="scheduled",
             )

@@ -594,7 +594,7 @@
                                 <div class="logo-preview-container-cfg position-relative cfg-logo-preview" style="cursor:{% if session.get('usuario_role') == 'admin' %}pointer{% else %}default{% endif %};">
                                     <img src="{{ display_logo_url }}" class="logo-preview-image-cfg cfg-logo-image" id="cfgLogoPreview"
                                          alt="Logo"
-                                         onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default_avatar.png') }}';">
+                                         onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/registrofacil.png') }}';">
                                     {% if session.get('usuario_role') == 'admin' %}
                                     <div class="logo-overlay-cfg cfg-logo-overlay">
                                         <div class="cfg-logo-overlay-content">
@@ -1006,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnRemove = document.getElementById('cfgBtnRemoverLogo');
     const chkRemove = document.getElementById('cfg-remover_logo');
     const sidebarLogo = document.getElementById('sidebar-company-logo');
-    const defaultUrl  = "{{ url_for('static', filename='img/default_avatar.png') }}";
+    const defaultUrl  = "{{ url_for('static', filename='img/registrofacil.png') }}";
 
     if (container && overlay) {
         container.addEventListener('mouseenter', () => overlay.style.opacity = '1');

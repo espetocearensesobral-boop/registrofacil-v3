@@ -39,9 +39,8 @@ def registrar_tentativa_login(ip, sucesso):
 def get_user_by_username(username):
     # Solução Completa (Recomendada) para lidar com a coluna session_invalidate_at
     try:
-        # CORREÇÃO DE IMAGEM/CACHE: Adicionando updated_at na query para o cache-busting
         return executar_query(
-            "SELECT id, nome, email, usuario, senha, ativo, foto, role, "
+            "SELECT id, nome, email, usuario, senha, ativo, role, "
             "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at, "
             "must_change_password FROM usuarios WHERE usuario = ?",
             [username],
@@ -52,7 +51,7 @@ def get_user_by_username(username):
             # Se a coluna não existe, retorna sem ela e loga um aviso
             logger.warning(f"Coluna 'session_invalidate_at' não encontrada durante a inicialização/migração. Selecionando usuário sem ela. Erro: {e}")
             return executar_query(
-                "SELECT id, nome, email, usuario, senha, ativo, foto, role, "
+                "SELECT id, nome, email, usuario, senha, ativo, role, "
                 "created_at, updated_at, deleted_at, last_login_at, must_change_password "
                 "FROM usuarios WHERE usuario = ?",
                 [username],

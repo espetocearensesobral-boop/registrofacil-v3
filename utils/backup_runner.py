@@ -76,7 +76,6 @@ def run_backup(source: str = "external") -> dict:
                 database_path=DATABASE_PATH,
                 upload_processos=get_upload_folder(),
                 upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
-                upload_perfil=Config.PROFILE_UPLOAD_FOLDER,
                 log_dir=Config.LOG_DIR,
                 source=source,
             )

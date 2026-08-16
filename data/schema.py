@@ -39,7 +39,6 @@ def init_db(criar_indices_performance, init_fts):
                     usuario TEXT NOT NULL UNIQUE,
                     senha TEXT NOT NULL,
                     ativo INTEGER DEFAULT 1,
-                    foto TEXT,
                     role TEXT DEFAULT 'user' NOT NULL,
                     created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
                     updated_at TEXT,
@@ -52,7 +51,6 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'usuarios' criada no SQLite.")
         else:
             logger.info("Tabela 'usuarios' já existe. Verificando/adicionando colunas.")
-            add_column_if_not_exists_sqlite('usuarios', 'foto', 'TEXT')
             add_column_if_not_exists_sqlite('usuarios', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
             add_column_if_not_exists_sqlite('usuarios', 'deleted_at', 'TEXT')
             add_column_if_not_exists_sqlite('usuarios', 'role', "TEXT DEFAULT 'user' NOT NULL")

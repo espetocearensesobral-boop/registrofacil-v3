@@ -217,16 +217,16 @@ def create_app():
         return redirect(url_for('auth.login'))
 
     # -----------------------------------------------------------------------
-    # Rota para servir arquivos de upload (perfil, empresa, processos)
+    # Rota para servir arquivos de upload (empresa e processos)
     # Funciona tanto em modo .py (static/uploads/) quanto .exe (ProgramData/uploads/)
     # -----------------------------------------------------------------------
     @app.route('/uploads/<path:filepath>')
     def serve_upload(filepath):
         """Serve arquivos de upload a partir de Config.UPLOAD_ROOT_DIR.
 
-        Subpastas públicas (sem autenticação): empresa/
+        Subpasta pública (sem autenticação): empresa/
           -> Logo da empresa é exibida nas telas de login, recuperar_senha e reset_password.
-        Subpastas privadas (exige sessão): perfil/, processos/
+        Subpasta privada (exige sessão): processos/
         """
         from flask import abort, send_from_directory
 
@@ -244,7 +244,7 @@ def create_app():
         # empresa/ é pública: logo exibida nas páginas sem autenticação (login, recuperar_senha...)
         is_public = safe.startswith('empresa/') or safe.startswith('empresa' + os.sep)
 
-        # Demais subpastas (perfil/, processos/) exigem sessão autenticada
+        # Anexos de processos exigem sessão autenticada.
         if not is_public and not session.get('usuario_id'):
             abort(401)
 

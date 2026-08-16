@@ -10,12 +10,10 @@ from flask import url_for
 from config import Config
 from utils.logger import logger
 
-# Diretórios de upload (mantidos)
-PROFILE_UPLOAD_FOLDER = Config.PROFILE_UPLOAD_FOLDER
+# Diretório único de imagem utilizado pela aplicação: logo do estabelecimento.
 EMPRESA_UPLOAD_FOLDER = Config.EMPRESA_UPLOAD_FOLDER
 
-# Garante que os diretórios de upload existam
-os.makedirs(PROFILE_UPLOAD_FOLDER, exist_ok=True)
+# Garante que o diretório de logo exista.
 os.makedirs(EMPRESA_UPLOAD_FOLDER, exist_ok=True)
 
 # --- Validação de MIME real para imagens (mesmo princípio de routes/processos.py) ---
@@ -120,13 +118,6 @@ def _sanitizar_svg(filepath):
         f.write(conteudo_sanitizado)
 
 
-def get_gravatar_url(email, size=180, default='mp'):
-    """
-    Anteriormente usava Gravatar externo (bloqueado por Tracking Prevention).
-    Agora retorna a URL do avatar padrão local, evitando requisições a terceiros.
-    """
-    return url_for('static', filename='img/default_avatar.png')
-
 
 def handle_image_upload(uploaded_file, current_filename, target_folder, allowed_extensions, max_size_mb, prefix=""):
     """
@@ -177,7 +168,7 @@ def handle_image_upload(uploaded_file, current_filename, target_folder, allowed_
                 _sanitizar_svg(temp_destination)
 
             # Só remove a imagem antiga depois que a nova passou na validação de conteúdo.
-            if current_filename and not (current_filename.startswith('http') or current_filename.startswith('/static/img/default_avatar.png') or current_filename == Config.DEFAULT_LOGO_URL):
+            if current_filename and not (current_filename.startswith('http') or current_filename == Config.DEFAULT_LOGO_URL):
                 old_file_path = os.path.join(target_folder, secure_filename(current_filename))
                 if os.path.exists(old_file_path):
                     try:
@@ -201,7 +192,7 @@ def remove_image_file(filename, target_folder):
     Remove um arquivo de imagem físico do servidor.
     (Esta função permanece inalterada)
     """
-    if filename and not (filename.startswith('http') or filename.startswith('/static/img/default_avatar.png') or filename == Config.DEFAULT_LOGO_URL):
+    if filename and not (filename.startswith('http') or filename == Config.DEFAULT_LOGO_URL):
         file_path = os.path.join(target_folder, secure_filename(filename))
         if os.path.exists(file_path):
             try:
@@ -211,24 +202,19 @@ def remove_image_file(filename, target_folder):
                 logger.error(f"Falha ao remover arquivo '{file_path}': {e}", exc_info=True)
     return False
 
-# --- INÍCIO DA ATUALIZAÇÃO ---
-def get_image_url_for_display(filename, email=None, is_company_logo=False, for_pdf=False):
+def get_image_url_for_display(filename, is_company_logo=True, for_pdf=False):
     """
     Retorna a URL apropriada para uma imagem.
     - Se for_pdf=True, retorna um caminho de arquivo local absoluto para o WeasyPrint.
     - Se for_pdf=False, retorna uma URL web para o navegador.
     """
-    # 1. Se o nome do arquivo já é uma URL externa (ex: Gravatar), retorna imediatamente.
+    # Preserva URLs externas configuradas para a logo, quando existirem.
     if filename and (filename.startswith('http://') or filename.startswith('https://')):
         return filename
 
-    # Define a pasta e o arquivo padrão com base no tipo de imagem
-    if is_company_logo:
-        target_folder = EMPRESA_UPLOAD_FOLDER
-        default_image_path = 'img/registrofacil.png'
-    else:
-        target_folder = PROFILE_UPLOAD_FOLDER
-        default_image_path = 'img/default_avatar.png'
+    # A aplicação usa somente a logo do estabelecimento.
+    target_folder = EMPRESA_UPLOAD_FOLDER
+    default_image_path = 'img/registrofacil.png'
     
     # Constrói o caminho completo para o arquivo de imagem, se um nome foi fornecido
     local_file_path_full = os.path.join(target_folder, secure_filename(filename)) if filename else ''
@@ -255,12 +241,6 @@ def get_image_url_for_display(filename, email=None, is_company_logo=False, for_p
         # Se um arquivo local existir, gera a URL para ele
         if filename and os.path.exists(local_file_path_full):
             version_param = int(os.path.getmtime(local_file_path_full))
-            folder_name = 'empresa' if is_company_logo else 'perfil'
-            return url_for('serve_upload', filepath=f'{folder_name}/{secure_filename(filename)}') + f'?v={version_param}'
-
-        # Fallbacks para web (Gravatar ou imagem padrão)
-        if not is_company_logo and email:
-            return get_gravatar_url(email)
+            return url_for('serve_upload', filepath=f'empresa/{secure_filename(filename)}') + f'?v={version_param}'
 
         return url_for('static', filename=default_image_path)
-# --- FIM DA ATUALIZAÇÃO ---

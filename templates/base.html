@@ -254,10 +254,10 @@
                     <i class="bi bi-chevron-down sidebar-group-toggle-icon" aria-hidden="true"></i>
                 </button>
                 <div class="sidebar-category-items" id="sidebar-group-administrador" hidden>
-                    <div class="menu-item" data-profile-menu-item="true" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
+                    <div class="menu-item" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
                          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ session.get('usuario_nome', 'Meu Perfil') }} (Alt+M)">
                         <div class="menu-icon">
-                            <img src="{{ session.get('usuario_foto_url', url_for('static', filename='img/default_avatar.png')) }}" alt="Avatar" class="sidebar-avatar">
+                            <i class="bi bi-person-circle" aria-hidden="true"></i>
                         </div>
                         <span class="menu-text">{{ session.get('usuario_nome', 'Meu Perfil') | truncate(18) }}</span>
                     </div>
@@ -565,7 +565,6 @@
             configuracoesIndex: "{{ url_for('configuracoes.index') }}",
             adminUsersList: "{{ url_for('admin_users.users_list') }}",
             adminEditUserBase: "{{ url_for('admin_users.edit_user', user_id=0) | replace('0', '') }}", // Base URL sem ID
-            uploadsPerfilBase: "{{ url_for('serve_upload', filepath='perfil/') }}",
             uploadsEmpresaBase: "{{ url_for('serve_upload', filepath='empresa/') }}",
             empresaIndex: "{{ url_for('empresa.index') }}",
             backupIndex: "{{ url_for('backup.index') }}", // Adicionado o link para a página de backup

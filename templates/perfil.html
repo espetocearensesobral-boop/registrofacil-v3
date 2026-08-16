@@ -42,44 +42,8 @@
                 <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Dados Pessoais</h5>
             </div>
             <div class="rf-card-body">
-                <form id="form-perfil" method="post" enctype="multipart/form-data">
+                <form id="form-perfil" method="post">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                    
-                    {# Foto de Perfil #}
-                    <div class="mb-4">
-                        <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Foto de Perfil</label>
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="position-relative">
-                                <img src="{{ display_foto_url }}" 
-                                     alt="Foto de Perfil" 
-                                     class="rounded-circle border"
-                                     id="preview-foto-perfil"
-                                     style="width: 100px; height: 100px; object-fit: cover;">
-                            </div>
-                            <div class="flex-grow-1">
-                                <input type="file" 
-                                       class="form-control mb-2" 
-                                       id="imagem_perfil" 
-                                       name="imagem_perfil" 
-                                       accept="image/jpeg,image/png,.jpg,.jpeg,.png">
-                                <small class="text-muted">Formatos aceitos: JPG/JPEG e PNG. Tamanho máximo: 2MB.</small>
-                                {% if user_data.foto %}
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" 
-                                           type="checkbox" 
-                                           name="remove_current_image" 
-                                           id="remove_current_image" 
-                                           value="1">
-                                    <label class="form-check-label" for="remove_current_image">
-                                        Remover foto atual e usar avatar padrão
-                                    </label>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <hr>
                     
                     {# Nome Completo #}
                     <div class="mb-3">
@@ -338,46 +302,6 @@
 {{ super() }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Preview da imagem antes do upload
-    const inputFoto = document.getElementById('imagem_perfil');
-    const previewFoto = document.getElementById('preview-foto-perfil');
-    const checkboxRemover = document.getElementById('remove_current_image');
-    
-    if (inputFoto) {
-        inputFoto.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                // Desmarcar checkbox de remoção se uma nova foto for selecionada
-                if (checkboxRemover) {
-                    checkboxRemover.checked = false;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    previewFoto.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    
-    // Preview ao marcar checkbox de remoção
-    if (checkboxRemover) {
-        checkboxRemover.addEventListener('change', function() {
-            if (this.checked) {
-                // Mostrar avatar padrão
-                previewFoto.src = "{{ url_for('static', filename='img/default_avatar.png') }}";
-                // Limpar input de arquivo
-                if (inputFoto) {
-                    inputFoto.value = '';
-                }
-            } else {
-                // Restaurar foto original
-                previewFoto.src = "{{ display_foto_url }}";
-            }
-        });
-    }
-    
     // Submissão do formulário via AJAX
     const formPerfil = document.getElementById('form-perfil');
     if (formPerfil) {
@@ -410,12 +334,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Atualizar dados na sessão/interface se fornecidos
                     if (data.updated_user_data) {
-                        // Atualizar foto na sidebar
-                        const sidebarAvatar = document.querySelector('.sidebar-avatar');
-                        if (sidebarAvatar && data.updated_user_data.usuario_foto_url) {
-                            sidebarAvatar.src = data.updated_user_data.usuario_foto_url;
-                        }
-                        
                         // Atualizar nome na sidebar
                         const sidebarNome = document.querySelector('.menu-item[data-accesskey="m"] .menu-text');
                         if (sidebarNome && data.updated_user_data.nome) {

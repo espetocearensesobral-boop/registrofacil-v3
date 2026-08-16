@@ -119,7 +119,6 @@ def create_backup_archive(
     database_path: str,
     upload_processos: str,
     upload_empresa: str,
-    upload_perfil: str,
     log_dir: str,
     source: str = "manual",
 ) -> dict:
@@ -143,7 +142,6 @@ def create_backup_archive(
             _add_file(zipf, db_snapshot, f"database/{Path(database_path).name}", entries)
             _add_directory(zipf, upload_processos, "uploads/processos", entries)
             _add_directory(zipf, upload_empresa, "uploads/empresa", entries)
-            _add_directory(zipf, upload_perfil, "uploads/perfil", entries)
             _add_directory(zipf, log_dir, "logs", entries)
             manifest = {
                 "format_version": BACKUP_FORMAT_VERSION,
@@ -225,7 +223,6 @@ def promote_staged_restore(
     database_path: str,
     upload_processos: str,
     upload_empresa: str,
-    upload_perfil: str,
     rollback_root: str,
     preserve_keys: bool = True,
 ) -> dict:
@@ -251,7 +248,6 @@ def promote_staged_restore(
         "database": (staged_database, os.path.abspath(database_path), "file"),
         "uploads_processos": (os.path.join(staging_dir, "uploads", "processos"), os.path.abspath(upload_processos), "dir"),
         "uploads_empresa": (os.path.join(staging_dir, "uploads", "empresa"), os.path.abspath(upload_empresa), "dir"),
-        "uploads_perfil": (os.path.join(staging_dir, "uploads", "perfil"), os.path.abspath(upload_perfil), "dir"),
     }
     for label, (source, _, kind) in targets.items():
         if kind == "file" and not os.path.isfile(source):
@@ -265,7 +261,7 @@ def promote_staged_restore(
     database_rollback = os.path.join(rollback_dir, "database.db")
     try:
         shutil.copy2(database_path, database_rollback)
-        for label in ("uploads_processos", "uploads_empresa", "uploads_perfil"):
+        for label in ("uploads_processos", "uploads_empresa"):
             _, target, _ = targets[label]
             old = os.path.join(rollback_dir, label)
             if os.path.exists(target):
@@ -274,7 +270,7 @@ def promote_staged_restore(
         temp_database = f"{database_path}.restore.tmp"
         shutil.copy2(staged_database, temp_database)
         os.replace(temp_database, database_path)
-        for label in ("uploads_processos", "uploads_empresa", "uploads_perfil"):
+        for label in ("uploads_processos", "uploads_empresa"):
             source, target, _ = targets[label]
             shutil.copytree(source, target)
         return {"rollback_dir": rollback_dir, "database_path": database_path, "keys_preserved": True}
@@ -322,7 +318,6 @@ def rollback_promoted_restore(
     database_path: str,
     upload_processos: str,
     upload_empresa: str,
-    upload_perfil: str,
 ) -> None:
     """Reverte uma promoção usando o snapshot criado antes da troca."""
     database_backup = os.path.join(rollback_dir, "database.db")
@@ -333,7 +328,6 @@ def rollback_promoted_restore(
     for label, target in (
         ("uploads_processos", upload_processos),
         ("uploads_empresa", upload_empresa),
-        ("uploads_perfil", upload_perfil),
     ):
         source = os.path.join(rollback_dir, label)
         if os.path.isdir(source):

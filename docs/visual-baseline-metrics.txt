@@ -92,7 +92,6 @@ static/css/main.css:144:.sidebar:not(.collapsed) .hamburger-menu .hamburger {
 static/css/main.css:148:.sidebar.collapsed .sidebar-company-logo {
 static/css/main.css:156:.sidebar.collapsed .hamburger-menu .hamburger {
 static/css/main.css:166:.sidebar.collapsed .hamburger-menu:hover .hamburger {
-static/css/main.css:242:.menu-icon .sidebar-avatar {
 static/css/main.css:259:.sidebar.collapsed .menu-text {
 static/css/main.css:286:.sidebar-group-label {
 static/css/main.css:300:.sidebar.collapsed .sidebar-group-label {
@@ -138,14 +137,12 @@ static/css/palette03-final.css:311:html body .sidebar .menu-item.active i { colo
 templates/admin/editar_usuario.html:564:                if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
 templates/admin/editar_usuario.html:634:                    if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
 templates/admin/editar_usuario.html:642:                    if (sidebarAvatar && '{{ user_data.id }}' == '{{ session.get("usuario_id") }}') {
-templates/admin/editar_usuario.html:841:                            if (result.updated_user_data.usuario_foto_url && sidebarAvatar) {
 templates/admin/editar_usuario.html:843:                            } else if (sidebarAvatar) {
 templates/admin/editar_usuario.html:847:                            if (sidebarUserNameElement && result.updated_user_data.nome) {
 templates/base.html:16:            if (sidebarState === 'true') {
 templates/base.html:613:        document.querySelectorAll('#sidebar .menu-item[data-href]').forEach(function(item) {
 templates/base.html:652:        if (sidebar && wrapper && isCollapsed) {
 templates/configuracoes.html:148:.appearance-preview-sidebar { width: 21%; background: var(--preview-primary); }
-templates/perfil.html:401:                        if (sidebarAvatar && data.updated_user_data.usuario_foto_url) {
 templates/perfil.html:407:                        if (sidebarNome && data.updated_user_data.nome) {
 === hamburger ===
 templates/base.html:148:            <div class="hamburger-menu" data-accesskey="i"

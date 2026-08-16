@@ -260,8 +260,6 @@ def login():
             session['usuario_role'] = user['role']
             session['session_start_time'] = agora_str # Usa o mesmo timestamp do ponto de invalidação
             
-            session['usuario_foto_url'] = get_image_url_for_display(user['foto'], user['email'], is_company_logo=False)
-
             # Set empresa logo in session so sidebar and all pages use it
             try:
                 _emp = get_empresa_info()
@@ -392,8 +390,6 @@ def dashboard():
             pending_status_options.append(status_item)
             all_pending_status_ids.append(str(status_item['id']))
             
-    usuario_foto_url = session.get('usuario_foto_url', url_for('static', filename='img/default_avatar.png'))
-
     finalizado_status_id = get_status_id_by_name('Finalizado') 
     prenotado_status_id = get_status_id_by_name('Prenotado')
 
@@ -417,8 +413,7 @@ def dashboard():
                            get_contrast_color=get_contrast_color,
                            formatar_data=formatar_data,
                            now=datetime.now(),
-                           custom_greeting=custom_greeting,
-                           usuario_foto_url=usuario_foto_url
+                           custom_greeting=custom_greeting
                           )
 
 @auth_bp.route('/recuperar_senha', methods=['GET', 'POST'])

@@ -312,7 +312,7 @@ body {
 #main-content .nav-btn.btn-xs { min-height: var(--rf-control-height-xs); padding-block: .25rem; font-size: .8125rem; }
 
 /* ------------------------------------------------------------
-   Modais Bootstrap e modal de criação de perfil
+   Modais Bootstrap
    ------------------------------------------------------------ */
 .modal { --rf-modal-gutter: 1rem; }
 .modal-dialog { width: auto; max-width: var(--rf-modal-max-width); margin: 1.5rem auto; }
@@ -743,13 +743,39 @@ body {
   color: var(--color-error);
 }
 
-#sidebar-group-administrador [data-profile-menu-item] .sidebar-avatar {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  object-fit: cover;
+/* Densidade tipográfica da navegação: compacta, legível e sem foto de perfil. */
+#sidebar .sidebar-group-toggle {
+  min-height: 1.875rem;
+  padding: .55rem .875rem .25rem;
+  font-size: .6875rem;
+  letter-spacing: .08em;
+  line-height: 1.15;
 }
 
-#sidebar-group-administrador [data-profile-menu-item] .menu-icon {
-  overflow: hidden;
+#sidebar .sidebar-category-items .menu-item,
+#sidebar .sidebar-logout .menu-item {
+  height: 2.5rem;
+  min-height: 2.5rem;
+  padding: .45rem .875rem;
+}
+
+#sidebar .sidebar-category-items .menu-text,
+#sidebar .sidebar-logout .menu-text {
+  font-size: .8125rem;
+  line-height: 1.25;
+}
+
+#sidebar .sidebar-category-items .menu-icon,
+#sidebar .sidebar-logout .menu-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: .625rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 991px) {
+  #sidebar .sidebar-group-toggle {
+    min-height: 1.875rem;
+    padding-block: .55rem .25rem;
+  }
 }
