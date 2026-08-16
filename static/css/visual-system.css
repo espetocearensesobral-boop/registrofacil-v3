@@ -1637,3 +1637,33 @@ body .nt-btn-cancel:focus-visible {
   border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
   color: var(--rf-text-on-primary, #FFFFFF) !important;
 }
+
+
+/* Cobertura complementar de controles compactos — Onda tertiary-action-2. */
+body .btn-dark,
+body .btn-download,
+body .download-btn,
+body a[href*="download"],
+body a[href*="baixar"],
+body [title*="Ativar"],
+body [title*="Inativar"],
+body [title*="Desativar"],
+body [title*="Revogar"] {
+  background-color: var(--rf-action-tertiary, #B08D3E) !important;
+  background-image: none !important;
+  border-color: var(--rf-action-tertiary, #B08D3E) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+body .btn-dark:hover,
+body .btn-download:hover,
+body .download-btn:hover,
+body a[href*="download"]:hover,
+body a[href*="baixar"]:hover,
+body [title*="Ativar"]:hover,
+body [title*="Inativar"]:hover,
+body [title*="Desativar"]:hover,
+body [title*="Revogar"]:hover {
+  background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
