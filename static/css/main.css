@@ -852,16 +852,3 @@ body.auth-page {
     0% { left: -40%; }
     100% { left: 100%; }
 }
-
-
-/* Antiflash do tema: o head define data-theme/data-cor antes do primeiro paint. */
-html.rf-preload body {
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-html.rf-loaded body {
-    visibility: visible !important;
-    opacity: 1 !important;
-    transition: opacity .15s ease-out;
-}
