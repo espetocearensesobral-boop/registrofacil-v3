@@ -1702,3 +1702,75 @@ html body .filter-bar.active-filters .filter-bar-toggle strong,
 html body .filter-bar.active-filters .filter-bar-toggle i {
   color: var(--rf-text-primary, #1D1B18) !important;
 }
+
+
+/* ============================================================
+   LAYOUT COMPACTO - régua única de espaços e superfícies
+   ============================================================ */
+:root {
+  --rf-layout-gutter: clamp(.875rem, 1.65vw, 1.5rem);
+  --rf-layout-gap: clamp(.75rem, 1.35vw, 1.125rem);
+  --rf-layout-section: clamp(1rem, 1.8vw, 1.5rem);
+}
+
+#page-content-wrapper > .container-fluid,
+#page-content-wrapper > main {
+  padding: var(--rf-layout-section) var(--rf-layout-gutter) !important;
+}
+
+#page-content-wrapper > .container-fluid > .row,
+#page-content-wrapper > main > .row,
+#page-content-wrapper .row.g-4,
+#page-content-wrapper .row.g-5 {
+  --bs-gutter-x: var(--rf-layout-gap);
+  --bs-gutter-y: var(--rf-layout-gap);
+}
+
+#page-content-wrapper .mb-4 { margin-bottom: var(--rf-layout-section) !important; }
+#page-content-wrapper .mb-5 { margin-bottom: 1.75rem !important; }
+
+#page-content-wrapper .card,
+#page-content-wrapper .rf-card,
+#page-content-wrapper .cfg-card,
+#page-content-wrapper .filter-bar,
+#page-content-wrapper .kpi-bar {
+  margin-bottom: 0;
+  border-radius: var(--rf-radius-md);
+}
+
+#page-content-wrapper .card-header,
+#page-content-wrapper .rf-card-header,
+#page-content-wrapper .cfg-card-header {
+  padding: .7rem 1rem;
+}
+
+#page-content-wrapper .card-body,
+#page-content-wrapper .rf-card-body,
+#page-content-wrapper .cfg-card-body {
+  padding: 1.125rem;
+}
+
+#page-content-wrapper .page-header,
+#page-content-wrapper .page-title-row {
+  margin-bottom: var(--rf-layout-gap) !important;
+}
+
+.modal-dialog { margin: .75rem auto; }
+.modal-content { border-radius: var(--rf-radius-md); }
+.modal-header { padding: .8rem 1rem; }
+.modal-body { padding: 1rem; }
+.modal-footer { padding: .7rem 1rem; }
+
+@media (max-width: 991.98px) {
+  #page-content-wrapper > .container-fluid,
+  #page-content-wrapper > main { padding: 1rem .875rem !important; }
+}
+
+@media (max-width: 575.98px) {
+  #page-content-wrapper > .container-fluid,
+  #page-content-wrapper > main { padding: .875rem .75rem !important; }
+  #page-content-wrapper .card-body,
+  #page-content-wrapper .rf-card-body,
+  #page-content-wrapper .cfg-card-body { padding: .875rem; }
+  .modal-dialog { margin: .5rem; }
+}
