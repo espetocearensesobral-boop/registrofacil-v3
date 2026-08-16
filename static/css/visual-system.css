@@ -1383,3 +1383,110 @@ html body .dashboard-action-link.nav-btn-secondary:focus-visible {
   border-color: var(--color-primary-dark) !important;
   color: var(--color-primary-contrast, #FFFFFF) !important;
 }
+
+
+/* Correção de precedência — Onda button-fill-2. Usa background-color explícito
+   para vencer regras legadas que também declaram background-color !important. */
+body .nav-btn,
+body .btn-primary,
+body .btn-dark,
+body .btn-secondary,
+body .btn-outline-primary,
+body .btn-outline-secondary,
+body .btn-success,
+body .btn-warning,
+body .btn-info,
+body .btn-danger,
+body .btn-outline-danger,
+body .btn-filter-apply,
+body .btn-filter-clear,
+body .btn-limpar,
+body .btn-action,
+body .btn-action-square,
+body .btn-browse-dir,
+body .btn-acao-clicavel,
+body .cfg-btn-add,
+body .cfg-sbtn,
+body .cfg-obtn,
+body .cfg-ibtn,
+body .nt-btn-save,
+body .nt-btn-cancel,
+body .tbl-btn,
+body .rf-tab-btn,
+body .metricas-tab-btn,
+body .cat-toggle-btn,
+body .auth-btn {
+  background-color: var(--color-primary-light, #1B4368) !important;
+  background-image: none !important;
+  border-color: var(--color-primary-light, #1B4368) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+body .nav-btn-primary,
+body .btn-primary,
+body .btn-dark,
+body .btn-filter-apply,
+body .cfg-btn-add,
+body .cfg-sbtn,
+body .nt-btn-save,
+body .auth-btn {
+  background-color: var(--color-primary, #0F2A43) !important;
+  border-color: var(--color-primary, #0F2A43) !important;
+}
+
+body .nav-btn-secondary,
+body .btn-secondary,
+body .btn-outline-primary,
+body .btn-outline-secondary,
+body .btn-filter-clear,
+body .btn-limpar,
+body .nt-btn-cancel,
+html body .dashboard-action-link.nav-btn-secondary {
+  background-color: var(--color-primary-light, #1B4368) !important;
+  border-color: var(--color-primary-light, #1B4368) !important;
+}
+
+body .nav-btn-danger,
+body .btn-danger,
+body .btn-outline-danger,
+body .cfg-obtn,
+body .btn-delete-backup,
+body .btn-remove-file,
+body .btn-excluir-titular,
+body .btn-excluir-apresentante,
+body .btn-excluir-representante,
+body .btn-revoke {
+  background-color: var(--color-gold-primary, #B08D3E) !important;
+  border-color: var(--color-gold-primary, #B08D3E) !important;
+}
+
+body .nav-btn-success,
+body .btn-success { background-color: var(--color-success, #1E5C3E) !important; border-color: var(--color-success, #1E5C3E) !important; }
+body .nav-btn-warning,
+body .btn-warning { background-color: var(--color-gold-primary, #B08D3E) !important; border-color: var(--color-gold-primary, #B08D3E) !important; }
+body .nav-btn-info,
+body .btn-info { background-color: var(--color-primary-light, #1B4368) !important; border-color: var(--color-primary-light, #1B4368) !important; }
+
+body .nav-btn:hover,
+body .btn:hover,
+body button:not(.btn-close):hover,
+body a.btn:hover,
+body .tbl-btn:hover,
+body .rf-tab-btn:hover,
+body .metricas-tab-btn:hover,
+body .cat-toggle-btn:hover,
+body .cfg-ibtn:hover {
+  background-color: var(--color-primary-dark, #0A1E30) !important;
+  border-color: var(--color-primary-dark, #0A1E30) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .nav-btn-danger:hover,
+body .btn-danger:hover,
+body .btn-outline-danger:hover,
+body .cfg-obtn:hover,
+body .btn-delete-backup:hover,
+body .btn-remove-file:hover,
+body .btn-excluir-titular:hover,
+body .btn-excluir-apresentante:hover,
+body .btn-excluir-representante:hover,
+body .btn-revoke:hover { background-color: var(--color-gold-dark, #8E702F) !important; border-color: var(--color-gold-dark, #8E702F) !important; }

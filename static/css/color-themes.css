@@ -2,6 +2,22 @@
    COLOR-THEMES.CSS - Seis temas institucionais completos
    ============================================================ */
 
+/* Fallback institucional: garante uma cor válida mesmo antes da aplicação do atributo data-cor. */
+:root {
+    --color-primary: #0F2A43;
+    --color-primary-light: #1B4368;
+    --color-primary-dark: #0A1E30;
+    --color-primary-contrast: #FFFFFF;
+    --color-gold-primary: #B08D3E;
+    --color-gold-dark: #8E702F;
+    --background-color-body: #F5F2EA;
+    --background-color-card: #FFFFFF;
+    --background-color-hover: #ECE8DE;
+    --text-color-primary: #1D1B18;
+    --text-color-secondary: #6B665C;
+    --border-color-default: #D9D2C2;
+}
+
 /* Cada tema controla o sistema inteiro; não existe cor visual independente da sidebar. */
 [data-cor="paleta-01"], [data-cor="paleta-02"], [data-cor="paleta-03"],
 [data-cor="paleta-04"], [data-cor="paleta-05"], [data-cor="paleta-06"] {
