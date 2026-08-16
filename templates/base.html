@@ -2,31 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>
-        (function() {
-            // 1. Recuperar estado da sidebar
-            var sidebarState = localStorage.getItem('registrofacil_sidebar_collapsed');
-            var sidebar = document.documentElement;
-            
-            // 2. Aplicar classe imediatamente (antes do CSS carregar)
-            if (sidebarState === 'true') {
-                sidebar.classList.add('sidebar-collapsed-initial');
-            }
-            
-            // 3. Desabilitar transições durante o carregamento
-            sidebar.classList.add('no-transitions');
-            
-            // 4. Remover classe de no-transitions após página carregar
-            window.addEventListener('load', function() {
-                // Pequeno delay para garantir que tudo renderizou
-                setTimeout(function() {
-                    document.documentElement.classList.remove('no-transitions');
-                }, 100);
-            });
-        })();
-    </script>
 
-    <title>{% block title %}Registro Fácil{% endblock %}</title>
+<title>{% block title %}Registro Fácil{% endblock %}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -140,10 +117,9 @@
     <div id="sidebar-overlay"></div>
     <div class="loader-overlay"></div>
     <div class="d-flex" id="wrapper">
-        <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
+        <aside class="sidebar" id="sidebar" aria-label="Navegação principal" tabindex="-1">
 
-            <div class="hamburger-menu" data-accesskey="i"
-                 title="Expandir/Recolher Menu (Alt+I)">
+            <div class="hamburger-menu" title="Navegação principal">
                 <img src="{{ session.get('empresa_logo_url', url_for('static', filename='img/registrofacil.png')) }}"
                      alt="Logo" class="sidebar-company-logo" id="sidebar-company-logo"
                      onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/registrofacil.png') }}'">
@@ -152,7 +128,11 @@
             <div class="menu-section">
 
                 {# ─── PRINCIPAL ─── #}
-                <div class="sidebar-group-label">Principal</div>
+                <button class="sidebar-group-toggle" type="button" aria-expanded="true" aria-controls="sidebar-group-principal">
+                    <span>Principal</span>
+                    <i class="bi bi-chevron-down sidebar-group-toggle-icon" aria-hidden="true"></i>
+                </button>
+                <div class="sidebar-category-items" id="sidebar-group-principal">
 
                 <div class="menu-item" data-href="{{ url_for('auth.dashboard') }}" data-accesskey="d" onclick="setActive(this)"
                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Início (Alt+D)">
@@ -173,7 +153,13 @@
                 </div>
 
                 {# ─── PROCESSOS ─── #}
-                <div class="sidebar-group-label">Processos</div>
+                </div>
+
+                <button class="sidebar-group-toggle" type="button" aria-expanded="false" aria-controls="sidebar-group-processos">
+                    <span>Processos</span>
+                    <i class="bi bi-chevron-down sidebar-group-toggle-icon" aria-hidden="true"></i>
+                </button>
+                <div class="sidebar-category-items" id="sidebar-group-processos" hidden>
 
                 <div class="menu-item" data-href="{{ url_for('processos.vinculados') }}" data-accesskey="f" onclick="setActive(this)"
                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Meus Processos (Alt+F)">
@@ -206,7 +192,13 @@
                 </div>
 
                 {# ─── CADASTROS ─── #}
-                <div class="sidebar-group-label">Cadastros</div>
+                </div>
+
+                <button class="sidebar-group-toggle" type="button" aria-expanded="false" aria-controls="sidebar-group-cadastros">
+                    <span>Cadastros</span>
+                    <i class="bi bi-chevron-down sidebar-group-toggle-icon" aria-hidden="true"></i>
+                </button>
+                <div class="sidebar-category-items" id="sidebar-group-cadastros" hidden>
 
                 <div class="menu-item" data-href="{{ url_for('titulares.index') }}" data-accesskey="l" onclick="setActive(this)"
                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Titulares (Alt+L)">
@@ -227,7 +219,13 @@
                 </div>
 
                 {# ─── SISTEMA ─── #}
-                <div class="sidebar-group-label">Sistema</div>
+                </div>
+
+                <button class="sidebar-group-toggle" type="button" aria-expanded="false" aria-controls="sidebar-group-sistema">
+                    <span>Sistema</span>
+                    <i class="bi bi-chevron-down sidebar-group-toggle-icon" aria-hidden="true"></i>
+                </button>
+                <div class="sidebar-category-items" id="sidebar-group-sistema" hidden>
 
                 {% if session.get('usuario_role') == 'admin' %}
                 <div class="menu-item" data-href="{{ url_for('admin_users.users_list') }}" data-accesskey="u" onclick="setActive(this)"
@@ -249,11 +247,12 @@
                     <span class="menu-text">Cópia de Segurança</span>
                 </div>
 
+                </div>
             </div>
 
             {# ─── RODAPÉ: Perfil do usuário ─── #}
             <div class="bottom-section" id="profile-section">
-                <div class="section-title-toggle" id="profile-section-toggle">
+                <div class="section-title-toggle" id="profile-section-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="profile-menu-items">
                     <div class="menu-icon">
                         <img src="{{ session.get('usuario_foto_url', url_for('static', filename='img/default_avatar.png')) }}"
                              alt="Avatar" class="sidebar-avatar">
@@ -263,7 +262,7 @@
                     </span>
                     <i class="bi bi-chevron-down toggle-icon"></i>
                 </div>
-                <div class="profile-menu-items">
+                <div class="profile-menu-items" id="profile-menu-items">
                     <div class="menu-item" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
                          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ session.get('usuario_nome', 'Meu Perfil') }} (Alt+M)">
                         <div class="menu-icon"><i class="bi bi-person-circle"></i></div>
@@ -617,15 +616,6 @@
             });
         });
 
-        // Em mobile: nunca restaurar estado "collapsed" do desktop
-        if (window.innerWidth <= 991) {
-            const sidebar  = document.getElementById('sidebar');
-            const wrapper  = document.getElementById('wrapper');
-            const pcw      = document.getElementById('page-content-wrapper');
-            sidebar.classList.remove('collapsed');
-            wrapper.classList.remove('toggled');
-            if (pcw) pcw.style.marginLeft = '0';
-        }
     });
 
     // Ao redimensionar: limpar estado mobile quando volta para desktop
@@ -640,20 +630,5 @@
     <!-- Identidade visual semântica consolidada após estilos locais dos templates -->
     <!-- Toast Container Global -->
     <div class="toast-container position-fixed top-0 end-0 p-3 rf-toast-container"></div>
-
-<script>
-    // Garantir que a sidebar está no estado correto
-    // (fallback caso o script do head não tenha funcionado)
-    document.addEventListener('DOMContentLoaded', function() {
-        const isCollapsed = localStorage.getItem('registrofacil_sidebar_collapsed') === 'true';
-        const sidebar = document.getElementById('sidebar');
-        const wrapper = document.getElementById('wrapper');
-        
-        if (sidebar && wrapper && isCollapsed) {
-            sidebar.classList.add('collapsed');
-            wrapper.classList.add('toggled');
-        }
-    });
-</script>
 </body>
 </html>

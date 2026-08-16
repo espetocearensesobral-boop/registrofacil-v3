@@ -16,78 +16,17 @@ if (typeof window.togglePassword !== 'function') {
 }
 
 // ============================================================
-// SIDEBAR: Toggle com Persistência de Estado
-// ============================================================
-
-// Chave do localStorage
-const SIDEBAR_STATE_KEY = 'registrofacil_sidebar_collapsed';
-
-/**
- * Inicializa a sidebar ao carregar a página
- */
+// SIDEBAR: fixa e expandida no desktop. Apenas a seção Administrador/perfil é recolhível.
 function inicializarSidebar() {
     const sidebar = document.getElementById('sidebar');
     const wrapper = document.getElementById('wrapper');
-    const pageContentWrapper = document.getElementById('page-content-wrapper');
-    
     if (!sidebar || !wrapper) return;
-    
-    // Recuperar estado salvo
-    const isCollapsed = localStorage.getItem(SIDEBAR_STATE_KEY) === 'true';
-    
-    // Aplicar estado SEM animação (já foi aplicado no head, mas garantimos)
-    if (isCollapsed) {
-        sidebar.classList.add('collapsed');
-        wrapper.classList.add('toggled');
-    } else {
-        sidebar.classList.remove('collapsed');
-        wrapper.classList.remove('toggled');
-    }
-    
-    // Configurar botão de toggle (hamburger)
-    const hamburger = document.querySelector('.hamburger-menu');
-    if (hamburger) {
-        hamburger.addEventListener('click', window.toggleSidebar);
-    }
+
+    sidebar.classList.remove('collapsed', 'mobile-open');
+    wrapper.classList.remove('toggled');
 }
 
-/**
- * Alterna o estado da sidebar
- */
-window.toggleSidebar = function() {
-    const sidebar = document.getElementById('sidebar');
-    const wrapper = document.getElementById('wrapper');
-    const pageContentWrapper = document.getElementById('page-content-wrapper');
-    
-    if (!sidebar || !wrapper) return;
-    
-    const isCollapsed = sidebar.classList.toggle('collapsed');
-    wrapper.classList.toggle('toggled', isCollapsed);
-    
-
-    // Salvar estado no localStorage
-    localStorage.setItem(SIDEBAR_STATE_KEY, isCollapsed.toString());
-    window.dispatchEvent(new Event('resize'));
-    
-    // NOVO: Ajustar estado da seção de perfil ao colapsar/expandir a sidebar
-    const profileSectionToggle = document.getElementById('profile-section-toggle');
-    const profileMenuItems = document.querySelector('.profile-menu-items');
-    if (profileSectionToggle && profileMenuItems) {
-        profileMenuItems.classList.add('collapsed');
-        profileSectionToggle.classList.add('collapsed');
-        profileSectionToggle.classList.remove('expanded');
-    }
-    
-    console.log('Sidebar toggle: ' + (isCollapsed ? 'recolhida' : 'expandida'));
-}
-
-// INICIALIZAÇÃO da Sidebar
-document.addEventListener('DOMContentLoaded', function() {
-    inicializarSidebar();
-    
-    // Remover classe de estado inicial após aplicar (para não conflitar)
-    document.documentElement.classList.remove('sidebar-collapsed-initial');
-});
+document.addEventListener('DOMContentLoaded', inicializarSidebar);
 
 /**
  * Ativa o item de menu clicado na sidebar e lida com a navegação/abertura de modais.
@@ -100,6 +39,7 @@ window.setActive = function(element) {
     menuItems.forEach(item => item.classList.remove('active'));
     
     element.classList.add('active');
+    window.openSidebarCategoryFor?.(element, false);
 
     // NOVO: Rola a sidebar para o item ativo, se encontrado
     const menuSection = document.querySelector('.menu-section');
@@ -179,126 +119,120 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     initializeFlashToasts();
 
-    // --- 2.3. Inicializa o Controle da Sidebar ---
+    // --- 2.3. Inicializa a Sidebar fixa e o accordion de categorias ---
     const initSidebarControl = () => {
         const sidebar = document.getElementById('sidebar');
         const wrapper = document.getElementById('wrapper');
         const pageContentWrapper = document.getElementById('page-content-wrapper');
-        const hamburgerMenu = document.querySelector('.hamburger-menu');
-        const sidebarCompanyLogo = document.getElementById('sidebar-company-logo');
-
-        // NOVOS ELEMENTOS PARA SEÇÃO DO PERFIL RECOLHÍVEL
         const profileSectionToggle = document.getElementById('profile-section-toggle');
         const profileMenuItems = document.querySelector('.profile-menu-items');
+        const categoryToggles = Array.from(document.querySelectorAll('.sidebar-group-toggle'));
 
-        // Adição de logs para verificar se os elementos foram encontrados
-        console.log("initSidebarControl: Verificando elementos da sidebar...");
-        console.log("Sidebar elemento:", sidebar);
-        console.log("Wrapper elemento:", wrapper);
-        console.log("Page Content Wrapper elemento:", pageContentWrapper);
-        console.log("Hamburger Menu elemento:", hamburgerMenu);
-        console.log("Sidebar Company Logo elemento:", sidebarCompanyLogo);
-        console.log("Profile Section Toggle elemento:", profileSectionToggle);
-        console.log("Profile Menu Items elemento:", profileMenuItems);
+        if (!sidebar || !wrapper || !pageContentWrapper) return;
 
+        // O desktop não possui mais estado collapsed/toggled.
+        sidebar.classList.remove('collapsed');
+        wrapper.classList.remove('toggled');
 
-        if (!sidebar || !wrapper || !pageContentWrapper || !hamburgerMenu || !profileSectionToggle || !profileMenuItems) {
-            console.error('initSidebarControl: Um ou mais elementos essenciais da sidebar NÃO ENCONTRADOS. O controle da sidebar pode não funcionar corretamente.');
-            return; // Interrompe a função se os elementos não forem encontrados
-        }
-        
-        // Adiciona evento de clique no menu hambúrguer
-        hamburgerMenu.addEventListener('click', window.toggleSidebar);
-        
-        // Adiciona evento de clique na logo da empresa para toggle da sidebar
-        if (sidebarCompanyLogo) {
-            sidebarCompanyLogo.style.cursor = 'pointer';
-            sidebarCompanyLogo.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita propagação para o hamburgerMenu
-                window.toggleSidebar();
+        const closeCategory = (toggle) => {
+            const panel = document.getElementById(toggle.getAttribute('aria-controls'));
+            toggle.setAttribute('aria-expanded', 'false');
+            if (panel) panel.hidden = true;
+            toggle.classList.remove('is-open');
+        };
+
+        const openCategory = (toggle, focus = true) => {
+            categoryToggles.forEach(other => {
+                if (other !== toggle) closeCategory(other);
             });
-            console.log('initSidebarControl: Evento de clique adicionado à logo da empresa.');
-        }
-        console.log('initSidebarControl: Listeners de clique adicionados para alternar a sidebar.');
+            const panel = document.getElementById(toggle.getAttribute('aria-controls'));
+            toggle.setAttribute('aria-expanded', 'true');
+            if (panel) panel.hidden = false;
+            toggle.classList.add('is-open');
+            if (focus) toggle.focus({ preventScroll: true });
+        };
 
-        // Restaura o estado da sidebar (colapsada/expandida)
-        // Por padrão (primeira visita), a sidebar inicia RECOLHIDA
-        const savedSidebarState = localStorage.getItem(SIDEBAR_STATE_KEY);
-        const isCollapsedInitially = savedSidebarState === null ? false : savedSidebarState === 'true';
-        sidebar.classList.toggle('collapsed', isCollapsedInitially);
-        wrapper.classList.toggle('toggled', isCollapsedInitially);
-        console.log(`initSidebarControl: Estado da sidebar restaurado para ${isCollapsedInitially ? 'recolhida' : 'expandida'}.`);
+        window.openSidebarCategoryFor = (element, focus = false) => {
+            const panel = element?.closest('.sidebar-category-items');
+            const toggle = element?.matches?.('.sidebar-group-toggle')
+                ? element
+                : panel?.previousElementSibling?.matches?.('.sidebar-group-toggle')
+                    ? panel.previousElementSibling
+                    : null;
+            if (toggle) openCategory(toggle, focus);
+        };
 
-        // Lógica de estado inicial da seção de perfil
-        // Força a seção de perfil a iniciar sempre recolhida.
-        profileMenuItems.classList.add('collapsed');
-        profileSectionToggle.classList.add('collapsed');
-        profileSectionToggle.classList.remove('expanded'); // Garante que 'expanded' é removido
-        console.log("initSidebarControl: Seção de perfil forçada a iniciar recolhida.");
-
-
-        // Adiciona listener para o clique no botão "Opções"
-        profileSectionToggle.addEventListener('click', (event) => {
-            console.log("profileSectionToggle: Clique detectado. Alternando estado...");
-            // Previne a propagação do evento para evitar interferências com outros listeners
-            event.stopPropagation(); 
-            
-            const isCurrentlyCollapsed = profileMenuItems.classList.toggle('collapsed');
-            profileSectionToggle.classList.toggle('collapsed', isCurrentlyCollapsed);
-            profileSectionToggle.classList.toggle('expanded', !isCurrentlyCollapsed);
-            
-            // Rola a sidebar para o topo ou para o botão de toggle para garantir visibilidade
-            if (!sidebar.classList.contains('collapsed')) {
-                 sidebar.scrollTo({ top: sidebar.scrollHeight, behavior: 'smooth' });
+        categoryToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+                if (isOpen) {
+                    closeCategory(toggle);
+                    toggle.focus({ preventScroll: true });
+                } else {
+                    openCategory(toggle, true);
+                }
+            });
+            toggle.addEventListener('keydown', event => {
+                if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    const index = categoryToggles.indexOf(toggle);
+                    const nextIndex = event.key === 'ArrowDown'
+                        ? (index + 1) % categoryToggles.length
+                        : (index - 1 + categoryToggles.length) % categoryToggles.length;
+                    categoryToggles[nextIndex].focus();
+                }
+            });
+            if (toggle.getAttribute('aria-expanded') === 'true') {
+                toggle.classList.add('is-open');
             }
         });
 
+        // O bloco Administrador/perfil continua sendo a única área recolhível.
+        if (profileSectionToggle && profileMenuItems) {
+            profileMenuItems.classList.add('collapsed');
+            profileSectionToggle.classList.add('collapsed');
+            profileSectionToggle.classList.remove('expanded');
+            profileSectionToggle.setAttribute('aria-expanded', 'false');
+            const toggleProfileSection = event => {
+                event.stopPropagation();
+                const isCollapsed = profileMenuItems.classList.toggle('collapsed');
+                profileSectionToggle.classList.toggle('collapsed', isCollapsed);
+                profileSectionToggle.classList.toggle('expanded', !isCollapsed);
+                profileSectionToggle.setAttribute('aria-expanded', String(!isCollapsed));
+                if (!isCollapsed) {
+                    sidebar.scrollTo({ top: sidebar.scrollHeight, behavior: 'smooth' });
+                    profileSectionToggle.focus({ preventScroll: true });
+                }
+            };
+            profileSectionToggle.addEventListener('click', toggleProfileSection);
+            profileSectionToggle.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggleProfileSection(event);
+                }
+            });
+        }
 
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 991) {
-                // Mobile/tablet: sidebar é um drawer — NÃO adiciona .collapsed
-                // (collapsed esconderia o texto mesmo com a sidebar aberta)
-                // O controle visual é feito por transform via CSS + .mobile-open
-                wrapper.classList.remove('toggled');
-
-                // Garante que a sidebar não fica "aberta" ao redimensionar
+        const handleResponsiveSidebar = () => {
+            sidebar.classList.remove('collapsed');
+            wrapper.classList.remove('toggled');
+            if (window.innerWidth > 991) {
                 sidebar.classList.remove('mobile-open');
-                document.getElementById('sidebar-overlay').classList.remove('active');
+                document.getElementById('sidebar-overlay')?.classList.remove('active');
                 document.body.style.overflow = '';
-
-                // Recolhe seção de perfil
-                profileMenuItems.classList.add('collapsed');
-                profileSectionToggle.classList.add('collapsed');
-                profileSectionToggle.classList.remove('expanded');
-            } else {
-                // Desktop: restaura estado salvo (collapsed ou expandido)
-                const isSavedCollapsed = localStorage.getItem(SIDEBAR_STATE_KEY) === 'true';
-                sidebar.classList.toggle('collapsed', isSavedCollapsed);
-                sidebar.classList.remove('mobile-open'); // garante limpeza
-                wrapper.classList.toggle('toggled', isSavedCollapsed);
-
-                // Recolhe seção de perfil
-                profileMenuItems.classList.add('collapsed');
-                profileSectionToggle.classList.add('collapsed');
-                profileSectionToggle.classList.remove('expanded');
             }
-        }
+        };
         window.addEventListener('resize', handleResponsiveSidebar);
-        handleResponsiveSidebar(); // Executa ao carregar a página
-        
-        document.addEventListener('click', function(event) {
-            // Mobile/tablet: fecha sidebar drawer ao clicar fora
-            if (window.innerWidth <= 991 &&
-                sidebar.classList.contains('mobile-open') &&
-                !sidebar.contains(event.target) &&
-                !event.target.closest('#mobile-menu-btn')) {
-                window.closeMobileSidebar();
+        handleResponsiveSidebar();
+
+        document.addEventListener('click', event => {
+            if (window.innerWidth <= 991 && sidebar.classList.contains('mobile-open') &&
+                !sidebar.contains(event.target) && !event.target.closest('#mobile-menu-btn')) {
+                window.closeMobileSidebar?.();
             }
         });
-        console.log("initSidebarControl: Controle da sidebar inicializado.");
     };
     initSidebarControl();
-
 
     // --- 2.4. Ativação de Links da Sidebar (para o item de menu selecionado) ---
     const setActiveSidebarLinks = () => {
@@ -361,6 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isActiveCandidate) {
                 item.classList.add('active');
+                window.openSidebarCategoryFor?.(item, false);
                 activeItemFound = item;
                 console.log(`setActiveSidebarLinks: Link ativo definido para: '${linkHref}'`);
             }
@@ -773,10 +708,6 @@ document.addEventListener('DOMContentLoaded', function() {
             let handledByShortcut = false;
 
             const shortcutActions = {
-                'i': () => {
-                    window.toggleSidebar();
-                    return true;
-                },
                 'd': () => {
                     window.location.href = FlaskRoutes.dashboard;
                     return true;
@@ -872,7 +803,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             // Permite atalhos específicos mesmo em inputs
-            const allowedInInputs = ['q', 'i', 'p', 'j', 'o'];
+            const allowedInInputs = ['q', 'p', 'j', 'o'];
             if (isInputOrTextarea && !allowedInInputs.includes(key)) {
                  return;
             }
