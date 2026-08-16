@@ -1777,3 +1777,178 @@ html body .filter-bar.active-filters .filter-bar-toggle i {
   #page-content-wrapper .cfg-card-body { padding: .875rem; }
   .modal-dialog { margin: .5rem; }
 }
+
+
+/* ============================================================
+   ESTADOS COMPLETOS E HIERARQUIA DE BOTÕES - relatório visual
+   ============================================================ */
+html body .btn,
+html body .nav-btn,
+html body button,
+html body input[type="submit"],
+html body input[type="button"] {
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease !important;
+}
+
+html body .btn:active,
+html body .nav-btn:active,
+html body button:active,
+html body input[type="submit"]:active,
+html body input[type="button"]:active {
+  transform: none !important;
+  box-shadow: var(--rf-shadow-xs) !important;
+}
+
+html body .btn:disabled,
+html body .btn.disabled,
+html body .nav-btn:disabled,
+html body .nav-btn.disabled,
+html body button:disabled,
+html body button[aria-disabled="true"],
+html body input[type="submit"]:disabled,
+html body input[type="button"]:disabled {
+  opacity: .55 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: saturate(.7);
+}
+
+html body .btn-tertiary {
+  background: var(--rf-action-tertiary) !important;
+  border: 1px solid var(--rf-action-tertiary) !important;
+  color: var(--rf-text-on-primary) !important;
+}
+
+html body .btn-tertiary:hover,
+html body .btn-tertiary:focus-visible {
+  background: var(--rf-action-tertiary-hover) !important;
+  border-color: var(--rf-action-tertiary-hover) !important;
+  color: var(--rf-text-on-primary) !important;
+}
+
+html body .btn-ghost {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: var(--rf-text-secondary) !important;
+}
+
+html body .btn-ghost:hover,
+html body .btn-ghost:focus-visible {
+  background: var(--rf-surface-muted) !important;
+  border-color: var(--rf-border) !important;
+  color: var(--rf-text-primary) !important;
+}
+
+
+/* ============================================================
+   INPUTS E ACESSIBILIDADE - estados previsíveis e contrastantes
+   ============================================================ */
+html body .form-control:hover,
+html body .form-select:hover,
+html body input:hover,
+html body select:hover,
+html body textarea:hover {
+  border-color: var(--rf-border-strong) !important;
+}
+
+html body .form-control:focus,
+html body .form-select:focus,
+html body input:focus,
+html body select:focus,
+html body textarea:focus {
+  border-color: var(--rf-action-primary) !important;
+  box-shadow: var(--rf-focus-ring) !important;
+  outline: none !important;
+}
+
+html body .form-control.is-valid,
+html body .form-select.is-valid,
+html body input[aria-invalid="false"],
+html body select[aria-invalid="false"] {
+  border-color: var(--rf-success) !important;
+  background-image: none;
+}
+
+html body .form-control.is-valid:focus,
+html body .form-select.is-valid:focus,
+html body input[aria-invalid="false"]:focus,
+html body select[aria-invalid="false"]:focus {
+  box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--rf-success) 22%, transparent) !important;
+}
+
+html body .form-control.is-invalid,
+html body .form-select.is-invalid,
+html body input[aria-invalid="true"],
+html body select[aria-invalid="true"] {
+  border-color: var(--rf-danger) !important;
+  background-image: none;
+}
+
+html body .form-control.is-invalid:focus,
+html body .form-select.is-invalid:focus,
+html body input[aria-invalid="true"]:focus,
+html body select[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--rf-danger) 22%, transparent) !important;
+}
+
+html body .form-control:disabled,
+html body .form-select:disabled,
+html body input:disabled,
+html body select:disabled,
+html body textarea:disabled {
+  background-color: var(--rf-surface-muted) !important;
+  color: var(--rf-text-muted) !important;
+  cursor: not-allowed !important;
+  opacity: .65;
+}
+
+
+/* ============================================================
+   MICROINTERAÇÕES - feedback discreto e acessível
+   ============================================================ */
+@keyframes rf-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rf-skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes rf-slide-in-right {
+  from { opacity: 0; transform: translateX(1rem); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+html body .skeleton {
+  background: linear-gradient(90deg, var(--rf-surface-muted) 25%, var(--rf-surface-card) 50%, var(--rf-surface-muted) 75%);
+  background-size: 200% 100%;
+  border-radius: var(--rf-radius-sm);
+  animation: rf-skeleton-loading 1.5s ease-in-out infinite;
+}
+
+html body .toast {
+  animation: rf-slide-in-right .2s ease-out both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .rf-card,
+  html body .card,
+  html body .modal-content {
+    animation: rf-fade-in .2s ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body *,
+  html body *::before,
+  html body *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
