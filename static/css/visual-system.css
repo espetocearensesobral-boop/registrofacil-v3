@@ -1667,3 +1667,24 @@ body [title*="Revogar"]:hover {
   border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
   color: var(--rf-text-on-primary, #FFFFFF) !important;
 }
+
+
+/* Cancelamentos em fluxos destrutivos vencem a variante visual secundária. */
+html body .btn-cancel-action,
+html body .nav-btn.btn-cancel-action,
+html body .btn.btn-cancel-action,
+html body .nt-btn-cancel {
+  background-color: var(--rf-action-tertiary, #B08D3E) !important;
+  background-image: none !important;
+  border-color: var(--rf-action-tertiary, #B08D3E) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+
+html body .btn-cancel-action:hover,
+html body .btn-cancel-action:focus-visible,
+html body .nt-btn-cancel:hover,
+html body .nt-btn-cancel:focus-visible {
+  background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}

@@ -145,7 +145,7 @@
                 <small style="color:var(--text-color-secondary);">Esta ação não pode ser desfeita.</small>
             </div>
             <div class="modal-footer">
-                <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Cancelar</button>
+                <button type="button" class="nav-btn nav-btn-secondary btn-cancel-action" data-bs-dismiss="modal"><i class="bi bi-x"></i> Cancelar</button>
                 <form id="formExcluirRepresentante" method="POST" action="" style="display:inline;">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
