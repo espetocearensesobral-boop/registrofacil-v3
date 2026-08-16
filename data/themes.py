@@ -45,13 +45,13 @@ PALETAS_INSTITUCIONAIS = {
         "sidebar": "#000000", "sidebar_hover": "#252525", "sidebar_text": "#FFFFFF", "sidebar_active_text": "#FFFFFF",
     },
     "paleta-05": {
-        "id": "paleta-05", "numero": "05", "nome": "Marfim Cartorial",
-        "descricao": "Sidebar branca equilibrada com azul petróleo, marfim e bronze para uma navegação clara e elegante.",
+        "id": "paleta-05", "numero": "05", "nome": "Azul Névoa Institucional",
+        "descricao": "Azul-cinza claro com azul petróleo, superfícies suaves e bronze discreto para uma navegação serena e profissional.",
         "primary": "#274C5E", "primary_light": "#4B7180", "primary_dark": "#193542", "accent": "#A87945",
-        "background": "#F5F1E8", "paper": "#FFFFFF", "text": "#243038", "muted": "#68747A", "line": "#D9D4C9",
+        "background": "#F3F6F7", "paper": "#FBFCFD", "text": "#243038", "muted": "#68747A", "line": "#C9D7DE",
         "success_bg": "#E6F1EB", "success_text": "#216044", "danger_bg": "#F9E9E4", "danger_text": "#9A3E2F",
         "warning_bg": "#FBF1D9", "warning_text": "#785B13", "info_bg": "#E7EFF1", "info_text": "#315B6B",
-        "sidebar": "#FFFFFF", "sidebar_hover": "#EEF2F1", "sidebar_text": "#274C5E", "sidebar_active_text": "#FFFFFF",
+        "sidebar": "#E7EEF2", "sidebar_hover": "#D6E2E8", "sidebar_text": "#274C5E", "sidebar_active_text": "#FFFFFF",
     },
     "paleta-06": {
         "id": "paleta-06", "numero": "06", "nome": "Dourado de Ofício",
