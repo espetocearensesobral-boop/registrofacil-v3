@@ -80,58 +80,53 @@
                     </div>
                 </div>
                 
+                <div class="w-100"></div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" id="possui_matricula" name="possui_matricula" onchange="toggleMatricula(this.value)" required>
+                            <option value="0" {% if dados_form.get('possui_matricula', '0') != '1' %}selected{% endif %}>Não</option>
+                            <option value="1" {% if dados_form.get('possui_matricula', '0') == '1' %}selected{% endif %}>Sim</option>
+                        </select>
+                        <label for="possui_matricula">Possui matrícula?</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6" id="campo_matricula_wrapper" {% if dados_form.get('possui_matricula', '0') != '1' %}style="display:none"{% endif %}>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="matricula" name="matricula"
+                               placeholder="Matrícula/Nº da Ordem"
+                               pattern="[A-Za-z0-9\s\-\.\/]{1,50}" maxlength="50"
+                               value="{{ dados_form.matricula }}" {% if dados_form.get('possui_matricula', '0') == '1' %}required{% endif %}>
+                        <label for="matricula">Matrícula/Nº da Ordem</label>
+                        <div class="invalid-feedback">
+                            Use apenas letras, números, espaços, hífens, pontos e barras (1-50 caracteres).
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-6">
                     <div class="form-floating">
                         <select class="form-select" id="status" name="status" required>
                             <option value="">Selecione um status...</option>
                             {% for status_item in status_processo %}
-                                <option value="{{ status_item.nome }}" 
-                                    {% if dados_form.status == status_item.nome %}selected{% endif %}>
+                                <option value="{{ status_item.nome }}" {% if dados_form.status == status_item.nome %}selected{% endif %}>
                                     {{ status_item.nome | replace('_', ' ') | capitalize }}
                                 </option>
                             {% endfor %}
                         </select>
                         <label for="status" class="required-field">Status</label>
-                        <div class="invalid-feedback">
-                            Por favor, selecione o status do processo.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    {# Switch + campo matrícula alinhados em uma única linha #}
-                    <div class="d-flex align-items-center gap-2">
-                        {# Campo matrícula — ocupa o espaço disponível #}
-                        <div id="campo_matricula_wrapper" class="form-floating flex-grow-1" {% if dados_form.get('possui_matricula', '0') != '1' %}style="display:none"{% endif %}>
-                            <input type="text" class="form-control" id="matricula" name="matricula"
-                                   placeholder="Matrícula/Nº da Ordem"
-                                   pattern="[A-Za-z0-9\s\-\.\/]{1,50}" maxlength="50"
-                                   value="{{ dados_form.matricula }}">
-                            <label for="matricula">Matrícula/Nº da Ordem</label>
-                            <div class="invalid-feedback">
-                                Use apenas letras, números, espaços, hífens, pontos e barras (1-50 caracteres).
-                            </div>
-                        </div>
-                        {# Switch à direita do campo, alinhado verticalmente ao centro #}
-                        <div class="form-check form-switch flex-shrink-0 d-flex flex-column align-items-center mb-0" style="min-width:90px;">
-                            <input class="form-check-input" type="checkbox" id="possui_matricula_check"
-                                   name="possui_matricula" value="1"
-                                   {% if dados_form.get('possui_matricula', '0') == '1' %}checked{% endif %}
-                                   onchange="toggleMatricula(this)">
-                            <label class="form-check-label small text-muted mt-1" for="possui_matricula_check">Possui matrícula?</label>
-                        </div>
+                        <div class="invalid-feedback">Por favor, selecione o status do processo.</div>
                     </div>
                 </div>
                 <script>
-                function toggleMatricula(cb) {
+                function toggleMatricula(value) {
                     var wrapper = document.getElementById('campo_matricula_wrapper');
                     var input = document.getElementById('matricula');
-                    if (cb.checked) {
-                        wrapper.style.display = '';
-                    } else {
-                        wrapper.style.display = 'none';
-                        input.value = '';
-                    }
+                    var possui = value === '1';
+                    wrapper.style.display = possui ? '' : 'none';
+                    input.required = possui;
+                    if (!possui) input.value = '';
                 }
                 </script>
             </div>
