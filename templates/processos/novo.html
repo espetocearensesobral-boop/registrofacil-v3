@@ -60,6 +60,21 @@
                     </div>
                 </div>
 
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="">Selecione um status...</option>
+                            {% for status_item in status_processo %}
+                                <option value="{{ status_item.nome }}" {% if dados_form.status == status_item.nome %}selected{% endif %}>
+                                    {{ status_item.nome | replace('_', ' ') | capitalize }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label for="status" class="required-field">Status</label>
+                        <div class="invalid-feedback">Por favor, selecione o status do processo.</div>
+                    </div>
+                </div>
+
                 <div class="col-md-3">
                     <div class="form-floating">
                         <input type="tel" class="form-control" id="titular_telefone" name="titular_telefone" 
@@ -103,22 +118,6 @@
                     </div>
                 </div>
 
-                <div class="w-100"></div>
-
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" id="status" name="status" required>
-                            <option value="">Selecione um status...</option>
-                            {% for status_item in status_processo %}
-                                <option value="{{ status_item.nome }}" {% if dados_form.status == status_item.nome %}selected{% endif %}>
-                                    {{ status_item.nome | replace('_', ' ') | capitalize }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        <label for="status" class="required-field">Status</label>
-                        <div class="invalid-feedback">Por favor, selecione o status do processo.</div>
-                    </div>
-                </div>
                 <script>
                 function toggleMatricula(value) {
                     var wrapper = document.getElementById('campo_matricula_wrapper');
