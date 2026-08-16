@@ -1248,8 +1248,8 @@ html body:has(.auth-panel-left) .auth-panel-right {
 html body:has(.auth-panel-left) .auth-input-group {
   background: color-mix(in srgb, var(--rf-sidebar-surface) 88%, #000000) !important;
 }
-html body:has(.auth-panel-left) .auth-input-group input {
-  color: var(--rf-sidebar-text) !important;
+html body:has(.auth-panel-left) .auth-panel-left .auth-input-group input {
+  color: var(--sidebar-text, #FFFFFF) !important;
 }
 html body:has(.auth-panel-left) .auth-input-group input::placeholder,
 html body:has(.auth-panel-left) .auth-input-group .input-icon,
@@ -1264,4 +1264,17 @@ html body:has(.auth-panel-left) .auth-link:hover,
 html body:has(.auth-panel-left) .auth-link:focus-visible {
   color: var(--rf-accent) !important;
   text-decoration: underline;
+}
+
+/* Dashboard: ações compactas mantêm contraste no hover em todas as paletas. */
+html body .dashboard-action-link.nav-btn-secondary,
+html body .dashboard-action-link.nav-btn-secondary:hover,
+html body .dashboard-action-link.nav-btn-secondary:focus-visible {
+  color: var(--rf-text-on-primary) !important;
+}
+html body .dashboard-action-link.nav-btn-secondary:hover,
+html body .dashboard-action-link.nav-btn-secondary:focus-visible {
+  background: var(--rf-action-primary) !important;
+  border-color: var(--rf-action-primary) !important;
+  text-decoration: none;
 }

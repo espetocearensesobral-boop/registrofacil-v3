@@ -95,7 +95,7 @@
             <div class="rf-card h-100" style="display:flex;flex-direction:column;">
                 <div class="rf-card-header" style="display:flex;align-items:center;justify-content:space-between;">
                     <h6 class="rf-card-title mb-0"><i class="bi bi-clock-history me-1"></i> Processos Recentes</h6>
-                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size: .75rem;">
+                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary dashboard-action-link" style="height:26px;padding:0 10px;font-size: .75rem;">
                         <i class="bi bi-list-ul"></i> Ver todos
                     </a>
                 </div>
@@ -146,7 +146,7 @@
                         <span class="badge ms-1" style="background:var(--color-error);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 7px;vertical-align:middle;">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
                         {% endif %}
                     </h6>
-                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary" style="height:26px;padding:0 10px;font-size: .75rem;">
+                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary dashboard-action-link" style="height:26px;padding:0 10px;font-size: .75rem;">
                         <i class="bi bi-clock-history"></i> Pendentes
                     </a>
                 </div>

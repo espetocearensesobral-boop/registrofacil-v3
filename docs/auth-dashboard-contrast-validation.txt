@@ -1,0 +1,11 @@
+# Validação intermediária do login e dashboard
+
+Após reiniciar o Flask, o login passou a servir `visual-system.css?v=auth-contrast-2` e a página exibiu v3.21.0. A regra de fundo semântico do `.auth-input-group` foi aplicada, mas o texto digitado ainda foi computado como `rgb(29, 27, 24)`, indicando uma prioridade posterior ou um token inválido no seletor de texto. O placeholder e os ícones foram computados como aproximadamente `#B2BBC3`.
+
+Os links foram computados como `rgb(15, 42, 67)`. A próxima correção deve usar diretamente `var(--rf-text-on-sidebar)` ou uma regra final explícita de contraste, pois `--rf-sidebar-text` não resolveu no navegador como esperado. O dashboard recebeu a classe `dashboard-action-link` nos dois links compactos para fixar texto branco durante hover.
+
+Após o cache bust `auth-contrast-3`, a folha nova foi carregada, mas o texto digitado continuou computado como `rgb(29, 27, 24)`. O fundo do grupo de entrada foi computado como azul escuro semântico e placeholder/ícones continuaram claros. Isso confirma que o problema restante é de cascata/token especificamente na propriedade `color` do input, não de cache. Será necessário inspecionar o valor computado de `--sidebar-text` e as regras correspondentes antes de finalizar.
+
+A inspeção das regras computadas identificou a causa: o seletor legado `html body:has(.auth-panel-left) .auth-panel-left .auth-input-group input` tinha especificidade maior e reaplicava `var(--rf-text-primary)`. A regra final foi ajustada para usar o mesmo caminho específico, com `var(--sidebar-text, #FFFFFF)`, e o cache foi atualizado para `auth-contrast-4`.
+
+Após o cache bust `auth-contrast-4`, o navegador confirmou `inputColor: rgb(255, 255, 255)` sobre o grupo de entrada azul escuro, com placeholder em aproximadamente `#B2BBC3`. A regra final de maior especificidade venceu o override legado. A folha carregada foi `visual-system.css?v=auth-contrast-4`.
