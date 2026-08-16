@@ -806,7 +806,7 @@ body .nav-btn-secondary,
 body .nt-btn-cancel,
 body .btn-filter-clear,
 body .btn-limpar {
-  background: transparent !important;
+  background: var(--background-color-card) !important;
   border: 1px solid var(--color-primary, var(--color-primary)) !important;
   color: var(--color-primary, var(--color-primary)) !important;
   box-shadow: none;
@@ -817,10 +817,16 @@ body .btn-outline-secondary:hover,
 body .nav-btn-secondary:hover,
 body .nt-btn-cancel:hover,
 body .btn-filter-clear:hover,
-body .btn-limpar:hover {
+body .btn-limpar:hover,
+body .btn-secondary:focus-visible,
+body .btn-outline-secondary:focus-visible,
+body .nav-btn-secondary:focus-visible,
+body .nt-btn-cancel:focus-visible,
+body .btn-filter-clear:focus-visible,
+body .btn-limpar:focus-visible {
   background: var(--color-primary, var(--color-primary)) !important;
   border-color: var(--color-primary, var(--color-primary)) !important;
-  color: #FFFFFF !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
   box-shadow: none;
   transform: none;
 }
@@ -913,7 +919,7 @@ html body .navbar .nav-btn-primary {
   color: #FFFFFF !important;
 }
 html body .navbar .nav-btn-secondary {
-  background: transparent !important;
+  background: var(--background-color-card) !important;
   border-color: var(--color-primary, var(--color-primary)) !important;
   color: var(--color-primary, var(--color-primary)) !important;
 }
@@ -927,10 +933,11 @@ html body .navbar .nav-btn-primary:hover {
   border-color: var(--color-primary-light, var(--color-primary-light)) !important;
   color: #FFFFFF !important;
 }
-html body .navbar .nav-btn-secondary:hover {
+html body .navbar .nav-btn-secondary:hover,
+html body .navbar .nav-btn-secondary:focus-visible {
   background: var(--color-primary, var(--color-primary)) !important;
   border-color: var(--color-primary, var(--color-primary)) !important;
-  color: #FFFFFF !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
 }
 html body .navbar .nav-btn-danger:hover {
   background: var(--color-gold-dark) !important;
@@ -1266,15 +1273,17 @@ html body:has(.auth-panel-left) .auth-link:focus-visible {
   text-decoration: underline;
 }
 
-/* Dashboard: ações compactas mantêm contraste no hover em todas as paletas. */
-html body .dashboard-action-link.nav-btn-secondary,
-html body .dashboard-action-link.nav-btn-secondary:hover,
-html body .dashboard-action-link.nav-btn-secondary:focus-visible {
-  color: var(--rf-text-on-primary) !important;
+/* Dashboard: ações compactas usam superfície clara e texto temático; no hover, ação sólida. */
+html body .dashboard-action-link.nav-btn-secondary {
+  background: var(--background-color-card) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  text-decoration: none;
 }
 html body .dashboard-action-link.nav-btn-secondary:hover,
 html body .dashboard-action-link.nav-btn-secondary:focus-visible {
-  background: var(--rf-action-primary) !important;
-  border-color: var(--rf-action-primary) !important;
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
   text-decoration: none;
 }
