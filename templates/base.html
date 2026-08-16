@@ -248,41 +248,36 @@
                 </div>
 
                 </div>
-            </div>
 
-            {# ─── RODAPÉ: Perfil do usuário ─── #}
-            <div class="bottom-section" id="profile-section">
-                <div class="section-title-toggle" id="profile-section-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="profile-menu-items">
-                    <div class="menu-icon">
-                        <img src="{{ session.get('usuario_foto_url', url_for('static', filename='img/default_avatar.png')) }}"
-                             alt="Avatar" class="sidebar-avatar">
-                    </div>
-                    <span class="menu-text rf-profile-name">
-                        {{ session.get('usuario_nome', 'Meu Perfil') | truncate(18) }}
-                    </span>
-                    <i class="bi bi-chevron-down toggle-icon"></i>
-                </div>
-                <div class="profile-menu-items" id="profile-menu-items">
-                    <div class="menu-item" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
+                <button class="sidebar-group-toggle" type="button" aria-expanded="false" aria-controls="sidebar-group-administrador">
+                    <span>Administrador</span>
+                    <i class="bi bi-chevron-down sidebar-group-toggle-icon" aria-hidden="true"></i>
+                </button>
+                <div class="sidebar-category-items" id="sidebar-group-administrador" hidden>
+                    <div class="menu-item" data-profile-menu-item="true" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
                          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ session.get('usuario_nome', 'Meu Perfil') }} (Alt+M)">
-                        <div class="menu-icon"><i class="bi bi-person-circle"></i></div>
-                        <span class="menu-text">Meu Perfil</span>
+                        <div class="menu-icon">
+                            <img src="{{ session.get('usuario_foto_url', url_for('static', filename='img/default_avatar.png')) }}" alt="Avatar" class="sidebar-avatar">
+                        </div>
+                        <span class="menu-text">{{ session.get('usuario_nome', 'Meu Perfil') | truncate(18) }}</span>
                     </div>
-                    <div class="menu-item" data-bs-toggle="modal" data-bs-target="#shortcutsModal" data-accesskey="j" onclick="setActive(this)"
-                         title="Atalhos do Sistema (Alt+J)">
+                    <div class="menu-item" data-bs-toggle="modal" data-bs-target="#shortcutsModal" data-accesskey="j" onclick="setActive(this)" title="Atalhos do Sistema (Alt+J)">
                         <div class="menu-icon"><i class="bi bi-keyboard"></i></div>
                         <span class="menu-text">Atalhos</span>
                     </div>
-                    <div class="menu-item" data-bs-toggle="modal" data-bs-target="#aboutModal" data-accesskey="p" onclick="setActive(this)"
-                         title="Sobre (Alt+P)">
+                    <div class="menu-item" data-bs-toggle="modal" data-bs-target="#aboutModal" data-accesskey="p" onclick="setActive(this)" title="Sobre (Alt+P)">
                         <div class="menu-icon"><i class="bi bi-info-circle"></i></div>
                         <span class="menu-text">Sobre</span>
                     </div>
-                    <div class="menu-item logout-menu-item" data-href="{{ url_for('auth.logout') }}" data-accesskey="x" onclick="setActive(this)"
-                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Sair da Conta (Alt+X)">
-                        <div class="menu-icon"><i class="bi bi-box-arrow-right"></i></div>
-                        <span class="menu-text menu-text-logout">Sair da Conta</span>
-                    </div>
+                </div>
+            </div>
+
+            {# ─── RODAPÉ FIXO: somente saída da conta ─── #}
+            <div class="sidebar-logout" id="sidebar-logout">
+                <div class="menu-item logout-menu-item" data-href="{{ url_for('auth.logout') }}" data-accesskey="x" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Sair da Conta (Alt+X)">
+                    <div class="menu-icon"><i class="bi bi-box-arrow-right"></i></div>
+                    <span class="menu-text menu-text-logout">Sair da Conta</span>
                 </div>
             </div>
         </aside>

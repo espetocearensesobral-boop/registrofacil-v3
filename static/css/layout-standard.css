@@ -673,16 +673,6 @@ body {
     margin-left: var(--rf-sidebar-width) !important;
     transition: none !important;
   }
-  #sidebar.collapsed .section-title-toggle .menu-text,
-  html.sidebar-collapsed-initial #sidebar .section-title-toggle .menu-text { opacity: 1 !important; pointer-events: auto !important; }
-  #sidebar.collapsed .section-title-toggle .menu-icon,
-  html.sidebar-collapsed-initial #sidebar .section-title-toggle .menu-icon {
-    position: static !important;
-    margin-right: 12px !important;
-    transform: none !important;
-  }
-  #sidebar.collapsed .section-title-toggle .toggle-icon,
-  html.sidebar-collapsed-initial #sidebar .section-title-toggle .toggle-icon { opacity: 1 !important; pointer-events: auto !important; }
 }
 
 .sidebar-group-toggle {
@@ -723,4 +713,43 @@ body {
   #wrapper.toggled #page-content-wrapper,
   #page-content-wrapper { margin-left: 0 !important; }
   #sidebar.collapsed { width: var(--rf-sidebar-width) !important; }
+}
+
+/* Sidebar: Administrador pertence ao accordion; somente Sair permanece fixo no rodapé. */
+#sidebar .sidebar-logout {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: .625rem 0 .75rem;
+  border-top: 1px solid var(--border-color-dark);
+  background: var(--background-color-sidebar);
+}
+
+#sidebar .sidebar-logout .menu-item {
+  margin: 0;
+  min-height: 2.75rem;
+}
+
+#sidebar .sidebar-logout .menu-icon {
+  color: var(--sidebar-text, var(--text-color-light));
+}
+
+#sidebar .sidebar-logout .menu-item:hover,
+#sidebar .sidebar-logout .menu-item:focus-visible {
+  background: color-mix(in srgb, var(--color-error) 14%, var(--background-color-sidebar));
+}
+
+#sidebar .sidebar-logout .menu-item:hover .menu-text,
+#sidebar .sidebar-logout .menu-item:focus-visible .menu-text {
+  color: var(--color-error);
+}
+
+#sidebar-group-administrador [data-profile-menu-item] .sidebar-avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#sidebar-group-administrador [data-profile-menu-item] .menu-icon {
+  overflow: hidden;
 }

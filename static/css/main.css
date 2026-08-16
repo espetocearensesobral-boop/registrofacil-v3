@@ -314,100 +314,6 @@ body {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   SEÇÃO INFERIOR - PERFIL DO USUÁRIO
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-.bottom-section {
-    border-top: 1px solid var(--border-color-dark);
-    padding: 10px 0;
-    flex-shrink: 0;
-}
-
-.section-title-toggle {
-    display: flex;
-    align-items: center;
-    padding: 10px 16px;
-    cursor: pointer;
-    font-size: var(--font-sm);
-    font-weight: 500;
-    background-color: var(--background-color-sidebar);
-    transition: background-color 0.2s ease;
-    color: var(--text-color-light);
-    height: 48px;
-}
-
-.section-title-toggle:hover {
-    background-color: var(--background-color-sidebar-hover);
-}
-
-.sidebar.collapsed .section-title-toggle .menu-text {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.section-title-toggle .menu-icon {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-color-light);
-    opacity: 1;
-    transition: opacity 0.3s ease;
-    margin-right: 12px;
-}
-
-.sidebar.collapsed .section-title-toggle .menu-icon {
-    opacity: 1;
-    margin-right: 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.section-title-toggle .toggle-icon {
-    font-size: 1rem;
-    transition: transform 0.25s ease;
-    color: var(--text-color-light);
-    position: absolute;
-    right: 15px;
-    margin-left: 12px;
-}
-
-.sidebar.collapsed .section-title-toggle .toggle-icon {
-    position: absolute;
-    right: 15px;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    margin-left: 0;
-}
-
-.section-title-toggle.expanded .toggle-icon {
-    transform: rotate(180deg);
-}
-
-.profile-menu-items {
-    max-height: 500px;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out, opacity 0.3s ease;
-    opacity: 1;
-}
-
-.profile-menu-items.collapsed {
-    max-height: 0;
-    opacity: 0;
-}
-
-/* ✓ CORREÇÃO: Hover do logout em tom pastel (menos agressivo) */
-.logout-menu-item:hover {
-    background-color: rgba(220, 38, 38, 0.15);
-}
-
-.logout-menu-item:hover .menu-text.menu-text-logout {
-    color: #DC2626;
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    CONTEÚDO DA PÁGINA
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #page-content-wrapper {
@@ -811,16 +717,6 @@ body.auth-page {
 
 .sidebar-collapsed-initial #page-content-wrapper {
     margin-left: var(--rf-sidebar-collapsed-width) !important;
-}
-
-.sidebar-collapsed-initial .sidebar .section-title-toggle .menu-text {
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-.sidebar-collapsed-initial .sidebar .section-title-toggle .toggle-icon {
-    opacity: 0 !important;
-    pointer-events: none !important;
 }
 
 /* HTMX Loader */

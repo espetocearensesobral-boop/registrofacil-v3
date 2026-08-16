@@ -16,7 +16,7 @@ if (typeof window.togglePassword !== 'function') {
 }
 
 // ============================================================
-// SIDEBAR: fixa e expandida no desktop. Apenas a seção Administrador/perfil é recolhível.
+// SIDEBAR: fixa e expandida no desktop. Todas as categorias, inclusive Administrador, usam o mesmo accordion.
 function inicializarSidebar() {
     const sidebar = document.getElementById('sidebar');
     const wrapper = document.getElementById('wrapper');
@@ -124,8 +124,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const wrapper = document.getElementById('wrapper');
         const pageContentWrapper = document.getElementById('page-content-wrapper');
-        const profileSectionToggle = document.getElementById('profile-section-toggle');
-        const profileMenuItems = document.querySelector('.profile-menu-items');
         const categoryToggles = Array.from(document.querySelectorAll('.sidebar-group-toggle'));
 
         if (!sidebar || !wrapper || !pageContentWrapper) return;
@@ -187,31 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // O bloco Administrador/perfil continua sendo a única área recolhível.
-        if (profileSectionToggle && profileMenuItems) {
-            profileMenuItems.classList.add('collapsed');
-            profileSectionToggle.classList.add('collapsed');
-            profileSectionToggle.classList.remove('expanded');
-            profileSectionToggle.setAttribute('aria-expanded', 'false');
-            const toggleProfileSection = event => {
-                event.stopPropagation();
-                const isCollapsed = profileMenuItems.classList.toggle('collapsed');
-                profileSectionToggle.classList.toggle('collapsed', isCollapsed);
-                profileSectionToggle.classList.toggle('expanded', !isCollapsed);
-                profileSectionToggle.setAttribute('aria-expanded', String(!isCollapsed));
-                if (!isCollapsed) {
-                    sidebar.scrollTo({ top: sidebar.scrollHeight, behavior: 'smooth' });
-                    profileSectionToggle.focus({ preventScroll: true });
-                }
-            };
-            profileSectionToggle.addEventListener('click', toggleProfileSection);
-            profileSectionToggle.addEventListener('keydown', event => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    toggleProfileSection(event);
-                }
-            });
-        }
+        // Administrador é uma categoria normal do accordion; somente Sair fica fixo no rodapé.
 
         const handleResponsiveSidebar = () => {
             sidebar.classList.remove('collapsed');
@@ -306,15 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Pequeno delay para garantir que a sidebar já se ajustou (se expandindo) antes de rolar
             setTimeout(() => {
                 const menuSection = document.querySelector('.menu-section');
-                // Se o item ativo está na seção de perfil, role para a seção de perfil
-                const profileMenuItems = document.querySelector('.profile-menu-items');
-                if (profileMenuItems && profileMenuItems.contains(activeItemFound)) {
-                    const bottomSection = document.querySelector('.bottom-section');
-                     if (bottomSection) {
-                         bottomSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                         console.log("setActiveSidebarLinks: Rolando para o item ativo na seção de perfil.");
-                     }
-                } else if (menuSection && menuSection.contains(activeItemFound)) {
+                if (menuSection && menuSection.contains(activeItemFound)) {
                     // Calcula a posição do item para centralizá-lo na área visível
                     const itemOffsetTop = activeItemFound.offsetTop;
                     const itemHeight = activeItemFound.offsetHeight;
@@ -792,11 +758,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     return true;
                 },
                 'o': () => {
-                    const profileSectionToggle = document.getElementById('profile-section-toggle');
-                    if (profileSectionToggle) {
-                        profileSectionToggle.click();
+                    const administratorToggle = document.querySelector('[aria-controls="sidebar-group-administrador"]');
+                    if (administratorToggle) {
+                        administratorToggle.click();
+                        administratorToggle.focus({ preventScroll: true });
                     } else {
-                        console.warn("Atalho para 'Opções' (Alt+O) acionado, mas o elemento de toggle não foi encontrado.");
+                        console.warn("Atalho Alt+O acionado, mas a categoria Administrador não foi encontrada.");
                     }
                     return true;
                 }
