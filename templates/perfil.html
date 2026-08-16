@@ -284,9 +284,23 @@
 .theme-choice small { color: var(--text-color-secondary); font-size: .75rem; line-height: 1.35; }
 .theme-choice-swatches { display: flex; gap: 4px; }
 .theme-choice-swatches i { width: 25%; height: 20px; border: 1px solid rgba(0,0,0,.08); border-radius: 4px; }
+
+/* Cards de seleção: superfície clara padrão, independente da paleta aplicada ao restante da tela. */
+#modalPaletas .theme-choice,
+#modalPaletas .theme-choice:hover,
+#modalPaletas .theme-choice.selected {
+    background-color: #FFFFFF !important;
+    color: #20242A !important;
+}
+#modalPaletas .theme-choice strong { color: #20242A !important; }
+#modalPaletas .theme-choice small { color: #5F6873 !important; }
+#modalPaletas .theme-choice-number { color: var(--color-primary-dark, #243B53) !important; }
+#modalPaletas .theme-choice-check { background-color: #FFFFFF !important; border-color: #7C8794 !important; color: transparent !important; }
+#modalPaletas .theme-choice.selected { border-color: var(--color-primary, #243B53) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #243B53) 18%, transparent) !important; }
+#modalPaletas .theme-choice.selected .theme-choice-check { background-color: var(--color-primary, #243B53) !important; border-color: var(--color-primary, #243B53) !important; color: #FFFFFF !important; }
 </style>
 
-<!-- Modal de seleção dos seis temas institucionais -->
+<!-- Modal de seleção dos quinze temas institucionais -->
 <div class="modal fade" id="modalPaletas" tabindex="-1" aria-labelledby="modalPaletasLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
