@@ -18,8 +18,8 @@
     --rf-palette-color-1: #111315;
     --rf-palette-color-2: #2B3035;
     --rf-palette-color-3: #7D6A4B;
-    --rf-palette-color-4: #D7D5CF;
-    --rf-palette-color-5: #E8E6E0;
+    --rf-palette-color-4: #F8F8F8;
+    --rf-palette-color-5: #FFFFFF;
 
     --color-gold-primary: #7D6A4B;
     --color-gold-dark: color-mix(in srgb, #7D6A4B 72%, #000);
@@ -27,14 +27,14 @@
     --rf-action-tertiary: #7D6A4B;
     --rf-action-tertiary-hover: color-mix(in srgb, #7D6A4B 72%, #000);
 
-    --background-color-body: #D7D5CF;
-    --background-color-card: #E8E6E0;
-    --background-color-header: #E8E6E0;
-    --background-color-hover: color-mix(in srgb, #D7D5CF 90%, #111315);
-    --background-color-input-bg: #E8E6E0;
+    --background-color-body: #F8F8F8;
+    --background-color-card: #FFFFFF;
+    --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #111315);
+    --background-color-input-bg: #FFFFFF;
 
-    --text-color-primary: #1D2529;
-    --text-color-secondary: #5D686D;
+    --text-color-primary: #121212;
+    --text-color-secondary: #2A2A2A;
     --text-color-link: #111315;
 
     --border-color-default: #C8CFD0;
@@ -50,11 +50,11 @@
     --color-error: #98424C;
     --color-warning: #846A30;
     --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #E8E6E0);
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF);
     --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #E8E6E0);
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF);
     --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #E8E6E0);
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF);
     --info-text: #3C6570;
 }
 
@@ -79,11 +79,17 @@
     --rf-theme-info-bg: var(--info-bg);
     --rf-theme-info-text: var(--info-text);
 
-    --rf-text-primary: var(--text-color-primary);
-    --rf-text-secondary: var(--text-color-secondary);
-    --rf-text-muted: var(--text-color-secondary);
-    --rf-text-strong: var(--text-color-primary);
-    --rf-text-body: var(--text-color-primary);
+    /* Fundação cromática neutra: a identidade fica nos elementos de ação. */
+    --rf-text-heading: #121212;
+    --rf-text-primary: #121212;
+    --rf-text-secondary: #2A2A2A;
+    --rf-text-muted: #2A2A2A;
+    --rf-text-strong: #121212;
+    --rf-text-body: #2A2A2A;
+
+    --rf-bg-cold: #F8F8F8;
+    --rf-bg-warm: #FDF8F0;
+    --rf-surface-modal: #FFFFFF;
     --rf-text-on-primary: var(--color-primary-contrast, #FFFFFF);
     --rf-text-on-sidebar: var(--sidebar-text);
     --rf-text-link: var(--text-color-link);
@@ -96,6 +102,7 @@
     --rf-surface-overlay: color-mix(in srgb, var(--background-color-body) 88%, #000000);
     --rf-surface: var(--background-color-card);
     --rf-page: var(--background-color-body);
+    --rf-surface-modal: #FFFFFF;
 
     --rf-border: var(--border-color-default);
     --rf-border-subtle: color-mix(in srgb, var(--border-color-default) 60%, transparent);
@@ -163,17 +170,17 @@
     --color-primary: #111315; --color-primary-light: #2B3035; --color-primary-dark: #0C0D0E;
     --color-primary-subtle: rgba(17, 19, 21, 0.12); --color-primary-rgb: 17,19,21;
     --rf-palette-color-1: #111315; --rf-palette-color-2: #2B3035; --rf-palette-color-3: #7D6A4B;
-    --rf-palette-color-4: #D7D5CF; --rf-palette-color-5: #E8E6E0;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #7D6A4B; --color-gold-dark: color-mix(in srgb, #7D6A4B 72%, #000);
-    --background-color-body: #D7D5CF; --background-color-card: #E8E6E0; --background-color-header: #E8E6E0;
-    --background-color-hover: color-mix(in srgb, #D7D5CF 90%, #111315); --background-color-input-bg: #E8E6E0;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #111315); --background-color-input-bg: #FFFFFF;
     --sidebar: #111315; --sidebar-hover: #2B3035; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #111315;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #111315;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #111315); --border-color-dark: #0C0D0E;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #E8E6E0); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #E8E6E0); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #E8E6E0); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -184,17 +191,17 @@
     --color-primary: #273137; --color-primary-light: #4D5A5F; --color-primary-dark: #1B2125;
     --color-primary-subtle: rgba(39, 49, 55, 0.12); --color-primary-rgb: 39,49,55;
     --rf-palette-color-1: #273137; --rf-palette-color-2: #4D5A5F; --rf-palette-color-3: #7A7368;
-    --rf-palette-color-4: #D8D5CE; --rf-palette-color-5: #EEECE7;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #7A7368; --color-gold-dark: color-mix(in srgb, #7A7368 72%, #000);
-    --background-color-body: #D8D5CE; --background-color-card: #EEECE7; --background-color-header: #EEECE7;
-    --background-color-hover: color-mix(in srgb, #D8D5CE 90%, #273137); --background-color-input-bg: #EEECE7;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #273137); --background-color-input-bg: #FFFFFF;
     --sidebar: #273137; --sidebar-hover: #4D5A5F; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #273137;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #273137;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #273137); --border-color-dark: #1B2125;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EEECE7); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EEECE7); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EEECE7); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -205,17 +212,17 @@
     --color-primary: #13283B; --color-primary-light: #264761; --color-primary-dark: #0D1B28;
     --color-primary-subtle: rgba(19, 40, 59, 0.12); --color-primary-rgb: 19,40,59;
     --rf-palette-color-1: #13283B; --rf-palette-color-2: #264761; --rf-palette-color-3: #8A7248;
-    --rf-palette-color-4: #D5DCE1; --rf-palette-color-5: #E9EEF0;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #8A7248; --color-gold-dark: color-mix(in srgb, #8A7248 72%, #000);
-    --background-color-body: #D5DCE1; --background-color-card: #E9EEF0; --background-color-header: #E9EEF0;
-    --background-color-hover: color-mix(in srgb, #D5DCE1 90%, #13283B); --background-color-input-bg: #E9EEF0;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #13283B); --background-color-input-bg: #FFFFFF;
     --sidebar: #13283B; --sidebar-hover: #264761; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #13283B;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #13283B;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #13283B); --border-color-dark: #0D1B28;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #E9EEF0); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #E9EEF0); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #E9EEF0); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -226,17 +233,17 @@
     --color-primary: #451C2B; --color-primary-light: #703A4A; --color-primary-dark: #2F131D;
     --color-primary-subtle: rgba(69, 28, 43, 0.12); --color-primary-rgb: 69,28,43;
     --rf-palette-color-1: #451C2B; --rf-palette-color-2: #703A4A; --rf-palette-color-3: #7D5C4E;
-    --rf-palette-color-4: #DED4D0; --rf-palette-color-5: #F0E8E3;
+    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #7D5C4E; --color-gold-dark: color-mix(in srgb, #7D5C4E 72%, #000);
-    --background-color-body: #DED4D0; --background-color-card: #F0E8E3; --background-color-header: #F0E8E3;
-    --background-color-hover: color-mix(in srgb, #DED4D0 90%, #451C2B); --background-color-input-bg: #F0E8E3;
+    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #451C2B); --background-color-input-bg: #FFFFFF;
     --sidebar: #451C2B; --sidebar-hover: #703A4A; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #451C2B;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #451C2B;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #451C2B); --border-color-dark: #2F131D;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #F0E8E3); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #F0E8E3); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #F0E8E3); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -247,17 +254,17 @@
     --color-primary: #1F3A32; --color-primary-light: #355A4B; --color-primary-dark: #152722;
     --color-primary-subtle: rgba(31, 58, 50, 0.12); --color-primary-rgb: 31,58,50;
     --rf-palette-color-1: #1F3A32; --rf-palette-color-2: #355A4B; --rf-palette-color-3: #6B7256;
-    --rf-palette-color-4: #D8DFD9; --rf-palette-color-5: #ECF0EB;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #6B7256; --color-gold-dark: color-mix(in srgb, #6B7256 72%, #000);
-    --background-color-body: #D8DFD9; --background-color-card: #ECF0EB; --background-color-header: #ECF0EB;
-    --background-color-hover: color-mix(in srgb, #D8DFD9 90%, #1F3A32); --background-color-input-bg: #ECF0EB;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #1F3A32); --background-color-input-bg: #FFFFFF;
     --sidebar: #1F3A32; --sidebar-hover: #355A4B; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #1F3A32;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #1F3A32;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #1F3A32); --border-color-dark: #152722;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #ECF0EB); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #ECF0EB); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #ECF0EB); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -268,17 +275,17 @@
     --color-primary: #123A45; --color-primary-light: #235B64; --color-primary-dark: #0C272F;
     --color-primary-subtle: rgba(18, 58, 69, 0.12); --color-primary-rgb: 18,58,69;
     --rf-palette-color-1: #123A45; --rf-palette-color-2: #235B64; --rf-palette-color-3: #6C6C5C;
-    --rf-palette-color-4: #D1DFDF; --rf-palette-color-5: #E9F0EF;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #6C6C5C; --color-gold-dark: color-mix(in srgb, #6C6C5C 72%, #000);
-    --background-color-body: #D1DFDF; --background-color-card: #E9F0EF; --background-color-header: #E9F0EF;
-    --background-color-hover: color-mix(in srgb, #D1DFDF 90%, #123A45); --background-color-input-bg: #E9F0EF;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #123A45); --background-color-input-bg: #FFFFFF;
     --sidebar: #123A45; --sidebar-hover: #235B64; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #123A45;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #123A45;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #123A45); --border-color-dark: #0C272F;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #E9F0EF); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #E9F0EF); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #E9F0EF); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -289,17 +296,17 @@
     --color-primary: #2D2F50; --color-primary-light: #4B4E72; --color-primary-dark: #1F2036;
     --color-primary-subtle: rgba(45, 47, 80, 0.12); --color-primary-rgb: 45,47,80;
     --rf-palette-color-1: #2D2F50; --rf-palette-color-2: #4B4E72; --rf-palette-color-3: #705B4A;
-    --rf-palette-color-4: #D9D8E1; --rf-palette-color-5: #ECECF0;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #705B4A; --color-gold-dark: color-mix(in srgb, #705B4A 72%, #000);
-    --background-color-body: #D9D8E1; --background-color-card: #ECECF0; --background-color-header: #ECECF0;
-    --background-color-hover: color-mix(in srgb, #D9D8E1 90%, #2D2F50); --background-color-input-bg: #ECECF0;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #2D2F50); --background-color-input-bg: #FFFFFF;
     --sidebar: #2D2F50; --sidebar-hover: #4B4E72; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #2D2F50;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #2D2F50;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #2D2F50); --border-color-dark: #1F2036;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #ECECF0); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #ECECF0); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #ECECF0); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -310,17 +317,17 @@
     --color-primary: #3B2A23; --color-primary-light: #5D4335; --color-primary-dark: #281D18;
     --color-primary-subtle: rgba(59, 42, 35, 0.12); --color-primary-rgb: 59,42,35;
     --rf-palette-color-1: #3B2A23; --rf-palette-color-2: #5D4335; --rf-palette-color-3: #6F6048;
-    --rf-palette-color-4: #DED4C8; --rf-palette-color-5: #EFE9E1;
+    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #6F6048; --color-gold-dark: color-mix(in srgb, #6F6048 72%, #000);
-    --background-color-body: #DED4C8; --background-color-card: #EFE9E1; --background-color-header: #EFE9E1;
-    --background-color-hover: color-mix(in srgb, #DED4C8 90%, #3B2A23); --background-color-input-bg: #EFE9E1;
+    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #3B2A23); --background-color-input-bg: #FFFFFF;
     --sidebar: #3B2A23; --sidebar-hover: #5D4335; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #3B2A23;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #3B2A23;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #3B2A23); --border-color-dark: #281D18;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EFE9E1); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EFE9E1); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EFE9E1); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -331,17 +338,17 @@
     --color-primary: #382737; --color-primary-light: #5A405B; --color-primary-dark: #261B25;
     --color-primary-subtle: rgba(56, 39, 55, 0.12); --color-primary-rgb: 56,39,55;
     --rf-palette-color-1: #382737; --rf-palette-color-2: #5A405B; --rf-palette-color-3: #6C626C;
-    --rf-palette-color-4: #DDD5DB; --rf-palette-color-5: #EEE9EE;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #6C626C; --color-gold-dark: color-mix(in srgb, #6C626C 72%, #000);
-    --background-color-body: #DDD5DB; --background-color-card: #EEE9EE; --background-color-header: #EEE9EE;
-    --background-color-hover: color-mix(in srgb, #DDD5DB 90%, #382737); --background-color-input-bg: #EEE9EE;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #382737); --background-color-input-bg: #FFFFFF;
     --sidebar: #382737; --sidebar-hover: #5A405B; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #382737;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #382737;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #382737); --border-color-dark: #261B25;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EEE9EE); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EEE9EE); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EEE9EE); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -352,17 +359,17 @@
     --color-primary: #2D3740; --color-primary-light: #495966; --color-primary-dark: #1F252C;
     --color-primary-subtle: rgba(45, 55, 64, 0.12); --color-primary-rgb: 45,55,64;
     --rf-palette-color-1: #2D3740; --rf-palette-color-2: #495966; --rf-palette-color-3: #5C6A6D;
-    --rf-palette-color-4: #D5DBDD; --rf-palette-color-5: #E8ECEC;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #5C6A6D; --color-gold-dark: color-mix(in srgb, #5C6A6D 72%, #000);
-    --background-color-body: #D5DBDD; --background-color-card: #E8ECEC; --background-color-header: #E8ECEC;
-    --background-color-hover: color-mix(in srgb, #D5DBDD 90%, #2D3740); --background-color-input-bg: #E8ECEC;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #2D3740); --background-color-input-bg: #FFFFFF;
     --sidebar: #2D3740; --sidebar-hover: #495966; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #2D3740;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #2D3740;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #2D3740); --border-color-dark: #1F252C;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #E8ECEC); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #E8ECEC); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #E8ECEC); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -373,17 +380,17 @@
     --color-primary: #5A2F28; --color-primary-light: #7A4639; --color-primary-dark: #3D201B;
     --color-primary-subtle: rgba(90, 47, 40, 0.12); --color-primary-rgb: 90,47,40;
     --rf-palette-color-1: #5A2F28; --rf-palette-color-2: #7A4639; --rf-palette-color-3: #754F3D;
-    --rf-palette-color-4: #E0D6D0; --rf-palette-color-5: #F0E9E4;
+    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #754F3D; --color-gold-dark: color-mix(in srgb, #754F3D 72%, #000);
-    --background-color-body: #E0D6D0; --background-color-card: #F0E9E4; --background-color-header: #F0E9E4;
-    --background-color-hover: color-mix(in srgb, #E0D6D0 90%, #5A2F28); --background-color-input-bg: #F0E9E4;
+    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #5A2F28); --background-color-input-bg: #FFFFFF;
     --sidebar: #5A2F28; --sidebar-hover: #7A4639; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #5A2F28;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #5A2F28;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #5A2F28); --border-color-dark: #3D201B;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #F0E9E4); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #F0E9E4); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #F0E9E4); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -394,17 +401,17 @@
     --color-primary: #36402A; --color-primary-light: #526043; --color-primary-dark: #252C1D;
     --color-primary-subtle: rgba(54, 64, 42, 0.12); --color-primary-rgb: 54,64,42;
     --rf-palette-color-1: #36402A; --rf-palette-color-2: #526043; --rf-palette-color-3: #626445;
-    --rf-palette-color-4: #D9DEC8; --rf-palette-color-5: #EDF0E6;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #626445; --color-gold-dark: color-mix(in srgb, #626445 72%, #000);
-    --background-color-body: #D9DEC8; --background-color-card: #EDF0E6; --background-color-header: #EDF0E6;
-    --background-color-hover: color-mix(in srgb, #D9DEC8 90%, #36402A); --background-color-input-bg: #EDF0E6;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #36402A); --background-color-input-bg: #FFFFFF;
     --sidebar: #36402A; --sidebar-hover: #526043; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #36402A;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #36402A;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #36402A); --border-color-dark: #252C1D;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EDF0E6); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EDF0E6); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EDF0E6); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -415,17 +422,17 @@
     --color-primary: #223645; --color-primary-light: #3D5A70; --color-primary-dark: #17252F;
     --color-primary-subtle: rgba(34, 54, 69, 0.12); --color-primary-rgb: 34,54,69;
     --rf-palette-color-1: #223645; --rf-palette-color-2: #3D5A70; --rf-palette-color-3: #5E6D78;
-    --rf-palette-color-4: #D3DCE1; --rf-palette-color-5: #E9EEF1;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #5E6D78; --color-gold-dark: color-mix(in srgb, #5E6D78 72%, #000);
-    --background-color-body: #D3DCE1; --background-color-card: #E9EEF1; --background-color-header: #E9EEF1;
-    --background-color-hover: color-mix(in srgb, #D3DCE1 90%, #223645); --background-color-input-bg: #E9EEF1;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #223645); --background-color-input-bg: #FFFFFF;
     --sidebar: #223645; --sidebar-hover: #3D5A70; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #223645;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #223645;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #223645); --border-color-dark: #17252F;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #E9EEF1); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #E9EEF1); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #E9EEF1); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -436,17 +443,17 @@
     --color-primary: #35443C; --color-primary-light: #5A6E61; --color-primary-dark: #242E29;
     --color-primary-subtle: rgba(53, 68, 60, 0.12); --color-primary-rgb: 53,68,60;
     --rf-palette-color-1: #35443C; --rf-palette-color-2: #5A6E61; --rf-palette-color-3: #6D6A4F;
-    --rf-palette-color-4: #D8DDD7; --rf-palette-color-5: #EDF0EA;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #6D6A4F; --color-gold-dark: color-mix(in srgb, #6D6A4F 72%, #000);
-    --background-color-body: #D8DDD7; --background-color-card: #EDF0EA; --background-color-header: #EDF0EA;
-    --background-color-hover: color-mix(in srgb, #D8DDD7 90%, #35443C); --background-color-input-bg: #EDF0EA;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #35443C); --background-color-input-bg: #FFFFFF;
     --sidebar: #35443C; --sidebar-hover: #5A6E61; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #35443C;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #35443C;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #35443C); --border-color-dark: #242E29;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EDF0EA); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EDF0EA); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EDF0EA); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -457,17 +464,17 @@
     --color-primary: #4E2E27; --color-primary-light: #7A4B3B; --color-primary-dark: #351F1B;
     --color-primary-subtle: rgba(78, 46, 39, 0.12); --color-primary-rgb: 78,46,39;
     --rf-palette-color-1: #4E2E27; --rf-palette-color-2: #7A4B3B; --rf-palette-color-3: #7A5541;
-    --rf-palette-color-4: #DED2C7; --rf-palette-color-5: #EFE7DF;
+    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #7A5541; --color-gold-dark: color-mix(in srgb, #7A5541 72%, #000);
-    --background-color-body: #DED2C7; --background-color-card: #EFE7DF; --background-color-header: #EFE7DF;
-    --background-color-hover: color-mix(in srgb, #DED2C7 90%, #4E2E27); --background-color-input-bg: #EFE7DF;
+    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #4E2E27); --background-color-input-bg: #FFFFFF;
     --sidebar: #4E2E27; --sidebar-hover: #7A4B3B; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #4E2E27;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #4E2E27;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #4E2E27); --border-color-dark: #351F1B;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EFE7DF); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EFE7DF); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EFE7DF); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -478,17 +485,17 @@
     --color-primary: #3B2239; --color-primary-light: #643A60; --color-primary-dark: #281727;
     --color-primary-subtle: rgba(59, 34, 57, 0.12); --color-primary-rgb: 59,34,57;
     --rf-palette-color-1: #3B2239; --rf-palette-color-2: #643A60; --rf-palette-color-3: #765663;
-    --rf-palette-color-4: #DED2DC; --rf-palette-color-5: #EEE8EE;
+    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #765663; --color-gold-dark: color-mix(in srgb, #765663 72%, #000);
-    --background-color-body: #DED2DC; --background-color-card: #EEE8EE; --background-color-header: #EEE8EE;
-    --background-color-hover: color-mix(in srgb, #DED2DC 90%, #3B2239); --background-color-input-bg: #EEE8EE;
+    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #3B2239); --background-color-input-bg: #FFFFFF;
     --sidebar: #3B2239; --sidebar-hover: #643A60; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #3B2239;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #3B2239;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #3B2239); --border-color-dark: #281727;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EEE8EE); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EEE8EE); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EEE8EE); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -499,17 +506,17 @@
     --color-primary: #542F39; --color-primary-light: #78505A; --color-primary-dark: #392027;
     --color-primary-subtle: rgba(84, 47, 57, 0.12); --color-primary-rgb: 84,47,57;
     --rf-palette-color-1: #542F39; --rf-palette-color-2: #78505A; --rf-palette-color-3: #7C554C;
-    --rf-palette-color-4: #E0D3D4; --rf-palette-color-5: #EFE6E6;
+    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #7C554C; --color-gold-dark: color-mix(in srgb, #7C554C 72%, #000);
-    --background-color-body: #E0D3D4; --background-color-card: #EFE6E6; --background-color-header: #EFE6E6;
-    --background-color-hover: color-mix(in srgb, #E0D3D4 90%, #542F39); --background-color-input-bg: #EFE6E6;
+    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #542F39); --background-color-input-bg: #FFFFFF;
     --sidebar: #542F39; --sidebar-hover: #78505A; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #542F39;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #542F39;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #542F39); --border-color-dark: #392027;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EFE6E6); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EFE6E6); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EFE6E6); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -520,17 +527,17 @@
     --color-primary: #2D4435; --color-primary-light: #49604D; --color-primary-dark: #1F2E24;
     --color-primary-subtle: rgba(45, 68, 53, 0.12); --color-primary-rgb: 45,68,53;
     --rf-palette-color-1: #2D4435; --rf-palette-color-2: #49604D; --rf-palette-color-3: #686045;
-    --rf-palette-color-4: #D6DDD1; --rf-palette-color-5: #EAEFE8;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #686045; --color-gold-dark: color-mix(in srgb, #686045 72%, #000);
-    --background-color-body: #D6DDD1; --background-color-card: #EAEFE8; --background-color-header: #EAEFE8;
-    --background-color-hover: color-mix(in srgb, #D6DDD1 90%, #2D4435); --background-color-input-bg: #EAEFE8;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #2D4435); --background-color-input-bg: #FFFFFF;
     --sidebar: #2D4435; --sidebar-hover: #49604D; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #2D4435;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #2D4435;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #2D4435); --border-color-dark: #1F2E24;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #EAEFE8); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #EAEFE8); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #EAEFE8); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -541,17 +548,17 @@
     --color-primary: #17424C; --color-primary-light: #28616A; --color-primary-dark: #102D34;
     --color-primary-subtle: rgba(23, 66, 76, 0.12); --color-primary-rgb: 23,66,76;
     --rf-palette-color-1: #17424C; --rf-palette-color-2: #28616A; --rf-palette-color-3: #5F6866;
-    --rf-palette-color-4: #D1E0E0; --rf-palette-color-5: #E9F1F0;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #5F6866; --color-gold-dark: color-mix(in srgb, #5F6866 72%, #000);
-    --background-color-body: #D1E0E0; --background-color-card: #E9F1F0; --background-color-header: #E9F1F0;
-    --background-color-hover: color-mix(in srgb, #D1E0E0 90%, #17424C); --background-color-input-bg: #E9F1F0;
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #17424C); --background-color-input-bg: #FFFFFF;
     --sidebar: #17424C; --sidebar-hover: #28616A; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #17424C;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #17424C;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #17424C); --border-color-dark: #102D34;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #E9F1F0); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #E9F1F0); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #E9F1F0); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }
 
 
@@ -562,15 +569,15 @@
     --color-primary: #54382C; --color-primary-light: #785541; --color-primary-dark: #39261E;
     --color-primary-subtle: rgba(84, 56, 44, 0.12); --color-primary-rgb: 84,56,44;
     --rf-palette-color-1: #54382C; --rf-palette-color-2: #785541; --rf-palette-color-3: #7A5A46;
-    --rf-palette-color-4: #E1D6C9; --rf-palette-color-5: #F0E9DE;
+    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
     --color-gold-primary: #7A5A46; --color-gold-dark: color-mix(in srgb, #7A5A46 72%, #000);
-    --background-color-body: #E1D6C9; --background-color-card: #F0E9DE; --background-color-header: #F0E9DE;
-    --background-color-hover: color-mix(in srgb, #E1D6C9 90%, #54382C); --background-color-input-bg: #F0E9DE;
+    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #54382C); --background-color-input-bg: #FFFFFF;
     --sidebar: #54382C; --sidebar-hover: #785541; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #1D2529; --text-color-secondary: #5D686D; --text-color-link: #54382C;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #54382C;
     --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #54382C); --border-color-dark: #39261E;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
-    --danger-bg: color-mix(in srgb, #98424C 10%, #F0E9DE); --danger-text: #98424C;
-    --warning-bg: color-mix(in srgb, #846A30 12%, #F0E9DE); --warning-text: #846A30;
-    --info-bg: color-mix(in srgb, #3C6570 10%, #F0E9DE); --info-text: #3C6570;
+    --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
+    --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
+    --info-bg: color-mix(in srgb, #3C6570 10%, #FFFFFF); --info-text: #3C6570;
 }

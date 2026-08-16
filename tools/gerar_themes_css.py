@@ -55,11 +55,17 @@ SEMANTICO = """
     --rf-theme-info-bg: var(--info-bg);
     --rf-theme-info-text: var(--info-text);
 
-    --rf-text-primary: var(--text-color-primary);
-    --rf-text-secondary: var(--text-color-secondary);
-    --rf-text-muted: var(--text-color-secondary);
-    --rf-text-strong: var(--text-color-primary);
-    --rf-text-body: var(--text-color-primary);
+    /* Fundação cromática neutra: a identidade fica nos elementos de ação. */
+    --rf-text-heading: #121212;
+    --rf-text-primary: #121212;
+    --rf-text-secondary: #2A2A2A;
+    --rf-text-muted: #2A2A2A;
+    --rf-text-strong: #121212;
+    --rf-text-body: #2A2A2A;
+
+    --rf-bg-cold: #F8F8F8;
+    --rf-bg-warm: #FDF8F0;
+    --rf-surface-modal: #FFFFFF;
     --rf-text-on-primary: var(--color-primary-contrast, #FFFFFF);
     --rf-text-on-sidebar: var(--sidebar-text);
     --rf-text-link: var(--text-color-link);
@@ -72,6 +78,7 @@ SEMANTICO = """
     --rf-surface-overlay: color-mix(in srgb, var(--background-color-body) 88%, #000000);
     --rf-surface: var(--background-color-card);
     --rf-page: var(--background-color-body);
+    --rf-surface-modal: #FFFFFF;
 
     --rf-border: var(--border-color-default);
     --rf-border-subtle: color-mix(in srgb, var(--border-color-default) 60%, transparent);
@@ -133,7 +140,19 @@ SEMANTICO = """
 """
 
 
+WARM_FAMILIES = {
+    'vinho', 'café', 'ferrugem', 'cobre', 'ameixa', 'rosa-queimado', 'argila'
+}
+
+
+def foundations(p: dict) -> tuple[str, str]:
+    """Retorna fundo de página e superfície limpa para a família do tema."""
+    page = '#FDF8F0' if p['familia'] in WARM_FAMILIES else '#F8F8F8'
+    return page, '#FFFFFF'
+
+
 def render_fallback(p: dict) -> str:
+    page, surface = foundations(p)
     return f"""
 /* ─────────────────────────────────────────────────────────────
    FALLBACK :root (tema padrão: {p['nome']})
@@ -157,14 +176,14 @@ def render_fallback(p: dict) -> str:
     --rf-action-tertiary: {p['accent']};
     --rf-action-tertiary-hover: color-mix(in srgb, {p['accent']} 72%, #000);
 
-    --background-color-body: {p['background']};
-    --background-color-card: {p['paper']};
-    --background-color-header: {p['paper']};
-    --background-color-hover: color-mix(in srgb, {p['background']} 90%, {p['primary']});
-    --background-color-input-bg: {p['paper']};
+    --background-color-body: {page};
+    --background-color-card: {surface};
+    --background-color-header: {surface};
+    --background-color-hover: color-mix(in srgb, {page} 90%, {p['primary']});
+    --background-color-input-bg: {surface};
 
-    --text-color-primary: {p['text']};
-    --text-color-secondary: {p['muted']};
+    --text-color-primary: #121212;
+    --text-color-secondary: #2A2A2A;
     --text-color-link: {p['primary']};
 
     --border-color-default: {p['line']};
@@ -180,17 +199,18 @@ def render_fallback(p: dict) -> str:
     --color-error: {p['danger_text']};
     --color-warning: {p['warning_text']};
     --color-info: {p['info_text']};
-    --danger-bg: color-mix(in srgb, {p['danger_text']} 10%, {p['paper']});
+    --danger-bg: color-mix(in srgb, {p['danger_text']} 10%, {surface});
     --danger-text: {p['danger_text']};
-    --warning-bg: color-mix(in srgb, {p['warning_text']} 12%, {p['paper']});
+    --warning-bg: color-mix(in srgb, {p['warning_text']} 12%, {surface});
     --warning-text: {p['warning_text']};
-    --info-bg: color-mix(in srgb, {p['info_text']} 10%, {p['paper']});
+    --info-bg: color-mix(in srgb, {p['info_text']} 10%, {surface});
     --info-text: {p['info_text']};
 }}
 """
 
 
 def render_paleta(pid: str, p: dict) -> str:
+    page, surface = foundations(p)
     return f"""
 /* ============================================================
    {p['numero']} · {p['nome']} — {p['descricao']}
@@ -201,15 +221,15 @@ def render_paleta(pid: str, p: dict) -> str:
     --rf-palette-color-1: {p['cores'][0]}; --rf-palette-color-2: {p['cores'][1]}; --rf-palette-color-3: {p['cores'][2]};
     --rf-palette-color-4: {p['cores'][3]}; --rf-palette-color-5: {p['cores'][4]};
     --color-gold-primary: {p['accent']}; --color-gold-dark: color-mix(in srgb, {p['accent']} 72%, #000);
-    --background-color-body: {p['background']}; --background-color-card: {p['paper']}; --background-color-header: {p['paper']};
-    --background-color-hover: color-mix(in srgb, {p['background']} 90%, {p['primary']}); --background-color-input-bg: {p['paper']};
+    --background-color-body: {page}; --background-color-card: {surface}; --background-color-header: {surface};
+    --background-color-hover: color-mix(in srgb, {page} 90%, {p['primary']}); --background-color-input-bg: {surface};
     --sidebar: {p['sidebar']}; --sidebar-hover: {p['sidebar_hover']}; --sidebar-text: {p['sidebar_text']}; --sidebar-active-text: {p['sidebar_active_text']};
-    --text-color-primary: {p['text']}; --text-color-secondary: {p['muted']}; --text-color-link: {p['primary']};
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: {p['primary']};
     --border-color-default: {p['line']}; --border-color-input: color-mix(in srgb, {p['line']} 78%, {p['primary']}); --border-color-dark: {p['primary_dark']};
     --color-success: {p['success_text']}; --color-error: {p['danger_text']}; --color-warning: {p['warning_text']}; --color-info: {p['info_text']};
-    --danger-bg: color-mix(in srgb, {p['danger_text']} 10%, {p['paper']}); --danger-text: {p['danger_text']};
-    --warning-bg: color-mix(in srgb, {p['warning_text']} 12%, {p['paper']}); --warning-text: {p['warning_text']};
-    --info-bg: color-mix(in srgb, {p['info_text']} 10%, {p['paper']}); --info-text: {p['info_text']};
+    --danger-bg: color-mix(in srgb, {p['danger_text']} 10%, {surface}); --danger-text: {p['danger_text']};
+    --warning-bg: color-mix(in srgb, {p['warning_text']} 12%, {surface}); --warning-text: {p['warning_text']};
+    --info-bg: color-mix(in srgb, {p['info_text']} 10%, {surface}); --info-text: {p['info_text']};
 }}
 """
 

@@ -46,9 +46,20 @@ textarea,
   font-family: var(--rf-font-sans, "Source Sans 3", system-ui, sans-serif);
 }
 body {
+  background-color: var(--rf-page, var(--background-color-body)) !important;
+  color: var(--rf-text-body, #2A2A2A);
   font-size: var(--rf-font-base, 1rem);
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+}
+#main-content h1,
+#main-content h2,
+#main-content h3,
+#main-content h4,
+#main-content h5,
+#main-content h6,
+#main-content .modal-title {
+  color: var(--rf-text-heading, #121212);
 }
 #page-content-wrapper { min-width: 0; overflow-x: clip; }
 #page-content-wrapper > .navbar,
@@ -323,8 +334,15 @@ body {
   padding: 0;
   border: 1px solid var(--rf-border);
   border-radius: var(--rf-radius-lg) !important;
-  background: var(--rf-surface);
+  background: var(--rf-surface-modal, #FFFFFF) !important;
+  color: var(--rf-text-body, #2A2A2A);
   box-shadow: var(--rf-shadow-lg);
+}
+.modal-content .modal-header,
+.modal-content .modal-body,
+.modal-content .modal-footer {
+  background: var(--rf-surface-modal, #FFFFFF) !important;
+  color: var(--rf-text-body, #2A2A2A);
 }
 .modal-header,
 .modal-body,
@@ -343,8 +361,10 @@ body {
 .rf-modal .modal-body .form-label { margin-bottom: var(--rf-space-2); }
 .rf-modal .modal-body .form-control { width: 100%; }
 .rf-modal .modal-body .rf-modal-field { display: grid; gap: var(--rf-space-2); }
-.rf-modal .modal-footer { background: var(--rf-surface-muted); }
-.rf-modal .modal-header { background: var(--rf-surface-muted); }
+.rf-modal .modal-footer,
+.rf-modal .modal-header {
+  background: var(--rf-surface-modal, #FFFFFF) !important;
+}
 
 /* Feedbacks dinâmicos também obedecem à mesma caixa e tipografia. */
 #feedbackAlert.rf-feedback {
