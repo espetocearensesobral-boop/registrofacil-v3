@@ -24,7 +24,7 @@
   --rf-control-height: 2.75rem;
   --rf-control-height-sm: 2.25rem;
   --rf-control-height-xs: 1.875rem;
-  --rf-form-max-width: 56rem;
+  --rf-form-max-width: 72rem;
   --rf-modal-max-width: 36rem;
   --rf-modal-wide-max-width: 52rem;
 }
@@ -593,3 +593,25 @@ body {
 #main-content .emp-system-divider { padding-top: var(--rf-space-3); border-top: 1px solid var(--rf-border); }
 #main-content .emp-restriction-note { display: flex; align-items: center; gap: var(--rf-space-2); color: var(--rf-warning-text); font-size: .8125rem; line-height: 1.4; }
 @media (max-width: 575.98px) { #main-content .emp-row-2 { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   Ajuste fino pós-auditoria: topo do dashboard e densidade dos cadastros
+   ------------------------------------------------------------ */
+#page-content-wrapper > main {
+  padding-block-start: clamp(1.5rem, 2.8vw, 2.25rem) !important;
+  padding-block-end: clamp(1.5rem, 2.2vw, 2rem) !important;
+}
+#main-content > .greeting-banner,
+#main-content > .kpi-grid { margin-top: 0 !important; }
+#main-content > .greeting-banner + .kpi-grid { margin-top: var(--rf-layout-section-gap) !important; }
+#main-content > .kpi-grid + .row { margin-top: var(--rf-layout-section-gap) !important; }
+#main-content .nt-wrap { max-width: var(--rf-form-max-width); }
+#main-content .nt-body { padding-block: clamp(1.75rem, 3vw, 2.5rem) !important; }
+#main-content .nt-row-2 { gap: clamp(1rem, 2.2vw, 1.75rem); }
+@media (max-width: 575.98px) {
+  #page-content-wrapper > main {
+    padding-block-start: 1.25rem !important;
+    padding-block-end: 1.5rem !important;
+  }
+  #main-content .nt-body { padding-block: 1.5rem !important; }
+}
