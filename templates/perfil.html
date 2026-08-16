@@ -313,7 +313,7 @@
                 <div class="row g-3" id="grid-paletas" role="radiogroup" aria-label="Temas institucionais">
                     {% for palette in institutional_palettes %}
                     <div class="col-md-6 col-xl-4">
-                        <button type="button" class="theme-choice w-100 text-start{% if visual_preferences.tema_cor == palette.id %} selected{% endif %}" data-theme="{{ palette.id }}" role="radio" aria-checked="{{ 'true' if visual_preferences.tema_cor == palette.id else 'false' }}">
+                        <button type="button" class="theme-choice w-100 text-start{% if visual_preferences.tema_cor == palette.id %} selected{% endif %}" data-palette="{{ palette.id }}" role="radio" aria-checked="{{ 'true' if visual_preferences.tema_cor == palette.id else 'false' }}">
                             <span class="theme-choice-check"><i class="bi bi-check-lg"></i></span>
                             <span class="theme-choice-number">Tema {{ palette.numero }}</span>
                             <strong>{{ palette.nome }}</strong>

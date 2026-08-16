@@ -8,7 +8,7 @@ function aplicarTema(tema) {
     const badge = document.getElementById('paleta-atual-badge');
     if (badge) badge.style.backgroundColor = 'var(--color-primary)';
     document.querySelectorAll('.theme-choice').forEach((choice) => {
-        const selected = choice.dataset.theme === tema;
+        const selected = choice.dataset.palette === tema;
         choice.classList.toggle('selected', selected);
         choice.setAttribute('aria-checked', selected ? 'true' : 'false');
     });
@@ -63,7 +63,7 @@ async function salvarTema() {
 document.addEventListener('DOMContentLoaded', function() {
     carregarTema();
     document.querySelectorAll('.theme-choice').forEach((choice) => {
-        choice.addEventListener('click', () => aplicarTema(choice.dataset.theme));
+        choice.addEventListener('click', () => aplicarTema(choice.dataset.palette));
     });
     const saveButton = document.getElementById('btn-salvar-aparencia');
     if (saveButton) saveButton.addEventListener('click', salvarTema);
