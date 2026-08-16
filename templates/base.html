@@ -115,7 +115,7 @@
     </style>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v='3.23.0') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v='3.23.1') }}">
     <style id="rf-header-button-contract">
         html body .navbar .nav-btn.nav-btn-secondary {
             background-color: var(--color-primary-light, #1B4368) !important;
@@ -321,7 +321,7 @@
             </main>
             <footer class="rf-footer" role="contentinfo">
                 <span>Registro Fácil v{{ app_version }}</span>
-                <span>{{ now().strftime('%d/%m/%Y') }} · sessão segura</span>
+                <span>{{ (now() if now is callable else now).strftime('%d/%m/%Y') }} · sessão segura</span>
             </footer>
         </div>
     </div>
