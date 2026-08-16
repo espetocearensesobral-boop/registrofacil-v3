@@ -377,6 +377,39 @@ body {
 }
 .rf-feedback-icon { flex: 0 0 auto; font-size: 1rem; }
 
+/* O seletor compara paletas em uma superfície neutra; a cor do tema aparece
+   apenas nas amostras, no estado selecionado e nas ações. Este seletor possui
+   especificidade maior que os overrides globais de `.card` e `.modal`. */
+html body #modalPaletas .theme-choice,
+html body #modalPaletas .theme-choice:hover,
+html body #modalPaletas .theme-choice:focus,
+html body #modalPaletas .theme-choice.selected {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  color: #2A2A2A !important;
+}
+html body #modalPaletas .theme-choice strong,
+html body #modalPaletas .theme-choice small,
+html body #modalPaletas .theme-choice .theme-choice-action {
+  color: #2A2A2A !important;
+}
+html body #modalPaletas .theme-choice .theme-choice-number,
+html body #modalPaletas .theme-choice .theme-choice-action i {
+  color: var(--color-primary-dark, #243B53) !important;
+}
+html body #modalPaletas .theme-choice.selected .theme-choice-action-label {
+  color: var(--color-primary-dark, #243B53) !important;
+}
+html body #modalPaletas .theme-choice-check {
+  background: #FFFFFF !important;
+  color: transparent !important;
+}
+html body #modalPaletas .theme-choice.selected .theme-choice-check {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: #FFFFFF !important;
+}
+
 /* ------------------------------------------------------------
    Responsividade: reduzir apenas o necessário, sem criar vácuos
    ------------------------------------------------------------ */
