@@ -92,7 +92,7 @@
                     <option value="100" {% if itens_por_pagina == 100 %}selected{% endif %}>100</option>
                 </select>
             </div>
-            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+            <div class="col-12 d-flex justify-content-end gap-2">
                 <button type="submit" class="btn-filter-apply">
                     <i class="bi bi-funnel me-1"></i> Filtrar
                 </button>
@@ -388,8 +388,8 @@
 .modal-alteracoes-table tr:last-child td { border-bottom: none; }
 .modal-alteracoes-table tr:hover td { background: var(--color-bg-alt, #f8f9fa); }
 .td-campo { font-weight: 600; width: 30%; color: var(--color-text, #212529); }
-.td-de    { color: #dc3545; }
-.td-para  { color: #198754; font-weight: 600; }
+.td-de    { color: var(--color-error); }
+.td-para  { color: var(--color-success); font-weight: 600; }
 .td-seta  { text-align: center; color: var(--color-muted, #adb5bd); font-size: .8rem; width: 3%; }
 .td-info  { color: var(--color-muted, #6c757d); font-style: italic; }
 .ctx-aviso {

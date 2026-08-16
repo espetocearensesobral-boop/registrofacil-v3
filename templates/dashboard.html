@@ -15,42 +15,7 @@
 
 {% block content %}
     {# Saudação Dinâmica - Destacada #}
-    <div class="greeting-banner mb-3">
-        <style>
-        .greeting-banner {
-            background: var(--background-color-card);
-            border: 1px solid var(--border-color-default);
-            border-radius: 12px;
-            padding: 18px 22px;
-            display: flex; align-items: center; gap: 16px;
-            position: relative; overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,.05);
-        }
-        .greeting-banner::before {
-            content:''; position:absolute; left:0; top:0; bottom:0;
-            width:4px; background: linear-gradient(180deg, var(--color-gold-primary), var(--color-gold-dark));
-            border-radius: 0;
-        }
-        .greeting-avatar {
-            width:50px; height:50px; border-radius:50%;
-            background: linear-gradient(135deg, var(--color-gold-primary), var(--color-gold-dark));
-            display:flex; align-items:center; justify-content:center;
-            color:#fff; font-size:22px; font-weight:800; flex-shrink:0;
-            box-shadow: 0 2px 8px rgba(184,142,67,.3);
-        }
-        .greeting-body { flex:1; min-width:0; }
-        .greeting-main {
-            font-size: 17px; font-weight: 700; color: var(--text-color-primary);
-            line-height: 1.3; margin-bottom: 3px;
-        }
-        .greeting-sub { font-size: 13px; color: var(--text-color-secondary); line-height: 1.4; margin:0; }
-        .greeting-time-badge {
-            background: var(--background-color-body); border: 1px solid var(--border-color-default);
-            border-radius: 99px; padding: 4px 12px; font-size: .75rem; font-weight: 600;
-            color: var(--text-color-secondary); white-space: nowrap; flex-shrink: 0;
-            display:flex; align-items:center; gap:5px;
-        }
-        </style>
+    <div class="greeting-banner">
         <div class="greeting-body">
             <div class="greeting-main" id="greeting-message">{{ custom_greeting }}</div>
             <p class="greeting-sub" id="greeting-subtitle"></p>
@@ -61,7 +26,7 @@
     </div>
 
     <!-- KPI Cards -->
-    <div class="kpi-grid mb-3">
+    <div class="kpi-grid">
         <a class="kpi-card kpi-success" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}" style="text-decoration:none;">
             <div class="kpi-label">Concluídos</div>
             <div class="kpi-value kpi-success">{{ dashboard_info.processos_concluidos }}</div>
@@ -92,31 +57,31 @@
 
         {# Card: Processos Recentes — interativo #}
         <div class="col-lg-6">
-            <div class="rf-card h-100" style="display:flex;flex-direction:column;">
-                <div class="rf-card-header" style="display:flex;align-items:center;justify-content:space-between;">
+            <div class="rf-card h-100 dashboard-panel">
+                <div class="rf-card-header">
                     <h6 class="rf-card-title mb-0"><i class="bi bi-clock-history me-1"></i> Processos Recentes</h6>
-                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary dashboard-action-link" style="height:26px;padding:0 10px;font-size: .75rem;">
+                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
                         <i class="bi bi-list-ul"></i> Ver todos
                     </a>
                 </div>
-                <div class="card-body p-0" style="flex:1;overflow:hidden;">
+                <div class="card-body p-0 dashboard-panel-body">
                     {% if dashboard_info.processos_recentes %}
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" style="font-size:13px;">
-                            <thead style="background:var(--background-color-body);">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
                                 <tr>
-                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
-                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Status</th>
+                                    <th>Titular</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for processo in dashboard_info.processos_recentes %}
                                 <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" style="cursor:pointer;" title="Clique para visualizar">
-                                    <td style="padding:9px 14px;">
+                                    <td>
                                         <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">{{ processo['titular'] }}</div>
                                         <div style="font-family: var(--rf-font-mono);font-size: .75rem;font-weight:600;margin-top:2px;color:var(--text-color-secondary);">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
                                     </td>
-                                    <td style="padding:9px 14px;text-align:right;white-space:nowrap;">
+                                    <td>
                                         <span class="badge rounded-pill" style="background-color:{{ processo['status_hex'] }};color:{{ get_contrast_color(processo['status_hex']) }};font-size: .75rem;">
                                             {{ (processo['status_nome'] | default('—')) | replace('_',' ') | capitalize }}
                                         </span>
@@ -138,26 +103,26 @@
 
         {# Card: Prazos Críticos — interativo #}
         <div class="col-lg-6">
-            <div class="rf-card h-100" style="display:flex;flex-direction:column;">
-                <div class="rf-card-header" style="display:flex;align-items:center;justify-content:space-between;">
+            <div class="rf-card h-100 dashboard-panel">
+                <div class="rf-card-header">
                     <h6 class="rf-card-title mb-0">
                         <i class="bi bi-exclamation-triangle-fill me-1" style="color:var(--color-error);"></i> Prazos Críticos
                         {% if dashboard_info.processos_com_prazo_critico %}
                         <span class="badge ms-1" style="background:var(--color-error);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 7px;vertical-align:middle;">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
                         {% endif %}
                     </h6>
-                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary dashboard-action-link" style="height:26px;padding:0 10px;font-size: .75rem;">
+                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
                         <i class="bi bi-clock-history"></i> Pendentes
                     </a>
                 </div>
-                <div class="card-body p-0" style="flex:1;overflow:hidden;">
+                <div class="card-body p-0 dashboard-panel-body">
                     {% if dashboard_info.processos_com_prazo_critico %}
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" style="font-size:13px;">
-                            <thead style="background:var(--background-color-body);">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
                                 <tr>
-                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);width:100%;">Titular</th>
-                                    <th style="padding:8px 14px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);white-space:nowrap;text-align:right;">Prazo</th>
+                                    <th>Titular</th>
+                                    <th>Prazo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -165,28 +130,24 @@
                                 {% set prazo_diff_days = ((processo['prazo_final'] | string | replace('-','') | int) - (now.strftime('%Y%m%d') | int)) %}
                                 {% if prazo_diff_days < 0 %}
                                     {% set prazo_texto = 'Vencido há ' ~ (-prazo_diff_days) ~ 'd' %}
-                                    {% set prazo_color = '#dc3545' %}
                                     {% set prazo_icon = 'bi-x-circle-fill' %}
                                 {% elif prazo_diff_days == 0 %}
                                     {% set prazo_texto = 'Vence hoje!' %}
-                                    {% set prazo_color = '#ff8c00' %}
                                     {% set prazo_icon = 'bi-alarm-fill' %}
                                 {% elif prazo_diff_days == 1 %}
                                     {% set prazo_texto = 'Amanhã' %}
-                                    {% set prazo_color = '#ff8c00' %}
                                     {% set prazo_icon = 'bi-alarm' %}
                                 {% else %}
                                     {% set prazo_texto = prazo_diff_days ~ ' dias' %}
-                                    {% set prazo_color = '#1E88E5' %}
                                     {% set prazo_icon = 'bi-calendar-event' %}
                                 {% endif %}
                                 <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}" style="cursor:pointer;" title="Clique para visualizar">
-                                    <td style="padding:9px 14px;max-width:180px;">
+                                    <td>
                                         <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ processo['titular'] }}</div>
                                         <div style="font-size: .75rem;margin-top:2px;font-family: var(--rf-font-mono);font-weight:600;">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
                                     </td>
-                                    <td style="padding:9px 14px;text-align:right;white-space:nowrap;">
-                                        <span style="display:inline-flex;align-items:center;gap:4px;background:{{ prazo_color }}18;color:{{ prazo_color }};border:1px solid {{ prazo_color }}55;border-radius:99px;padding:2px 9px;font-size: .75rem;font-weight:700;white-space:nowrap;">
+                                    <td>
+                                        <span class="prazo-chip {% if prazo_diff_days < 0 %}prazo-chip-vencido{% elif prazo_diff_days <= 1 %}prazo-chip-hoje{% else %}prazo-chip-futuro{% endif %}">
                                             <i class="bi {{ prazo_icon }}"></i>{{ prazo_texto }}
                                         </span>
                                     </td>

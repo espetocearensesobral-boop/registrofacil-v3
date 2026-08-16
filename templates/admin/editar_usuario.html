@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="form-card">
+<div class="form-card rf-form-card">
     <form id="form-edit-user" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('admin_users.edit_user', user_id=user_data.id) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 

@@ -35,7 +35,7 @@
 </div>
 {% endif %}
 
-<div class="form-card">
+<div class="form-card rf-form-card rf-wide">
     <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.editar', processo_id=processo_id) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {# Campo oculto para o ID do processo, usado no JavaScript para o controle de lock #}
@@ -624,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${file.name}</div>
                     <div style="font-size: .75rem;color:var(--text-color-secondary);">${formatBytes(file.size)}</div>
                 </div>
-                <button type="button" data-idx="${idx}" class="btn-remove-file nav-btn nav-btn-danger" style="height:26px;padding:0 8px;font-size: .75rem;flex-shrink:0;"><i class="bi bi-x"></i></button>`;
+                <button type="button" data-idx="${idx}" class="btn-remove-file nav-btn nav-btn-danger"><i class="bi bi-x"></i></button>`;
             filePreview.appendChild(row);
         });
         filePreview.querySelectorAll('.btn-remove-file').forEach(function(btn) {

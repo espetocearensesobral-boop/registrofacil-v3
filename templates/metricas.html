@@ -293,21 +293,22 @@
 ───────────────────────────────────────────────────────── */
 Chart.defaults.font.family = "'Source Sans 3', sans-serif";
 Chart.defaults.font.size   = 12;
-Chart.defaults.color       = '#6B6B6B';
+const cssToken = (name) => getComputedStyle(document.body).getPropertyValue(name).trim() || 'currentColor';
+Chart.defaults.color       = cssToken('--rf-text-muted');
 Chart.defaults.plugins.legend.position = 'bottom';
 
-// Paleta do sistema
+// Paleta derivada dos tokens do tema institucional vigente.
 const C = {
-    gold:    '#CDA865',
-    goldDk:  '#8B6332',
-    success: '#00A86B',
-    warning: '#FF8C00',
-    error:   '#C5282F',
-    info:    '#1E88E5',
-    black:   '#121212',
-    gray:    '#6B6B6B',
+    gold:    cssToken('--color-gold-primary'),
+    goldDk:  cssToken('--color-gold-dark'),
+    success: cssToken('--color-success'),
+    warning: cssToken('--color-warning'),
+    error:   cssToken('--color-error'),
+    info:    cssToken('--color-info'),
+    black:   cssToken('--text-color-primary'),
+    gray:    cssToken('--rf-text-muted'),
 };
-const PALETTE = [C.gold, C.info, C.success, C.warning, C.error, C.goldDk, '#7C3AED', '#0891B2'];
+const PALETTE = [C.gold, C.info, C.success, C.warning, C.error, C.goldDk, cssToken('--color-primary-light'), cssToken('--color-primary')];
 
 const charts = {};
 
