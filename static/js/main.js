@@ -39,11 +39,9 @@ function inicializarSidebar() {
     if (isCollapsed) {
         sidebar.classList.add('collapsed');
         wrapper.classList.add('toggled');
-        if (pageContentWrapper) pageContentWrapper.style.marginLeft = '60px';
     } else {
         sidebar.classList.remove('collapsed');
         wrapper.classList.remove('toggled');
-        if (pageContentWrapper) pageContentWrapper.style.marginLeft = '220px';
     }
     
     // Configurar botão de toggle (hamburger)
@@ -66,14 +64,7 @@ window.toggleSidebar = function() {
     const isCollapsed = sidebar.classList.toggle('collapsed');
     wrapper.classList.toggle('toggled', isCollapsed);
     
-    if (pageContentWrapper) {
-        if (isCollapsed) {
-            pageContentWrapper.style.marginLeft = '60px';
-        } else {
-            pageContentWrapper.style.marginLeft = '220px';
-        }
-    }
-    
+
     // Salvar estado no localStorage
     localStorage.setItem(SIDEBAR_STATE_KEY, isCollapsed.toString());
     window.dispatchEvent(new Event('resize'));
@@ -236,7 +227,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const isCollapsedInitially = savedSidebarState === null ? false : savedSidebarState === 'true';
         sidebar.classList.toggle('collapsed', isCollapsedInitially);
         wrapper.classList.toggle('toggled', isCollapsedInitially);
-        pageContentWrapper.style.marginLeft = isCollapsedInitially ? '60px' : '220px';
         console.log(`initSidebarControl: Estado da sidebar restaurado para ${isCollapsedInitially ? 'recolhida' : 'expandida'}.`);
 
         // Lógica de estado inicial da seção de perfil
@@ -269,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Mobile/tablet: sidebar é um drawer — NÃO adiciona .collapsed
                 // (collapsed esconderia o texto mesmo com a sidebar aberta)
                 // O controle visual é feito por transform via CSS + .mobile-open
-                pageContentWrapper.style.marginLeft = '0';
                 wrapper.classList.remove('toggled');
 
                 // Garante que a sidebar não fica "aberta" ao redimensionar
@@ -287,7 +276,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 sidebar.classList.toggle('collapsed', isSavedCollapsed);
                 sidebar.classList.remove('mobile-open'); // garante limpeza
                 wrapper.classList.toggle('toggled', isSavedCollapsed);
-                pageContentWrapper.style.marginLeft = isSavedCollapsed ? '60px' : '220px';
 
                 // Recolhe seção de perfil
                 profileMenuItems.classList.add('collapsed');
