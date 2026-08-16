@@ -252,12 +252,12 @@ def obter_preferencia_visual_usuario(usuario_id):
 
 
 def obter_tema_usuario(usuario_id):
-    """Compatibilidade: retorna somente um dos vinte temas institucionais."""
+    """Compatibilidade: retorna somente um dos trinta temas institucionais."""
     return obter_preferencia_visual_usuario(usuario_id)['tema_cor'] or 'paleta-01'
 
 
 def salvar_tema_usuario(usuario_id, tema_cor):
-    """Salva somente uma das vinte aparências institucionais por usuário."""
+    """Salva somente uma das trinta aparências institucionais por usuário."""
     query = """
         INSERT INTO user_preferences (usuario_id, tema_cor)
         VALUES (?, ?)

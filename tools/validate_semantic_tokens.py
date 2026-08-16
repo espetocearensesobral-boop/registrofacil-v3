@@ -26,7 +26,7 @@ semantic_body = semantic_match.group('body')
 for token in shared_required:
     assert re.search(rf'{re.escape(token)}\s*:', semantic_body), f'token semântico ausente: {token}'
 
-for number in range(1, 21):
+for number in range(1, 31):
     theme = f'paleta-{number:02d}'
     match = re.search(rf'^\[data-cor="{theme}"\]\s*\{{(?P<body>.*?)\n\}}', css, re.S | re.M)
     assert match, f'{theme}: bloco não encontrado'
@@ -41,4 +41,4 @@ for line in css.splitlines():
     for name, value in declarations:
         assert f'var({name}' not in value, f'alias circular: {name}: {value}'
 
-print('semantic-token-validation: ok; themes=20; required_tokens=', len(shared_required) + len(palette_required))
+print('semantic-token-validation: ok; themes=30; required_tokens=', len(shared_required) + len(palette_required))

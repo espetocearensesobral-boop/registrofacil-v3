@@ -587,7 +587,7 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'user_preferences' criada no SQLite.")
         else:
             add_column_if_not_exists_sqlite("user_preferences", "tema_cor", "TEXT", "paleta-01")
-            cursor.execute("UPDATE user_preferences SET tema_cor = 'paleta-01' WHERE tema_cor IS NULL OR tema_cor = 'grafite-vinho' OR tema_cor NOT IN ('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10', 'paleta-11', 'paleta-12', 'paleta-13', 'paleta-14', 'paleta-15', 'paleta-16', 'paleta-17', 'paleta-18', 'paleta-19', 'paleta-20')")
+            cursor.execute("UPDATE user_preferences SET tema_cor = 'paleta-01' WHERE tema_cor IS NULL OR tema_cor = 'grafite-vinho' OR tema_cor NOT IN ('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10', 'paleta-11', 'paleta-12', 'paleta-13', 'paleta-14', 'paleta-15', 'paleta-16', 'paleta-17', 'paleta-18', 'paleta-19', 'paleta-20', 'paleta-21', 'paleta-22', 'paleta-23', 'paleta-24', 'paleta-25', 'paleta-26', 'paleta-27', 'paleta-28', 'paleta-29', 'paleta-30')")
 
             logger.info("Tabela 'user_preferences' já existe.")
 

@@ -211,21 +211,38 @@ def executar_migracoes_dados(connection=None):
         migracoes.append(migracao_011)
 
         def migracao_012(cursor):
-            """Expande o catálogo visual persistido para vinte temas."""
+            """Expande o catálogo visual persistido para trinta temas."""
             tabela = cursor.execute(
                 "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
             ).fetchone()
             if not tabela:
                 logger.info("[Migração 012] user_preferences ausente; nada a migrar.")
                 return
-            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10', 'paleta-11', 'paleta-12', 'paleta-13', 'paleta-14', 'paleta-15', 'paleta-16', 'paleta-17', 'paleta-18', 'paleta-19', 'paleta-20')"
+            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10', 'paleta-11', 'paleta-12', 'paleta-13', 'paleta-14', 'paleta-15', 'paleta-16', 'paleta-17', 'paleta-18', 'paleta-19', 'paleta-20', 'paleta-21', 'paleta-22', 'paleta-23', 'paleta-24', 'paleta-25', 'paleta-26', 'paleta-27', 'paleta-28', 'paleta-29', 'paleta-30')"
             cursor.execute(
                 f"UPDATE user_preferences SET tema_cor = 'paleta-01' "
                 f"WHERE tema_cor IS NULL OR tema_cor NOT IN {validos}"
             )
-            logger.info("[Migração 012] Preferências visuais normalizadas para vinte temas.")
+            logger.info("[Migração 012] Preferências visuais normalizadas para trinta temas.")
 
         migracoes.append(migracao_012)
+
+        def migracao_013(cursor):
+            """Consolida o catálogo visual de trinta temas em bancos já existentes."""
+            tabela = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
+            ).fetchone()
+            if not tabela:
+                logger.info("[Migração 013] user_preferences ausente; nada a migrar.")
+                return
+            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10', 'paleta-11', 'paleta-12', 'paleta-13', 'paleta-14', 'paleta-15', 'paleta-16', 'paleta-17', 'paleta-18', 'paleta-19', 'paleta-20', 'paleta-21', 'paleta-22', 'paleta-23', 'paleta-24', 'paleta-25', 'paleta-26', 'paleta-27', 'paleta-28', 'paleta-29', 'paleta-30')"
+            cursor.execute(
+                f"UPDATE user_preferences SET tema_cor = 'paleta-01' "
+                f"WHERE tema_cor IS NULL OR tema_cor NOT IN {validos}"
+            )
+            logger.info("[Migração 013] Preferências visuais consolidadas para trinta temas.")
+
+        migracoes.append(migracao_013)
 
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]

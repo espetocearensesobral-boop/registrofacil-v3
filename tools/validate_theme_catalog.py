@@ -34,9 +34,13 @@ def require(condition: bool, message: str) -> None:
 
 
 require(APPEARANCE_DEFAULT == 'paleta-01', 'default theme must be paleta-01')
-require(len(PALETAS_INSTITUCIONAIS) == 20, 'catalog must contain exactly 20 themes')
-require(len({theme['familia'] for theme in PALETAS_INSTITUCIONAIS.values()}) == 20, 'theme families must be unique')
-warm_families = {'vinho', 'café', 'ferrugem', 'cobre', 'ameixa', 'rosa-queimado', 'argila'}
+require(len(PALETAS_INSTITUCIONAIS) == 30, 'catalog must contain exactly 30 themes')
+require(len({theme['familia'] for theme in PALETAS_INSTITUCIONAIS.values()}) == 30, 'theme families must be unique')
+warm_families = {
+    'vinho', 'café', 'ferrugem', 'cobre', 'ameixa', 'rosa-queimado', 'argila',
+    'ouro-velado', 'ambar', 'laranja-queimado', 'coral-mineral', 'rubi',
+    'granada', 'terracota', 'mostarda', 'bronze', 'pessego-terroso',
+}
 
 for theme_id, theme in PALETAS_INSTITUCIONAIS.items():
     colors = theme['cores']
@@ -59,4 +63,4 @@ first = PALETAS_INSTITUCIONAIS['paleta-01']
 require(first['cores'] == ['#111315', '#2B3035', '#7D6A4B', '#F8F8F8', '#FFFFFF'], 'default palette is not the approved matte black palette')
 require(first['sidebar'] == '#111315', 'default sidebar is not matte black')
 
-print('theme-catalog-validation: ok; themes=20; colors_per_theme=5; families=20; default=matte-black')
+print('theme-catalog-validation: ok; themes=30; colors_per_theme=5; families=30; default=matte-black')
