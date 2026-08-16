@@ -140,12 +140,19 @@
     --text-color-primary:#29251F; --text-color-secondary:#766E61; --text-color-link:#244353; --border-color-default:#DDD2BF; --border-color-input:#C7BDAA; --border-color-dark:#142B36; --color-success:#356044; --color-error:#963F32; --color-warning:#765A13; --color-info:#315B6C; --danger-bg:#F9E9E5; --danger-text:#963F32; --warning-bg:#FCF1D5; --warning-text:#765A13; --info-bg:#E8EFF1; --info-text:#315B6C;
 }
 
-/* Paleta 05: claro institucional, sem branco absoluto na sidebar. */
+/* Paleta 05: azul névoa institucional, sem branco absoluto na sidebar. */
 [data-cor="paleta-05"] {
-    --sidebar: #F1F4F3;
-    --sidebar-hover: #E3EBE9;
+    --sidebar: #E7EEF2;
+    --sidebar-hover: #D6E2E8;
     --sidebar-text: #274C5E;
     --sidebar-active-text: #FFFFFF;
+    --background-color-body: #F3F6F7;
+    --background-color-card: #FBFCFD;
+    --background-color-header: #FBFCFD;
+    --background-color-hover: #EAF1F4;
+    --background-color-input-bg: #FFFFFF;
+    --border-color-default: #C9D7DE;
+    --border-color-input: #AFC2CC;
 }
 
 /* Dark mode: preserva a cor de ação de cada paleta e troca superfícies, textos e bordas. */

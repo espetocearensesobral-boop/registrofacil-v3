@@ -1491,3 +1491,91 @@ body .btn-excluir-titular:hover,
 body .btn-excluir-apresentante:hover,
 body .btn-excluir-representante:hover,
 body .btn-revoke:hover { background-color: var(--color-gold-dark, #8E702F) !important; border-color: var(--color-gold-dark, #8E702F) !important; }
+
+
+/* Revisão de contraste e superfície clara — Onda visual button-fill-5. */
+body .nav-btn,
+body .btn,
+body button:not(.btn-close),
+body a.btn,
+body .tbl-btn,
+body .rf-tab-btn,
+body .metricas-tab-btn,
+body .cat-toggle-btn,
+body .cfg-ibtn,
+body .cfg-obtn,
+body .cfg-sbtn,
+body .nt-btn-save,
+body .nt-btn-cancel,
+body .auth-btn {
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+body .nav-btn-secondary,
+body .btn-secondary,
+body .btn-outline-secondary,
+body .btn-outline-primary,
+body .btn-filter-clear,
+body .btn-limpar,
+body .nt-btn-cancel {
+  background-color: var(--color-primary-light, #1B4368) !important;
+  background-image: none !important;
+  border-color: var(--color-primary-light, #1B4368) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+body .nav-btn-danger,
+body .btn-danger,
+body .btn-outline-danger,
+body .cfg-obtn,
+body .btn-delete-backup,
+body .btn-remove-file,
+body .btn-excluir-titular,
+body .btn-excluir-apresentante,
+body .btn-excluir-representante,
+body .btn-revoke {
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+body .badge.bg-success,
+body .badge.bg-danger,
+body .badge.bg-secondary,
+body .badge.bg-primary,
+body .badge.bg-info,
+body .cfg-status-badge,
+body .htl-badge {
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+/* A barra de filtros usa a superfície branca institucional; o toggle mantém borda e texto temáticos. */
+body .filter-bar {
+  background-color: var(--rf-surface-card, #FFFFFF) !important;
+  border-color: var(--rf-border, #D9D2C2) !important;
+}
+body .filter-bar-toggle {
+  background-color: var(--rf-surface-card, #FFFFFF) !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--rf-border, #D9D2C2) !important;
+  color: var(--rf-text-primary, #1D1B18) !important;
+}
+body .filter-bar-toggle strong,
+body .filter-bar-toggle i,
+body .filter-bar-toggle .ms-auto {
+  color: var(--rf-text-primary, #1D1B18) !important;
+}
+body .filter-bar-toggle:hover,
+body .filter-bar-toggle:focus-visible,
+body .filter-bar.active-filters .filter-bar-toggle {
+  background-color: var(--rf-surface-hover, #ECE8DE) !important;
+  color: var(--rf-text-primary, #1D1B18) !important;
+}
+
+/* Ações de estado com fundo próprio preservam texto branco também no repouso. */
+body .bg-success,
+body .bg-danger,
+body .bg-primary,
+body .bg-info,
+body .bg-dark {
+  color: #FFFFFF !important;
+}
