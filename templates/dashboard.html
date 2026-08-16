@@ -27,25 +27,25 @@
 
     <!-- KPI Cards -->
     <div class="kpi-grid">
-        <a class="kpi-card kpi-success" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}" style="text-decoration:none;">
+        <a class="kpi-card kpi-success kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
             <div class="kpi-label">Concluídos</div>
             <div class="kpi-value kpi-success">{{ dashboard_info.processos_concluidos }}</div>
             <div class="kpi-sub">Processos finalizados</div>
             <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
         </a>
-        <a class="kpi-card kpi-info" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}" style="text-decoration:none;">
+        <a class="kpi-card kpi-info kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
             <div class="kpi-label">Prenotados</div>
             <div class="kpi-value kpi-info">{{ dashboard_info.processos_prenotados }}</div>
             <div class="kpi-sub">Processos prenotados</div>
             <i class="bi bi-pencil-square kpi-bg-icon"></i>
         </a>
-        <a class="kpi-card kpi-warning" href="{{ url_for('processos.pendentes') }}" style="text-decoration:none;">
+        <a class="kpi-card kpi-warning kpi-link" href="{{ url_for('processos.pendentes') }}">
             <div class="kpi-label">Pendentes</div>
             <div class="kpi-value kpi-warning">{{ dashboard_info.processos_pendentes }}</div>
             <div class="kpi-sub">Aguardando conclusão</div>
             <i class="bi bi-hourglass-split kpi-bg-icon"></i>
         </a>
-        <a class="kpi-card kpi-gold" href="{{ url_for('processos.em_andamento') }}" style="text-decoration:none;">
+        <a class="kpi-card kpi-gold kpi-link" href="{{ url_for('processos.em_andamento') }}">
             <div class="kpi-label">Em Andamento</div>
             <div class="kpi-value kpi-gold">{{ dashboard_info.processos_em_andamento }}</div>
             <div class="kpi-sub">Processos ativos</div>
@@ -67,22 +67,22 @@
                 <div class="card-body p-0 dashboard-panel-body">
                     {% if dashboard_info.processos_recentes %}
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table dash-table">
                             <thead>
                                 <tr>
-                                    <th>Titular</th>
-                                    <th>Status</th>
+                                    <th class="col-fill">Titular</th>
+                                    <th class="col-end">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for processo in dashboard_info.processos_recentes %}
-                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" style="cursor:pointer;" title="Clique para visualizar">
-                                    <td>
-                                        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">{{ processo['titular'] }}</div>
-                                        <div style="font-family: var(--rf-font-mono);font-size: .75rem;font-weight:600;margin-top:2px;color:var(--text-color-secondary);">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" title="Clique para visualizar">
+                                    <td class="col-fill">
+                                        <div class="cell-strong cell-ellipsis">{{ processo['titular'] }}</div>
+                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
                                     </td>
-                                    <td>
-                                        <span class="badge rounded-pill" style="background-color:{{ processo['status_hex'] }};color:{{ get_contrast_color(processo['status_hex']) }};font-size: .75rem;">
+                                    <td class="col-end">
+                                        <span class="status-badge" data-status-color="{{ processo['status_hex'] }}" data-status-text="{{ get_contrast_color(processo['status_hex']) }}">
                                             {{ (processo['status_nome'] | default('—')) | replace('_',' ') | capitalize }}
                                         </span>
                                     </td>
@@ -92,9 +92,9 @@
                         </table>
                     </div>
                     {% else %}
-                    <div class="empty-state-small" style="padding:32px 0;">
-                        <i class="bi bi-inbox" style="font-size:2rem;opacity:.25;display:block;text-align:center;"></i>
-                        <p class="mb-0 text-center mt-2" style="font-size:13px;color:var(--text-color-secondary);">Nenhum processo recente.</p>
+                    <div class="empty-state-small">
+                        <i class="bi bi-inbox" ></i>
+                        <p class="mb-0 text-center mt-2" >Nenhum processo recente.</p>
                     </div>
                     {% endif %}
                 </div>
@@ -106,9 +106,9 @@
             <div class="rf-card h-100 dashboard-panel">
                 <div class="rf-card-header">
                     <h6 class="rf-card-title mb-0">
-                        <i class="bi bi-exclamation-triangle-fill me-1" style="color:var(--color-error);"></i> Prazos Críticos
+                        <i class="bi bi-exclamation-triangle-fill me-1" class="icon-danger"></i> Prazos Críticos
                         {% if dashboard_info.processos_com_prazo_critico %}
-                        <span class="badge ms-1" style="background:var(--color-error);color:#fff;font-size: .75rem;border-radius:99px;padding:2px 7px;vertical-align:middle;">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
+                        <span class="count-danger">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
                         {% endif %}
                     </h6>
                     <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
@@ -118,11 +118,11 @@
                 <div class="card-body p-0 dashboard-panel-body">
                     {% if dashboard_info.processos_com_prazo_critico %}
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table dash-table">
                             <thead>
                                 <tr>
-                                    <th>Titular</th>
-                                    <th>Prazo</th>
+                                    <th class="col-fill">Titular</th>
+                                    <th class="col-end">Prazo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,12 +141,12 @@
                                     {% set prazo_texto = prazo_diff_days ~ ' dias' %}
                                     {% set prazo_icon = 'bi-calendar-event' %}
                                 {% endif %}
-                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}" style="cursor:pointer;" title="Clique para visualizar">
-                                    <td>
-                                        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ processo['titular'] }}</div>
-                                        <div style="font-size: .75rem;margin-top:2px;font-family: var(--rf-font-mono);font-weight:600;">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}" title="Clique para visualizar">
+                                    <td class="col-fill">
+                                        <div class="cell-strong cell-ellipsis">{{ processo['titular'] }}</div>
+                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
                                     </td>
-                                    <td>
+                                    <td class="col-end">
                                         <span class="prazo-chip {% if prazo_diff_days < 0 %}prazo-chip-vencido{% elif prazo_diff_days <= 1 %}prazo-chip-hoje{% else %}prazo-chip-futuro{% endif %}">
                                             <i class="bi {{ prazo_icon }}"></i>{{ prazo_texto }}
                                         </span>
@@ -157,9 +157,9 @@
                         </table>
                     </div>
                     {% else %}
-                    <div class="empty-state-small" style="padding:32px 0;">
-                        <i class="bi bi-patch-check" style="font-size:2rem;opacity:.25;display:block;text-align:center;color:var(--color-success);"></i>
-                        <p class="mb-0 text-center mt-2" style="font-size:13px;color:var(--text-color-secondary);">Nenhum prazo crítico. Tudo em dia!</p>
+                    <div class="empty-state-small">
+                        <i class="bi bi-patch-check" class="icon-success"></i>
+                        <p class="mb-0 text-center mt-2" >Nenhum prazo crítico. Tudo em dia!</p>
                     </div>
                     {% endif %}
                 </div>
@@ -170,15 +170,13 @@
 
     {# Script: linhas clicáveis dos cards do dashboard #}
     <script>
+    document.querySelectorAll('.status-badge').forEach(function(badge) {
+        badge.style.setProperty('--st', badge.dataset.statusColor || 'var(--color-primary)');
+        badge.style.setProperty('--st-text', badge.dataset.statusText || 'var(--rf-text-on-primary)');
+    });
     document.querySelectorAll('.dash-row-link').forEach(function(row) {
         row.addEventListener('click', function() {
             window.location.href = this.dataset.href;
-        });
-        row.addEventListener('mouseenter', function() {
-            this.style.backgroundColor = 'var(--background-color-hover, rgba(0,0,0,.04))';
-        });
-        row.addEventListener('mouseleave', function() {
-            this.style.backgroundColor = '';
         });
     });
     </script>

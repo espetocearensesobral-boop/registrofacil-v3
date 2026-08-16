@@ -53,6 +53,9 @@ jobs:
           python -m pip install -r /tmp/requirements-ci.txt
           python -m pip install python-magic pytest
 
+      - name: Lint UI
+        run: python tools/lint_ui.py
+
       - name: Verify generated theme CSS
         run: python tools/verificar_themes.py
 
