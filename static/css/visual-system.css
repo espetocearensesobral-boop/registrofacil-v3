@@ -28,8 +28,11 @@
     --rf-radius-sm: .375rem;
     --rf-radius-md: .625rem;
     --rf-radius-lg: .875rem;
-    --rf-shadow-sm: 0 1px 2px rgba(43, 43, 46, .06);
-    --rf-shadow-md: 0 8px 24px rgba(43, 43, 46, .10);
+    --rf-shadow-xs: 0 1px 2px rgba(43, 43, 46, .04);
+    --rf-shadow-sm: 0 1px 3px rgba(43, 43, 46, .06), 0 1px 2px rgba(43, 43, 46, .04);
+    --rf-shadow-md: 0 4px 6px -1px rgba(43, 43, 46, .08), 0 2px 4px -1px rgba(43, 43, 46, .04);
+    --rf-shadow-lg: 0 10px 15px -3px rgba(43, 43, 46, .08), 0 4px 6px -2px rgba(43, 43, 46, .04);
+    --rf-shadow-xl: 0 20px 25px -5px rgba(43, 43, 46, .10), 0 10px 10px -5px rgba(43, 43, 46, .04);
     --rf-focus-ring: 0 0 0 .2rem color-mix(in srgb, var(--color-primary) 24%, transparent);
     --rf-text-on-primary: var(--color-primary-contrast, #fff);
     --rf-text-strong: var(--rf-text-primary, var(--text-color-primary));

@@ -5,7 +5,7 @@
     background-color: var(--background-color-header);
     padding: 1.5rem 1rem;
     margin-bottom: 1.5rem;
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     border-bottom: 1px solid var(--border-color-default);
 }
 
@@ -18,13 +18,13 @@
 .page-header .btn {
     font-weight: 500;
     padding: 0.6rem 1.2rem;
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
 }
 
 /* Seção de Filtros */
 .filter-section {
     background-color: var(--background-color-card);
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     border: 1px solid var(--border-color-default);
@@ -33,7 +33,7 @@
 
 .filter-highlight {
     border-color: var(--color-info) !important;
-    box-shadow: 0 0 0 0.25rem rgba(30, 136, 229, 0.25);
+    box-shadow: var(--rf-focus-ring);
 }
 
 .filter-toggle {
@@ -41,7 +41,7 @@
     color: var(--text-color-light);
     border: none;
     padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     font-size: var(--font-base);
     cursor: pointer;
     transition: background-color 0.2s;
@@ -173,7 +173,7 @@
 }
 .btn-action:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--rf-shadow-sm);
 }
 
 /* REMOVIDO: Estilo para colunas redimensionáveis e arrastáveis */
@@ -276,15 +276,15 @@
 /* Estilos de formulário (cadastrar/editar) */
 .form-card {
     background: var(--background-color-card);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: var(--rf-radius-lg);
+    box-shadow: var(--rf-shadow-md);
     padding: 2rem;
     margin-bottom: 2rem;
 }
 
 .form-section {
     border: 1px solid var(--border-color-default);
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     padding: 1.5rem;
     margin-bottom: 2rem;
     position: relative;
@@ -316,7 +316,7 @@
 /* Estilos de Upload de Arquivos */
 .file-upload-area {
     border: 2px dashed var(--color-info);
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     padding: 3rem 1.5rem;
     text-align: center;
     cursor: pointer;
@@ -365,7 +365,7 @@
 .file-preview {
     margin-top: 1.5rem;
     border: 1px solid var(--border-color-default);
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     padding: 1rem;
     display: flex;
     flex-wrap: wrap;
@@ -446,7 +446,7 @@
     z-index: 1050;
 }
 .toast {
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    box-shadow: var(--rf-shadow-lg);
     border-radius: 0.5rem;
     padding: 0.75rem 1.25rem;
 }
@@ -485,7 +485,7 @@
     align-items: center;
     padding: 0.75rem 1rem;
     border: 1px solid var(--border-color-default);
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     margin-bottom: 0.5rem;
     background-color: var(--background-color-body);
 }
@@ -576,22 +576,22 @@
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
-    box-shadow: 0 0 0 3px var(--background-color-card), 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 0 3px var(--background-color-card), var(--rf-shadow-sm);
     z-index: 1;
 }
 
 .timeline-content {
     background-color: var(--background-color-body);
     padding: 15px 20px;
-    border-radius: 8px;
+    border-radius: var(--rf-radius-md);
     border: 1px solid var(--border-color-default);
     margin-left: 30px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: var(--rf-shadow-sm);
     transition: all 0.2s ease;
 }
 
 .timeline-content:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: var(--rf-shadow-md);
     transform: translateY(-2px);
 }
 
@@ -641,6 +641,6 @@
 
 .dashboard-stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--rf-shadow-lg);
 }
 */
