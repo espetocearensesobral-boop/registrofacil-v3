@@ -115,7 +115,7 @@
     </style>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v='3.24.1') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v='3.24.2') }}">
     <style id="rf-header-button-contract">
         html body .navbar .nav-btn.nav-btn-secondary {
             background-color: var(--color-primary-light, #1B4368) !important;
@@ -591,7 +591,7 @@
     {# O main.js agora é o orquestrador, ele DEVE ser o último script a ser carregado, e também precisa ser um módulo #}
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/accessibility.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/theme-toggle.js', v='3.24.1') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/theme-toggle.js', v='3.24.2') }}" defer></script>
     <script src="{{ url_for('static', filename='js/system-update.js') }}" defer></script>
     <script>
     // ── Controle de sidebar mobile ──────────────────────────────

@@ -80,9 +80,7 @@
                     </div>
                 </div>
                 
-                <div class="w-100"></div>
-
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-floating">
                         <select class="form-select" id="possui_matricula" name="possui_matricula" onchange="toggleMatricula(this.value)" required>
                             <option value="0" {% if dados_form.get('possui_matricula', '0') != '1' %}selected{% endif %}>Não</option>
@@ -92,7 +90,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6" id="campo_matricula_wrapper" {% if dados_form.get('possui_matricula', '0') != '1' %}style="display:none"{% endif %}>
+                <div class="col-md-3" id="campo_matricula_wrapper" {% if dados_form.get('possui_matricula', '0') != '1' %}style="display:none"{% endif %}>
                     <div class="form-floating">
                         <input type="text" class="form-control" id="matricula" name="matricula"
                                placeholder="Matrícula/Nº da Ordem"
@@ -104,6 +102,8 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="w-100"></div>
 
                 <div class="col-md-6">
                     <div class="form-floating">
