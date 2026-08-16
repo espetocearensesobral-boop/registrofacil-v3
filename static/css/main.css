@@ -411,7 +411,8 @@ body {
    CONTEÚDO DA PÁGINA
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #page-content-wrapper {
-    width: 100%;
+    width: auto;
+    min-width: 0;
     min-height: 100vh;
     margin-left: var(--rf-sidebar-width);
     transition: margin-left 0.3s ease-in-out;

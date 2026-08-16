@@ -1952,3 +1952,212 @@ html body .toast {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* ============================================================
+   LAYOUT STANDARD — régua institucional única
+   Corrige o desalinhamento lateral e centraliza o conteúdo
+   sem alterar os tokens de cor dos seis temas.
+   ============================================================ */
+:root {
+  --rf-gutter-x: clamp(1.25rem, 3vw, 2.5rem);
+  --rf-gutter-y: clamp(1.25rem, 2.5vw, 2rem);
+  --rf-content-max: 1680px;
+  --rf-card-padding: clamp(1rem, 1.5vw, 1.25rem);
+}
+
+#page-content-wrapper {
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  overflow-x: clip;
+}
+
+#page-content-wrapper > .navbar,
+#page-content-wrapper > main,
+#page-content-wrapper > .rf-footer {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#page-content-wrapper > .navbar {
+  padding: .875rem 0;
+}
+
+#page-content-wrapper > .navbar > .container-fluid,
+#page-content-wrapper > main,
+#page-content-wrapper > .rf-footer,
+.rf-shell {
+  width: 100%;
+  max-width: var(--rf-content-max);
+  margin-inline: auto;
+  padding-inline: var(--rf-gutter-x) !important;
+}
+
+#page-content-wrapper > main {
+  padding-block: var(--rf-gutter-y) !important;
+}
+
+#page-content-wrapper > .navbar > .container-fluid {
+  padding-block: 0 !important;
+}
+
+.rf-page-header,
+#page-content-wrapper .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rf-space-4);
+  flex-wrap: wrap;
+  padding: 0 0 var(--rf-space-4);
+  margin: 0 0 var(--rf-space-5);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rf-border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.rf-page-header h1,
+.rf-page-header h2,
+#page-content-wrapper .page-header h1,
+#page-content-wrapper .page-header h2 {
+  margin: 0;
+}
+
+.rf-page-header .rf-actions,
+#page-content-wrapper .page-header .rf-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--rf-space-2);
+  flex-wrap: wrap;
+}
+
+.rf-card,
+#page-content-wrapper .stats-card,
+#page-content-wrapper .form-card,
+#page-content-wrapper .filter-section,
+#page-content-wrapper .filter-bar {
+  background: var(--rf-surface) !important;
+  border: 1px solid var(--rf-border) !important;
+  border-radius: var(--rf-radius-lg) !important;
+  box-shadow: var(--rf-shadow-sm) !important;
+}
+
+.rf-card,
+#page-content-wrapper .form-card,
+#page-content-wrapper .filter-section {
+  padding: var(--rf-card-padding);
+}
+
+#page-content-wrapper .stats-card,
+#page-content-wrapper .filter-bar {
+  padding: var(--rf-card-padding);
+}
+
+#page-content-wrapper .stats-card:hover,
+#page-content-wrapper .rf-card:hover {
+  transform: none;
+  box-shadow: var(--rf-shadow-sm) !important;
+}
+
+.rf-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--rf-space-4);
+  margin-bottom: var(--rf-space-5);
+}
+
+#page-content-wrapper .table-responsive,
+#page-content-wrapper .rf-table-wrapper {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+#page-content-wrapper .table-responsive > table,
+#page-content-wrapper .rf-table-wrapper > table {
+  min-width: 640px;
+}
+
+.rf-footer {
+  margin-top: auto;
+  padding-block: var(--rf-space-4);
+  border-top: 1px solid var(--rf-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--rf-text-muted);
+  font-size: var(--rf-font-xs);
+}
+
+.rf-footer span:last-child {
+  text-align: right;
+}
+
+@media (max-width: 991.98px) {
+  #page-content-wrapper > .navbar > .container-fluid,
+  #page-content-wrapper > main,
+  #page-content-wrapper > .rf-footer,
+  .rf-shell {
+    padding-inline: 1rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #page-content-wrapper > .navbar > .container-fluid,
+  #page-content-wrapper > main,
+  #page-content-wrapper > .rf-footer,
+  .rf-shell {
+    padding-inline: .75rem !important;
+  }
+
+  #page-content-wrapper > main {
+    padding-block: 1rem !important;
+  }
+
+  .rf-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rf-footer span:last-child {
+    text-align: left;
+  }
+}
+
+
+/* Compatibilidade do dashboard com a régua standard. */
+#page-content-wrapper .kpi-grid,
+#page-content-wrapper .rf-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--rf-space-4);
+  margin-bottom: var(--rf-space-5);
+}
+
+#page-content-wrapper .kpi-card {
+  min-width: 0;
+  border-radius: var(--rf-radius-lg);
+  box-shadow: var(--rf-shadow-sm);
+}
+
+#page-content-wrapper .dashboard-action-link {
+  min-height: 2.25rem !important;
+  height: auto !important;
+  padding: .35rem .7rem !important;
+  font-size: var(--rf-font-xs) !important;
+}
+
+#page-content-wrapper .greeting-banner {
+  border-radius: var(--rf-radius-lg) !important;
+  box-shadow: var(--rf-shadow-sm) !important;
+  padding: var(--rf-card-padding) !important;
+}
+
+#page-content-wrapper .row > [class*="col-"] {
+  min-width: 0;
+}
