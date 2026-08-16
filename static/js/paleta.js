@@ -1,17 +1,46 @@
 let temaSelecionado = null;
 let temaOriginal = null;
 
-function aplicarTema(tema) {
-    if (!tema) return;
-    document.body.setAttribute('data-cor', tema);
-    temaSelecionado = tema;
-    const badge = document.getElementById('paleta-atual-badge');
-    if (badge) badge.style.backgroundColor = 'var(--color-primary)';
+function obterNomeTema(tema) {
+    const choice = document.querySelector(`.theme-choice[data-palette="${tema}"]`);
+    return choice?.querySelector('strong')?.textContent?.trim() || tema;
+}
+
+function atualizarBuscaPaletas() {
+    const input = document.getElementById('paleta-busca');
+    const query = (input?.value || '').trim().toLocaleLowerCase('pt-BR');
+    const choices = [...document.querySelectorAll('.theme-choice')];
+    let visibleCount = 0;
+    choices.forEach((choice) => {
+        const visible = !query || (choice.dataset.search || '').toLocaleLowerCase('pt-BR').includes(query);
+        choice.hidden = !visible;
+        if (visible) visibleCount += 1;
+    });
+    const count = document.getElementById('paleta-contagem');
+    if (count) count.textContent = `${visibleCount} ${visibleCount === 1 ? 'tema encontrado' : 'temas encontrados'}`;
+    const empty = document.getElementById('paleta-vazia');
+    if (empty) empty.hidden = visibleCount !== 0;
+}
+
+function atualizarEstadoCards(tema) {
     document.querySelectorAll('.theme-choice').forEach((choice) => {
         const selected = choice.dataset.palette === tema;
         choice.classList.toggle('selected', selected);
         choice.setAttribute('aria-checked', selected ? 'true' : 'false');
+        const label = choice.querySelector('.theme-choice-action-label');
+        if (label) label.textContent = selected ? 'Tema selecionado' : 'Selecionar tema';
     });
+    const currentName = document.getElementById('paleta-atual-nome');
+    if (currentName) currentName.textContent = obterNomeTema(tema);
+    const badge = document.getElementById('paleta-atual-badge');
+    if (badge) badge.dataset.currentTheme = tema;
+}
+
+function aplicarTema(tema) {
+    if (!tema) return;
+    document.body.setAttribute('data-cor', tema);
+    temaSelecionado = tema;
+    atualizarEstadoCards(tema);
 }
 
 async function carregarTema() {
@@ -62,9 +91,32 @@ async function salvarTema() {
 
 document.addEventListener('DOMContentLoaded', function() {
     carregarTema();
-    document.querySelectorAll('.theme-choice').forEach((choice) => {
+    const choices = [...document.querySelectorAll('.theme-choice')];
+    choices.forEach((choice) => {
         choice.addEventListener('click', () => aplicarTema(choice.dataset.palette));
+        choice.addEventListener('keydown', (event) => {
+            if (!['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(event.key)) return;
+            const visibleChoices = choices.filter((item) => !item.hidden);
+            const currentIndex = visibleChoices.indexOf(choice);
+            if (currentIndex < 0) return;
+            const direction = ['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1;
+            const next = visibleChoices[(currentIndex + direction + visibleChoices.length) % visibleChoices.length];
+            event.preventDefault();
+            next.focus();
+            aplicarTema(next.dataset.palette);
+        });
     });
+    const search = document.getElementById('paleta-busca');
+    if (search) {
+        search.addEventListener('input', atualizarBuscaPaletas);
+        search.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && search.value) {
+                search.value = '';
+                atualizarBuscaPaletas();
+            }
+        });
+    }
+    atualizarBuscaPaletas();
     const saveButton = document.getElementById('btn-salvar-aparencia');
     if (saveButton) saveButton.addEventListener('click', salvarTema);
 });

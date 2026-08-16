@@ -238,30 +238,55 @@
 </div>
 
 <style>
-.theme-choice { position: relative; display: flex; flex-direction: column; gap: 7px; min-height: 155px; padding: 14px; border: 1px solid var(--border-color-default); border-radius: 10px; background: var(--background-color-card); color: var(--text-color-primary); cursor: pointer; transition: border-color .15s, box-shadow .15s; }
-.theme-choice:hover { border-color: var(--color-primary-light); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
-.theme-choice.selected { border: 2px solid var(--color-primary); padding: 13px; box-shadow: 0 0 0 3px var(--color-primary-subtle); }
-.theme-choice-check { position: absolute; top: 12px; right: 12px; width: 21px; height: 21px; display: grid; place-items: center; border: 1px solid var(--border-color-default); border-radius: 50%; color: transparent; font-size: 12px; }
-.theme-choice.selected .theme-choice-check { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
-.theme-choice-number { color: var(--color-primary); font: 600 10px 'IBM Plex Mono', monospace; letter-spacing: .08em; text-transform: uppercase; }
-.theme-choice strong { padding-right: 26px; font-size: 14px; line-height: 1.25; }
-.theme-choice small { color: var(--text-color-secondary); font-size: .75rem; line-height: 1.35; }
-.theme-choice-swatches { display: flex; gap: 4px; }
-.theme-choice-swatches i { width: 25%; height: 20px; border: 1px solid rgba(0,0,0,.08); border-radius: 4px; }
-
-/* Cards de seleção: superfície clara padrão, independente da paleta aplicada ao restante da tela. */
-#modalPaletas .theme-choice,
-#modalPaletas .theme-choice:hover,
-#modalPaletas .theme-choice.selected {
-    background-color: #FFFFFF !important;
-    color: #20242A !important;
+#modalPaletas .modal-dialog { max-width: 66rem; }
+#modalPaletas .modal-header { padding: 1.125rem 1.375rem .875rem !important; }
+#modalPaletas .modal-body { padding: 1rem 1.375rem 1.25rem !important; }
+#modalPaletas .modal-footer { padding: .875rem 1.375rem !important; }
+#modalPaletas .palette-modal-title { display: flex; align-items: center; gap: .7rem; }
+#modalPaletas .palette-modal-title-icon { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: .6rem; background: var(--color-primary); color: #fff; font-size: 1rem; }
+#modalPaletas .palette-modal-heading { display: flex; flex-direction: column; gap: .15rem; }
+#modalPaletas .palette-modal-eyebrow { color: var(--color-primary); font-size: .625rem; font-weight: 800; letter-spacing: .12em; line-height: 1; text-transform: uppercase; }
+#modalPaletas .palette-modal-subtitle { color: var(--rf-text-secondary, #2A2A2A); font-size: .75rem; font-weight: 400; line-height: 1.3; }
+#modalPaletas .palette-modal-intro { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .875rem; }
+#modalPaletas .palette-modal-description { margin: 0; color: var(--rf-text-secondary, #2A2A2A); font-size: .8125rem; line-height: 1.45; }
+#modalPaletas .palette-modal-current { display: inline-flex; align-items: center; gap: .45rem; flex: 0 0 auto; padding: .45rem .65rem; border: 1px solid var(--border-color-default); border-radius: 999px; background: #fff; color: var(--rf-text-secondary, #2A2A2A); font-size: .6875rem; white-space: nowrap; }
+#modalPaletas .palette-modal-current-dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 16%, transparent); }
+#modalPaletas .palette-modal-current strong { color: var(--rf-text-heading, #121212); font-weight: 750; }
+#modalPaletas .palette-modal-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .875rem; }
+#modalPaletas .palette-search { display: flex; align-items: center; gap: .5rem; width: min(100%, 22rem); min-height: 2.25rem; padding: 0 .7rem; border: 1px solid var(--border-color-input); border-radius: .55rem; background: #fff; color: var(--rf-text-secondary, #2A2A2A); }
+#modalPaletas .palette-search:focus-within { border-color: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 14%, transparent); }
+#modalPaletas .palette-search i { color: var(--color-primary); font-size: .85rem; }
+#modalPaletas .palette-search input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--rf-text-heading, #121212); font-size: .8125rem; }
+#modalPaletas .palette-search input::placeholder { color: #6b7280; }
+#modalPaletas .palette-count { color: var(--rf-text-secondary, #2A2A2A); font-size: .6875rem; font-weight: 700; white-space: nowrap; }
+#modalPaletas .theme-choice-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
+#modalPaletas .theme-choice { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: .55rem; min-width: 0; min-height: 10.5rem; padding: .8rem; border: 1px solid var(--border-color-default); border-radius: .7rem; background: #fff; color: var(--rf-text-body, #2A2A2A); cursor: pointer; font: inherit; text-align: left; transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+#modalPaletas .theme-choice:hover { border-color: var(--color-primary-light); box-shadow: 0 .4rem 1rem rgba(15, 23, 42, .09); transform: translateY(-1px); }
+#modalPaletas .theme-choice:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-primary) 30%, transparent); outline-offset: 2px; }
+#modalPaletas .theme-choice.selected { border: 2px solid var(--color-primary); padding: calc(.8rem - 1px); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 16%, transparent); }
+#modalPaletas .theme-choice[hidden] { display: none; }
+#modalPaletas .theme-choice-top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+#modalPaletas .theme-choice-number { color: var(--color-primary-dark, #243B53); font: 700 .625rem 'IBM Plex Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+#modalPaletas .theme-choice-check { display: grid; place-items: center; width: 1.35rem; height: 1.35rem; flex: 0 0 auto; border: 1px solid #9aa3ad; border-radius: 50%; background: #fff; color: transparent; font-size: .7rem; }
+#modalPaletas .theme-choice.selected .theme-choice-check { border-color: var(--color-primary); background: var(--color-primary); color: #fff; }
+#modalPaletas .theme-choice strong { display: block; min-height: 2.1rem; color: #121212; font-size: .875rem; line-height: 1.2; }
+#modalPaletas .theme-choice-swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: .25rem; }
+#modalPaletas .theme-choice-swatches i { display: block; width: 100%; height: 1.25rem; border: 1px solid rgba(0,0,0,.1); border-radius: .25rem; }
+#modalPaletas .theme-choice small { display: block; min-height: 2.25rem; color: #5f6873; font-size: .6875rem; line-height: 1.35; }
+#modalPaletas .theme-choice-action { display: flex; align-items: center; gap: .35rem; margin-top: auto; color: var(--color-primary); font-size: .6875rem; font-weight: 750; }
+#modalPaletas .theme-choice-action i { font-size: .75rem; }
+#modalPaletas .theme-choice.selected .theme-choice-action-label { color: var(--color-primary-dark); }
+#modalPaletas .palette-empty { margin: 1rem 0 0; padding: 1.25rem; border: 1px dashed var(--border-color-default); border-radius: .7rem; color: var(--rf-text-secondary, #2A2A2A); text-align: center; font-size: .8125rem; }
+#modalPaletas .palette-empty[hidden] { display: none; }
+@media (max-width: 1199.98px) { #modalPaletas .theme-choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 859.98px) { #modalPaletas .theme-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 575.98px) {
+    #modalPaletas .modal-header, #modalPaletas .modal-body, #modalPaletas .modal-footer { padding-inline: .875rem !important; }
+    #modalPaletas .palette-modal-intro, #modalPaletas .palette-modal-toolbar { align-items: stretch; flex-direction: column; }
+    #modalPaletas .palette-modal-current { align-self: flex-start; }
+    #modalPaletas .palette-search { width: 100%; }
+    #modalPaletas .theme-choice-grid { grid-template-columns: 1fr; }
 }
-#modalPaletas .theme-choice strong { color: #20242A !important; }
-#modalPaletas .theme-choice small { color: #5F6873 !important; }
-#modalPaletas .theme-choice-number { color: var(--color-primary-dark, #243B53) !important; }
-#modalPaletas .theme-choice-check { background-color: #FFFFFF !important; border-color: #7C8794 !important; color: transparent !important; }
-#modalPaletas .theme-choice.selected { border-color: var(--color-primary, #243B53) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #243B53) 18%, transparent) !important; }
-#modalPaletas .theme-choice.selected .theme-choice-check { background-color: var(--color-primary, #243B53) !important; border-color: var(--color-primary, #243B53) !important; color: #FFFFFF !important; }
 </style>
 
 <!-- Modal de seleção dos vinte temas institucionais -->
@@ -269,24 +294,46 @@
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPaletasLabel"><i class="bi bi-brush-fill me-2 text-primary"></i>Tema do sistema</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <div class="palette-modal-title">
+                    <span class="palette-modal-title-icon" aria-hidden="true"><i class="bi bi-palette2"></i></span>
+                    <span class="palette-modal-heading">
+                        <span class="palette-modal-eyebrow">Personalização</span>
+                        <h5 class="modal-title mb-0" id="modalPaletasLabel">Tema do sistema</h5>
+                        <span class="palette-modal-subtitle">Escolha uma identidade visual para o Registro Fácil.</span>
+                    </span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar seleção de temas"></button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-info mb-4"><i class="bi bi-info-circle me-2"></i>Escolha um tema. Ele será aplicado integralmente ao sistema, incluindo a sidebar, telas, componentes e modais.</div>
-                <div class="row g-3" id="grid-paletas" role="radiogroup" aria-label="Temas institucionais">
+                <div class="palette-modal-intro">
+                    <p class="palette-modal-description">A paleta será aplicada ao sistema inteiro, incluindo sidebar, telas, componentes e modais.</p>
+                    <span class="palette-modal-current" id="paleta-atual-badge" data-current-theme="{{ visual_preferences.tema_cor or 'paleta-01' }}" aria-live="polite">
+                        <span class="palette-modal-current-dot" aria-hidden="true"></span>
+                        Atual: <strong id="paleta-atual-nome">Tema selecionado</strong>
+                    </span>
+                </div>
+                <div class="palette-modal-toolbar">
+                    <label class="palette-search" for="paleta-busca">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input type="search" id="paleta-busca" placeholder="Buscar por nome ou família" autocomplete="off">
+                    </label>
+                    <span class="palette-count" id="paleta-contagem" aria-live="polite">20 temas disponíveis</span>
+                </div>
+                <div class="theme-choice-grid" id="grid-paletas" role="radiogroup" aria-labelledby="modalPaletasLabel">
                     {% for palette in institutional_palettes %}
-                    <div class="col-md-6 col-xl-4">
-                        <button type="button" class="theme-choice w-100 text-start{% if visual_preferences.tema_cor == palette.id %} selected{% endif %}" data-palette="{{ palette.id }}" role="radio" aria-checked="{{ 'true' if visual_preferences.tema_cor == palette.id else 'false' }}">
-                            <span class="theme-choice-check"><i class="bi bi-check-lg"></i></span>
+                    <button type="button" class="theme-choice{% if visual_preferences.tema_cor == palette.id %} selected{% endif %}" data-palette="{{ palette.id }}" data-search="{{ (palette.nome ~ ' ' ~ palette.familia ~ ' ' ~ palette.descricao)|lower }}" role="radio" aria-checked="{{ 'true' if visual_preferences.tema_cor == palette.id else 'false' }}" aria-label="Tema {{ palette.numero }} — {{ palette.nome }}">
+                        <span class="theme-choice-top">
                             <span class="theme-choice-number">Tema {{ palette.numero }}</span>
-                            <strong>{{ palette.nome }}</strong>
-                            <span class="theme-choice-swatches" aria-label="Cinco cores da paleta">{% for color in palette.cores %}<i style="background:{{ color }}" title="{{ color }}"></i>{% endfor %}</span>
-                            <small>{{ palette.descricao }}</small>
-                        </button>
-                    </div>
+                            <span class="theme-choice-check" aria-hidden="true"><i class="bi bi-check-lg"></i></span>
+                        </span>
+                        <strong>{{ palette.nome }}</strong>
+                        <span class="theme-choice-swatches" aria-label="Cinco cores da paleta">{% for color in palette.cores %}<i style="background:{{ color }}" title="{{ color }}"></i>{% endfor %}</span>
+                        <small>{{ palette.descricao }}</small>
+                        <span class="theme-choice-action"><i class="bi bi-hand-index-thumb" aria-hidden="true"></i><span class="theme-choice-action-label">Selecionar tema</span></span>
+                    </button>
                     {% endfor %}
                 </div>
+                <p class="palette-empty" id="paleta-vazia" hidden>Nenhuma paleta encontrada. Tente buscar por outro nome ou família.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
