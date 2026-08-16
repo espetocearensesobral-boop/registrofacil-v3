@@ -4,7 +4,7 @@ import models
 from config import Config
 
 
-PALETAS_DA_INTERFACE = [f'paleta-{numero:02d}' for numero in range(1, 16)]
+PALETAS_DA_INTERFACE = [f'paleta-{numero:02d}' for numero in range(1, 21)]
 
 
 def _admin_password():
@@ -72,16 +72,17 @@ def test_all_institutional_palette_ids_are_accepted(app_client):
     assert current.get_json()['tema_cor'] == PALETAS_DA_INTERFACE[-1]
 
 
-def test_profile_exposes_fifteen_institutional_themes_without_sidebar_palette(app_client):
+def test_profile_exposes_twenty_institutional_themes_without_sidebar_palette(app_client):
     _login(app_client)
     response = app_client.get('/perfil/')
     assert response.status_code == 200
     body = response.get_data(as_text=True)
     assert 'Tema 01' in body
     assert 'Tema 02' in body
-    for numero in range(1, 16):
+    for numero in range(1, 21):
         assert f'Tema {numero:02d}' in body
     assert '30 paletas profissionais' not in body
+    assert 'vinte temas institucionais' in body
     assert 'sidebar-color-grid' not in body
     assert 'Cor de seleção da sidebar' not in body
 

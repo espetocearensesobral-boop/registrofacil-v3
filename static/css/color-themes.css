@@ -749,3 +749,84 @@
     --rf-p3-sucesso: var(--color-success);
     --rf-p3-aviso: var(--color-warning);
 }
+
+
+/* ============================================================
+   16 · Navy & Latão
+   ============================================================ */
+[data-cor="paleta-16"] {
+    --color-primary: #0B1F33; --color-primary-light: #1F4E79; --color-primary-dark: #06121F;
+    --color-primary-subtle: rgba(11, 31, 51, .12); --color-primary-rgb: 11, 31, 51;
+    --color-gold-primary: #C89B3C; --color-gold-dark: #8D6A21;
+    --background-color-body: #F7F5EF; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: #E8EDF1; --background-color-input-bg: #FFFFFF;
+    --sidebar: #0B1F33; --sidebar-hover: #1F4E79; --sidebar-text: #F7F5EF; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #17212B; --text-color-secondary: #5F6B76; --text-color-link: #1F4E79;
+    --border-color-default: #D9D5C8; --border-color-input: #B9C4CC; --border-color-dark: #06121F;
+    --color-success: #2E6B4B; --color-error: #8C2A2A; --color-warning: #80620A; --color-info: #315D7C;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A; --warning-bg: #FCF3DC; --warning-text: #80620A; --info-bg: #EAF1F5; --info-text: #315D7C;
+}
+
+/* ============================================================
+   17 · Bosque & Linho
+   ============================================================ */
+[data-cor="paleta-17"] {
+    --color-primary: #1B4332; --color-primary-light: #2D6A4F; --color-primary-dark: #10291F;
+    --color-primary-subtle: rgba(27, 67, 50, .12); --color-primary-rgb: 27, 67, 50;
+    --color-gold-primary: #B08968; --color-gold-dark: #806044;
+    --background-color-body: #F5F4EE; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: #E8EEE9; --background-color-input-bg: #FFFFFF;
+    --sidebar: #1B4332; --sidebar-hover: #2D6A4F; --sidebar-text: #F1F5EE; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #17251D; --text-color-secondary: #607267; --text-color-link: #2D6A4F;
+    --border-color-default: #D2D9D1; --border-color-input: #B9C9BF; --border-color-dark: #10291F;
+    --color-success: #31572C; --color-error: #8C2A2A; --color-warning: #7A5A0A; --color-info: #3A6350;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A; --warning-bg: #FCF3DC; --warning-text: #7A5A0A; --info-bg: #EAF2ED; --info-text: #3A6350;
+}
+
+/* ============================================================
+   18 · Ameixa & Areia
+   ============================================================ */
+[data-cor="paleta-18"] {
+    --color-primary: #3C1642; --color-primary-light: #71367C; --color-primary-dark: #250D29;
+    --color-primary-subtle: rgba(60, 22, 66, .12); --color-primary-rgb: 60, 22, 66;
+    --color-gold-primary: #C58B7B; --color-gold-dark: #956256;
+    --background-color-body: #F5F0EC; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: #EEE5EA; --background-color-input-bg: #FFFFFF;
+    --sidebar: #3C1642; --sidebar-hover: #71367C; --sidebar-text: #F8F2F7; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #241B26; --text-color-secondary: #6C5A6B; --text-color-link: #71367C;
+    --border-color-default: #DDD2DB; --border-color-input: #C9B8C8; --border-color-dark: #250D29;
+    --color-success: #3E5C2A; --color-error: #8C2A2A; --color-warning: #7A5A0A; --color-info: #5A4578;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A; --warning-bg: #FCF3DC; --warning-text: #7A5A0A; --info-bg: #F0EAF3; --info-text: #5A4578;
+}
+
+/* ============================================================
+   19 · Petróleo & Coral
+   ============================================================ */
+[data-cor="paleta-19"] {
+    --color-primary: #134B5F; --color-primary-light: #1C7293; --color-primary-dark: #0B303D;
+    --color-primary-subtle: rgba(19, 75, 95, .12); --color-primary-rgb: 19, 75, 95;
+    --color-gold-primary: #D98E73; --color-gold-dark: #A86550;
+    --background-color-body: #F1F7F7; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: #E1EFF0; --background-color-input-bg: #FFFFFF;
+    --sidebar: #134B5F; --sidebar-hover: #1C7293; --sidebar-text: #EEF8F8; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #152A31; --text-color-secondary: #5F7379; --text-color-link: #1C7293;
+    --border-color-default: #D0DFE1; --border-color-input: #B3CDD1; --border-color-dark: #0B303D;
+    --color-success: #216044; --color-error: #9A3E2F; --color-warning: #7A5A0A; --color-info: #315E70;
+    --danger-bg: #FDECEC; --danger-text: #9A3E2F; --warning-bg: #FCF3DC; --warning-text: #7A5A0A; --info-bg: #E6F1F3; --info-text: #315E70;
+}
+
+/* ============================================================
+   20 · Ardósia & Cobre
+   ============================================================ */
+[data-cor="paleta-20"] {
+    --color-primary: #263238; --color-primary-light: #455A64; --color-primary-dark: #172024;
+    --color-primary-subtle: rgba(38, 50, 56, .12); --color-primary-rgb: 38, 50, 56;
+    --color-gold-primary: #B87333; --color-gold-dark: #805022;
+    --background-color-body: #F5F4F1; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: #E9ECEB; --background-color-input-bg: #FFFFFF;
+    --sidebar: #263238; --sidebar-hover: #455A64; --sidebar-text: #F2F5F5; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #1D2528; --text-color-secondary: #647277; --text-color-link: #455A64;
+    --border-color-default: #D5D9D8; --border-color-input: #B9C2C4; --border-color-dark: #172024;
+    --color-success: #2E6B4B; --color-error: #8C2A2A; --color-warning: #80620A; --color-info: #455A64;
+    --danger-bg: #FDECEC; --danger-text: #8C2A2A; --warning-bg: #FCF3DC; --warning-text: #80620A; --info-bg: #EAF0F1; --info-text: #455A64;
+}

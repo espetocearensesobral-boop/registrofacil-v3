@@ -261,11 +261,56 @@ PALETAS_INSTITUCIONAIS = {
         'success_text': '#4A5C2A', 'danger_text': '#8C2A2A', 'warning_text': '#7A5A0A', 'info_text': '#6B5A3A',
         'sidebar': '#704214', 'sidebar_hover': '#A67C52', 'sidebar_text': '#F5EAD8', 'sidebar_active_text': '#FFFFFF',
     },
+    'paleta-16': {
+        'id': 'paleta-16', 'numero': '16', 'nome': 'Navy & Latão',
+        'descricao': 'Azul marinho e latão para uma identidade registral sóbria, nítida e premium.',
+        'primary': '#0B1F33', 'primary_light': '#1F4E79', 'primary_dark': '#06121F',
+        'accent': '#C89B3C', 'background': '#F7F5EF', 'paper': '#FFFFFF',
+        'text': '#17212B', 'muted': '#5F6B76', 'line': '#D9D5C8',
+        'success_text': '#2E6B4B', 'danger_text': '#8C2A2A', 'warning_text': '#80620A', 'info_text': '#315D7C',
+        'sidebar': '#0B1F33', 'sidebar_hover': '#1F4E79', 'sidebar_text': '#F7F5EF', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-17': {
+        'id': 'paleta-17', 'numero': '17', 'nome': 'Bosque & Linho',
+        'descricao': 'Verde bosque com linho para uma presença natural, serena e institucional.',
+        'primary': '#1B4332', 'primary_light': '#2D6A4F', 'primary_dark': '#10291F',
+        'accent': '#B08968', 'background': '#F5F4EE', 'paper': '#FFFFFF',
+        'text': '#17251D', 'muted': '#607267', 'line': '#D2D9D1',
+        'success_text': '#31572C', 'danger_text': '#8C2A2A', 'warning_text': '#7A5A0A', 'info_text': '#3A6350',
+        'sidebar': '#1B4332', 'sidebar_hover': '#2D6A4F', 'sidebar_text': '#F1F5EE', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-18': {
+        'id': 'paleta-18', 'numero': '18', 'nome': 'Ameixa & Areia',
+        'descricao': 'Ameixa profunda com areia para um ambiente elegante, acolhedor e refinado.',
+        'primary': '#3C1642', 'primary_light': '#71367C', 'primary_dark': '#250D29',
+        'accent': '#C58B7B', 'background': '#F5F0EC', 'paper': '#FFFFFF',
+        'text': '#241B26', 'muted': '#6C5A6B', 'line': '#DDD2DB',
+        'success_text': '#3E5C2A', 'danger_text': '#8C2A2A', 'warning_text': '#7A5A0A', 'info_text': '#5A4578',
+        'sidebar': '#3C1642', 'sidebar_hover': '#71367C', 'sidebar_text': '#F8F2F7', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-19': {
+        'id': 'paleta-19', 'numero': '19', 'nome': 'Petróleo & Coral',
+        'descricao': 'Azul petróleo com coral suave para um sistema contemporâneo e equilibrado.',
+        'primary': '#134B5F', 'primary_light': '#1C7293', 'primary_dark': '#0B303D',
+        'accent': '#D98E73', 'background': '#F1F7F7', 'paper': '#FFFFFF',
+        'text': '#152A31', 'muted': '#5F7379', 'line': '#D0DFE1',
+        'success_text': '#216044', 'danger_text': '#9A3E2F', 'warning_text': '#7A5A0A', 'info_text': '#315E70',
+        'sidebar': '#134B5F', 'sidebar_hover': '#1C7293', 'sidebar_text': '#EEF8F8', 'sidebar_active_text': '#FFFFFF',
+    },
+    'paleta-20': {
+        'id': 'paleta-20', 'numero': '20', 'nome': 'Ardósia & Cobre',
+        'descricao': 'Ardósia neutra com cobre para uma estética técnica, discreta e profissional.',
+        'primary': '#263238', 'primary_light': '#455A64', 'primary_dark': '#172024',
+        'accent': '#B87333', 'background': '#F5F4F1', 'paper': '#FFFFFF',
+        'text': '#1D2528', 'muted': '#647277', 'line': '#D5D9D8',
+        'success_text': '#2E6B4B', 'danger_text': '#8C2A2A', 'warning_text': '#80620A', 'info_text': '#455A64',
+        'sidebar': '#263238', 'sidebar_hover': '#455A64', 'sidebar_text': '#F2F5F5', 'sidebar_active_text': '#FFFFFF',
+    },
 }
 
 
 def listar_paletas_institucionais() -> list[dict]:
-    """Retorna cópias seguras do catálogo dos 15 temas institucionais."""
+    """Retorna cópias seguras do catálogo dos 20 temas institucionais."""
     return [deepcopy(paleta) for paleta in PALETAS_INSTITUCIONAIS.values()]
 
 

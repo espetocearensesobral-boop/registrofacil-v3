@@ -92,7 +92,7 @@ def test_update_state_starts_idle(temp_database):
     state = system_updates.get_update_state()
 
     assert state["state"] == "idle"
-    assert state["version_from"] == "3.24.6"
+    assert state["version_from"] == "3.24.7"
     assert state["progress"] == 0
 
 

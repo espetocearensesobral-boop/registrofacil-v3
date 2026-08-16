@@ -194,7 +194,7 @@ def executar_migracoes_dados(connection=None):
         migracoes.append(migracao_010)
 
         def migracao_011(cursor):
-            """Expande o catálogo visual persistido para quinze temas."""
+            """Migração histórica que expandiu o catálogo visual persistido para quinze temas."""
             tabela = cursor.execute(
                 "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
             ).fetchone()
@@ -206,9 +206,26 @@ def executar_migracoes_dados(connection=None):
                 f"UPDATE user_preferences SET tema_cor = 'paleta-01' "
                 f"WHERE tema_cor IS NULL OR tema_cor NOT IN {validos}"
             )
-            logger.info("[Migração 011] Preferências visuais normalizadas para quinze temas.")
+            logger.info("[Migração 011] Preferências visuais históricas normalizadas para quinze temas.")
 
         migracoes.append(migracao_011)
+
+        def migracao_012(cursor):
+            """Expande o catálogo visual persistido para vinte temas."""
+            tabela = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'user_preferences'"
+            ).fetchone()
+            if not tabela:
+                logger.info("[Migração 012] user_preferences ausente; nada a migrar.")
+                return
+            validos = "('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10', 'paleta-11', 'paleta-12', 'paleta-13', 'paleta-14', 'paleta-15', 'paleta-16', 'paleta-17', 'paleta-18', 'paleta-19', 'paleta-20')"
+            cursor.execute(
+                f"UPDATE user_preferences SET tema_cor = 'paleta-01' "
+                f"WHERE tema_cor IS NULL OR tema_cor NOT IN {validos}"
+            )
+            logger.info("[Migração 012] Preferências visuais normalizadas para vinte temas.")
+
+        migracoes.append(migracao_012)
 
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]
