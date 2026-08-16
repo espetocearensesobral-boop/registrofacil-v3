@@ -1,0 +1,18 @@
+# Validação do contraste público — login
+
+URL validada: `http://127.0.0.1:5000/login?auth-contrast-wave=1`
+
+A página carregou com `data-cor="paleta-01"`. Após a correção, o navegador computou:
+
+| Elemento | Cor computada |
+|---|---|
+| Labels | `rgb(107, 102, 92)` |
+| Subtítulo | `rgb(107, 102, 92)` |
+| Links | `rgb(15, 42, 67)` |
+| Texto digitado | `rgb(29, 27, 24)` |
+| Placeholder/ícones | `color-mix` resolvido para aproximadamente `#B2BBC3` |
+| Título do painel direito | `rgb(29, 27, 24)` |
+| Subtítulo e recursos do painel direito | `rgb(107, 102, 92)` |
+| Botão Entrar | fundo `rgb(15, 42, 67)`, texto branco |
+
+O relatório anexado não corresponde integralmente ao estado atual. Os links não estão invisíveis; o placeholder e os ícones agora usam um tom claro derivado dos tokens da sidebar; e o painel direito foi clareado por um gradiente semântico. A validação de contraste automatizada e a suíte de testes permanecem necessárias antes do commit.

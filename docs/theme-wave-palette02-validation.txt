@@ -1,0 +1,51 @@
+[report_claim_checks]
+  #7A1F2B_on_#FFFFFF=10.20
+  #C1663E_on_#F3F4F1=3.63
+  #FFFFFF_on_#C1663E=4.01
+  #FFFFFF_on_#B87A5A=3.52
+  #FFFFFF_on_#A85C3A=4.93
+  #7C693C_on_#F6F1E6=4.73
+  #A6AFB6_on_#101921=7.97
+  #738291_on_#2B2B2E=3.58
+  #6B665C_on_#F5F2EA=5.10
+[paleta-06]
+  colors=
+[paleta-01]
+  primary_on_body=#0F2A43/#F5F2EA ratio=13.10
+  primary_on_card=#0F2A43/#FFFFFF ratio=14.66
+  sidebar_text=#FFFFFF/#0F2A43 ratio=14.66
+  secondary_on_body=#6B665C/#F5F2EA ratio=5.10
+  colors=color-primary:#0F2A43,color-primary-light:#1B4368,color-primary-dark:#0A1E30,background-color-body:#F5F2EA,background-color-card:#FFFFFF,sidebar:#0F2A43,sidebar-hover:#1B4368,sidebar-text:#FFFFFF
+[paleta-02]
+  primary_on_body=#123C31/#F3F4F1 ratio=11.08
+  primary_on_card=#123C31/#FFFFFF ratio=12.23
+  sidebar_text=#FFFFFF/#123C31 ratio=12.23
+  secondary_on_body=#687168/#F3F4F1 ratio=4.58
+  colors=color-primary:#123C31,color-primary-light:#1E5C4A,color-primary-dark:#0A251E,background-color-body:#F3F4F1,background-color-card:#FFFFFF,sidebar:#123C31,sidebar-hover:#1E5C4A,sidebar-text:#FFFFFF
+[paleta-03]
+  primary_on_body=#2B2B2E/#F5F5F4 ratio=12.94
+  primary_on_card=#2B2B2E/#FFFFFF ratio=14.12
+  sidebar_text=#FFFFFF/#2B2B2E ratio=14.12
+  secondary_on_body=#6B665C/#F5F5F4 ratio=5.23
+  colors=color-primary:#2B2B2E,color-primary-light:#45454A,color-primary-dark:#18181A,background-color-body:#F5F5F4,background-color-card:#FFFFFF,sidebar:#2B2B2E,sidebar-hover:#45454A,sidebar-text:#FFFFFF
+[paleta-04]
+  primary_on_body=#111111/#F4F4F2 ratio=17.15
+  primary_on_card=#111111/#FFFFFF ratio=18.88
+  sidebar_text=#FFFFFF/#000000 ratio=21.00
+  secondary_on_body=#686868/#F4F4F2 ratio=5.06
+  colors=color-primary:#111111,color-primary-light:#333333,color-primary-dark:#000000,background-color-body:#F4F4F2,background-color-card:#FFFFFF,sidebar:#000000,sidebar-hover:#252525,sidebar-text:#FFFFFF
+[paleta-05]
+  primary_on_body=#274C5E/#F5F1E8 ratio=8.16
+  primary_on_card=#274C5E/#FFFFFF ratio=9.20
+  sidebar_text=#274C5E/#FFFFFF ratio=9.20
+  secondary_on_body=#68747A/#F5F1E8 ratio=4.27
+  colors=color-primary:#274C5E,color-primary-light:#4B7180,color-primary-dark:#193542,background-color-body:#F5F1E8,background-color-card:#FFFFFF,sidebar:#FFFFFF,sidebar-hover:#EEF2F1,sidebar-text:#274C5E
+[paleta-06]
+  primary_on_body=#244353/#F6F1E6 ratio=9.31
+  primary_on_card=#244353/#FFFDFC ratio=10.34
+  sidebar_text=#FFFFFF/#244353 ratio=10.49
+  secondary_on_body=#766E61/#F6F1E6 ratio=4.47
+  colors=color-primary:#244353,color-primary-light:#3C6878,color-primary-dark:#142B36,background-color-body:#F6F1E6,background-color-card:#FFFDFC,sidebar:#244353,sidebar-hover:#3C6878,sidebar-text:#FFFFFF
+[paleta-05]
+  sidebar_text=#274C5E/#F1F4F3 ratio=8.32
+  colors=sidebar:#F1F4F3,sidebar-hover:#E3EBE9,sidebar-text:#274C5E

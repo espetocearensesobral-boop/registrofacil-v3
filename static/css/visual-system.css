@@ -1238,3 +1238,30 @@ html body:has(.auth-panel-left) .auth-panel-left .auth-btn { background: var(--r
 .cfg-modal-row { display: flex; gap: 10px; align-items: flex-start; }
 .cfg-modal-footer { padding: 10px 16px; gap: 8px; }
 .cfg-dir-list { max-height: 340px; overflow-y: auto; }
+
+/* Onda de contraste da autenticação pública: usa o par semântico da superfície de entrada. */
+html body:has(.auth-panel-left) .auth-panel-right {
+  background: linear-gradient(145deg,
+    color-mix(in srgb, var(--rf-surface-body) 72%, var(--rf-sidebar-surface)),
+    var(--rf-surface-body)) !important;
+}
+html body:has(.auth-panel-left) .auth-input-group {
+  background: color-mix(in srgb, var(--rf-sidebar-surface) 88%, #000000) !important;
+}
+html body:has(.auth-panel-left) .auth-input-group input {
+  color: var(--rf-sidebar-text) !important;
+}
+html body:has(.auth-panel-left) .auth-input-group input::placeholder,
+html body:has(.auth-panel-left) .auth-input-group .input-icon,
+html body:has(.auth-panel-left) .auth-input-group .toggle-pw {
+  color: color-mix(in srgb, var(--rf-sidebar-text) 68%, var(--rf-sidebar-surface)) !important;
+}
+html body:has(.auth-panel-left) .auth-link {
+  color: var(--rf-text-link) !important;
+  text-decoration: none;
+}
+html body:has(.auth-panel-left) .auth-link:hover,
+html body:has(.auth-panel-left) .auth-link:focus-visible {
+  color: var(--rf-accent) !important;
+  text-decoration: underline;
+}
