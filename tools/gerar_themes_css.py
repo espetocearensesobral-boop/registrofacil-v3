@@ -207,7 +207,7 @@ def render_paleta(pid: str, p: dict) -> str:
 """
 
 
-def main() -> int:
+def render() -> str:
     header = (
         "/* ============================================================\n"
         "   COLOR-THEMES.CSS — Registro Fácil v3.25\n"
@@ -221,14 +221,14 @@ def main() -> int:
     blocos = [header, render_fallback(fallback), SEMANTICO]
     for pid, p in PALETAS_INSTITUCIONAIS.items():
         blocos.append(render_paleta(pid, p))
+    return "\n".join(blocos)
 
+def main() -> int:
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
-        f.write("\n".join(blocos))
-
+        f.write(render())
     print(f"✅ {len(PALETAS_INSTITUCIONAIS)} paletas → {OUT}")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

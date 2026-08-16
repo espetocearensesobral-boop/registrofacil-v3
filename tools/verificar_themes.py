@@ -1,31 +1,37 @@
 #!/usr/bin/env python3
-"""Verifica se color-themes.css está sincronizado com data/themes.py.
-Uso no CI: python tools/verificar_themes.py || exit 1
-"""
-import os, sys, tempfile
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CSS = os.path.join(ROOT, "static", "css", "color-themes.css")
+"""Verifica se color-themes.css está sincronizado semanticamente com data/themes.py."""
 
-# Backup do atual
-with open(CSS, encoding="utf-8") as f:
-    original = f.read()
+from __future__ import annotations
 
-# Regenera
-sys.path.insert(0, ROOT)
-from tools.gerar_themes_css import main as gerar
-gerar()
+import re
+import sys
+from pathlib import Path
 
-with open(CSS, encoding="utf-8") as f:
-    gerado = f.read()
+ROOT = Path(__file__).resolve().parents[1]
+CSS = ROOT / "static" / "css" / "color-themes.css"
+sys.path.insert(0, str(ROOT))
 
-# Restaura original
-with open(CSS, "w", encoding="utf-8") as f:
-    f.write(original)
+from tools.gerar_themes_css import render  # noqa: E402
 
-if original == gerado:
-    print("✅ color-themes.css sincronizado com data/themes.py")
-    sys.exit(0)
-else:
-    print("❌ color-themes.css DIVERGE de data/themes.py")
-    print("   Rode: python tools/gerar_themes_css.py")
-    sys.exit(1)
+
+def normalizar_css(texto: str) -> str:
+    """Remove comentários e diferenças de whitespace sem alterar valores CSS."""
+    sem_comentarios = re.sub(r"/\*.*?\*/", "", texto, flags=re.DOTALL)
+    return re.sub(r"\s+", "", sem_comentarios)
+
+
+def main() -> int:
+    original = CSS.read_text(encoding="utf-8")
+    gerado = render()
+
+    if normalizar_css(original) == normalizar_css(gerado):
+        print("color-themes.css sincronizado semanticamente com data/themes.py")
+        return 0
+
+    print("color-themes.css diverge semanticamente de data/themes.py")
+    print("Rode: python tools/gerar_themes_css.py")
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
