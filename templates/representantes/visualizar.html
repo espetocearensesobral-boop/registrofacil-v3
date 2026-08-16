@@ -55,7 +55,7 @@
 <div class="rf-card">
     <div class="rf-card-header">
         <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
-            <div style="width:40px;height:40px;border-radius:50%;background:var(--color-black-premium);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;">
+            <div class="rf-avatar">
                 {{ representante.nome[0] | upper }}
             </div>
             <div style="min-width:0;">
@@ -80,11 +80,11 @@
                 </div>
             </div>
         </div>
-        <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;flex-shrink:0;">{{ historico|length }} registro(s)</span>
+        <span class="rf-pill rf-pill-dark flex-shrink-0">{{ historico|length }} registro(s)</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+            <table class="table table-hover align-middle mb-0">
                 <thead>
                     <tr style="background:var(--background-color-body);">
                         <th class="ps-4" style="padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);">Matrícula</th>
@@ -109,8 +109,7 @@
                         </td>
                         <td class="text-end pe-4" style="padding:10px 12px;">
                             <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}"
-                               class="nav-btn nav-btn-secondary"
-                               style="height:28px;padding:0 10px;font-size:12px;"
+                               class="nav-btn nav-btn-secondary btn-xs"
                                title="Ver Processo">
                                 <i class="bi bi-eye"></i> Ver
                             </a>
@@ -120,7 +119,7 @@
                     <tr>
                         <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
                             <i class="bi bi-folder2 d-block mb-2" style="font-size:2rem;opacity:.3;"></i>
-                            <span style="font-size:13px;">Nenhum processo encontrado para este representante.</span>
+                            <span>Nenhum processo encontrado para este representante.</span>
                         </td>
                     </tr>
                     {% endfor %}

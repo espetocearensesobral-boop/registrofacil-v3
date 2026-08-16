@@ -63,10 +63,10 @@
                 <select id="selectPerfil" class="form-select form-select-sm" style="min-width:180px;font-size:12px;">
                     <option value="">— Sem perfil (permissões manuais) —</option>
                 </select>
-                <button type="button" class="nav-btn nav-btn-primary" style="height:30px;padding:0 12px;font-size:12px;" onclick="aplicarPerfil()">
+                <button type="button" class="nav-btn nav-btn-primary btn-xs"  onclick="aplicarPerfil()">
                     <i class="bi bi-check-circle me-1"></i>Aplicar Perfil
                 </button>
-                <a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;">
+                <a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary btn-xs" >
                     <i class="bi bi-gear me-1"></i>Gerir Perfis
                 </a>
             </div>
@@ -85,10 +85,10 @@
 
     {# Barra de ações rápidas #}
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
-        <button type="button" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;" onclick="selecionarTodas()">
+        <button type="button" class="nav-btn nav-btn-secondary btn-xs"  onclick="selecionarTodas()">
             <i class="bi bi-check-all"></i> Selecionar Tudo
         </button>
-        <button type="button" class="nav-btn nav-btn-secondary" style="height:30px;padding:0 12px;font-size:12px;" onclick="desselecionarTodas()">
+        <button type="button" class="nav-btn nav-btn-secondary btn-xs"  onclick="desselecionarTodas()">
             <i class="bi bi-x-circle"></i> Limpar Tudo
         </button>
         <div style="flex:1;"></div>

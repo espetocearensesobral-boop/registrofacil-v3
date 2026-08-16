@@ -68,3 +68,81 @@ h1, .page-header h1, .rf-page-header h1 { font-size: var(--rf-font-xl); font-wei
 .empty-state, .empty-state-small { padding: 2rem 1rem; text-align: center; color: var(--rf-text-muted); font-size: .8125rem; }
 .empty-state i { font-size: 2.5rem; opacity: .25; } .empty-state-small i { font-size: 2rem; opacity: .25; }
 .modal-content, .alert { border-radius: var(--rf-radius-md); }
+
+/* ------------------------------------------------------------
+   Utilitários de padronização — substituem padrões repetidos de
+   `style=""` inline encontrados nos templates (todos.html,
+   apresentantes/representantes/titulares, telas de permissão).
+   Mesma escala de tokens já usada acima: nada de valores soltos.
+   ------------------------------------------------------------ */
+
+/* Cabeçalho de tabela ordenável (antes: {% set th_style %} + {% set th_sort_style %}
+   duplicado em 3 templates com padding/font-size/border diferentes do padrão global). */
+.th-sort { cursor: pointer; user-select: none; }
+.th-sort:hover { color: var(--rf-text-strong); }
+
+/* Botões de ação em linha de tabela (antes: height:28px / height:30px + padding
+   e font-size soltos, repetidos em 8 templates, cada um com um valor levemente
+   diferente). .btn-xs já existe acima com a geometria correta (--rf-ctl-h-xs =
+   28px) — só faltava um estado "desabilitado visível" para os casos em que o
+   botão fica cinza/inativo em vez de sumir. */
+.nav-btn.is-disabled, .btn-xs.is-disabled {
+  opacity: .4; cursor: not-allowed; pointer-events: none;
+}
+
+/* Pílulas de status/contagem (antes: border-radius 99px + cores hardcoded
+   repetidas 3-6x por template). A cor dinâmica (status do processo) continua
+   vindo por variável inline, só a geometria vira classe. */
+.rf-pill {
+  display: inline-flex; align-items: center; gap: .25rem;
+  font-size: var(--rf-font-xs); font-weight: 700;
+  padding: .1875rem .625rem; border-radius: 99px; line-height: 1.3;
+}
+.rf-pill-soft {
+  border-radius: var(--rf-radius-sm); padding: .1875rem .5rem;
+  font-size: var(--rf-font-xs); font-weight: 700;
+  border: 1px solid transparent;
+}
+.rf-pill-dark {
+  background: var(--color-black-premium); color: var(--rf-text-on-primary);
+}
+.rf-pill-dark.flex-shrink-0 { flex-shrink: 0; }
+.rf-pill-gold { background: var(--color-gold-dark); color: var(--rf-text-on-primary); }
+.rf-badge-info {
+  background: color-mix(in srgb, var(--color-info) 12%, transparent);
+  color: var(--color-info);
+  border-color: color-mix(in srgb, var(--color-info) 20%, transparent);
+}
+.rf-badge-neutral {
+  background: color-mix(in srgb, var(--text-color-secondary) 10%, transparent);
+  color: var(--text-color-secondary);
+  border-color: color-mix(in srgb, var(--text-color-secondary) 20%, transparent);
+}
+
+/* Avatar circular (iniciais de usuário) */
+.rf-avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%;
+  font-size: 1rem; font-weight: 800; color: var(--rf-text-on-primary);
+  background: var(--color-black-premium);
+}
+
+/* Texto auxiliar em tamanho reduzido (antes: font-size:12px/13px soltos,
+   fora da escala de .6875/.75/.8125/.875rem já usada no resto do sistema). */
+.rf-text-sm { font-size: var(--rf-font-sm); }
+.rf-text-xs { font-size: var(--rf-font-xs); }
+.rf-text-muted-xs { font-size: var(--rf-font-xs); color: var(--rf-text-muted); }
+.rf-text-muted-sm { font-size: var(--rf-font-sm); color: var(--rf-text-muted); }
+
+/* Célula/estado vazio dentro de tabela (contraste corrigido: bbb/ccc puro
+   falha AA em fundo claro; usa o token de texto secundário do tema). */
+.rf-empty-cell { text-align: center; color: var(--rf-text-muted); font-style: italic; }
+
+/* Larguras de coluna de tabela (antes: style="width:NN%" repetido por linha) */
+.col-w-4  { width: 4%; }
+.col-w-10 { width: 10%; }
+.col-w-14 { width: 14%; }
+.col-w-15 { width: 15%; }
+.col-w-16 { width: 16%; }
+.col-w-25 { width: 25%; }
+.col-w-30 { width: 30%; }

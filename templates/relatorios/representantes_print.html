@@ -52,7 +52,7 @@
         <tbody>
             {% for representante in representantes %}
             <tr>
-                <td style="color:#bbb;">{{ loop.index }}</td>
+                <td style="color:#6c757d;">{{ loop.index }}</td>
                 <td class="nome-col">{{ representante.nome }}</td>
                 <td>{{ representante.telefone or '—' }}</td>
                 <td style="font-size:7.5pt;">{{ representante.email or '—' }}</td>
@@ -61,12 +61,12 @@
                     {% if representante.total_processos %}
                     <span class="count-badge">{{ representante.total_processos }}</span>
                     {% else %}
-                    <span style="color:#ccc;">0</span>
+                    <span style="color:#6c757d;">0</span>
                     {% endif %}
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="6" style="text-align:center;padding:20px;color:#bbb;font-style:italic;">Nenhum representante encontrado.</td></tr>
+            <tr><td colspan="6" style="text-align:center;padding:20px;color:#6c757d;font-style:italic;">Nenhum representante encontrado.</td></tr>
             {% endfor %}
         </tbody>
     </table>

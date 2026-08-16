@@ -48,7 +48,7 @@
                     {% endif %}
                 </td>
                 <td style="padding:10px 16px;">
-                    <span class="badge" style="background:var(--color-gold-dark);color:#fff;border-radius:99px;padding:3px 10px;">
+                    <span class="badge rf-pill rf-pill-gold">
                         {{ perfil.total_permissoes }} permissões
                     </span>
                 </td>
@@ -56,11 +56,11 @@
                 <td style="padding:10px 16px;">{{ perfil.created_at[:10] if perfil.created_at else '—' }}</td>
                 <td style="padding:10px 16px;text-align:right;">
                     <a href="{{ url_for('permissoes.visualizar_perfil', perfil_id=perfil.id) }}"
-                       class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size: .75rem;">
+                       class="nav-btn nav-btn-secondary btn-xs">
                         <i class="bi bi-pencil"></i> Editar
                     </a>
                     <button type="button"
-                            class="nav-btn nav-btn-secondary" style="height:28px;padding:0 10px;font-size: .75rem;color:#dc2626;"
+                            class="nav-btn nav-btn-secondary btn-xs" style="color:var(--color-error);"
                             onclick="excluirPerfil({{ perfil.id }}, '{{ perfil.nome|e }}', {{ perfil.total_usuarios }})">
                         <i class="bi bi-trash"></i>
                     </button>

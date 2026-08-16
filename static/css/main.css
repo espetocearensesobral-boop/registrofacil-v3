@@ -464,7 +464,7 @@ body {
     background-color: var(--background-color-card);
     color: var(--text-color-primary);
     border: 1px solid var(--border-color-default);
-    border-radius: 0.5rem;
+    border-radius: var(--rf-radius-md, .625rem);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
@@ -530,7 +530,7 @@ body.auth-page {
 
 .auth-card {
     background: var(--background-color-card);
-    border-radius: 15px;
+    border-radius: var(--rf-radius-lg, .875rem);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     padding: 2rem;
     color: var(--text-color-primary);

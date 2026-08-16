@@ -52,7 +52,7 @@
         <tbody>
             {% for apresentante in apresentantes %}
             <tr>
-                <td style="color:#bbb;">{{ loop.index }}</td>
+                <td style="color:#6c757d;">{{ loop.index }}</td>
                 <td class="nome-col">{{ apresentante.nome }}</td>
                 <td>{{ apresentante.telefone or '—' }}</td>
                 <td style="font-size:7.5pt;">{{ apresentante.email or '—' }}</td>
@@ -61,12 +61,12 @@
                     {% if apresentante.total_processos %}
                     <span class="count-badge">{{ apresentante.total_processos }}</span>
                     {% else %}
-                    <span style="color:#ccc;">0</span>
+                    <span style="color:#6c757d;">0</span>
                     {% endif %}
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="6" style="text-align:center;padding:20px;color:#bbb;font-style:italic;">Nenhum apresentante encontrado.</td></tr>
+            <tr><td colspan="6" style="text-align:center;padding:20px;color:#6c757d;font-style:italic;">Nenhum apresentante encontrado.</td></tr>
             {% endfor %}
         </tbody>
     </table>

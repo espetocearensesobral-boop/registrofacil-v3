@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);margin-bottom:4px;">Por página</label>
-                <select name="registros_por_pagina" class="form-select form-select-sm" style="font-size:13px;">
+                <select name="registros_por_pagina" class="form-select form-select-sm">
                     {% for n in [10, 25, 50, 100] %}
                     <option value="{{ n }}" {% if registros_por_pagina == n %}selected{% endif %}>{{ n }}</option>
                     {% endfor %}
@@ -81,23 +81,21 @@
 <div class="rf-card">
     <div class="rf-card-header">
         <h5 class="m-0"><i class="bi bi-people me-2" style="color:var(--color-gold-primary);"></i>Lista de Titulares</h5>
-        <span style="background:var(--color-black-premium);color:#fff;font-size: .75rem;border-radius:99px;padding:3px 10px;font-weight:700;">{{ total_registros }}</span>
+        <span class="rf-pill rf-pill-dark">{{ total_registros }}</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table-titulares table table-hover align-middle mb-0" style="font-size:13px;">
+            <table class="table-titulares table table-hover align-middle mb-0">
                 <thead>
                     <tr style="background:var(--background-color-body);">
-                        {% set th_style = "padding:10px 12px;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-color-secondary);border-bottom:2px solid var(--border-color-default);" %}
-                        {% set th_sort_style = th_style + "cursor:pointer;user-select:none;" %}
                         {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1" style="opacity:.8;"></i>{% else %}<i class="bi bi-sort-down ms-1" style="opacity:.8;"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1" style="opacity:.3;"></i>{% endif %}{% endmacro %}
                         {% macro sort_url(col) %}{{ url_for('titulares.index', busca=busca, registros_por_pagina=registros_por_pagina, ordenar=col, direcao='desc' if (ordenar == col and direcao == 'asc') else 'asc', pagina=1) }}{% endmacro %}
-                        <th class="ps-4" style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('nome') }}'">Nome do Titular{{ sort_icon('nome') }}</th>
-                        <th style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('telefone') }}'">Telefone{{ sort_icon('telefone') }}</th>
-                        <th style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('email') }}'">E-mail{{ sort_icon('email') }}</th>
-                        <th style="{{ th_sort_style }}" onclick="window.location='{{ sort_url('processos') }}'">Processos{{ sort_icon('processos') }}</th>
-                        <th style="{{ th_style }}">Último Registro</th>
-                        <th class="text-end pe-4" style="{{ th_style }}">Ações</th>
+                        <th class="ps-4 th-sort" onclick="window.location='{{ sort_url('nome') }}'">Nome do Titular{{ sort_icon('nome') }}</th>
+                        <th class="th-sort" onclick="window.location='{{ sort_url('telefone') }}'">Telefone{{ sort_icon('telefone') }}</th>
+                        <th class="th-sort" onclick="window.location='{{ sort_url('email') }}'">E-mail{{ sort_icon('email') }}</th>
+                        <th class="th-sort" onclick="window.location='{{ sort_url('processos') }}'">Processos{{ sort_icon('processos') }}</th>
+                        <th>Último Registro</th>
+                        <th class="text-end pe-4">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,7 +107,7 @@
                         <td style="padding:11px 12px;color:var(--text-color-secondary);">{{ titular.email or '—' }}</td>
                         <td style="padding:11px 12px;">
                             {% if tem_vinculo %}
-                            <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+                            <span class="rf-pill-soft rf-badge-info">
                                 <i class="bi bi-folder me-1"></i>{{ titular.total_processos }}
                             </span>
                             {% else %}
@@ -120,11 +118,11 @@
                             {% if titular.ultimo_registro_id %}
                             <a href="{{ url_for('processos.visualizar', processo_id=titular.ultimo_registro_id) }}" class="text-decoration-none">
                                 {% if titular.ultimo_registro_matricula == 'Sem Matrícula' %}
-                                <span style="background:rgba(108,117,125,.1);color:var(--text-color-secondary);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:600;border:1px solid rgba(108,117,125,.2);">
+                                <span class="rf-pill-soft rf-badge-neutral">
                                     <i class="bi bi-file-earmark me-1"></i>Sem Matrícula
                                 </span>
                                 {% else %}
-                                <span style="background:rgba(30,136,229,.12);color:var(--color-info);font-size: .75rem;border-radius:6px;padding:3px 8px;font-weight:700;border:1px solid rgba(30,136,229,.2);">
+                                <span class="rf-pill-soft rf-badge-info">
                                     <i class="bi bi-file-earmark-text me-1"></i>{{ titular.ultimo_registro_matricula }}
                                 </span>
                                 {% endif %}
@@ -136,33 +134,28 @@
                         <td class="text-end pe-4" style="padding:11px 12px;">
                             <div style="display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap;">
                                 <a href="{{ url_for('titulares.visualizar', titular_id=titular.id) }}"
-                                   class="nav-btn nav-btn-info"
-                                   style="height:28px;padding:0 10px;font-size:12px;"
+                                   class="nav-btn nav-btn-info btn-xs"
                                    title="Ver Histórico">
                                     <i class="bi bi-clock-history"></i> Histórico
                                 </a>
                                 {% if tem_vinculo %}
                                 {# Botões visíveis mas inativos quando há vínculo #}
-                                <span class="nav-btn nav-btn-primary"
-                                   style="height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;"
+                                <span class="nav-btn nav-btn-primary btn-xs is-disabled"
                                    title="Não é possível editar: titular possui {{ titular.total_processos }} processo(s) vinculado(s)">
                                     <i class="bi bi-pencil"></i>
                                 </span>
-                                <span class="nav-btn nav-btn-danger"
-                                   style="height:28px;padding:0 10px;font-size:12px;opacity:.4;cursor:not-allowed;pointer-events:none;"
+                                <span class="nav-btn nav-btn-danger btn-xs is-disabled"
                                    title="Não é possível excluir: titular possui {{ titular.total_processos }} processo(s) vinculado(s)">
                                     <i class="bi bi-trash"></i>
                                 </span>
                                 {% else %}
                                 <a href="{{ url_for('titulares.editar', titular_id=titular.id) }}"
-                                   class="nav-btn nav-btn-primary"
-                                   style="height:28px;padding:0 10px;font-size:12px;"
+                                   class="nav-btn nav-btn-primary btn-xs"
                                    title="Editar Titular">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <button type="button"
-                                        class="nav-btn nav-btn-danger btn-excluir-titular"
-                                        style="height:28px;padding:0 10px;font-size:12px;"
+                                        class="nav-btn nav-btn-danger btn-excluir-titular btn-xs"
                                         data-id="{{ titular.id }}"
                                         data-nome="{{ titular.nome }}"
                                         title="Excluir Titular">
@@ -176,7 +169,7 @@
                     <tr>
                         <td colspan="6" class="text-center py-5" style="color:var(--text-color-secondary);">
                             <i class="bi bi-people mb-2 d-block" style="font-size:2rem;opacity:.3;"></i>
-                            <span style="font-size:13px;">Nenhum titular encontrado.</span>
+                            <span>Nenhum titular encontrado.</span>
                         </td>
                     </tr>
                     {% endfor %}
