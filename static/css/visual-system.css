@@ -1434,6 +1434,7 @@ body .auth-btn {
   border-color: var(--color-primary, #0F2A43) !important;
 }
 
+html body .navbar .nav-btn-secondary,
 body .nav-btn-secondary,
 body .btn-secondary,
 body .btn-outline-primary,
