@@ -9,7 +9,8 @@
 .dash-cols { display: grid; grid-template-columns: 1fr; gap: var(--rf-gap); }
 @media (min-width: 992px) { .dash-cols { grid-template-columns: 1fr 1fr; } }
 .dash-card, .dashboard-panel { display: flex; flex-direction: column; }
-.dash-card-body, .dashboard-panel-body { flex: 1; overflow: hidden; }
+.dash-card-body, .dashboard-panel-body { flex: 0 0 auto; height: auto; max-height: none; overflow: visible; }
+.dashboard-panel .table-responsive { overflow: visible; max-height: none; }
 .icon-danger { color: var(--color-error); } .icon-success { color: var(--color-success); }
 .count-danger { background: var(--color-error); color: var(--rf-text-on-primary); font-size: .6875rem; font-weight: 700; border-radius: 99px; padding: 2px 7px; }
 .dash-table { margin-bottom: 0; font-size: .8125rem; }
@@ -24,4 +25,4 @@
 .prazo-chip-vencido { color: var(--color-error); background: color-mix(in srgb, var(--color-error) 10%, transparent); border-color: color-mix(in srgb, var(--color-error) 35%, transparent); }
 .prazo-chip-hoje { color: var(--color-warning); background: color-mix(in srgb, var(--color-warning) 12%, transparent); border-color: color-mix(in srgb, var(--color-warning) 35%, transparent); }
 .prazo-chip-futuro { color: var(--color-info); background: color-mix(in srgb, var(--color-info) 10%, transparent); border-color: color-mix(in srgb, var(--color-info) 35%, transparent); }
-@media (max-width: 991.98px) { .dash-card-body, .dashboard-panel-body { overflow: visible; } }
+@media (max-width: 991.98px) { .dash-card-body, .dashboard-panel-body { flex-basis: auto; overflow: visible; } }
