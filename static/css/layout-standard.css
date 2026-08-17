@@ -1732,3 +1732,36 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
     overflow-y: visible;
   }
 }
+
+/* Tags ativas: padrão claro, legível e alinhado à esquerda. */
+#main-content .filter-bar.process-filter-surface .process-filter-chips {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start !important;
+  align-content: flex-start;
+  width: 100%;
+  min-height: 2.25rem;
+  padding: .35rem 1rem .7rem !important;
+  text-align: left !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chip {
+  flex: 0 0 auto;
+  border: 1px solid #d0d5dd !important;
+  border-radius: 999px !important;
+  background: #f8fafc !important;
+  color: #344054 !important;
+  font-size: .75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .06);
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chip button {
+  color: #667085 !important;
+  border-radius: 50%;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chip button:hover,
+#main-content .filter-bar.process-filter-surface .process-filter-chip button:focus-visible {
+  background: #e4e7ec;
+  color: #1d2939 !important;
+  outline: 0;
+}
