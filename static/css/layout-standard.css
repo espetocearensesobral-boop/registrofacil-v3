@@ -1812,3 +1812,28 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   border-radius: 0 0 var(--rf-radius-lg, .875rem) var(--rf-radius-lg, .875rem) !important;
   background: transparent !important;
 }
+
+/* Visualização de processo: e-mail compacto, legível e sem quebra isolada. */
+#main-content .process-contact-email-col {
+  position: relative;
+  left: -.35rem;
+  min-width: 0;
+}
+#main-content .process-contact-email {
+  display: flex !important;
+  min-width: 0;
+  align-items: flex-start !important;
+  gap: .35rem !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-height: 1.35;
+  font-size: .8125rem;
+}
+#main-content .process-contact-email i {
+  flex: 0 0 auto;
+  margin-top: .15rem;
+}
+@media (max-width: 767.98px) {
+  #main-content .process-contact-email-col { left: 0; }
+}

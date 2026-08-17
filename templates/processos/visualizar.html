@@ -56,11 +56,11 @@
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 process-contact-email-col">
                         <div class="det-lbl">E-mail</div>
                         <div class="det-val">
                             {% if processo.titular_email %}
-                            <a href="mailto:{{ processo.titular_email }}" class="d-flex align-items-center gap-2" style="color:var(--color-info);text-decoration:none;">
+                            <a href="mailto:{{ processo.titular_email }}" class="d-flex align-items-center gap-2 process-contact-email" style="color:var(--color-info);text-decoration:none;">
                                 <i class="bi bi-envelope"></i>{{ processo.titular_email }}
                             </a>
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
@@ -95,11 +95,11 @@
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 process-contact-email-col">
                         <div class="det-lbl">E-mail</div>
                         <div class="det-val">
                             {% if processo.apresentante_email %}
-                            <a href="mailto:{{ processo.apresentante_email }}" class="d-flex align-items-center gap-2" style="color:var(--color-info);text-decoration:none;">
+                            <a href="mailto:{{ processo.apresentante_email }}" class="d-flex align-items-center gap-2 process-contact-email" style="color:var(--color-info);text-decoration:none;">
                                 <i class="bi bi-envelope"></i>{{ processo.apresentante_email }}
                             </a>
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
