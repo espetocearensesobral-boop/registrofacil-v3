@@ -1919,3 +1919,24 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   .modal-body,
   .modal-footer { padding-inline: .75rem !important; }
 }
+
+/* Lista de processos unificada: título, filtro e tabela na mesma superfície. */
+#main-content .process-list-card {
+  overflow: visible !important;
+}
+#main-content .process-list-card > .process-filter-surface {
+  margin: 0 !important;
+  border-inline: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+#main-content .process-list-card > .process-filter-surface .process-filter-toolbar {
+  border-radius: 0 !important;
+}
+#main-content .process-list-card > .process-filter-surface .process-filter-chips {
+  border-radius: 0 !important;
+}
+#main-content .process-list-card > .card-body {
+  overflow: hidden;
+  border-radius: 0 0 var(--rf-radius-lg, .875rem) var(--rf-radius-lg, .875rem);
+}
