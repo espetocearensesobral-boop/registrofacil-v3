@@ -140,16 +140,16 @@
                     <span class="menu-text">Início</span>
                 </div>
 
-                <div class="menu-item" data-bs-toggle="modal" data-bs-target="#globalSearchModal" data-accesskey="q" onclick="setActive(this)"
-                     title="Buscar (Alt+Q)">
-                    <div class="menu-icon"><i class="bi bi-search"></i></div>
-                    <span class="menu-text">Buscar</span>
-                </div>
-
                 <div class="menu-item" data-href="{{ url_for('processos.novo') }}" data-accesskey="n" onclick="setActive(this)"
                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Novo Processo (Alt+N)">
                     <div class="menu-icon"><i class="bi bi-plus-circle-fill"></i></div>
                     <span class="menu-text">Novo Processo</span>
+                </div>
+
+                <div class="menu-item" data-bs-toggle="modal" data-bs-target="#globalSearchModal" data-accesskey="q" onclick="setActive(this)"
+                     title="Buscar (Alt+Q)">
+                    <div class="menu-icon"><i class="bi bi-search"></i></div>
+                    <span class="menu-text">Buscar</span>
                 </div>
 
                 {# ─── PROCESSOS ─── #}
@@ -161,14 +161,20 @@
                 </button>
                 <div class="sidebar-category-items" id="sidebar-group-processos" hidden>
 
-                <div class="menu-item" data-href="{{ url_for('processos.vinculados') }}" data-accesskey="f" onclick="setActive(this)"
-                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Meus Processos (Alt+F)">
-                    <div class="menu-icon"><i class="bi bi-person-check-fill"></i></div>
-                    <span class="menu-text">Meus Processos</span>
+                <div class="menu-item" data-href="{{ url_for('processos.todos') }}" data-accesskey="t" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Todos os Processos (Alt+T)">
+                    <div class="menu-icon"><i class="bi bi-folder-fill"></i></div>
+                    <span class="menu-text">Todos os Processos</span>
                 </div>
 
-                <div class="menu-item" data-href="{{ url_for('processos.em_andamento') }}" data-accesskey="m" onclick="setActive(this)"
-                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Em Andamento (Alt+M)">
+                <div class="menu-item" data-href="{{ url_for('processos.hoje') }}" data-accesskey="h" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Processos do Dia (Alt+H)">
+                    <div class="menu-icon"><i class="bi bi-calendar-check-fill"></i></div>
+                    <span class="menu-text">Processos do Dia</span>
+                </div>
+
+                <div class="menu-item" data-href="{{ url_for('processos.em_andamento') }}" data-accesskey="i" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Em Andamento (Alt+I)">
                     <div class="menu-icon"><i class="bi bi-arrow-repeat"></i></div>
                     <span class="menu-text">Em Andamento</span>
                 </div>
@@ -179,16 +185,10 @@
                     <span class="menu-text">Pendentes</span>
                 </div>
 
-                <div class="menu-item" data-href="{{ url_for('processos.hoje') }}" data-accesskey="h" onclick="setActive(this)"
-                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Processos do Dia (Alt+H)">
-                    <div class="menu-icon"><i class="bi bi-calendar-check-fill"></i></div>
-                    <span class="menu-text">Processos do Dia</span>
-                </div>
-
-                <div class="menu-item" data-href="{{ url_for('processos.todos') }}" data-accesskey="t" onclick="setActive(this)"
-                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Todos os Processos (Alt+T)">
-                    <div class="menu-icon"><i class="bi bi-folder-fill"></i></div>
-                    <span class="menu-text">Todos os Processos</span>
+                <div class="menu-item" data-href="{{ url_for('processos.vinculados') }}" data-accesskey="f" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Meus Processos (Alt+F)">
+                    <div class="menu-icon"><i class="bi bi-person-check-fill"></i></div>
+                    <span class="menu-text">Meus Processos</span>
                 </div>
 
                 {# ─── CADASTROS ─── #}
@@ -227,14 +227,6 @@
                 </button>
                 <div class="sidebar-category-items" id="sidebar-group-sistema" hidden>
 
-                {% if session.get('usuario_role') == 'admin' %}
-                <div class="menu-item" data-href="{{ url_for('admin_users.users_list') }}" data-accesskey="u" onclick="setActive(this)"
-                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Gerenciar Usuários (Alt+U)">
-                    <div class="menu-icon"><i class="bi bi-people-fill"></i></div>
-                    <span class="menu-text">Gerenciar Usuários</span>
-                </div>
-                {% endif %}
-
                 <div class="menu-item" data-href="{{ url_for('configuracoes.index') }}" data-accesskey="s" onclick="setActive(this)"
                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Configurações (Alt+S)">
                     <div class="menu-icon"><i class="bi bi-gear-wide-connected"></i></div>
@@ -254,6 +246,14 @@
                     <i class="bi bi-chevron-down sidebar-group-toggle-icon" aria-hidden="true"></i>
                 </button>
                 <div class="sidebar-category-items" id="sidebar-group-administrador" hidden>
+                    {% if session.get('usuario_role') == 'admin' %}
+                    <div class="menu-item" data-href="{{ url_for('admin_users.users_list') }}" data-accesskey="u" onclick="setActive(this)"
+                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Gerenciar Usuários (Alt+U)">
+                        <div class="menu-icon"><i class="bi bi-people-fill"></i></div>
+                        <span class="menu-text">Gerenciar Usuários</span>
+                    </div>
+                    {% endif %}
+
                     <div class="menu-item" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
                          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ session.get('usuario_nome', 'Meu Perfil') }} (Alt+M)">
                         <div class="menu-icon">

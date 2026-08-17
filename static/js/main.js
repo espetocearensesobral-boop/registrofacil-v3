@@ -132,11 +132,29 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar.classList.remove('collapsed');
         wrapper.classList.remove('toggled');
 
+        const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
         const closeCategory = (toggle) => {
             const panel = document.getElementById(toggle.getAttribute('aria-controls'));
             toggle.setAttribute('aria-expanded', 'false');
-            if (panel) panel.hidden = true;
             toggle.classList.remove('is-open');
+            if (!panel) return;
+
+            panel._sidebarAnimationToken = (panel._sidebarAnimationToken || 0) + 1;
+            const animationToken = panel._sidebarAnimationToken;
+            panel.classList.remove('is-opening', 'is-open');
+            panel.classList.add('is-closing');
+            const finishClose = () => {
+                if (panel._sidebarAnimationToken !== animationToken) return;
+                panel.hidden = true;
+                panel.classList.remove('is-closing');
+            };
+            if (prefersReducedMotion) {
+                finishClose();
+            } else {
+                panel.addEventListener('transitionend', finishClose, { once: true });
+                window.setTimeout(finishClose, 260);
+            }
         };
 
         const openCategory = (toggle, focus = true) => {
@@ -145,8 +163,18 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const panel = document.getElementById(toggle.getAttribute('aria-controls'));
             toggle.setAttribute('aria-expanded', 'true');
-            if (panel) panel.hidden = false;
             toggle.classList.add('is-open');
+            if (panel) {
+                panel._sidebarAnimationToken = (panel._sidebarAnimationToken || 0) + 1;
+                panel.hidden = false;
+                panel.classList.remove('is-closing');
+                if (prefersReducedMotion) {
+                    panel.classList.add('is-open');
+                } else {
+                    panel.classList.remove('is-open');
+                    window.requestAnimationFrame(() => panel.classList.add('is-open'));
+                }
+            }
             if (focus) toggle.focus({ preventScroll: true });
         };
 
@@ -182,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             if (toggle.getAttribute('aria-expanded') === 'true') {
                 toggle.classList.add('is-open');
+                document.getElementById(toggle.getAttribute('aria-controls'))?.classList.add('is-open');
             }
         });
 

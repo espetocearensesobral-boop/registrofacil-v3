@@ -758,9 +758,38 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
 }
 .sidebar-group-toggle-icon { transition: transform .2s ease; }
 .sidebar-group-toggle[aria-expanded="false"] .sidebar-group-toggle-icon { transform: rotate(-90deg); }
-.sidebar-category-items { display: flex; flex-direction: column; }
+.sidebar-category-items {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: max-height .22s ease, opacity .16s ease, visibility 0s linear .22s;
+}
+.sidebar-category-items.is-open {
+  max-height: 40rem;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: max-height .26s ease, opacity .18s ease, visibility 0s linear 0s;
+}
+.sidebar-category-items.is-closing {
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
 .sidebar-category-items[hidden] { display: none !important; }
 .sidebar-category-items .menu-item { flex-shrink: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-category-items,
+  .sidebar-category-items.is-open,
+  .sidebar-category-items.is-closing,
+  .sidebar-group-toggle-icon { transition: none !important; }
+}
 
 @media (max-width: 991px) {
   #wrapper.toggled #page-content-wrapper,
