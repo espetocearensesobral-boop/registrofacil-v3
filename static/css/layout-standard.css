@@ -1697,3 +1697,38 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   }
   #main-content .filter-bar.process-filter-surface .process-filter-search { flex: 0 0 15rem; }
 }
+
+/* Correção final do popover: texto à esquerda e camada acima da toolbar. */
+#main-content .filter-bar.process-filter-surface,
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar,
+#main-content .filter-bar.process-filter-surface .process-filter-more-wrap {
+  position: relative;
+}
+#main-content .filter-bar.process-filter-surface {
+  z-index: 90;
+  overflow: visible;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  z-index: 91;
+  overflow: visible;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-more-wrap {
+  z-index: 1000;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-popover {
+  z-index: 1010;
+  text-align: left !important;
+  text-align-last: left !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-popover input,
+#main-content .filter-bar.process-filter-surface .process-filter-popover select,
+#main-content .filter-bar.process-filter-surface .process-filter-popover option {
+  text-align: left !important;
+  text-align-last: left !important;
+}
+@media (max-width: 800px) {
+  #main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+}
