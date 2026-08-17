@@ -40,6 +40,8 @@ warm_families = {
     'vinho', 'café', 'ferrugem', 'cobre', 'ameixa', 'rosa-queimado', 'argila',
     'ouro-velado', 'ambar', 'laranja-queimado', 'coral-mineral', 'rubi',
     'granada', 'terracota', 'mostarda', 'bronze', 'pessego-terroso',
+    'aurora-ardosia', 'sunburst-rubi', 'autumn-glow', 'oceano-sunset',
+    'fiery-sunset', 'terra-musgo',
 }
 
 for theme_id, theme in PALETAS_INSTITUCIONAIS.items():

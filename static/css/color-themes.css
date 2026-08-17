@@ -206,19 +206,19 @@
 
 
 /* ============================================================
-   03 · Azul Marinho Registral — Azul marinho sóbrio com latão contido para uma presença de confiança.
+   03 · Crepúsculo Dourado — Azul noturno e dourado contido para uma identidade clássica e marcante.
    ============================================================ */
 [data-cor="paleta-03"] {
-    --color-primary: #13283B; --color-primary-light: #264761; --color-primary-dark: #0D1B28;
-    --color-primary-subtle: rgba(19, 40, 59, 0.12); --color-primary-rgb: 19,40,59;
-    --rf-palette-color-1: #13283B; --rf-palette-color-2: #264761; --rf-palette-color-3: #8A7248;
+    --color-primary: #001D3D; --color-primary-light: #003566; --color-primary-dark: #000814;
+    --color-primary-subtle: rgba(0, 29, 61, 0.12); --color-primary-rgb: 0,29,61;
+    --rf-palette-color-1: #001D3D; --rf-palette-color-2: #003566; --rf-palette-color-3: #8C6D00;
     --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #8A7248; --color-gold-dark: color-mix(in srgb, #8A7248 72%, #000);
+    --color-gold-primary: #8C6D00; --color-gold-dark: color-mix(in srgb, #8C6D00 72%, #000);
     --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #13283B); --background-color-input-bg: #FFFFFF;
-    --sidebar: #13283B; --sidebar-hover: #264761; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #13283B;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #13283B); --border-color-dark: #0D1B28;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #001D3D); --background-color-input-bg: #FFFFFF;
+    --sidebar: #001D3D; --sidebar-hover: #003566; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #001D3D;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #001D3D); --border-color-dark: #000814;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -290,19 +290,19 @@
 
 
 /* ============================================================
-   07 · Índigo Sóbrio — Índigo institucional com nuance de taupe para reduzir a fadiga visual.
+   07 · Jardim Verde Sombrio — Verde de mata, musgo e oliva para uma experiência natural e estável.
    ============================================================ */
 [data-cor="paleta-07"] {
-    --color-primary: #2D2F50; --color-primary-light: #4B4E72; --color-primary-dark: #1F2036;
-    --color-primary-subtle: rgba(45, 47, 80, 0.12); --color-primary-rgb: 45,47,80;
-    --rf-palette-color-1: #2D2F50; --rf-palette-color-2: #4B4E72; --rf-palette-color-3: #705B4A;
+    --color-primary: #132A13; --color-primary-light: #31572C; --color-primary-dark: #091309;
+    --color-primary-subtle: rgba(19, 42, 19, 0.12); --color-primary-rgb: 19,42,19;
+    --rf-palette-color-1: #132A13; --rf-palette-color-2: #31572C; --rf-palette-color-3: #4F772D;
     --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #705B4A; --color-gold-dark: color-mix(in srgb, #705B4A 72%, #000);
+    --color-gold-primary: #4F772D; --color-gold-dark: color-mix(in srgb, #4F772D 72%, #000);
     --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #2D2F50); --background-color-input-bg: #FFFFFF;
-    --sidebar: #2D2F50; --sidebar-hover: #4B4E72; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #2D2F50;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #2D2F50); --border-color-dark: #1F2036;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #132A13); --background-color-input-bg: #FFFFFF;
+    --sidebar: #132A13; --sidebar-hover: #31572C; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #132A13;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #132A13); --border-color-dark: #091309;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -584,19 +584,19 @@
 
 
 /* ============================================================
-   21 · Ouro Velado — Dourado profundo e oliva mineral para uma presença nobre sem brilho excessivo.
+   21 · Aurora de Ardósia — Azul ardósia, couro e pêssego inspirados na luz suave do amanhecer.
    ============================================================ */
 [data-cor="paleta-21"] {
-    --color-primary: #5A481B; --color-primary-light: #7A662A; --color-primary-dark: #3D3212;
-    --color-primary-subtle: rgba(90, 72, 27, 0.12); --color-primary-rgb: 90,72,27;
-    --rf-palette-color-1: #5A481B; --rf-palette-color-2: #7A662A; --rf-palette-color-3: #8A7442;
+    --color-primary: #577590; --color-primary-light: #3E647C; --color-primary-dark: #405467;
+    --color-primary-subtle: rgba(87, 117, 144, 0.12); --color-primary-rgb: 87,117,144;
+    --rf-palette-color-1: #577590; --rf-palette-color-2: #3E647C; --rf-palette-color-3: #A65E35;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #8A7442; --color-gold-dark: color-mix(in srgb, #8A7442 72%, #000);
+    --color-gold-primary: #A65E35; --color-gold-dark: color-mix(in srgb, #A65E35 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #5A481B); --background-color-input-bg: #FFFFFF;
-    --sidebar: #5A481B; --sidebar-hover: #7A662A; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #5A481B;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #5A481B); --border-color-dark: #3D3212;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #577590); --background-color-input-bg: #FFFFFF;
+    --sidebar: #577590; --sidebar-hover: #3E647C; --sidebar-text: #FFFFFF; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #577590;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #577590); --border-color-dark: #405467;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -647,19 +647,19 @@
 
 
 /* ============================================================
-   24 · Coral Mineral — Coral fechado e argila rosada para uma alternativa humana e equilibrada.
+   24 · Sunburst Rubi — Vinho profundo, framboesa e terracota em uma combinação pronta de calor controlado.
    ============================================================ */
 [data-cor="paleta-24"] {
-    --color-primary: #71383A; --color-primary-light: #96545A; --color-primary-dark: #4F2729;
-    --color-primary-subtle: rgba(113, 56, 58, 0.12); --color-primary-rgb: 113,56,58;
-    --rf-palette-color-1: #71383A; --rf-palette-color-2: #96545A; --rf-palette-color-3: #8E625B;
+    --color-primary: #4F000B; --color-primary-light: #720026; --color-primary-dark: #330007;
+    --color-primary-subtle: rgba(79, 0, 11, 0.12); --color-primary-rgb: 79,0,11;
+    --rf-palette-color-1: #4F000B; --rf-palette-color-2: #720026; --rf-palette-color-3: #A34837;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #8E625B; --color-gold-dark: color-mix(in srgb, #8E625B 72%, #000);
+    --color-gold-primary: #A34837; --color-gold-dark: color-mix(in srgb, #A34837 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #71383A); --background-color-input-bg: #FFFFFF;
-    --sidebar: #71383A; --sidebar-hover: #96545A; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #71383A;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #71383A); --border-color-dark: #4F2729;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #4F000B); --background-color-input-bg: #FFFFFF;
+    --sidebar: #4F000B; --sidebar-hover: #720026; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #4F000B;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #4F000B); --border-color-dark: #330007;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -668,19 +668,19 @@
 
 
 /* ============================================================
-   25 · Vermelho Rubi — Vermelho rubi profundo com rosa terroso para ações de presença controlada.
+   25 · Autumn Glow — Framboesa, abóbora e cobre queimado de uma paleta pronta para uma presença quente e vibrante.
    ============================================================ */
 [data-cor="paleta-25"] {
-    --color-primary: #651F2A; --color-primary-light: #8B3A48; --color-primary-dark: #45151D;
-    --color-primary-subtle: rgba(101, 31, 42, 0.12); --color-primary-rgb: 101,31,42;
-    --rf-palette-color-1: #651F2A; --rf-palette-color-2: #8B3A48; --rf-palette-color-3: #925E62;
+    --color-primary: #780116; --color-primary-light: #9B2D24; --color-primary-dark: #50000E;
+    --color-primary-subtle: rgba(120, 1, 22, 0.12); --color-primary-rgb: 120,1,22;
+    --rf-palette-color-1: #780116; --rf-palette-color-2: #9B2D24; --rf-palette-color-3: #9B6418;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #925E62; --color-gold-dark: color-mix(in srgb, #925E62 72%, #000);
+    --color-gold-primary: #9B6418; --color-gold-dark: color-mix(in srgb, #9B6418 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #651F2A); --background-color-input-bg: #FFFFFF;
-    --sidebar: #651F2A; --sidebar-hover: #8B3A48; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #651F2A;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #651F2A); --border-color-dark: #45151D;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #780116); --background-color-input-bg: #FFFFFF;
+    --sidebar: #780116; --sidebar-hover: #9B2D24; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #780116;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #780116); --border-color-dark: #50000E;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -689,19 +689,19 @@
 
 
 /* ============================================================
-   26 · Granada Profunda — Granada escuro e vinho mineral para uma identidade firme e silenciosa.
+   26 · Pôr do Sol Oceânico — Azul petróleo, teal e verde água de uma referência oceânica com equilíbrio mineral.
    ============================================================ */
 [data-cor="paleta-26"] {
-    --color-primary: #54202A; --color-primary-light: #763A43; --color-primary-dark: #3A161D;
-    --color-primary-subtle: rgba(84, 32, 42, 0.12); --color-primary-rgb: 84,32,42;
-    --rf-palette-color-1: #54202A; --rf-palette-color-2: #763A43; --rf-palette-color-3: #8B5B5E;
+    --color-primary: #001219; --color-primary-light: #005F73; --color-primary-dark: #00070A;
+    --color-primary-subtle: rgba(0, 18, 25, 0.12); --color-primary-rgb: 0,18,25;
+    --rf-palette-color-1: #001219; --rf-palette-color-2: #005F73; --rf-palette-color-3: #0A6A66;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #8B5B5E; --color-gold-dark: color-mix(in srgb, #8B5B5E 72%, #000);
+    --color-gold-primary: #0A6A66; --color-gold-dark: color-mix(in srgb, #0A6A66 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #54202A); --background-color-input-bg: #FFFFFF;
-    --sidebar: #54202A; --sidebar-hover: #763A43; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #54202A;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #54202A); --border-color-dark: #3A161D;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #001219); --background-color-input-bg: #FFFFFF;
+    --sidebar: #001219; --sidebar-hover: #005F73; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #001219;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #001219); --border-color-dark: #00070A;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -731,19 +731,19 @@
 
 
 /* ============================================================
-   28 · Mostarda Cartorial — Mostarda fechada e oliva dourado para uma leitura calorosa sem excesso de saturação.
+   28 · Fiery Sunset — Índigo noturno, vermelho escarlate e laranja queimado para uma identidade de ação controlada.
    ============================================================ */
 [data-cor="paleta-28"] {
-    --color-primary: #5C4B1D; --color-primary-light: #7D682B; --color-primary-dark: #403414;
-    --color-primary-subtle: rgba(92, 75, 29, 0.12); --color-primary-rgb: 92,75,29;
-    --rf-palette-color-1: #5C4B1D; --rf-palette-color-2: #7D682B; --rf-palette-color-3: #806C38;
+    --color-primary: #370617; --color-primary-light: #6A040F; --color-primary-dark: #21030E;
+    --color-primary-subtle: rgba(55, 6, 23, 0.12); --color-primary-rgb: 55,6,23;
+    --rf-palette-color-1: #370617; --rf-palette-color-2: #6A040F; --rf-palette-color-3: #B5480D;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #806C38; --color-gold-dark: color-mix(in srgb, #806C38 72%, #000);
+    --color-gold-primary: #B5480D; --color-gold-dark: color-mix(in srgb, #B5480D 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #5C4B1D); --background-color-input-bg: #FFFFFF;
-    --sidebar: #5C4B1D; --sidebar-hover: #7D682B; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #5C4B1D;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #5C4B1D); --border-color-dark: #403414;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #370617); --background-color-input-bg: #FFFFFF;
+    --sidebar: #370617; --sidebar-hover: #6A040F; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #370617;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #370617); --border-color-dark: #21030E;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -773,19 +773,19 @@
 
 
 /* ============================================================
-   30 · Pêssego Terroso — Pêssego queimado e argila suave para uma experiência acolhedora e madura.
+   30 · Terra & Musgo — Verde carvão, oliva e terracota de uma composição pronta, tradicional e orgânica.
    ============================================================ */
 [data-cor="paleta-30"] {
-    --color-primary: #713F3A; --color-primary-light: #955B55; --color-primary-dark: #4F2C29;
-    --color-primary-subtle: rgba(113, 63, 58, 0.12); --color-primary-rgb: 113,63,58;
-    --rf-palette-color-1: #713F3A; --rf-palette-color-2: #955B55; --rf-palette-color-3: #90675E;
+    --color-primary: #142324; --color-primary-light: #73713F; --color-primary-dark: #0D1718;
+    --color-primary-subtle: rgba(20, 35, 36, 0.12); --color-primary-rgb: 20,35,36;
+    --rf-palette-color-1: #142324; --rf-palette-color-2: #73713F; --rf-palette-color-3: #A9614B;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #90675E; --color-gold-dark: color-mix(in srgb, #90675E 72%, #000);
+    --color-gold-primary: #A9614B; --color-gold-dark: color-mix(in srgb, #A9614B 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #713F3A); --background-color-input-bg: #FFFFFF;
-    --sidebar: #713F3A; --sidebar-hover: #955B55; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #713F3A;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #713F3A); --border-color-dark: #4F2C29;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #142324); --background-color-input-bg: #FFFFFF;
+    --sidebar: #142324; --sidebar-hover: #73713F; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #142324;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #142324); --border-color-dark: #0D1718;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
