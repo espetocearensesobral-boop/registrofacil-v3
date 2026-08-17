@@ -374,19 +374,19 @@
 
 
 /* ============================================================
-   11 · Ferrugem Moderada — Ferrugem controlada com terracota envelhecida, sem vibração excessiva.
+   11 · Bordô Profundo — Bordô profundo inspirado na referência fornecida, elegante, sóbrio e confortável para uso prolongado.
    ============================================================ */
 [data-cor="paleta-11"] {
-    --color-primary: #5A2F28; --color-primary-light: #7A4639; --color-primary-dark: #3D201B;
-    --color-primary-subtle: rgba(90, 47, 40, 0.12); --color-primary-rgb: 90,47,40;
-    --rf-palette-color-1: #5A2F28; --rf-palette-color-2: #7A4639; --rf-palette-color-3: #754F3D;
+    --color-primary: #3F0218; --color-primary-light: #69072D; --color-primary-dark: #28010F;
+    --color-primary-subtle: rgba(63, 2, 24, 0.12); --color-primary-rgb: 63,2,24;
+    --rf-palette-color-1: #3F0218; --rf-palette-color-2: #69072D; --rf-palette-color-3: #7A3346;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #754F3D; --color-gold-dark: color-mix(in srgb, #754F3D 72%, #000);
+    --color-gold-primary: #7A3346; --color-gold-dark: color-mix(in srgb, #7A3346 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #5A2F28); --background-color-input-bg: #FFFFFF;
-    --sidebar: #5A2F28; --sidebar-hover: #7A4639; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #5A2F28;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #5A2F28); --border-color-dark: #3D201B;
+    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #3F0218); --background-color-input-bg: #FFFFFF;
+    --sidebar: #3F0218; --sidebar-hover: #69072D; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #3F0218;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #3F0218); --border-color-dark: #28010F;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -563,19 +563,19 @@
 
 
 /* ============================================================
-   20 · Argila & Areia — Argila escura e areia para uma identidade tradicional, confortável e sóbria.
+   20 · Floresta Nebulosa — Carvão, verde-floresta e névoa mineral para uma identidade discreta, natural e contemporânea.
    ============================================================ */
 [data-cor="paleta-20"] {
-    --color-primary: #54382C; --color-primary-light: #785541; --color-primary-dark: #39261E;
-    --color-primary-subtle: rgba(84, 56, 44, 0.12); --color-primary-rgb: 84,56,44;
-    --rf-palette-color-1: #54382C; --rf-palette-color-2: #785541; --rf-palette-color-3: #7A5A46;
-    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #7A5A46; --color-gold-dark: color-mix(in srgb, #7A5A46 72%, #000);
-    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #54382C); --background-color-input-bg: #FFFFFF;
-    --sidebar: #54382C; --sidebar-hover: #785541; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #54382C;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #54382C); --border-color-dark: #39261E;
+    --color-primary: #212227; --color-primary-light: #637074; --color-primary-dark: #15161B;
+    --color-primary-subtle: rgba(33, 34, 39, 0.12); --color-primary-rgb: 33,34,39;
+    --rf-palette-color-1: #212227; --rf-palette-color-2: #637074; --rf-palette-color-3: #4F6D64;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
+    --color-gold-primary: #4F6D64; --color-gold-dark: color-mix(in srgb, #4F6D64 72%, #000);
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #212227); --background-color-input-bg: #FFFFFF;
+    --sidebar: #212227; --sidebar-hover: #637074; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #212227;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #212227); --border-color-dark: #15161B;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;
@@ -626,19 +626,19 @@
 
 
 /* ============================================================
-   23 · Laranja Queimado — Laranja queimado e couro mineral para uma interface ativa, mas confortável.
+   23 · Charme Vintage — Cinza quente, malva e carvão suave para uma identidade vintage, refinada e pouco saturada.
    ============================================================ */
 [data-cor="paleta-23"] {
-    --color-primary: #71391F; --color-primary-light: #955536; --color-primary-dark: #4F2816;
-    --color-primary-subtle: rgba(113, 57, 31, 0.12); --color-primary-rgb: 113,57,31;
-    --rf-palette-color-1: #71391F; --rf-palette-color-2: #955536; --rf-palette-color-3: #9B694B;
-    --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #9B694B; --color-gold-dark: color-mix(in srgb, #9B694B 72%, #000);
-    --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
-    --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #71391F); --background-color-input-bg: #FFFFFF;
-    --sidebar: #71391F; --sidebar-hover: #955536; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
-    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #71391F;
-    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #71391F); --border-color-dark: #4F2816;
+    --color-primary: #5A5353; --color-primary-light: #776274; --color-primary-dark: #3E3939;
+    --color-primary-subtle: rgba(90, 83, 83, 0.12); --color-primary-rgb: 90,83,83;
+    --rf-palette-color-1: #5A5353; --rf-palette-color-2: #776274; --rf-palette-color-3: #5F605A;
+    --rf-palette-color-4: #F8F8F8; --rf-palette-color-5: #FFFFFF;
+    --color-gold-primary: #5F605A; --color-gold-dark: color-mix(in srgb, #5F605A 72%, #000);
+    --background-color-body: #F8F8F8; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
+    --background-color-hover: color-mix(in srgb, #F8F8F8 90%, #5A5353); --background-color-input-bg: #FFFFFF;
+    --sidebar: #5A5353; --sidebar-hover: #776274; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
+    --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: #5A5353;
+    --border-color-default: #C8CFD0; --border-color-input: color-mix(in srgb, #C8CFD0 78%, #5A5353); --border-color-dark: #3E3939;
     --color-success: #2F6B50; --color-error: #98424C; --color-warning: #846A30; --color-info: #3C6570;
     --danger-bg: color-mix(in srgb, #98424C 10%, #FFFFFF); --danger-text: #98424C;
     --warning-bg: color-mix(in srgb, #846A30 12%, #FFFFFF); --warning-text: #846A30;

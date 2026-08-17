@@ -37,7 +37,7 @@ require(APPEARANCE_DEFAULT == 'paleta-01', 'default theme must be paleta-01')
 require(len(PALETAS_INSTITUCIONAIS) == 30, 'catalog must contain exactly 30 themes')
 require(len({theme['familia'] for theme in PALETAS_INSTITUCIONAIS.values()}) == 30, 'theme families must be unique')
 warm_families = {
-    'vinho', 'café', 'ferrugem', 'cobre', 'ameixa', 'rosa-queimado', 'argila',
+    'vinho', 'café', 'ferrugem', 'bordo-profundo', 'cobre', 'ameixa', 'rosa-queimado', 'argila',
     'ouro-velado', 'ambar', 'laranja-queimado', 'coral-mineral', 'rubi',
     'granada', 'terracota', 'mostarda', 'bronze', 'pessego-terroso',
     'aurora-ardosia', 'sunburst-rubi', 'autumn-glow', 'oceano-sunset',
