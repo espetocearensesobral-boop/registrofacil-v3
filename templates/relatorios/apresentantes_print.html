@@ -19,7 +19,7 @@
         </div>
         <div class="header-right">
             <div class="report-title">Relatório de Apresentantes</div>
-            <div class="report-sub">Gerado em {{ now.strftime('%d/%m/%Y às %H:%M:%S') }}</div>
+            <div class="report-sub">Documento institucional · Gerado em {{ now.strftime('%d/%m/%Y às %H:%M:%S') }}</div>
         </div>
     </div>
 
@@ -29,8 +29,8 @@
             <span class="sum-value">{{ total_registros }}</span>
         </div>
         <div class="sum-cell">
-            <div class="sum-label">Filtro Ativo</div>
-            <span class="sum-value small">{{ busca if busca else '(Todos)' }}</span>
+            <span class="sum-label">Consulta</span>
+            <span class="sum-value small">{{ busca if busca else 'Todos os apresentantes' }}</span>
         </div>
         <div class="sum-cell">
             <span class="sum-label">Data</span>
@@ -66,14 +66,15 @@
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="6" style="text-align:center;padding:20px;color:#6c757d;font-style:italic;">Nenhum apresentante encontrado.</td></tr>
+            <tr><td colspan="6"><div class="empty-report"><strong>Nenhum apresentante encontrado.</strong><span>A consulta não retornou registros para os critérios informados.</span></div></td></tr>
             {% endfor %}
         </tbody>
     </table>
 
     <div class="footer">
         <div class="footer-left">Registro Fácil — Listagem de Apresentantes</div>
-        <div class="footer-right">Total: {{ total_registros }} registros &nbsp;|&nbsp; {{ now.strftime('%d/%m/%Y %H:%M') }}</div>
+        <div class="footer-center">Documento gerado pelo sistema</div>
+        <div class="footer-right">Total: {{ total_registros }} registro{{ 's' if total_registros != 1 }} &nbsp;|&nbsp; {{ now.strftime('%d/%m/%Y %H:%M') }}</div>
     </div>
 
 </div>

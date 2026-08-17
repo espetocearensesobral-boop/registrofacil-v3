@@ -23,8 +23,8 @@
     }
     .header-right { text-align: right; }
     .logo { max-width: 160px; max-height: 55px; object-fit: contain; }
-    .report-title { font-size: 15pt; font-weight: 300; color: #444; margin-bottom: 2px; }
-    .report-sub { font-size: 8.5pt; color: #999; font-style: italic; }
+    .report-title { font-size: 15pt; font-weight: 700; color: #121212; margin-bottom: 3px; letter-spacing: .1px; }
+    .report-sub { font-size: 8.5pt; color: #475467; font-style: normal; }
 
     /* RESUMO */
     .summary-bar {
@@ -48,13 +48,13 @@
         font-size: 7pt;
         font-weight: 700;
         text-transform: uppercase;
-        color: #b09060;
+        color: #475467;
         letter-spacing: 0.4px;
         display: block;
         margin-bottom: 2px;
     }
-    .sum-value { font-size: 14pt; font-weight: 700; color: #8B6332; }
-    .sum-value.small { font-size: 9pt; color: #555; font-weight: 600; }
+    .sum-value { font-size: 14pt; font-weight: 750; color: #1f2937; }
+    .sum-value.small { font-size: 9pt; color: #344054; font-weight: 650; }
 
     /* TABELA */
     table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
@@ -80,6 +80,14 @@
     tbody tr:nth-child(even) td { background: #fdfaf5; }
     tbody tr:last-child td { border-bottom: none; }
     .nome-col { font-weight: 600; color: #222; }
+    .empty-report {
+        padding: 24px 12px;
+        color: #475467;
+        text-align: center;
+        font-style: normal;
+    }
+    .empty-report strong { display: block; color: #1f2937; font-size: 9pt; margin-bottom: 3px; }
+    .empty-report span { display: block; font-size: 8pt; }
     .count-badge {
         display: inline-block;
         background: #f0e8d8;
@@ -97,15 +105,24 @@
         padding-top: 8px;
         border-top: 1px solid #e5d7be;
     }
-    .footer-left, .footer-right {
+    .footer-left, .footer-center, .footer-right {
         display: table-cell;
         font-size: 7.5pt;
         color: #6c757d;
         vertical-align: middle;
     }
+    .footer-center { text-align: center; }
     .footer-right { text-align: right; }
 
-    @page { size: A4; margin: 12mm 14mm; }
+    @page {
+        size: A4;
+        margin: 12mm 14mm;
+        @bottom-right {
+            color: #6c757d;
+            content: "Página " counter(page) " de " counter(pages);
+            font-size: 7pt;
+        }
+    }
     @media print {
         body {
             -webkit-print-color-adjust: exact !important;
@@ -123,5 +140,6 @@
         }
         thead { display: table-header-group; }
         tr { page-break-inside: avoid; }
+        .summary-bar, .header, .footer { page-break-inside: avoid; }
     }
 </style>
