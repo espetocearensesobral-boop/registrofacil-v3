@@ -138,6 +138,14 @@
    </div>
 </div>
 
+<div class="rf-report-context-bar" aria-label="Resumo da consulta de processos">
+    <div class="rf-report-context-main">
+        <span class="rf-report-context-title">Resultado da consulta</span>
+        <span class="rf-report-context-subtitle">{% if has_active_filters %}Filtros ativos aplicados à listagem.{% else %}Todos os processos disponíveis no sistema.{% endif %}</span>
+    </div>
+    <span class="rf-report-context-total"><i class="bi bi-folder2-open" aria-hidden="true"></i>{{ total_registros }} registro{{ 's' if total_registros != 1 }}</span>
+</div>
+
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center py-3">
         <h6 class="rf-card-title mb-0"><i class="bi bi-folder-fill"></i> Todos os Processos</h6>
@@ -145,10 +153,10 @@
     </div>
     <div class="card-body p-0">
         {% if not processos %}
-            <div class="empty-state">
-                <i class="bi bi-folder-x"></i>
-                <h4 class="mb-2">Nenhum processo encontrado</h4>
-                <p class="text-muted mb-4">Tente ajustar os filtros ou cadastre um novo processo.</p>
+            <div class="rf-report-empty">
+                <i class="bi bi-folder-x" aria-hidden="true"></i>
+                <strong>Nenhum processo encontrado.</strong>
+                <span>Tente ajustar os filtros ou cadastre um novo processo.</span>
             </div>
         {% else %}
             <div class="table-responsive">

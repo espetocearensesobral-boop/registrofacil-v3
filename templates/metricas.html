@@ -980,8 +980,15 @@ document.addEventListener('DOMContentLoaded', () => {
 {% endblock %}
 
 {% block content %}
-
+<div class="rf-report-context-bar" aria-label="Contexto do painel de métricas">
+    <div class="rf-report-context-main">
+        <span class="rf-report-context-title">Indicadores operacionais</span>
+        <span class="rf-report-context-subtitle">Acompanhe desempenho, situação dos processos e carga de trabalho da equipe.</span>
+    </div>
+    <span class="rf-report-context-total"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Atualização em tempo real</span>
+</div>
 <!-- TABS -->
+
 <div class="metricas-tabs">
     <button class="metricas-tab-btn active" data-tab="meu-desempenho" onclick="switchTab(this)">
         <i class="bi bi-person-lines-fill"></i> Meu Desempenho

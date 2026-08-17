@@ -77,6 +77,14 @@
     </div>
 </div>
 
+<div class="rf-report-context-bar" aria-label="Resumo da consulta de apresentantes">
+    <div class="rf-report-context-main">
+        <span class="rf-report-context-title">Resultado da consulta</span>
+        <span class="rf-report-context-subtitle">{% if busca %}Apresentantes filtrados por “{{ busca }}”.{% else %}Todos os apresentantes disponíveis no sistema.{% endif %}</span>
+    </div>
+    <span class="rf-report-context-total"><i class="bi bi-person-badge" aria-hidden="true"></i>{{ total_registros }} registro{{ 's' if total_registros != 1 }}</span>
+</div>
+
 <!-- Tabela -->
 <div class="rf-card">
     <div class="rf-card-header">
@@ -167,9 +175,12 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" class="text-center py-5 rf-empty-cell">
-                            <i class="bi bi-people mb-2 d-block rf-empty-icon"></i>
-                            <span>Nenhum apresentante encontrado.</span>
+                        <td colspan="6" class="p-0">
+                            <div class="rf-report-empty">
+                                <i class="bi bi-person-badge" aria-hidden="true"></i>
+                                <strong>Nenhum apresentante encontrado.</strong>
+                                <span>Tente ajustar a busca ou limpar os filtros para consultar novamente.</span>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

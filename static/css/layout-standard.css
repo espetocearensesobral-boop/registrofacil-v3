@@ -1342,3 +1342,81 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
     width: 100%;
   }
 }
+
+/* Contrato visual compartilhado dos relatórios ativos. */
+.rf-report-context-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rf-space-4);
+  min-height: 3.25rem;
+  margin-bottom: var(--rf-layout-section-gap);
+  padding: .75rem var(--rf-card-pad-x);
+  background: var(--rf-surface-muted, #f8f8f8);
+  border: 1px solid var(--rf-border, #e2e2e2);
+  border-radius: var(--rf-radius-md, .625rem);
+  color: var(--rf-text-body, #2a2a2a);
+}
+.rf-report-context-main { min-width: 0; }
+.rf-report-context-title {
+  display: block;
+  margin: 0;
+  color: var(--rf-text-heading, #121212);
+  font-size: .875rem;
+  font-weight: 750;
+  line-height: 1.3;
+}
+.rf-report-context-subtitle {
+  display: block;
+  margin-top: .15rem;
+  color: var(--rf-text-muted, #475467);
+  font-size: .75rem;
+  line-height: 1.4;
+}
+.rf-report-context-total {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: .35rem;
+  padding: .35rem .625rem;
+  border: 1px solid var(--rf-border-strong, #cfcfcf);
+  border-radius: 999px;
+  background: var(--rf-surface, #fff);
+  color: var(--rf-text-heading, #121212);
+  font-size: .75rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.rf-report-context-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: var(--rf-space-2);
+}
+.rf-report-empty {
+  display: flex;
+  min-height: 11rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--rf-space-8) var(--rf-card-pad-x);
+  color: var(--rf-text-muted, #475467);
+  text-align: center;
+}
+.rf-report-empty i { margin-bottom: .5rem; color: var(--color-primary, #243b53); font-size: 1.75rem; }
+.rf-report-empty strong { color: var(--rf-text-heading, #121212); font-size: .9375rem; }
+.rf-report-empty span { max-width: 32rem; margin-top: .25rem; font-size: .8125rem; line-height: 1.45; }
+.rf-report-generated-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rf-space-3);
+  margin-top: var(--rf-space-3);
+  color: var(--rf-text-muted, #475467);
+  font-size: .75rem;
+}
+@media (max-width: 640px) {
+  .rf-report-context-bar,
+  .rf-report-generated-note { align-items: flex-start; flex-direction: column; }
+  .rf-report-context-total { align-self: flex-start; }
+}
