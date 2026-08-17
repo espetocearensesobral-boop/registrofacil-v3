@@ -172,23 +172,6 @@ def init_db(criar_indices_performance, init_fts):
         else:
             logger.info("Tabela 'apresentantes' já existe.")
 
-        if not table_exists("representantes"):
-            cursor.execute("""
-                CREATE TABLE representantes (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nome TEXT NOT NULL UNIQUE,
-                    telefone TEXT,
-                    email TEXT,
-                    ultimo_registro_id INTEGER,
-                    created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-                    updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-                    FOREIGN KEY (ultimo_registro_id) REFERENCES processos(id) ON DELETE SET NULL
-                );
-            """)
-            logger.info("Tabela 'representantes' criada no SQLite.")
-        else:
-            logger.info("Tabela 'representantes' já existe.")
-
         if not table_exists("processos"):
             cursor.execute("""
                 CREATE TABLE processos (
@@ -205,7 +188,6 @@ def init_db(criar_indices_performance, init_fts):
                     status_id INTEGER NOT NULL,
                     prazo_final TEXT,
                     apresentante TEXT,
-                    representante TEXT,
                     apresentante_id INTEGER,
                     apresentante_telefone TEXT,
                     apresentante_email TEXT,
@@ -227,7 +209,6 @@ def init_db(criar_indices_performance, init_fts):
             add_column_if_not_exists_sqlite('processos', 'matricula', 'TEXT')
             add_column_if_not_exists_sqlite('processos', 'possui_matricula', 'INTEGER', default_value=0)
             add_column_if_not_exists_sqlite('processos', 'apresentante_telefone', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'representante', 'TEXT')
             add_column_if_not_exists_sqlite('processos', 'apresentante_email', 'TEXT')
             add_column_if_not_exists_sqlite('processos', 'titular_telefone', 'TEXT')
             add_column_if_not_exists_sqlite('processos', 'titular_email', 'TEXT')

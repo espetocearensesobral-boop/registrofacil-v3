@@ -60,7 +60,7 @@ def test_permission_denial_for_ajax_returns_json_403(app_client):
         session["usuario_id"] = user_id
 
     response = app_client.get(
-        "/representantes/",
+        "/relatorios/",
         headers={"X-Requested-With": "XMLHttpRequest"},
     )
 
@@ -70,9 +70,9 @@ def test_permission_denial_for_ajax_returns_json_403(app_client):
     assert "permissão" in response.json["message"].lower()
 
 
-def test_admin_can_reach_representatives_list(app_client):
+def test_admin_can_reach_reports_center(app_client):
     _session(app_client, role="admin")
 
-    response = app_client.get("/representantes/")
+    response = app_client.get("/relatorios/")
 
     assert response.status_code == 200

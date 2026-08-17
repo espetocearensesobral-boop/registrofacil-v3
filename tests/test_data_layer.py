@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 
-from data import locks, representatives, users
+from data import locks, users
 
 
 def test_schema_contains_core_tables(temp_database):
@@ -11,7 +11,8 @@ def test_schema_contains_core_tables(temp_database):
             row[0]
             for row in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
         }
-    assert {"usuarios", "processos", "titulares", "apresentantes", "representantes"}.issubset(tables)
+    assert {"usuarios", "processos", "titulares", "apresentantes"}.issubset(tables)
+    assert "representantes" not in tables
 
 
 def test_user_creation_and_password_reset_token(temp_database):
@@ -38,26 +39,6 @@ def test_login_attempts_are_blocked_after_limit(temp_database):
     allowed, message = users.verificar_tentativas_login(ip)
     assert allowed is False
     assert "tentativas" in message.lower()
-
-
-def test_representative_crud_and_process_history(temp_database):
-    representative_id = representatives.executar_query(
-        "INSERT INTO representantes (nome, telefone, email) VALUES (?, ?, ?)",
-        ["Representante Teste", "(88) 99999-0101", "rep@example.com"],
-    )
-    assert representative_id
-    representative = representatives.get_representante_by_id(representative_id)
-    assert representative["nome"] == "Representante Teste"
-
-    assert representatives.editar_representante(
-        representative_id,
-        "Representante Atualizado",
-        "(88) 99999-0102",
-        "rep2@example.com",
-    )
-    assert representatives.get_representante_by_id(representative_id)["nome"] == "Representante Atualizado"
-    assert representatives.buscar_representantes_json("Atualizado")
-    assert representatives.representante_tem_processos(representative_id) is False
 
 
 def test_record_lock_lifecycle(temp_database):

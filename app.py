@@ -186,7 +186,7 @@ def create_app():
     from routes.utils_routes import utils_bp
     from routes.titulares import titulares_bp
     from routes.apresentantes import apresentantes_bp
-    from routes.representantes import representantes_bp
+    from routes.relatorios import relatorios_bp
     from routes.dashboard import dashboard_bp
     from routes.notificacoes import notificacoes_bp
     from routes.perfil import perfil_bp  # NOVA ROTA
@@ -196,7 +196,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(titulares_bp)
     app.register_blueprint(apresentantes_bp)
-    app.register_blueprint(representantes_bp)
+    app.register_blueprint(relatorios_bp)
     app.register_blueprint(processos_bp)
     app.register_blueprint(search_bp)
     app.register_blueprint(atividades_bp)

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Relatório de Contatos{% endblock %}
+{% block content %}
+<div class="container-fluid py-4" id="main-content">
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+    <div><span class="text-uppercase small text-muted fw-semibold">Relatórios</span><h1 class="page-title-text mb-1">Contatos</h1><p class="text-muted mb-0">Titulares e apresentantes com nome, telefone e e-mail.</p></div>
+    <a class="nav-btn nav-btn-secondary" href="{{ url_for('relatorios.exportar_contatos', busca=busca, origem=origem) }}"><i class="bi bi-download me-1"></i>Exportar CSV</a>
+  </div>
+  <div class="rf-card p-3 mb-3">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-12 col-lg-6"><label class="form-label" for="busca">Buscar</label><input class="form-control" id="busca" name="busca" value="{{ busca }}" placeholder="Nome, telefone ou e-mail"></div>
+      <div class="col-12 col-lg-3"><label class="form-label" for="origem">Origem</label><select class="form-select" id="origem" name="origem"><option value="todos" {% if origem == 'todos' %}selected{% endif %}>Todos</option><option value="titulares" {% if origem == 'titulares' %}selected{% endif %}>Titulares</option><option value="apresentantes" {% if origem == 'apresentantes' %}selected{% endif %}>Apresentantes</option></select></div>
+      <div class="col-12 col-lg-3 d-flex gap-2"><button class="nav-btn nav-btn-success flex-fill" type="submit"><i class="bi bi-filter me-1"></i>Filtrar</button><a class="nav-btn nav-btn-secondary" href="{{ url_for('relatorios.contatos') }}">Limpar</a></div>
+    </form>
+  </div>
+  <div class="rf-card p-0 overflow-hidden">
+    <div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Origem</th><th>Nome</th><th>Telefone</th><th>E-mail</th></tr></thead><tbody>
+      {% for contato in contatos %}<tr><td><span class="badge text-bg-light">{{ contato.origem }}</span></td><td>{{ contato.nome }}</td><td>{{ contato.telefone or 'Não informado' }}</td><td>{{ contato.email or 'Não informado' }}</td></tr>{% else %}<tr><td colspan="4" class="text-center text-muted py-5">Nenhum contato encontrado.</td></tr>{% endfor %}
+    </tbody></table></div>
+    <div class="p-3 border-top d-flex flex-wrap justify-content-between align-items-center gap-2"><small class="text-muted">{{ total }} contato(s) encontrado(s)</small>{% if total_paginas > 1 %}<nav aria-label="Paginação de contatos"><ul class="pagination pagination-sm mb-0">{% for pagina_item in range(1, total_paginas + 1) %}<li class="page-item {% if pagina_item == pagina %}active{% endif %}"><a class="page-link" href="{{ url_for('relatorios.contatos', pagina=pagina_item, busca=busca, origem=origem, por_pagina=por_pagina) }}">{{ pagina_item }}</a></li>{% endfor %}</ul></nav>{% endif %}</div>
+  </div>
+</div>
+{% endblock %}

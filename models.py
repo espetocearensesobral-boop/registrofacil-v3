@@ -144,16 +144,6 @@ from data.validators import (
     validar_telefone_unico,
     validar_email_unico,
 )
-from data.representatives import (
-    listar_representantes,
-    get_representante_by_id,
-    get_historico_servicos_representante,
-    buscar_representantes_json,
-    representante_tem_processos,
-    editar_representante,
-    excluir_representante,
-)
-
 # Aliases mantidos por compatibilidade com rotas, scheduler e utilitários.
 DATABASE_PATH = Config.DATABASE_PATH
 TENTATIVAS_MAX = Config.TENTATIVAS_MAX

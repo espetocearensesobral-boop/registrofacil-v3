@@ -244,6 +244,85 @@ def executar_migracoes_dados(connection=None):
 
         migracoes.append(migracao_013)
 
+        def migracao_014(cursor):
+            """Remove Representantes e consolida eventuais dados legados em Apresentantes."""
+            tabela_representantes = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'representantes'"
+            ).fetchone()
+            if tabela_representantes:
+                registros = cursor.execute(
+                    "SELECT nome, telefone, email FROM representantes ORDER BY id"
+                ).fetchall()
+                for registro in registros:
+                    nome, telefone, email = registro
+                    if not nome:
+                        continue
+                    existente = cursor.execute(
+                        "SELECT id FROM apresentantes WHERE nome = ?",
+                        (nome,),
+                    ).fetchone()
+                    if existente:
+                        cursor.execute(
+                            """UPDATE apresentantes
+                               SET telefone = COALESCE(NULLIF(telefone, ''), ?),
+                                   email = COALESCE(NULLIF(email, ''), ?)
+                             WHERE id = ?""",
+                            (telefone, email, existente[0]),
+                        )
+                    else:
+                        cursor.execute(
+                            """INSERT INTO apresentantes (nome, telefone, email)
+                               VALUES (?, ?, ?)""",
+                            (nome, telefone, email),
+                        )
+                cursor.execute("DROP TABLE representantes")
+                logger.info("[Migração 014] Dados legados de representantes consolidados em apresentantes e tabela removida.")
+
+            tabela_processos = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'processos'"
+            ).fetchone()
+            if not tabela_processos:
+                return
+
+            colunas = {
+                row[1] for row in cursor.execute("PRAGMA table_info(processos)").fetchall()
+            }
+            colunas_legadas = {'representante', 'representante_telefone', 'representante_email'} & colunas
+            if not colunas_legadas:
+                return
+
+            if 'representante' in colunas and 'apresentante' in colunas:
+                cursor.execute(
+                    """UPDATE processos
+                          SET apresentante = representante
+                        WHERE (apresentante IS NULL OR TRIM(apresentante) = '')
+                          AND representante IS NOT NULL
+                          AND TRIM(representante) <> ''"""
+                )
+            if 'representante_telefone' in colunas and 'apresentante_telefone' in colunas:
+                cursor.execute(
+                    """UPDATE processos
+                          SET apresentante_telefone = representante_telefone
+                        WHERE (apresentante_telefone IS NULL OR TRIM(apresentante_telefone) = '')
+                          AND representante_telefone IS NOT NULL
+                          AND TRIM(representante_telefone) <> ''"""
+                )
+            if 'representante_email' in colunas and 'apresentante_email' in colunas:
+                cursor.execute(
+                    """UPDATE processos
+                          SET apresentante_email = representante_email
+                        WHERE (apresentante_email IS NULL OR TRIM(apresentante_email) = '')
+                          AND representante_email IS NOT NULL
+                          AND TRIM(representante_email) <> ''"""
+                )
+
+            for coluna in ('representante', 'representante_telefone', 'representante_email'):
+                if coluna in colunas:
+                    cursor.execute(f"ALTER TABLE processos DROP COLUMN {coluna}")
+            logger.info("[Migração 014] Colunas legadas de representante removidas de processos.")
+
+        migracoes.append(migracao_014)
+
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]
 

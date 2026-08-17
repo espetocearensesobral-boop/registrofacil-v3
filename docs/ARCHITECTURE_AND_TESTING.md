@@ -14,7 +14,7 @@ A camada de dados foi dividida no pacote `data/`, mantendo `models.py` como uma 
 | `data/database.py` | Centraliza conexões e execução de consultas. |
 | `data/users.py` | Usuários, login, sessões, tokens e auditoria relacionada. |
 | `data/processes.py` | Operações de processos e vínculos de domínio. |
-| `data/representatives.py` | CRUD de representantes e associações com processos. |
+| `data/registries.py` | CRUD de titulares e apresentantes, vínculos com processos e históricos. |
 | `routes/` | Camada HTTP, autenticação, autorização e renderização. |
 | `tests/` | Testes de domínio e testes HTTP com banco temporário. |
 
@@ -32,7 +32,7 @@ A aplicação não deve ser exposta diretamente à Internet sem TLS no proxy rev
 
 ## Atualização de uma instalação existente
 
-A versão 3.19.0 mantém o SQLite como banco compatível com a instalação anterior. Na inicialização, `data/schema.py` verifica e cria colunas e tabelas ausentes de forma idempotente, enquanto `data/migrations.py` aplica as migrações de dados pendentes usando `PRAGMA user_version`. As migrações atuais levam bancos antigos até a versão de esquema 6 e preservam os registros existentes.
+A versão 3.19.0 mantém o SQLite como banco compatível com a instalação anterior. A migração 014 consolida registros legados de Representantes em Apresentantes quando necessário e remove a tabela e os campos legados após a confirmação transacional. Na inicialização, `data/schema.py` verifica e cria colunas e tabelas ausentes de forma idempotente, enquanto `data/migrations.py` aplica as migrações de dados pendentes usando `PRAGMA user_version`. As migrações atuais levam bancos antigos até a versão de esquema 6 e preservam os registros existentes.
 
 Antes de atualizar uma instalação com dados reais, faça uma cópia do arquivo `registrofacil.db`, da pasta de uploads e das chaves `.secret_key` e `.encryption_key` — ou forneça as mesmas chaves por variáveis de ambiente. A atualização deve ser executada primeiro em uma cópia de homologação. Não substitua as chaves ao migrar, pois isso pode impedir a leitura de dados criptografados e invalidar sessões existentes.
 

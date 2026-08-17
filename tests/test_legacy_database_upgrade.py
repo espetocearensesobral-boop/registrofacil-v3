@@ -5,7 +5,6 @@ import models
 
 def test_legacy_database_upgrade_preserves_data_and_reaches_current_schema(temp_database):
     with sqlite3.connect(temp_database) as connection:
-        connection.execute("DROP TABLE representantes")
         connection.execute("PRAGMA user_version = 0")
         connection.commit()
 
@@ -24,6 +23,6 @@ def test_legacy_database_upgrade_preserves_data_and_reaches_current_schema(temp_
             ["admin"],
         ).fetchone()
 
-    assert "representantes" in tables
-    assert user_version == 13
+    assert "representantes" not in tables
+    assert user_version == 14
     assert admin == ("admin", "admin")

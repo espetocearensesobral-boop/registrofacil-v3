@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Relatório de Serviços{% endblock %}
+{% block content %}
+<div class="container-fluid py-4" id="main-content">
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+    <div><span class="text-uppercase small text-muted fw-semibold">Relatórios</span><h1 class="page-title-text mb-1">Serviços e tipos</h1><p class="text-muted mb-0">Catálogo de serviços e sua utilização nos processos.</p></div>
+    <a class="nav-btn nav-btn-secondary" href="{{ url_for('relatorios.exportar_servicos') }}"><i class="bi bi-download me-1"></i>Exportar CSV</a>
+  </div>
+  <div class="rf-card p-0 overflow-hidden"><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Serviço</th><th>Descrição</th><th>Prazo padrão</th><th>Status</th><th class="text-end">Processos</th></tr></thead><tbody>
+  {% for servico in servicos %}<tr><td class="fw-semibold">{{ servico.nome }}</td><td>{{ servico.descricao or '—' }}</td><td>{{ servico.prazo_padrao or 0 }} dias</td><td>{% if servico.ativo %}<span class="badge text-bg-success">Ativo</span>{% else %}<span class="badge text-bg-secondary">Inativo</span>{% endif %}</td><td class="text-end">{{ servico.total_processos }}</td></tr>{% else %}<tr><td colspan="5" class="text-center text-muted py-5">Nenhum serviço cadastrado.</td></tr>{% endfor %}
+  </tbody></table></div></div>
+</div>
+{% endblock %}
