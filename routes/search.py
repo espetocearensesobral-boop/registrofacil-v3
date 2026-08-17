@@ -7,7 +7,6 @@ from models import (
     executar_query,
     gravar_log,
     listar_processos,
-    obter_tipos_servico,
     obter_status_processo_config,
     LOCK_TIMEOUT_MINUTES
 )
@@ -101,15 +100,9 @@ def global_search():
 def smart_search():
     """Busca completa de processos para o modal Buscar."""
     query = proteger_input(request.args.get('q', '').strip())
-    tipo = request.args.get('tipo', type=int)
-    status = request.args.get('status', type=int)
     pagina = max(request.args.get('pagina', 1, type=int), 1)
     por_pagina = min(max(request.args.get('por_pagina', 25, type=int), 10), 100)
     filtros = {'busca': query}
-    if tipo:
-        filtros['tipo'] = tipo
-    if status:
-        filtros['status_id'] = status
     try:
         resultado = listar_processos(filtros, pagina, por_pagina, 'id_desc')
         processos = []
@@ -120,7 +113,7 @@ def smart_search():
             item['baixar_url'] = url_for('processos.gerar_pdf', processo_id=item['id'])
             processos.append(item)
         gravar_log('pesquisa_inteligente_realizada', None, session.get('usuario_id'), get_client_ip(), f"Busca: '{query}' - {resultado['total_records']} resultados.")
-        return jsonify(success=True, processos=processos, total=resultado['total_records'], pagina=pagina, total_paginas=resultado['total_pages'], tipos=[dict(row) for row in (obter_tipos_servico() or [])], status=[dict(row) for row in (obter_status_processo_config() or [])])
+        return jsonify(success=True, processos=processos, total=resultado['total_records'], pagina=pagina, total_paginas=resultado['total_pages'])
     except Exception as exc:
         logger.error(f"Erro na busca inteligente: {exc}", exc_info=True)
         return jsonify(success=False, message='Falha ao pesquisar processos.'), 500

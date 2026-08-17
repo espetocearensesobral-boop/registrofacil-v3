@@ -434,32 +434,22 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeGlobalSearchModal() {
         const modal = document.getElementById('globalSearchModal');
         const input = document.getElementById('modal-global-search-input');
-        const type = document.getElementById('modal-global-search-type');
-        const status = document.getElementById('modal-global-search-status');
         const clear = document.getElementById('modal-global-search-clear');
         const results = document.getElementById('modal-search-results-list');
         const summary = document.getElementById('modal-search-summary');
         const pagination = document.getElementById('modal-search-pagination');
-        if (!modal || !input || !type || !status || !clear || !results || !summary || !pagination) return;
+        if (!modal || !input || !clear || !results || !summary || !pagination) return;
 
         let timer;
         let page = 1;
-        let optionsLoaded = false;
         const escapeHtml = value => String(value ?? '').replace(/[&<>\'"]/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'}[char]));
         const formatDate = value => value ? new Date(String(value).replace(' ', 'T')).toLocaleDateString('pt-BR') : '—';
 
-        function populateOptions(data) {
-            if (optionsLoaded) return;
-            (data.tipos || []).forEach(item => type.insertAdjacentHTML('beforeend', `<option value="${item.id}">${escapeHtml(item.nome)}</option>`));
-            (data.status || []).forEach(item => status.insertAdjacentHTML('beforeend', `<option value="${item.id}">${escapeHtml(item.nome)}</option>`));
-            optionsLoaded = true;
-        }
 
         function render(data) {
-            populateOptions(data);
             summary.textContent = `${data.total || 0} processo(s) encontrado(s)`;
             if (!data.processos || !data.processos.length) {
-                results.innerHTML = '<div class="gs-empty"><i class="bi bi-inbox"></i><p>Nenhum processo encontrado.</p><p class="rf-search-hint">Digite outro nome, telefone, matrícula, ID ou ajuste os filtros.</p></div>';
+                results.innerHTML = '<div class="gs-empty"><i class="bi bi-inbox"></i><p>Nenhum processo encontrado.</p><p class="rf-search-hint">Digite outro nome, telefone, matrícula, ID ou processo.</p></div>';
                 pagination.innerHTML = '';
                 return;
             }
@@ -467,15 +457,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 <article class="rf-process-report-row">
                     <div class="rf-process-report-main">
                         <div class="rf-process-report-title"><strong>${escapeHtml(item.titular || 'Titular não informado')}</strong><span class="rf-process-report-status" style="--status-color:${escapeHtml(item.status_hex || '#777')}" >${escapeHtml(item.status_nome || 'Sem status')}</span></div>
-                        <div class="rf-process-report-meta"><span><i class="bi bi-hash"></i>${escapeHtml(item.numero_processo || item.id)}</span><span><i class="bi bi-tag"></i>${escapeHtml(item.tipo_nome || 'Sem tipo')}</span><span><i class="bi bi-card-text"></i>Matrícula: ${escapeHtml(item.matricula || 'Não informada')}</span><span><i class="bi bi-calendar3"></i>${formatDate(item.data_entrada)}</span>${item.apresentante ? `<span><i class="bi bi-person"></i>${escapeHtml(item.apresentante)}</span>` : ''}</div>
+                        <div class="rf-process-report-meta"><span><i class="bi bi-tag"></i>${escapeHtml(item.tipo_nome || 'Sem tipo')}</span><span><i class="bi bi-card-text"></i>Matrícula: ${escapeHtml(item.matricula || 'Não informada')}</span><span><i class="bi bi-calendar3"></i>${formatDate(item.data_entrada)}</span>${item.apresentante ? `<span><i class="bi bi-person"></i>${escapeHtml(item.apresentante)}</span>` : ''}</div>
                     </div>
                     <div class="rf-process-report-actions"><a class="nav-btn nav-btn-secondary" href="${item.visualizar_url}"><i class="bi bi-eye me-1"></i>Visualizar</a><a class="nav-btn nav-btn-secondary" target="_blank" rel="noopener" href="${item.imprimir_url}"><i class="bi bi-printer me-1"></i>Imprimir</a><a class="nav-btn nav-btn-primary" href="${item.baixar_url}"><i class="bi bi-file-earmark-pdf me-1"></i>Baixar PDF</a></div>
                 </article>`).join('');
             pagination.innerHTML = (data.total_paginas || 1) > 1 ? `<button type="button" class="nav-btn nav-btn-secondary" ${data.pagina <= 1 ? 'disabled' : ''} data-page="${data.pagina - 1}"><i class="bi bi-chevron-left"></i></button><span>Página ${data.pagina} de ${data.total_paginas}</span><button type="button" class="nav-btn nav-btn-secondary" ${data.pagina >= data.total_paginas ? 'disabled' : ''} data-page="${data.pagina + 1}"><i class="bi bi-chevron-right"></i></button>` : '';
         }
 
+        function showIdleState() {
+            results.innerHTML = '<div class="gs-empty"><i class="bi bi-search" aria-hidden="true"></i><p>Digite uma pesquisa para começar.</p><p class="rf-search-hint">A busca será realizada automaticamente por nome, telefone, matrícula, ID ou processo.</p></div>';
+            summary.textContent = 'Digite uma pesquisa para consultar processos.';
+            pagination.innerHTML = '';
+        }
         async function load() {
-            const params = new URLSearchParams({ q: input.value.trim(), tipo: type.value, status: status.value, pagina: page, por_pagina: 25 });
+            const query = input.value.trim();
+            if (!query) {
+                showIdleState();
+                return;
+            }
+            const params = new URLSearchParams({ q: query, pagina: page, por_pagina: 25 });
             results.innerHTML = '<div class="gs-loading"><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Pesquisando...</div>';
             try {
                 const response = await fetch(`${FlaskRoutes.apiSmartSearch}?${params}`, { credentials: 'same-origin' });
@@ -490,12 +490,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function schedule() { page = 1; clearTimeout(timer); timer = setTimeout(load, 250); }
-        modal.addEventListener('shown.bs.modal', () => { input.focus(); load(); });
-        [input].forEach(element => element.addEventListener('input', schedule));
-        [type, status].forEach(element => element.addEventListener('change', schedule));
-        clear.addEventListener('click', () => { input.value = ''; type.value = ''; status.value = ''; page = 1; load(); });
+        modal.addEventListener('shown.bs.modal', () => { input.focus(); showIdleState(); });
+        input.addEventListener('input', schedule);
+        clear.addEventListener('click', () => { input.value = ''; page = 1; showIdleState(); input.focus(); });
         pagination.addEventListener('click', event => { const button = event.target.closest('[data-page]'); if (button && !button.disabled) { page = Number(button.dataset.page); load(); } });
-        modal.addEventListener('hidden.bs.modal', () => { input.value = ''; type.value = ''; status.value = ''; page = 1; });
+        modal.addEventListener('hidden.bs.modal', () => { input.value = ''; page = 1; showIdleState(); });
     }
     initializeGlobalSearchModal();
 

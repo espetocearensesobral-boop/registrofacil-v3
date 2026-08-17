@@ -1229,3 +1229,46 @@ html body #globalSearchModal .rf-process-report-footer {
     flex: 1 1 auto;
   }
 }
+
+/* Busca Inteligente: controles preenchidos com a paleta ativa do tema. */
+html body #globalSearchModal .rf-process-report-filters {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+html body #globalSearchModal .rf-process-report-actions .nav-btn-secondary,
+html body #globalSearchModal #modal-global-search-clear,
+html body #globalSearchModal .rf-process-report-footer .nav-btn-secondary {
+  background: var(--color-primary-light, #1b4368) !important;
+  border-color: var(--color-primary-light, #1b4368) !important;
+  color: var(--color-primary-contrast, #ffffff) !important;
+}
+
+html body #globalSearchModal .rf-process-report-actions .nav-btn-secondary:hover,
+html body #globalSearchModal .rf-process-report-actions .nav-btn-secondary:focus-visible,
+html body #globalSearchModal #modal-global-search-clear:hover,
+html body #globalSearchModal #modal-global-search-clear:focus-visible,
+html body #globalSearchModal .rf-process-report-footer .nav-btn-secondary:hover,
+html body #globalSearchModal .rf-process-report-footer .nav-btn-secondary:focus-visible {
+  background: var(--color-primary-dark, #0a1e30) !important;
+  border-color: var(--color-primary-dark, #0a1e30) !important;
+  color: var(--color-primary-contrast, #ffffff) !important;
+}
+
+html body #globalSearchModal .rf-process-report-actions .nav-btn-primary {
+  background: var(--color-primary, #243b53) !important;
+  border-color: var(--color-primary, #243b53) !important;
+  color: var(--color-primary-contrast, #ffffff) !important;
+}
+
+html body #globalSearchModal .rf-process-report-actions .nav-btn-primary:hover,
+html body #globalSearchModal .rf-process-report-actions .nav-btn-primary:focus-visible {
+  background: var(--color-primary-dark, #0a1e30) !important;
+  border-color: var(--color-primary-dark, #0a1e30) !important;
+  color: var(--color-primary-contrast, #ffffff) !important;
+}
+
+@media (max-width: 640px) {
+  html body #globalSearchModal .rf-process-report-filters {
+    grid-template-columns: 1fr;
+  }
+}
