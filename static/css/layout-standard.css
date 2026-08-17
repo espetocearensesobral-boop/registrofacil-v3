@@ -1765,3 +1765,35 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   color: #1d2939 !important;
   outline: 0;
 }
+
+/* Tags ativas no topo da superfície, conforme o modelo visual solicitado. */
+#main-content .filter-bar.process-filter-surface {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chips {
+  order: 0;
+  min-height: 2.25rem;
+  padding: .55rem 1rem .25rem !important;
+  border-radius: var(--rf-radius-lg, .875rem) var(--rf-radius-lg, .875rem) 0 0;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  order: 1;
+}
+
+/* Ajuste final: tags abaixo da linha de controles, próximas à caixa de pesquisa. */
+#main-content .filter-bar.process-filter-surface {
+  display: block;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chips {
+  order: initial;
+  min-height: 0;
+  margin-top: -.15rem;
+  padding: .1rem 1rem .45rem !important;
+  border-radius: 0 0 var(--rf-radius-lg, .875rem) var(--rf-radius-lg, .875rem);
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  order: initial;
+  min-height: 3.75rem;
+}
