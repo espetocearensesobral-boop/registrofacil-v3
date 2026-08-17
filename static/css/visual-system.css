@@ -189,7 +189,8 @@ select, .form-select, [data-bs-toggle="dropdown"] { cursor: pointer; }
 .empty-state, .no-results, .placeholder-message { font-size: 1rem; line-height: 1.6; }
 
 .btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--rf-text-on-primary); }
-.btn-primary:hover, .btn-primary:focus { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: var(--rf-text-on-primary); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 24%, transparent); }
+.btn-primary:hover, .btn-primary:focus-visible { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: var(--rf-text-on-primary); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 24%, transparent); }
+.btn-primary:active { background: var(--color-primary-dark); border-color: var(--color-primary-dark); box-shadow: none; }
 .btn-secondary { background: var(--rf-action-secondary); border-color: var(--rf-border); color: var(--rf-action-primary); }
 .btn-secondary:hover { background: var(--rf-action-secondary-hover); border-color: var(--rf-action-primary); color: var(--rf-action-primary); }
 .btn-success { background: var(--rf-success); border-color: var(--rf-success); color: var(--rf-text-on-primary); }
@@ -904,6 +905,22 @@ body .toast, body .toast-container .toast { border-color: var(--border-color-def
 /* Acessibilidade e ausência de efeitos conflitantes */
 body .btn:hover, body button:hover, body a.btn:hover, body .nav-btn:hover { transform: none; box-shadow: none; }
 body :focus-visible { outline: 3px solid color-mix(in srgb, var(--color-gold-primary) 55%, #FFFFFF) !important; outline-offset: 2px; }
+
+/* O clique por mouse não deve deixar o botão com aparência pressionada após a soltura.
+   O foco de teclado continua visível por meio de :focus-visible. */
+body .btn:focus:not(:focus-visible):not(:active),
+body .nav-btn:focus:not(:focus-visible):not(:active),
+body .btn-filter-apply:focus:not(:focus-visible):not(:active),
+body .btn-filter-clear:focus:not(:focus-visible):not(:active),
+body .cfg-sbtn:focus:not(:focus-visible):not(:active),
+body .cfg-obtn:focus:not(:focus-visible):not(:active),
+body .cfg-btn-add:focus:not(:focus-visible):not(:active),
+body .nt-btn-save:focus:not(:focus-visible):not(:active),
+body .nt-btn-cancel:focus:not(:focus-visible):not(:active),
+body .auth-btn:focus:not(:focus-visible):not(:active) {
+    outline: none !important;
+    box-shadow: none !important;
+}
 
 /* Guardas de especificidade: vencem o bloco legado inline do cabeçalho. */
 html body .navbar .nav-btn-primary {

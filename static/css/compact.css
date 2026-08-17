@@ -847,11 +847,15 @@ a.kpi-card {
     color: #fff !important;
     box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
-.btn-primary:focus,
-.btn-primary:active {
+.btn-primary:focus-visible {
     background-color: #1a1a1a !important;
     border-color: #1a1a1a !important;
     box-shadow: 0 0 0 3px rgba(18,18,18,.25) !important;
+}
+.btn-primary:active {
+    background-color: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+    box-shadow: none !important;
 }
 
 /* Secundário */
