@@ -385,6 +385,10 @@ def listar_processos(filtros, pagina_atual, registros_por_pagina, ordenar, ignor
     if filtros.get('tipo'):
         where_clauses.append("P.tipo_id = ?")
         query_params.append(filtros['tipo'])
+    if filtros.get('matricula'):
+        matricula_termo = f"%{filtros['matricula']}%"
+        where_clauses.append("P.matricula LIKE ?")
+        query_params.append(matricula_termo)
     if filtros.get('busca'):
         busca_termo = f"%{filtros['busca']}%"
         # A busca já contempla P.matricula LIKE ?, então a funcionalidade de pesquisar pelo número da matrícula já está presente na lógica de busca global.

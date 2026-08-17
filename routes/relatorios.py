@@ -1,9 +1,9 @@
 from csv import writer
 from io import StringIO
 
-from flask import Blueprint, Response, render_template, request
+from flask import Blueprint, Response, render_template, request, jsonify, url_for
 
-from models import executar_query
+from models import executar_query, listar_processos, obter_tipos_servico, obter_status_processo_config
 from routes.auth import login_status_required, proteger_input
 from routes.permissoes import permission_required
 
@@ -50,6 +50,42 @@ def index():
         )["total"]),
     }
     return render_template("relatorios/index.html", indicadores=indicadores)
+
+
+@relatorios_bp.route("/processos/dados", methods=["GET"])
+@login_status_required
+@permission_required("relatorios_geral")
+def processos_dados():
+    """Fornece a listagem do modal de relatório de processos."""
+    filtros = {
+        "busca": proteger_input(request.args.get("busca", "").strip()),
+        "matricula": proteger_input(request.args.get("matricula", "").strip()),
+    }
+    tipo = request.args.get("tipo", type=int)
+    status = request.args.get("status", type=int)
+    if tipo:
+        filtros["tipo"] = tipo
+    if status:
+        filtros["status_id"] = status
+
+    pagina = max(request.args.get("pagina", 1, type=int), 1)
+    por_pagina = min(max(request.args.get("por_pagina", 25, type=int), 10), 100)
+    resultado = listar_processos(filtros, pagina, por_pagina, "id_desc")
+    processos = []
+    for processo in resultado["processos"] or []:
+        item = dict(processo)
+        item["imprimir_url"] = url_for("processos.gerar_relatorio_customizado", processo_id=item["id"], tipo="html_print")
+        item["baixar_url"] = url_for("processos.gerar_pdf", processo_id=item["id"])
+        processos.append(item)
+    return jsonify({
+        "success": True,
+        "processos": processos,
+        "total": resultado["total_records"],
+        "pagina": pagina,
+        "total_paginas": resultado["total_pages"],
+        "tipos": [dict(row) for row in (obter_tipos_servico() or [])],
+        "status": [dict(row) for row in (obter_status_processo_config() or [])],
+    })
 
 
 @relatorios_bp.route("/contatos", methods=["GET"])
