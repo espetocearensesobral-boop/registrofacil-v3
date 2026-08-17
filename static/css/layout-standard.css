@@ -18,6 +18,10 @@
   --rf-space-12: 3rem;
   --rf-layout-gutter: 1rem;
   --rf-layout-section-gap: 1rem;
+  --rf-layout-gap: 1rem;
+  --rf-layout-section: 1rem;
+  --rf-gutter-x: 1rem;
+  --rf-gutter-y: 1rem;
   --rf-card-pad-x: 1rem;
   --rf-card-pad-y: 1rem;
   --rf-card-header-pad-y: .75rem;
@@ -1867,4 +1871,51 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
     min-height: 0;
     padding-inline: .75rem !important;
   }
+}
+
+/* Régua lateral única: remove resíduos de 24px das camadas legadas. */
+#page-content-wrapper > .navbar > .container-fluid,
+#page-content-wrapper > main,
+#page-content-wrapper > .rf-footer,
+#page-content-wrapper > main.rf-shell {
+  padding-inline: 1rem !important;
+}
+#page-content-wrapper > main {
+  padding-block: 1rem !important;
+}
+#page-content-wrapper > .navbar { padding-inline: 0 !important; }
+
+/* Componentes legados que ainda usavam 24px no conteúdo interno. */
+#main-content .page-header,
+#main-content .filter-section,
+#main-content .form-card,
+#main-content .form-section,
+#main-content .stats-card {
+  padding-inline: 1rem !important;
+}
+#main-content .page-header,
+#main-content .filter-section,
+#main-content .stats-card { margin-bottom: 1rem !important; }
+#main-content .form-card { padding-block: 1rem !important; }
+#main-content .form-section { padding-block: 1rem !important; margin-bottom: 1rem !important; }
+#main-content .form-section .section-title { left: 1rem; }
+#main-content .file-upload-area { padding: 2rem 1rem !important; }
+
+/* Janelas e superfícies modais seguem a mesma régua lateral. */
+.modal-header,
+.modal-body,
+.modal-footer { padding-inline: 1rem !important; }
+@media (max-width: 575.98px) {
+  #page-content-wrapper > .navbar > .container-fluid,
+  #page-content-wrapper > main,
+  #page-content-wrapper > .rf-footer { padding-inline: .75rem !important; }
+  #main-content .page-header,
+  #main-content .filter-section,
+  #main-content .form-card,
+  #main-content .form-section,
+  #main-content .stats-card { padding-inline: .75rem !important; }
+  #main-content .form-section .section-title { left: .75rem; }
+  .modal-header,
+  .modal-body,
+  .modal-footer { padding-inline: .75rem !important; }
 }
