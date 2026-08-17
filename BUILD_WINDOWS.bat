@@ -1,6 +1,6 @@
 @echo off
 :: ============================================================================
-::  RegistroFacil v3.17.6 - Script de Compilacao para Windows
+::  RegistroFacil v3.27.0 - Script de Compilacao para Windows
 ::  Gera um executavel standalone (.exe) via PyInstaller
 ::  Compativel com: Windows 10/11, x64 e x86
 :: ============================================================================
@@ -8,7 +8,7 @@ setlocal EnableDelayedExpansion
 
 :: ── Configuraçoes do projeto ─────────────────────────────────────────────────
 set "APP_NAME=RegistroFacil"
-set "APP_VERSION=3.17.6"
+set "APP_VERSION=3.27.0"
 set "MAIN_SCRIPT=app.py"
 set "ICON_PATH=static\img\certificate.ico"
 set "DIST_DIR=dist"
