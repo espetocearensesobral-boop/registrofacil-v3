@@ -16,11 +16,11 @@
   --rf-space-8: 2rem;
   --rf-space-10: 2.5rem;
   --rf-space-12: 3rem;
-  --rf-layout-gutter: clamp(1rem, 2.5vw, 2rem);
-  --rf-layout-section-gap: clamp(1rem, 1.8vw, 1.5rem);
-  --rf-card-pad-x: clamp(1rem, 1.7vw, 1.5rem);
-  --rf-card-pad-y: clamp(1rem, 1.5vw, 1.25rem);
-  --rf-card-header-pad-y: .875rem;
+  --rf-layout-gutter: 1rem;
+  --rf-layout-section-gap: 1rem;
+  --rf-card-pad-x: 1rem;
+  --rf-card-pad-y: 1rem;
+  --rf-card-header-pad-y: .75rem;
   --rf-control-height: 2.75rem;
   --rf-control-height-sm: 2.25rem;
   --rf-control-height-xs: 1.875rem;
@@ -300,8 +300,8 @@ body {
    Tabelas, alertas e ações
    ------------------------------------------------------------ */
 #main-content .table { margin-bottom: 0; font-size: .875rem; }
-#main-content .table thead th { padding: .75rem var(--rf-card-pad-x); font-size: .75rem; line-height: 1.25; }
-#main-content .table tbody td { padding: .75rem var(--rf-card-pad-x); font-size: .875rem; line-height: 1.4; }
+#main-content .table thead th { padding: .625rem .75rem; font-size: .75rem; line-height: 1.25; }
+#main-content .table tbody td { padding: .625rem .75rem; font-size: .875rem; line-height: 1.4; }
 #main-content .table-responsive { overflow-x: auto; }
 #main-content .alert,
 #main-content .rf-alert,
@@ -1836,4 +1836,35 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
 }
 @media (max-width: 767.98px) {
   #main-content .process-contact-email-col { left: 0; }
+}
+
+/* Densidade compacta institucional: controles de filtro com 32px de altura. */
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  gap: .5rem;
+  min-height: 0;
+  padding: .5rem .75rem !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-search input,
+#main-content .filter-bar.process-filter-surface .process-filter-select,
+#main-content .filter-bar.process-filter-surface .process-filter-icon-btn {
+  height: 2rem;
+  min-height: 2rem;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-search input {
+  padding: .25rem .625rem .25rem 2rem;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-select {
+  padding: .25rem 1.75rem .25rem .625rem;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-icon-btn {
+  width: 2rem;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chips {
+  padding: .1rem .75rem .35rem !important;
+}
+@media (max-width: 800px) {
+  #main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+    min-height: 0;
+    padding-inline: .75rem !important;
+  }
 }
