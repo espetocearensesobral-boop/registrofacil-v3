@@ -381,12 +381,6 @@ async function loadMetricasUsuario() {
 function renderKPIUsuario(kpis) {
     if (!kpis) { setWrap('kpi-usuario', errorHTML()); return; }
     setWrap('kpi-usuario', `
-        <div class="kpi-card kpi-info">
-            <div class="kpi-label">Total Processos (90d)</div>
-            <div class="kpi-value kpi-info">${kpis.total_processos ?? 0}</div>
-            <div class="kpi-sub">${kpis.em_andamento ?? 0} em andamento</div>
-            <i class="bi bi-folder2-open kpi-bg-icon"></i>
-        </div>
         <div class="kpi-card kpi-success">
             <div class="kpi-label">Concluídos</div>
             <div class="kpi-value kpi-success">${kpis.concluidos ?? 0}</div>
@@ -643,29 +637,10 @@ async function loadGraficosGerais() {
         renderTimeline(data.graficos.timeline);
         renderGeralTipos(data.graficos.tipos);
         renderMensal(data.graficos.mensal);
-        loadStatsResumo();
     } catch(e) {
         setWrap('kpi-resumo', `<div class="mtr-error" style="grid-column:1/-1"><i class="bi bi-exclamation-triangle-fill"></i><p>Erro ao carregar dados.</p></div>`);
         console.error('Gráficos gerais:', e);
     }
-}
-
-async function loadStatsResumo() {
-    try {
-        const data = await fetchJSON('/dashboard/api/stats/resumo');
-        if (!data.success) return;
-        const s = data.stats;
-        const wrap = document.getElementById('kpi-resumo');
-        if (wrap) {
-            wrap.insertAdjacentHTML('beforeend', `
-                <div class="kpi-card kpi-info">
-                    <div class="kpi-label">Criados Hoje</div>
-                    <div class="kpi-value kpi-info">${s.hoje ?? 0}</div>
-                    <i class="bi bi-calendar-day kpi-bg-icon"></i>
-                </div>
-            `);
-        }
-    } catch(e) { console.error('Stats resumo:', e); }
 }
 
 function renderKPIResumo(stats) {

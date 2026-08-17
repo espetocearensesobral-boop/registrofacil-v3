@@ -861,3 +861,170 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
     padding-block: .65rem .35rem;
   }
 }
+
+
+/* ------------------------------------------------------------
+   Central de relatórios: cards e ações padronizados
+   ------------------------------------------------------------ */
+#main-content .rf-report-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--rf-space-4);
+}
+#main-content .rf-eyebrow {
+  display: block;
+  margin-bottom: var(--rf-space-1);
+  color: var(--rf-text-muted, #2A2A2A);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+#main-content .rf-report-kpi-grid,
+#main-content .rf-report-card-grid {
+  display: grid;
+  width: 100%;
+  gap: var(--rf-layout-section-gap);
+  margin: 0;
+}
+#main-content .rf-report-kpi-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+#main-content .rf-report-card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+#main-content .rf-report-kpi-card {
+  display: flex;
+  align-items: center;
+  gap: var(--rf-space-3);
+  min-width: 0;
+  min-height: 5.75rem;
+  padding: var(--rf-card-pad-y) var(--rf-card-pad-x);
+  overflow: hidden;
+  background: var(--rf-surface, #fff);
+  border: 1px solid var(--rf-border, #e2e2e2);
+  border-radius: var(--rf-radius-lg, .875rem);
+  box-shadow: var(--rf-shadow-sm);
+}
+#main-content .rf-report-kpi-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 2.5rem;
+  border-radius: var(--rf-radius-sm, .5rem);
+  background: var(--rf-surface-muted, #f8f8f8);
+  color: var(--rf-action-primary, var(--color-primary));
+  font-size: 1.25rem;
+}
+#main-content .rf-report-kpi-label {
+  display: block;
+  color: var(--rf-text-muted, #2A2A2A);
+  font-size: .8125rem;
+  line-height: 1.3;
+}
+#main-content .rf-report-kpi-value {
+  display: block;
+  margin-top: .15rem;
+  color: var(--rf-text-heading, #121212);
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+#main-content .rf-report-card {
+  display: flex;
+  min-width: 0;
+  min-height: 12.25rem;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--rf-surface, #fff);
+  border: 1px solid var(--rf-border, #e2e2e2);
+  border-radius: var(--rf-radius-lg, .875rem);
+  box-shadow: var(--rf-shadow-sm);
+}
+#main-content .rf-report-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rf-space-3);
+  min-height: 5.5rem;
+  padding: var(--rf-card-pad-y) var(--rf-card-pad-x);
+  border-bottom: 1px solid var(--rf-border, #e2e2e2);
+}
+#main-content .rf-report-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 2.5rem;
+  border-radius: var(--rf-radius-sm, .5rem);
+  background: var(--rf-surface-muted, #f8f8f8);
+  color: var(--rf-action-primary, var(--color-primary));
+  font-size: 1.125rem;
+}
+#main-content .rf-report-card-header h2 {
+  margin: 0;
+  color: var(--rf-text-heading, #121212);
+  font-family: var(--rf-font-sans, "Source Sans 3", system-ui, sans-serif);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+#main-content .rf-report-card-header p {
+  margin: .25rem 0 0;
+  color: var(--rf-text-muted, #2A2A2A);
+  font-size: .8125rem;
+  line-height: 1.45;
+}
+#main-content .rf-report-card-body {
+  display: flex;
+  align-items: flex-end;
+  flex: 1;
+  padding: var(--rf-card-pad-y) var(--rf-card-pad-x);
+}
+#main-content .rf-report-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rf-space-2);
+  width: 100%;
+}
+#main-content .rf-report-card-actions .nav-btn {
+  min-height: var(--rf-control-height-sm);
+  white-space: nowrap;
+}
+#main-content .rf-report-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rf-space-6);
+  width: 100%;
+  padding: var(--rf-space-3) var(--rf-card-pad-x);
+  color: var(--rf-text-muted, #2A2A2A);
+  font-size: .8125rem;
+  background: var(--rf-surface, #fff);
+  border: 1px solid var(--rf-border, #e2e2e2);
+  border-radius: var(--rf-radius-lg, .875rem);
+  box-shadow: var(--rf-shadow-sm);
+}
+#main-content .rf-report-note strong { color: var(--rf-text-heading, #121212); }
+
+@media (max-width: 900px) {
+  #main-content .rf-report-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  #main-content .rf-report-page-header { align-items: flex-start; flex-direction: column; }
+  #main-content .rf-report-card-grid { grid-template-columns: 1fr; }
+  #main-content .rf-report-kpi-grid { grid-template-columns: 1fr; }
+  #main-content .rf-report-card-actions .nav-btn { flex: 1 1 auto; }
+}
+
+@media print {
+  #main-content .rf-report-card-actions,
+  #main-content .rf-report-page-header .nav-btn,
+  #main-content .sidebar,
+  #main-content .navbar { display: none !important; }
+  #main-content .rf-report-card-grid { grid-template-columns: 1fr 1fr; }
+  #main-content .rf-report-card { break-inside: avoid; box-shadow: none !important; }
+}

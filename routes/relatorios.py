@@ -83,6 +83,13 @@ def contatos():
     pagina, por_pagina, total_paginas, offset = _paginate(
         total, request.args.get("pagina", 1, type=int), request.args.get("por_pagina", 25, type=int)
     )
+    if request.args.get("imprimir"):
+        rows = executar_query(
+            f"SELECT origem, id, nome, telefone, email FROM ({base}) contatos{where} ORDER BY nome COLLATE NOCASE ASC",
+            params,
+            fetch_all=True,
+        ) or []
+        return render_template("relatorios/contatos_print.html", contatos=rows, busca=busca, origem=origem, total=total)
     rows = executar_query(
         f"SELECT origem, id, nome, telefone, email FROM ({base}) contatos{where} ORDER BY nome COLLATE NOCASE ASC LIMIT ? OFFSET ?",
         params + [por_pagina, offset],
@@ -149,6 +156,8 @@ def servicos():
             ORDER BY ts.ativo DESC, ts.nome COLLATE NOCASE ASC""",
         fetch_all=True,
     ) or []
+    if request.args.get("imprimir"):
+        return render_template("relatorios/servicos_print.html", servicos=rows)
     return render_template("relatorios/servicos.html", servicos=rows)
 
 

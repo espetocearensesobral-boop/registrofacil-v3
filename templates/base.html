@@ -212,6 +212,12 @@
                     <span class="menu-text">Contatos</span>
                 </div>
 
+                <div class="menu-item" data-href="{{ url_for('dashboard.metricas') }}" onclick="setActive(this)"
+                     data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Métricas e Desempenho">
+                    <div class="menu-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <span class="menu-text">Métricas</span>
+                </div>
+
                 <div class="menu-item" data-href="{{ url_for('relatorios.servicos') }}" onclick="setActive(this)"
                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Relatório de Serviços e Tipos">
                     <div class="menu-icon"><i class="bi bi-list-check"></i></div>
