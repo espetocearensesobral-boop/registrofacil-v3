@@ -1797,3 +1797,18 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   order: initial;
   min-height: 3.75rem;
 }
+
+/* Contorno contínuo da superfície de filtros. */
+#main-content .filter-bar.process-filter-surface {
+  border-radius: var(--rf-radius-lg, .875rem) !important;
+  background: var(--rf-surface, #fff) !important;
+  overflow: visible !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  border-radius: var(--rf-radius-lg, .875rem) var(--rf-radius-lg, .875rem) 0 0 !important;
+  background: transparent !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chips {
+  border-radius: 0 0 var(--rf-radius-lg, .875rem) var(--rf-radius-lg, .875rem) !important;
+  background: transparent !important;
+}
