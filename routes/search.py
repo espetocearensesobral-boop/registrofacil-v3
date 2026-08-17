@@ -6,6 +6,8 @@ from routes.auth import is_logged_in_status, login_status_required, get_client_i
 from models import (
     executar_query,
     gravar_log,
+    listar_processos,
+    obter_tipos_servico,
     obter_status_processo_config,
     LOCK_TIMEOUT_MINUTES
 )
@@ -92,6 +94,36 @@ def global_search():
     logger.info(f"Pesquisa global por '{query}' realizada por {usuario_id}. Resultados: {len(results)}")
 
     return jsonify(results)
+
+
+@search_bp.route('/smart_search', methods=['GET'])
+@login_status_required
+def smart_search():
+    """Busca completa de processos para o modal Buscar."""
+    query = proteger_input(request.args.get('q', '').strip())
+    tipo = request.args.get('tipo', type=int)
+    status = request.args.get('status', type=int)
+    pagina = max(request.args.get('pagina', 1, type=int), 1)
+    por_pagina = min(max(request.args.get('por_pagina', 25, type=int), 10), 100)
+    filtros = {'busca': query}
+    if tipo:
+        filtros['tipo'] = tipo
+    if status:
+        filtros['status_id'] = status
+    try:
+        resultado = listar_processos(filtros, pagina, por_pagina, 'id_desc')
+        processos = []
+        for processo in resultado['processos'] or []:
+            item = dict(processo)
+            item['visualizar_url'] = url_for('processos.visualizar', processo_id=item['id'])
+            item['imprimir_url'] = url_for('processos.gerar_relatorio_customizado', processo_id=item['id'], tipo='html_print')
+            item['baixar_url'] = url_for('processos.gerar_pdf', processo_id=item['id'])
+            processos.append(item)
+        gravar_log('pesquisa_inteligente_realizada', None, session.get('usuario_id'), get_client_ip(), f"Busca: '{query}' - {resultado['total_records']} resultados.")
+        return jsonify(success=True, processos=processos, total=resultado['total_records'], pagina=pagina, total_paginas=resultado['total_pages'], tipos=[dict(row) for row in (obter_tipos_servico() or [])], status=[dict(row) for row in (obter_status_processo_config() or [])])
+    except Exception as exc:
+        logger.error(f"Erro na busca inteligente: {exc}", exc_info=True)
+        return jsonify(success=False, message='Falha ao pesquisar processos.'), 500
 
 
 # ... (o restante do arquivo search.py permanece o mesmo) ...

@@ -346,51 +346,23 @@
         </div>
     </div>
 
-    {# Modal de Busca Global - Modernizado #}
+    {# Modal de Busca Inteligente #}
     <div class="modal fade" id="globalSearchModal" tabindex="-1" aria-labelledby="globalSearchModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered rf-search-dialog">
-            <div class="modal-content rf-search-modal">
-                <style>
-                .gs-wrap { padding:0; }
-                .gs-input-bar { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border-color-default); background:var(--background-color-card); }
-                .gs-input-bar i.gs-icon { font-size:17px; color:var(--text-color-secondary); flex-shrink:0; }
-                .gs-input-bar input { flex:1; border:none; background:transparent; font-size:15px; color:var(--text-color-primary); outline:none; }
-                .gs-input-bar input::placeholder { color:var(--text-color-secondary); }
-                .gs-kbd { background:var(--background-color-body); border:1px solid var(--border-color-default); border-radius:5px; padding:2px 7px; font-size: .75rem; color:var(--text-color-secondary); font-family: var(--rf-font-mono); }
-                .gs-body { max-height:380px; overflow-y:auto; background:var(--background-color-card); }
-                .gs-section-lbl { font-size: .75rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-color-secondary); padding:10px 16px 4px; }
-                .gs-item { display:flex; align-items:center; gap:12px; padding:10px 16px; cursor:pointer; transition:background .1s; text-decoration:none; color:inherit; border:none; background:transparent; width:100%; }
-                .gs-item:hover, .gs-item.gs-active { background:var(--background-color-body); }
-                .gs-item-icon { width:34px; height:34px; border-radius:8px; background:var(--background-color-body); border:1px solid var(--border-color-default); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; color:var(--color-gold-dark); }
-                .gs-item-text { flex:1; min-width:0; text-align:left; }
-                .gs-item-title { font-size:13px; font-weight:600; color:var(--text-color-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-                .gs-item-sub { font-size: .75rem; color:var(--text-color-secondary); margin-top:1px; }
-                .gs-item-arrow { font-size:12px; color:var(--text-color-secondary); }
-                .gs-empty { padding:36px 16px; text-align:center; }
-                .gs-empty i { font-size:2rem; opacity:.2; display:block; margin-bottom:8px; }
-                .gs-empty p { font-size:13px; color:var(--text-color-secondary); margin:0; }
-                .gs-loading { padding:24px; text-align:center; color:var(--text-color-secondary); font-size:13px; }
-                .gs-footer { display:flex; align-items:center; gap:12px; padding:8px 16px; border-top:1px solid var(--border-color-default); background:var(--background-color-body); font-size: .75rem; color:var(--text-color-secondary); }
-                </style>
-                <div class="gs-wrap">
-                    <div class="gs-input-bar">
-                        <i class="bi bi-search gs-icon"></i>
-                        <input type="text" id="modal-global-search-input" placeholder="Buscar processos por titular, matrícula ou ID..." autofocus autocomplete="off">
-                        <button type="button" class="btn-close rf-search-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="gs-body" id="modal-search-results-list">
-                        <div class="gs-empty" id="modal-search-no-results">
-                            <i class="bi bi-search"></i>
-                            <p>Digite para buscar processos no sistema</p>
-                            <p class="rf-search-hint">Busca por titular, matrícula ou ID do processo</p>
-                        </div>
-                    </div>
-                    <div class="gs-footer">
-                        <span><kbd class="gs-kbd">↑↓</kbd> navegar</span>
-                        <span><kbd class="gs-kbd">Enter</kbd> abrir</span>
-                        <span><kbd class="gs-kbd">Esc</kbd> fechar</span>
-                    </div>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable rf-report-dialog">
+            <div class="modal-content rf-search-modal rf-process-report-modal">
+                <div class="rf-process-report-head">
+                    <div><span class="rf-eyebrow">Consulta inteligente</span><h2 id="globalSearchModalLabel">Buscar</h2><p>Pesquise processos por nome, telefone, matrícula, ID ou outros dados.</p></div>
+                    <button type="button" class="btn-close rf-search-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
+                <div class="rf-process-report-filters" role="search" aria-label="Busca inteligente">
+                    <div class="rf-process-search"><i class="bi bi-search" aria-hidden="true"></i><input type="search" id="modal-global-search-input" placeholder="Nome, telefone, matrícula, ID, processo..." autocomplete="off"></div>
+                    <select id="modal-global-search-type" class="form-select" aria-label="Filtrar por tipo"><option value="">Todos os tipos</option></select>
+                    <select id="modal-global-search-status" class="form-select" aria-label="Filtrar por status"><option value="">Todos os status</option></select>
+                    <button type="button" class="nav-btn nav-btn-secondary" id="modal-global-search-clear"><i class="bi bi-eraser me-1"></i>Limpar</button>
+                </div>
+                <div class="rf-process-report-summary" id="modal-search-summary" aria-live="polite">Carregando processos...</div>
+                <div class="rf-process-report-body" id="modal-search-results-list"><div class="gs-loading"><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Carregando processos...</div></div>
+                <div class="rf-process-report-footer" id="modal-search-pagination"></div>
             </div>
         </div>
     </div>
@@ -559,6 +531,7 @@
             apiRenewLock: "{{ url_for('search.api_renew_lock') }}",
             apiReleaseLock: "{{ url_for('search.api_release_lock') }}",
             apiGlobalSearch: "{{ url_for('search.global_search') }}",
+            apiSmartSearch: "{{ url_for('search.smart_search') }}",
             atividadesHistorico: "{{ url_for('atividades.historico') }}",
             configuracoesIndex: "{{ url_for('configuracoes.index') }}",
             adminUsersList: "{{ url_for('admin_users.users_list') }}",

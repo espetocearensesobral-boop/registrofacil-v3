@@ -20,7 +20,7 @@
   <div class="rf-report-card-grid">
     <article class="rf-report-card">
       <div class="rf-report-card-header"><span class="rf-report-card-icon"><i class="bi bi-folder2-open" aria-hidden="true"></i></span><div><h2>Relatório de processos</h2><p>Listagem completa com filtros e ações individuais.</p></div></div>
-      <div class="rf-report-card-body"><div class="rf-report-card-actions"><button type="button" class="nav-btn nav-btn-primary" data-bs-toggle="modal" data-bs-target="#processReportModal"><i class="bi bi-eye me-1"></i>Visualizar</button><a class="nav-btn nav-btn-secondary" target="_blank" rel="noopener" href="{{ url_for('processos.imprimir_lista', view_mode='todos') }}"><i class="bi bi-printer me-1"></i>Imprimir</a><a class="nav-btn nav-btn-secondary" href="{{ url_for('processos.gerar_pdf_lista', view_mode='todos') }}"><i class="bi bi-file-earmark-pdf me-1"></i>Salvar em PDF</a></div></div>
+      <div class="rf-report-card-body"><div class="rf-report-card-actions"><span class="nav-btn nav-btn-primary" aria-label="A busca inteligente está disponível na barra Buscar">Use Buscar na barra superior</span><a class="nav-btn nav-btn-secondary" target="_blank" rel="noopener" href="{{ url_for('processos.imprimir_lista', view_mode='todos') }}"><i class="bi bi-printer me-1"></i>Imprimir</a><a class="nav-btn nav-btn-secondary" href="{{ url_for('processos.gerar_pdf_lista', view_mode='todos') }}"><i class="bi bi-file-earmark-pdf me-1"></i>Salvar em PDF</a></div></div>
     </article>
     <article class="rf-report-card">
       <div class="rf-report-card-header"><span class="rf-report-card-icon"><i class="bi bi-person-vcard-fill" aria-hidden="true"></i></span><div><h2>Relatório de contatos</h2><p>Titulares e apresentantes em uma listagem única, com origem identificada.</p></div></div>
@@ -39,63 +39,5 @@
   <div class="rf-report-note"><span><strong>{{ indicadores.contatos_sem_telefone }}</strong> contato(s) sem telefone</span><span><strong>{{ indicadores.contatos_sem_email }}</strong> contato(s) sem e-mail</span></div>
 </div>
 
-<div class="modal fade" id="processReportModal" tabindex="-1" aria-labelledby="processReportModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable rf-report-dialog">
-    <div class="modal-content rf-search-modal rf-process-report-modal">
-      <div class="rf-process-report-head"><div><span class="rf-eyebrow">Relatórios</span><h2 id="processReportModalLabel">Relatório de processos</h2><p>Consulte, filtre e acesse as ações de cada processo.</p></div><button type="button" class="btn-close rf-search-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
-      <div class="rf-process-report-filters" role="search" aria-label="Filtros do relatório de processos">
-        <div class="rf-process-search"><i class="bi bi-search" aria-hidden="true"></i><input id="process-report-search" type="search" placeholder="Buscar por titular, número ou responsável..." autocomplete="off"></div>
-        <select id="process-report-type" class="form-select" aria-label="Filtrar por tipo"><option value="">Todos os tipos</option></select>
-        <select id="process-report-status" class="form-select" aria-label="Filtrar por status"><option value="">Todos os status</option></select>
-        <input id="process-report-matricula" class="form-control" type="search" placeholder="Matrícula" aria-label="Filtrar por matrícula">
-        <button type="button" class="nav-btn nav-btn-secondary" id="process-report-clear"><i class="bi bi-eraser me-1"></i>Limpar</button>
-      </div>
-      <div class="rf-process-report-summary" id="process-report-summary" aria-live="polite">Carregando processos...</div>
-      <div class="rf-process-report-body" id="process-report-results"><div class="gs-loading"><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Carregando processos...</div></div>
-      <div class="rf-process-report-footer" id="process-report-pagination"></div>
-    </div>
-  </div>
-</div>
-{% endblock %}
 
-{% block scripts %}
-<script>
-(() => {
-  const modal = document.getElementById('processReportModal');
-  if (!modal) return;
-  const endpoint = {{ url_for('relatorios.processos_dados')|tojson }};
-  const results = document.getElementById('process-report-results');
-  const summary = document.getElementById('process-report-summary');
-  const pagination = document.getElementById('process-report-pagination');
-  const input = document.getElementById('process-report-search');
-  const matricula = document.getElementById('process-report-matricula');
-  const type = document.getElementById('process-report-type');
-  const status = document.getElementById('process-report-status');
-  let timer; let page = 1; let initialized = false;
-  const esc = value => String(value ?? '').replace(/[&<>\'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));
-  const date = value => value ? new Date(String(value).replace(' ', 'T')).toLocaleDateString('pt-BR') : '—';
-  function fillOptions(data) {
-    if (initialized) return;
-    (data.tipos || []).forEach(item => type.insertAdjacentHTML('beforeend', `<option value="${item.id}">${esc(item.nome)}</option>`));
-    (data.status || []).forEach(item => status.insertAdjacentHTML('beforeend', `<option value="${item.id}">${esc(item.nome)}</option>`));
-    initialized = true;
-  }
-  function render(data) {
-    fillOptions(data); summary.textContent = `${data.total || 0} processo(s) encontrado(s)`;
-    if (!data.processos || !data.processos.length) { results.innerHTML = '<div class="gs-empty"><i class="bi bi-folder2-open"></i><p>Nenhum processo encontrado.</p><p class="rf-search-hint">Ajuste os filtros e tente novamente.</p></div>'; pagination.innerHTML = ''; return; }
-    results.innerHTML = data.processos.map(item => `<article class="rf-process-report-row"><div class="rf-process-report-main"><div class="rf-process-report-title"><strong>${esc(item.titular || 'Titular não informado')}</strong><span class="rf-process-report-status" style="--status-color:${esc(item.status_hex || '#777')}">${esc(item.status_nome || 'Sem status')}</span></div><div class="rf-process-report-meta"><span><i class="bi bi-hash"></i>${esc(item.numero_processo || item.id)}</span><span><i class="bi bi-tag"></i>${esc(item.tipo_nome || 'Sem tipo')}</span><span><i class="bi bi-card-text"></i>Matrícula: ${esc(item.matricula || 'Não informada')}</span><span><i class="bi bi-calendar3"></i>${date(item.data_entrada)}</span></div></div><div class="rf-process-report-actions"><a class="nav-btn nav-btn-secondary" target="_blank" rel="noopener" href="${item.imprimir_url}"><i class="bi bi-printer me-1"></i>Imprimir</a><a class="nav-btn nav-btn-primary" href="${item.baixar_url}"><i class="bi bi-download me-1"></i>Baixar</a></div></article>`).join('');
-    pagination.innerHTML = (data.total_paginas || 1) > 1 ? `<button class="nav-btn nav-btn-secondary" ${data.pagina <= 1 ? 'disabled' : ''} data-page="${data.pagina - 1}"><i class="bi bi-chevron-left"></i></button><span>Página ${data.pagina} de ${data.total_paginas}</span><button class="nav-btn nav-btn-secondary" ${data.pagina >= data.total_paginas ? 'disabled' : ''} data-page="${data.pagina + 1}"><i class="bi bi-chevron-right"></i></button>` : '';
-  }
-  async function load() {
-    const params = new URLSearchParams({busca: input.value.trim(), matricula: matricula.value.trim(), tipo: type.value, status: status.value, pagina: page, por_pagina: 25});
-    results.innerHTML = '<div class="gs-loading"><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Carregando processos...</div>';
-    try { const response = await fetch(`${endpoint}?${params}`, {credentials:'same-origin'}); const data = await response.json(); if (!response.ok || !data.success) throw new Error(); render(data); } catch (error) { results.innerHTML = '<div class="gs-empty"><i class="bi bi-exclamation-triangle"></i><p>Não foi possível carregar os processos.</p></div>'; }
-  }
-  function schedule() { page = 1; clearTimeout(timer); timer = setTimeout(load, 250); }
-  modal.addEventListener('shown.bs.modal', () => { input.focus(); load(); });
-  [input, matricula].forEach(el => el.addEventListener('input', schedule)); [type, status].forEach(el => el.addEventListener('change', schedule));
-  document.getElementById('process-report-clear').addEventListener('click', () => { input.value=''; matricula.value=''; type.value=''; status.value=''; page=1; load(); });
-  pagination.addEventListener('click', event => { const button = event.target.closest('[data-page]'); if (button && !button.disabled) { page = Number(button.dataset.page); load(); } });
-})();
-</script>
 {% endblock %}

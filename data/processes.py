@@ -333,7 +333,8 @@ def obter_historico_processo(processo_id):
 def listar_processos(filtros, pagina_atual, registros_por_pagina, ordenar, ignore_default_filters=False): # MODIFICADO: Adicionado ignore_default_filters
     base_query = """
         SELECT
-            P.id, P.numero_processo, P.titular, P.matricula,
+            P.id, P.numero_processo, P.titular, P.titular_telefone, P.titular_email,
+            P.apresentante, P.apresentante_telefone, P.apresentante_email, P.matricula,
             P.data_entrada, P.prazo_final, P.envolvido_notas,
             TS.nome AS tipo_nome,
             SP.nome AS status_nome, SP.hex_color AS status_hex,
@@ -392,8 +393,8 @@ def listar_processos(filtros, pagina_atual, registros_por_pagina, ordenar, ignor
     if filtros.get('busca'):
         busca_termo = f"%{filtros['busca']}%"
         # A busca já contempla P.matricula LIKE ?, então a funcionalidade de pesquisar pelo número da matrícula já está presente na lógica de busca global.
-        where_clauses.append("(P.numero_processo LIKE ? OR P.titular LIKE ? OR P.matricula LIKE ? OR U.nome LIKE ? OR TS.nome LIKE ? OR SP.nome LIKE ?)")
-        query_params.extend([busca_termo, busca_termo, busca_termo, busca_termo, busca_termo, busca_termo])
+        where_clauses.append("(P.numero_processo LIKE ? OR P.id LIKE ? OR P.titular LIKE ? OR P.titular_telefone LIKE ? OR P.titular_email LIKE ? OR P.apresentante LIKE ? OR P.apresentante_telefone LIKE ? OR P.apresentante_email LIKE ? OR P.matricula LIKE ? OR U.nome LIKE ? OR TS.nome LIKE ? OR SP.nome LIKE ?)")
+        query_params.extend([busca_termo] * 12)
     if filtros.get('data_inicio'):
         where_clauses.append("P.data_entrada >= ?")
         query_params.append(filtros['data_inicio'])

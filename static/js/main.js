@@ -430,170 +430,72 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDateValidation();
 
 
-    // --- 2.8. Lógica de Pesquisa Global (Focada no Modal) ---
+    // --- 2.8. Lógica da Busca Inteligente ---
     function initializeGlobalSearchModal() {
-        const globalSearchModalElement = document.getElementById('globalSearchModal');
-        const modalGlobalSearchInput = document.getElementById('modal-global-search-input');
-        const modalSearchResultsList = document.getElementById('modal-search-results-list');
-        const modalSearchNoResults = document.getElementById('modal-search-no-results');
+        const modal = document.getElementById('globalSearchModal');
+        const input = document.getElementById('modal-global-search-input');
+        const type = document.getElementById('modal-global-search-type');
+        const status = document.getElementById('modal-global-search-status');
+        const clear = document.getElementById('modal-global-search-clear');
+        const results = document.getElementById('modal-search-results-list');
+        const summary = document.getElementById('modal-search-summary');
+        const pagination = document.getElementById('modal-search-pagination');
+        if (!modal || !input || !type || !status || !clear || !results || !summary || !pagination) return;
 
-        let searchTimeout;
+        let timer;
+        let page = 1;
+        let optionsLoaded = false;
+        const escapeHtml = value => String(value ?? '').replace(/[&<>\'"]/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'}[char]));
+        const formatDate = value => value ? new Date(String(value).replace(' ', 'T')).toLocaleDateString('pt-BR') : '—';
 
-        if (!globalSearchModalElement || !modalGlobalSearchInput || !modalSearchResultsList || !modalSearchNoResults) {
-            console.log("initializeGlobalSearchModal: Elementos do modal de pesquisa NÃO ENCONTRADOS, ignorando inicialização.");
-            return;
+        function populateOptions(data) {
+            if (optionsLoaded) return;
+            (data.tipos || []).forEach(item => type.insertAdjacentHTML('beforeend', `<option value="${item.id}">${escapeHtml(item.nome)}</option>`));
+            (data.status || []).forEach(item => status.insertAdjacentHTML('beforeend', `<option value="${item.id}">${escapeHtml(item.nome)}</option>`));
+            optionsLoaded = true;
         }
-        console.log("initializeGlobalSearchModal: Elementos do modal de pesquisa encontrados. Inicializando lógica de pesquisa.");
 
-        globalSearchModalElement.addEventListener('shown.bs.modal', function () {
-            console.log("initializeGlobalSearchModal: Modal de pesquisa global aberto. Focando no input.");
-            modalGlobalSearchInput.focus();
-            modalSearchResultsList.innerHTML = '<div class="gs-empty" id="modal-search-no-results"><i class="bi bi-search"></i><p>Digite para buscar processos no sistema</p><p style="font-size:10px;margin-top:4px;opacity:.6;">Busca por titular, matrícula ou ID do processo</p></div>';
-            modalGlobalSearchInput.value = '';
-        });
-
-        modalGlobalSearchInput.addEventListener('keydown', function(e) {
-            const items = this._items || [];
-            if (!items.length) return;
-            let idx = (this._activeIdx !== undefined && this._activeIdx !== null) ? this._activeIdx : -1;
-
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                e.stopPropagation();
-                idx = Math.min(idx + 1, items.length - 1);
-                items.forEach(el => el.classList.remove('gs-active'));
-                if (items[idx]) {
-                    items[idx].classList.add('gs-active');
-                    items[idx].scrollIntoView({ block: 'nearest' });
-                }
-                this._activeIdx = idx;
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                e.stopPropagation();
-                idx = Math.max(idx - 1, 0);
-                items.forEach(el => el.classList.remove('gs-active'));
-                if (items[idx]) {
-                    items[idx].classList.add('gs-active');
-                    items[idx].scrollIntoView({ block: 'nearest' });
-                }
-                this._activeIdx = idx;
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopPropagation();
-                const active = modalSearchResultsList.querySelector('.gs-item.gs-active');
-                const target = active || items[0];
-                if (target && target.dataset.url) {
-                    const modalEl = document.getElementById('globalSearchModal');
-                    const bsModal = bootstrap.Modal.getInstance(modalEl);
-                    if (bsModal) {
-                        modalEl.addEventListener('hidden.bs.modal', () => { window.location.href = target.dataset.url; }, { once: true });
-                        bsModal.hide();
-                    } else {
-                        window.location.href = target.dataset.url;
-                    }
-                }
-            }
-        });
-        modalGlobalSearchInput.addEventListener('input', function() {
-            console.log("initializeGlobalSearchModal: Input de pesquisa do modal digitado.");
-            clearTimeout(searchTimeout);
-            const query = this.value.trim();
-
-            if (query.length === 0) {
-                modalSearchResultsList.innerHTML = '<div class="gs-empty" id="modal-search-no-results"><i class="bi bi-search"></i><p>Digite para buscar processos no sistema</p></div>';
+        function render(data) {
+            populateOptions(data);
+            summary.textContent = `${data.total || 0} processo(s) encontrado(s)`;
+            if (!data.processos || !data.processos.length) {
+                results.innerHTML = '<div class="gs-empty"><i class="bi bi-inbox"></i><p>Nenhum processo encontrado.</p><p class="rf-search-hint">Digite outro nome, telefone, matrícula, ID ou ajuste os filtros.</p></div>';
+                pagination.innerHTML = '';
                 return;
             }
+            results.innerHTML = data.processos.map(item => `
+                <article class="rf-process-report-row">
+                    <div class="rf-process-report-main">
+                        <div class="rf-process-report-title"><strong>${escapeHtml(item.titular || 'Titular não informado')}</strong><span class="rf-process-report-status" style="--status-color:${escapeHtml(item.status_hex || '#777')}" >${escapeHtml(item.status_nome || 'Sem status')}</span></div>
+                        <div class="rf-process-report-meta"><span><i class="bi bi-hash"></i>${escapeHtml(item.numero_processo || item.id)}</span><span><i class="bi bi-tag"></i>${escapeHtml(item.tipo_nome || 'Sem tipo')}</span><span><i class="bi bi-card-text"></i>Matrícula: ${escapeHtml(item.matricula || 'Não informada')}</span><span><i class="bi bi-calendar3"></i>${formatDate(item.data_entrada)}</span>${item.apresentante ? `<span><i class="bi bi-person"></i>${escapeHtml(item.apresentante)}</span>` : ''}</div>
+                    </div>
+                    <div class="rf-process-report-actions"><a class="nav-btn nav-btn-secondary" href="${item.visualizar_url}"><i class="bi bi-eye me-1"></i>Visualizar</a><a class="nav-btn nav-btn-secondary" target="_blank" rel="noopener" href="${item.imprimir_url}"><i class="bi bi-printer me-1"></i>Imprimir</a><a class="nav-btn nav-btn-primary" href="${item.baixar_url}"><i class="bi bi-file-earmark-pdf me-1"></i>Baixar PDF</a></div>
+                </article>`).join('');
+            pagination.innerHTML = (data.total_paginas || 1) > 1 ? `<button type="button" class="nav-btn nav-btn-secondary" ${data.pagina <= 1 ? 'disabled' : ''} data-page="${data.pagina - 1}"><i class="bi bi-chevron-left"></i></button><span>Página ${data.pagina} de ${data.total_paginas}</span><button type="button" class="nav-btn nav-btn-secondary" ${data.pagina >= data.total_paginas ? 'disabled' : ''} data-page="${data.pagina + 1}"><i class="bi bi-chevron-right"></i></button>` : '';
+        }
 
-            modalSearchResultsList.innerHTML = '<div class="gs-loading"><div class="spinner-border spinner-border-sm me-2" style="width:14px;height:14px;" role="status"></div>Pesquisando...</div>';
+        async function load() {
+            const params = new URLSearchParams({ q: input.value.trim(), tipo: type.value, status: status.value, pagina: page, por_pagina: 25 });
+            results.innerHTML = '<div class="gs-loading"><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Pesquisando...</div>';
+            try {
+                const response = await fetch(`${FlaskRoutes.apiSmartSearch}?${params}`, { credentials: 'same-origin' });
+                const data = await response.json();
+                if (!response.ok || !data.success) throw new Error(data.message || 'Falha na busca');
+                render(data);
+            } catch (error) {
+                results.innerHTML = '<div class="gs-empty"><i class="bi bi-wifi-off"></i><p>Não foi possível realizar a busca.</p></div>';
+                summary.textContent = 'Erro ao carregar resultados';
+                console.error('Busca inteligente:', error);
+            }
+        }
 
-            searchTimeout = setTimeout(async () => {
-                console.log(`initializeGlobalSearchModal: Executando pesquisa para: '${query}'`);
-                try {
-                    const response = await fetch(`${FlaskRoutes.apiGlobalSearch}?q=${encodeURIComponent(query)}`);
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        if (data && data.length > 0) {
-                            modalSearchResultsList.innerHTML = '<div class="gs-section-lbl"><i class="bi bi-folder2-open me-1"></i>Processos encontrados</div>';
-                            let activeIdx = -1;
-                            const items = [];
-                            const modalEl = document.getElementById('globalSearchModal');
-                            data.forEach(item => {
-                                const listItem = document.createElement('a');
-                                listItem.className = 'gs-item';
-                                listItem.href = item.url;
-                                listItem.dataset.url = item.url;
-
-                                // Datas formatadas
-                                const entradaLabel = item.data_entrada
-                                    ? `<span title="Data de Entrada"><i class="bi bi-box-arrow-in-right" style="margin-right:2px;"></i>${item.data_entrada}</span>` : '';
-                                const conclusaoLabel = item.data_conclusao
-                                    ? `<span title="Data de Conclusão"><i class="bi bi-check2-circle" style="margin-right:2px;color:var(--color-success);"></i>${item.data_conclusao}</span>` : '';
-                                const statusDot = item.hex_color
-                                    ? `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${item.hex_color};flex-shrink:0;"></span>` : '';
-                                const statusLabel = item.status_nome
-                                    ? `${statusDot}<span>${item.status_nome}</span>` : '';
-                                const matriculaLabel = item.matricula && item.matricula !== 'N/A'
-                                    ? `<span><i class="bi bi-hash" style="margin-right:1px;"></i>${item.matricula}</span>` : '';
-                                const numeroLabel = item.numero_processo
-                                    ? `<span title="Número do Processo"><i class="bi bi-file-text" style="margin-right:2px;"></i>${item.numero_processo}</span>` : '';
-                                const apresentanteLabel = item.apresentante
-                                    ? `<span title="Apresentante"><i class="bi bi-person" style="margin-right:2px;"></i>${item.apresentante}</span>` : '';
-
-                                const dot = '<span style="opacity:.35;margin:0 2px;">·</span>';
-                                const metaParts = [matriculaLabel, numeroLabel, apresentanteLabel, entradaLabel, conclusaoLabel].filter(Boolean).join(dot);
-
-                                listItem.innerHTML = `
-                                    <div class="gs-item-icon"><i class="bi bi-file-earmark-text"></i></div>
-                                    <div class="gs-item-text">
-                                        <div class="gs-item-title">${item.title}</div>
-                                        <div class="gs-item-sub" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
-                                            ${metaParts}
-                                            ${statusLabel ? dot + statusLabel : ''}
-                                        </div>
-                                    </div>
-                                    <i class="bi bi-arrow-right-short gs-item-arrow"></i>`;
-
-                                // Clique: fecha o modal antes de navegar
-                                listItem.addEventListener('click', function(e) {
-                                    e.preventDefault();
-                                    const url = this.dataset.url;
-                                    if (!url) return;
-                                    const bsModal = bootstrap.Modal.getInstance(modalEl);
-                                    if (bsModal) {
-                                        modalEl.addEventListener('hidden.bs.modal', () => { window.location.href = url; }, { once: true });
-                                        bsModal.hide();
-                                    } else {
-                                        window.location.href = url;
-                                    }
-                                });
-
-                                items.push(listItem);
-                                modalSearchResultsList.appendChild(listItem);
-                            });
-                            modalGlobalSearchInput._items = items;
-                            modalGlobalSearchInput._activeIdx = -1;
-                            console.log(`initializeGlobalSearchModal: ${data.length} resultados encontrados e exibidos.`);
-                        } else {
-                            modalSearchResultsList.innerHTML = `<div class="gs-empty"><i class="bi bi-inbox"></i><p>Nenhum resultado para "<strong>${query}</strong>"</p><p style="font-size:10px;margin-top:4px;opacity:.6;">Tente outros termos ou verifique a ortografia</p></div>`;
-                            console.log("initializeGlobalSearchModal: Nenhum resultado encontrado.");
-                        }
-                    } else {
-                        const errorData = data || {};
-                        const errorMessage = errorData.message || `Erro do servidor: ${response.status} ${response.statusText}.`;
-                        modalSearchResultsList.style.display = 'none';
-                        modalSearchNoResults.style.display = 'block';
-                        modalSearchNoResults.textContent = `Erro: ${errorMessage} Por favor, tente novamente.`;
-                        console.error(`initializeGlobalSearchModal: Erro da API: ${errorMessage} (Status: ${response.status}).`);
-                    }
-
-                } catch (error) {
-                    console.error('initializeGlobalSearchModal: Erro na requisição Fetch da pesquisa global:', error);
-                    modalSearchResultsList.innerHTML = '<div class="gs-empty"><i class="bi bi-wifi-off"></i><p>Erro de rede. Verifique sua conexão.</p></div>';
-                }
-            }, 300);
-        });  // end input listener
-        console.log("initializeGlobalSearchModal: Lógica de pesquisa global inicializada.");
+        function schedule() { page = 1; clearTimeout(timer); timer = setTimeout(load, 250); }
+        modal.addEventListener('shown.bs.modal', () => { input.focus(); load(); });
+        [input].forEach(element => element.addEventListener('input', schedule));
+        [type, status].forEach(element => element.addEventListener('change', schedule));
+        clear.addEventListener('click', () => { input.value = ''; type.value = ''; status.value = ''; page = 1; load(); });
+        pagination.addEventListener('click', event => { const button = event.target.closest('[data-page]'); if (button && !button.disabled) { page = Number(button.dataset.page); load(); } });
+        modal.addEventListener('hidden.bs.modal', () => { input.value = ''; type.value = ''; status.value = ''; page = 1; });
     }
     initializeGlobalSearchModal();
 
