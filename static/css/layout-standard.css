@@ -1629,3 +1629,34 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
 @media (max-width: 800px) {
   #main-content .filter-bar.process-filter-surface .process-filter-toolbar { min-height: 0; }
 }
+
+/* Refinamento final de alinhamento e raio do painel compacto. */
+#main-content .filter-bar.process-filter-surface {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.5rem;
+  border-radius: var(--rf-radius-lg, .875rem) !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.25rem;
+  padding: .75rem 1rem !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chips {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 var(--rf-radius-lg, .875rem) var(--rf-radius-lg, .875rem);
+}
+#main-content .filter-bar.process-filter-surface .process-filter-search,
+#main-content .filter-bar.process-filter-surface .process-filter-select,
+#main-content .filter-bar.process-filter-surface .process-filter-icon-btn {
+  align-self: center;
+}
+@media (max-width: 800px) {
+  #main-content .filter-bar.process-filter-surface { min-height: 0; }
+  #main-content .filter-bar.process-filter-surface .process-filter-toolbar { min-height: 0; }
+}
