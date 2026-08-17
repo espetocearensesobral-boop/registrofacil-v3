@@ -15,16 +15,17 @@
         .header-left, .header-right { display: table-cell; vertical-align: middle; width: 50%; }
         .header-right { text-align: right; }
         .logo { max-width: 150px; max-height: 48px; object-fit: contain; }
-        .report-title { font-size: 13pt; font-weight: 300; color: #444; margin-bottom: 2px; }
-        .report-sub { font-size: 8pt; color: #999; font-style: italic; }
+        .report-title { font-size: 13pt; font-weight: 700; color: #121212; margin-bottom: 3px; }
+        .report-sub { font-size: 8pt; color: #475467; font-style: normal; }
 
         /* BLOCO RESUMO */
         .summary-bar { display: table; width: 100%; margin-bottom: 12px; background: #fffdf7; border: 1px solid #e5d7be; border-radius: 5px; overflow: hidden; }
         .sum-cell { display: table-cell; padding: 7px 12px; vertical-align: middle; text-align: center; border-right: 1px solid #e5d7be; }
         .sum-cell:last-child { border-right: none; }
-        .sum-label { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; color: #b09060; letter-spacing: 0.4px; display: block; margin-bottom: 2px; }
-        .sum-value { font-size: 12pt; font-weight: 700; color: #8B6332; }
-        .sum-value.small { font-size: 8pt; color: #555; font-weight: 600; }
+        .sum-label { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; color: #475467; letter-spacing: 0.4px; display: block; margin-bottom: 2px; }
+        .sum-value { font-size: 12pt; font-weight: 750; color: #1f2937; }
+        .sum-value.small { display: block; font-size: 7.5pt; color: #344054; font-weight: 650; line-height: 1.35; }
+        .context-value { max-width: 100%; overflow-wrap: anywhere; }
 
         /* TABELA */
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
@@ -64,11 +65,23 @@
         }
 
         /* RODAPÉ */
+        .empty-report { padding: 20px 10px; color: #475467; text-align: center; }
+        .empty-report strong { display: block; color: #1f2937; font-size: 8.5pt; margin-bottom: 3px; }
+        .empty-report span { display: block; font-size: 7.5pt; }
         .footer { display: table; width: 100%; padding-top: 7px; border-top: 1px solid #e5d7be; margin-top: 10px; }
-        .footer-left, .footer-right { display: table-cell; font-size: 7pt; color: #6c757d; vertical-align: middle; }
+        .footer-left, .footer-center, .footer-right { display: table-cell; font-size: 7pt; color: #6c757d; vertical-align: middle; }
+        .footer-center { text-align: center; }
         .footer-right { text-align: right; }
 
-        @page { size: A4 landscape; margin: 10mm 12mm; }
+        @page {
+            size: A4 landscape;
+            margin: 10mm 12mm;
+            @bottom-right {
+                color: #6c757d;
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 7pt;
+            }
+        }
         @media print {
             body { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
             .page { max-width: none; width: 100%; margin: 0; padding: 0; }
@@ -77,6 +90,7 @@
             table { page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
             thead { display: table-header-group; }
+            .summary-bar, .header, .footer { page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -92,7 +106,7 @@
         </div>
         <div class="header-right">
             <div class="report-title">{{ titulo_relatorio | default('Relatório de Processos') }}</div>
-            <div class="report-sub">Gerado em {{ now.strftime('%d/%m/%Y às %H:%M:%S') }}</div>
+            <div class="report-sub">Documento institucional · Gerado em {{ now.strftime('%d/%m/%Y às %H:%M:%S') }}</div>
         </div>
     </div>
 
@@ -102,8 +116,16 @@
             <span class="sum-value">{{ total_registros }}</span>
         </div>
         <div class="sum-cell">
-            <span class="sum-label">Data do Relatório</span>
-            <span class="sum-value small">{{ now.strftime('%d/%m/%Y') }}</span>
+            <span class="sum-label">Consulta</span>
+            <span class="sum-value small context-value">{{ contexto_relatorio.filtros | join(' · ') }}</span>
+        </div>
+        <div class="sum-cell">
+            <span class="sum-label">Ordenação</span>
+            <span class="sum-value small">{{ contexto_relatorio.ordenacao | replace('_', ' ') | replace('desc', 'decrescente') | replace('asc', 'crescente') | capitalize }}</span>
+        </div>
+        <div class="sum-cell">
+            <span class="sum-label">Situação de prazo</span>
+            <span class="sum-value small">{{ prazo_resumo.vencidos }} vencido{{ 's' if prazo_resumo.vencidos != 1 }} · {{ prazo_resumo.em_dia }} em dia{% if prazo_resumo.sem_prazo %} · {{ prazo_resumo.sem_prazo }} sem prazo{% endif %}</span>
         </div>
     </div>
 
@@ -140,13 +162,14 @@
                 <td style="text-align:center;">{% if processo.envolvido_notas %}✔{% else %}—{% endif %}</td>
             </tr>
             {% else %}
-            <tr><td colspan="9" style="text-align:center;padding:18px;color:#6c757d;font-style:italic;">Nenhum processo encontrado.</td></tr>
+            <tr><td colspan="9"><div class="empty-report"><strong>Nenhum processo encontrado.</strong><span>A consulta não retornou processos para os critérios informados.</span></div></td></tr>
             {% endfor %}
         </tbody>
     </table>
 
     <div class="footer">
         <div class="footer-left">Registro Fácil — {{ titulo_relatorio | default('Listagem de Processos') }}</div>
+        <div class="footer-center">Documento gerado pelo sistema</div>
         <div class="footer-right">Total: {{ total_registros }} registro{{ 's' if total_registros != 1 }} &nbsp;|&nbsp; {{ now.strftime('%d/%m/%Y %H:%M') }}</div>
     </div>
 

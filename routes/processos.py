@@ -1825,7 +1825,62 @@ def _build_lista_filters_and_title(view_mode):
         else:
             filters['status_id'] = filtro_status_id
 
-    return filters, ordenar, titulo_relatorio
+    tipos_servico = obter_tipos_servico() or []
+    status_list = obter_status_processo_config() or []
+    tipo_label = next((row['nome'] for row in tipos_servico if int(row['id']) == filtro_tipo), None) if filtro_tipo else None
+    status_ids_context = status_ids_in or ([filtro_status_id] if filtro_status_id else [])
+    status_labels = [row['nome'] for row in status_list if int(row['id']) in status_ids_context]
+    contexto_filtros = []
+    if filtro_busca:
+        contexto_filtros.append(f'Busca: {filtro_busca}')
+    if status_labels:
+        contexto_filtros.append(f"Status: {', '.join(status_labels)}")
+    elif status_ids_context:
+        contexto_filtros.append(f'Status: {", ".join(str(item) for item in status_ids_context)}')
+    if tipo_label:
+        contexto_filtros.append(f'Tipo: {tipo_label}')
+    if filters.get('data_inicio') or filters.get('data_fim'):
+        inicio = filters.get('data_inicio') or 'início'
+        fim = filters.get('data_fim') or 'fim'
+        try:
+            inicio = datetime.strptime(inicio, '%Y-%m-%d').strftime('%d/%m/%Y') if inicio != 'início' else inicio
+            fim = datetime.strptime(fim, '%Y-%m-%d').strftime('%d/%m/%Y') if fim != 'fim' else fim
+        except (TypeError, ValueError):
+            pass
+        contexto_filtros.append(f'Período: {inicio} a {fim}')
+    if filtro_envolve_notas is not None:
+        contexto_filtros.append(f'Envolve notas: {"Sim" if filtro_envolve_notas else "Não"}')
+    if not contexto_filtros:
+        contexto_filtros.append('Sem filtros adicionais')
+    contexto_relatorio = {
+        'filtros': contexto_filtros,
+        'ordenacao': ordenar,
+        'visao': titulo_relatorio,
+    }
+    return filters, ordenar, titulo_relatorio, contexto_relatorio
+
+
+def _resumir_prazos_relatorio(processos):
+    """Resume a situação de prazo somente dos processos ativos do relatório."""
+    hoje = datetime.now().date()
+    vencidos = 0
+    em_dia = 0
+    sem_prazo = 0
+    for processo in processos:
+        prazo = str(processo.get('prazo_final') or '')[:10]
+        if processo.get('data_conclusao'):
+            continue
+        if not prazo:
+            sem_prazo += 1
+            continue
+        try:
+            if datetime.strptime(prazo, '%Y-%m-%d').date() < hoje:
+                vencidos += 1
+            else:
+                em_dia += 1
+        except ValueError:
+            sem_prazo += 1
+    return {'vencidos': vencidos, 'em_dia': em_dia, 'sem_prazo': sem_prazo}
 
 
 @processos_bp.route('/imprimir_lista', methods=['GET'])
@@ -1835,12 +1890,13 @@ def imprimir_lista():
     logger.info(f"Gerando relatório de impressão da lista de processos para Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}")
 
     view_mode = request.args.get('view_mode', 'todos')
-    filters, ordenar, titulo_relatorio = _build_lista_filters_and_title(view_mode)
+    filters, ordenar, titulo_relatorio, contexto_relatorio = _build_lista_filters_and_title(view_mode)
 
     try:
         resultado = listar_processos(filters, 1, 9999, ordenar)
         processos = resultado['processos']
         total_registros_impressao = resultado['total_records']
+        prazo_resumo = _resumir_prazos_relatorio(processos)
 
         empresa_info = get_empresa_info()
         logo_filename = empresa_info.get('logo') if empresa_info else None
@@ -1853,6 +1909,8 @@ def imprimir_lista():
                                processos=processos,
                                total_registros=total_registros_impressao,
                                titulo_relatorio=titulo_relatorio,
+                               contexto_relatorio=contexto_relatorio,
+                               prazo_resumo=prazo_resumo,
                                logo_url=logo_url,
                                now=datetime.now(),
                                formatar_data=formatar_data,
@@ -1870,12 +1928,13 @@ def imprimir_lista():
 def gerar_pdf_lista():
     """Gera PDF da listagem de processos respeitando todos os filtros ativos."""
     view_mode = request.args.get('view_mode', 'todos')
-    filters, ordenar, titulo_relatorio = _build_lista_filters_and_title(view_mode)
+    filters, ordenar, titulo_relatorio, contexto_relatorio = _build_lista_filters_and_title(view_mode)
 
     try:
         resultado = listar_processos(filters, 1, 9999, ordenar)
         processos = resultado['processos']
         total_registros_impressao = resultado['total_records']
+        prazo_resumo = _resumir_prazos_relatorio(processos)
 
         empresa_info = get_empresa_info()
         logo_filename = empresa_info.get('logo') if empresa_info else None
@@ -1886,6 +1945,8 @@ def gerar_pdf_lista():
             processos=processos,
             total_registros=total_registros_impressao,
             titulo_relatorio=titulo_relatorio,
+            contexto_relatorio=contexto_relatorio,
+            prazo_resumo=prazo_resumo,
             logo_url=logo_url,
             now=datetime.now(),
             formatar_data=formatar_data,
