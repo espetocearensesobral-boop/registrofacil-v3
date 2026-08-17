@@ -12,6 +12,7 @@ from io import BytesIO
 from flask import Response
 from datetime import datetime
 from werkzeug.utils import secure_filename
+from weasyprint import HTML
 import os
 from routes.auth import login_status_required, get_client_ip, proteger_input
 from routes.permissoes import permission_required
@@ -290,6 +291,42 @@ def imprimir():
         logger.error(f"Erro ao imprimir titulares: {e}", exc_info=True)
         flash("Erro ao gerar relatório de impressão.", "danger")
         return redirect(url_for('titulares.index'))
+
+@titulares_bp.route('/pdf', methods=['GET'])
+@login_status_required
+@permission_required('titulares_imprimir')
+def gerar_pdf():
+    """Gera o PDF da listagem de titulares respeitando os filtros ativos."""
+    busca = proteger_input(request.args.get('busca', ''))
+    ordenar = request.args.get('ordenar', 'nome')
+    direcao = request.args.get('direcao', 'asc')
+    filtros = {'busca': busca, 'ordenar': ordenar, 'direcao': direcao}
+    try:
+        resultado = listar_titulares(filtros, 1, 9999)
+        titulares = resultado['titulares']
+        empresa_info = get_empresa_info()
+        logo_filename = empresa_info.get('logo') if empresa_info else None
+        from utils.file_uploads import get_image_url_for_display
+        logo_url = get_image_url_for_display(logo_filename, is_company_logo=True)
+        html_string = render_template(
+            'relatorios/titulares_print.html',
+            titulares=titulares,
+            total_registros=resultado['total_records'],
+            logo_url=logo_url,
+            busca=busca,
+            now=datetime.now()
+        )
+        pdf_bytes = HTML(string=html_string, base_url=request.url_root).write_pdf()
+        return Response(
+            pdf_bytes,
+            mimetype='application/pdf',
+            headers={'Content-Disposition': f'inline; filename=relatorio_titulares_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'}
+        )
+    except Exception as e:
+        logger.error(f"Erro ao gerar PDF de titulares: {e}", exc_info=True)
+        flash("Erro ao gerar relatório em PDF.", "danger")
+        return redirect(url_for('titulares.index'))
+
 
 @titulares_bp.route('/api/buscar', methods=['GET'])
 @login_status_required

@@ -10,6 +10,7 @@ from openpyxl.styles import Font, PatternFill
 from io import BytesIO
 from flask import Response
 from datetime import datetime
+from weasyprint import HTML
 from routes.auth import login_status_required, get_client_ip, proteger_input
 from routes.permissoes import permission_required
 from utils.logger import logger
@@ -191,7 +192,11 @@ def novo():
 @permission_required('apresentantes_exportar')
 def exportar():
     try:
-        resultado = listar_apresentantes(registros_por_pagina=1000000)
+        busca = proteger_input(request.args.get('busca', ''))
+        ordenar = request.args.get('ordenar', 'nome')
+        direcao = request.args.get('direcao', 'asc')
+        filtros = {'busca': busca, 'ordenar': ordenar, 'direcao': direcao}
+        resultado = listar_apresentantes(filtros, 1, 1000000)
         apresentantes = resultado['apresentantes']
 
         wb = Workbook()
@@ -264,6 +269,42 @@ def imprimir():
         logger.error(f"Erro ao gerar impressão de apresentantes: {e}", exc_info=True)
         flash("Erro ao gerar relatório de impressão.", "danger")
         return redirect(url_for('apresentantes.index'))
+
+@apresentantes_bp.route('/pdf', methods=['GET'])
+@login_status_required
+@permission_required('apresentantes_imprimir')
+def gerar_pdf():
+    """Gera o PDF da listagem de apresentantes respeitando os filtros ativos."""
+    busca = proteger_input(request.args.get('busca', ''))
+    ordenar = request.args.get('ordenar', 'nome')
+    direcao = request.args.get('direcao', 'asc')
+    filtros = {'busca': busca, 'ordenar': ordenar, 'direcao': direcao}
+    try:
+        resultado = listar_apresentantes(filtros, 1, 9999)
+        apresentantes = resultado['apresentantes']
+        empresa_info = get_empresa_info()
+        logo_filename = empresa_info.get('logo') if empresa_info else None
+        from utils.file_uploads import get_image_url_for_display
+        logo_url = get_image_url_for_display(logo_filename, is_company_logo=True)
+        html_string = render_template(
+            'relatorios/apresentantes_print.html',
+            apresentantes=apresentantes,
+            total_registros=resultado['total_records'],
+            logo_url=logo_url,
+            busca=busca,
+            now=datetime.now()
+        )
+        pdf_bytes = HTML(string=html_string, base_url=request.url_root).write_pdf()
+        return Response(
+            pdf_bytes,
+            mimetype='application/pdf',
+            headers={'Content-Disposition': f'inline; filename=relatorio_apresentantes_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'}
+        )
+    except Exception as e:
+        logger.error(f"Erro ao gerar PDF de apresentantes: {e}", exc_info=True)
+        flash("Erro ao gerar relatório em PDF.", "danger")
+        return redirect(url_for('apresentantes.index'))
+
 
 @apresentantes_bp.route('/api/buscar', methods=['GET'])
 @login_status_required

@@ -20,6 +20,9 @@
             <li><a class="dropdown-item" href="{{ url_for('titulares.exportar_excel', **request.args.to_dict()) }}">
                 <i class="bi bi-filetype-xlsx me-2"></i>Exportar Excel
             </a></li>
+            <li><a class="dropdown-item" href="{{ url_for('titulares.gerar_pdf', **request.args.to_dict()) }}" target="_blank" rel="noopener">
+                <i class="bi bi-file-earmark-pdf me-2"></i>Baixar PDF
+            </a></li>
         </ul>
     </div>
 {% endblock %}
