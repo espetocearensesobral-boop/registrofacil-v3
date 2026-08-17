@@ -827,9 +827,9 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
 
 /* Densidade tipográfica da navegação: legível, compacta e sem foto de perfil. */
 #sidebar .sidebar-group-toggle {
-  min-height: 1.875rem;
-  padding: .55rem .875rem .25rem;
-  font-size: .75rem;
+  min-height: 2.25rem;
+  padding: .65rem .875rem .35rem;
+  font-size: .875rem;
   letter-spacing: .08em;
   line-height: 1.15;
 }
@@ -857,7 +857,7 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
 
 @media (max-width: 991px) {
   #sidebar .sidebar-group-toggle {
-    min-height: 1.875rem;
-    padding-block: .55rem .25rem;
+    min-height: 2.25rem;
+    padding-block: .65rem .35rem;
   }
 }
