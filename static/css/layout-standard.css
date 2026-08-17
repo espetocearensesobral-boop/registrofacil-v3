@@ -1587,3 +1587,45 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   #main-content .process-filter-date-row { flex-direction: column; gap: .25rem; }
   #main-content .process-filter-popover { right: -.25rem; }
 }
+
+/* Visual definitivo dos filtros compactos: sem accordion e sem a caixa visual legada. */
+#main-content .filter-bar.process-filter-surface {
+  width: 100%;
+  min-width: 0;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 1px solid var(--rf-border, #e2e2e2) !important;
+  border-radius: .625rem !important;
+  background: var(--rf-surface, #fff) !important;
+  box-shadow: var(--rf-shadow-sm, 0 .125rem .5rem rgba(16, 24, 40, .08)) !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  min-height: 3.75rem;
+  padding: .5rem .75rem !important;
+  background: var(--rf-surface, #fff) !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-chips {
+  padding-bottom: .625rem;
+  background: var(--rf-surface, #fff);
+}
+#main-content .filter-bar.process-filter-surface .process-filter-search input,
+#main-content .filter-bar.process-filter-surface .process-filter-select,
+#main-content .filter-bar.process-filter-surface .process-filter-icon-btn {
+  height: 2.375rem;
+  min-height: 2.375rem;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-search input {
+  border-color: var(--rf-border-strong, #c9cfd6) !important;
+  border-radius: .45rem !important;
+  background: #fff !important;
+  color: var(--rf-text-body, #2a2a2a) !important;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-select {
+  border-color: var(--rf-border-strong, #c9cfd6) !important;
+  border-radius: .45rem !important;
+  background-color: #fff !important;
+  color: var(--rf-text-body, #2a2a2a) !important;
+}
+@media (max-width: 800px) {
+  #main-content .filter-bar.process-filter-surface .process-filter-toolbar { min-height: 0; }
+}

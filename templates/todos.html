@@ -48,12 +48,7 @@
     </div>
 </div>
 
-<div class="filter-bar {% if has_active_filters %}active-filters{% endif %}">
-    <button class="filter-bar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false">
-        <i class="bi bi-funnel-fill"></i> <strong>Filtros</strong>
-        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
-    </button>
-<div class="collapse filter-bar-body" id="filterCollapse">
+<div class="filter-bar process-filter-surface">
     <form hx-get="{{ url_for('processos.todos') }}" hx-target="#processos-container" hx-select="#processos-container" hx-push-url="true" hx-indicator=".loader-overlay" class="process-filter-toolbar" id="process-filter-form">
         <div class="process-filter-search">
             <i class="bi bi-search" aria-hidden="true"></i>
@@ -136,7 +131,6 @@
         {% if ordenar != 'id_desc' %}<span class="process-filter-chip">Ordem: {{ ordenar | replace('_', ' ') }} <button type="button" data-clear-filter="ordenar" aria-label="Remover ordenação"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
         {% if registros_por_pagina != 10 %}<span class="process-filter-chip">{{ registros_por_pagina }} por página <button type="button" data-clear-filter="registros_por_pagina" aria-label="Remover quantidade por página"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
     </div>
-   </div>
 </div>
 
 <div class="rf-report-context-bar" aria-label="Resumo da consulta de processos">
@@ -310,19 +304,6 @@
     document.getElementById('printListModal').addEventListener('show.bs.modal', updatePrintListUrls);
 </script>
 <script>
-    document.addEventListener('show.bs.collapse', function(e) {
-        if (e.target.id === 'filterCollapse') {
-            const btn = document.querySelector('[data-bs-target="#filterCollapse"] strong');
-            if (btn) btn.textContent = 'Recolher Filtros';
-        }
-    });
-    document.addEventListener('hide.bs.collapse', function(e) {
-        if (e.target.id === 'filterCollapse') {
-            const btn = document.querySelector('[data-bs-target="#filterCollapse"] strong');
-            if (btn) btn.textContent = 'Filtros';
-        }
-    });
-
     function updateProcessFilterBadge() {
         const badge = document.getElementById('process-filter-badge');
         if (!badge) return;
