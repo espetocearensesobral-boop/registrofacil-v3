@@ -1660,3 +1660,40 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   #main-content .filter-bar.process-filter-surface { min-height: 0; }
   #main-content .filter-bar.process-filter-surface .process-filter-toolbar { min-height: 0; }
 }
+
+/* Correção de composição: controles sempre na mesma linha em telas amplas. */
+#main-content .filter-bar.process-filter-surface {
+  display: block;
+  min-height: 0;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .5rem;
+  min-height: 4.25rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-toolbar::-webkit-scrollbar { display: none; }
+#main-content .filter-bar.process-filter-surface .process-filter-search {
+  flex: 1 1 16rem;
+  min-width: 15rem;
+}
+#main-content .filter-bar.process-filter-surface .process-filter-select {
+  flex: 0 0 auto;
+  min-width: 9rem;
+}
+#main-content .filter-bar.process-filter-surface #tipo { min-width: 10.5rem; }
+#main-content .filter-bar.process-filter-surface #envolve_notas { min-width: 8.75rem; }
+#main-content .filter-bar.process-filter-surface .process-filter-more-wrap,
+#main-content .filter-bar.process-filter-surface .process-filter-icon-btn { flex: 0 0 auto; }
+@media (max-width: 800px) {
+  #main-content .filter-bar.process-filter-surface .process-filter-toolbar {
+    min-height: 3.75rem;
+    padding-inline: .75rem !important;
+  }
+  #main-content .filter-bar.process-filter-surface .process-filter-search { flex: 0 0 15rem; }
+}
