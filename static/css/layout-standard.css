@@ -825,11 +825,11 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
   color: var(--color-error);
 }
 
-/* Densidade tipográfica da navegação: compacta, legível e sem foto de perfil. */
+/* Densidade tipográfica da navegação: legível, compacta e sem foto de perfil. */
 #sidebar .sidebar-group-toggle {
   min-height: 1.875rem;
   padding: .55rem .875rem .25rem;
-  font-size: .6875rem;
+  font-size: .75rem;
   letter-spacing: .08em;
   line-height: 1.15;
 }
@@ -843,7 +843,7 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
 
 #sidebar .sidebar-category-items .menu-text,
 #sidebar .sidebar-logout .menu-text {
-  font-size: .8125rem;
+  font-size: .9375rem;
   line-height: 1.25;
 }
 
