@@ -2339,3 +2339,48 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   box-sizing: border-box;
   overflow: visible;
 }
+
+/* Dashboard: tabela em duas colunas reais, sem dependência do algoritmo de tabela. */
+#main-content .dashboard-panels-row .dash-table {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12rem;
+  width: 100% !important;
+  min-width: 0;
+  table-layout: auto;
+  border-collapse: separate;
+}
+#main-content .dashboard-panels-row .dash-table thead,
+#main-content .dashboard-panels-row .dash-table tbody,
+#main-content .dashboard-panels-row .dash-table tr {
+  display: contents;
+}
+#main-content .dashboard-panels-row .dash-table th,
+#main-content .dashboard-panels-row .dash-table td {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box;
+  overflow: visible;
+}
+#main-content .dashboard-panels-row .dash-table th.col-end,
+#main-content .dashboard-panels-row .dash-table td.col-end {
+  grid-column: 2;
+  width: 12rem !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+#main-content .dashboard-panels-row .dash-table th.col-fill,
+#main-content .dashboard-panels-row .dash-table td.col-fill {
+  grid-column: 1;
+  width: auto !important;
+  min-width: 0 !important;
+}
+@media (max-width: 575.98px) {
+  #main-content .dashboard-panels-row .dash-table {
+    grid-template-columns: minmax(0, 1fr) 10rem;
+  }
+  #main-content .dashboard-panels-row .dash-table th.col-end,
+  #main-content .dashboard-panels-row .dash-table td.col-end {
+    width: 10rem !important;
+  }
+}
