@@ -23,7 +23,7 @@
                 <small>Atualize os dados de <strong>{{ titular.nome }}</strong></small>
             </div>
         </div>
-        <form id="form-titular" method="post" novalidate action="{{ url_for('titulares.editar', titular_id=titular.id) }}">
+        <form id="form-titular" method="post" novalidate action="{{ url_for('titulares.editar', titular_id=titular.id) }}" data-rf-submit-state data-submit-label="Salvar Alterações">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <div class="nt-body">
                 <div class="nt-fld">

@@ -29,6 +29,33 @@ function inicializarSidebar() {
 document.addEventListener('DOMContentLoaded', inicializarSidebar);
 
 /**
+ * Estado visual comum para ações de envio: confirma o clique, evita duplo envio
+ * e preserva o texto específico de cada ação sem alterar o fluxo do backend.
+ */
+function inicializarEstadosDeEnvio() {
+    document.querySelectorAll('form').forEach(form => {
+        const declaredSubmitState = form.hasAttribute('data-rf-submit-state');
+        const declaredSubmitButton = form.querySelector('button[type="submit"][data-loading-text]');
+        if (!declaredSubmitState && !declaredSubmitButton) return;
+        if (form.dataset.rfSubmitStateReady === 'true') return;
+        form.dataset.rfSubmitStateReady = 'true';
+        form.addEventListener('submit', function() {
+            const submitButton = this.querySelector('button[type="submit"]:not([data-no-submit-state])');
+            if (!submitButton || submitButton.dataset.rfSubmitting === 'true') return;
+            submitButton.dataset.rfSubmitting = 'true';
+            submitButton.dataset.rfOriginalHtml = submitButton.innerHTML;
+            const loadingText = submitButton.dataset.loadingText || this.dataset.submitLabel || 'Processando...';
+            submitButton.disabled = true;
+            submitButton.setAttribute('aria-busy', 'true');
+            submitButton.innerHTML = `<span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>${loadingText}`;
+            this.setAttribute('aria-busy', 'true');
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', inicializarEstadosDeEnvio);
+
+/**
  * Ativa o item de menu clicado na sidebar e lida com a navegação/abertura de modais.
  * @param {HTMLElement} element - O elemento .menu-item clicado.
  */

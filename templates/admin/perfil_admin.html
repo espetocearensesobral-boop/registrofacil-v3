@@ -70,7 +70,7 @@
                 <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Configurações Administrativas</h5>
             </div>
             <div class="rf-card-body">
-                <form id="form-gerenciar-usuario" method="post">
+                <form id="form-gerenciar-usuario" method="post" data-rf-submit-state data-submit-label="Salvar Alterações">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     
                     <div class="row">
@@ -172,13 +172,10 @@
                     
                     <hr class="my-4">
                     
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-1"></i> Salvar Alterações
-                        </button>
-                        <a href="{{ url_for('admin_users.users_list') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-1"></i> Cancelar
-                        </a>
+                    <div class="rf-form-actions" data-action-bar>
+                        <span class="rf-required-note">Revise os dados antes de salvar.</span>
+                        <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary"><i class="bi bi-x-circle me-1"></i> Cancelar</a>
+                        <button type="submit" class="nav-btn nav-btn-primary" data-loading-text="Salvando..."><i class="bi bi-check-circle me-1"></i> Salvar Alterações</button>
                     </div>
                 </form>
             </div>

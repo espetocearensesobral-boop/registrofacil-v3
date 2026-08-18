@@ -166,9 +166,10 @@
     {% endfor %}
 
     {# Botão Salvar #}
-    <div class="rf-form-actions">
-        <button type="submit" class="nav-btn" id="btnSalvar"
-                >
+    <div class="rf-form-actions" data-action-bar>
+        <span class="rf-required-note">Revise as permissões antes de salvar.</span>
+        <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary">Cancelar</a>
+        <button type="submit" class="nav-btn nav-btn-primary" id="btnSalvar" data-loading-text="Salvando...">
             <i class="bi bi-save me-1"></i> Salvar Alterações
         </button>
     </div>

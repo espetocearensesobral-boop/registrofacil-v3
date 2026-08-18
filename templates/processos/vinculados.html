@@ -9,17 +9,13 @@
     <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary">
         <i class="bi bi-plus-circle"></i> Novo Processo
     </a>
-    <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#printListModal">
-        <i class="bi bi-printer"></i> Imprimir
-    </button>
     <div class="dropdown">
         <button class="nav-btn nav-btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-download"></i> Exportar
+            <i class="bi bi-three-dots"></i> Mais ações
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="{{ url_for('processos.exportar_excel', **request.args.to_dict()) }}">
-                <i class="bi bi-filetype-xlsx me-2"></i>Exportar Excel
-            </a></li>
+            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#printListModal"><i class="bi bi-printer me-2"></i>Imprimir lista</button></li>
+            <li><a class="dropdown-item" href="{{ url_for('processos.exportar_excel', **request.args.to_dict()) }}"><i class="bi bi-filetype-xlsx me-2"></i>Exportar Excel</a></li>
         </ul>
     </div>
 {% endblock %}

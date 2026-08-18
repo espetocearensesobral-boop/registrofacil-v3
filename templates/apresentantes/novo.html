@@ -20,7 +20,7 @@
                 <small>Preencha as informações para cadastrar um novo apresentante</small>
             </div>
         </div>
-        <form id="form-apresentante" method="post" novalidate action="{{ url_for('apresentantes.novo') }}">
+        <form id="form-apresentante" method="post" novalidate action="{{ url_for('apresentantes.novo') }}" data-rf-submit-state data-submit-label="Cadastrar Apresentante">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <div class="nt-body">
                 <div class="nt-fld">

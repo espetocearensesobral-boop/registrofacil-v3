@@ -8,17 +8,16 @@
 {# Define os botões de ação que serão exibidos na navbar do base.html #}
 {% block page_actions %}
     <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" class="nav-btn nav-btn-secondary">
-        <i class="bi bi-eye"></i> Visualizar
+        <i class="bi bi-arrow-left"></i> Voltar para visualização
     </a>
-    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary">
-        <i class="bi bi-list-ul"></i> Todos
-    </a>
-    <button type="button" class="nav-btn nav-btn-danger"
-            data-bs-toggle="modal"
-            data-bs-target="#confirmDeleteModal"
-            data-id="{{ processo_id }}">
-        <i class="bi bi-trash"></i> Excluir
-    </button>
+    <div class="dropdown">
+        <button class="nav-btn nav-btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots"></i> Mais ações
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="{{ processo_id }}"><i class="bi bi-trash me-2"></i>Excluir processo</button></li>
+        </ul>
+    </div>
 {% endblock %}
 
 {% block content %}
@@ -36,7 +35,7 @@
 {% endif %}
 
 <div class="form-card rf-form-card rf-wide">
-    <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.editar', processo_id=processo_id) }}">
+    <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.editar', processo_id=processo_id) }}" data-rf-submit-state data-submit-label="Salvar Alterações">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {# Campo oculto para o ID do processo, usado no JavaScript para o controle de lock #}
         <input type="hidden" name="id" value="{{ processo_id }}">
@@ -337,15 +336,13 @@
             <div id="total-size" class="mt-2 text-muted small"></div>
         </div>
 
-        <div class="action-buttons" style="display:flex; justify-content:flex-end; gap:.5rem;">
-            {# Transformado o botão Cancelar em um link direto #}
-            <a href="{{ url_for('processos.todos') }}" class="btn btn-secondary btn-cancel-action">
-                <i class="bi bi-x-lg"></i>
-                Cancelar
+        <div class="rf-form-actions" data-action-bar>
+            <span class="rf-required-note"><span class="rf-required-mark">*</span> Campos obrigatórios</span>
+            <a href="{{ url_for('processos.visualizar', processo_id=processo_id) }}" class="nav-btn nav-btn-secondary btn-cancel-action">
+                <i class="bi bi-x-lg"></i> Cancelar
             </a>
-            <button type="submit" class="btn btn-success">
-                <i class="bi bi-check-lg"></i>
-                Salvar Alterações
+            <button type="submit" class="nav-btn nav-btn-primary" data-loading-text="Salvando...">
+                <i class="bi bi-check-lg"></i> Salvar Alterações
             </button>
         </div>
     </form>

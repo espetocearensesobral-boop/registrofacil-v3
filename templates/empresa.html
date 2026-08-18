@@ -87,7 +87,8 @@
             </div>
 
             {% if session.get('usuario_role') == 'admin' %}
-            <div class="rf-form-actions">
+            <div class="rf-form-actions" data-action-bar>
+                <span class="rf-required-note"><span class="rf-required-mark">*</span> Campos obrigatórios</span>
                 <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
                     <i class="bi bi-x"></i> Cancelar
                 </a>

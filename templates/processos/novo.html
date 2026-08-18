@@ -9,14 +9,11 @@
     <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary">
         <i class="bi bi-list-ul"></i> Processos
     </a>
-    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
-        <i class="bi bi-house"></i> Dashboard
-    </a>
 {% endblock %}
 
 {% block content %}
 <div class="form-card rf-form-card rf-wide">
-    <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.novo') }}">
+    <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.novo') }}" data-rf-submit-state data-submit-label="Cadastrar Processo">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         
         <div class="form-section">
@@ -254,14 +251,13 @@
             <div id="total-size" class="mt-2 text-muted small"></div>
         </div>
 
-        <div class="action-buttons" style="display:flex; justify-content:flex-end; gap:.5rem;">
-            <a href="{{ url_for('processos.todos') }}" class="btn btn-secondary btn-cancel-action">
-                <i class="bi bi-x-lg"></i>
-                Cancelar
+        <div class="rf-form-actions" data-action-bar>
+            <span class="rf-required-note"><span class="rf-required-mark">*</span> Campos obrigatórios</span>
+            <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary btn-cancel-action">
+                <i class="bi bi-x-lg"></i> Cancelar
             </a>
-            <button type="submit" class="btn btn-success">
-                <i class="bi bi-check-lg"></i>
-                Cadastrar Processo
+            <button type="submit" class="nav-btn nav-btn-primary" data-loading-text="Cadastrando...">
+                <i class="bi bi-check-lg"></i> Cadastrar Processo
             </button>
         </div>
     </form>

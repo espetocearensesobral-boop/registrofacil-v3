@@ -4193,3 +4193,149 @@ html body #main-content.rf-list-page .rf-infinite-status {
 #sidebar .sidebar-flat-group .menu-item {
   margin-block: 0 !important;
 }
+
+/* =====================================================================
+   CONTRATO UX DE AÇÕES — topo, rodapé de formulário e modais
+   Última camada intencional: neutraliza variações legadas sem alterar lógica.
+   ===================================================================== */
+#page-content-wrapper > .navbar .rf-navbar-actions {
+  min-width: 0;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--rf-space-2, .5rem) !important;
+}
+#page-content-wrapper > .navbar .rf-navbar-actions > .nav-btn,
+#page-content-wrapper > .navbar .rf-navbar-actions > .dropdown > .nav-btn {
+  min-height: var(--rf-control-height, 2.625rem);
+  height: var(--rf-control-height, 2.625rem);
+  padding-inline: .9rem;
+  border-radius: var(--rf-radius-sm, 8px);
+  font-size: .875rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+#page-content-wrapper > .navbar .rf-navbar-actions > .dropdown { display: inline-flex; min-width: 0; }
+#page-content-wrapper > .navbar .rf-navbar-actions .nav-btn:focus-visible,
+#main-content .rf-form-actions .nav-btn:focus-visible,
+#main-content .nt-footer .nt-btn-save:focus-visible,
+#main-content .nt-footer .nt-btn-cancel:focus-visible,
+.modal-footer .btn:focus-visible,
+.modal-footer .nav-btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary, #cda865) 35%, transparent);
+  outline-offset: 2px;
+}
+
+#main-content .rf-form-actions,
+#main-content .action-buttons,
+#main-content .form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--rf-space-3, .75rem);
+  min-height: 4.25rem;
+  margin-top: var(--rf-space-4, 1rem);
+  padding: var(--rf-space-4, 1rem) var(--rf-card-pad-x, 1.25rem) !important;
+  background: var(--rf-surface-muted, #f8f8f8);
+  border-top: 1px solid var(--rf-border, #e2e2e2);
+  border-radius: 0 0 var(--rf-radius-md, 10px) var(--rf-radius-md, 10px);
+}
+#main-content .rf-form-actions .rf-required-note,
+#main-content .action-buttons .rf-required-note,
+#main-content .form-actions .rf-required-note {
+  margin: 0 auto 0 0;
+  color: var(--rf-text-muted, #6b6b6b);
+  font-size: .8125rem;
+  line-height: 1.35;
+}
+#main-content .rf-form-actions > .btn,
+#main-content .rf-form-actions > .nav-btn,
+#main-content .action-buttons > .btn,
+#main-content .action-buttons > .nav-btn,
+#main-content .form-actions > .btn,
+#main-content .form-actions > .nav-btn,
+#main-content .nt-footer > .nt-btn-save,
+#main-content .nt-footer > .nt-btn-cancel {
+  min-width: 8.75rem;
+  min-height: var(--rf-control-height, 2.625rem);
+  height: var(--rf-control-height, 2.625rem);
+  justify-content: center;
+  border-radius: var(--rf-radius-sm, 8px);
+  font-weight: 650;
+}
+#main-content .rf-form-actions > button[type="submit"],
+#main-content .action-buttons > button[type="submit"],
+#main-content .form-actions > button[type="submit"] { order: 3; }
+#main-content .rf-form-actions > a,
+#main-content .action-buttons > a,
+#main-content .form-actions > a { order: 2; }
+#main-content .rf-form-actions > .rf-required-note,
+#main-content .action-buttons > .rf-required-note,
+#main-content .form-actions > .rf-required-note { order: 1; }
+#main-content .rf-form-actions > .nav-btn-success,
+#main-content .action-buttons > .btn-success { background: var(--color-primary, #cda865) !important; border-color: var(--color-primary, #cda865) !important; color: var(--rf-text-on-primary, #fff) !important; }
+#main-content .rf-form-actions > .nav-btn-success:hover,
+#main-content .action-buttons > .btn-success:hover { background: var(--color-primary-dark, #8b6332) !important; border-color: var(--color-primary-dark, #8b6332) !important; }
+
+#main-content .nt-footer {
+  min-height: 4.25rem;
+  gap: var(--rf-space-3, .75rem);
+  padding-inline: var(--rf-card-pad-x, 1.25rem) !important;
+  background: var(--rf-surface-muted, #f8f8f8);
+  border-top: 1px solid var(--rf-border, #e2e2e2);
+}
+#main-content .nt-footer .nt-required-note { margin-right: auto; }
+
+.modal-footer,
+#main-content .modal-footer {
+  min-height: 3.75rem;
+  align-items: center;
+  gap: var(--rf-space-2, .5rem);
+}
+.modal-footer .btn,
+.modal-footer .nav-btn {
+  min-height: var(--rf-control-height, 2.625rem);
+  height: auto;
+  border-radius: var(--rf-radius-sm, 8px);
+  font-weight: 650;
+}
+.modal-footer .rf-inline-form { display: inline-flex; margin: 0; }
+.modal-footer .dropdown-item { min-height: 2.25rem; }
+
+@media (max-width: 700px) {
+  #page-content-wrapper > .navbar .rf-navbar-actions { width: 100%; margin-top: .5rem; justify-content: flex-start; }
+  #page-content-wrapper > .navbar .rf-navbar-actions > .nav-btn,
+  #page-content-wrapper > .navbar .rf-navbar-actions > .dropdown { flex: 0 1 auto; }
+  #main-content .rf-form-actions,
+  #main-content .action-buttons,
+  #main-content .form-actions,
+  #main-content .nt-footer { align-items: stretch; }
+  #main-content .rf-form-actions .rf-required-note,
+  #main-content .action-buttons .rf-required-note,
+  #main-content .form-actions .rf-required-note,
+  #main-content .nt-footer .nt-required-note { flex: 1 0 100%; margin: 0; }
+  #main-content .rf-form-actions > .btn,
+  #main-content .rf-form-actions > .nav-btn,
+  #main-content .action-buttons > .btn,
+  #main-content .action-buttons > .nav-btn,
+  #main-content .form-actions > .btn,
+  #main-content .form-actions > .nav-btn,
+  #main-content .nt-footer > .nt-btn-save,
+  #main-content .nt-footer > .nt-btn-cancel { flex: 1 1 0; min-width: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #page-content-wrapper > .navbar .rf-navbar-actions .nav-btn,
+  #main-content .rf-form-actions .btn,
+  #main-content .rf-form-actions .nav-btn,
+  #main-content .nt-footer .nt-btn-save,
+  #main-content .nt-footer .nt-btn-cancel,
+  .modal-footer .btn,
+  .modal-footer .nav-btn { transition: transform .16s ease-out, background-color .16s ease-out, border-color .16s ease-out, color .16s ease-out; }
+}
+#page-content-wrapper > .navbar .rf-navbar-actions .nav-btn:active,
+#main-content .rf-form-actions .btn:active,
+#main-content .rf-form-actions .nav-btn:active,
+#main-content .nt-footer .nt-btn-save:active,
+#main-content .nt-footer .nt-btn-cancel:active,
+.modal-footer .btn:active,
+.modal-footer .nav-btn:active { transform: scale(.97); }

@@ -5,6 +5,9 @@
 {% block page_title %}Processo #{{ '%04d' % processo.id }}{% endblock %}
 
 {% block page_actions %}
+    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar para Processos
+    </a>
     {% if processo.status_nome_original == 'Finalizado' or processo.data_conclusao %}
     <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="nav-btn nav-btn-warning"
        title="Este processo está finalizado. A edição será registrada no histórico.">
@@ -15,18 +18,14 @@
         <i class="bi bi-pencil"></i> Editar
     </a>
     {% endif %}
-    <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#reportOptionsModal">
-        <i class="bi bi-printer"></i> Imprimir
-    </button>
-    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary">
-        <i class="bi bi-list-ul"></i> Todos
-    </a>
-    <button type="button" class="nav-btn nav-btn-danger"
-            data-bs-toggle="modal"
-            data-bs-target="#confirmDeleteModal"
-            data-id="{{ processo.id }}">
-        <i class="bi bi-trash"></i> Excluir
-    </button>
+    <div class="dropdown">
+        <button type="button" class="nav-btn nav-btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i> Mais ações</button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reportOptionsModal"><i class="bi bi-printer me-2"></i>Imprimir processo</button></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="{{ processo.id }}"><i class="bi bi-trash me-2"></i>Excluir processo</button></li>
+        </ul>
+    </div>
 {% endblock %}
 
 {% block content %}

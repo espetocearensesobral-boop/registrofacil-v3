@@ -11,9 +11,6 @@
     <a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary">
         <i class="bi bi-person-badge-fill"></i> Perfis de Permissão
     </a>
-    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
-        <i class="bi bi-house"></i> Dashboard
-    </a>
 {% endblock %}
 
 
@@ -194,7 +191,7 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <input type="hidden" name="id_usuario" id="inactivateUserId">
                     <input type="hidden" name="action" value="inativar_usuario">
-                    <button type="submit" class="btn btn-danger">Confirmar Inativação</button>
+                    <button type="submit" class="nav-btn nav-btn-danger" data-loading-text="Confirmando...">Confirmar Inativação</button>
                 </div>
             </form>
         </div>

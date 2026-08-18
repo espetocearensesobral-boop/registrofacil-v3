@@ -3,9 +3,6 @@
 {% block page_title %}Perfil: {{ perfil.nome }}{% endblock %}
 
 {% block page_actions %}
-<button type="button" class="nav-btn nav-btn-primary" onclick="salvarPerfil()">
-    <i class="bi bi-save me-1"></i> Salvar Alterações
-</button>
 <a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary">
     <i class="bi bi-arrow-left"></i> Voltar
 </a>
@@ -78,6 +75,13 @@
     </div>
     {% endfor %}
 </form>
+<div class="rf-form-actions" data-action-bar>
+    <span class="rf-required-note">Revise as permissões antes de salvar.</span>
+    <a href="{{ url_for('permissoes.listar_perfis') }}" class="nav-btn nav-btn-secondary">Cancelar</a>
+    <button type="button" class="nav-btn nav-btn-primary" id="btn-salvar-perfil" onclick="salvarPerfil()" data-loading-text="Salvando...">
+        <i class="bi bi-save me-1"></i> Salvar Alterações
+    </button>
+</div>
 
 {% if usuarios_vinculados %}
 <div class="rf-card mt-3">
@@ -148,6 +152,8 @@ function setProfileFeedback(type, icon, message) {
 }
 
 async function salvarPerfil() {
+    const saveButton = document.getElementById('btn-salvar-perfil');
+    if (saveButton) { saveButton.disabled = true; saveButton.classList.add('is-loading'); saveButton.setAttribute('aria-busy', 'true'); }
     const fd = new FormData();
     fd.append('csrf_token', csrfToken);
     fd.append('nome', document.getElementById('perfilNome').value.trim());
@@ -162,7 +168,7 @@ async function salvarPerfil() {
         } else {
             setProfileFeedback('danger', 'bi bi-exclamation-circle-fill', data.message);
         }
-    } catch(e) { alert('Erro de rede.'); }
+    } catch(e) { alert('Erro de rede.'); } finally { if (saveButton) { saveButton.disabled = false; saveButton.classList.remove('is-loading'); saveButton.removeAttribute('aria-busy'); } }
 }
 
 document.addEventListener('DOMContentLoaded', atualizarContador);

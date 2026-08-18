@@ -9,14 +9,11 @@
     <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary">
         <i class="bi bi-people"></i> Usuários
     </a>
-    <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
-        <i class="bi bi-house"></i> Dashboard
-    </a>
 {% endblock %}
 
 {% block content %}
 <div class="form-card rf-form-card">
-    <form id="form-edit-user" method="post" novalidate action="{{ url_for('admin_users.edit_user', user_id=user_data.id) }}">
+    <form id="form-edit-user" method="post" novalidate action="{{ url_for('admin_users.edit_user', user_id=user_data.id) }}" data-rf-submit-state data-submit-label="Salvar Alterações">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <div class="row g-4">
@@ -190,11 +187,11 @@
             </div>
         </div>
 
-        <div class="action-buttons">
-            <a href="{{ url_for('admin_users.users_list') }}" class="btn btn-secondary btn-cancel-action">
+        <div class="rf-form-actions">
+            <a href="{{ url_for('admin_users.users_list') }}" class="nav-btn nav-btn-secondary btn-cancel-action">
                 <i class="bi bi-x-lg"></i> Cancelar
             </a>
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="nav-btn nav-btn-primary" data-loading-text="Salvando...">
                 <i class="bi bi-check-lg"></i> Salvar Alterações
             </button>
         </div>
