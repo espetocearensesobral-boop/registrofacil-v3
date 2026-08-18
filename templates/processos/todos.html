@@ -25,28 +25,6 @@
 
 
 {% block content %}
-<!-- KPI Cards -->
-<div class="kpi-grid">
-    <div class="kpi-card kpi-danger">
-        <div class="kpi-label">Atrasados</div>
-        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
-        <div class="kpi-sub">Com prazo vencido</div>
-        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-warning">
-        <div class="kpi-label">Pendentes</div>
-        <div class="kpi-value kpi-warning">{{ processos_andamento }}</div>
-        <div class="kpi-sub">Aguardando conclusão</div>
-        <i class="bi bi-hourglass-split kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-gold">
-        <div class="kpi-label">Total</div>
-        <div class="kpi-value kpi-gold">{{ total_processos }}</div>
-        <div class="kpi-sub">Processos no sistema</div>
-        <i class="bi bi-archive-fill kpi-bg-icon"></i>
-    </div>
-</div>
-
 <div class="card process-list-card">
     <div class="rf-card-header">
         <h6 class="rf-card-title mb-0"><i class="bi bi-folder-fill"></i> Todos os Processos</h6>

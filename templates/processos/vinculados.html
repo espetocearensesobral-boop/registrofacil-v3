@@ -26,31 +26,9 @@
 
 
 {% block content %}
-<!-- KPI Cards -->
-<div class="kpi-grid">
-    <div class="kpi-card kpi-danger">
-        <div class="kpi-label">Atrasados</div>
-        <div class="kpi-value kpi-danger">{{ prazo_vencido }}</div>
-        <div class="kpi-sub">Com prazo vencido</div>
-        <i class="bi bi-exclamation-octagon kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-warning">
-        <div class="kpi-label">Em Andamento</div>
-        <div class="kpi-value kpi-warning">{{ processos_andamento }}</div>
-        <div class="kpi-sub">Aguardando conclusão</div>
-        <i class="bi bi-hourglass kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-gold">
-        <div class="kpi-label">Meus Processos</div>
-        <div class="kpi-value kpi-gold">{{ meus_processos }}</div>
-        <div class="kpi-sub">Vinculados a mim</div>
-        <i class="bi bi-person-check kpi-bg-icon"></i>
-    </div>
-</div>
-
 <div class="card process-list-card">
     <div class="rf-card-header">
-        <h6 class="rf-card-title mb-0"><i class="bi bi-table"></i> Lista de Meus Processos</h6>
+        <h6 class="rf-card-title mb-0"><i class="bi bi-table"></i> Meus Processos</h6>
         <span class="rf-badge count">{{ total_registros }}</span>
     </div>
     {% include "processos/_filter_toolbar.html" %}
