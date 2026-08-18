@@ -608,7 +608,7 @@ button[class*="btn-"] {
 .cfg-sbtn.blue,
 .cfg-btn-add,
 .nt-btn-save,
-button[type="submit"]:not(.btn-outline-primary) {
+button[type="submit"]:not(.btn-outline-primary):not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):not(.btn-info):not(.btn-secondary):not(.btn-outline-secondary) {
     background: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
     color: var(--rf-text-on-primary) !important;
@@ -620,7 +620,7 @@ button[type="submit"]:not(.btn-outline-primary) {
 .cfg-sbtn.blue:hover,
 .cfg-btn-add:hover,
 .nt-btn-save:hover,
-button[type="submit"]:not(.btn-outline-primary):hover {
+button[type="submit"]:not(.btn-outline-primary):not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):not(.btn-info):not(.btn-secondary):not(.btn-outline-secondary):hover {
     background: var(--color-primary-light) !important;
     border-color: var(--color-primary-light) !important;
     color: var(--rf-text-on-primary) !important;
@@ -630,7 +630,7 @@ button[type="submit"]:not(.btn-outline-primary):hover {
 .cfg-btn-add:active,
 .nav-btn-primary:active,
 .nav-btn-primary:active,
-button[type="submit"]:not(.btn-outline-primary):active { background: var(--color-primary-dark) !important; }
+button[type="submit"]:not(.btn-outline-primary):not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):not(.btn-info):not(.btn-secondary):not(.btn-outline-secondary):active { background: var(--color-primary-dark) !important; }
 
 .btn-secondary,
 .nav-btn-secondary,
@@ -768,7 +768,7 @@ body .nt-btn-save,
 body .auth-btn,
 body .btn-acao-clicavel,
 body .btn-browse-dir,
-body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger) {
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):not(.btn-primary):not(.nav-btn-primary):not(.btn-success):not(.nav-btn-success):not(.btn-warning):not(.nav-btn-warning):not(.btn-info):not(.nav-btn-info):not(.btn-secondary):not(.btn-outline-secondary) {
   background: var(--color-primary, var(--color-primary)) !important;
   border: 1px solid var(--color-primary, var(--color-primary)) !important;
   color: var(--color-primary-contrast, #FFFFFF) !important;
@@ -785,7 +785,7 @@ body .nt-btn-save:hover,
 body .auth-btn:hover,
 body .btn-acao-clicavel:hover,
 body .btn-browse-dir:hover,
-body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):hover {
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):not(.btn-primary):not(.nav-btn-primary):not(.btn-success):not(.nav-btn-success):not(.btn-warning):not(.nav-btn-warning):not(.btn-info):not(.nav-btn-info):not(.btn-secondary):not(.btn-outline-secondary):hover {
   background: var(--color-primary-light, var(--color-primary-light)) !important;
   border-color: var(--color-primary-light, var(--color-primary-light)) !important;
   color: #FFFFFF !important;
@@ -795,7 +795,7 @@ body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):hover {
 body .btn-primary:active,
 body .btn-dark:active,
 body .nav-btn-primary:active,
-body button[type="submit"]:active { background: var(--color-primary-dark, var(--color-primary-dark)) !important; }
+body button[type="submit"]:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):not(.btn-info):not(.btn-secondary):not(.btn-outline-secondary):active { background: var(--color-primary-dark, var(--color-primary-dark)) !important; }
 
 body .btn-secondary,
 body .btn-outline-secondary,
@@ -1327,7 +1327,7 @@ body .nt-btn-save,
 body .auth-btn,
 body .btn-acao-clicavel,
 body .btn-browse-dir,
-body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger) {
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):not(.btn-primary):not(.nav-btn-primary):not(.btn-success):not(.nav-btn-success):not(.btn-warning):not(.nav-btn-warning):not(.btn-info):not(.nav-btn-info):not(.btn-secondary):not(.btn-outline-secondary) {
   background-color: var(--color-primary, #0F2A43) !important;
   border-color: var(--color-primary, #0F2A43) !important;
 }
@@ -1343,7 +1343,7 @@ body .nt-btn-save:hover,
 body .auth-btn:hover,
 body .btn-acao-clicavel:hover,
 body .btn-browse-dir:hover,
-body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):hover,
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):not(.btn-primary):not(.nav-btn-primary):not(.btn-success):not(.nav-btn-success):not(.btn-warning):not(.nav-btn-warning):not(.btn-info):not(.nav-btn-info):not(.btn-secondary):not(.btn-outline-secondary):hover,
 body .nav-btn-primary:focus-visible,
 body .btn-primary:focus-visible,
 body .btn-dark:focus-visible,
