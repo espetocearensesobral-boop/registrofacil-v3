@@ -46,16 +46,6 @@
         <button type="submit" class="process-filter-icon-btn process-filter-apply-btn" title="Aplicar filtros" aria-label="Aplicar filtros"><i class="bi bi-funnel" aria-hidden="true"></i></button>
         <a href="{{ request.path }}" class="process-filter-icon-btn process-filter-clear-btn" title="Limpar filtros" aria-label="Limpar filtros"><i class="bi bi-x-lg" aria-hidden="true"></i></a>
     </form>
-    <div class="process-filter-chips" id="process-filter-chips" aria-live="polite">
-        {% if filtro_busca %}<span class="process-filter-chip">Busca: {{ filtro_busca }} <button type="button" data-clear-filter="busca" aria-label="Remover busca"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
-        {% if filtro_status_id %}{% for status in status_list if status.id == filtro_status_id %}<span class="process-filter-chip">Status: {{ status.nome }} <button type="button" data-clear-filter="status" aria-label="Remover status"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endfor %}{% endif %}
-        {% if filtro_tipo %}{% for tipo in tipos_servico if tipo.id == filtro_tipo %}<span class="process-filter-chip">Serviço: {{ tipo.nome }} <button type="button" data-clear-filter="tipo" aria-label="Remover serviço"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endfor %}{% endif %}
-        {% if filtro_envolve_notas is not none %}<span class="process-filter-chip">Notas: {{ 'Sim' if filtro_envolve_notas == 1 else 'Não' }} <button type="button" data-clear-filter="envolve_notas" aria-label="Remover filtro de notas"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
-        {% if filtro_data_inicio %}<span class="process-filter-chip">De: {{ filtro_data_inicio | replace('-', '/') }} <button type="button" data-clear-filter="data_inicio" aria-label="Remover data inicial"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
-        {% if filtro_data_fim %}<span class="process-filter-chip">Até: {{ filtro_data_fim | replace('-', '/') }} <button type="button" data-clear-filter="data_fim" aria-label="Remover data final"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
-        {% if ordenar != 'id_desc' %}<span class="process-filter-chip">Ordem: {{ ordenar | replace('_', ' ') }} <button type="button" data-clear-filter="ordenar" aria-label="Remover ordenação"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
-        {% if registros_por_pagina != 10 %}<span class="process-filter-chip">{{ registros_por_pagina }} por página <button type="button" data-clear-filter="registros_por_pagina" aria-label="Remover quantidade por página"><i class="bi bi-x" aria-hidden="true"></i></button></span>{% endif %}
-    </div>
 </div>
 
 <script>
@@ -76,7 +66,6 @@
     }
     document.addEventListener('click', function (event) {
         const moreButton = event.target.closest('#process-filter-more');
-        const clearButton = event.target.closest('[data-clear-filter]');
         const popover = document.getElementById('process-filter-popover');
         if (moreButton && popover) {
             event.preventDefault();
@@ -84,14 +73,6 @@
             popover.hidden = isOpen;
             moreButton.setAttribute('aria-expanded', String(!isOpen));
             updateProcessFilterBadge();
-            return;
-        }
-        if (clearButton) {
-            event.preventDefault();
-            const field = document.getElementById(clearButton.dataset.clearFilter);
-            const form = document.getElementById('process-filter-form');
-            if (field) field.value = field.id === 'ordenar' ? 'id_desc' : field.id === 'registros_por_pagina' ? '10' : '';
-            if (form) form.requestSubmit();
             return;
         }
         if (popover && !popover.hidden && !event.target.closest('.process-filter-more-wrap')) {
