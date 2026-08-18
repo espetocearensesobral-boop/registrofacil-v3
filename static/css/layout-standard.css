@@ -3263,3 +3263,39 @@ html body #main-content .process-list-card::after {
   border: 0 !important;
   box-shadow: none !important;
 }
+
+/* Listas de Processos: aproveitamento integral das laterais da superfície. */
+html body #main-content .process-list-card,
+html body #main-content .process-list-card > .rf-card-header,
+html body #main-content .process-list-card > .filter-bar.process-filter-surface,
+html body #main-content .process-list-card > .card-body,
+html body #main-content .process-list-card > .card-body > .table-responsive,
+html body #main-content .process-list-card > .card-body > .table-responsive > .table-processos {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-inline: 0 !important;
+}
+html body #main-content .process-list-card > .rf-card-header {
+  padding-inline: .75rem !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-toolbar {
+  padding-inline: .75rem !important;
+}
+html body #main-content .process-list-card > .card-body > .table-responsive {
+  padding-inline: 0 !important;
+}
+html body #main-content .process-list-card > .card-body > .table-responsive > .table-processos th,
+html body #main-content .process-list-card > .card-body > .table-responsive > .table-processos td {
+  padding-inline: .625rem !important;
+}
+@media (max-width: 575.98px) {
+  html body #main-content .process-list-card > .rf-card-header,
+  html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-toolbar {
+    padding-inline: .5rem !important;
+  }
+  html body #main-content .process-list-card > .card-body > .table-responsive > .table-processos th,
+  html body #main-content .process-list-card > .card-body > .table-responsive > .table-processos td {
+    padding-inline: .5rem !important;
+  }
+}
