@@ -2249,7 +2249,13 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   table-layout: fixed;
 }
 #main-content .dashboard-panel .dash-table .col-fill {
+  width: auto !important;
   min-width: 0;
+}
+#main-content .dashboard-panel .dash-table .col-end {
+  width: 9.5rem !important;
+  min-width: 9.5rem;
+  white-space: nowrap;
 }
 #main-content .dashboard-panel .dash-table .cell-ellipsis {
   max-width: none;
