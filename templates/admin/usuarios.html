@@ -41,49 +41,6 @@
     </div>
 </div>
 
-<div class="filter-bar {% if has_active_filters %}active-filters{% endif %}">
-    <button class="filter-bar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false">
-        <i class="bi bi-funnel-fill"></i> <strong>Filtros</strong>
-        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
-    </button>
-
-    <div class="collapse filter-bar-body" id="filterCollapse">
-        <form method="get" class="row g-3 align-items-end">
-            <div class="col-12 col-md-4">
-                <label for="status" class="form-label">Status</label>
-                <select name="status" id="status" class="form-select">
-                    <option value="ativo" {% if filtro_status == 'ativo' %}selected{% endif %}>Ativos</option>
-                    <option value="inativo" {% if filtro_status == 'inativo' %}selected{% endif %}>Inativos</option>
-                    <option value="todos" {% if filtro_status == 'todos' %}selected{% endif %}>Todos</option>
-                </select>
-            </div>
-            <div class="col-12 col-md-4">
-                <label for="busca" class="form-label">Buscar</label>
-                <input type="text" name="busca" id="busca" class="form-control"
-                       value="{{ filtro_busca | default('') }}"
-                       placeholder="Usuário, nome ou e-mail">
-            </div>
-            <div class="col-12 col-md-4">
-                <label for="itens_por_pagina" class="form-label">Registros por página</label>
-                <select name="itens_por_pagina" id="itens_por_pagina" class="form-select">
-                    <option value="10" {% if itens_por_pagina == 10 %}selected{% endif %}>10</option>
-                    <option value="25" {% if itens_por_pagina == 25 %}selected{% endif %}>25</option>
-                    <option value="50" {% if itens_por_pagina == 50 %}selected{% endif %}>50</option>
-                    <option value="100" {% if itens_por_pagina == 100 %}selected{% endif %}>100</option>
-                </select>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn-filter-apply">
-                    <i class="bi bi-funnel me-1"></i> Filtrar
-                </button>
-                <a href="{{ url_for('admin_users.users_list') }}" class="btn btn-limpar ms-2">
-                    <i class="bi bi-x-circle me-1"></i> Limpar
-                </a>
-            </div>
-        </form>
-    </div>
-</div>
-
 {% if filtro_status == 'inativo' %}
 <div style="background:rgba(30,136,229,.08);border:1px solid rgba(30,136,229,.2);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--color-info);margin-bottom:1rem;">
     <i class="bi bi-info-circle-fill me-2"></i>
@@ -91,13 +48,14 @@
 </div>
 {% endif %}
 
-<div class="card mb-4">
+<div class="card mb-4 admin-list-card">
     <div class="card-header d-flex justify-content-between align-items-center py-3">
         <h5 class="m-0">Lista de Usuários</h5>
         <span class="badge bg-primary rounded-pill">
             {% if filtro_status == 'todos' %}Total{% else %}{{ filtro_status | capitalize }}{% endif %}: {{ total_usuarios }}
         </span>
     </div>
+    {% include "_users_filter_toolbar.html" %}
     <div class="card-body p-0">
         {% if not usuarios %}
             <div class="empty-state">
@@ -310,26 +268,6 @@
 {{ super() }}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Lógica para o botão de colapsar/exibir filtros
-        const filterCollapse = document.getElementById('filterCollapse');
-        const filterToggleText = document.querySelector('.filter-toggle #filterToggleText');
-        const filterToggleButton = document.querySelector('[data-bs-target="#filterCollapse"]');
-
-        if (filterCollapse && filterToggleText && filterToggleButton) {
-            filterCollapse.addEventListener('show.bs.collapse', function () {
-                filterToggleText.textContent = 'Recolher Filtros';
-                filterToggleButton.setAttribute('aria-expanded', 'true');
-            });
-
-            filterCollapse.addEventListener('hide.bs.collapse', function () {
-                filterToggleText.textContent = 'Filtros Avançados';
-                filterToggleButton.setAttribute('aria-expanded', 'false');
-            });
-
-            filterToggleText.textContent = 'Filtros Avançados';
-            filterToggleButton.setAttribute('aria-expanded', 'false');
-        }
-
         // Configurar o modal de inativação
         const inactivateModal = document.getElementById('inactivateModal');
         if (inactivateModal) {

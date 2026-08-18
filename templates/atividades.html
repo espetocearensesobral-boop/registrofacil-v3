@@ -33,83 +33,14 @@
     </div>
 </div>
 
-<!-- Filtros -->
-<div class="filter-bar {% if has_active_filters %}active-filters{% endif %}">
-    <button class="filter-bar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false">
-        <i class="bi bi-funnel-fill"></i> <strong>Filtros</strong>
-        {% if has_active_filters %}<span class="ms-auto" style="color:var(--color-info);">Ativos</span>{% endif %}
-    </button>
-
-    <div class="collapse filter-bar-body" id="filterCollapse">
-        <form method="get" class="row g-3 align-items-end">
-            <div class="col-md-6 col-lg-4">
-                <label for="usuario" class="form-label">Usuário</label>
-                <select name="usuario" id="usuario" class="form-select">
-                    <option value="">Todos os Usuários</option>
-                    {% for user_item in usuarios %}
-                        <option value="{{ user_item.id }}" {% if filtro_usuario == user_item.id %}selected{% endif %}>
-                            {{ user_item.nome }} ({{ user_item.email }})
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <label for="acao" class="form-label">Ação</label>
-                <select name="acao" id="acao" class="form-select">
-                    <option value="">Todas as Ações</option>
-                    {% for acao_item in acoes %}
-                        <option value="{{ acao_item }}" {% if filtro_acao == acao_item %}selected{% endif %}>
-                            {{ acao_item }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <label for="data" class="form-label">Data Específica</label>
-                <input type="date" name="data" id="data" class="form-control" value="{{ filtro_data | default('') }}">
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <label for="ordenar" class="form-label">Ordenar por</label>
-                <select name="ordenar" id="ordenar" class="form-select">
-                    <option value="created_at_desc" {% if ordenar == 'created_at_desc' %}selected{% endif %}>Mais Recente</option>
-                    <option value="created_at_asc"  {% if ordenar == 'created_at_asc'  %}selected{% endif %}>Mais Antigo</option>
-                    <option value="usuario_asc"     {% if ordenar == 'usuario_asc'     %}selected{% endif %}>Usuário (A-Z)</option>
-                    <option value="usuario_desc"    {% if ordenar == 'usuario_desc'    %}selected{% endif %}>Usuário (Z-A)</option>
-                    <option value="acao_asc"        {% if ordenar == 'acao_asc'        %}selected{% endif %}>Ação (A-Z)</option>
-                    <option value="acao_desc"       {% if ordenar == 'acao_desc'       %}selected{% endif %}>Ação (Z-A)</option>
-                    <option value="processo_asc"    {% if ordenar == 'processo_asc'    %}selected{% endif %}>Processo (Crescente)</option>
-                    <option value="processo_desc"   {% if ordenar == 'processo_desc'   %}selected{% endif %}>Processo (Decrescente)</option>
-                    <option value="ip_asc"          {% if ordenar == 'ip_asc'          %}selected{% endif %}>IP (A-Z)</option>
-                    <option value="ip_desc"         {% if ordenar == 'ip_desc'         %}selected{% endif %}>IP (Z-A)</option>
-                </select>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <label for="itens_por_pagina" class="form-label">Registros por página</label>
-                <select name="itens_por_pagina" id="itens_por_pagina" class="form-select">
-                    <option value="10"  {% if itens_por_pagina == 10  %}selected{% endif %}>10</option>
-                    <option value="25"  {% if itens_por_pagina == 25  %}selected{% endif %}>25</option>
-                    <option value="50"  {% if itens_por_pagina == 50  %}selected{% endif %}>50</option>
-                    <option value="100" {% if itens_por_pagina == 100 %}selected{% endif %}>100</option>
-                </select>
-            </div>
-            <div class="col-12 d-flex justify-content-end gap-2">
-                <button type="submit" class="btn-filter-apply">
-                    <i class="bi bi-funnel me-1"></i> Filtrar
-                </button>
-                <a href="{{ url_for('atividades.historico') }}" class="btn-filter-clear">
-                    <i class="bi bi-x-circle me-1"></i> Limpar
-                </a>
-            </div>
-        </form>
-    </div>
-</div>
-
+{% set admin_filter_context = 'atividades' %}
 <!-- Tabela -->
-<div class="rf-card">
+<div class="rf-card admin-list-card">
     <div class="rf-card-header">
         <h6 class="rf-card-title mb-0"><i class="bi bi-activity"></i> Atividades</h6>
         <span class="rf-badge count">{{ total_registros }}</span>
     </div>
+    {% include "_activity_filter_toolbar.html" %}
     <div class="card-body p-0">
         {% if not atividades %}
             <div class="empty-state">
@@ -439,14 +370,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
-    /* ── Filtros collapse ── */
-    const filterCollapse = document.getElementById('filterCollapse');
-    const filterToggleBtn = document.querySelector('[data-bs-target="#filterCollapse"]');
-    if (filterCollapse && filterToggleBtn) {
-        filterCollapse.addEventListener('show.bs.collapse', () => filterToggleBtn.setAttribute('aria-expanded', 'true'));
-        filterCollapse.addEventListener('hide.bs.collapse', () => filterToggleBtn.setAttribute('aria-expanded', 'false'));
-    }
 
     /* ── Modal de detalhe ── */
     const modalEl = document.getElementById('modalDetalheAtividade');

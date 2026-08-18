@@ -1,0 +1,85 @@
+<div class="filter-bar admin-filter-surface">
+    <form method="get" action="{{ url_for('atividades.historico') }}" class="admin-filter-toolbar" id="activity-filter-form">
+        <select name="usuario" id="atividade-usuario" class="admin-filter-select" aria-label="Filtrar por usuário">
+            <option value="">Usuário: Todos</option>
+            {% for user_item in usuarios %}
+                <option value="{{ user_item.id }}" {% if filtro_usuario == user_item.id %}selected{% endif %}>
+                    {{ user_item.nome }}
+                </option>
+            {% endfor %}
+        </select>
+        <select name="acao" id="atividade-acao" class="admin-filter-select admin-filter-select-action" aria-label="Filtrar por ação">
+            <option value="">Ação: Todas</option>
+            {% for acao_item in acoes %}
+                <option value="{{ acao_item }}" {% if filtro_acao == acao_item %}selected{% endif %}>
+                    {{ acao_item }}
+                </option>
+            {% endfor %}
+        </select>
+        <div class="admin-filter-date">
+            <i class="bi bi-calendar3" aria-hidden="true"></i>
+            <input type="date" name="data" id="atividade-data" value="{{ filtro_data | default('') }}" aria-label="Filtrar por data">
+        </div>
+        <div class="admin-filter-more-wrap">
+            <button type="button" class="admin-filter-icon-btn admin-filter-more-btn" id="activity-filter-more" title="Mais filtros" aria-label="Mais filtros" aria-expanded="false" aria-controls="activity-filter-popover">
+                <i class="bi bi-three-dots-vertical" aria-hidden="true"></i>
+            </button>
+            <div class="admin-filter-popover" id="activity-filter-popover" hidden>
+                <label for="atividade-ordenar">Ordenar por</label>
+                <select name="ordenar" id="atividade-ordenar">
+                    <option value="created_at_desc" {% if ordenar == 'created_at_desc' %}selected{% endif %}>Mais recente</option>
+                    <option value="created_at_asc" {% if ordenar == 'created_at_asc' %}selected{% endif %}>Mais antigo</option>
+                    <option value="usuario_asc" {% if ordenar == 'usuario_asc' %}selected{% endif %}>Usuário (A–Z)</option>
+                    <option value="usuario_desc" {% if ordenar == 'usuario_desc' %}selected{% endif %}>Usuário (Z–A)</option>
+                    <option value="acao_asc" {% if ordenar == 'acao_asc' %}selected{% endif %}>Ação (A–Z)</option>
+                    <option value="acao_desc" {% if ordenar == 'acao_desc' %}selected{% endif %}>Ação (Z–A)</option>
+                    <option value="processo_asc" {% if ordenar == 'processo_asc' %}selected{% endif %}>Processo (crescente)</option>
+                    <option value="processo_desc" {% if ordenar == 'processo_desc' %}selected{% endif %}>Processo (decrescente)</option>
+                    <option value="ip_asc" {% if ordenar == 'ip_asc' %}selected{% endif %}>IP (A–Z)</option>
+                    <option value="ip_desc" {% if ordenar == 'ip_desc' %}selected{% endif %}>IP (Z–A)</option>
+                </select>
+                <label for="atividade-itens-por-pagina">Registros por página</label>
+                <select name="itens_por_pagina" id="atividade-itens-por-pagina">
+                    {% for n in [10, 25, 50, 100] %}
+                        <option value="{{ n }}" {% if itens_por_pagina == n %}selected{% endif %}>{{ n }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="admin-filter-icon-btn admin-filter-apply-btn" title="Aplicar filtros" aria-label="Aplicar filtros">
+            <i class="bi bi-funnel" aria-hidden="true"></i>
+        </button>
+        <a href="{{ url_for('atividades.historico') }}" class="admin-filter-icon-btn admin-filter-clear-btn" title="Limpar filtros" aria-label="Limpar filtros">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </a>
+    </form>
+</div>
+<script>
+(function () {
+    document.addEventListener('click', function (event) {
+        const button = event.target.closest('#activity-filter-more');
+        const popover = document.getElementById('activity-filter-popover');
+        if (button && popover) {
+            event.preventDefault();
+            const isOpen = !popover.hidden;
+            popover.hidden = isOpen;
+            button.setAttribute('aria-expanded', String(!isOpen));
+            return;
+        }
+        if (popover && !popover.hidden && !event.target.closest('.admin-filter-more-wrap')) {
+            popover.hidden = true;
+            const moreButton = document.getElementById('activity-filter-more');
+            if (moreButton) moreButton.setAttribute('aria-expanded', 'false');
+        }
+    });
+    document.addEventListener('keydown', function (event) {
+        if (event.key !== 'Escape') return;
+        const popover = document.getElementById('activity-filter-popover');
+        const button = document.getElementById('activity-filter-more');
+        if (popover && !popover.hidden) {
+            popover.hidden = true;
+            if (button) { button.setAttribute('aria-expanded', 'false'); button.focus(); }
+        }
+    });
+})();
+</script>
