@@ -112,9 +112,9 @@
                             <i class="bi bi-file-earmark-zip me-1"></i>Gerar Backup Agora
                         </button>
                     </form>
-                    <form method="post" action="{{ url_for('backup.test_db') }}">
+                    <form method="post" action="{{ url_for('backup.test_db') }}" data-rf-submit-state data-submit-label="Testando banco...">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <button type="submit" class="nav-btn rf-backup-info-action">
+                        <button type="submit" class="nav-btn rf-backup-info-action" data-loading-text="Testando banco...">
                             <i class="bi bi-arrow-repeat me-1"></i>Testar Banco
                         </button>
                     </form>
@@ -172,10 +172,10 @@
                                             <i class="bi bi-trash"></i>
                                         </button>
                                         {% if session.get('usuario_role') in ['admin', 'suporte'] %}
-                                        <form method="post" action="{{ url_for('backup.restore_backup') }}" onsubmit="return confirmarRestauracao('{{ backup.name|e }}');" class="rf-inline-form">
+                                        <form method="post" action="{{ url_for('backup.restore_backup') }}" onsubmit="return confirmarRestauracao('{{ backup.name|e }}');" class="rf-inline-form" data-rf-submit-state data-submit-label="Restaurando...">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                             <input type="hidden" name="filename" value="{{ backup.name }}">
-                                            <button type="submit" class="nav-btn nav-btn-secondary rf-backup-action" title="Restaurar">
+                                            <button type="submit" class="nav-btn nav-btn-secondary rf-backup-action" title="Restaurar" data-loading-text="Restaurando...">
                                                 <i class="bi bi-arrow-counterclockwise"></i>
                                             </button>
                                         </form>
@@ -211,7 +211,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar configuração de Backup"></button>
             </div>
             <div class="modal-body backup-settings-body">
-            <form id="form-all-backup-settings" method="post" novalidate action="{{ url_for('configuracoes.index') }}">
+            <form id="form-all-backup-settings" method="post" novalidate action="{{ url_for('configuracoes.index') }}" data-rf-submit-state>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <input type="hidden" name="return_to" value="backup">
                 <input type="hidden" name="id" value="{{ backup_config.id if backup_config else '' }}">
@@ -304,8 +304,8 @@
                     </div>
                 </div>
                 <div class="cfg-inline-end">
-                    <button type="submit" name="action" value="test_sftp_connection" class="cfg-sbtn blue"><i class="bi bi-plug"></i> Testar SFTP</button>
-                    <button type="submit" name="action" value="update_backup_settings" class="cfg-sbtn green"><i class="bi bi-save"></i> Salvar Backup</button>
+                    <button type="submit" name="action" value="test_sftp_connection" class="cfg-sbtn blue" data-loading-text="Testando SFTP..."><i class="bi bi-plug"></i> Testar SFTP</button>
+                    <button type="submit" name="action" value="update_backup_settings" class="cfg-sbtn green" data-loading-text="Salvando Backup..."><i class="bi bi-save"></i> Salvar Backup</button>
                 </div>
             </form>
             </div>
@@ -359,7 +359,7 @@
                 <form id="deleteBackupForm" method="POST" action="" class="rf-inline-form">
                     <input type="hidden" name="filename" id="deleteBackupFilename">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                    <button type="submit" class="nav-btn nav-btn-danger">Excluir Permanentemente</button>
+                    <button type="submit" class="nav-btn nav-btn-danger" data-loading-text="Excluindo Backup...">Excluir Permanentemente</button>
                 </form>
             </div>
         </div>
@@ -473,7 +473,9 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const submitBtn = createBackupForm.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
+            submitBtn.setAttribute('aria-busy', 'true');
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Gerando Backup...';
+            if (typeof window.showPageLoading === 'function') window.showPageLoading('Gerando backup...');
             fetch(createBackupForm.action, {
                 method: 'POST',
                 body: new FormData(createBackupForm),
@@ -487,7 +489,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => { showToast('danger', error.message || 'Erro inesperado ao gerar backup.'); })
             .finally(() => {
                 submitBtn.disabled = false;
+                submitBtn.removeAttribute('aria-busy');
                 submitBtn.innerHTML = '<i class="bi bi-file-earmark-zip me-2"></i>Gerar Backup Agora';
+                if (typeof window.hidePageLoading === 'function') window.hidePageLoading();
             });
         });
     }
@@ -530,8 +534,10 @@ function confirmarReparo() {
         const btn = document.querySelector('#form-repair-db button');
         if (btn) {
             btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Reparando...';
         }
+        if (typeof window.showPageLoading === 'function') window.showPageLoading('Reparando banco...');
         document.getElementById('form-repair-db').submit();
     }
 }

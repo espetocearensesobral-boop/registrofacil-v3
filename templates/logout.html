@@ -123,9 +123,11 @@ document.getElementById('logoutForm').addEventListener('submit', function() {
     const icon = document.getElementById('logoutIcon');
     const text = document.getElementById('logoutText');
     btn.disabled = true;
+    btn.setAttribute('aria-busy', 'true');
     spinner.classList.remove('d-none');
     icon.classList.add('d-none');
     text.textContent = ' Saindo...';
+    if (typeof window.showPageLoading === 'function') window.showPageLoading('Encerrando sessão...');
 });
 </script>
 {% endblock %}

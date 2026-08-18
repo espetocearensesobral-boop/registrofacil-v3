@@ -4339,3 +4339,61 @@ html body #main-content.rf-list-page .rf-infinite-status {
 #main-content .nt-footer .nt-btn-cancel:active,
 .modal-footer .btn:active,
 .modal-footer .nav-btn:active { transform: scale(.97); }
+
+/* =====================================================================
+   FEEDBACK GLOBAL DE CARREGAMENTO
+   Indicador não bloqueante para navegação e operações de página.
+   As notificações/toasts continuam sendo o canal de sucesso e erro.
+   ===================================================================== */
+#rf-global-loading {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 2000;
+  height: 3px;
+  display: none;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--rf-border, #e2e2e2) 72%, transparent);
+  overflow: hidden;
+}
+#rf-global-loading.is-visible { display: block; }
+#rf-global-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 34%;
+  background: linear-gradient(90deg, var(--color-primary, #cda865), var(--color-primary-dark, #8b6332));
+  border-radius: 0 999px 999px 0;
+  animation: rf-loading-progress 1.15s cubic-bezier(.23, 1, .32, 1) infinite;
+}
+#rf-global-loading .rf-global-loading-label {
+  position: fixed;
+  top: .75rem;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 2rem;
+  padding: .35rem .65rem;
+  color: var(--rf-text-primary, #121212);
+  background: var(--rf-surface, #fff);
+  border: 1px solid var(--rf-border, #e2e2e2);
+  border-radius: var(--rf-radius-sm, 8px);
+  box-shadow: 0 5px 18px rgba(18, 18, 18, .12);
+  font-size: .75rem;
+  font-weight: 650;
+}
+#rf-global-loading .rf-global-loading-label .spinner-border { color: var(--color-primary-dark, #8b6332); }
+@keyframes rf-loading-progress {
+  0% { transform: translateX(-130%); }
+  55% { transform: translateX(180%); }
+  100% { transform: translateX(330%); }
+}
+.rf-page-loading-button { position: relative; pointer-events: none; }
+.rf-page-loading-button .rf-loading-spinner { display: inline-block; }
+.rf-loading-spinner { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  #rf-global-loading::after { animation: none; left: 0; width: 100%; opacity: .8; }
+}
+@media (max-width: 700px) {
+  #rf-global-loading .rf-global-loading-label { top: .5rem; right: .5rem; max-width: calc(100vw - 1rem); }
+}

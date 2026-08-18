@@ -296,7 +296,7 @@
                     <form id="deleteForm" method="POST" action="" class="rf-inline-form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="id" id="deleteProcessId" value="">
-                        <button type="submit" class="nav-btn nav-btn-danger">
+                        <button type="submit" class="nav-btn nav-btn-danger" data-loading-text="Excluindo...">
                             <i class="bi bi-trash"></i> Excluir Permanentemente
                         </button>
                     </form>
@@ -521,6 +521,13 @@
     </script>
     {% block scripts %}{% endblock %}
     <!-- Identidade visual semântica consolidada após estilos locais dos templates -->
+    <!-- Indicador global de carregamento; notificações continuam no container de toasts. -->
+    <div id="rf-global-loading" role="status" aria-live="polite" aria-atomic="true" hidden>
+        <span class="rf-global-loading-label">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span data-rf-loading-message>Carregando...</span>
+        </span>
+    </div>
     <!-- Toast Container Global -->
     <div class="toast-container position-fixed top-0 end-0 p-3 rf-toast-container"></div>
 </body>

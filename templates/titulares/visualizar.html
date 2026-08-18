@@ -146,7 +146,7 @@
                 <button type="button" class="nav-btn nav-btn-secondary btn-cancel-action" data-bs-dismiss="modal"><i class="bi bi-x"></i> Cancelar</button>
                 <form id="formExcluirTitular" method="POST" action="" class="rf-inline-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                    <button type="submit" class="nav-btn nav-btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                    <button type="submit" class="nav-btn nav-btn-danger" data-loading-text="Excluindo..."><i class="bi bi-trash"></i> Excluir</button>
                 </form>
             </div>
         </div>

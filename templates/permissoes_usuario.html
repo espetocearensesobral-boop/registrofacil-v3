@@ -79,7 +79,7 @@
 {% endif %}
 
 {# ── Formulário ── #}
-<form id="formPermissoes" method="POST" action="{{ url_for('permissoes.atualizar_permissoes', usuario_id=usuario.id) }}">
+<form id="formPermissoes" method="POST" action="{{ url_for('permissoes.atualizar_permissoes', usuario_id=usuario.id) }}" data-rf-submit-state data-submit-label="Salvando permissões...">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
     {# Barra de ações rápidas #}

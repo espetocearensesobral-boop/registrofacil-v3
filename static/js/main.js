@@ -29,6 +29,51 @@ function inicializarSidebar() {
 document.addEventListener('DOMContentLoaded', inicializarSidebar);
 
 /**
+ * Loading global não bloqueante. Sucesso e erro continuam sendo comunicados
+ * pelo sistema atual de toasts/notificações.
+ */
+function obterGlobalLoading() {
+    return document.getElementById('rf-global-loading');
+}
+
+window.showPageLoading = function(message = 'Carregando...') {
+    const indicator = obterGlobalLoading();
+    if (!indicator) return;
+    const messageElement = indicator.querySelector('[data-rf-loading-message]');
+    if (messageElement) messageElement.textContent = message;
+    indicator.hidden = false;
+    indicator.classList.add('is-visible');
+};
+
+window.hidePageLoading = function() {
+    const indicator = obterGlobalLoading();
+    if (!indicator) return;
+    indicator.classList.remove('is-visible');
+    indicator.hidden = true;
+};
+
+function inicializarLoadingNavegacao() {
+    document.addEventListener('click', function(event) {
+        const trigger = event.target.closest('a[href], [data-href]');
+        if (!trigger || event.defaultPrevented) return;
+        if (event.button !== undefined && event.button !== 0) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (trigger.matches('[data-bs-toggle], [data-bs-dismiss]')) return;
+        if (trigger.getAttribute('target') === '_blank' || trigger.hasAttribute('download')) return;
+
+        const href = trigger.getAttribute('href') || trigger.dataset.href || '';
+        if (!href || href === '#' || href.startsWith('javascript:')) return;
+        if (href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+        const isDownloadOrDocument = /export|imprimir|gerar_pdf|\.pdf(?:$|\?)/i.test(href);
+        window.showPageLoading(trigger.dataset.loadingText || (isDownloadOrDocument ? 'Preparando arquivo...' : 'Abrindo...'));
+        if (isDownloadOrDocument) window.setTimeout(window.hidePageLoading, 1400);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', inicializarLoadingNavegacao);
+
+/**
  * Estado visual comum para ações de envio: confirma o clique, evita duplo envio
  * e preserva o texto específico de cada ação sem alterar o fluxo do backend.
  */
@@ -39,12 +84,15 @@ function inicializarEstadosDeEnvio() {
         if (!declaredSubmitState && !declaredSubmitButton) return;
         if (form.dataset.rfSubmitStateReady === 'true') return;
         form.dataset.rfSubmitStateReady = 'true';
-        form.addEventListener('submit', function() {
-            const submitButton = this.querySelector('button[type="submit"]:not([data-no-submit-state])');
+        form.addEventListener('submit', function(event) {
+            // Handlers AJAX existentes exibem seus próprios toasts e loading; não duplicar.
+            if (event.defaultPrevented) return;
+            const submitButton = event.submitter || this.querySelector('button[type="submit"]:not([data-no-submit-state])');
             if (!submitButton || submitButton.dataset.rfSubmitting === 'true') return;
             submitButton.dataset.rfSubmitting = 'true';
             submitButton.dataset.rfOriginalHtml = submitButton.innerHTML;
             const loadingText = submitButton.dataset.loadingText || this.dataset.submitLabel || 'Processando...';
+            window.showPageLoading(loadingText);
             submitButton.disabled = true;
             submitButton.setAttribute('aria-busy', 'true');
             submitButton.innerHTML = `<span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>${loadingText}`;

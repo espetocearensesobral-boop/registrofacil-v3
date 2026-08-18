@@ -206,7 +206,7 @@
 
         <!-- STATUS -->
         <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status">
-            <form method="post" novalidate id="form-add-status" action="{{ url_for('configuracoes.index') }}">
+            <form method="post" novalidate id="form-add-status" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Adicionando status...">
                 <input type="hidden" name="action" value="add_status">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="cfg-add-row">
@@ -268,7 +268,7 @@
                                                 data-id="{{s.id}}" data-nome="{{s.nome}}" data-hex_color="{{s.hex_color}}" data-ativo="{{s.ativo}}" title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <form method="post" class="cfg-inline" action="{{ url_for('configuracoes.index') }}">
+                                        <form method="post" class="cfg-inline" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Atualizando...">
                                             <input type="hidden" name="action" value="toggle_status">
                                             <input type="hidden" name="id" value="{{s.id}}">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -291,7 +291,7 @@
 
         <!-- SERVIÇOS -->
         <div class="cfg-panel{% if active_tab == 'services' %} active{% endif %}" id="panel-services">
-            <form method="post" novalidate id="form-add-service" action="{{ url_for('configuracoes.index') }}">
+            <form method="post" novalidate id="form-add-service" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Adicionando serviço...">
                 <input type="hidden" name="action" value="add_service">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="cfg-add-row">
@@ -336,7 +336,7 @@
                                                 data-id="{{sv.id}}" data-nome="{{sv.nome}}" data-descricao="{{sv.descricao or ''}}" data-prazo="{{sv.prazo_padrao or ''}}" title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <form method="post" class="cfg-inline" action="{{ url_for('configuracoes.index') }}">
+                                        <form method="post" class="cfg-inline" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Atualizando...">
                                             <input type="hidden" name="action" value="toggle_service">
                                             <input type="hidden" name="id" value="{{sv.id}}">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -417,7 +417,7 @@
         {# ── ABA: ESTABELECIMENTO (conteúdo de empresa.html integrado) ── #}
         <div class="cfg-panel{% if active_tab == 'estabelecimento' %} active{% endif %}" id="panel-estabelecimento">
 
-            <form id="form-empresa-cfg" method="post" action="{{ url_for('empresa.index') }}" enctype="multipart/form-data" novalidate>
+            <form id="form-empresa-cfg" method="post" action="{{ url_for('empresa.index') }}" enctype="multipart/form-data" novalidate data-rf-submit-state data-submit-label="Salvando organização...">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                 <div class="row g-3">
@@ -577,7 +577,7 @@
                 <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Status</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar edição de status"></button>
             </div>
-            <form method="post" novalidate action="{{ url_for('configuracoes.index') }}">
+            <form method="post" novalidate action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Salvando status...">
                 <input type="hidden" name="action" value="edit_status">
                 <input type="hidden" name="id" id="edit_status_id">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -629,7 +629,7 @@
                 <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Serviço</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar edição de serviço"></button>
             </div>
-            <form method="post" novalidate action="{{ url_for('configuracoes.index') }}">
+            <form method="post" novalidate action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Salvando serviço...">
                 <input type="hidden" name="action" value="edit_service">
                 <input type="hidden" name="id" id="edit_service_id">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -803,6 +803,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (other) other.disabled = true;
         if (sp) sp.classList.remove('d-none');
         if (ic) ic.classList.add('d-none');
+        if (typeof window.showPageLoading === 'function') window.showPageLoading(isTest ? 'Testando e-mail...' : 'Salvando configuração de e-mail...');
         const fd = new FormData(fE);
         if (isTest) fd.append('test_email', '1');
         try {
@@ -817,6 +818,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (other) other.disabled = false;
             if (sp) sp.classList.add('d-none');
             if (ic) ic.classList.remove('d-none');
+            if (typeof window.hidePageLoading === 'function') window.hidePageLoading();
         }
     }
     if (fE) fE.addEventListener('submit', e => { e.preventDefault(); handleEmail(false); });

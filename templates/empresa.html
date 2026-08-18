@@ -11,7 +11,7 @@
 
 {% block content %}
 
-<form id="form-empresa" method="post" enctype="multipart/form-data" novalidate>
+<form id="form-empresa" method="post" enctype="multipart/form-data" novalidate data-rf-submit-state data-submit-label="Salvando organização...">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
     <div class="row g-3">
@@ -92,7 +92,7 @@
                 <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
                     <i class="bi bi-x"></i> Cancelar
                 </a>
-                <button type="submit" class="nav-btn nav-btn-success">
+                    <button type="submit" class="nav-btn nav-btn-primary" data-loading-text="Salvando...">
                     <i class="bi bi-check-lg"></i> Salvar Alterações
                 </button>
             </div>
