@@ -2318,3 +2318,24 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Dashboard: distribuição explícita das colunas para evitar recorte de badges. */
+#main-content .dashboard-panels-row .dash-table .dash-col-main {
+  width: calc(100% - 12rem) !important;
+}
+#main-content .dashboard-panels-row .dash-table .dash-col-meta {
+  width: 12rem !important;
+}
+#main-content .dashboard-panels-row .dash-table th.col-fill,
+#main-content .dashboard-panels-row .dash-table td.col-fill {
+  width: auto !important;
+  min-width: 0;
+}
+#main-content .dashboard-panels-row .dash-table th.col-end,
+#main-content .dashboard-panels-row .dash-table td.col-end {
+  width: 12rem !important;
+  min-width: 0;
+  max-width: none;
+  box-sizing: border-box;
+  overflow: visible;
+}
