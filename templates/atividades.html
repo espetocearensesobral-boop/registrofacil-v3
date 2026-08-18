@@ -11,33 +11,11 @@
 
 {% block content %}
 
-<!-- KPI Cards -->
-<div class="kpi-grid">
-    <div class="kpi-card kpi-gold">
-        <div class="kpi-label">Total de Registros</div>
-        <div class="kpi-value kpi-gold">{{ contagem_total }}</div>
-        <div class="kpi-sub">Atividades no sistema</div>
-        <i class="bi bi-list-columns kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-success">
-        <div class="kpi-label">Usuários com Log</div>
-        <div class="kpi-value kpi-success">{{ contagem_usuarios }}</div>
-        <div class="kpi-sub">Usuários com atividades</div>
-        <i class="bi bi-people-fill kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-info">
-        <div class="kpi-label">Atividades Hoje</div>
-        <div class="kpi-value kpi-info">{{ contagem_hoje }}</div>
-        <div class="kpi-sub">Registradas no dia atual</div>
-        <i class="bi bi-clock kpi-bg-icon"></i>
-    </div>
-</div>
-
 {% set admin_filter_context = 'atividades' %}
 <!-- Tabela -->
 <div class="rf-card admin-list-card">
     <div class="rf-card-header">
-        <h6 class="rf-card-title mb-0"><i class="bi bi-activity"></i> Atividades</h6>
+        <h6 class="rf-card-title mb-0"><i class="bi bi-activity"></i> Histórico de Atividades</h6>
         <span class="rf-badge count">{{ total_registros }}</span>
     </div>
     {% include "_activity_filter_toolbar.html" %}
@@ -53,7 +31,7 @@
             </div>
         {% else %}
             <div class="table-responsive">
-                <table class="rf-table">
+                <table class="rf-table table-atividades">
                     {# Macro de ordenação para atividades #}
                     {% macro sort_th_atv(label, col) %}
                     {% set cur = request.args.to_dict() %}
@@ -111,8 +89,15 @@
                                     </span>
                                 {% endif %}
                             </td>
-                            <td data-label="Descrição">{{ atividade.ip | default('N/A') }}</td>
-                            <td data-label="Data/Hora">{{ atividade.timestamp | format_datetime_full }}</td>
+                            <td data-label="Processo" class="text-nowrap">
+                                {% if atividade.processo_id %}
+                                    <a href="{{ url_for('processos.visualizar', processo_id=atividade.processo_id) }}" class="rf-table-inline-link">#{{ atividade.processo_id }}</a>
+                                {% else %}
+                                    <span class="rf-muted-value">—</span>
+                                {% endif %}
+                            </td>
+                            <td data-label="IP" class="font-monospace">{{ atividade.ip | default('N/A') }}</td>
+                            <td data-label="Data/Hora" class="text-nowrap">{{ atividade.timestamp | format_datetime_full }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

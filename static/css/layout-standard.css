@@ -3604,3 +3604,340 @@ html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.is-disabled:fo
   background: transparent !important;
   outline: 0 !important;
 }
+
+/* Administrativo: Usuários e Atividades seguem o mesmo contrato das demais listas. */
+html body #main-content > .admin-list-card {
+  width: calc(100% + var(--rf-gutter-x, 1rem) + var(--rf-gutter-x, 1rem)) !important;
+  max-width: none !important;
+  margin-left: calc(0px - var(--rf-gutter-x, 1rem)) !important;
+  margin-right: calc(0px - var(--rf-gutter-x, 1rem)) !important;
+  overflow: visible !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body #main-content > .admin-list-card > .rf-card-header,
+html body #main-content > .admin-list-card > .card-header {
+  width: 100% !important;
+  min-height: 3.25rem !important;
+  padding: var(--rf-card-header-pad-y, .75rem) var(--rf-card-pad-x, 1rem) !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: none !important;
+}
+html body #main-content > .admin-list-card .rf-card-title,
+html body #main-content > .admin-list-card .card-title {
+  color: var(--rf-text-heading, #121212) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+html body #main-content > .admin-list-card .rf-card-title i,
+html body #main-content > .admin-list-card .card-title i {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+}
+html body #main-content > .admin-list-card > .admin-filter-surface {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-inline: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: none !important;
+}
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-toolbar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: .5rem !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 1rem .75rem !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-search {
+  flex: 1 1 18rem !important;
+  min-width: min(100%, 15rem) !important;
+}
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-date {
+  flex: 0 1 10.5rem !important;
+  min-width: 9rem !important;
+}
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-select {
+  flex: 0 1 11rem !important;
+  min-width: 9rem !important;
+  max-width: 100% !important;
+}
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-search input,
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-date input,
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-select,
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-icon-btn {
+  box-sizing: border-box !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+}
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-search input,
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-date input,
+html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-select {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+html body #main-content > .admin-list-card > .card-body {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content > .admin-list-card .table-responsive {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  border: 0 !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios,
+html body #main-content > .admin-list-card .rf-table.table-atividades {
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: auto !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  --rf-admin-row-base: var(--rf-surface-card, #FFFFFF);
+  --rf-admin-row-alt: color-mix(in srgb, var(--rf-surface-card, #FFFFFF) 94%, var(--rf-surface-body, #F8F8F8));
+  --rf-admin-divider: color-mix(in srgb, #6B6B6B 24%, var(--rf-surface-card, #FFFFFF));
+  --rf-admin-hover: color-mix(in srgb, var(--rf-accent, var(--color-gold-primary, #CDA865)) 9%, var(--rf-surface-card, #FFFFFF));
+  background: var(--rf-admin-row-base) !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios thead,
+html body #main-content > .admin-list-card .rf-table.table-usuarios thead tr,
+html body #main-content > .admin-list-card .rf-table.table-atividades thead,
+html body #main-content > .admin-list-card .rf-table.table-atividades thead tr {
+  background: var(--rf-admin-row-base) !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios th,
+html body #main-content > .admin-list-card .rf-table.table-usuarios td,
+html body #main-content > .admin-list-card .rf-table.table-atividades th,
+html body #main-content > .admin-list-card .rf-table.table-atividades td {
+  max-width: none !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  vertical-align: middle !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  outline: 0 !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios th,
+html body #main-content > .admin-list-card .rf-table.table-atividades th {
+  padding: .625rem .625rem !important;
+  background: var(--rf-admin-row-base) !important;
+  color: var(--rf-text-strong, #121212) !important;
+  border-bottom: 1px solid var(--rf-admin-divider) !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .035em !important;
+  line-height: 1.25 !important;
+  text-transform: none !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios th a,
+html body #main-content > .admin-list-card .rf-table.table-atividades th a {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios th a:hover,
+html body #main-content > .admin-list-card .rf-table.table-usuarios th a:focus-visible,
+html body #main-content > .admin-list-card .rf-table.table-atividades th a:hover,
+html body #main-content > .admin-list-card .rf-table.table-atividades th a:focus-visible {
+  color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios tbody tr,
+html body #main-content > .admin-list-card .rf-table.table-atividades tbody tr {
+  background: var(--rf-admin-row-base) !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:nth-child(even),
+html body #main-content > .admin-list-card .rf-table.table-atividades tbody tr:nth-child(even) {
+  background: var(--rf-admin-row-alt) !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:hover,
+html body #main-content > .admin-list-card .rf-table.table-atividades tbody tr:hover {
+  background: var(--rf-admin-hover) !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios tbody td,
+html body #main-content > .admin-list-card .rf-table.table-atividades tbody td {
+  padding: .625rem !important;
+  background: transparent !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  border-bottom: 1px solid var(--rf-admin-divider) !important;
+  line-height: 1.4 !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:hover td,
+html body #main-content > .admin-list-card .rf-table.table-atividades tbody tr:hover td {
+  background: transparent !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:last-child td,
+html body #main-content > .admin-list-card .rf-table.table-atividades tbody tr:last-child td {
+  border-bottom: 0 !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios td[data-label="ID"],
+html body #main-content > .admin-list-card .rf-table.table-usuarios td[data-label="Usuário"],
+html body #main-content > .admin-list-card .rf-table.table-usuarios td[data-label="Nome Completo"] {
+  color: var(--rf-text-strong, #121212) !important;
+  font-weight: 650 !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios td[data-label="ID"],
+html body #main-content > .admin-list-card .rf-table.table-usuarios td[data-label="Cadastrado em"],
+html body #main-content > .admin-list-card .rf-table.table-usuarios td[data-label="Status"],
+html body #main-content > .admin-list-card .rf-table.table-usuarios td[data-label="Ações"],
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="ID"],
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Processo"],
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="IP"],
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Data/Hora"],
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Ação"] {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Ação"] {
+  white-space: normal !important;
+  min-width: 14rem !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-atividades .rf-table-inline-link {
+  color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
+  font-weight: 650 !important;
+  text-decoration: none !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-atividades .rf-table-inline-link:hover,
+html body #main-content > .admin-list-card .rf-table.table-atividades .rf-table-inline-link:focus-visible {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios .rf-muted-cell,
+html body #main-content > .admin-list-card .rf-table.table-atividades .rf-muted-cell {
+  color: var(--rf-text-muted, #475467) !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-usuarios .filter-icon,
+html body #main-content > .admin-list-card .rf-table.table-atividades .filter-icon {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+}
+html body #main-content > .admin-list-card .rf-pagination {
+  border-top: 0 !important;
+  padding-inline: var(--rf-card-pad-x, 1rem) !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content > .admin-list-card .tbl-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: .25rem !important;
+  flex-wrap: nowrap !important;
+}
+html body #main-content > .admin-list-card .tbl-actions .tbl-btn.is-disabled,
+html body #main-content > .admin-list-card .tbl-actions .tbl-btn.is-disabled:hover,
+html body #main-content > .admin-list-card .tbl-actions .tbl-btn.is-disabled:focus-visible {
+  opacity: .4 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  color: var(--rf-text-muted, #6B6B6B) !important;
+  border-color: var(--rf-border, #C8CFD0) !important;
+  background: transparent !important;
+  outline: 0 !important;
+}
+html body #main-content > .admin-list-card .rf-admin-status-note {
+  margin: 0 0 var(--rf-layout-section-gap, 1rem) !important;
+  padding: .75rem 1rem !important;
+  border: 1px solid color-mix(in srgb, var(--rf-info, var(--color-info, #1E88E5)) 24%, var(--rf-surface-card, #FFFFFF)) !important;
+  border-radius: var(--rf-radius-surface, 10px) !important;
+  background: color-mix(in srgb, var(--rf-info-surface, #E8F1FA) 82%, var(--rf-surface-card, #FFFFFF)) !important;
+  color: var(--rf-info-text, var(--rf-info, var(--color-info, #1E88E5))) !important;
+  font-size: .8125rem !important;
+}
+html body #main-content > .admin-list-card .btn-acao-clicavel {
+  max-width: 100% !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  font: inherit !important;
+  line-height: inherit !important;
+  text-align: left !important;
+  white-space: normal !important;
+}
+html body #main-content > .admin-list-card .btn-acao-clicavel:hover,
+html body #main-content > .admin-list-card .btn-acao-clicavel:focus-visible {
+  color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
+  outline: 0 !important;
+}
+html body #main-content > .admin-list-card .btn-acao-clicavel .acao-icon {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+}
+@media (max-width: 800px) {
+  html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-toolbar {
+    padding-inline: .75rem !important;
+  }
+  html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-search {
+    flex: 1 1 100% !important;
+    min-width: 100% !important;
+  }
+  html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-select,
+  html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-date {
+    flex: 1 1 calc(50% - .5rem) !important;
+    min-width: 0 !important;
+  }
+}
+@media (max-width: 520px) {
+  html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-select,
+  html body #main-content > .admin-list-card > .admin-filter-surface .admin-filter-date {
+    flex: 1 1 100% !important;
+  }
+}
+@media (max-width: 575.98px) {
+  html body #main-content > .admin-list-card {
+    width: calc(100% + 1.5rem) !important;
+    margin-left: -.75rem !important;
+    margin-right: -.75rem !important;
+  }
+}
+
+/* O aviso de usuários inativos fica como irmão da lista, não dentro do card. */
+html body #main-content > .rf-admin-status-note {
+  margin: 0 0 var(--rf-layout-section-gap, 1rem) !important;
+  padding: .75rem 1rem !important;
+  border: 1px solid color-mix(in srgb, var(--rf-info, var(--color-info, #1E88E5)) 24%, var(--rf-surface-card, #FFFFFF)) !important;
+  border-radius: var(--rf-radius-surface, 10px) !important;
+  background: color-mix(in srgb, var(--rf-info-surface, #E8F1FA) 82%, var(--rf-surface-card, #FFFFFF)) !important;
+  color: var(--rf-info-text, var(--rf-info, var(--color-info, #1E88E5))) !important;
+  font-size: .8125rem !important;
+}
+
+/* Estados vazios administrativos: mesma superfície contínua das tabelas. */
+html body #main-content > .admin-list-card .empty-state {
+  min-height: 12rem !important;
+  margin: 0 !important;
+  padding: 3rem 1rem !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  text-align: center !important;
+}
+html body #main-content > .admin-list-card .empty-state > i {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+}
