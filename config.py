@@ -22,7 +22,7 @@ else:
 
 
 class Config:
-    VERSION = '3.28.29'
+    VERSION = '3.28.30'
     ENVIRONMENT = os.environ.get('REGISTROFACIL_ENV', 'development').strip().lower()
     IS_PRODUCTION = ENVIRONMENT in {'production', 'prod'}
     INITIAL_ADMIN_PASSWORD = os.environ.get('INITIAL_ADMIN_PASSWORD')

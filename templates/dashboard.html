@@ -5,10 +5,10 @@
 {% block page_title %}Dashboard{% endblock %}
 
 {% block page_actions %}
-    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary">
+    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary" title="Novo Processo" aria-label="Novo Processo">
         <i class="bi bi-plus-circle"></i> Novo Processo
     </a>
-    <a href="{{ url_for('dashboard.metricas') }}" class="nav-btn nav-btn-secondary">
+    <a href="{{ url_for('dashboard.metricas') }}" class="nav-btn nav-btn-secondary" title="Métricas" aria-label="Métricas">
         <i class="bi bi-graph-up"></i> Métricas
     </a>
 {% endblock %}
