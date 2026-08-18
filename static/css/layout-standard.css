@@ -2463,3 +2463,38 @@ html body #globalSearchModal .rf-process-report-actions .rf-search-action i {
     justify-content: flex-end;
   }
 }
+
+/* Correção final das ações iconográficas da Busca Inteligente. */
+#sidebar .sidebar-nav-group {
+  width: 100%;
+}
+#sidebar .sidebar-nav-group .menu-item,
+#sidebar .sidebar-nav-group .menu-item.active {
+  max-width: none;
+  margin-inline: 0;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action.nav-btn-primary,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action.nav-btn-secondary {
+  flex: 0 0 2rem !important;
+  width: 2rem !important;
+  min-width: 2rem !important;
+  max-width: 2rem !important;
+  height: 2rem !important;
+  min-height: 2rem !important;
+  padding: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 1px solid var(--color-primary-light, #1B4368) !important;
+  color: var(--color-primary, #243B53) !important;
+  box-shadow: none !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action:hover,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action:focus-visible,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action:active,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action[aria-pressed="true"] {
+  background: var(--color-primary-light, #1B4368) !important;
+  background-color: var(--color-primary-light, #1B4368) !important;
+  border-color: var(--color-primary-light, #1B4368) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
