@@ -36,7 +36,7 @@ def listar_titulares(filtros=None, pagina=1, registros_por_pagina=10):
     ordenar = filtros.get('ordenar', 'nome') if filtros else 'nome'
     direcao = filtros.get('direcao', 'asc') if filtros else 'asc'
     
-    colunas_validas = {'nome': 't.nome', 'email': 't.email', 'telefone': 't.telefone', 'processos': 'total_processos'}
+    colunas_validas = {'id': 't.id', 'nome': 't.nome', 'email': 't.email', 'telefone': 't.telefone', 'processos': 'total_processos'}
     col_sql = colunas_validas.get(ordenar, 't.nome')
     dir_sql = 'DESC' if direcao == 'desc' else 'ASC'
     
@@ -377,10 +377,23 @@ def listar_apresentantes(filtros=None, pagina=1, registros_por_pagina=10):
     offset = (pagina - 1) * registros_por_pagina
     
     query = """SELECT r.*,
+               ultimo.id as ultimo_registro_id,
+               CASE WHEN ultimo.id IS NULL THEN NULL
+                    WHEN (ultimo.possui_matricula = 1 OR (ultimo.possui_matricula IS NULL AND ultimo.matricula IS NOT NULL)) AND ultimo.matricula IS NOT NULL THEN ultimo.matricula
+                    ELSE 'Sem Matrícula'
+               END as ultimo_registro_matricula,
                (SELECT COUNT(*) FROM processos pr
                   WHERE pr.apresentante_id = r.id
                      OR (pr.apresentante_id IS NULL AND pr.apresentante = r.nome)) as total_processos
-               FROM apresentantes r WHERE 1=1"""
+               FROM apresentantes r
+               LEFT JOIN processos ultimo ON ultimo.id = (
+                   SELECT pr_last.id FROM processos pr_last
+                    WHERE pr_last.apresentante_id = r.id
+                       OR (pr_last.apresentante_id IS NULL AND pr_last.apresentante = r.nome)
+                    ORDER BY pr_last.data_entrada DESC, pr_last.id DESC
+                    LIMIT 1
+               )
+               WHERE 1=1"""
     params = []
     
     if filtros:
@@ -395,7 +408,7 @@ def listar_apresentantes(filtros=None, pagina=1, registros_por_pagina=10):
     ordenar = filtros.get('ordenar', 'nome') if filtros else 'nome'
     direcao = filtros.get('direcao', 'asc') if filtros else 'asc'
     
-    colunas_validas = {'nome': 'r.nome', 'email': 'r.email', 'telefone': 'r.telefone', 'processos': 'total_processos'}
+    colunas_validas = {'id': 'r.id', 'nome': 'r.nome', 'email': 'r.email', 'telefone': 'r.telefone', 'processos': 'total_processos'}
     col_sql = colunas_validas.get(ordenar, 'r.nome')
     dir_sql = 'DESC' if direcao == 'desc' else 'ASC'
     
@@ -413,10 +426,23 @@ def listar_apresentantes(filtros=None, pagina=1, registros_por_pagina=10):
 def get_apresentante_by_id(apresentante_id):
     """Obtém detalhes de um apresentante pelo ID."""
     query = """SELECT r.*,
+               ultimo.id as ultimo_registro_id,
+               CASE WHEN ultimo.id IS NULL THEN NULL
+                    WHEN (ultimo.possui_matricula = 1 OR (ultimo.possui_matricula IS NULL AND ultimo.matricula IS NOT NULL)) AND ultimo.matricula IS NOT NULL THEN ultimo.matricula
+                    ELSE 'Sem Matrícula'
+               END as ultimo_registro_matricula,
                (SELECT COUNT(*) FROM processos pr
                   WHERE pr.apresentante_id = r.id
                      OR (pr.apresentante_id IS NULL AND pr.apresentante = r.nome)) as total_processos
-               FROM apresentantes r WHERE r.id = ?"""
+               FROM apresentantes r
+               LEFT JOIN processos ultimo ON ultimo.id = (
+                   SELECT pr_last.id FROM processos pr_last
+                    WHERE pr_last.apresentante_id = r.id
+                       OR (pr_last.apresentante_id IS NULL AND pr_last.apresentante = r.nome)
+                    ORDER BY pr_last.data_entrada DESC, pr_last.id DESC
+                    LIMIT 1
+               )
+               WHERE r.id = ?"""
     return executar_query(query, [apresentante_id], fetch_one=True)
 
 def apresentante_tem_processos(apresentante_id):

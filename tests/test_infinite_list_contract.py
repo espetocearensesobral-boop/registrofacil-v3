@@ -72,3 +72,36 @@ def test_base_and_assets_expose_fixed_list_shell_contract():
     assert 'data-infinite-scroll' in js
     assert 'list.dataset.listScrollMode !== \'internal\'' in js
     assert 'Todas as listas padronizadas' in css
+
+
+def test_cadastro_tables_expose_ids_and_last_record_data_contract():
+    titulares = read('templates/titulares/index.html')
+    apresentantes = read('templates/apresentantes/index.html')
+    for text in (titulares, apresentantes):
+        assert 'data-label="ID"' in text
+        assert '>ID<' in text or '>ID{{' in text
+        assert 'data-label="Último Registro"' in text
+        assert 'ultimo_registro_id' in text
+        assert 'ultimo_registro_matricula' in text
+    registries = read('data/registries.py')
+    assert 'ultimo.id as ultimo_registro_id' in registries
+    assert 'ultimo_registro_matricula' in registries
+
+
+def test_process_lists_order_entry_deadline_status_in_headers_and_rows():
+    for relative in [
+        'templates/processos/todos.html',
+        'templates/processos/hoje.html',
+        'templates/processos/em_andamento.html',
+        'templates/processos/pendentes.html',
+        'templates/processos/vinculados.html',
+    ]:
+        text = read(relative)
+        entry = text.find('data-label="Entrada"')
+        deadline = text.find('data-label="Prazo"')
+        status = text.find('data-label="Status"')
+        assert -1 not in (entry, deadline, status), relative
+        assert entry < deadline < status, relative
+        assert text.count('Entrada') >= 1, relative
+        assert text.count('Prazo') >= 1, relative
+        assert text.count('Status') >= 1, relative

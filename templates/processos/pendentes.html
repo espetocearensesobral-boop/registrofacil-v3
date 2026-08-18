@@ -84,20 +84,20 @@
                                     <i class="bi {{ 'bi-sort-up' if ordenar == 'data_entrada_asc' else ('bi-sort-down' if ordenar == 'data_entrada_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
                                 </a>
                             </th>
-                            <th data-column-id="status" width="150" class="resizable draggable">
-                                {% set temp_args = request.args.copy().to_dict() %}
-                                <a href="{{ url_for('processos.pendentes', **(temp_args | combine({'pagina': 1, 'ordenar': 'status_asc' if ordenar == 'status_desc' else 'status_desc'}))) }}"
-                                   class="text-decoration-none text-reset">
-                                    Status
-                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'status_asc' else ('bi-sort-down' if ordenar == 'status_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
-                                </a>
-                            </th>
                             <th data-column-id="prazo" width="120" class="resizable draggable">
                                 {% set temp_args = request.args.copy().to_dict() %}
                                 <a href="{{ url_for('processos.pendentes', **(temp_args | combine({'pagina': 1, 'ordenar': 'prazo_asc' if ordenar == 'prazo_desc' else 'prazo_desc'}))) }}"
                                    class="text-decoration-none text-reset">
                                     Prazo
                                     <i class="bi {{ 'bi-sort-up' if ordenar == 'prazo_asc' else ('bi-sort-down' if ordenar == 'prazo_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
+                                </a>
+                            </th>
+                            <th data-column-id="status" width="150" class="resizable draggable">
+                                {% set temp_args = request.args.copy().to_dict() %}
+                                <a href="{{ url_for('processos.pendentes', **(temp_args | combine({'pagina': 1, 'ordenar': 'status_asc' if ordenar == 'status_desc' else 'status_desc'}))) }}"
+                                   class="text-decoration-none text-reset">
+                                    Status
+                                    <i class="bi {{ 'bi-sort-up' if ordenar == 'status_asc' else ('bi-sort-down' if ordenar == 'status_desc' else 'bi-sort-down-alt') }} filter-icon"></i>
                                 </a>
                             </th>
                             <th width="110" class="text-center">Ações</th>
@@ -137,12 +137,12 @@
                                 <td data-label="Matrícula">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else 'Sem Matrícula' }}</td>
                                 <td data-label="Tipo">{{ processo.tipo_nome | default('Desconhecido') }}</td>
                                 <td data-label="Entrada">{{ data_entrada_formatada }}</td>
+                                <td data-label="Prazo" class="{{ prazo_class }}">{{ prazo_text }}</td>
                                 <td data-label="Status">
                                     <span class="badge rounded-pill" style="background-color: {{ processo_status_hex }}; color: {{ get_contrast_color(processo_status_hex) }};">
                                         {{ (processo.status_nome | default('Desconhecido')) | replace('_', ' ') | capitalize }}
                                     </span>
                                 </td>
-                                <td data-label="Prazo" class="{{ prazo_class }}">{{ prazo_text }}</td>
                                 <td data-label="Ações" class="text-center">
                                     <div class="tbl-actions">
                                         <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" class="tbl-btn view" title="Visualizar" data-bs-toggle="tooltip">

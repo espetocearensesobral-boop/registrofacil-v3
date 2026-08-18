@@ -50,8 +50,8 @@
                             <th>Matrícula</th>
                             <th>Tipo</th>
                             <th class="th-sort" onclick="window.location='{{ sort_url_p('data_entrada') }}'">Entrada{{ sort_icon_p('data_entrada') }}</th>
-                            <th class="th-sort" onclick="window.location='{{ sort_url_p('status') }}'">Status{{ sort_icon_p('status') }}</th>
                             <th class="th-sort" onclick="window.location='{{ sort_url_p('prazo') }}'">Prazo{{ sort_icon_p('prazo') }}</th>
+                            <th class="th-sort" onclick="window.location='{{ sort_url_p('status') }}'">Status{{ sort_icon_p('status') }}</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -74,12 +74,12 @@
                                 <td data-label="Matrícula">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else 'Sem Matrícula' }}</td>
                                 <td data-label="Tipo">{{ processo.tipo_nome }}</td>
                                 <td data-label="Entrada">{{ processo.data_entrada | format_datetime_full }}</td>
+                                <td data-label="Prazo" class="{{ prazo_class }}">{{ processo.prazo_final | format_datetime_full if processo.prazo_final else 'N/A' }}</td>
                                 <td data-label="Status">
                                     <span class="badge rounded-pill" style="background-color: {{ processo.status_hex }}; color: {{ get_contrast_color(processo.status_hex) }};">
                                         {{ processo.status_nome }}
                                     </span>
                                 </td>
-                                <td data-label="Prazo" class="{{ prazo_class }}">{{ processo.prazo_final | format_datetime_full if processo.prazo_final else 'N/A' }}</td>
                                 <td data-label="Ações" class="text-center">
                                     <div class="d-flex justify-content-center">
                                         <div class="tbl-actions">

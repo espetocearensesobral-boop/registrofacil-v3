@@ -46,6 +46,7 @@
                     <tr class="rf-table-head-row">
                         {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1 rf-sort-active"></i>{% else %}<i class="bi bi-sort-down ms-1 rf-sort-active"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1 rf-sort-inactive"></i>{% endif %}{% endmacro %}
                         {% macro sort_url(col) %}{{ url_for('apresentantes.index', busca=busca, registros_por_pagina=registros_por_pagina, ordenar=col, direcao='desc' if (ordenar == col and direcao == 'asc') else 'asc', pagina=1) }}{% endmacro %}
+                        <th class="th-sort" onclick="window.location='{{ sort_url('id') }}'">ID{{ sort_icon('id') }}</th>
                         <th class="th-sort" onclick="window.location='{{ sort_url('nome') }}'">Nome do Apresentante{{ sort_icon('nome') }}</th>
                         <th class="th-sort" onclick="window.location='{{ sort_url('telefone') }}'">Telefone{{ sort_icon('telefone') }}</th>
                         <th class="th-sort" onclick="window.location='{{ sort_url('email') }}'">E-mail{{ sort_icon('email') }}</th>
@@ -58,6 +59,7 @@
                     {% for apresentante in apresentantes %}
                     {% set tem_vinculo = apresentante.total_processos and apresentante.total_processos > 0 %}
                     <tr>
+                        <td data-label="ID" class="fw-bold">{{ apresentante.id }}</td>
                         <td data-label="Nome" class="fw-semibold">{{ apresentante.nome }}</td>
                         <td data-label="Telefone" class="rf-muted-cell">{{ apresentante.telefone or '—' }}</td>
                         <td data-label="E-mail" class="rf-muted-cell">{{ apresentante.email or '—' }}</td>
@@ -123,7 +125,7 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" class="p-0">
+                        <td colspan="7" class="p-0">
                             <div class="rf-report-empty">
                                 <i class="bi bi-person-badge" aria-hidden="true"></i>
                                 <strong>Nenhum apresentante encontrado.</strong>
