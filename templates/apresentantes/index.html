@@ -29,36 +29,14 @@
 
 {% block content %}
 
-<!-- KPI Cards -->
-<div class="kpi-grid">
-    <div class="kpi-card kpi-gold">
-        <div class="kpi-label">Total de Apresentantes</div>
-        <div class="kpi-value kpi-gold">{{ total_registros }}</div>
-        <div class="kpi-sub">Cadastrados no sistema</div>
-        <i class="bi bi-people-fill kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-info">
-        <div class="kpi-label">Com Registros</div>
-        <div class="kpi-value kpi-info">{{ apresentantes | selectattr('total_processos') | list | length }}</div>
-        <div class="kpi-sub">Apresentantes com processos</div>
-        <i class="bi bi-file-earmark-text kpi-bg-icon"></i>
-    </div>
-    <div class="kpi-card kpi-success">
-        <div class="kpi-label">Resultado da Busca</div>
-        <div class="kpi-value kpi-success">{{ apresentantes | list | length }}</div>
-        <div class="kpi-sub">{% if busca %}Filtrado por "{{ busca }}"{% else %}Exibindo todos{% endif %}</div>
-        <i class="bi bi-funnel-fill kpi-bg-icon"></i>
-    </div>
-</div>
-
 {% set cadastro_tipo = 'apresentantes' %}
 {% set cadastro_label = 'Apresentante' %}
 {% set cadastro_endpoint = 'apresentantes.index' %}
 <!-- Tabela -->
 <div class="rf-card cadastro-list-card">
     <div class="rf-card-header">
-        <h5 class="m-0"><i class="bi bi-people me-2 rf-heading-icon"></i>Lista de Apresentantes</h5>
-        <span class="rf-pill rf-pill-dark">{{ total_registros }}</span>
+        <h6 class="rf-card-title mb-0"><i class="bi bi-people-fill"></i> Apresentantes</h6>
+        <span class="rf-badge count">{{ total_registros }}</span>
     </div>
     {% include "_cadastro_filter_toolbar.html" %}
     <div class="card-body p-0">
@@ -68,22 +46,22 @@
                     <tr class="rf-table-head-row">
                         {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1 rf-sort-active"></i>{% else %}<i class="bi bi-sort-down ms-1 rf-sort-active"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1 rf-sort-inactive"></i>{% endif %}{% endmacro %}
                         {% macro sort_url(col) %}{{ url_for('apresentantes.index', busca=busca, registros_por_pagina=registros_por_pagina, ordenar=col, direcao='desc' if (ordenar == col and direcao == 'asc') else 'asc', pagina=1) }}{% endmacro %}
-                        <th class="ps-4 th-sort" onclick="window.location='{{ sort_url('nome') }}'">Nome do Apresentante{{ sort_icon('nome') }}</th>
+                        <th class="th-sort" onclick="window.location='{{ sort_url('nome') }}'">Nome do Apresentante{{ sort_icon('nome') }}</th>
                         <th class="th-sort" onclick="window.location='{{ sort_url('telefone') }}'">Telefone{{ sort_icon('telefone') }}</th>
                         <th class="th-sort" onclick="window.location='{{ sort_url('email') }}'">E-mail{{ sort_icon('email') }}</th>
                         <th class="th-sort" onclick="window.location='{{ sort_url('processos') }}'">Processos{{ sort_icon('processos') }}</th>
                         <th>Último Registro</th>
-                        <th class="text-end pe-4">Ações</th>
+                        <th class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for apresentante in apresentantes %}
                     {% set tem_vinculo = apresentante.total_processos and apresentante.total_processos > 0 %}
                     <tr>
-                        <td class="ps-4 fw-semibold" >{{ apresentante.nome }}</td>
-                        <td class="rf-muted-cell">{{ apresentante.telefone or '—' }}</td>
-                        <td class="rf-muted-cell">{{ apresentante.email or '—' }}</td>
-                        <td >
+                        <td data-label="Nome" class="fw-semibold">{{ apresentante.nome }}</td>
+                        <td data-label="Telefone" class="rf-muted-cell">{{ apresentante.telefone or '—' }}</td>
+                        <td data-label="E-mail" class="rf-muted-cell">{{ apresentante.email or '—' }}</td>
+                        <td data-label="Processos">
                             {% if tem_vinculo %}
                             <span class="rf-pill-soft rf-badge-info">
                                 <i class="bi bi-folder me-1"></i>{{ apresentante.total_processos }}
@@ -92,7 +70,7 @@
                             <span class="rf-muted-value">0</span>
                             {% endif %}
                         </td>
-                        <td >
+                        <td data-label="Último Registro">
                             {% if apresentante.ultimo_registro_id %}
                             <a href="{{ url_for('processos.visualizar', processo_id=apresentante.ultimo_registro_id) }}" class="text-decoration-none">
                                 {% if apresentante.ultimo_registro_matricula == 'Sem Matrícula' %}
@@ -109,31 +87,31 @@
                             <span class="rf-muted-value">—</span>
                             {% endif %}
                         </td>
-                        <td class="text-end pe-4" >
-                            <div class="rf-row-actions">
+                        <td data-label="Ações" class="text-center">
+                            <div class="tbl-actions">
                                 <a href="{{ url_for('apresentantes.visualizar', apresentante_id=apresentante.id) }}"
-                                   class="nav-btn nav-btn-info btn-xs"
+                                   class="tbl-btn view"
                                    title="Ver Histórico">
-                                    <i class="bi bi-clock-history"></i> Histórico
+                                    <i class="bi bi-clock-history"></i>
                                 </a>
                                 {% if tem_vinculo %}
                                 {# Botões visíveis mas inativos quando há vínculo #}
-                                <span class="nav-btn nav-btn-primary btn-xs is-disabled"
+                                <span class="tbl-btn edit is-disabled"
                                    title="Não é possível editar: apresentante possui {{ apresentante.total_processos }} processo(s) vinculado(s)">
                                     <i class="bi bi-pencil"></i>
                                 </span>
-                                <span class="nav-btn nav-btn-danger btn-xs is-disabled"
+                                <span class="tbl-btn del is-disabled"
                                    title="Não é possível excluir: apresentante possui {{ apresentante.total_processos }} processo(s) vinculado(s)">
                                     <i class="bi bi-trash"></i>
                                 </span>
                                 {% else %}
                                 <a href="{{ url_for('apresentantes.editar', apresentante_id=apresentante.id) }}"
-                                   class="nav-btn nav-btn-primary btn-xs"
+                                   class="tbl-btn edit"
                                    title="Editar Apresentante">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <button type="button"
-                                        class="nav-btn nav-btn-danger btn-excluir-apresentante btn-xs"
+                                        class="tbl-btn del btn-excluir-apresentante"
                                         data-id="{{ apresentante.id }}"
                                         data-nome="{{ apresentante.nome }}"
                                         title="Excluir Apresentante">

@@ -3321,3 +3321,286 @@ html body #main-content > .process-list-card > .card-body {
     margin-right: -.75rem !important;
   }
 }
+
+/* Cadastros: Titulares e Apresentantes seguem o mesmo contrato das listas de Processos. */
+html body #main-content > .cadastro-list-card {
+  width: calc(100% + var(--rf-gutter-x, 1rem) + var(--rf-gutter-x, 1rem)) !important;
+  max-width: none !important;
+  margin-left: calc(0px - var(--rf-gutter-x, 1rem)) !important;
+  margin-right: calc(0px - var(--rf-gutter-x, 1rem)) !important;
+  overflow: visible !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body #main-content > .cadastro-list-card > .rf-card-header {
+  width: 100% !important;
+  min-height: 3.25rem !important;
+  padding: var(--rf-card-header-pad-y, .75rem) var(--rf-card-pad-x, 1rem) !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: none !important;
+}
+html body #main-content > .cadastro-list-card > .rf-card-header .rf-card-title {
+  color: var(--rf-text-heading, #121212) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+html body #main-content > .cadastro-list-card > .rf-card-header .rf-card-title i {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+}
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-inline: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: none !important;
+}
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-toolbar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: .5rem !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 1rem .75rem !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-search {
+  flex: 1 1 18rem !important;
+  min-width: min(100%, 15rem) !important;
+}
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-select {
+  flex: 0 1 11rem !important;
+  min-width: 9rem !important;
+  max-width: 100% !important;
+}
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-search input,
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-select,
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-icon-btn {
+  box-sizing: border-box !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+}
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-search input,
+html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-select {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+html body #main-content > .cadastro-list-card > .card-body {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content > .cadastro-list-card .table-responsive {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  border: 0 !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares,
+html body #main-content > .cadastro-list-card .table-apresentantes {
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: auto !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  --rf-cadastro-row-base: var(--rf-surface-card, #FFFFFF);
+  --rf-cadastro-row-alt: color-mix(in srgb, var(--rf-surface-card, #FFFFFF) 94%, var(--rf-surface-body, #F8F8F8));
+  --rf-cadastro-divider: color-mix(in srgb, #6B6B6B 24%, var(--rf-surface-card, #FFFFFF));
+  --rf-cadastro-hover: color-mix(in srgb, var(--rf-accent, var(--color-gold-primary, #CDA865)) 9%, var(--rf-surface-card, #FFFFFF));
+  background: var(--rf-cadastro-row-base) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares thead,
+html body #main-content > .cadastro-list-card .table-titulares thead tr,
+html body #main-content > .cadastro-list-card .table-apresentantes thead,
+html body #main-content > .cadastro-list-card .table-apresentantes thead tr {
+  background: var(--rf-cadastro-row-base) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares th,
+html body #main-content > .cadastro-list-card .table-titulares td,
+html body #main-content > .cadastro-list-card .table-apresentantes th,
+html body #main-content > .cadastro-list-card .table-apresentantes td {
+  max-width: none !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  vertical-align: middle !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  outline: 0 !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares th,
+html body #main-content > .cadastro-list-card .table-apresentantes th {
+  padding: .625rem .625rem !important;
+  background: var(--rf-cadastro-row-base) !important;
+  color: var(--rf-text-strong, #121212) !important;
+  border-bottom: 1px solid var(--rf-cadastro-divider) !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .035em !important;
+  line-height: 1.25 !important;
+  text-transform: none !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares th a,
+html body #main-content > .cadastro-list-card .table-apresentantes th a {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares th a:hover,
+html body #main-content > .cadastro-list-card .table-titulares th a:focus-visible,
+html body #main-content > .cadastro-list-card .table-apresentantes th a:hover,
+html body #main-content > .cadastro-list-card .table-apresentantes th a:focus-visible {
+  color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares tbody tr,
+html body #main-content > .cadastro-list-card .table-apresentantes tbody tr {
+  background: var(--rf-cadastro-row-base) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares tbody tr:nth-child(even),
+html body #main-content > .cadastro-list-card .table-apresentantes tbody tr:nth-child(even) {
+  background: var(--rf-cadastro-row-alt) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares tbody tr:hover,
+html body #main-content > .cadastro-list-card .table-apresentantes tbody tr:hover {
+  background: var(--rf-cadastro-hover) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares tbody td,
+html body #main-content > .cadastro-list-card .table-apresentantes tbody td {
+  padding: .625rem !important;
+  background: transparent !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  border-bottom: 1px solid var(--rf-cadastro-divider) !important;
+  line-height: 1.4 !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares tbody tr:hover td,
+html body #main-content > .cadastro-list-card .table-apresentantes tbody tr:hover td {
+  background: transparent !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares tbody tr:last-child td,
+html body #main-content > .cadastro-list-card .table-apresentantes tbody tr:last-child td {
+  border-bottom: 0 !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares td[data-label="Nome"],
+html body #main-content > .cadastro-list-card .table-apresentantes td[data-label="Nome"] {
+  color: var(--rf-text-strong, #121212) !important;
+  font-weight: 650 !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares td[data-label="Processos"],
+html body #main-content > .cadastro-list-card .table-titulares td[data-label="Último Registro"],
+html body #main-content > .cadastro-list-card .table-apresentantes td[data-label="Processos"],
+html body #main-content > .cadastro-list-card .table-apresentantes td[data-label="Último Registro"] {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares td[data-label="Ações"],
+html body #main-content > .cadastro-list-card .table-apresentantes td[data-label="Ações"] {
+  white-space: nowrap !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .rf-muted-cell,
+html body #main-content > .cadastro-list-card .table-apresentantes .rf-muted-cell {
+  color: var(--rf-text-muted, #475467) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .rf-sort-active,
+html body #main-content > .cadastro-list-card .table-titulares .rf-sort-inactive,
+html body #main-content > .cadastro-list-card .table-apresentantes .rf-sort-active,
+html body #main-content > .cadastro-list-card .table-apresentantes .rf-sort-inactive {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+}
+html body #main-content > .cadastro-list-card .rf-pagination-bar {
+  border-top: 0 !important;
+  padding-inline: var(--rf-card-pad-x, 1rem) !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+@media (max-width: 800px) {
+  html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-toolbar {
+    padding-inline: .75rem !important;
+  }
+  html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-search {
+    flex: 1 1 100% !important;
+    min-width: 100% !important;
+  }
+  html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-select {
+    flex: 1 1 calc(50% - .5rem) !important;
+    min-width: 0 !important;
+  }
+}
+@media (max-width: 520px) {
+  html body #main-content > .cadastro-list-card > .cadastro-filter-surface .cadastro-filter-select {
+    flex: 1 1 100% !important;
+  }
+}
+@media (max-width: 575.98px) {
+  html body #main-content > .cadastro-list-card {
+    width: calc(100% + 1.5rem) !important;
+    margin-left: -.75rem !important;
+    margin-right: -.75rem !important;
+  }
+}
+
+/* Ações de cadastro: mesmo contrato compacto e temático das listas de Processos. */
+html body #main-content .cadastro-list-card .tbl-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: .25rem !important;
+  flex-wrap: nowrap !important;
+}
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.view,
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.edit {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  border-color: color-mix(in srgb, var(--rf-accent, #CDA865) 46%, var(--rf-border, #C8CFD0)) !important;
+  background: transparent !important;
+}
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.view:hover,
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.view:focus-visible,
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.edit:hover,
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.edit:focus-visible {
+  color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
+  border-color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  background: color-mix(in srgb, var(--rf-accent, #CDA865) 9%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.del {
+  color: var(--rf-danger, var(--color-error, #98424C)) !important;
+  border-color: color-mix(in srgb, var(--rf-danger, #98424C) 40%, var(--rf-border, #C8CFD0)) !important;
+  background: transparent !important;
+}
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.del:hover,
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.del:focus-visible {
+  color: var(--rf-danger-hover, var(--color-error, #98424C)) !important;
+  border-color: var(--rf-danger, var(--color-error, #98424C)) !important;
+  background: color-mix(in srgb, var(--rf-danger, #98424C) 9%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.is-disabled,
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.is-disabled:hover,
+html body #main-content .cadastro-list-card .tbl-actions .tbl-btn.is-disabled:focus-visible {
+  opacity: .4 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  color: var(--rf-text-muted, #6B6B6B) !important;
+  border-color: var(--rf-border, #C8CFD0) !important;
+  background: transparent !important;
+  outline: 0 !important;
+}
