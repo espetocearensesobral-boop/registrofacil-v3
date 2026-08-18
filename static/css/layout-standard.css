@@ -4107,38 +4107,41 @@ body {
   }
 }
 
-/* Todos os Processos — experimento: scroll interno primeiro, página depois. */
-html body #main-content.rf-list-page > .process-list-card .rf-infinite-table[data-list-scroll-mode="internal-first"] {
-  max-height: 26rem !important;
-  flex: 0 0 26rem !important;
-  overflow-y: auto !important;
-  overflow-x: auto !important;
-  transition: max-height .18s ease, flex-basis .18s ease;
-}
-html body #main-content.rf-list-page.rf-main-scroll-active,
-html body #main-content.rf-list-page > .process-list-card.rf-main-scroll-active .rf-infinite-table,
-html body #main-content.rf-list-page .rf-infinite-table[data-list-scroll-mode="internal-first"].rf-main-scroll-active {
-  overflow: visible !important;
-}
-html body #main-content.rf-list-page > .process-list-card.rf-main-scroll-active,
-html body #main-content.rf-list-page.rf-main-scroll-active > .process-list-card {
-  flex: 0 0 auto !important;
-  min-height: 0 !important;
-}
-html body #main-content.rf-list-page > .process-list-card.rf-main-scroll-active .rf-infinite-table,
-html body #main-content.rf-list-page .rf-infinite-table[data-list-scroll-mode="internal-first"].rf-main-scroll-active {
+/* Todos os Processos — rolagem natural, como em dispositivos móveis. */
+html body #main-content.rf-list-page > .process-list-card .rf-infinite-table[data-list-scroll-mode="internal-first"],
+html body #main-content.rf-list-page > .process-list-card .rf-infinite-table[data-list-scroll-mode="internal-first"].rf-main-scroll-active {
+  display: block !important;
   max-height: none !important;
   flex: 0 0 auto !important;
-  overflow-y: visible !important;
   overflow-x: auto !important;
+  overflow-y: visible !important;
+  overscroll-behavior: auto !important;
+}
+html body #main-content.rf-list-page.rf-main-scroll-active,
+html body #main-content.rf-list-page > .process-list-card.rf-main-scroll-active,
+html body #main-content.rf-list-page > .process-list-card.rf-main-scroll-active .rf-infinite-table {
+  overflow: visible !important;
 }
 html body #main-content.rf-list-page .rf-infinite-table[data-list-scroll-mode="internal-first"] .rf-infinite-status {
-  position: sticky !important;
-  bottom: 0 !important;
+  position: static !important;
 }
-@media (max-width: 800px) {
-  html body #main-content.rf-list-page > .process-list-card .rf-infinite-table[data-list-scroll-mode="internal-first"] {
-    max-height: 24rem !important;
-    flex-basis: 24rem !important;
-  }
+
+/* Todos os Processos: override final para rolagem natural do documento. */
+html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]),
+html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]) > .process-list-card,
+html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]) > .process-list-card > .card-body,
+html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]) .rf-infinite-table[data-list-scroll-mode="internal-first"] {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]) > .process-list-card,
+html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]) .rf-infinite-table[data-list-scroll-mode="internal-first"] {
+  flex: 0 0 auto !important;
+}
+html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]) .rf-infinite-table[data-list-scroll-mode="internal-first"] {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  overscroll-behavior: auto !important;
 }

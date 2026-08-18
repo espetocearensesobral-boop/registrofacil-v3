@@ -49,10 +49,12 @@ def test_todos_processos_uses_internal_first_mode_with_ten_record_batch():
     css = read('static/css/layout-standard.css')
     assert 'data-list-scroll-mode="internal-first"' in template
     assert "request.args.get('registros_por_pagina', 10, type=int)" in route
-    assert 'const isInternalFirst' in js
-    assert 'activateMainScroll' in js
+    assert 'const naturalPageScroll' in js
+    assert 'activateMainScroll' not in js
     assert 'window.addEventListener(\'scroll\', onWindowScroll' in js
-    assert 'rf-main-scroll-active' in css
+    assert 'documentNearEnd' in js
+    assert 'max-height: none !important' in css
+    assert 'overflow-y: visible !important' in css
 
 
 def test_base_and_assets_expose_fixed_list_shell_contract():

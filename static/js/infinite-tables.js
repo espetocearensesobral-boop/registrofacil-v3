@@ -1,18 +1,17 @@
 /*
- * Registro Fácil — carregamento contínuo das listas padronizadas.
+ * Registro Fácil — carregamento incremental das listas padronizadas.
  *
- * O modo padrão mantém a rolagem interna das tabelas. A lista de Todos os
- * Processos pode ativar o modo experimental "internal-first": começa com
- * dez registros em uma viewport própria e, ao atingir o fim do lote inicial,
- * libera o crescimento da tabela e transfere a continuidade para o scroll da
- * página principal.
+ * As listas comuns continuam consumindo lotes pela rolagem de seu wrapper.
+ * Todos os Processos usa o modo "internal-first" apenas como marcador de
+ * comportamento: a tabela não ganha uma segunda barra vertical; o carregamento
+ * é disparado pelo scroll natural do documento, como em interfaces móveis.
  */
 (function () {
     'use strict';
 
     const LIST_SELECTOR = '[data-infinite-scroll]';
     const FETCH_TIMEOUT_MS = 20000;
-    const MAIN_SCROLL_THRESHOLD = 240;
+    const LOAD_THRESHOLD = 360;
 
     function asNumber(value, fallback) {
         const parsed = Number.parseInt(value, 10);
@@ -37,7 +36,6 @@
     function initInfiniteList(list) {
         if (!list || list.dataset.infiniteReady === 'true') return;
 
-        const scrollViewport = list;
         const table = list.querySelector('table');
         const tbody = table && table.querySelector('tbody');
         const sentinel = list.querySelector('[data-infinite-sentinel]');
@@ -45,19 +43,16 @@
         if (!tbody || !sentinel) return;
 
         list.dataset.infiniteReady = 'true';
-        const isInternalFirst = list.dataset.listScrollMode === 'internal-first';
-        const mainContent = document.getElementById('main-content');
-        const card = list.closest('.process-list-card');
+        const naturalPageScroll = list.dataset.listScrollMode === 'internal-first';
         let currentPage = asNumber(list.dataset.page, 1);
         let totalPages = asNumber(list.dataset.totalPages, 1);
-        const pageSize = Math.max(1, asNumber(list.dataset.pageSize, isInternalFirst ? 10 : 50));
+        const pageSize = Math.max(1, asNumber(list.dataset.pageSize, naturalPageScroll ? 10 : 50));
         const pageSizeParam = list.dataset.pageSizeParam || 'registros_por_pagina';
         const endpoint = list.dataset.infiniteEndpoint || window.location.pathname;
         let totalRecords = asNumber(list.dataset.totalRecords, tbody.querySelectorAll('tr').length);
         let loadedRecords = tbody.querySelectorAll('tr').length;
         let loading = false;
         let completed = currentPage >= totalPages;
-        let mainScrollActive = false;
         let observer = null;
 
         function updateStatus(message, visible) {
@@ -71,40 +66,30 @@
             sentinel.hidden = true;
             updateStatus(`${pluralizeRegistro(totalRecords)} carregado${totalRecords === 1 ? '' : 's'}.`, true);
             if (observer) observer.disconnect();
-            window.removeEventListener('scroll', onWindowScroll);
+            if (naturalPageScroll) window.removeEventListener('scroll', onWindowScroll);
         }
 
-        function hasRoomToScroll() {
-            return scrollViewport.scrollHeight <= scrollViewport.clientHeight + 8;
+        function internalViewportHasRoom() {
+            return list.scrollHeight <= list.clientHeight + 8;
         }
 
-        function activateMainScroll() {
-            if (!isInternalFirst || mainScrollActive) return;
-            mainScrollActive = true;
-            list.classList.add('rf-main-scroll-active');
-            if (card) card.classList.add('rf-main-scroll-active');
-            if (mainContent) mainContent.classList.add('rf-main-scroll-active');
-            if (observer) {
-                observer.disconnect();
-                observer = null;
-            }
-            window.addEventListener('scroll', onWindowScroll, { passive: true });
-            updateStatus('Continue rolando a página para carregar mais registros.', true);
+        function documentHasRoomToScroll() {
+            return document.documentElement.scrollHeight > document.documentElement.clientHeight + 8;
         }
 
-        function nearMainScrollEnd() {
-            return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - MAIN_SCROLL_THRESHOLD;
+        function documentNearEnd() {
+            return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - LOAD_THRESHOLD;
         }
 
         function onWindowScroll() {
-            if (!mainScrollActive || completed || !nearMainScrollEnd()) return;
-            loadNextPage();
+            if (!naturalPageScroll || completed || loading) return;
+            if (documentNearEnd()) loadNextPage();
         }
 
         async function loadNextPage() {
             if (loading || completed) return;
             loading = true;
-            sentinel.hidden = false;
+            if (!naturalPageScroll) sentinel.hidden = false;
             updateStatus('Carregando mais registros…', true);
 
             const nextPage = currentPage + 1;
@@ -132,29 +117,26 @@
 
                 if (currentPage >= totalPages || loadedRecords >= totalRecords || payload.rows.length === 0) {
                     finish();
-                } else {
-                    updateStatus(mainScrollActive ? 'Continue rolando a página para carregar mais registros.' : '', mainScrollActive);
-                    sentinel.hidden = false;
-                    if (!mainScrollActive && hasRoomToScroll()) {
+                } else if (naturalPageScroll) {
+                    updateStatus('', false);
+                    sentinel.hidden = true;
+                    // Se o lote ainda não criou altura suficiente para a página,
+                    // carrega outro lote para evitar uma tela sem scroll.
+                    if (!documentHasRoomToScroll() || documentNearEnd()) {
                         window.requestAnimationFrame(loadNextPage);
                     }
+                } else {
+                    updateStatus('', false);
+                    sentinel.hidden = false;
+                    if (internalViewportHasRoom()) window.requestAnimationFrame(loadNextPage);
                 }
             } catch (error) {
                 console.error('[Registro Fácil] Falha ao carregar registros adicionais:', error);
                 updateStatus('Não foi possível carregar mais registros. Tente rolar novamente.', true);
-                sentinel.hidden = false;
+                if (!naturalPageScroll) sentinel.hidden = false;
             } finally {
                 window.clearTimeout(timeout);
                 loading = false;
-            }
-        }
-
-        function onInternalScroll() {
-            if (mainScrollActive || completed) return;
-            const remaining = scrollViewport.scrollHeight - scrollViewport.scrollTop - scrollViewport.clientHeight;
-            if (remaining < 8) {
-                if (isInternalFirst) activateMainScroll();
-                loadNextPage();
             }
         }
 
@@ -163,23 +145,28 @@
             return;
         }
 
-        if (isInternalFirst) {
-            // O lote inicial permanece em uma área própria; dez linhas podem
-            // ultrapassar essa altura e tornar a barra interna utilizável.
-            scrollViewport.addEventListener('scroll', onInternalScroll, { passive: true });
-            if (!completed && totalPages > 1 && hasRoomToScroll()) activateMainScroll();
-        } else {
-            observer = 'IntersectionObserver' in window
-                ? new IntersectionObserver((entries) => {
-                    if (entries.some((entry) => entry.isIntersecting)) loadNextPage();
-                }, { root: scrollViewport, rootMargin: '240px 0px', threshold: 0.01 })
-                : null;
-            sentinel.hidden = false;
-            if (observer) observer.observe(sentinel);
-            scrollViewport.addEventListener('scroll', onInternalScroll, { passive: true });
+        if (naturalPageScroll) {
+            sentinel.hidden = true;
+            window.addEventListener('scroll', onWindowScroll, { passive: true });
             updateStatus('', false);
-            if (hasRoomToScroll()) window.requestAnimationFrame(loadNextPage);
+            // O primeiro lote permanece visível até o usuário iniciar a
+            // rolagem; o próximo lote só entra ao alcançar o fim da página.
+            return;
         }
+
+        observer = 'IntersectionObserver' in window
+            ? new IntersectionObserver((entries) => {
+                if (entries.some((entry) => entry.isIntersecting)) loadNextPage();
+            }, { root: list, rootMargin: '240px 0px', threshold: 0.01 })
+            : null;
+        sentinel.hidden = false;
+        if (observer) observer.observe(sentinel);
+        list.addEventListener('scroll', function () {
+            const remaining = list.scrollHeight - list.scrollTop - list.clientHeight;
+            if (remaining < 240) loadNextPage();
+        }, { passive: true });
+        updateStatus('', false);
+        if (internalViewportHasRoom()) window.requestAnimationFrame(loadNextPage);
     }
 
     function boot() {
