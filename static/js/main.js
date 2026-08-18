@@ -39,7 +39,6 @@ window.setActive = function(element) {
     menuItems.forEach(item => item.classList.remove('active'));
     
     element.classList.add('active');
-    window.openSidebarCategoryFor?.(element, false);
 
     // NOVO: Rola a sidebar para o item ativo, se encontrado
     const menuSection = document.querySelector('.menu-section');
@@ -119,102 +118,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     initializeFlashToasts();
 
-    // --- 2.3. Inicializa a Sidebar fixa e o accordion de categorias ---
+    // --- 2.3. Inicializa a sidebar fixa e a navegação sempre aberta ---
     const initSidebarControl = () => {
         const sidebar = document.getElementById('sidebar');
         const wrapper = document.getElementById('wrapper');
         const pageContentWrapper = document.getElementById('page-content-wrapper');
-        const categoryToggles = Array.from(document.querySelectorAll('.sidebar-group-toggle'));
-
         if (!sidebar || !wrapper || !pageContentWrapper) return;
 
-        // O desktop não possui mais estado collapsed/toggled.
         sidebar.classList.remove('collapsed');
         wrapper.classList.remove('toggled');
-
-        const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
-        const closeCategory = (toggle) => {
-            const panel = document.getElementById(toggle.getAttribute('aria-controls'));
-            toggle.setAttribute('aria-expanded', 'false');
-            toggle.classList.remove('is-open');
-            if (!panel) return;
-
-            panel._sidebarAnimationToken = (panel._sidebarAnimationToken || 0) + 1;
-            const animationToken = panel._sidebarAnimationToken;
-            panel.classList.remove('is-opening', 'is-open');
-            panel.classList.add('is-closing');
-            const finishClose = () => {
-                if (panel._sidebarAnimationToken !== animationToken) return;
-                panel.hidden = true;
-                panel.classList.remove('is-closing');
-            };
-            if (prefersReducedMotion) {
-                finishClose();
-            } else {
-                panel.addEventListener('transitionend', finishClose, { once: true });
-                window.setTimeout(finishClose, 260);
-            }
-        };
-
-        const openCategory = (toggle, focus = true) => {
-            categoryToggles.forEach(other => {
-                if (other !== toggle) closeCategory(other);
-            });
-            const panel = document.getElementById(toggle.getAttribute('aria-controls'));
-            toggle.setAttribute('aria-expanded', 'true');
-            toggle.classList.add('is-open');
-            if (panel) {
-                panel._sidebarAnimationToken = (panel._sidebarAnimationToken || 0) + 1;
-                panel.hidden = false;
-                panel.classList.remove('is-closing');
-                if (prefersReducedMotion) {
-                    panel.classList.add('is-open');
-                } else {
-                    panel.classList.remove('is-open');
-                    window.requestAnimationFrame(() => panel.classList.add('is-open'));
-                }
-            }
-            if (focus) toggle.focus({ preventScroll: true });
-        };
-
-        window.openSidebarCategoryFor = (element, focus = false) => {
-            const panel = element?.closest('.sidebar-category-items');
-            const toggle = element?.matches?.('.sidebar-group-toggle')
-                ? element
-                : panel?.previousElementSibling?.matches?.('.sidebar-group-toggle')
-                    ? panel.previousElementSibling
-                    : null;
-            if (toggle) openCategory(toggle, focus);
-        };
-
-        categoryToggles.forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-                if (isOpen) {
-                    closeCategory(toggle);
-                    toggle.focus({ preventScroll: true });
-                } else {
-                    openCategory(toggle, true);
-                }
-            });
-            toggle.addEventListener('keydown', event => {
-                if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-                    event.preventDefault();
-                    const index = categoryToggles.indexOf(toggle);
-                    const nextIndex = event.key === 'ArrowDown'
-                        ? (index + 1) % categoryToggles.length
-                        : (index - 1 + categoryToggles.length) % categoryToggles.length;
-                    categoryToggles[nextIndex].focus();
-                }
-            });
-            if (toggle.getAttribute('aria-expanded') === 'true') {
-                toggle.classList.add('is-open');
-                document.getElementById(toggle.getAttribute('aria-controls'))?.classList.add('is-open');
-            }
-        });
-
-        // Administrador é uma categoria normal do accordion; somente Sair fica fixo no rodapé.
 
         const handleResponsiveSidebar = () => {
             sidebar.classList.remove('collapsed');
@@ -298,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isActiveCandidate) {
                 item.classList.add('active');
-                window.openSidebarCategoryFor?.(item, false);
                 activeItemFound = item;
                 console.log(`setActiveSidebarLinks: Link ativo definido para: '${linkHref}'`);
             }
@@ -688,12 +599,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     return true;
                 },
                 'o': () => {
-                    const administratorToggle = document.querySelector('[aria-controls="sidebar-group-administrador"]');
-                    if (administratorToggle) {
-                        administratorToggle.click();
-                        administratorToggle.focus({ preventScroll: true });
+                    const administratorLink = document.querySelector('.menu-item[data-accesskey="u"]');
+                    if (administratorLink) {
+                        administratorLink.focus({ preventScroll: true });
+                        administratorLink.classList.add('active');
                     } else {
-                        console.warn("Atalho Alt+O acionado, mas a categoria Administrador não foi encontrada.");
+                        console.warn("Atalho Alt+O acionado, mas o acesso administrativo não está disponível.");
                     }
                     return true;
                 }
