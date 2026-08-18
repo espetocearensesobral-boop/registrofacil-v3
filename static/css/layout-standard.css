@@ -2976,3 +2976,143 @@ html body #form-processo .form-section .form-select:focus {
   html body #form-processo .form-section + .form-section { padding-top: .25rem !important; }
   html body #form-processo .form-section .section-title { margin-bottom: .75rem !important; font-size: .9375rem !important; }
 }
+
+/* Processos: título e filtros em uma superfície contínua, sem divisória redundante. */
+html body #main-content .process-list-card {
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+html body #main-content .process-list-card > .rf-card-header,
+html body #main-content .process-list-card > .card-header {
+  min-width: 0 !important;
+  padding-bottom: .5rem !important;
+  border-bottom: 0 !important;
+}
+html body #main-content .process-list-card > .rf-card-header .rf-card-title,
+html body #main-content .process-list-card > .card-header h5,
+html body #main-content .process-list-card > .card-header h6 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface {
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-toolbar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: .5rem !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 1rem .75rem !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-search {
+  flex: 1 1 18rem !important;
+  min-width: min(100%, 15rem) !important;
+  max-width: none !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-select {
+  flex: 0 1 11rem !important;
+  min-width: 9rem !important;
+  max-width: 100% !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-search input,
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-select,
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-icon-btn {
+  box-sizing: border-box !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-search input,
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-select {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+html body #main-content .process-list-card > .card-body {
+  min-width: 0 !important;
+  padding-top: 0 !important;
+  overflow: visible !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+}
+html body #main-content .process-list-card > .card-body > .table-responsive {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  border: 0 !important;
+  border-top: 0 !important;
+}
+
+/* Tabelas de processos: layout automático para conteúdo variável, sem corte de células. */
+html body #main-content .process-list-card .table-processos {
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: auto !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+html body #main-content .process-list-card .table-processos th,
+html body #main-content .process-list-card .table-processos td {
+  max-width: none !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  vertical-align: middle !important;
+}
+html body #main-content .process-list-card .table-processos th[data-column-id="id"],
+html body #main-content .process-list-card .table-processos th[data-column-id="matricula"],
+html body #main-content .process-list-card .table-processos th[data-column-id="data_entrada"],
+html body #main-content .process-list-card .table-processos th[data-column-id="prazo"],
+html body #main-content .process-list-card .table-processos td[data-label="ID"],
+html body #main-content .process-list-card .table-processos td[data-label="Matrícula"],
+html body #main-content .process-list-card .table-processos td[data-label="Entrada"],
+html body #main-content .process-list-card .table-processos td[data-label="Prazo"],
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+html body #main-content .process-list-card .table-processos td[data-label="Titular"],
+html body #main-content .process-list-card .table-processos td[data-label="Tipo"] {
+  min-width: 8rem !important;
+}
+html body #main-content .process-list-card .table-processos td[data-label="Status"] .badge,
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes {
+  white-space: nowrap !important;
+}
+@media (max-width: 800px) {
+  html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-toolbar {
+    padding-inline: .75rem !important;
+  }
+  html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-search {
+    flex: 1 1 100% !important;
+    min-width: 100% !important;
+  }
+  html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-select {
+    flex: 1 1 calc(50% - .5rem) !important;
+    min-width: 0 !important;
+  }
+}
+@media (max-width: 520px) {
+  html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-select {
+    flex: 1 1 100% !important;
+  }
+}
