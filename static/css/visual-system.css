@@ -1290,206 +1290,13 @@ html body .dashboard-action-link.nav-btn-secondary:focus-visible {
 
 
 /* ============================================================
-   CONTRATO FINAL DE PREENCHIMENTO TEMÁTICO — Onda button-fill-1
-   Nenhum botão de ação deve depender do hover para receber cor.
+   CONTRATO CANÔNICO DE BOTÕES — consolidado
+   Uma única camada temática para o estado padrão e os estados
+   hover/focus-visible, sem depender de ondas duplicadas.
    ============================================================ */
-body .nav-btn-secondary,
-html body .navbar .nav-btn-secondary,
-body .btn-secondary,
-body .btn-outline-secondary,
-body .btn-filter-clear,
-body .btn-limpar {
-  background: var(--color-primary-light) !important;
-  border-color: var(--color-primary-light) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-body .nav-btn-secondary:hover,
-html body .navbar .nav-btn-secondary:hover,
-body .btn-secondary:hover,
-body .btn-outline-secondary:hover,
-body .btn-filter-clear:hover,
-body .btn-limpar:hover,
-body .nav-btn-secondary:focus-visible,
-body .btn-secondary:focus-visible,
-body .btn-outline-secondary:focus-visible {
-  background: var(--color-primary-dark) !important;
-  border-color: var(--color-primary-dark) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
 
-/* Ações compactas também recebem preenchimento no estado repouso. */
-body .tbl-btn,
-body .rf-tab-btn,
-body .metricas-tab-btn,
-body .cat-toggle-btn,
-body .cfg-ibtn {
-  background: var(--color-primary-light) !important;
-  border-color: var(--color-primary-light) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-body .tbl-btn:hover,
-body .rf-tab-btn:hover,
-body .metricas-tab-btn:hover,
-body .cat-toggle-btn:hover,
-body .cfg-ibtn:hover,
-body .rf-tab-btn.active,
-body .metricas-tab-btn.active {
-  background: var(--color-primary-dark) !important;
-  border-color: var(--color-primary-dark) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-body .tbl-btn.del,
-body .tbl-btn.delete {
-  background: var(--color-gold-primary) !important;
-  border-color: var(--color-gold-primary) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-
-/* Variantes outline são ações preenchidas para manter unidade visual global. */
-body .btn-outline-primary,
-body .btn-link {
-  background: var(--color-primary-light) !important;
-  border-color: var(--color-primary-light) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-body .btn-outline-primary:hover,
-body .btn-link:hover {
-  background: var(--color-primary-dark) !important;
-  border-color: var(--color-primary-dark) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-body .btn-outline-danger {
-  background: var(--color-gold-primary) !important;
-  border-color: var(--color-gold-primary) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-body .btn-outline-danger:hover {
-  background: var(--color-gold-dark) !important;
-  border-color: var(--color-gold-dark) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-
-/* Ações do dashboard seguem o mesmo preenchimento desde o primeiro frame. */
-html body .dashboard-action-link.nav-btn-secondary {
-  background: var(--color-primary-light) !important;
-  border-color: var(--color-primary-light) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-html body .dashboard-action-link.nav-btn-secondary:hover,
-html body .dashboard-action-link.nav-btn-secondary:focus-visible {
-  background: var(--color-primary-dark) !important;
-  border-color: var(--color-primary-dark) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-
-
-/* Correção de precedência — Onda button-fill-2. Usa background-color explícito
-   para vencer regras legadas que também declaram background-color !important. */
-body .nav-btn,
-body .btn-primary,
-body .btn-dark,
-body .btn-secondary,
-body .btn-outline-primary,
-body .btn-outline-secondary,
-body .btn-success,
-body .btn-warning,
-body .btn-info,
-body .btn-danger,
-body .btn-outline-danger,
-body .btn-filter-apply,
-body .btn-filter-clear,
-body .btn-limpar,
-body .btn-action,
-body .btn-action-square,
-body .btn-browse-dir,
-body .btn-acao-clicavel,
-body .cfg-btn-add,
-body .cfg-sbtn,
-body .cfg-obtn,
-body .cfg-ibtn,
-body .nt-btn-save,
-body .tbl-btn,
-body .rf-tab-btn,
-body .metricas-tab-btn,
-body .cat-toggle-btn,
-body .auth-btn {
-  background-color: var(--color-primary-light, #1B4368) !important;
-  background-image: none !important;
-  border-color: var(--color-primary-light, #1B4368) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-
-body .nav-btn-primary,
-body .btn-primary,
-body .btn-dark,
-body .btn-filter-apply,
-body .cfg-btn-add,
-body .cfg-sbtn,
-body .nt-btn-save,
-body .auth-btn {
-  background-color: var(--color-primary, #0F2A43) !important;
-  border-color: var(--color-primary, #0F2A43) !important;
-}
-
-html body .navbar .nav-btn-secondary,
-body .nav-btn-secondary,
-body .btn-secondary,
-body .btn-outline-primary,
-body .btn-outline-secondary,
-body .btn-filter-clear,
-body .btn-limpar,
-html body .dashboard-action-link.nav-btn-secondary {
-  background-color: var(--color-primary-light, #1B4368) !important;
-  border-color: var(--color-primary-light, #1B4368) !important;
-}
-
-body .nav-btn-danger,
-body .btn-danger,
-body .btn-outline-danger,
-body .cfg-obtn,
-body .btn-delete-backup,
-body .btn-remove-file,
-body .btn-excluir-titular,
-body .btn-excluir-apresentante,
-body .btn-excluir-representante,
-body .btn-revoke {
-  background-color: var(--color-gold-primary, #B08D3E) !important;
-  border-color: var(--color-gold-primary, #B08D3E) !important;
-}
-
-body .nav-btn-success,
-body .btn-success { background-color: var(--color-success, #1E5C3E) !important; border-color: var(--color-success, #1E5C3E) !important; }
-body .nav-btn-warning,
-body .btn-warning { background-color: var(--color-gold-primary, #B08D3E) !important; border-color: var(--color-gold-primary, #B08D3E) !important; }
-body .nav-btn-info,
-body .btn-info { background-color: var(--color-primary-light, #1B4368) !important; border-color: var(--color-primary-light, #1B4368) !important; }
-
-body .nav-btn:hover,
-body .btn:hover,
-body button:not(.btn-close):hover,
-body a.btn:hover,
-body .tbl-btn:hover,
-body .rf-tab-btn:hover,
-body .metricas-tab-btn:hover,
-body .cat-toggle-btn:hover,
-body .cfg-ibtn:hover {
-  background-color: var(--color-primary-dark, #0A1E30) !important;
-  border-color: var(--color-primary-dark, #0A1E30) !important;
-  color: var(--color-primary-contrast, #FFFFFF) !important;
-}
-body .nav-btn-danger:hover,
-body .btn-danger:hover,
-body .btn-outline-danger:hover,
-body .cfg-obtn:hover,
-body .btn-delete-backup:hover,
-body .btn-remove-file:hover,
-body .btn-excluir-titular:hover,
-body .btn-excluir-apresentante:hover,
-body .btn-excluir-representante:hover,
-body .btn-revoke:hover { background-color: var(--color-gold-dark, #8E702F) !important; border-color: var(--color-gold-dark, #8E702F) !important; }
-
-
-/* Revisão de contraste e superfície clara — Onda visual button-fill-5. */
+/* Base comum: todos os controles mantêm contraste e não ficam
+   visualmente pressionados após o clique. */
 body .nav-btn,
 body .btn,
 body button:not(.btn-close),
@@ -1504,84 +1311,126 @@ body .cfg-sbtn,
 body .nt-btn-save,
 body .auth-btn {
   color: var(--color-primary-contrast, #FFFFFF) !important;
+  background-image: none !important;
 }
 
+/* Ações primárias. */
+body .nav-btn-primary,
+body .btn-primary,
+body .btn-dark,
+body .btn-filter-apply,
+body .btn-action,
+body .btn-action-square,
+body .cfg-btn-add,
+body .cfg-sbtn,
+body .nt-btn-save,
+body .auth-btn,
+body .btn-acao-clicavel,
+body .btn-browse-dir,
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger) {
+  background-color: var(--color-primary, #0F2A43) !important;
+  border-color: var(--color-primary, #0F2A43) !important;
+}
+body .nav-btn-primary:hover,
+body .btn-primary:hover,
+body .btn-dark:hover,
+body .btn-filter-apply:hover,
+body .btn-action:hover,
+body .btn-action-square:hover,
+body .cfg-btn-add:hover,
+body .cfg-sbtn:hover,
+body .nt-btn-save:hover,
+body .auth-btn:hover,
+body .btn-acao-clicavel:hover,
+body .btn-browse-dir:hover,
+body button[type="submit"]:not(.btn-danger):not(.nav-btn-danger):hover,
+body .nav-btn-primary:focus-visible,
+body .btn-primary:focus-visible,
+body .btn-dark:focus-visible,
+body .btn-filter-apply:focus-visible,
+body .cfg-btn-add:focus-visible,
+body .cfg-sbtn:focus-visible,
+body .nt-btn-save:focus-visible,
+body .auth-btn:focus-visible {
+  background-color: var(--color-primary-dark, #0A1E30) !important;
+  border-color: var(--color-primary-dark, #0A1E30) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+
+/* Ações secundárias: preenchidas no repouso e mais escuras na interação. */
 body .nav-btn-secondary,
 body .btn-secondary,
-body .btn-outline-secondary,
 body .btn-outline-primary,
+body .btn-outline-secondary,
+body .btn-link,
 body .btn-filter-clear,
-body .btn-limpar {
+body .btn-limpar,
+body .dashboard-action-link.nav-btn-secondary {
   background-color: var(--color-primary-light, #1B4368) !important;
-  background-image: none !important;
   border-color: var(--color-primary-light, #1B4368) !important;
   color: var(--color-primary-contrast, #FFFFFF) !important;
 }
-
-body .nav-btn-danger,
-body .btn-danger,
-body .btn-outline-danger,
-body .cfg-obtn,
-body .btn-delete-backup,
-body .btn-remove-file,
-body .btn-excluir-titular,
-body .btn-excluir-apresentante,
-body .btn-excluir-representante,
-body .btn-revoke {
+body .nav-btn-secondary:hover,
+body .btn-secondary:hover,
+body .btn-outline-primary:hover,
+body .btn-outline-secondary:hover,
+body .btn-link:hover,
+body .btn-filter-clear:hover,
+body .btn-limpar:hover,
+body .dashboard-action-link.nav-btn-secondary:hover,
+body .nav-btn-secondary:focus-visible,
+body .btn-secondary:focus-visible,
+body .btn-outline-primary:focus-visible,
+body .btn-outline-secondary:focus-visible,
+body .btn-filter-clear:focus-visible,
+body .btn-limpar:focus-visible,
+body .dashboard-action-link.nav-btn-secondary:focus-visible {
+  background-color: var(--color-primary-dark, #0A1E30) !important;
+  border-color: var(--color-primary-dark, #0A1E30) !important;
   color: var(--color-primary-contrast, #FFFFFF) !important;
 }
 
-body .badge.bg-success,
-body .badge.bg-danger,
-body .badge.bg-secondary,
-body .badge.bg-primary,
-body .badge.bg-info,
-body .cfg-status-badge,
-body .htl-badge {
-  color: var(--color-primary-contrast, #FFFFFF) !important;
+/* Ações de sucesso, informação e advertência. */
+body .nav-btn-success,
+body .btn-success {
+  background-color: var(--color-success, #1E5C3E) !important;
+  border-color: var(--color-success, #1E5C3E) !important;
 }
-
-/* A barra de filtros usa a superfície branca institucional; o toggle mantém borda e texto temáticos. */
-body .filter-bar {
-  background-color: var(--rf-surface-card, #FFFFFF) !important;
-  border-color: var(--rf-border, #D9D2C2) !important;
+body .nav-btn-success:hover,
+body .btn-success:hover,
+body .nav-btn-success:focus-visible,
+body .btn-success:focus-visible {
+  background-color: var(--color-primary-dark, #0A1E30) !important;
+  border-color: var(--color-primary-dark, #0A1E30) !important;
 }
-body .filter-bar-toggle {
-  background-color: var(--rf-surface-card, #FFFFFF) !important;
-  background-image: none !important;
-  border: 0 !important;
-  border-bottom: 1px solid var(--rf-border, #D9D2C2) !important;
-  color: var(--rf-text-primary, #1D1B18) !important;
-}
-body .filter-bar-toggle strong,
-body .filter-bar-toggle i,
-body .filter-bar-toggle .ms-auto {
-  color: var(--rf-text-primary, #1D1B18) !important;
-}
-body .filter-bar-toggle:hover,
-body .filter-bar-toggle:focus-visible,
-body .filter-bar.active-filters .filter-bar-toggle {
-  background-color: var(--rf-surface-hover, #ECE8DE) !important;
-  color: var(--rf-text-primary, #1D1B18) !important;
-}
-
-/* Ações de estado com fundo próprio preservam texto branco também no repouso. */
-body .bg-success,
-body .bg-danger,
-body .bg-primary,
-body .bg-info,
-body .bg-dark {
-  color: #FFFFFF !important;
-}
-
-
-/* Terceira cor semântica para ações destrutivas e reversíveis — Onda tertiary-action-1. */
-body .nav-btn-danger,
 body .nav-btn-warning,
-body .btn-danger,
 body .btn-warning,
+body .nav-btn-info,
+body .btn-info {
+  background-color: var(--color-gold-primary, #B08D3E) !important;
+  border-color: var(--color-gold-primary, #B08D3E) !important;
+}
+body .nav-btn-info,
+body .btn-info { background-color: var(--color-primary-light, #1B4368) !important; border-color: var(--color-primary-light, #1B4368) !important; }
+body .nav-btn-warning:hover,
+body .btn-warning:hover,
+body .nav-btn-warning:focus-visible,
+body .btn-warning:focus-visible {
+  background-color: var(--color-gold-dark, #8E702F) !important;
+  border-color: var(--color-gold-dark, #8E702F) !important;
+}
+body .nav-btn-info:hover,
+body .btn-info:hover,
+body .nav-btn-info:focus-visible,
+body .btn-info:focus-visible {
+  background-color: var(--color-primary-dark, #0A1E30) !important;
+  border-color: var(--color-primary-dark, #0A1E30) !important;
+}
+
+/* Ações destrutivas e reversíveis usam o terciário institucional. */
+body .nav-btn-danger,
+body .btn-danger,
 body .btn-outline-danger,
-body .btn-outline-warning,
 body .btn-filter-clear,
 body .btn-limpar,
 body .cfg-obtn,
@@ -1594,19 +1443,25 @@ body .btn-revoke,
 body .btn-inativar,
 body .btn-desativar,
 body .btn-rejeitar,
-body .btn-descartar {
+body .btn-descartar,
+body .btn-cancel-action,
+body .nt-btn-cancel,
+body .cfg-ibtn.cfg-destructive-toggle,
+body .btn-download,
+body .download-btn,
+body a[href*="download"],
+body a[href*="baixar"],
+body [title*="Ativar"],
+body [title*="Inativar"],
+body [title*="Desativar"],
+body [title*="Revogar"] {
   background-color: var(--rf-action-tertiary, #B08D3E) !important;
-  background-image: none !important;
   border-color: var(--rf-action-tertiary, #B08D3E) !important;
   color: var(--rf-text-on-primary, #FFFFFF) !important;
 }
-
 body .nav-btn-danger:hover,
-body .nav-btn-warning:hover,
 body .btn-danger:hover,
-body .btn-warning:hover,
 body .btn-outline-danger:hover,
-body .btn-outline-warning:hover,
 body .btn-filter-clear:hover,
 body .btn-limpar:hover,
 body .cfg-obtn:hover,
@@ -1620,32 +1475,9 @@ body .btn-inativar:hover,
 body .btn-desativar:hover,
 body .btn-rejeitar:hover,
 body .btn-descartar:hover,
-body .nav-btn-danger:focus-visible,
-body .btn-danger:focus-visible,
-body .btn-filter-clear:focus-visible,
-body .btn-limpar:focus-visible,
-  background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
-  border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
-  color: var(--rf-text-on-primary, #FFFFFF) !important;
-}
-
-
-/* Cobertura complementar de controles compactos — Onda tertiary-action-2. */
-body .btn-dark,
-body .btn-download,
-body .download-btn,
-body a[href*="download"],
-body a[href*="baixar"],
-body [title*="Ativar"],
-body [title*="Inativar"],
-body [title*="Desativar"],
-body [title*="Revogar"] {
-  background-color: var(--rf-action-tertiary, #B08D3E) !important;
-  background-image: none !important;
-  border-color: var(--rf-action-tertiary, #B08D3E) !important;
-  color: var(--rf-text-on-primary, #FFFFFF) !important;
-}
-body .btn-dark:hover,
+body .btn-cancel-action:hover,
+body .nt-btn-cancel:hover,
+body .cfg-ibtn.cfg-destructive-toggle:hover,
 body .btn-download:hover,
 body .download-btn:hover,
 body a[href*="download"]:hover,
@@ -1653,66 +1485,74 @@ body a[href*="baixar"]:hover,
 body [title*="Ativar"]:hover,
 body [title*="Inativar"]:hover,
 body [title*="Desativar"]:hover,
-body [title*="Revogar"]:hover {
+body [title*="Revogar"]:hover,
+body .nav-btn-danger:focus-visible,
+body .btn-danger:focus-visible,
+body .btn-filter-clear:focus-visible,
+body .btn-limpar:focus-visible,
+body .cfg-obtn:focus-visible,
+body .btn-cancel-action:focus-visible,
+body .nt-btn-cancel:focus-visible,
+body .cfg-ibtn.cfg-destructive-toggle:focus-visible {
   background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
   border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
   color: var(--rf-text-on-primary, #FFFFFF) !important;
 }
 
-
-/* Cancelamentos em fluxos destrutivos vencem a variante visual secundária. */
-html body .btn-cancel-action,
-html body .nav-btn.btn-cancel-action,
-html body .btn.btn-cancel-action,
-html body .nt-btn-cancel {
-  background-color: var(--rf-action-tertiary, #B08D3E) !important;
-  background-image: none !important;
-  border-color: var(--rf-action-tertiary, #B08D3E) !important;
-  color: var(--rf-text-on-primary, #FFFFFF) !important;
+/* Controles compactos: preenchimento temático e estados de seleção. */
+body .tbl-btn,
+body .rf-tab-btn,
+body .metricas-tab-btn,
+body .cat-toggle-btn,
+body .cfg-ibtn {
+  background-color: var(--color-primary-light, #1B4368) !important;
+  border-color: var(--color-primary-light, #1B4368) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .tbl-btn:hover,
+body .rf-tab-btn:hover,
+body .metricas-tab-btn:hover,
+body .cat-toggle-btn:hover,
+body .cfg-ibtn:hover,
+body .rf-tab-btn.active,
+body .metricas-tab-btn.active,
+body .rf-tab-btn:focus-visible,
+body .metricas-tab-btn:focus-visible,
+body .cat-toggle-btn:focus-visible,
+body .cfg-ibtn:focus-visible {
+  background-color: var(--color-primary-dark, #0A1E30) !important;
+  border-color: var(--color-primary-dark, #0A1E30) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
+}
+body .tbl-btn.del,
+body .tbl-btn.delete {
+  background-color: var(--color-gold-primary, #B08D3E) !important;
+  border-color: var(--color-gold-primary, #B08D3E) !important;
+}
+body .tbl-btn.del:hover,
+body .tbl-btn.delete:hover,
+body .tbl-btn.del:focus-visible,
+body .tbl-btn.delete:focus-visible {
+  background-color: var(--color-gold-dark, #8E702F) !important;
+  border-color: var(--color-gold-dark, #8E702F) !important;
 }
 
-html body .btn-cancel-action:hover,
-html body .btn-cancel-action:focus-visible,
-html body .nt-btn-cancel:hover,
-html body .nt-btn-cancel:focus-visible {
-  background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
-  border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
-  color: var(--rf-text-on-primary, #FFFFFF) !important;
-}
-
-
-/* Ajuste fino de Configurações: desativar é destrutivo; o filtro preserva sua superfície. */
-html body .cfg-ibtn.cfg-destructive-toggle {
-  background-color: var(--rf-action-tertiary, #B08D3E) !important;
-  background-image: none !important;
-  border-color: var(--rf-action-tertiary, #B08D3E) !important;
-  color: var(--rf-text-on-primary, #FFFFFF) !important;
-}
-
-html body .cfg-ibtn.cfg-destructive-toggle:hover,
-html body .cfg-ibtn.cfg-destructive-toggle:focus-visible {
-  background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
-  border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
-  color: var(--rf-text-on-primary, #FFFFFF) !important;
-}
-
-html body .filter-bar-toggle:hover,
-html body .filter-bar-toggle:focus-visible,
-html body .filter-bar.active-filters .filter-bar-toggle {
+/* A barra de filtros permanece clara e legível no repouso. */
+body .filter-bar-toggle:hover,
+body .filter-bar-toggle:focus-visible,
+body .filter-bar.active-filters .filter-bar-toggle {
   background-color: var(--rf-surface-card, #FFFFFF) !important;
   background-image: none !important;
   color: var(--rf-text-primary, #1D1B18) !important;
 }
-
-html body .filter-bar-toggle:hover strong,
-html body .filter-bar-toggle:hover i,
-html body .filter-bar-toggle:focus-visible strong,
-html body .filter-bar-toggle:focus-visible i,
-html body .filter-bar.active-filters .filter-bar-toggle strong,
-html body .filter-bar.active-filters .filter-bar-toggle i {
+body .filter-bar-toggle:hover strong,
+body .filter-bar-toggle:hover i,
+body .filter-bar-toggle:focus-visible strong,
+body .filter-bar-toggle:focus-visible i,
+body .filter-bar.active-filters .filter-bar-toggle strong,
+body .filter-bar.active-filters .filter-bar-toggle i {
   color: var(--rf-text-primary, #1D1B18) !important;
 }
-
 
 /* ============================================================
    LAYOUT COMPACTO - régua única de espaços e superfícies

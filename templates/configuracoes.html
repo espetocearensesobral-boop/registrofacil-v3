@@ -656,7 +656,7 @@
         <div class="modal-content">
             <div class="modal-header cfg-modal-header-tight">
                 <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Status</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar edição de status"></button>
             </div>
             <form method="post" novalidate action="{{ url_for('configuracoes.index') }}">
                 <input type="hidden" name="action" value="edit_status">
@@ -708,7 +708,7 @@
         <div class="modal-content">
             <div class="modal-header cfg-modal-header-tight">
                 <h6 class="modal-title fw-bold mb-0"><i class="bi bi-pencil me-2"></i>Editar Serviço</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar edição de serviço"></button>
             </div>
             <form method="post" novalidate action="{{ url_for('configuracoes.index') }}">
                 <input type="hidden" name="action" value="edit_service">
@@ -742,7 +742,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title fw-bold"><i class="bi bi-folder2-open me-2"></i>Selecionar Diretório</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar seletor de diretório"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3"><div class="input-group">
@@ -894,7 +894,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const d = document.createElement('div');
         d.innerHTML = `<div class="toast align-items-center text-white bg-${ok?'success':'danger'} border-0" role="alert">
             <div class="d-flex"><div class="toast-body">${msg}</div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>`;
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar notificação"></button></div></div>`;
         const el = d.firstElementChild;
         c.appendChild(el);
         new bootstrap.Toast(el, {delay:5000}).show();

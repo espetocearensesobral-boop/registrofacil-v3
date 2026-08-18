@@ -990,19 +990,19 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- TABS -->
 
 <div class="metricas-tabs">
-    <button class="metricas-tab-btn active" data-tab="meu-desempenho" onclick="switchTab(this)">
+    <button class="metricas-tab-btn{% if not active_tab or active_tab == 'meu-desempenho' %} active{% endif %}" data-tab="meu-desempenho" onclick="switchTab(this)">
         <i class="bi bi-person-lines-fill"></i> Meu Desempenho
     </button>
-    <button class="metricas-tab-btn" data-tab="visao-geral" onclick="switchTab(this)">
+    <button class="metricas-tab-btn{% if active_tab == 'visao-geral' %} active{% endif %}" data-tab="visao-geral" onclick="switchTab(this)">
         <i class="bi bi-globe2"></i> Visão Geral
     </button>
-    <button class="metricas-tab-btn" data-tab="equipe" onclick="switchTab(this)">
+    <button class="metricas-tab-btn{% if active_tab == 'equipe' %} active{% endif %}" data-tab="equipe" onclick="switchTab(this)">
         <i class="bi bi-people-fill"></i> Equipe
     </button>
 </div>
 
 <!-- ══ TAB: MEU DESEMPENHO ══ -->
-<div class="metricas-tab-panel active" id="tab-meu-desempenho">
+<div class="metricas-tab-panel{% if not active_tab or active_tab == 'meu-desempenho' %} active{% endif %}" id="tab-meu-desempenho">
 
     <div class="kpi-grid" id="kpi-usuario">
         <div class="mtr-loading" style="grid-column:1/-1">
@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <!-- ══ TAB: VISÃO GERAL ══ -->
-<div class="metricas-tab-panel" id="tab-visao-geral">
+<div class="metricas-tab-panel{% if active_tab == 'visao-geral' %} active{% endif %}" id="tab-visao-geral">
 
     <div class="kpi-grid" id="kpi-resumo">
         <div class="mtr-loading" style="grid-column:1/-1">
@@ -1144,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <!-- ══ TAB: EQUIPE ══ -->
-<div class="metricas-tab-panel" id="tab-equipe">
+<div class="metricas-tab-panel{% if active_tab == 'equipe' %} active{% endif %}" id="tab-equipe">
 
     <div class="card shadow-sm mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
