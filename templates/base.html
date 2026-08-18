@@ -227,9 +227,9 @@
                         </div>
                         {% endif %}
                         <div class="menu-item" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
-                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ session.get('usuario_nome', 'Meu Perfil') }} (Alt+M)">
+                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Meu Perfil (Alt+M)">
                             <div class="menu-icon"><i class="bi bi-person-circle" aria-hidden="true"></i></div>
-                            <span class="menu-text">{{ session.get('usuario_nome', 'Meu Perfil') | truncate(18) }}</span>
+                            <span class="menu-text">Meu Perfil</span>
                         </div>
                         <div class="menu-item" data-bs-toggle="modal" data-bs-target="#shortcutsModal" data-accesskey="j" onclick="setActive(this)" title="Atalhos do Sistema (Alt+J)">
                             <div class="menu-icon"><i class="bi bi-keyboard"></i></div>

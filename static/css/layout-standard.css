@@ -2498,3 +2498,24 @@ html body #globalSearchModal .rf-process-report-actions .rf-search-action[aria-p
   border-color: var(--color-primary-light, #1B4368) !important;
   color: var(--color-primary-contrast, #FFFFFF) !important;
 }
+
+/* Sidebar: destaque ativo ocupa toda a largura interna disponível. */
+#sidebar .sidebar-menu-open {
+  padding-inline: 0;
+}
+#sidebar .sidebar-section,
+#sidebar .sidebar-nav-group {
+  width: 100%;
+}
+#sidebar .sidebar-section-label {
+  padding-inline: .85rem;
+}
+#sidebar .sidebar-nav-group .menu-item {
+  padding-inline: .85rem;
+}
+#sidebar .sidebar-logout {
+  padding-inline: 0;
+}
+#sidebar .sidebar-logout .menu-item {
+  padding-inline: .85rem;
+}
