@@ -8,16 +8,15 @@
     <a href="{{ url_for('titulares.novo') }}" class="nav-btn nav-btn-primary">
         <i class="bi bi-plus-circle"></i> Novo Titular
     </a>
-    <div class="dropdown">
-        <button class="nav-btn nav-btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-three-dots"></i> Mais ações
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><button type="button" class="dropdown-item" onclick="window.open('{{ url_for('titulares.imprimir', **request.args.to_dict()) }}', '_blank')"><i class="bi bi-printer me-2"></i>Imprimir lista</button></li>
-            <li><a class="dropdown-item" href="{{ url_for('titulares.exportar_excel', **request.args.to_dict()) }}"><i class="bi bi-filetype-xlsx me-2"></i>Exportar Excel</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('titulares.gerar_pdf', **request.args.to_dict()) }}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf me-2"></i>Baixar PDF</a></li>
-        </ul>
-    </div>
+    <button type="button" class="nav-btn nav-btn-secondary" onclick="window.open('{{ url_for('titulares.imprimir', **request.args.to_dict()) }}', '_blank')">
+        <i class="bi bi-printer"></i> Imprimir
+    </button>
+    <a class="nav-btn nav-btn-secondary" href="{{ url_for('titulares.exportar_excel', **request.args.to_dict()) }}">
+        <i class="bi bi-filetype-xlsx"></i> Exportar Excel
+    </a>
+    <a class="nav-btn nav-btn-secondary" href="{{ url_for('titulares.gerar_pdf', **request.args.to_dict()) }}" target="_blank" rel="noopener">
+        <i class="bi bi-file-earmark-pdf"></i> Baixar PDF
+    </a>
 {% endblock %}
 
 {% block content %}

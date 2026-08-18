@@ -19,12 +19,10 @@
     </a>
     {% endif %}
     {% if not historico %}
-    <div class="dropdown">
-        <button type="button" class="nav-btn nav-btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i> Mais ações</button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><button type="button" class="dropdown-item text-danger" onclick="confirmarExclusaoApresentante({{ apresentante.id }}, '{{ apresentante.nome | replace("'", "\\'") }}')"><i class="bi bi-trash me-2"></i>Excluir apresentante</button></li>
-        </ul>
-    </div>
+    <button type="button" class="nav-btn nav-btn-danger"
+            onclick="confirmarExclusaoApresentante({{ apresentante.id }}, '{{ apresentante.nome | replace("'", "\\'") }}')">
+        <i class="bi bi-trash"></i> Excluir
+    </button>
     {% endif %}
 {% endblock %}
 

@@ -18,14 +18,13 @@
         <i class="bi bi-pencil"></i> Editar
     </a>
     {% endif %}
-    <div class="dropdown">
-        <button type="button" class="nav-btn nav-btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i> Mais ações</button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reportOptionsModal"><i class="bi bi-printer me-2"></i>Imprimir processo</button></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="{{ processo.id }}"><i class="bi bi-trash me-2"></i>Excluir processo</button></li>
-        </ul>
-    </div>
+    <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#reportOptionsModal">
+        <i class="bi bi-printer"></i> Imprimir
+    </button>
+    <button type="button" class="nav-btn nav-btn-danger"
+            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="{{ processo.id }}">
+        <i class="bi bi-trash"></i> Excluir
+    </button>
 {% endblock %}
 
 {% block content %}
