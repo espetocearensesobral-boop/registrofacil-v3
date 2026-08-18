@@ -2922,3 +2922,57 @@ html body .cfg-ibtn:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--color-primary-light, #1B4368) 72%, transparent) !important;
   outline-offset: 2px;
 }
+
+/* Formulários de processo: seções leves, sem molduras empilhadas ou títulos sobre linhas. */
+html body #form-processo .form-section {
+  position: static !important;
+  margin: 0 0 1.5rem !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body #form-processo .form-section + .form-section {
+  padding-top: .5rem !important;
+}
+html body #form-processo .form-section .section-title {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: .5rem !important;
+  min-height: 2rem !important;
+  margin: 0 0 .875rem !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--rf-text-strong, var(--text-color-primary)) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: .01em !important;
+}
+html body #form-processo .form-section .section-title i {
+  flex: 0 0 auto;
+  margin: 0 !important;
+  color: var(--rf-action-primary, var(--color-primary)) !important;
+  font-size: .95rem !important;
+}
+html body #form-processo .form-section .row.g-4 {
+  --bs-gutter-x: 1rem;
+  --bs-gutter-y: 1rem;
+}
+html body #form-processo .form-section .form-control,
+html body #form-processo .form-section .form-select {
+  box-shadow: none !important;
+}
+html body #form-processo .form-section .form-control:focus,
+html body #form-processo .form-section .form-select:focus {
+  box-shadow: var(--rf-focus-ring) !important;
+}
+@media (max-width: 575.98px) {
+  html body #form-processo .form-section { margin-bottom: 1.25rem !important; }
+  html body #form-processo .form-section + .form-section { padding-top: .25rem !important; }
+  html body #form-processo .form-section .section-title { margin-bottom: .75rem !important; font-size: .9375rem !important; }
+}
