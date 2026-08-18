@@ -3116,3 +3116,100 @@ html body #main-content .process-list-card .table-processos td[data-label="Açõ
     flex: 1 1 100% !important;
   }
 }
+
+/* Tabelas de Processos: leitura leve, separação horizontal e acentos derivados do tema. */
+html body #main-content .process-list-card .table-processos {
+  --rf-process-row-base: var(--rf-surface-card, #FFFFFF);
+  --rf-process-row-alt: color-mix(in srgb, var(--rf-surface-card, #FFFFFF) 94%, var(--rf-surface-body, #F8F8F8));
+  --rf-process-divider: color-mix(in srgb, #6B6B6B 24%, var(--rf-surface-card, #FFFFFF));
+  --rf-process-hover: color-mix(in srgb, var(--rf-accent, var(--color-gold-primary, #CDA865)) 9%, var(--rf-surface-card, #FFFFFF));
+  --rf-process-accent-hover: var(--rf-accent-hover, var(--color-gold-dark, #8B6332));
+  background: var(--rf-process-row-base) !important;
+}
+html body #main-content .process-list-card .table-processos thead,
+html body #main-content .process-list-card .table-processos thead tr {
+  background: var(--rf-process-row-base) !important;
+}
+html body #main-content .process-list-card .table-processos thead th {
+  padding-block: .625rem !important;
+  background: var(--rf-process-row-base) !important;
+  color: var(--rf-text-strong, #121212) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--rf-process-divider) !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .035em !important;
+  line-height: 1.25 !important;
+  text-transform: none !important;
+}
+html body #main-content .process-list-card .table-processos thead th + th {
+  border-left: 0 !important;
+}
+html body #main-content .process-list-card .table-processos thead th a {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+html body #main-content .process-list-card .table-processos thead th a:hover,
+html body #main-content .process-list-card .table-processos thead th a:focus-visible {
+  color: var(--rf-process-accent-hover) !important;
+}
+html body #main-content .process-list-card .table-processos thead .filter-icon {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  font-size: .75rem;
+}
+html body #main-content .process-list-card .table-processos tbody tr {
+  background: var(--rf-process-row-base) !important;
+}
+html body #main-content .process-list-card .table-processos tbody tr:nth-child(even) {
+  background: var(--rf-process-row-alt) !important;
+}
+html body #main-content .process-list-card .table-processos tbody tr:hover {
+  background: var(--rf-process-hover) !important;
+}
+html body #main-content .process-list-card .table-processos tbody td {
+  padding-block: .625rem !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--rf-process-divider) !important;
+  line-height: 1.4 !important;
+}
+html body #main-content .process-list-card .table-processos tbody tr:last-child td {
+  border-bottom: 0 !important;
+}
+html body #main-content .process-list-card .table-processos tbody tr:hover td {
+  background: transparent !important;
+}
+html body #main-content .process-list-card .table-processos td.fw-bold,
+html body #main-content .process-list-card .table-processos td[data-label="ID"],
+html body #main-content .process-list-card .table-processos td[data-label="Titular"] .fw-medium {
+  color: var(--rf-text-strong, #121212) !important;
+  font-weight: 650 !important;
+}
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes a.view,
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes a.edit {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  border-color: color-mix(in srgb, var(--rf-accent, #CDA865) 46%, var(--rf-border, #C8CFD0)) !important;
+  background: transparent !important;
+}
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes a.view:hover,
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes a.view:focus-visible,
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes a.edit:hover,
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes a.edit:focus-visible {
+  color: var(--rf-process-accent-hover) !important;
+  border-color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  background: var(--rf-process-hover) !important;
+}
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes button.del {
+  color: var(--rf-danger, var(--color-error, #98424C)) !important;
+  border-color: color-mix(in srgb, var(--rf-danger, #98424C) 40%, var(--rf-border, #C8CFD0)) !important;
+  background: transparent !important;
+}
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes button.del:hover,
+html body #main-content .process-list-card .table-processos td[data-label="Ações"] .tbl-acoes button.del:focus-visible {
+  color: var(--rf-danger-hover, var(--color-error, #98424C)) !important;
+  border-color: var(--rf-danger, var(--color-error, #98424C)) !important;
+  background: color-mix(in srgb, var(--rf-danger, #98424C) 9%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content .process-list-card .table-processos tbody td .text-muted {
+  color: var(--rf-text-muted, #2A2A2A) !important;
+}
