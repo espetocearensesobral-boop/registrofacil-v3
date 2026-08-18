@@ -6,6 +6,10 @@ from data import system_updates
 from data.update_config import load_update_settings
 
 
+CURRENT_VERSION = "3.28.0"
+NEXT_VERSION = "3.29.0"
+
+
 def _login_admin(client):
     with client.session_transaction() as session:
         session.update(
@@ -92,24 +96,24 @@ def test_update_state_starts_idle(temp_database):
     state = system_updates.get_update_state()
 
     assert state["state"] == "idle"
-    assert state["version_from"] == "3.27.0"
+    assert state["version_from"] == CURRENT_VERSION
     assert state["progress"] == 0
 
 
 def test_detect_available_version_persists_state(temp_database, monkeypatch):
-    monkeypatch.setenv("REGISTROFACIL_UPDATE_VERSION", "3.28.0")
+    monkeypatch.setenv("REGISTROFACIL_UPDATE_VERSION", NEXT_VERSION)
 
     result = system_updates.detect_available_version()
     state = system_updates.get_update_state()
 
     assert result["available"] is True
-    assert result["available_version"] == "3.28.0"
+    assert result["available_version"] == NEXT_VERSION
     assert state["state"] == "update_available"
-    assert state["version_to"] == "3.28.0"
+    assert state["version_to"] == NEXT_VERSION
 
 
 def test_confirmation_enters_maintenance_pending(temp_database):
-    system_updates.request_confirmation("3.28.0")
+    system_updates.request_confirmation(NEXT_VERSION)
     state = system_updates.set_maintenance_pending()
 
     assert state["state"] == "maintenance_pending"
@@ -118,15 +122,15 @@ def test_confirmation_enters_maintenance_pending(temp_database):
 
 
 def test_second_confirmation_is_rejected_while_update_is_active(temp_database):
-    system_updates.request_confirmation("3.28.0")
+    system_updates.request_confirmation(NEXT_VERSION)
     system_updates.set_maintenance_pending()
 
     with pytest.raises(RuntimeError, match="atualização em andamento"):
-        system_updates.request_confirmation("3.28.0")
+        system_updates.request_confirmation(NEXT_VERSION)
 
 
 def test_cancel_is_allowed_before_confirmation(temp_database):
-    system_updates.request_confirmation("3.28.0")
+    system_updates.request_confirmation(NEXT_VERSION)
     state = system_updates.cancel_update()
 
     assert state["state"] == "idle"
@@ -150,14 +154,14 @@ def test_update_http_status_and_confirmation_require_auth_and_csrf(app_client):
 
     invalid_csrf = app_client.post(
         "/api/system/update/confirm",
-        json={"version": "3.28.0"},
+        json={"version": NEXT_VERSION},
         headers={"X-Requested-With": "XMLHttpRequest"},
     )
     assert invalid_csrf.status_code == 400
 
     confirmed = app_client.post(
         "/api/system/update/confirm",
-        json={"version": "3.28.0"},
+        json={"version": NEXT_VERSION},
         headers={"X-CSRFToken": "csrf-test", "X-Requested-With": "XMLHttpRequest"},
     )
     assert confirmed.status_code == 200
@@ -167,7 +171,7 @@ def test_update_http_status_and_confirmation_require_auth_and_csrf(app_client):
 
 def test_mutations_are_blocked_during_maintenance(app_client):
     _login_admin(app_client)
-    system_updates.request_confirmation("3.28.0")
+    system_updates.request_confirmation(NEXT_VERSION)
     system_updates.set_maintenance_pending()
 
     app_client.application.add_url_rule(

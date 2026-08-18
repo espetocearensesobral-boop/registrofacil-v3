@@ -66,8 +66,8 @@
         .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family: var(--rf-font-mono)}
         .field-hint{font-size:.73rem;color:#555;margin-top:.35rem}
     </style>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css', v=app_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v=app_version) }}">
 </head>
 <body data-cor="{{ tema_cor_usuario }}">
     <!-- Painel esquerdo: formulário -->

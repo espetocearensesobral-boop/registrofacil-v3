@@ -10,10 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
 	<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css', v=app_version) }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/processos.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/compact.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/processos.css', v=app_version) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css', v=app_version) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/compact.css', v=app_version) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css', v=app_version) }}">
     <style>
         /* ── Padronização global dos botões do cabeçalho (navbar page_actions) ── */
         .navbar .nav-btn {
@@ -515,14 +515,14 @@
     </script>
     
     {# Importações dos novos módulos JavaScript - IMPORTANTES: type="module" e a ordem de dependência #}
-    <script type="module" src="{{ url_for('static', filename='js/utils/dom_helpers.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/processos/form_logic.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/processos/record_locking.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/utils/dom_helpers.js', v=app_version) }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/processos/form_logic.js', v=app_version) }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/processos/record_locking.js', v=app_version) }}"></script>
     
     {# O main.js agora é o orquestrador, ele DEVE ser o último script a ser carregado, e também precisa ser um módulo #}
     <script type="module" src="{{ url_for('static', filename='js/main.js', v=app_version) }}"></script>
-    <script src="{{ url_for('static', filename='js/accessibility.js') }}" defer></script>
-<script src="{{ url_for('static', filename='js/system-update.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/accessibility.js', v=app_version) }}" defer></script>
+<script src="{{ url_for('static', filename='js/system-update.js', v=app_version) }}" defer></script>
     <script>
     // ── Controle de sidebar mobile ──────────────────────────────
     window.toggleMobileSidebar = function() {
