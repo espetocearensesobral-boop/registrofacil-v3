@@ -3250,3 +3250,16 @@ html body #main-content .process-list-card > .card-body > .table-responsive {
   outline: 0 !important;
   box-shadow: none !important;
 }
+
+/* Correção da moldura externa: o card de lista não deve desenhar uma segunda tabela ao redor do conteúdo. */
+html body #main-content .process-list-card {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content .process-list-card::before,
+html body #main-content .process-list-card::after {
+  border: 0 !important;
+  box-shadow: none !important;
+}
