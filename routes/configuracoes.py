@@ -5,11 +5,11 @@ import secrets
 from datetime import datetime
 
 from routes.auth import login_status_required, admin_required, verificar_csrf_token, get_client_ip, gerar_csrf_token
-from routes.permissoes import permission_required
+from routes.permissoes import permission_required, has_permission
 from models import (
     get_email_config, save_email_config, send_email,
     get_backup_config, save_backup_config,
-    gravar_log, obter_status_processo_config, obter_tipos_servico,
+    executar_query, gravar_log, obter_status_processo_config, obter_tipos_servico,
     update_status_processo, update_tipo_servico,
     add_status_processo, add_tipo_servico,
     toggle_status_processo, toggle_tipo_servico
@@ -34,6 +34,10 @@ def index():
     usuario_id = session.get('usuario_id')
     usuario_role = session.get('usuario_role')
     active_tab = request.args.get('tab', 'status')
+    pode_ver_atividades = usuario_role in {'admin', 'suporte'} or has_permission(usuario_id, 'atividades_visualizar')
+
+    if request.method == 'GET' and active_tab == 'backup':
+        return redirect(url_for('backup.index', config='1'))
 
     if request.method == 'POST':
         # Verifica se é uma requisição AJAX (para e-mail)
@@ -304,6 +308,8 @@ def index():
                 return jsonify({'success': False, 'message': f"Erro inesperado: {str(e)}"})
             flash(f"Erro inesperado: {str(e)}", 'danger')
 
+        if request.form.get('return_to') == 'backup':
+            return redirect(url_for('backup.index', config='1'))
         return redirect(url_for('configuracoes.index', tab=active_tab))
 
     # GET request
@@ -335,6 +341,17 @@ def index():
         from utils.helpers import get_contrast_color
         csrf_token_val = gerar_csrf_token()
 
+        atividades_recentes = []
+        atividades_total = 0
+        if active_tab == 'atividades' and pode_ver_atividades:
+            atividades_recentes = executar_query(
+                """SELECT H.id, H.acao, H.contexto, H.processo_id, H.ip, H.timestamp, U.nome AS usuario_nome
+                   FROM logs H LEFT JOIN usuarios U ON H.usuario_id = U.id
+                   ORDER BY H.timestamp DESC, H.id DESC LIMIT 50"""
+            )
+            total_atividades_row = executar_query("SELECT COUNT(*) AS count FROM logs", fetch_one=True)
+            atividades_total = total_atividades_row['count'] if total_atividades_row else 0
+
         return render_template('configuracoes.html',
                                email_config=email_config,
                                backup_config=backup_config,
@@ -347,7 +364,10 @@ def index():
                                csrf_token=csrf_token_val,
                                get_contrast_color=get_contrast_color,
                                empresa=empresa_data,
-                               display_logo_url=display_logo_url)
+                               display_logo_url=display_logo_url,
+                               pode_ver_atividades=pode_ver_atividades,
+                               atividades_recentes=atividades_recentes,
+                               atividades_total=atividades_total)
     except Exception as e:
         logger.exception(f"Erro ao carregar página de configurações: {e}")
         flash(f"Erro ao carregar configurações: {str(e)}", 'danger')

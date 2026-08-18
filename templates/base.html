@@ -127,7 +127,7 @@
 
             <div class="menu-section sidebar-menu-open">
 
-                <section class="sidebar-section" aria-labelledby="sidebar-label-principal">
+                <div class="sidebar-flat-group">
                     <div class="sidebar-nav-group" id="sidebar-group-principal">
                         <div class="menu-item" data-href="{{ url_for('auth.dashboard') }}" data-accesskey="d" onclick="setActive(this)"
                              data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Início (Alt+D)">
@@ -145,9 +145,9 @@
                             <span class="menu-text">Buscar</span>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <section class="sidebar-section" aria-labelledby="sidebar-label-processos">
+                <div class="sidebar-flat-group">
                     <div class="sidebar-nav-group" id="sidebar-group-processos">
                         <div class="menu-item" data-href="{{ url_for('processos.todos') }}" data-accesskey="t" onclick="setActive(this)"
                              data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Todos os Processos (Alt+T)">
@@ -175,9 +175,9 @@
                             <span class="menu-text">Meus Processos</span>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <section class="sidebar-section" aria-labelledby="sidebar-label-cadastros">
+                <div class="sidebar-flat-group">
                     <div class="sidebar-nav-group" id="sidebar-group-cadastros">
                         <div class="menu-item" data-href="{{ url_for('titulares.index') }}" data-accesskey="l" onclick="setActive(this)"
                              data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Titulares (Alt+L)">
@@ -189,15 +189,10 @@
                             <div class="menu-icon"><i class="bi bi-person-badge-fill"></i></div>
                             <span class="menu-text">Apresentantes</span>
                         </div>
-                        <div class="menu-item" data-href="{{ url_for('atividades.historico') }}" data-accesskey="a" onclick="setActive(this)"
-                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Atividades (Alt+A)">
-                            <div class="menu-icon"><i class="bi bi-activity"></i></div>
-                            <span class="menu-text">Atividades</span>
-                        </div>
-                    </div>
-                </section>
+</div>
+                </div>
 
-                <section class="sidebar-section" aria-labelledby="sidebar-label-sistema">
+                <div class="sidebar-flat-group">
                     <div class="sidebar-nav-group" id="sidebar-group-sistema">
                         <div class="menu-item" data-href="{{ url_for('configuracoes.index') }}" data-accesskey="s" onclick="setActive(this)"
                              data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Configurações (Alt+S)">
@@ -210,9 +205,9 @@
                             <span class="menu-text">Cópia de Segurança</span>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <section class="sidebar-section" aria-labelledby="sidebar-label-meu-perfil">
+                <div class="sidebar-flat-group">
                     <div class="sidebar-nav-group" id="sidebar-group-conta">
                         {% if session.get('usuario_role') == 'admin' %}
                         <div class="menu-item" data-href="{{ url_for('admin_users.users_list') }}" data-accesskey="u" onclick="setActive(this)"
@@ -230,12 +225,8 @@
                             <div class="menu-icon"><i class="bi bi-keyboard"></i></div>
                             <span class="menu-text">Atalhos</span>
                         </div>
-                        <div class="menu-item" data-bs-toggle="modal" data-bs-target="#aboutModal" data-accesskey="p" onclick="setActive(this)" title="Sobre (Alt+P)">
-                            <div class="menu-icon"><i class="bi bi-info-circle"></i></div>
-                            <span class="menu-text">Sobre</span>
-                        </div>
-                    </div>
-                </section>
+</div>
+                </div>
             </div>
 
             {# ─── RODAPÉ FIXO: somente saída da conta ─── #}
@@ -329,36 +320,6 @@
                 <div class="rf-process-report-summary" id="modal-search-summary" aria-live="polite">Digite uma pesquisa para consultar processos.</div>
                 <div class="rf-process-report-body" id="modal-search-results-list"><div class="gs-empty"><i class="bi bi-search" aria-hidden="true"></i><p>Digite uma pesquisa para começar.</p><p class="rf-search-hint">A busca será realizada automaticamente por nome, telefone, matrícula, ID ou processo.</p></div></div>
                 <div class="rf-process-report-footer" id="modal-search-pagination"></div>
-            </div>
-        </div>
-    </div>
-
-    {# Modal: Sobre #}
-    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="aboutModalLabel">
-                        <i class="bi bi-info-circle me-2"></i>Sobre
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center mb-3">
-                        <img src="{{ url_for('static', filename='img/registrofacil.png') }}" alt="Logo" class="img-fluid mb-3 rf-logo">
-                        <h4>Registro Fácil</h4>
-                        <p class="text-muted">Sistema de Gestão de Processos</p>
-                    </div>
-                    <hr>
-                    <p><strong>Versão:</strong> {{ app_version }}</p>
-                    <p><strong>Desenvolvido por:</strong> Tauan Pires</p>
-                    <p><strong>Data de Lançamento:</strong> Fevereiro 2026</p>
-                    <hr>
-                    <p class="small text-muted">© 2025 Registro Fácil. Todos os direitos reservados.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                </div>
             </div>
         </div>
     </div>

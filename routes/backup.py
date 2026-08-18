@@ -158,6 +158,7 @@ def index():
     
     csrf_token_val = gerar_csrf_token()
     db_config = {'path_completo': DATABASE_PATH}
+    backup_config = get_backup_config()
     return render_template('backup.html', 
                          backups=backups_list, 
                          csrf_token=csrf_token_val, 
@@ -166,6 +167,9 @@ def index():
                          has_database=has_database,
                          is_server=is_server,
                          db_config=db_config,
+                         backup_config=backup_config,
+                         DEFAULT_BACKUP_PATH=Config.DEFAULT_BACKUP_PATH,
+                         UPLOAD_PROCESSOS_DIR=Config.UPLOAD_PROCESSOS_DIR,
                          backup_status=backup_status)
 
 

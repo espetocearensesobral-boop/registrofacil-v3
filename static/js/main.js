@@ -548,7 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     return true;
                 },
                 'a': () => {
-                    window.location.href = FlaskRoutes.atividadesHistorico;
+                    window.location.href = FlaskRoutes.configuracoesIndex + '?tab=atividades';
                     return true;
                 },
                 's': () => {
@@ -579,11 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     return true;
                 },
                 'p': () => {
-                    const modalElement = document.querySelector('#aboutModal');
-                    if (modalElement) {
-                        const bsModal = new bootstrap.Modal(modalElement);
-                        bsModal.show();
-                    }
+                    window.location.href = FlaskRoutes.configuracoesIndex + '?tab=sobre';
                     return true;
                 },
                 'j': () => {

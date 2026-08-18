@@ -1,0 +1,44 @@
+<div class="cfg-panel{% if active_tab == 'atividades' %} active{% endif %}" id="panel-atividades">
+    <div class="cfg-panel-header">
+        <span class="cfg-ph-icon"><i class="bi bi-activity"></i></span>
+        <div>
+            <h5>Atividades recentes</h5>
+            <p class="cfg-appearance-intro mb-0">Acompanhe as últimas ações registradas no sistema.</p>
+        </div>
+        <a href="{{ url_for('atividades.historico') }}" class="nav-btn nav-btn-secondary ms-auto">
+            <i class="bi bi-clock-history me-1"></i> Histórico completo
+        </a>
+    </div>
+
+    <div class="cfg-card">
+        <div class="cfg-card-header">
+            <span><i class="bi bi-list-check me-1"></i>Últimos registros</span>
+            <span class="rf-badge count">{{ atividades_total }}</span>
+        </div>
+        <div class="table-responsive">
+            <table class="cfg-tbl cfg-activity-table">
+                <thead>
+                    <tr><th>ID</th><th>Usuário</th><th>Ação</th><th>Processo</th><th>IP</th><th>Data/Hora</th></tr>
+                </thead>
+                <tbody>
+                {% for atividade in atividades_recentes %}
+                    <tr>
+                        <td class="font-monospace">{{ atividade.id }}</td>
+                        <td>{{ atividade.usuario_nome | default('N/A') }}</td>
+                        <td class="cfg-activity-action">{{ atividade.acao }}</td>
+                        <td>
+                            {% if atividade.processo_id %}
+                                <a href="{{ url_for('processos.visualizar', processo_id=atividade.processo_id) }}" class="rf-table-inline-link">#{{ atividade.processo_id }}</a>
+                            {% else %}—{% endif %}
+                        </td>
+                        <td class="font-monospace">{{ atividade.ip | default('N/A') }}</td>
+                        <td class="text-nowrap">{{ atividade.timestamp | format_datetime_full }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="text-center text-muted py-4">Nenhuma atividade registrada.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

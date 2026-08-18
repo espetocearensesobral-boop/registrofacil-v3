@@ -1,0 +1,23 @@
+<div class="cfg-panel{% if active_tab == 'sobre' %} active{% endif %}" id="panel-sobre">
+    <div class="cfg-panel-header">
+        <span class="cfg-ph-icon"><i class="bi bi-info-circle"></i></span>
+        <div>
+            <h5>Sobre o Registro Fácil</h5>
+            <p class="cfg-appearance-intro mb-0">Informações institucionais e versão da aplicação.</p>
+        </div>
+    </div>
+
+    <div class="cfg-card cfg-about-panel-card">
+        <div class="cfg-card-body text-center">
+            <img src="{{ url_for('static', filename='img/registrofacil.png') }}" alt="Logo do Registro Fácil" class="cfg-about-logo mb-3">
+            <h4 class="mb-1">Registro Fácil</h4>
+            <p class="text-muted mb-4">Sistema de Gestão de Processos</p>
+            <div class="cfg-about-meta">
+                <div><span>Versão</span><strong>{{ app_version }}</strong></div>
+                <div><span>Desenvolvido por</span><strong>Tauan Pires</strong></div>
+                <div><span>Data de lançamento</span><strong>Fevereiro de 2026</strong></div>
+            </div>
+            <p class="small text-muted mt-4 mb-0">© 2025 Registro Fácil. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</div>

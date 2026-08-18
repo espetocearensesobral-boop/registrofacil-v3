@@ -4174,3 +4174,22 @@ html body #main-content.rf-list-page .table-responsive.rf-infinite-table {
 html body #main-content.rf-list-page .rf-infinite-status {
   position: static !important;
 }
+
+/* Navegação administrativa sem categorias visuais: todos os itens seguem um fluxo único. */
+#sidebar .menu-section {
+  gap: .15rem !important;
+}
+#sidebar .sidebar-flat-group {
+  display: contents !important;
+}
+#sidebar .sidebar-flat-group + .sidebar-flat-group {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+#sidebar .sidebar-flat-group .sidebar-nav-group {
+  display: contents !important;
+}
+#sidebar .sidebar-flat-group .menu-item {
+  margin-block: 0 !important;
+}
