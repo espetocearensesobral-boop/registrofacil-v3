@@ -211,10 +211,10 @@ def excluir_anexos_selecionados(anexo_ids, processo_id, usuario_id, conn):
 def todos():
     logger.info(f"Acessando lista de todos os processos. Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}.")
     pagina_atual = request.args.get('pagina', 1, type=int)
-    registros_por_pagina = request.args.get('registros_por_pagina', 50, type=int)
+    registros_por_pagina = request.args.get('registros_por_pagina', 10, type=int)
     if not (1 <= registros_por_pagina <= 100):
-        registros_por_pagina = 50
-        flash("Lote de registros inválido; usando o lote padrão de 50.", 'warning')
+        registros_por_pagina = 10
+        flash("Lote de registros inválido; usando o lote padrão de 10.", 'warning')
     
     status_filter = request.args.get('status', '').strip()
     filtro_status_id = None
@@ -313,7 +313,7 @@ def todos():
             filtro_data_fim, filtro_envolve_notas is not None,
             filtro_pendentes_dashboard,
             ordenar != 'id_desc',
-            registros_por_pagina != 50
+            registros_por_pagina != 10
         ])
 
         acao = request.args.get('acao')

@@ -39,7 +39,7 @@
                 <p class="text-muted mb-4">Tente ajustar os filtros ou cadastre um novo processo.</p>
             </div>
         {% else %}
-            <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('processos.todos') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ registros_por_pagina }}" data-page-size-param="registros_por_pagina">
+            <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('processos.todos') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ registros_por_pagina }}" data-page-size-param="registros_por_pagina" data-list-scroll-mode="internal-first">
                 <table class="table-processos table table-hover align-middle mb-0">
                     <thead>
                         <tr>

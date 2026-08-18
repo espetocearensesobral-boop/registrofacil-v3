@@ -42,6 +42,19 @@ def test_standardized_filter_toolbars_do_not_expose_page_size_controls():
         assert 'por página' not in text, relative
 
 
+def test_todos_processos_uses_internal_first_mode_with_ten_record_batch():
+    template = read('templates/processos/todos.html')
+    route = read('routes/processos.py')
+    js = read('static/js/infinite-tables.js')
+    css = read('static/css/layout-standard.css')
+    assert 'data-list-scroll-mode="internal-first"' in template
+    assert "request.args.get('registros_por_pagina', 10, type=int)" in route
+    assert 'const isInternalFirst' in js
+    assert 'activateMainScroll' in js
+    assert 'window.addEventListener(\'scroll\', onWindowScroll' in js
+    assert 'rf-main-scroll-active' in css
+
+
 def test_base_and_assets_expose_fixed_list_shell_contract():
     base = read('templates/base.html')
     css = read('static/css/layout-standard.css')
