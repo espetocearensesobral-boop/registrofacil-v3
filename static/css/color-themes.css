@@ -717,7 +717,7 @@
     --color-primary-subtle: rgba(104, 54, 41, 0.12); --color-primary-rgb: 104,54,41;
     --rf-palette-color-1: #683629; --rf-palette-color-2: #8D503D; --rf-palette-color-3: #976851;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #976851; --color-gold-dark: color-mix(in srgb, #976851 72%, #000);
+    --color-gold-primary: #9A5A45; --color-gold-dark: color-mix(in srgb, #9A5A45 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
     --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #683629); --background-color-input-bg: #FFFFFF;
     --sidebar: #683629; --sidebar-hover: #8D503D; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;
@@ -780,7 +780,7 @@
     --color-primary-subtle: rgba(20, 35, 36, 0.12); --color-primary-rgb: 20,35,36;
     --rf-palette-color-1: #142324; --rf-palette-color-2: #73713F; --rf-palette-color-3: #A9614B;
     --rf-palette-color-4: #FDF8F0; --rf-palette-color-5: #FFFFFF;
-    --color-gold-primary: #A9614B; --color-gold-dark: color-mix(in srgb, #A9614B 72%, #000);
+    --color-gold-primary: #8F5C46; --color-gold-dark: color-mix(in srgb, #8F5C46 72%, #000);
     --background-color-body: #FDF8F0; --background-color-card: #FFFFFF; --background-color-header: #FFFFFF;
     --background-color-hover: color-mix(in srgb, #FDF8F0 90%, #142324); --background-color-input-bg: #FFFFFF;
     --sidebar: #142324; --sidebar-hover: #73713F; --sidebar-text: #F3F4F1; --sidebar-active-text: #FFFFFF;

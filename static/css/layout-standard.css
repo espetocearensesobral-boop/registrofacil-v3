@@ -2583,3 +2583,107 @@ html body .filter-chip,
 html body .process-filter-chip {
   border-radius: var(--rf-radius-pill) !important;
 }
+
+/* Acessibilidade: piso tipográfico e área de toque sem inflar o componente visual. */
+:root {
+  --rf-font-xs: .8125rem;
+  --font-xs: .8125rem;
+}
+
+html body .btn-action-square,
+html body .tbl-btn,
+html body .tbl-acoes a,
+html body .tbl-acoes button,
+html body #globalSearchModal .rf-search-action {
+  position: relative;
+}
+
+html body .btn-action-square::before,
+html body .tbl-btn::before,
+html body .tbl-acoes a::before,
+html body .tbl-acoes button::before,
+html body #globalSearchModal .rf-search-action::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+}
+
+html body .tbl-acoes {
+  gap: 11px;
+}
+
+html body .btn-action-square:focus-visible,
+html body .tbl-btn:focus-visible,
+html body .tbl-acoes a:focus-visible,
+html body .tbl-acoes button:focus-visible,
+html body #globalSearchModal .rf-search-action:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary-light, #1B4368) 72%, transparent);
+  outline-offset: 2px;
+}
+
+/* Contratos semânticos finais: estados de sucesso, perigo, aviso e informação. */
+html body .btn-success,
+html body .nav-btn-success {
+  background: var(--rf-success, var(--color-success)) !important;
+  border-color: var(--rf-success, var(--color-success)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+html body .btn-success:hover,
+html body .btn-success:focus-visible,
+html body .btn-success:active,
+html body .nav-btn-success:hover,
+html body .nav-btn-success:focus-visible,
+html body .nav-btn-success:active {
+  background: var(--rf-success-hover, var(--color-success)) !important;
+  border-color: var(--rf-success-hover, var(--color-success)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+html body .btn-danger,
+html body .nav-btn-danger {
+  background: var(--rf-danger, var(--color-error)) !important;
+  border-color: var(--rf-danger, var(--color-error)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+html body .btn-danger:hover,
+html body .btn-danger:focus-visible,
+html body .btn-danger:active,
+html body .nav-btn-danger:hover,
+html body .nav-btn-danger:focus-visible,
+html body .nav-btn-danger:active {
+  background: var(--rf-danger-hover, var(--color-error)) !important;
+  border-color: var(--rf-danger-hover, var(--color-error)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+html body .btn-warning,
+html body .nav-btn-warning {
+  background: var(--rf-warning, var(--color-warning)) !important;
+  border-color: var(--rf-warning, var(--color-warning)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+html body .btn-warning:hover,
+html body .btn-warning:focus-visible,
+html body .btn-warning:active,
+html body .nav-btn-warning:hover,
+html body .nav-btn-warning:focus-visible,
+html body .nav-btn-warning:active {
+  background: var(--rf-warning-hover, var(--color-warning)) !important;
+  border-color: var(--rf-warning-hover, var(--color-warning)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+html body .btn-info,
+html body .nav-btn-info {
+  background: var(--rf-info, var(--color-info)) !important;
+  border-color: var(--rf-info, var(--color-info)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
+html body .btn-info:hover,
+html body .btn-info:focus-visible,
+html body .btn-info:active,
+html body .nav-btn-info:hover,
+html body .nav-btn-info:focus-visible,
+html body .nav-btn-info:active {
+  background: var(--rf-info-hover, var(--color-info)) !important;
+  border-color: var(--rf-info-hover, var(--color-info)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
+}
