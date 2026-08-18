@@ -43,7 +43,7 @@
         if (!tbody || !sentinel) return;
 
         list.dataset.infiniteReady = 'true';
-        const naturalPageScroll = list.dataset.listScrollMode === 'internal-first';
+        const naturalPageScroll = list.dataset.listScrollMode !== 'internal';
         let currentPage = asNumber(list.dataset.page, 1);
         let totalPages = asNumber(list.dataset.totalPages, 1);
         const pageSize = Math.max(1, asNumber(list.dataset.pageSize, naturalPageScroll ? 10 : 50));

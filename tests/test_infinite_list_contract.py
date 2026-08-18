@@ -28,6 +28,7 @@ def test_all_standardized_list_templates_use_continuous_scroll_markup():
         assert 'data-total-pages' in text, relative
         assert 'rf-pagination' not in text, relative
         assert 'class="pagination' not in text, relative
+        assert 'data-list-scroll-mode="internal"' not in text, relative
 
 
 def test_standardized_filter_toolbars_do_not_expose_page_size_controls():
@@ -69,3 +70,5 @@ def test_base_and_assets_expose_fixed_list_shell_contract():
     assert 'html {' in css and 'overflow-y: scroll !important' in css
     assert 'IntersectionObserver' in js
     assert 'data-infinite-scroll' in js
+    assert 'list.dataset.listScrollMode !== \'internal\'' in js
+    assert 'Todas as listas padronizadas' in css

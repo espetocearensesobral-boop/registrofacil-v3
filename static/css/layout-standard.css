@@ -4144,3 +4144,33 @@ html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mod
   overflow: visible !important;
   overscroll-behavior: auto !important;
 }
+
+/* Todas as listas padronizadas: somente a página possui rolagem vertical. */
+html body #main-content.rf-list-page,
+html body #main-content.rf-list-page > .process-list-card,
+html body #main-content.rf-list-page > .cadastro-list-card,
+html body #main-content.rf-list-page > .admin-list-card,
+html body #main-content.rf-list-page > .process-list-card > .card-body,
+html body #main-content.rf-list-page > .cadastro-list-card > .card-body,
+html body #main-content.rf-list-page > .admin-list-card > .card-body,
+html body #main-content.rf-list-page .table-responsive.rf-infinite-table {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+html body #main-content.rf-list-page,
+html body #main-content.rf-list-page > .process-list-card,
+html body #main-content.rf-list-page > .cadastro-list-card,
+html body #main-content.rf-list-page > .admin-list-card {
+  flex: 1 0 auto !important;
+}
+html body #main-content.rf-list-page > .process-list-card,
+html body #main-content.rf-list-page > .cadastro-list-card,
+html body #main-content.rf-list-page > .admin-list-card,
+html body #main-content.rf-list-page .table-responsive.rf-infinite-table {
+  flex: 0 0 auto !important;
+}
+html body #main-content.rf-list-page .rf-infinite-status {
+  position: static !important;
+}
