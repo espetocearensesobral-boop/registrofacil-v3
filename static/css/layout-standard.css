@@ -2519,3 +2519,67 @@ html body #globalSearchModal .rf-process-report-actions .rf-search-action[aria-p
 #sidebar .sidebar-logout .menu-item {
   padding-inline: .85rem;
 }
+
+/* Teste visual: escala institucional de bordas — controles 8px, ações 9px, superfícies 10px, categorias pill. */
+:root {
+  --rf-radius-control: 8px;
+  --rf-radius-action: 9px;
+  --rf-radius-surface: 10px;
+  --rf-radius-pill: 999px;
+  --rf-radius-sm: 8px;
+  --rf-radius-md: 10px;
+  --rf-radius-lg: 10px;
+}
+
+html body input:not([type="checkbox"]):not([type="radio"]),
+html body select,
+html body textarea,
+html body .form-control,
+html body .form-select,
+html body .search-input,
+html body .filter-input,
+html body .filter-select,
+html body .process-filter-control,
+html body .cadastro-filter-control {
+  border-radius: var(--rf-radius-control) !important;
+}
+
+html body .btn,
+html body .nav-btn,
+html body .rf-tab-btn,
+html body .tbl-btn,
+html body .rf-search-action,
+html body .btn-cancel-action,
+html body .dropdown-toggle,
+html body .sidebar-nav-group .menu-item,
+html body .sidebar-logout .menu-item {
+  border-radius: var(--rf-radius-action) !important;
+}
+
+html body .card,
+html body .rf-card,
+html body .form-card,
+html body .form-section,
+html body .process-list-card,
+html body .kpi-card,
+html body .panel,
+html body .dashboard-panel,
+html body .process-filter-surface,
+html body .process-filter-popover,
+html body .cadastro-filter-surface,
+html body .admin-list-card,
+html body .dropdown-menu,
+html body .modal-content,
+html body .rf-search-modal {
+  border-radius: var(--rf-radius-surface) !important;
+}
+
+html body .badge,
+html body .rounded-pill,
+html body .rf-badge,
+html body .status-badge,
+html body .chip,
+html body .filter-chip,
+html body .process-filter-chip {
+  border-radius: var(--rf-radius-pill) !important;
+}
