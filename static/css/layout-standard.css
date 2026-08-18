@@ -3299,3 +3299,25 @@ html body #main-content .process-list-card > .card-body > .table-responsive > .t
     padding-inline: .5rem !important;
   }
 }
+
+/* Processos: a superfície da lista usa todo o eixo horizontal do conteúdo principal. */
+html body #main-content > .process-list-card {
+  width: calc(100% + var(--rf-gutter-x, 1rem) + var(--rf-gutter-x, 1rem)) !important;
+  max-width: none !important;
+  margin-left: calc(0px - var(--rf-gutter-x, 1rem)) !important;
+  margin-right: calc(0px - var(--rf-gutter-x, 1rem)) !important;
+}
+html body #main-content > .process-list-card > .rf-card-header,
+html body #main-content > .process-list-card > .card-header,
+html body #main-content > .process-list-card > .filter-bar.process-filter-surface,
+html body #main-content > .process-list-card > .card-body {
+  width: 100% !important;
+  max-width: none !important;
+}
+@media (max-width: 575.98px) {
+  html body #main-content > .process-list-card {
+    width: calc(100% + 1.5rem) !important;
+    margin-left: -.75rem !important;
+    margin-right: -.75rem !important;
+  }
+}

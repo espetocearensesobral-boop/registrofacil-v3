@@ -163,14 +163,14 @@
                                 </td>
                                 <td data-label="Prazo" class="{{ prazo_class }}">{{ prazo_text }}</td>
                                 <td data-label="Ações" class="text-center">
-                                    <div class="tbl-acoes">
-                                        <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" class="view" title="Visualizar" data-bs-toggle="tooltip">
+                                    <div class="tbl-actions">
+                                        <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" class="tbl-btn view" title="Visualizar" data-bs-toggle="tooltip">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="edit" title="Editar" data-bs-toggle="tooltip">
+                                        <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="tbl-btn edit" title="Editar" data-bs-toggle="tooltip">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <button type="button" class="del"
+                                        <button type="button" class="tbl-btn del"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#confirmDeleteModal"
                                                 data-id="{{ processo.id }}"
