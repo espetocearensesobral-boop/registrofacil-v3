@@ -4141,7 +4141,6 @@ html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mod
   flex: 0 0 auto !important;
 }
 html body #main-content.rf-list-page:has(.rf-infinite-table[data-list-scroll-mode="internal-first"]) .rf-infinite-table[data-list-scroll-mode="internal-first"] {
-  overflow-x: auto !important;
-  overflow-y: visible !important;
+  overflow: visible !important;
   overscroll-behavior: auto !important;
 }

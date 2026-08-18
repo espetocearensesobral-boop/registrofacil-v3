@@ -55,6 +55,7 @@ def test_todos_processos_uses_internal_first_mode_with_ten_record_batch():
     assert 'documentNearEnd' in js
     assert 'max-height: none !important' in css
     assert 'overflow-y: visible !important' in css
+    assert 'overflow: visible !important' in css
 
 
 def test_base_and_assets_expose_fixed_list_shell_contract():
