@@ -211,10 +211,10 @@ def excluir_anexos_selecionados(anexo_ids, processo_id, usuario_id, conn):
 def todos():
     logger.info(f"Acessando lista de todos os processos. Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}.")
     pagina_atual = request.args.get('pagina', 1, type=int)
-    registros_por_pagina = request.args.get('registros_por_pagina', 10, type=int)
+    registros_por_pagina = request.args.get('registros_por_pagina', 50, type=int)
     if not (1 <= registros_por_pagina <= 100):
-        registros_por_pagina = 10
-        flash("Número de registros por página inválido, usando padrão de 10.", 'warning')
+        registros_por_pagina = 50
+        flash("Lote de registros inválido; usando o lote padrão de 50.", 'warning')
     
     status_filter = request.args.get('status', '').strip()
     filtro_status_id = None
@@ -313,7 +313,7 @@ def todos():
             filtro_data_fim, filtro_envolve_notas is not None,
             filtro_pendentes_dashboard,
             ordenar != 'id_desc',
-            registros_por_pagina != 10
+            registros_por_pagina != 50
         ])
 
         acao = request.args.get('acao')
@@ -579,10 +579,10 @@ def novo():
 def hoje():
     logger.info(f"Acessando processos de hoje. Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}")
     pagina_atual = request.args.get('pagina', 1, type=int)
-    registros_por_pagina = request.args.get('registros_por_pagina', 10, type=int)
+    registros_por_pagina = request.args.get('registros_por_pagina', 50, type=int)
     if not (1 <= registros_por_pagina <= 100):
-        registros_por_pagina = 10
-        flash("Número de registros por página inválido, usando padrão de 10.", 'warning')
+        registros_por_pagina = 50
+        flash("Lote de registros inválido; usando o lote padrão de 50.", 'warning')
     filtro_status_id = request.args.get('status', type=int)
     filtro_tipo = request.args.get('tipo', type=int)
     filtro_busca = proteger_input(request.args.get('busca'))
@@ -643,7 +643,7 @@ def hoje():
 
         has_active_filters = any([
             filtro_status_id, filtro_tipo, filtro_busca, filtro_envolve_notas is not None,
-            ordenar != 'prazo_asc', registros_por_pagina != 10,
+            ordenar != 'prazo_asc', registros_por_pagina != 50,
             filtro_data_inicio != hoje_formatado, filtro_data_fim != hoje_formatado
         ])
         
@@ -678,10 +678,10 @@ def hoje():
 def pendentes():
     logger.info(f"Acessando processos pendentes. Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}")
     pagina_atual = request.args.get('pagina', 1, type=int)
-    registros_por_pagina = request.args.get('registros_por_pagina', 10, type=int)
+    registros_por_pagina = request.args.get('registros_por_pagina', 50, type=int)
     if not (1 <= registros_por_pagina <= 100):
-        registros_por_pagina = 10
-        flash("Número de registros por página inválido, usando padrão de 10.", 'warning')
+        registros_por_pagina = 50
+        flash("Lote de registros inválido; usando o lote padrão de 50.", 'warning')
     
     filtro_status_id = request.args.get('status', type=int)
     filtro_tipo = request.args.get('tipo', type=int)
@@ -755,7 +755,7 @@ def pendentes():
             (filtro_status_id is None and status_pendente_ids_to_filter),
             filtro_tipo, filtro_busca, filtro_data_inicio, filtro_data_fim,
             filtro_envolve_notas is not None,
-            ordenar != 'prazo_asc', registros_por_pagina != 10
+            ordenar != 'prazo_asc', registros_por_pagina != 50
         ])
         
         acao = request.args.get('acao')
@@ -790,7 +790,7 @@ def vinculados():
     logger.info(f"Acessando processos vinculados ao usuário logado. Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}")
     usuario_id_logado = session.get('usuario_id')
     pagina_atual = request.args.get('pagina', 1, type=int)
-    registros_por_pagina = request.args.get('registros_por_pagina', 10, type=int)
+    registros_por_pagina = request.args.get('registros_por_pagina', 50, type=int)
     ordenar = request.args.get('ordenar', 'id_desc')
     
     filtro_status_id = request.args.get('status', type=int)
@@ -855,7 +855,7 @@ def vinculados():
             filtro_status_id, filtro_tipo, filtro_busca, filtro_data_inicio,
             filtro_data_fim, filtro_envolve_notas is not None,
             ordenar != 'id_desc',
-            registros_por_pagina != 10
+            registros_por_pagina != 50
         ])
 
         acao = request.args.get('acao')
@@ -889,10 +889,10 @@ def vinculados():
 def em_andamento():
     logger.info(f"Acessando processos em andamento. Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}")
     pagina_atual = request.args.get('pagina', 1, type=int)
-    registros_por_pagina = request.args.get('registros_por_pagina', 10, type=int)
+    registros_por_pagina = request.args.get('registros_por_pagina', 50, type=int)
     if not (1 <= registros_por_pagina <= 100):
-        registros_por_pagina = 10
-        flash("Número de registros por página inválido, usando padrão de 10.", 'warning')
+        registros_por_pagina = 50
+        flash("Lote de registros inválido; usando o lote padrão de 50.", 'warning')
 
     filtro_status_id = request.args.get('status', type=int)
     filtro_tipo = request.args.get('tipo', type=int)
@@ -962,7 +962,7 @@ def em_andamento():
             filtro_status_id, filtro_tipo, filtro_busca,
             filtro_data_inicio, filtro_data_fim,
             filtro_envolve_notas is not None,
-            ordenar != 'id_desc', registros_por_pagina != 10
+            ordenar != 'id_desc', registros_por_pagina != 50
         ])
 
         acao = request.args.get('acao')

@@ -9,11 +9,6 @@
             <i class="bi bi-search" aria-hidden="true"></i>
             <input type="text" name="busca" id="usuarios-busca" value="{{ filtro_busca | default('') }}" placeholder="Usuário, nome ou e-mail..." autocomplete="off" aria-label="Buscar usuário">
         </div>
-        <select name="itens_por_pagina" id="usuarios-itens-por-pagina" class="admin-filter-select" aria-label="Registros por página">
-            {% for n in [10, 25, 50, 100] %}
-                <option value="{{ n }}" {% if itens_por_pagina == n %}selected{% endif %}>{{ n }} por página</option>
-            {% endfor %}
-        </select>
         <button type="submit" class="admin-filter-icon-btn admin-filter-apply-btn" title="Aplicar filtros" aria-label="Aplicar filtros">
             <i class="bi bi-funnel" aria-hidden="true"></i>
         </button>

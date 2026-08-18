@@ -12,14 +12,6 @@
                    autocomplete="off"
                    aria-label="Buscar {{ cadastro_label | lower }}">
         </div>
-        <select name="registros_por_pagina"
-                id="{{ cadastro_tipo }}-registros-por-pagina"
-                class="cadastro-filter-select"
-                aria-label="Registros por página">
-            {% for n in [10, 25, 50, 100] %}
-            <option value="{{ n }}" {% if registros_por_pagina == n %}selected{% endif %}>{{ n }} por página</option>
-            {% endfor %}
-        </select>
         <button type="submit"
                 class="cadastro-filter-icon-btn cadastro-filter-apply-btn"
                 title="Aplicar filtros"

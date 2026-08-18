@@ -38,12 +38,6 @@
                     <option value="ip_asc" {% if ordenar == 'ip_asc' %}selected{% endif %}>IP (A–Z)</option>
                     <option value="ip_desc" {% if ordenar == 'ip_desc' %}selected{% endif %}>IP (Z–A)</option>
                 </select>
-                <label for="atividade-itens-por-pagina">Registros por página</label>
-                <select name="itens_por_pagina" id="atividade-itens-por-pagina">
-                    {% for n in [10, 25, 50, 100] %}
-                        <option value="{{ n }}" {% if itens_por_pagina == n %}selected{% endif %}>{{ n }}</option>
-                    {% endfor %}
-                </select>
             </div>
         </div>
         <button type="submit" class="admin-filter-icon-btn admin-filter-apply-btn" title="Aplicar filtros" aria-label="Aplicar filtros">

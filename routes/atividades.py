@@ -24,12 +24,12 @@ def historico():
     filtro_usuario_id = request.args.get('usuario', type=int)
     filtro_acao = proteger_input(request.args.get('acao'))
     filtro_data = request.args.get('data')
-    itens_por_pagina = request.args.get('itens_por_pagina', 10, type=int)
+    itens_por_pagina = request.args.get('itens_por_pagina', 50, type=int)
     ordenar = request.args.get('ordenar', 'created_at_desc')
 
     if not (1 <= itens_por_pagina <= 100):
-        itens_por_pagina = 10
-        flash("Número de registros por página inválido, usando padrão de 10.", 'warning')
+        itens_por_pagina = 50
+        flash("Lote de registros inválido; usando o lote padrão de 50.", 'warning')
 
     if filtro_data:
         try:
@@ -112,8 +112,8 @@ def historico():
         total_paginas = (total_registros + itens_por_pagina - 1) // itens_por_pagina
         
         has_active_filters = any([
-            filtro_usuario_id, filtro_acao, filtro_data, 
-            itens_por_pagina != 10, ordenar != 'created_at_desc'
+            filtro_usuario_id, filtro_acao, filtro_data,
+            ordenar != 'created_at_desc'
         ])
 
     except Exception as e:

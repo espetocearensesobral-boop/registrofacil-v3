@@ -30,7 +30,7 @@
                 </a>
             </div>
         {% else %}
-            <div class="table-responsive">
+            <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('atividades.historico') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ itens_por_pagina }}" data-page-size-param="itens_por_pagina">
                 <table class="rf-table table-atividades">
                     {# Macro de ordenação para atividades #}
                     {% macro sort_th_atv(label, col) %}
@@ -102,48 +102,11 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <div class="rf-infinite-sentinel" data-infinite-sentinel hidden aria-hidden="true"></div>
+                <div class="rf-infinite-status" data-infinite-status role="status" aria-live="polite" hidden></div>
             </div>
 
-            {% if total_paginas > 1 %}
-                {% set _a = request.args.to_dict() %}
-                {% set inicio = (pagina_atual - 1) * itens_por_pagina + 1 %}
-                {% set fim = inicio + atividades|length - 1 %}
-                <div class="rf-pagination">
-                    <div></div>
-                    <div class="rf-pagination-nav">
-                        <nav aria-label="Paginação">
-                            <ul class="pagination mb-0" style="gap:3px;">
-                                <li class="page-item {{ 'disabled' if pagina_atual <= 1 }}">
-                                    <a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': pagina_atual - 1}))) }}">Anterior</a>
-                                </li>
-                                {% set max_links = 7 %}
-                                {% set start_p = [1, pagina_atual - (max_links // 2)] | max %}
-                                {% set end_p = [total_paginas, start_p + max_links - 1] | min %}
-                                {% set start_p = [1, end_p - max_links + 1] | max %}
-                                {% if start_p > 1 %}
-                                    <li class="page-item"><a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': 1}))) }}">1</a></li>
-                                    {% if start_p > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
-                                {% endif %}
-                                {% for i in range(start_p, end_p + 1) %}
-                                    <li class="page-item {{ 'active' if i == pagina_atual }}">
-                                        <a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': i}))) }}">{{ i }}</a>
-                                    </li>
-                                {% endfor %}
-                                {% if end_p < total_paginas %}
-                                    {% if end_p < total_paginas - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
-                                    <li class="page-item"><a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': total_paginas}))) }}">{{ total_paginas }}</a></li>
-                                {% endif %}
-                                <li class="page-item {{ 'disabled' if pagina_atual >= total_paginas }}">
-                                    <a class="page-link" href="{{ url_for('atividades.historico', **(_a | combine({'pagina': pagina_atual + 1}))) }}">Próximo</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="rf-pagination-info">
-                        Mostrando {{ inicio }}–{{ fim }} de {{ total_registros }} registro{{ 's' if total_registros != 1 }}
-                    </div>
-                </div>
-            {% endif %}
+
         {% endif %}
     </div>
 </div>

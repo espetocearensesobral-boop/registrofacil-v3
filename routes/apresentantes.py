@@ -24,7 +24,7 @@ def index():
     logger.info(f"Acessando lista de apresentantes. Usuário ID: {session.get('usuario_id')}, IP: {get_client_ip()}")
     
     pagina_atual = request.args.get('pagina', 1, type=int)
-    registros_por_pagina = request.args.get('registros_por_pagina', 10, type=int)
+    registros_por_pagina = request.args.get('registros_por_pagina', 50, type=int)
     busca = proteger_input(request.args.get('busca', ''))
     ordenar = request.args.get('ordenar', 'nome')
     direcao = request.args.get('direcao', 'asc')

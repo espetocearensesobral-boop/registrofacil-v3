@@ -37,10 +37,6 @@
                     <option value="prazo_asc" {% if ordenar == 'prazo_asc' %}selected{% endif %}>Prazo crescente</option>
                     <option value="prazo_desc" {% if ordenar == 'prazo_desc' %}selected{% endif %}>Prazo decrescente</option>
                 </select>
-                <label for="registros_por_pagina">Registros por página</label>
-                <select name="registros_por_pagina" id="registros_por_pagina">
-                    <option value="10" {% if registros_por_pagina == 10 %}selected{% endif %}>10</option><option value="25" {% if registros_por_pagina == 25 %}selected{% endif %}>25</option><option value="50" {% if registros_por_pagina == 50 %}selected{% endif %}>50</option><option value="100" {% if registros_por_pagina == 100 %}selected{% endif %}>100</option>
-                </select>
             </div>
         </div>
         <button type="submit" class="process-filter-icon-btn process-filter-apply-btn" title="Aplicar filtros" aria-label="Aplicar filtros"><i class="bi bi-funnel" aria-hidden="true"></i></button>
@@ -53,12 +49,11 @@
     function updateProcessFilterBadge() {
         const badge = document.getElementById('process-filter-badge');
         if (!badge) return;
-        const ids = ['data_inicio', 'data_fim', 'ordenar', 'registros_por_pagina'];
+        const ids = ['data_inicio', 'data_fim', 'ordenar'];
         const count = ids.reduce((total, id) => {
             const field = document.getElementById(id);
             if (!field) return total;
             if (id === 'ordenar' && field.value === 'id_desc') return total;
-            if (id === 'registros_por_pagina' && field.value === '10') return total;
             return total + (field.value ? 1 : 0);
         }, 0);
         badge.textContent = count;

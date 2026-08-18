@@ -100,10 +100,10 @@ def users_list():
 
 
     pagina_atual = request.args.get('pagina', 1, type=int)
-    itens_por_pagina = request.args.get('itens_por_pagina', 10, type=int)
+    itens_por_pagina = request.args.get('itens_por_pagina', 50, type=int)
     if not (1 <= itens_por_pagina <= 100):
-        itens_por_pagina = 10
-        flash("Número de registros por página inválido, usando padrão de 10.", 'warning')
+        itens_por_pagina = 50
+        flash("Lote de registros inválido; usando o lote padrão de 50.", 'warning')
 
     filtro_busca = proteger_input(request.args.get('busca'))
     filtro_status = request.args.get('status', 'ativo')
@@ -127,7 +127,7 @@ def users_list():
         contagem_hoje = executar_query("SELECT COUNT(*) AS count FROM usuarios WHERE strftime('%Y-%m-%d', created_at) = strftime('%Y-%m-%d', 'now', 'localtime')", fetch_one=True)['count']
 
         has_active_filters = any([
-            filtro_status != 'ativo', filtro_busca, itens_por_pagina != 10, ordenar != 'created_at_desc'
+            filtro_status != 'ativo', filtro_busca, ordenar != 'created_at_desc'
         ])
 
     except Exception as e:

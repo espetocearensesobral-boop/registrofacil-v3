@@ -3941,3 +3941,168 @@ html body #main-content > .admin-list-card .empty-state {
 html body #main-content > .admin-list-card .empty-state > i {
   color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
 }
+
+/* ============================================================
+   LISTAS — shell fixo e rolagem exclusiva no corpo da tabela
+   ============================================================ */
+html {
+  overflow-y: scroll !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: var(--rf-scrollbar-thumb, #8B6332) var(--rf-scrollbar-track, #F1F2F2) !important;
+  scrollbar-gutter: stable;
+}
+html::-webkit-scrollbar {
+  width: 12px !important;
+  height: 12px !important;
+}
+html::-webkit-scrollbar-track {
+  background: var(--rf-scrollbar-track, #F1F2F2) !important;
+  border-radius: 0 !important;
+}
+html::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  background: var(--rf-scrollbar-thumb, #8B6332) !important;
+  border: 3px solid var(--rf-scrollbar-track, #F1F2F2) !important;
+  border-radius: 8px !important;
+  background-clip: padding-box !important;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  border-color: var(--rf-scrollbar-track, #F1F2F2) !important;
+}
+body {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+#page-content-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
+  min-width: 0 !important;
+}
+#page-content-wrapper > .navbar {
+  flex: 0 0 auto !important;
+}
+#page-content-wrapper > .rf-footer {
+  flex: 0 0 auto !important;
+}
+#main-content.rf-list-page {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  padding-block: var(--rf-layout-section-gap, 1rem) !important;
+}
+#main-content.rf-list-page > .process-list-card,
+#main-content.rf-list-page > .cadastro-list-card,
+#main-content.rf-list-page > .admin-list-card {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  margin-top: 0 !important;
+}
+#main-content.rf-list-page > .rf-admin-status-note {
+  flex: 0 0 auto !important;
+}
+#main-content.rf-list-page > .process-list-card > .rf-card-header,
+#main-content.rf-list-page > .process-list-card > .filter-bar,
+#main-content.rf-list-page > .process-list-card > .filter-section,
+#main-content.rf-list-page > .cadastro-list-card > .rf-card-header,
+#main-content.rf-list-page > .cadastro-list-card > .filter-bar,
+#main-content.rf-list-page > .cadastro-list-card > .filter-section,
+#main-content.rf-list-page > .admin-list-card > .rf-card-header,
+#main-content.rf-list-page > .admin-list-card > .card-header,
+#main-content.rf-list-page > .admin-list-card > .admin-filter-surface {
+  flex: 0 0 auto !important;
+}
+#main-content.rf-list-page > .process-list-card > .card-body,
+#main-content.rf-list-page > .cadastro-list-card > .card-body,
+#main-content.rf-list-page > .admin-list-card > .card-body {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-width: auto !important;
+  scrollbar-color: var(--rf-scrollbar-thumb, #8B6332) var(--rf-scrollbar-track, #F1F2F2) !important;
+  scrollbar-gutter: stable;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table::-webkit-scrollbar {
+  width: 12px !important;
+  height: 12px !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table::-webkit-scrollbar-track {
+  background: var(--rf-scrollbar-track, #F1F2F2) !important;
+  border-radius: 0 !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  background: var(--rf-scrollbar-thumb, #8B6332) !important;
+  border: 3px solid var(--rf-scrollbar-track, #F1F2F2) !important;
+  border-radius: 8px !important;
+  background-clip: padding-box !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table::-webkit-scrollbar-thumb:hover {
+  background: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  border-color: var(--rf-scrollbar-track, #F1F2F2) !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table > table {
+  margin-bottom: 0 !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table > table > thead th {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 4 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: 0 1px 0 var(--rf-divider, rgba(107, 107, 107, .24)) !important;
+}
+#main-content.rf-list-page .rf-infinite-sentinel {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+#main-content.rf-list-page .rf-infinite-status {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: block;
+  min-height: 1.75rem;
+  padding: .35rem .75rem;
+  background: color-mix(in srgb, var(--rf-surface-card, #FFFFFF) 94%, var(--rf-surface-body, #F8F8F8));
+  color: var(--rf-text-muted, #475467);
+  font-size: .75rem;
+  line-height: 1.25;
+  text-align: center;
+}
+#main-content.rf-list-page .rf-infinite-status[hidden],
+#main-content.rf-list-page .rf-infinite-sentinel[hidden] {
+  display: none !important;
+}
+#main-content.rf-list-page .empty-state {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+@media (max-width: 991.98px) {
+  #main-content.rf-list-page {
+    min-height: 0 !important;
+  }
+}
