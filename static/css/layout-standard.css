@@ -2278,3 +2278,43 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
     min-width: 0;
   }
 }
+
+/* Dashboard: cards independentes e colunas finais sempre visíveis. */
+#main-content .dashboard-panels-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--rf-space-4, 1rem) !important;
+  margin-inline: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+#main-content .dashboard-panels-row > [class*="col-"] {
+  width: auto !important;
+  max-width: none;
+  min-width: 0;
+  padding-inline: 0 !important;
+}
+#main-content .dashboard-panels-row .dashboard-panel {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden !important;
+  border-radius: var(--rf-radius-lg, .875rem) !important;
+}
+#main-content .dashboard-panels-row .dash-table .col-fill {
+  width: auto !important;
+}
+#main-content .dashboard-panels-row .dash-table .col-end {
+  width: 12rem !important;
+  min-width: 12rem !important;
+  max-width: 12rem;
+  white-space: nowrap;
+}
+#main-content .dashboard-panels-row .dash-table .col-end .status-badge,
+#main-content .dashboard-panels-row .dash-table .col-end .prazo-chip {
+  max-width: 100%;
+}
+@media (max-width: 991.98px) {
+  #main-content .dashboard-panels-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
