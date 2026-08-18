@@ -51,49 +51,16 @@
     </div>
 </div>
 
-<!-- Filtro -->
-<div class="rf-card mb-4">
-    <div class="rf-card-body" >
-        <form method="get" class="row g-2 align-items-end">
-            <input type="hidden" name="ordenar" value="{{ ordenar | default('nome') }}">
-            <input type="hidden" name="direcao" value="{{ direcao | default('asc') }}">
-            <div class="col-md-7">
-                <label class="form-label rf-filter-label">Buscar Apresentante</label>
-                <div class="input-group">
-                    <span class="input-group-text rf-filter-addon"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" name="busca" class="form-control rf-filter-input" placeholder="Nome, E-mail ou Telefone..." value="{{ busca | default('') }}">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label rf-filter-label">Por página</label>
-                <select name="registros_por_pagina" class="form-select form-select-sm">
-                    {% for n in [10, 25, 50, 100] %}
-                    <option value="{{ n }}" {% if registros_por_pagina == n %}selected{% endif %}>{{ n }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3 d-flex gap-2">
-                <button type="submit" class="nav-btn nav-btn-success flex-fill"><i class="bi bi-funnel"></i> Filtrar</button>
-                <a href="{{ url_for('apresentantes.index') }}" class="nav-btn nav-btn-danger flex-fill rf-action-center"><i class="bi bi-x-circle"></i> Limpar</a>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="rf-report-context-bar" aria-label="Resumo da consulta de apresentantes">
-    <div class="rf-report-context-main">
-        <span class="rf-report-context-title">Resultado da consulta</span>
-        <span class="rf-report-context-subtitle">{% if busca %}Apresentantes filtrados por “{{ busca }}”.{% else %}Todos os apresentantes disponíveis no sistema.{% endif %}</span>
-    </div>
-    <span class="rf-report-context-total"><i class="bi bi-person-badge" aria-hidden="true"></i>{{ total_registros }} registro{{ 's' if total_registros != 1 }}</span>
-</div>
-
+{% set cadastro_tipo = 'apresentantes' %}
+{% set cadastro_label = 'Apresentante' %}
+{% set cadastro_endpoint = 'apresentantes.index' %}
 <!-- Tabela -->
-<div class="rf-card">
+<div class="rf-card cadastro-list-card">
     <div class="rf-card-header">
         <h5 class="m-0"><i class="bi bi-people me-2 rf-heading-icon"></i>Lista de Apresentantes</h5>
         <span class="rf-pill rf-pill-dark">{{ total_registros }}</span>
     </div>
+    {% include "_cadastro_filter_toolbar.html" %}
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table-apresentantes table table-hover align-middle mb-0">
