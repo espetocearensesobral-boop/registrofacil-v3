@@ -216,8 +216,8 @@
                     </div>
                 </section>
 
-                <section class="sidebar-section" aria-labelledby="sidebar-label-conta">
-                    <h2 class="sidebar-section-label" id="sidebar-label-conta">Conta</h2>
+                <section class="sidebar-section" aria-labelledby="sidebar-label-meu-perfil">
+                    <h2 class="sidebar-section-label" id="sidebar-label-meu-perfil">Meu Perfil</h2>
                     <div class="sidebar-nav-group" id="sidebar-group-conta">
                         {% if session.get('usuario_role') == 'admin' %}
                         <div class="menu-item" data-href="{{ url_for('admin_users.users_list') }}" data-accesskey="u" onclick="setActive(this)"
