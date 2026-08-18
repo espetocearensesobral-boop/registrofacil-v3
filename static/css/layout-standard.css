@@ -3213,3 +3213,40 @@ html body #main-content .process-list-card .table-processos td[data-label="Açõ
 html body #main-content .process-list-card .table-processos tbody td .text-muted {
   color: var(--rf-text-muted, #2A2A2A) !important;
 }
+
+/* Tabelas de Processos: sem grade externa ou divisórias verticais. */
+html body #main-content .process-list-card .table-processos {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+html body #main-content .process-list-card .table-processos thead,
+html body #main-content .process-list-card .table-processos tbody,
+html body #main-content .process-list-card .table-processos tr,
+html body #main-content .process-list-card .table-processos th,
+html body #main-content .process-list-card .table-processos td {
+  border-left: 0 !important;
+  border-right: 0 !important;
+  outline: 0 !important;
+}
+html body #main-content .process-list-card .table-processos thead th {
+  border-top: 0 !important;
+  border-bottom: 1px solid var(--rf-process-divider, rgba(107, 107, 107, .24)) !important;
+}
+html body #main-content .process-list-card .table-processos tbody td {
+  border-top: 0 !important;
+  border-bottom: 1px solid var(--rf-process-divider, rgba(107, 107, 107, .24)) !important;
+}
+html body #main-content .process-list-card .table-processos tbody tr:last-child td {
+  border-bottom: 0 !important;
+}
+html body #main-content .process-list-card .table-processos tbody tr:hover td {
+  border-bottom-color: color-mix(in srgb, var(--rf-accent, #CDA865) 20%, var(--rf-process-divider, #E6E6E6)) !important;
+}
+html body #main-content .process-list-card > .card-body > .table-responsive {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
