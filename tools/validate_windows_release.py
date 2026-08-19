@@ -25,19 +25,19 @@ def main() -> int:
 
     if f'"{version}"' not in installer:
         raise SystemExit(f"Versão {version} não está declarada no instalador")
-    if "Config.VERSION" not in build or "APP_VERSION" not in build:
+    if "VERSION =" not in build or "APP_VERSION" not in build:
         raise SystemExit("Build não possui contrato de versão")
     if "requirements-build.txt" not in build:
         raise SystemExit("Build não instala requirements-build.txt")
     required_python_probes = ("py -3.12", "py -3.11", "python3.12", "python3.11", "Python312", "PY_EXE", "PY_ARGS")
     if any(marker not in build for marker in required_python_probes):
         raise SystemExit("Build não possui descoberta robusta de Python 3.11/3.12")
-    required_diagnostics = ("RF_BUILD_CHILD", "RF_BUILD_LOG", "cmd /d /c", "type \"%RF_BUILD_LOG%\"")
+    required_diagnostics = ("RF_BUILD_LOG", "call :build_main", "type \"%RF_BUILD_LOG%\"")
     if any(marker not in build for marker in required_diagnostics):
         raise SystemExit("Build não preserva diagnóstico quando aberto pelo Explorer")
     required_labels = {
-        "build_main", "discover_python", "python_ready", "create_venv", "venv_ready",
-        "missing_templates", "missing_static", "missing_routes", "missing_data", "missing_utils", "fail",
+        "build_main", "check_existing_venv", "recreate_venv", "discover_python", "create_venv", "venv_ready",
+        "python_not_found", "missing_templates", "missing_static", "missing_routes", "missing_data", "missing_utils", "fail",
     }
     found_labels = set(re.findall(r"(?m)^:([A-Za-z0-9_]+)\s*$", build))
     missing_labels = sorted(required_labels - found_labels)
