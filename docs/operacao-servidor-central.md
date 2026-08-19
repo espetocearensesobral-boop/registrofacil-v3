@@ -16,7 +16,7 @@ A máquina central precisa permanecer ligada durante o horário de operação e 
 
 | Etapa | Procedimento |
 |---|---|
-| Build | Executar `BUILD_WINDOWS.bat` em uma máquina Windows com Python 3.11. O script cria `.venv-build`, instala runtime e dependências de build e gera `dist\RegistroFacil`. |
+| Build | Executar `BUILD_WINDOWS.bat` em uma máquina Windows com Python 3.11. O script procura o Python Launcher (`py -3.11`), interpretadores no `PATH` e instalações padrão do Python.org, valida a versão e cria `.venv-build` antes de gerar `dist\RegistroFacil`. |
 | Instalador | Compilar `INSTALADOR_RegistroFacil.iss` com Inno Setup 6. O fallback atual é 3.28.44; o parâmetro `/DMyAppVersion=...` pode ser usado para uma release posterior. |
 | Rede | Permitir TCP 5000 somente no perfil Private e na sub-rede local. Não publicar a porta diretamente na internet. |
 | Dados | O banco, chaves, logs, uploads e backups ficam em `C:\ProgramData\RegistroFacil`. |

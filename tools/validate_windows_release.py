@@ -29,6 +29,9 @@ def main() -> int:
         raise SystemExit("Build não possui contrato de versão")
     if "requirements-build.txt" not in build:
         raise SystemExit("Build não instala requirements-build.txt")
+    required_python_probes = ("py -3.11", "python3.11", "PY_EXE", "PY_ARGS")
+    if any(marker not in build for marker in required_python_probes):
+        raise SystemExit("Build não possui descoberta robusta de Python 3.11")
     if "--no-browser" not in installer or "--host 0.0.0.0" not in installer:
         raise SystemExit("Tarefa central não está configurada sem navegador e na rede local")
     if "remoteip=localsubnet" not in installer or "profile=private" not in installer:

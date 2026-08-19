@@ -15,23 +15,64 @@ set "DIST_DIR=dist"
 set "BUILD_DIR=build_temp"
 set "VENV_DIR=.venv-build"
 set "OUT_DIR=%DIST_DIR%\%APP_NAME%"
-set "PY_CMD=python"
+set "PY_EXE="
+set "PY_ARGS="
 
-if exist "%VENV_DIR%\Scripts\python.exe" goto :venv_ready
+if exist "%VENV_DIR%\Scripts\python.exe" (
+    "%VENV_DIR%\Scripts\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+    if not errorlevel 1 goto :venv_ready
+    echo [INFO] Ambiente virtual existente nao usa Python 3.11; recriando.
+    rmdir /s /q "%VENV_DIR%"
+)
 
+:: 1) Python Launcher: funciona mesmo quando python.exe nao esta no PATH.
 where py >nul 2>&1
-if not errorlevel 1 set "PY_CMD=py -3.11"
+if not errorlevel 1 (
+    py -3.11 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+    if not errorlevel 1 (
+        set "PY_EXE=py"
+        set "PY_ARGS=-3.11"
+        goto :python_ready
+    )
+)
 
-%PY_CMD% -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
-if errorlevel 1 (
+:: 2) Interpretadores expostos diretamente no PATH.
+for %%C in (python3.11 python3 python) do (
+    where %%C >nul 2>&1
+    if not errorlevel 1 (
+        %%C -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+        if not errorlevel 1 (
+            set "PY_EXE=%%C"
+            set "PY_ARGS="
+            goto :python_ready
+        )
+    )
+)
+
+:: 3) Instalacoes comuns do Python.org fora do PATH.
+for %%P in ("%LocalAppData%\Programs\Python\Python311\python.exe" "%ProgramFiles%\Python311\python.exe" "%ProgramFiles(x86)%\Python311\python.exe") do (
+    if exist "%%~P" (
+        "%%~P" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+        if not errorlevel 1 (
+            set "PY_EXE=%%~P"
+            set "PY_ARGS="
+            goto :python_ready
+        )
+    )
+)
+
+:python_ready
+if not defined PY_EXE (
     echo [ERRO] Python 3.11 nao encontrado.
-    echo        Instale Python 3.11 x64 e execute novamente.
+    echo        O script tentou o Launcher ^(py -3.11^), PATH e instalacoes padrao.
+    echo        Verifique com "py -0p" ou instale Python 3.11 x64.
     pause
     exit /b 1
 )
 
+echo [INFO] Interpretador selecionado: %PY_EXE% %PY_ARGS%
 echo [1/7] Criando ambiente virtual de build...
-%PY_CMD% -m venv "%VENV_DIR%"
+"%PY_EXE%" %PY_ARGS% -m venv "%VENV_DIR%"
 if errorlevel 1 (
     echo [ERRO] Falha ao criar o ambiente virtual.
     pause
