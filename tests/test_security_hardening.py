@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import models
+from config import Config
 
 
 def _authenticated_session(client, role="admin", user_id=1, username="admin", epoch=0):
@@ -138,7 +139,11 @@ def test_login_marks_session_permanent(app_client):
 
     response = app_client.post(
         "/login",
-        data={"usuario": "admin", "senha": "admin123", "csrf_token": csrf_token},
+        data={
+            "usuario": "admin",
+            "senha": Config.INITIAL_ADMIN_PASSWORD or "admin123",
+            "csrf_token": csrf_token,
+        },
     )
 
     assert response.status_code == 302
