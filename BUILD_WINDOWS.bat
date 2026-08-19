@@ -183,13 +183,15 @@ if errorlevel 1 goto fail
 goto venv_ready
 
 :venv_ready
-set "BUILD_PY=%VENV_DIR%\Scripts\python.exe"
+set "BUILD_PY=%CD%\%VENV_DIR%\Scripts\python.exe"
 if not exist "%BUILD_PY%" goto fail
+set "PIP_CACHE_DIR=%TEMP%\RegistroFacil-pip-cache"
+if not exist "%PIP_CACHE_DIR%" mkdir "%PIP_CACHE_DIR%" >nul 2>&1
 
 for /f "tokens=3 delims=' " %%v in ('findstr /C:"VERSION =" config.py') do set "APP_VERSION=%%v"
 if not defined APP_VERSION goto fail
 
-for /f "usebackq delims=" %%a in (`"%BUILD_PY%" -c "import platform; print(platform.machine())"`) do set "SYS_ARCH=%%a"
+for /f "delims=" %%a in ('"%BUILD_PY%" -c "import platform; print(platform.machine())"') do set "SYS_ARCH=%%a"
 
 echo.
 echo ==========================================================
@@ -199,15 +201,15 @@ echo  Arquitetura: %SYS_ARCH%
 echo.
 
 echo [2/7] Instalando dependencias fixadas...
-"%BUILD_PY%" -m pip install --upgrade pip
+"%BUILD_PY%" -m pip install --disable-pip-version-check --no-cache-dir --upgrade pip
 if errorlevel 1 goto fail
-"%BUILD_PY%" -m pip install -r requirements.txt -r requirements-build.txt
+"%BUILD_PY%" -m pip install --disable-pip-version-check --no-cache-dir -r requirements.txt -r requirements-build.txt
 if errorlevel 1 goto fail
 
 "%BUILD_PY%" -c "import flask, waitress, weasyprint, magic, openpyxl, paramiko, cryptography; print('Dependencias runtime verificadas')"
 if errorlevel 1 goto fail
 
-for /f "usebackq delims=" %%v in (`"%BUILD_PY%" -m PyInstaller --version`) do set "PI_VERSION=%%v"
+for /f "delims=" %%v in ('"%BUILD_PY%" -m PyInstaller --version') do set "PI_VERSION=%%v"
 echo  PyInstaller: %PI_VERSION%
 
 echo [3/7] Limpando artefatos anteriores...
