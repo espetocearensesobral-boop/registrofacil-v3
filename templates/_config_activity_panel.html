@@ -5,9 +5,16 @@
             <h5>Atividades recentes</h5>
             <p class="cfg-appearance-intro mb-0">Acompanhe as últimas ações registradas no sistema.</p>
         </div>
-        <a href="{{ url_for('atividades.historico') }}" class="nav-btn nav-btn-secondary ms-auto">
-            <i class="bi bi-clock-history me-1"></i> Histórico completo
-        </a>
+        <div class="d-flex gap-2 ms-auto flex-wrap">
+            <a href="{{ url_for('atividades.historico') }}" class="nav-btn nav-btn-secondary">
+                <i class="bi bi-clock-history me-1"></i> Histórico operacional
+            </a>
+            {% if has_permission('admin_logs') %}
+            <a href="{{ url_for('atividades.auditoria_seguranca') }}" class="nav-btn nav-btn-secondary">
+                <i class="bi bi-shield-lock me-1"></i> Auditoria e segurança
+            </a>
+            {% endif %}
+        </div>
     </div>
 
     <div class="cfg-card">

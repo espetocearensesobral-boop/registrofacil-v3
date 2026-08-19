@@ -15,7 +15,7 @@ from models import (
     toggle_status_processo, toggle_tipo_servico
 )
 from config import Config
-from utils.logger import logger
+from utils.logger import sistema_logger as logger
 from utils.scheduler import configure_and_start_scheduler
 from utils.sftp_backup import test_sftp_connection
 

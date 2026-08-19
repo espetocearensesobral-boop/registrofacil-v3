@@ -3,7 +3,7 @@
 from cryptography.fernet import Fernet
 
 from config import Config
-from utils.logger import logger
+from utils.logger import sistema_logger as logger
 
 try:
     _fernet_key = Config.ENCRYPTION_KEY.encode('utf-8')

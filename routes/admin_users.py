@@ -24,7 +24,7 @@ from routes.auth import (
     admin_required, gerar_csrf_token, validate_user_role, ensure_admin_safety
 )
 from routes.permissoes import permission_required, has_permission
-from utils.logger import logger
+from utils.logger import auth_logger as logger
 from utils.notification_contract import success, error, warning
 
 admin_users_bp = Blueprint('admin_users', __name__, url_prefix='/admin')

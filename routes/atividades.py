@@ -7,8 +7,9 @@ from datetime import datetime, timedelta
 from models import executar_query, gravar_log
 from routes.auth import is_logged_in_status, login_status_required, get_client_ip, proteger_input
 from routes.permissoes import permission_required
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 from utils.helpers import formatar_data # Importar de utils.helpers
+from data.audit_logs import obter_logs_seguranca
 
 atividades_bp = Blueprint('atividades', __name__, url_prefix='/atividades')
 
@@ -139,3 +140,27 @@ def historico():
                            contagem_hoje=contagem_hoje_atividades,
                            has_active_filters=has_active_filters
                            )
+
+
+@atividades_bp.route('/auditoria', methods=['GET'])
+@login_status_required
+@permission_required('admin_logs')
+def auditoria_seguranca():
+    """Exibe a trilha administrativa e de segurança sem misturá-la à operação."""
+    pagina = request.args.get('pagina', 1, type=int)
+    por_pagina = min(100, max(1, request.args.get('itens_por_pagina', 50, type=int)))
+    filtro_acao = proteger_input(request.args.get('acao'))
+    filtro_ip = proteger_input(request.args.get('ip'))
+    resultado = obter_logs_seguranca(
+        {'acao': filtro_acao, 'ip': filtro_ip}, pagina=pagina, por_pagina=por_pagina
+    )
+    return render_template(
+        'auditoria.html',
+        eventos=resultado['logs'],
+        total_registros=resultado['total'],
+        total_paginas=resultado['total_paginas'],
+        pagina_atual=resultado['pagina'],
+        itens_por_pagina=resultado['por_pagina'],
+        filtro_acao=filtro_acao or '',
+        filtro_ip=filtro_ip or '',
+    )

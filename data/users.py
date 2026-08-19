@@ -12,7 +12,8 @@ import pytz
 
 from config import Config
 from data.database import executar_query, get_sqlite_connection
-from utils.logger import logger, security_logger
+from utils.log_events import event_extra, new_event_id, sanitize_details, sanitize_text
+from utils.logger import auth_logger, security_logger
 
 TENTATIVAS_MAX = Config.TENTATIVAS_MAX
 BLOQUEIO_TEMPO = Config.BLOQUEIO_TEMPO
@@ -27,14 +28,15 @@ def verificar_tentativas_login(ip):
         [ip, tempo_limite_str], fetch_one=True
     )
     if result and result['total_count'] >= TENTATIVAS_MAX:
-        logger.warning(f"IP '{ip}' bloqueado por excesso de tentativas de login ({result['total_count']} falhas).")
+        auth_logger.warning(f"IP '{ip}' bloqueado por excesso de tentativas de login ({result['total_count']} falhas).")
         return False, f"Muitas tentativas de login. Tente novamente em {BLOQUEIO_TEMPO // 60} minutos."
     return True, None
 
-def registrar_tentativa_login(ip, sucesso):
+def registrar_tentativa_login(ip, sucesso, event_id=None):
+    event_id = event_id or new_event_id()
     return executar_query(
-        "INSERT INTO login_attempts (ip, sucesso, tempo) VALUES (?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
-        [ip, 1 if sucesso else 0]
+        "INSERT INTO login_attempts (ip, sucesso, event_id, tempo) VALUES (?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        [sanitize_text(ip, 128), 1 if sucesso else 0, event_id]
     )
 
 def _select_user_query(where_clause):
@@ -54,7 +56,7 @@ def get_user_by_username(username):
         )
     except sqlite3.OperationalError as e:
         if "no such column: session_epoch" in str(e) or "no such column: session_invalidate_at" in str(e):
-            logger.warning("Coluna de sessão ausente durante migração; usando consulta compatível.")
+            auth_logger.warning("Coluna de sessão ausente durante migração; usando consulta compatível.")
             return executar_query(
                 "SELECT id, nome, email, usuario, senha, ativo, role, "
                 "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at, "
@@ -115,7 +117,7 @@ def create_user(nome, email, usuario, senha_hash, role='user'):
     """
     try:
         if role not in VALID_USER_ROLES:
-            logger.warning(f"Tentativa de criar usuário com role inválida: {role!r}")
+            auth_logger.warning(f"Tentativa de criar usuário com role inválida: {role!r}")
             return None
 
         # Inserir usuário no banco
@@ -125,7 +127,7 @@ def create_user(nome, email, usuario, senha_hash, role='user'):
         )
         
         if rows_affected:
-            logger.info(f"Usuário '{usuario}' criado com sucesso no banco de dados com role '{role}'.")
+            auth_logger.info(f"Usuário '{usuario}' criado com sucesso no banco de dados com role '{role}'.")
             
             # Conceder permissões básicas automaticamente
             try:
@@ -139,7 +141,7 @@ def create_user(nome, email, usuario, senha_hash, role='user'):
                     # Se não for admin, NÃO conceder permissões automáticas.
                     # Um admin deve atribuir um perfil ou permissões manualmente.
                     if role not in ['admin', 'suporte']:
-                        logger.info(f"Usuário '{usuario}' (ID: {novo_usuario_id}) criado sem permissões. "
+                        auth_logger.info(f"Usuário '{usuario}' (ID: {novo_usuario_id}) criado sem permissões. "
                                     f"Um admin deve atribuir permissões ou um perfil.")
                     else:
                         # Para admins, conceder todas as permissões
@@ -154,19 +156,19 @@ def create_user(nome, email, usuario, senha_hash, role='user'):
                                 """
                                 executar_query(perm_query, [novo_usuario_id, modulo['id'], novo_usuario_id])
                             
-                            logger.info(f"Todas as permissões concedidas ao admin '{usuario}' (ID: {novo_usuario_id})")
+                            auth_logger.info(f"Todas as permissões concedidas ao admin '{usuario}' (ID: {novo_usuario_id})")
                         
             except Exception as e:
                 # Não bloquear a criação do usuário se houver erro nas permissões
-                logger.warning(f"Erro ao conceder permissões ao novo usuário '{usuario}': {e}")
+                auth_logger.warning(f"Erro ao conceder permissões ao novo usuário '{usuario}': {e}")
             
         return rows_affected
         
     except sqlite3.IntegrityError as e:
-        logger.warning(f"Tentativa de criar usuário com email '{email}' ou usuario '{usuario}' já existente. Erro: {e}")
+        auth_logger.warning(f"Tentativa de criar usuário com email '{email}' ou usuario '{usuario}' já existente. Erro: {e}")
         return None
     except Exception as e:
-        logger.error(f"Erro ao criar novo usuário: {e}", exc_info=True)
+        auth_logger.error(f"Erro ao criar novo usuário: {e}", exc_info=True)
         return None
 
 def create_password_reset_token(user_id, expires_in_minutes=60):
@@ -188,10 +190,10 @@ def create_password_reset_token(user_id, expires_in_minutes=60):
             "INSERT INTO password_reset_tokens (user_id, token, short_id, expires_at, is_used, created_at) VALUES (?, ?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
             [user_id, token, short_id, expires_at_str, 0]
         )
-        logger.info(f"Token de redefinição de senha gerado para usuário ID: {user_id}. Expira em {expires_at_str}.")
+        auth_logger.info(f"Token de redefinição de senha gerado para usuário ID: {user_id}. Expira em {expires_at_str}.")
         return short_id  # Retorna apenas o short_id — é o que vai na URL
     except Exception as e:
-        logger.error(f"Erro ao criar token de redefinição de senha para usuário ID {user_id}: {e}", exc_info=True)
+        auth_logger.error(f"Erro ao criar token de redefinição de senha para usuário ID {user_id}: {e}", exc_info=True)
         raise
 
 def get_password_reset_token(short_id_string):
@@ -211,11 +213,11 @@ def get_password_reset_token(short_id_string):
     token_data = executar_query(query, [short_id_string], fetch_one=True)
 
     if not token_data:
-        logger.warning(f"Tentativa de usar token de redefinição não encontrado (short_id): {short_id_string[:6]}...")
+        auth_logger.warning(f"Tentativa de usar token de redefinição não encontrado (short_id): {short_id_string[:6]}...")
         return None
 
     if token_data['is_used'] == 1:
-        logger.warning(f"Tentativa de usar token de redefinição já utilizado (short_id): {short_id_string[:6]}... (ID: {token_data['token_id']})")
+        auth_logger.warning(f"Tentativa de usar token de redefinição já utilizado (short_id): {short_id_string[:6]}... (ID: {token_data['token_id']})")
         return None
 
     return {
@@ -233,144 +235,137 @@ def mark_password_reset_token_as_used(token_id, connection=None):
         rows = executar_query(query, [token_id], connection=connection)
         
         if rows > 0:
-            logger.info(f"Token de redefinição de senha ID {token_id} marcado como usado.")
+            auth_logger.info(f"Token de redefinição de senha ID {token_id} marcado como usado.")
             return True
         return False
     except Exception as e:
-        logger.error(f"Erro ao marcar token de redefinição de senha ID {token_id} como usado: {e}", exc_info=True)
+        auth_logger.error(f"Erro ao marcar token de redefinição de senha ID {token_id} como usado: {e}", exc_info=True)
         raise # Propaga o erro para o rollback da transação
 
-def gravar_auditoria_admin(admin_id, acao, justificativa, ip, usuario_afetado_id=None, 
-                           campo_alterado=None, valor_anterior=None, valor_novo=None, 
-                           user_agent=None):
-    """
-    Grava uma ação administrativa no log de auditoria.
-    
-    Args:
-        admin_id: ID do administrador que realizou a ação
-        acao: Tipo de ação ('reset_senha', 'inativacao', 'alteracao_role', etc)
-        justificativa: Justificativa obrigatória da ação
-        ip: IP do administrador
-        usuario_afetado_id: ID do usuário afetado pela ação (opcional)
-        campo_alterado: Nome do campo alterado (opcional)
-        valor_anterior: Valor anterior do campo (opcional)
-        valor_novo: Valor novo do campo (opcional)
-        user_agent: User agent do navegador (opcional)
-    
-    Returns:
-        ID do registro de auditoria criado
-    """
+def gravar_auditoria_admin(admin_id, acao, justificativa, ip, usuario_afetado_id=None,
+                           campo_alterado=None, valor_anterior=None, valor_novo=None,
+                           user_agent=None, *, event_id=None, request_id=None):
+    """Grava auditoria administrativa com correlação e dados sanitizados."""
+    event_id = event_id or new_event_id()
+    safe_action = sanitize_text(acao, 160) or 'admin.action'
+    safe_justification = sanitize_details(justificativa)
+    safe_ip = sanitize_text(ip, 128)
+    safe_agent = sanitize_text(user_agent, 500)
     try:
-        # Buscar informações do admin
         admin_data = executar_query(
-            "SELECT nome, email FROM usuarios WHERE id = ?",
-            [admin_id],
-            fetch_one=True
+            "SELECT nome, email FROM usuarios WHERE id = ?", [admin_id], fetch_one=True
         )
-        
-        admin_nome = admin_data['nome'] if admin_data else 'Desconhecido'
+        admin_name = admin_data['nome'] if admin_data else 'Desconhecido'
         admin_email = admin_data['email'] if admin_data else None
-        
-        # Buscar informações do usuário afetado, se aplicável
-        usuario_afetado_nome = None
-        usuario_afetado_email = None
+
+        affected_name = None
+        affected_email = None
         if usuario_afetado_id:
-            user_data = executar_query(
+            affected_data = executar_query(
                 "SELECT nome, email FROM usuarios WHERE id = ?",
-                [usuario_afetado_id],
-                fetch_one=True
+                [usuario_afetado_id], fetch_one=True
             )
-            if user_data:
-                usuario_afetado_nome = user_data['nome']
-                usuario_afetado_email = user_data['email']
-        
-        # Inserir registro de auditoria
+            if affected_data:
+                affected_name = affected_data['nome']
+                affected_email = affected_data['email']
+
         query = """
             INSERT INTO auditoria_admin (
-                admin_id, admin_nome, admin_email, acao, 
-                usuario_afetado_id, usuario_afetado_nome, usuario_afetado_email,
-                campo_alterado, valor_anterior, valor_novo, 
-                justificativa, ip, user_agent
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """
-        
-        with get_sqlite_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(query, [
                 admin_id, admin_nome, admin_email, acao,
                 usuario_afetado_id, usuario_afetado_nome, usuario_afetado_email,
                 campo_alterado, valor_anterior, valor_novo,
-                justificativa, ip, user_agent
-            ])
-            audit_id = cursor.lastrowid
-        
-        logger.info(f"Auditoria registrada: {acao} por admin {admin_id} ({admin_nome}) - ID: {audit_id}")
-        return audit_id
-        
-    except Exception as e:
-        logger.error(f"Erro ao gravar auditoria administrativa: {e}", exc_info=True)
-        return None
-
-def gravar_tentativa_nao_autorizada(usuario_id, tipo_tentativa, ip, detalhes=None, 
-                                    alvo_user_id=None, user_agent=None, bloqueado=True):
-    """
-    Grava uma tentativa de acesso não autorizado.
-    
-    Args:
-        usuario_id: ID do usuário que tentou a ação
-        tipo_tentativa: Tipo de tentativa ('acesso_admin', 'editar_outro_usuario', etc)
-        ip: IP do usuário
-        detalhes: Detalhes adicionais sobre a tentativa (opcional)
-        alvo_user_id: ID do usuário alvo da tentativa (opcional)
-        user_agent: User agent do navegador (opcional)
-        bloqueado: Se a tentativa foi bloqueada (padrão True)
-    
-    Returns:
-        ID do registro criado
-    """
-    try:
-        # Buscar informações do usuário
-        user_data = executar_query(
-            "SELECT nome FROM usuarios WHERE id = ?",
-            [usuario_id],
-            fetch_one=True
-        )
-        usuario_nome = user_data['nome'] if user_data else 'Desconhecido'
-        
-        # Buscar informações do usuário alvo, se aplicável
-        alvo_user_nome = None
-        if alvo_user_id:
-            alvo_data = executar_query(
-                "SELECT nome FROM usuarios WHERE id = ?",
-                [alvo_user_id],
-                fetch_one=True
-            )
-            alvo_user_nome = alvo_data['nome'] if alvo_data else None
-        
-        # Inserir registro
-        query = """
-            INSERT INTO tentativas_acesso_nao_autorizado (
-                usuario_id, usuario_nome, tipo_tentativa, detalhes,
-                alvo_user_id, alvo_user_nome, ip, user_agent, bloqueado
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                justificativa, ip, user_agent, event_id, request_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
-        
         with get_sqlite_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(query, [
-                usuario_id, usuario_nome, tipo_tentativa, detalhes,
-                alvo_user_id, alvo_user_nome, ip, user_agent, 
-                1 if bloqueado else 0
+                admin_id, admin_name, admin_email, safe_action,
+                usuario_afetado_id, affected_name, affected_email,
+                sanitize_text(campo_alterado, 160), sanitize_text(valor_anterior), sanitize_text(valor_novo),
+                safe_justification, safe_ip, safe_agent, event_id, request_id,
             ])
-            tentativa_id = cursor.lastrowid
-        
-        security_logger.warning(
-            f"Tentativa não autorizada registrada: {tipo_tentativa} por usuário {usuario_id} "
-            f"({usuario_nome}) - ID: {tentativa_id} - Bloqueado: {bloqueado}"
+            audit_id = cursor.lastrowid
+
+        auth_logger.info(
+            f"Auditoria registrada: {safe_action} por admin {admin_id} ({admin_name}) - ID: {audit_id}",
+            extra=event_extra(
+                event_id=event_id, request_id_value=request_id, domain='auth',
+                event_type='admin.audit', entity_id=usuario_afetado_id,
+                user_id=admin_id, ip=safe_ip,
+                details={'action': safe_action, 'audit_id': audit_id},
+            ),
         )
-        return tentativa_id
-        
-    except Exception as e:
-        logger.error(f"Erro ao gravar tentativa não autorizada: {e}", exc_info=True)
+        return audit_id
+    except Exception as exc:
+        auth_logger.error(
+            f"Erro ao gravar auditoria administrativa: {exc}",
+            extra=event_extra(
+                event_id=event_id, request_id_value=request_id, domain='auth',
+                event_type='admin.audit.persistence_failed', user_id=admin_id,
+                ip=safe_ip, details={'action': safe_action, 'error': str(exc)},
+            ),
+            exc_info=True,
+        )
         return None
 
+
+def gravar_tentativa_nao_autorizada(usuario_id, tipo_tentativa, ip, detalhes=None,
+                                    alvo_user_id=None, user_agent=None, bloqueado=True,
+                                    *, event_id=None, request_id=None):
+    """Grava tentativa não autorizada no banco e na trilha de segurança."""
+    event_id = event_id or new_event_id()
+    safe_type = sanitize_text(tipo_tentativa, 160) or 'unauthorized.action'
+    safe_details = sanitize_details(detalhes)
+    safe_ip = sanitize_text(ip, 128)
+    safe_agent = sanitize_text(user_agent, 500)
+    try:
+        user_data = executar_query(
+            "SELECT nome FROM usuarios WHERE id = ?", [usuario_id], fetch_one=True
+        )
+        user_name = user_data['nome'] if user_data else 'Desconhecido'
+        target_name = None
+        if alvo_user_id:
+            target_data = executar_query(
+                "SELECT nome FROM usuarios WHERE id = ?", [alvo_user_id], fetch_one=True
+            )
+            target_name = target_data['nome'] if target_data else None
+
+        query = """
+            INSERT INTO tentativas_acesso_nao_autorizado (
+                usuario_id, usuario_nome, tipo_tentativa, detalhes,
+                alvo_user_id, alvo_user_nome, ip, user_agent, bloqueado,
+                event_id, request_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """
+        with get_sqlite_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, [
+                usuario_id, user_name, safe_type, safe_details,
+                alvo_user_id, target_name, safe_ip, safe_agent,
+                1 if bloqueado else 0, event_id, request_id,
+            ])
+            attempt_id = cursor.lastrowid
+
+        security_logger.warning(
+            f"Tentativa não autorizada registrada: {safe_type} por usuário {usuario_id} "
+            f"({user_name}) - ID: {attempt_id} - Bloqueado: {bool(bloqueado)}",
+            extra=event_extra(
+                event_id=event_id, request_id_value=request_id, domain='auth',
+                event_type='security.unauthorized', entity_id=alvo_user_id,
+                user_id=usuario_id, ip=safe_ip,
+                details={'attempt_id': attempt_id, 'blocked': bool(bloqueado)},
+            ),
+        )
+        return attempt_id
+    except Exception as exc:
+        auth_logger.error(
+            f"Erro ao gravar tentativa não autorizada: {exc}",
+            extra=event_extra(
+                event_id=event_id, request_id_value=request_id, domain='auth',
+                event_type='security.persistence_failed', user_id=usuario_id,
+                ip=safe_ip, details={'type': safe_type, 'error': str(exc)},
+            ),
+            exc_info=True,
+        )
+        return None

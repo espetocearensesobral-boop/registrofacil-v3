@@ -14,7 +14,7 @@ from routes.auth import (
     login_status_required, get_client_ip, proteger_input, verificar_csrf_token,
     gerar_csrf_token, validate_user_role, ensure_admin_safety
 )
-from utils.logger import logger
+from utils.logger import auth_logger as logger
 from utils.notification_contract import success, error, warning
 
 perfil_bp = Blueprint('perfil', __name__, url_prefix='/perfil')

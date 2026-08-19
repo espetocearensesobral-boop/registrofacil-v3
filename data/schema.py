@@ -8,11 +8,10 @@ import os
 import sqlite3
 
 from config import Config
-from utils.logger import logger
+from utils.logger import sistema_logger as logger
 from data.database import (
     get_sqlite_connection,
     executar_query,
-    add_column_if_not_exists_sqlite,
 )
 from data.migrations import executar_migracoes_dados
 
@@ -25,11 +24,24 @@ def init_db(criar_indices_performance, init_fts):
         def table_exists(table_name):
             cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}';")
             return cursor.fetchone() is not None
-        
-        # NOTE: add_column_if_not_exists_sqlite is now defined outside init_db
-        # and has its own get_sqlite_connection context.
-        # This prevents issues with 'cursor' not being directly accessible here.
-        
+
+        def ensure_column(table_name, column_name, definition, default_value=None):
+            """Adiciona coluna na mesma conexão para evitar lock de migração."""
+            cursor.execute(f"PRAGMA table_info({table_name})")
+            columns = {row[1] for row in cursor.fetchall()}
+            if column_name in columns:
+                return
+            alter_definition = definition
+            if default_value is not None and not (
+                isinstance(default_value, str) and default_value.startswith('strftime(')
+            ):
+                alter_definition = f"{definition} DEFAULT {default_value}"
+            cursor.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {alter_definition}")
+            if isinstance(default_value, str) and default_value.startswith('strftime('):
+                cursor.execute(
+                    f"UPDATE {table_name} SET {column_name} = {default_value} WHERE {column_name} IS NULL"
+                )
+
         if not table_exists("usuarios"):
             cursor.execute("""
                 CREATE TABLE usuarios (
@@ -52,14 +64,14 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'usuarios' criada no SQLite.")
         else:
             logger.info("Tabela 'usuarios' já existe. Verificando/adicionando colunas.")
-            add_column_if_not_exists_sqlite('usuarios', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
-            add_column_if_not_exists_sqlite('usuarios', 'deleted_at', 'TEXT')
-            add_column_if_not_exists_sqlite('usuarios', 'role', "TEXT DEFAULT 'user' NOT NULL")
-            add_column_if_not_exists_sqlite('usuarios', 'last_login_at', 'TEXT')
+            ensure_column('usuarios', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('usuarios', 'deleted_at', 'TEXT')
+            ensure_column('usuarios', 'role', "TEXT DEFAULT 'user' NOT NULL")
+            ensure_column('usuarios', 'last_login_at', 'TEXT')
             # Mantido aqui como fallback para bases de dados mais antigas que já existiam antes da mudança no CREATE TABLE
-            add_column_if_not_exists_sqlite('usuarios', 'session_invalidate_at', 'TEXT')
-            add_column_if_not_exists_sqlite('usuarios', 'session_epoch', 'INTEGER', default_value='0')
-            add_column_if_not_exists_sqlite('usuarios', 'must_change_password', 'INTEGER', default_value='0')
+            ensure_column('usuarios', 'session_invalidate_at', 'TEXT')
+            ensure_column('usuarios', 'session_epoch', 'INTEGER', default_value='0')
+            ensure_column('usuarios', 'must_change_password', 'INTEGER', default_value='0')
 
         if not table_exists("user_presence"):
             cursor.execute("""
@@ -82,12 +94,14 @@ def init_db(criar_indices_performance, init_fts):
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     ip TEXT NOT NULL,
                     sucesso INTEGER NOT NULL,
+                    event_id TEXT,
                     tempo TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
                 );
             """)
             logger.info("Tabela 'login_attempts' criada no SQLite.")
         else:
             logger.info("Tabela 'login_attempts' já existe.")
+            ensure_column('login_attempts', 'event_id', 'TEXT')
 
         if not table_exists("logs"):
             cursor.execute("""
@@ -98,6 +112,12 @@ def init_db(criar_indices_performance, init_fts):
                     processo_id INTEGER,
                     usuario_id INTEGER,
                     ip TEXT,
+                    event_id TEXT,
+                    request_id TEXT,
+                    domain TEXT DEFAULT 'operacional',
+                    event_type TEXT DEFAULT 'legacy',
+                    entity_id TEXT,
+                    severity TEXT DEFAULT 'INFO',
                     timestamp TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
                     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL,
                     FOREIGN KEY (processo_id) REFERENCES processos(id) ON DELETE CASCADE
@@ -106,8 +126,14 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'logs' criada no SQLite.")
         else:
             logger.info("Tabela 'logs' já existe.")
-            add_column_if_not_exists_sqlite('logs', 'processo_id', 'INTEGER')
-            add_column_if_not_exists_sqlite('logs', 'contexto', 'TEXT')
+            ensure_column('logs', 'processo_id', 'INTEGER')
+            ensure_column('logs', 'contexto', 'TEXT')
+            ensure_column('logs', 'event_id', 'TEXT')
+            ensure_column('logs', 'request_id', 'TEXT')
+            ensure_column('logs', 'domain', "TEXT DEFAULT 'operacional'")
+            ensure_column('logs', 'event_type', "TEXT DEFAULT 'legacy'")
+            ensure_column('logs', 'entity_id', 'TEXT')
+            ensure_column('logs', 'severity', "TEXT DEFAULT 'INFO'")
 
 
         if not table_exists("configuracoes"):
@@ -136,9 +162,9 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'tipos_servico' criada no SQLite.")
         else:
             logger.info("Tabela 'tipos_servico' já existe. Verificando/adicionando colunas.")
-            add_column_if_not_exists_sqlite('tipos_servico', 'descricao', 'TEXT')
-            add_column_if_not_exists_sqlite('tipos_servico', 'ativo', 'INTEGER', default_value=1)
-            add_column_if_not_exists_sqlite('tipos_servico', 'prazo_padrao', 'INTEGER', default_value=30)
+            ensure_column('tipos_servico', 'descricao', 'TEXT')
+            ensure_column('tipos_servico', 'ativo', 'INTEGER', default_value=1)
+            ensure_column('tipos_servico', 'prazo_padrao', 'INTEGER', default_value=30)
 
 
         if not table_exists("status_processo"):
@@ -153,8 +179,8 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'status_processo' criada no SQLite.")
         else:
             logger.info("Tabela 'status_processo' já existe.")
-            add_column_if_not_exists_sqlite('status_processo', 'hex_color', 'TEXT', default_value="'#6c757d'")
-            add_column_if_not_exists_sqlite('status_processo', 'ativo', 'INTEGER', default_value=1)
+            ensure_column('status_processo', 'hex_color', 'TEXT', default_value="'#6c757d'")
+            ensure_column('status_processo', 'ativo', 'INTEGER', default_value=1)
 
 
         if not table_exists("titulares"):
@@ -222,16 +248,16 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'processos' criada no SQLite.")
         else:
             logger.info("Tabela 'processos' já existe. Verificando/adicionando colunas.")
-            add_column_if_not_exists_sqlite('processos', 'numero_processo', 'TEXT UNIQUE')
-            add_column_if_not_exists_sqlite('processos', 'matricula', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'possui_matricula', 'INTEGER', default_value=0)
-            add_column_if_not_exists_sqlite('processos', 'apresentante_telefone', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'apresentante_email', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'titular_telefone', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'titular_email', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'titular_id', 'INTEGER')
-            add_column_if_not_exists_sqlite('processos', 'apresentante_id', 'INTEGER')
-            add_column_if_not_exists_sqlite('processos', 'envolvido_notas', 'INTEGER', default_value=0)
+            ensure_column('processos', 'numero_processo', 'TEXT UNIQUE')
+            ensure_column('processos', 'matricula', 'TEXT')
+            ensure_column('processos', 'possui_matricula', 'INTEGER', default_value=0)
+            ensure_column('processos', 'apresentante_telefone', 'TEXT')
+            ensure_column('processos', 'apresentante_email', 'TEXT')
+            ensure_column('processos', 'titular_telefone', 'TEXT')
+            ensure_column('processos', 'titular_email', 'TEXT')
+            ensure_column('processos', 'titular_id', 'INTEGER')
+            ensure_column('processos', 'apresentante_id', 'INTEGER')
+            ensure_column('processos', 'envolvido_notas', 'INTEGER', default_value=0)
             cursor.execute("""
                 UPDATE processos
                    SET titular_id = (SELECT id FROM titulares WHERE titulares.nome = processos.titular)
@@ -246,9 +272,9 @@ def init_db(criar_indices_performance, init_fts):
             """)
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_processos_titular_id ON processos(titular_id)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_processos_apresentante_id ON processos(apresentante_id)")
-            add_column_if_not_exists_sqlite('processos', 'observacoes', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'data_conclusao', 'TEXT')
-            add_column_if_not_exists_sqlite('processos', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('processos', 'observacoes', 'TEXT')
+            ensure_column('processos', 'data_conclusao', 'TEXT')
+            ensure_column('processos', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
 
 
         if not table_exists("anexos_processos"):
@@ -288,7 +314,7 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'historico_processos' criada no SQLite.")
         else:
             logger.info("Tabela 'historico_processos' já existe.")
-            add_column_if_not_exists_sqlite('historico_processos', 'observacao_adicional', 'TEXT')
+            ensure_column('historico_processos', 'observacao_adicional', 'TEXT')
 
 
         if not table_exists("email_config"):
@@ -329,15 +355,15 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'empresa' criada no SQLite com nova estrutura.")
         else:
             logger.info("Tabela 'empresa' já existe. Verificando/adicionando/removendo colunas (se suportado).")
-            add_column_if_not_exists_sqlite('empresa', 'cartorio', 'TEXT')
-            add_column_if_not_exists_sqlite('empresa', 'oficial', 'TEXT')
-            add_column_if_not_exists_sqlite('empresa', 'substituta', 'TEXT')
-            add_column_if_not_exists_sqlite('empresa', 'endereco', 'TEXT')
-            add_column_if_not_exists_sqlite('empresa', 'telefone', 'TEXT')
-            add_column_if_not_exists_sqlite('empresa', 'email', 'TEXT')
-            add_column_if_not_exists_sqlite('empresa', 'logo', 'TEXT')
-            add_column_if_not_exists_sqlite('empresa', 'criado_em', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
-            add_column_if_not_exists_sqlite('empresa', 'atualizado_em', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('empresa', 'cartorio', 'TEXT')
+            ensure_column('empresa', 'oficial', 'TEXT')
+            ensure_column('empresa', 'substituta', 'TEXT')
+            ensure_column('empresa', 'endereco', 'TEXT')
+            ensure_column('empresa', 'telefone', 'TEXT')
+            ensure_column('empresa', 'email', 'TEXT')
+            ensure_column('empresa', 'logo', 'TEXT')
+            ensure_column('empresa', 'criado_em', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('empresa', 'atualizado_em', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
 
 
         if not table_exists("record_locks"):
@@ -356,8 +382,8 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'record_locks' criada no SQLite.")
         else:
             logger.info("Tabela 'record_locks' já existe.")
-            add_column_if_not_exists_sqlite('record_locks', 'locked_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
-            add_column_if_not_exists_sqlite('record_locks', 'expires_at', 'TEXT')
+            ensure_column('record_locks', 'locked_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('record_locks', 'expires_at', 'TEXT')
 
         if not table_exists("backup_configs"):
             cursor.execute("""
@@ -389,20 +415,20 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Configuração de backup padrão inserida na tabela 'backup_configs'.")
         else:
             logger.info("Tabela 'backup_configs' já existe. Verificando/adicionando colunas.")
-            add_column_if_not_exists_sqlite('backup_configs', 'local_path', "TEXT NOT NULL DEFAULT ''")
-            add_column_if_not_exists_sqlite('backup_configs', 'cloud_provider', "TEXT DEFAULT 'none'")
-            add_column_if_not_exists_sqlite('backup_configs', 'sftp_host', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'sftp_port', 'INTEGER')
-            add_column_if_not_exists_sqlite('backup_configs', 'sftp_username', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'sftp_password', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'sftp_remote_path', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'auto_backup_enabled', 'INTEGER', default_value=0)
-            add_column_if_not_exists_sqlite('backup_configs', 'backup_frequency', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'backup_time', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'backup_days', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'backup_day_of_month', 'INTEGER')
-            add_column_if_not_exists_sqlite('backup_configs', 'last_backup_at', 'TEXT')
-            add_column_if_not_exists_sqlite('backup_configs', 'uploads_path', 'TEXT')
+            ensure_column('backup_configs', 'local_path', "TEXT NOT NULL DEFAULT ''")
+            ensure_column('backup_configs', 'cloud_provider', "TEXT DEFAULT 'none'")
+            ensure_column('backup_configs', 'sftp_host', 'TEXT')
+            ensure_column('backup_configs', 'sftp_port', 'INTEGER')
+            ensure_column('backup_configs', 'sftp_username', 'TEXT')
+            ensure_column('backup_configs', 'sftp_password', 'TEXT')
+            ensure_column('backup_configs', 'sftp_remote_path', 'TEXT')
+            ensure_column('backup_configs', 'auto_backup_enabled', 'INTEGER', default_value=0)
+            ensure_column('backup_configs', 'backup_frequency', 'TEXT')
+            ensure_column('backup_configs', 'backup_time', 'TEXT')
+            ensure_column('backup_configs', 'backup_days', 'TEXT')
+            ensure_column('backup_configs', 'backup_day_of_month', 'INTEGER')
+            ensure_column('backup_configs', 'last_backup_at', 'TEXT')
+            ensure_column('backup_configs', 'uploads_path', 'TEXT')
             # Migração: limpa uploads_path obsoleto do banco.
             # Antes, get_upload_folder() lia esse campo e podia retornar um caminho
             # inconsistente (ex: static/uploads/processos configurado manualmente).
@@ -429,8 +455,8 @@ def init_db(criar_indices_performance, init_fts):
                     exc_info=True,
                 )
                 raise
-            add_column_if_not_exists_sqlite('backup_configs', 'created_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
-            add_column_if_not_exists_sqlite('backup_configs', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('backup_configs', 'created_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('backup_configs', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
 
         if not table_exists("password_reset_tokens"):
             cursor.execute("""
@@ -449,10 +475,10 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'password_reset_tokens' criada no SQLite.")
         else:
             logger.info("Tabela 'password_reset_tokens' já existe. Verificando/adicionando colunas.")
-            add_column_if_not_exists_sqlite('password_reset_tokens', 'is_used', 'INTEGER', default_value=0)
-            add_column_if_not_exists_sqlite('password_reset_tokens', 'created_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
-            add_column_if_not_exists_sqlite('password_reset_tokens', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
-            add_column_if_not_exists_sqlite('password_reset_tokens', 'short_id', 'TEXT')
+            ensure_column('password_reset_tokens', 'is_used', 'INTEGER', default_value=0)
+            ensure_column('password_reset_tokens', 'created_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('password_reset_tokens', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+            ensure_column('password_reset_tokens', 'short_id', 'TEXT')
 
         logger.info("Esquema do banco de dados SQLite inicializado/verificado com sucesso.")
         conn.commit()  # Garantir que o schema está salvo antes das migrações
@@ -601,7 +627,7 @@ def init_db(criar_indices_performance, init_fts):
             ''')
             logger.info("Tabela 'user_preferences' criada no SQLite.")
         else:
-            add_column_if_not_exists_sqlite("user_preferences", "tema_cor", "TEXT", "paleta-01")
+            ensure_column("user_preferences", "tema_cor", "TEXT", "paleta-01")
             cursor.execute("UPDATE user_preferences SET tema_cor = 'paleta-01' WHERE tema_cor IS NULL OR tema_cor = 'grafite-vinho' OR tema_cor NOT IN ('paleta-01', 'paleta-02', 'paleta-03', 'paleta-04', 'paleta-05', 'paleta-06', 'paleta-07', 'paleta-08', 'paleta-09', 'paleta-10', 'paleta-11', 'paleta-12', 'paleta-13', 'paleta-14', 'paleta-15', 'paleta-16', 'paleta-17', 'paleta-18', 'paleta-19', 'paleta-20', 'paleta-21', 'paleta-22', 'paleta-23', 'paleta-24', 'paleta-25', 'paleta-26', 'paleta-27', 'paleta-28', 'paleta-29', 'paleta-30')")
 
             logger.info("Tabela 'user_preferences' já existe.")
@@ -836,6 +862,8 @@ def init_db(criar_indices_performance, init_fts):
                     justificativa TEXT,
                     ip TEXT,
                     user_agent TEXT,
+                    event_id TEXT,
+                    request_id TEXT,
                     created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
                     FOREIGN KEY (admin_id) REFERENCES usuarios(id) ON DELETE SET NULL,
                     FOREIGN KEY (usuario_afetado_id) REFERENCES usuarios(id) ON DELETE SET NULL
@@ -844,6 +872,8 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'auditoria_admin' criada no SQLite.")
         else:
             logger.info("Tabela 'auditoria_admin' já existe.")
+            ensure_column('auditoria_admin', 'event_id', 'TEXT')
+            ensure_column('auditoria_admin', 'request_id', 'TEXT')
 
         # Tentativas de acesso não autorizado
         if not table_exists("tentativas_acesso_nao_autorizado"):
@@ -859,6 +889,8 @@ def init_db(criar_indices_performance, init_fts):
                     ip TEXT,
                     user_agent TEXT,
                     bloqueado INTEGER DEFAULT 1,
+                    event_id TEXT,
+                    request_id TEXT,
                     created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
                     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL,
                     FOREIGN KEY (alvo_user_id) REFERENCES usuarios(id) ON DELETE SET NULL
@@ -867,6 +899,8 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'tentativas_acesso_nao_autorizado' criada no SQLite.")
         else:
             logger.info("Tabela 'tentativas_acesso_nao_autorizado' já existe.")
+            ensure_column('tentativas_acesso_nao_autorizado', 'event_id', 'TEXT')
+            ensure_column('tentativas_acesso_nao_autorizado', 'request_id', 'TEXT')
 
         # Notificações de usuário (tabela separada para notificações internas de admin)
         if not table_exists("notificacoes_usuario"):

@@ -1,7 +1,7 @@
 """Migrações de dados versionadas do banco SQLite."""
 
 from config import Config
-from utils.logger import logger
+from utils.logger import sistema_logger as logger
 from data.database import get_sqlite_connection
 
 DATABASE_PATH = Config.DATABASE_PATH

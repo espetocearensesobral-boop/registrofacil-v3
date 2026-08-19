@@ -1,6 +1,6 @@
 """Índices de performance do banco de dados."""
 
-from utils.logger import logger
+from utils.logger import sistema_logger as logger
 
 def criar_indices_performance(cursor):
     """Cria índices otimizados para melhorar performance das queries."""
@@ -33,9 +33,12 @@ def criar_indices_performance(cursor):
             "CREATE INDEX IF NOT EXISTS idx_logs_timestamp ON logs(timestamp DESC)",
             "CREATE INDEX IF NOT EXISTS idx_logs_usuario ON logs(usuario_id, timestamp DESC)",
             "CREATE INDEX IF NOT EXISTS idx_logs_acao ON logs(acao, timestamp DESC)",
+            "CREATE INDEX IF NOT EXISTS idx_logs_event_id ON logs(event_id)",
+            "CREATE INDEX IF NOT EXISTS idx_logs_domain_type ON logs(domain, event_type, timestamp DESC)",
 
             # Login attempts
             "CREATE INDEX IF NOT EXISTS idx_login_attempts_ip ON login_attempts(ip, tempo DESC)",
+            "CREATE INDEX IF NOT EXISTS idx_login_attempts_event_id ON login_attempts(event_id)",
 
             # Notificações
             "CREATE INDEX IF NOT EXISTS idx_notificacoes_usuario ON notificacoes(usuario_id, created_at DESC)",
@@ -60,8 +63,10 @@ def criar_indices_performance(cursor):
             "CREATE INDEX IF NOT EXISTS idx_auditoria_admin_id ON auditoria_admin(admin_id, created_at DESC)",
             "CREATE INDEX IF NOT EXISTS idx_auditoria_usuario_afetado ON auditoria_admin(usuario_afetado_id, created_at DESC)",
             "CREATE INDEX IF NOT EXISTS idx_auditoria_acao ON auditoria_admin(acao, created_at DESC)",
+            "CREATE INDEX IF NOT EXISTS idx_auditoria_event_id ON auditoria_admin(event_id)",
             "CREATE INDEX IF NOT EXISTS idx_tentativas_usuario ON tentativas_acesso_nao_autorizado(usuario_id, created_at DESC)",
             "CREATE INDEX IF NOT EXISTS idx_tentativas_ip ON tentativas_acesso_nao_autorizado(ip, created_at DESC)",
+            "CREATE INDEX IF NOT EXISTS idx_tentativas_event_id ON tentativas_acesso_nao_autorizado(event_id)",
             "CREATE INDEX IF NOT EXISTS idx_notificacoes_usuario_lida ON notificacoes_usuario(usuario_id, lida)",
         ]
 

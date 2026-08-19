@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Iterable
 
 from config import Config, DATA_DIR
-from utils.logger import logger
+from utils.logger import manutencao_logger as logger
 
 BACKUP_FORMAT_VERSION = 1
 MANIFEST_NAME = "backup-manifest.json"

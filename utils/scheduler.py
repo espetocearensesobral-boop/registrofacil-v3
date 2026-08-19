@@ -16,7 +16,7 @@ from io import BytesIO # Adicionado: Importação de BytesIO
 
 from models import DATABASE_PATH, gravar_log, get_backup_config, update_last_backup_time, get_upload_folder
 from config import Config 
-from utils.logger import logger, manutencao_logger
+from utils.logger import manutencao_logger
 from utils.logger_config import limpar_logs_antigos
 from utils.backup_service import create_backup_archive, validate_backup_archive, write_backup_status, apply_retention
 
@@ -36,7 +36,7 @@ def configure_and_start_scheduler(app_context_callback):
     global _scheduler_initialized
 
     if not scheduler.running:
-        logger.info("Scheduler não está rodando. Iniciando e configurando.")
+        manutencao_logger.info("Scheduler não está rodando. Iniciando e configurando.")
         scheduler.start()
         _scheduler_initialized = True
 
@@ -47,7 +47,7 @@ def configure_and_start_scheduler(app_context_callback):
         pass
 
     if not Config.INTERNAL_BACKUP_SCHEDULER_ENABLED:
-        logger.info("Scheduler interno de backup desativado; use python -m utils.backup_runner.")
+        manutencao_logger.info("Scheduler interno de backup desativado; use python -m utils.backup_runner.")
         return
     
     backup_config = None
@@ -55,21 +55,21 @@ def configure_and_start_scheduler(app_context_callback):
         with app_context_callback():
             backup_config = get_backup_config()
     except Exception as e:
-        logger.error(f"Erro ao carregar configurações de backup para o scheduler: {e}", exc_info=True)
+        manutencao_logger.error(f"Erro ao carregar configurações de backup para o scheduler: {e}", exc_info=True)
         return
 
     if not backup_config or not backup_config.get('auto_backup_enabled'):
-        logger.info("Backup automático desativado nas configurações. Nenhum job de backup agendado.")
+        manutencao_logger.info("Backup automático desativado nas configurações. Nenhum job de backup agendado.")
         return
 
-    logger.info("Configurando job de backup automático...")
+    manutencao_logger.info("Configurando job de backup automático...")
 
     try:
         backup_frequency = backup_config['backup_frequency']
         backup_time_str = backup_config['backup_time']
         
         if not backup_time_str:
-            logger.error("Hora de backup não configurada. Backup automático não será agendado.")
+            manutencao_logger.error("Hora de backup não configurada. Backup automático não será agendado.")
             return
 
         backup_hour, backup_minute = map(int, backup_time_str.split(':'))
@@ -87,12 +87,12 @@ def configure_and_start_scheduler(app_context_callback):
                 coalesce=True,
                 misfire_grace_time=3600,
             )
-            logger.info(f"Job de backup diário agendado para {backup_time_str} (Horário de Fortaleza).")
+            manutencao_logger.info(f"Job de backup diário agendado para {backup_time_str} (Horário de Fortaleza).")
         
         elif backup_frequency == 'weekly':
             backup_days = backup_config.get('backup_days', '').split(',')
             if not backup_days:
-                logger.error("Dias da semana não configurados para backup semanal. Job não agendado.")
+                manutencao_logger.error("Dias da semana não configurados para backup semanal. Job não agendado.")
                 return
             
             days_of_week_apscheduler = []
@@ -107,7 +107,7 @@ def configure_and_start_scheduler(app_context_callback):
                 elif d_lower in ['sábado', 'sabado', 'saturday', 'sat']: days_of_week_apscheduler.append('sat')
 
             if not days_of_week_apscheduler:
-                logger.error(f"Nenhum dia de semana válido configurado para backup semanal: {backup_days}. Job não agendado.")
+                manutencao_logger.error(f"Nenhum dia de semana válido configurado para backup semanal: {backup_days}. Job não agendado.")
                 return
 
             scheduler.add_job(
@@ -123,12 +123,12 @@ def configure_and_start_scheduler(app_context_callback):
                 coalesce=True,
                 misfire_grace_time=3600,
             )
-            logger.info(f"Job de backup semanal agendado para {backup_time_str} nos dias {backup_days} (Horário de Fortaleza).")
+            manutencao_logger.info(f"Job de backup semanal agendado para {backup_time_str} nos dias {backup_days} (Horário de Fortaleza).")
 
         elif backup_frequency == 'monthly':
             backup_day_of_month = backup_config.get('backup_day_of_month')
             if backup_day_of_month is None or not (1 <= backup_day_of_month <= 31):
-                logger.error(f"Dia do mês inválido para backup mensal: {backup_day_of_month}. Job não agendado.")
+                manutencao_logger.error(f"Dia do mês inválido para backup mensal: {backup_day_of_month}. Job não agendado.")
                 return
 
             scheduler.add_job(
@@ -144,17 +144,17 @@ def configure_and_start_scheduler(app_context_callback):
                 coalesce=True,
                 misfire_grace_time=3600,
             )
-            logger.info(f"Job de backup mensal agendado para o dia {backup_day_of_month} às {backup_time_str} (Horário de Fortaleza).")
+            manutencao_logger.info(f"Job de backup mensal agendado para o dia {backup_day_of_month} às {backup_time_str} (Horário de Fortaleza).")
         
         else:
-            logger.error(f"Frequência de backup inválida ou não suportada: {backup_frequency}. Job não agendado.")
+            manutencao_logger.error(f"Frequência de backup inválida ou não suportada: {backup_frequency}. Job não agendado.")
             scheduler.remove_all_jobs()
             return
 
-        logger.info("Scheduler de backup automático configurado com sucesso!")
+        manutencao_logger.info("Scheduler de backup automático configurado com sucesso!")
 
     except Exception as e:
-        logger.critical(f"Falha CRÍTICA ao configurar o scheduler de backup automático: {e}", exc_info=True)
+        manutencao_logger.critical(f"Falha CRÍTICA ao configurar o scheduler de backup automático: {e}", exc_info=True)
         scheduler.remove_all_jobs()
 
 def create_temp_db_backup(target_dir: str) -> str:
@@ -169,7 +169,7 @@ def create_temp_db_backup(target_dir: str) -> str:
     dest_conn = None
 
     try:
-        logger.info(f"Iniciando backup do banco de dados para temporário do sistema: {db_temp_path}")
+        manutencao_logger.info(f"Iniciando backup do banco de dados para temporário do sistema: {db_temp_path}")
         
         conn = sqlite3.connect(DATABASE_PATH, timeout=30) 
         dest_conn = sqlite3.connect(db_temp_path) 
@@ -198,21 +198,21 @@ def create_temp_db_backup(target_dir: str) -> str:
             try:
                 os.remove(db_temp_path)
             except OSError as exc:
-                logger.error(f"Falha ao remover arquivo temporário parcial do DB {db_temp_path}: {exc}")
+                manutencao_logger.error(f"Falha ao remover arquivo temporário parcial do DB {db_temp_path}: {exc}")
         
         raise Exception(f"Falha no backup do banco de dados: {str(e)}")
 
 def add_folder_to_zip(zipf: zipfile.ZipFile, source: str, arcname: str) -> int:
     """Adiciona um diretório ao arquivo ZIP, verificando existência e permissões."""
-    logger.info(f"Verificando diretório para backup: {source}")
+    manutencao_logger.info(f"Verificando diretório para backup: {source}")
     if not os.path.exists(source):
-        logger.error(f"DIRETÓRIO CRÍTICO NÃO ENCONTRADO PARA BACKUP: {source}. Permissões ou caminho incorreto.")
+        manutencao_logger.error(f"DIRETÓRIO CRÍTICO NÃO ENCONTRADO PARA BACKUP: {source}. Permissões ou caminho incorreto.")
         return 0
     if not os.path.isdir(source):
-        logger.error(f"CAMINHO NÃO É UM DIRETÓRIO PARA BACKUP: {source}.")
+        manutencao_logger.error(f"CAMINHO NÃO É UM DIRETÓRIO PARA BACKUP: {source}.")
         return 0
     if not os.access(source, os.R_OK):
-        logger.error(f"SEM PERMISSÃO DE LEITURA PARA DIRETÓRIO DE BACKUP: {source}. Verifique as permissões.")
+        manutencao_logger.error(f"SEM PERMISSÃO DE LEITURA PARA DIRETÓRIO DE BACKUP: {source}. Verifique as permissões.")
         return 0
     
     count = 0
@@ -226,8 +226,8 @@ def add_folder_to_zip(zipf: zipfile.ZipFile, source: str, arcname: str) -> int:
                 zipf.write(file_path, arc_path)
                 count += 1
             except Exception as e:
-                logger.error(f"Erro ao adicionar arquivo '{file_path}' ao ZIP: {str(e)}")
-    logger.info(f"Conteúdo de {source} ({count} arquivos) adicionado ao backup.")
+                manutencao_logger.error(f"Erro ao adicionar arquivo '{file_path}' ao ZIP: {str(e)}")
+    manutencao_logger.info(f"Conteúdo de {source} ({count} arquivos) adicionado ao backup.")
     return count
 
 def perform_scheduled_backup(app_context_callback):
@@ -236,7 +236,7 @@ def perform_scheduled_backup(app_context_callback):
     Executado pelo APScheduler.
     """
     with app_context_callback():
-        logger.info("Iniciando execução do backup automático agendado...")
+        manutencao_logger.info("Iniciando execução do backup automático agendado...")
         user_id = 1
 
         final_zip_path = None
@@ -261,13 +261,13 @@ def perform_scheduled_backup(app_context_callback):
             validate_backup_archive(full_backup_path)
             apply_retention(scheduled_backup_dir)
             write_backup_status(scheduled_backup_dir, status="success_local", source="scheduled", result=result)
-            logger.info(
+            manutencao_logger.info(
                 f"Backup automático '{backup_file_name}' salvo e verificado em "
                 f"'{scheduled_backup_dir}' (SHA-256: {result['sha256']})."
             )
 
             if backup_config.get('cloud_provider') == 'sftp':
-                logger.info("Iniciando upload SFTP do backup automático...")
+                manutencao_logger.info("Iniciando upload SFTP do backup automático...")
                 try:
                     sftp_host = backup_config['sftp_host']
                     sftp_port = backup_config.get('sftp_port', 22)
@@ -290,7 +290,7 @@ def perform_scheduled_backup(app_context_callback):
                                 except FileNotFoundError:
                                     pass
                                 except Exception as stat_err:
-                                    logger.error(f"Erro ao verificar existência de diretório SFTP '{current_path}': {stat_err}")
+                                    manutencao_logger.error(f"Erro ao verificar existência de diretório SFTP '{current_path}': {stat_err}")
                                     raise
 
                                 while current_path and current_path != '/' and current_path != '.':
@@ -303,12 +303,12 @@ def perform_scheduled_backup(app_context_callback):
                                         if not current_path: 
                                             current_path = '/'
                                     except Exception as stat_err:
-                                        logger.error(f"Erro ao verificar existência de diretório SFTP '{current_path}': {stat_err}")
+                                        manutencao_logger.error(f"Erro ao verificar existência de diretório SFTP '{current_path}': {stat_err}")
                                         raise
 
                                 for d in reversed(dirs_to_create):
                                     sftp_client.mkdir(d)
-                                    logger.info(f"Diretório SFTP criado: {d}")
+                                    manutencao_logger.info(f"Diretório SFTP criado: {d}")
                             
                             sftp_mkdir_p(sftp, sftp_remote_path) 
 
@@ -319,14 +319,14 @@ def perform_scheduled_backup(app_context_callback):
                                 raise IOError("O tamanho remoto diverge do backup local.")
                             remote_status = "success_remote"
                             write_backup_status(scheduled_backup_dir, status=remote_status, source="scheduled", result=result)
-                            logger.info(f"Backup '{backup_file_name}' enviado e verificado no SFTP em '{remote_target}'.")
+                            manutencao_logger.info(f"Backup '{backup_file_name}' enviado e verificado no SFTP em '{remote_target}'.")
                             gravar_log("Backup Automático SFTP", None, user_id, "Scheduler", f"Upload SFTP concluído: {backup_file_name}")
 
                 except Exception as sftp_e:
                     remote_status = "partial"
                     remote_error = str(sftp_e)
                     write_backup_status(scheduled_backup_dir, status=remote_status, source="scheduled", result=result, error=remote_error)
-                    logger.error(f"Falha no upload SFTP do backup automático: {sftp_e}", exc_info=True)
+                    manutencao_logger.error(f"Falha no upload SFTP do backup automático: {sftp_e}", exc_info=True)
                     gravar_log("Backup Automático SFTP", None, user_id, "Scheduler", f"Falha no upload SFTP: {sftp_e}")
 
             update_last_backup_time()
@@ -335,14 +335,14 @@ def perform_scheduled_backup(app_context_callback):
                 f"Backup local concluído: {backup_file_name} | status={remote_status} | "
                 f"SHA-256: {result['sha256']}" + (f" | erro remoto: {remote_error}" if remote_error else "")
             )
-            logger.info("Backup automático agendado concluído com sucesso.")
+            manutencao_logger.info("Backup automático agendado concluído com sucesso.")
 
         except Exception as e:
-            logger.critical(f"Erro CRÍTICO durante execução do backup automático: {e}", exc_info=True)
+            manutencao_logger.critical(f"Erro CRÍTICO durante execução do backup automático: {e}", exc_info=True)
             try:
                 write_backup_status(locals().get('scheduled_backup_dir', Config.BACKUP_ROOT_DIR), status="failed", source="scheduled", error=str(e))
             except Exception:
-                logger.warning("Falha ao persistir status de erro do backup agendado.", exc_info=True)
+                manutencao_logger.warning("Falha ao persistir status de erro do backup agendado.", exc_info=True)
             gravar_log("Backup Automático", None, user_id, "Scheduler", f"Falha CRÍTICA: {e}")
         finally:
             if db_temp_path and os.path.exists(db_temp_path):
@@ -351,10 +351,10 @@ def perform_scheduled_backup(app_context_callback):
                 try:
                     renamed_path = f"{temp_file_to_delete}.deleteme_{secrets.token_hex(4)}"
                     os.rename(temp_file_to_delete, renamed_path)
-                    logger.debug(f"Arquivo temporário de DB renomeado para exclusão: {temp_file_to_delete} -> {renamed_path}")
+                    manutencao_logger.debug(f"Arquivo temporário de DB renomeado para exclusão: {temp_file_to_delete} -> {renamed_path}")
                     temp_file_to_delete = renamed_path
                 except OSError as e:
-                    logger.warning(f"Falha ao renomear arquivo temporário de DB: {temp_file_to_delete} - {e}. Tentando deletar o original.")
+                    manutencao_logger.warning(f"Falha ao renomear arquivo temporário de DB: {temp_file_to_delete} - {e}. Tentando deletar o original.")
                     renamed_path = None
                 
                 target_path_for_deletion = renamed_path if renamed_path else db_temp_path
@@ -362,17 +362,17 @@ def perform_scheduled_backup(app_context_callback):
                 for i in range(15): 
                     try:
                         os.remove(target_path_for_deletion)
-                        logger.info(f"Arquivo temporário de DB {target_path_for_deletion} removido com sucesso.")
+                        manutencao_logger.info(f"Arquivo temporário de DB {target_path_for_deletion} removido com sucesso.")
                         break
                     except OSError as e:
                         if i < 14:
-                            logger.warning(f"Falha ao limpar arquivo temporário de DB {target_path_for_deletion}: {e}. Tentando novamente em 1.0s...") 
+                            manutencao_logger.warning(f"Falha ao limpar arquivo temporário de DB {target_path_for_deletion}: {e}. Tentando novamente em 1.0s...")
                             time.sleep(1.0)
                         else:
-                            logger.warning(f"Falha persistente ao limpar arquivo temporário de DB {target_path_for_deletion}: {e}")
+                            manutencao_logger.warning(f"Falha persistente ao limpar arquivo temporário de DB {target_path_for_deletion}: {e}")
                             gravar_log("Backup Automático", None, user_id, "Scheduler", f"Falha na limpeza de temp DB: {target_path_for_deletion}")
                     except Exception as e:
-                        logger.warning(f"Erro inesperado ao limpar arquivo temporário de DB {target_path_for_deletion}: {e}")
+                        manutencao_logger.warning(f"Erro inesperado ao limpar arquivo temporário de DB {target_path_for_deletion}: {e}")
                         gravar_log("Backup Automático", None, user_id, "Scheduler", f"Erro inesperado na limpeza de temp DB: {target_path_for_deletion}, Erro: {e}")
             else:
-                logger.debug("Nenhum arquivo temporário de DB para limpar.")
+                manutencao_logger.debug("Nenhum arquivo temporário de DB para limpar.")

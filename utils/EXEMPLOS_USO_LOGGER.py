@@ -19,8 +19,8 @@
 # --- Opção A: Importar os loggers de domínio diretamente (RECOMENDADO) ---
 from utils.logger import auth_logger, operacional_logger, sistema_logger, manutencao_logger
 
-# --- Opção B: Manter compatibilidade com código antigo ---
-from utils.logger import logger  # grava em logs/operacional/
+# --- Opção B: Compatibilidade explícita para rotinas operacionais legadas ---
+from utils.logger import operacional_logger as logger  # grava em logs/operacional/
 
 
 # ============================================================

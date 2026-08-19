@@ -122,3 +122,14 @@ A unificação deve ocorrer no contrato, não necessariamente em um único arqui
 Não recomendo remover a segregação nem apagar as tabelas específicas. Recomendo **unificar o motor e o contrato de eventos**, preservar `auditoria_admin` e as trilhas de segurança, manter `logs` para operação e migrar os módulos restantes para os loggers de domínio. A primeira aplicação deve ser pequena e segura: migrar scheduler/backup, sistema/banco e reduzir o nível de logs repetitivos. Depois, com testes, pode-se introduzir `event_id` e a nova tela de auditoria.
 
 A auditoria não recomenda alterar a lógica de consulta, filtros, paginação, impressão, PDF, Excel, permissões ou hardening de segurança nesta etapa.
+
+
+## Estado pós-implementação — versão 3.28.44
+
+A refatoração descrita neste documento foi aplicada e validada na release 3.28.44. O sistema passou a usar o contrato estruturado de eventos em `utils/log_events.py`, com `event_id`, `request_id`, domínio, tipo de evento, entidade, severidade, detalhes sanitizados e mascaramento de segredos. Os módulos executáveis foram migrados para os loggers de domínio; a auditoria estática final não encontrou importações do logger genérico legado fora da fachada de compatibilidade.
+
+A tabela `logs` agora mantém os campos estruturados e índices correspondentes. As trilhas `auditoria_admin`, `tentativas_acesso_nao_autorizado` e `login_attempts` preservam sua separação semântica e receberam correlação por identificadores. O **Histórico Operacional** permanece separado da tela **Auditoria e Segurança**, que reúne ações administrativas e bloqueios de segurança somente para perfis autorizados.
+
+A rotação dos arquivos combina limite de tamanho de 25 MB e mudança de dia, com retenção de arquivos configurável. A retenção persistida usa 365 dias para operação e 730 dias para segurança, mantendo o expurgo de segurança desativado por padrão. O harness de estresse continua isolado dos logs reais e a suíte local final cobre sanitização, rotação, schema, persistência, retenção e a rota administrativa.
+
+A validação final desta entrega deve ser repetida no ambiente Windows antes da compilação do instalador, especialmente o build com PyInstaller, o firewall restrito à sub-rede local, o autostart sem navegador e o acesso simultâneo pelos terminais.

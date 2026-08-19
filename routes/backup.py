@@ -23,7 +23,7 @@ from models import (
 )
 from config import Config 
 from data.system_updates import begin_restore_maintenance, end_restore_maintenance
-from utils.logger import logger
+from utils.logger import manutencao_logger as logger
 from utils.backup_service import (
     BACKUP_PREFIX,
     create_backup_archive,

@@ -7,8 +7,8 @@ from flask import Flask, redirect, url_for, request, session
 from jinja2 import Environment
 from config import Config
 from models import init_db, executar_query, set_config, get_config, get_user_by_username
-from utils.logger import logger, setup_all_loggers, sistema_logger, manutencao_logger
-from utils.logger_config import limpar_logs_antigos
+from utils.logger import sistema_logger, setup_all_loggers, manutencao_logger
+from utils.logger_config import limpar_logs_antigos, limpar_logs_persistidos
 from datetime import datetime
 from utils.helpers import formatar_data
 
@@ -169,6 +169,13 @@ def create_app():
         )
 
     init_db()
+    try:
+        limpar_logs_persistidos()
+    except Exception as _persisted_log_clean_err:
+        sistema_logger.warning(
+            f"Falha na retenção persistente inicial de logs: {_persisted_log_clean_err}",
+            extra={'user_id': 'SISTEMA', 'ip': '0.0.0.0', 'domain': 'sistema', 'event_type': 'logs.retention_failed'}
+        )
 
     # Importação e registro das Blueprints.
     from routes.auth import auth_bp
@@ -256,11 +263,11 @@ def create_app():
             logo_url = get_config('empresa_logo_url')
             if not logo_url:
                 set_config('empresa_logo_url', Config.DEFAULT_LOGO_URL)
-                logger.info(f"Configuração de logo padrão definida como: {Config.DEFAULT_LOGO_URL}")
+                sistema_logger.info(f"Configuração de logo padrão definida como: {Config.DEFAULT_LOGO_URL}")
             else:
-                logger.info(f"Configuração de logo existente: {logo_url}")
+                sistema_logger.info(f"Configuração de logo existente: {logo_url}")
         except Exception as e:
-            logger.error(f"Erro ao configurar logo padrão: {e}", exc_info=True)
+            sistema_logger.error(f"Erro ao configurar logo padrão: {e}", exc_info=True)
             
         # Configura e inicia o scheduler com o contexto do aplicativo
         configure_and_start_scheduler(app.app_context)
@@ -277,11 +284,20 @@ def create_app():
                     minute=0,
                     id='job_limpeza_logs_90dias',
                     replace_existing=True,
-                    name='Limpeza automática de logs (90 dias)'
+                    name='Limpeza automática de arquivos de log (90 dias)'
+                )
+                _scheduler.add_job(
+                    limpar_logs_persistidos,
+                    trigger='cron',
+                    hour=3,
+                    minute=10,
+                    id='job_retencao_logs_sqlite',
+                    replace_existing=True,
+                    name='Retenção de logs persistidos'
                 )
                 sistema_logger.info(
-                    "Job de limpeza automática de logs agendado para 03:00 (diário).",
-                    extra={'user_id': 'SISTEMA', 'ip': '0.0.0.0'}
+                    "Jobs de retenção de logs agendados para 03:00 e 03:10 (diário).",
+                    extra={'user_id': 'SISTEMA', 'ip': '0.0.0.0', 'domain': 'sistema', 'event_type': 'logs.retention_scheduled'}
                 )
         except Exception as _sched_err:
             sistema_logger.warning(
@@ -346,11 +362,11 @@ if __name__ == '__main__':
         from utils.db_lock import adquirir_lock_db
         _db_locked = adquirir_lock_db(_Cfg.DATABASE_PATH)
         if _db_locked:
-            logger.info("Lock do banco de dados adquirido — arquivo protegido.")
+            sistema_logger.info("Lock do banco de dados adquirido — arquivo protegido.")
         else:
-            logger.warning("Não foi possível adquirir lock no arquivo DB.")
+            sistema_logger.warning("Não foi possível adquirir lock no arquivo DB.")
     except Exception as _lock_err:
-        logger.error(f"Erro ao adquirir lock do banco: {_lock_err}", exc_info=True)
+        sistema_logger.error(f"Erro ao adquirir lock do banco: {_lock_err}", exc_info=True)
 
     # ── 2. Abrir navegador somente no modo interativo ─────────────────────────
     open_browser = '--no-browser' not in cli_args
@@ -362,7 +378,7 @@ if __name__ == '__main__':
             browser_host = '127.0.0.1' if host in {'0.0.0.0', '::'} else host
             abrir_navegador(url=f"http://{browser_host}:{port}", delay=1.8)
         except Exception as _browser_err:
-            logger.warning(f"Não foi possível abrir navegador automaticamente: {_browser_err}")
+            sistema_logger.warning(f"Não foi possível abrir navegador automaticamente: {_browser_err}")
 
-    logger.info("Iniciando aplicação Flask 'Registro Fácil' com Waitress...")
+    sistema_logger.info("Iniciando aplicação Flask 'Registro Fácil' com Waitress...")
     serve(app, host=host, port=port, threads=8)

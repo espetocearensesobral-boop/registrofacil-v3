@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, session, request
 from models import (executar_query, criar_notificacao, listar_notificacoes_pendentes,
                     marcar_notificacao_lida, marcar_todas_lidas)
 from routes.auth import login_status_required, verificar_csrf_token
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 from utils.notification_contract import success, error, warning, info
 from datetime import datetime
 

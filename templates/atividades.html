@@ -4,6 +4,11 @@
 {% block page_title %}Histórico de Atividades{% endblock %}
 
 {% block page_actions %}
+    {% if has_permission('admin_logs') %}
+    <a href="{{ url_for('atividades.auditoria_seguranca') }}" class="nav-btn nav-btn-secondary">
+        <i class="bi bi-shield-lock me-1"></i> Auditoria e Segurança
+    </a>
+    {% endif %}
     <a href="{{ url_for('auth.dashboard') }}" class="nav-btn nav-btn-secondary">
         <i class="bi bi-house"></i> Dashboard
     </a>
@@ -15,7 +20,7 @@
 <!-- Tabela -->
 <div class="rf-card admin-list-card">
     <div class="rf-card-header">
-        <h6 class="rf-card-title mb-0"><i class="bi bi-activity"></i> Histórico de Atividades</h6>
+        <h6 class="rf-card-title mb-0"><i class="bi bi-activity"></i> Histórico Operacional</h6>
         <span class="rf-badge count">{{ total_registros }}</span>
     </div>
     {% include "_activity_filter_toolbar.html" %}

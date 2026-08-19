@@ -6,7 +6,7 @@ from datetime import datetime
 
 from config import Config
 from data.database import executar_query, get_sqlite_connection
-from utils.logger import logger
+from utils.logger import manutencao_logger as logger
 
 DATABASE_PATH = Config.DATABASE_PATH
 UPLOAD_FOLDER = Config.UPLOAD_PROCESSOS_DIR

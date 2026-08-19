@@ -1,7 +1,7 @@
 """Serviços de notificações e preferências do usuário."""
 
 from data.database import executar_query, get_sqlite_connection
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 
 def criar_notificacao(usuario_id, tipo, titulo, mensagem, processo_id=None, 
                       url=None, prioridade='normal'):

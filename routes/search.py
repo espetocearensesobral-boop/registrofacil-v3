@@ -11,7 +11,7 @@ from models import (
     obter_status_processo_config,
     LOCK_TIMEOUT_MINUTES
 )
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 from utils.helpers import formatar_data, get_contrast_color
 
 search_bp = Blueprint('search', __name__, url_prefix='/api')

@@ -33,7 +33,7 @@ from models import (
     mark_password_reset_token_as_used, 
     get_sqlite_connection # Necessário para a transação atômica
 )
-from utils.logger import logger
+from utils.logger import auth_logger as logger
 from config import Config
 from utils.helpers import get_contrast_color, formatar_data
 from utils.file_uploads import get_image_url_for_display

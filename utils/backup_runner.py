@@ -23,7 +23,7 @@ from utils.backup_service import (
     validate_backup_archive,
     write_backup_status,
 )
-from utils.logger import logger
+from utils.logger import manutencao_logger as logger
 
 
 @contextmanager

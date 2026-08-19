@@ -7,7 +7,7 @@ e com o scheduler.
 from config import Config
 from data.crypto import encrypt, decrypt
 from data.database import executar_query
-from utils.logger import logger
+from utils.logger import sistema_logger as logger
 
 def get_config(key):
     result = executar_query("SELECT valor FROM configuracoes WHERE chave = ?", [key], fetch_one=True)

@@ -1,6 +1,6 @@
 # Operação do Registro Fácil em servidor central
 
-**Versão:** 3.28.43  
+**Versão:** 3.28.44
 **Modelo:** Opção A — aplicação central iniciada no logon  
 **Terminais previstos:** 10 usuários, com possibilidade de crescimento controlado
 
@@ -17,7 +17,7 @@ A máquina central precisa permanecer ligada durante o horário de operação e 
 | Etapa | Procedimento |
 |---|---|
 | Build | Executar `BUILD_WINDOWS.bat` em uma máquina Windows com Python 3.11. O script cria `.venv-build`, instala runtime e dependências de build e gera `dist\RegistroFacil`. |
-| Instalador | Compilar `INSTALADOR_RegistroFacil.iss` com Inno Setup 6. O fallback atual é 3.28.43; o parâmetro `/DMyAppVersion=...` pode ser usado para uma release posterior. |
+| Instalador | Compilar `INSTALADOR_RegistroFacil.iss` com Inno Setup 6. O fallback atual é 3.28.44; o parâmetro `/DMyAppVersion=...` pode ser usado para uma release posterior. |
 | Rede | Permitir TCP 5000 somente no perfil Private e na sub-rede local. Não publicar a porta diretamente na internet. |
 | Dados | O banco, chaves, logs, uploads e backups ficam em `C:\ProgramData\RegistroFacil`. |
 | Primeiro acesso | Abrir `http://IP-DO-SERVIDOR:5000`, entrar com o usuário administrativo e concluir a troca de senha quando solicitada. |

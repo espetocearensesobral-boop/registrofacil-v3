@@ -217,6 +217,11 @@
                             <div class="menu-icon"><i class="bi bi-people-fill"></i></div>
                             <span class="menu-text">Gerenciar Usuários</span>
                         </div>
+                        <div class="menu-item" data-href="{{ url_for('atividades.auditoria_seguranca') }}" data-accesskey="a" onclick="setActive(this)"
+                             data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Auditoria e Segurança (Alt+A)">
+                            <div class="menu-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                            <span class="menu-text">Auditoria e Segurança</span>
+                        </div>
                         {% endif %}
                         <div class="menu-item" data-href="{{ url_for('perfil.index') }}" data-accesskey="m" onclick="setActive(this)"
                              data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Meu Perfil (Alt+M)">
@@ -253,7 +258,7 @@
                 </div>
             </nav>
 
-            <main id="main-content" class="container-fluid rf-shell py-4{% if request.endpoint in ['processos.todos', 'processos.hoje', 'processos.pendentes', 'processos.em_andamento', 'processos.vinculados', 'titulares.index', 'apresentantes.index', 'admin_users.users_list', 'atividades.historico'] %} rf-list-page{% endif %}" tabindex="-1">
+            <main id="main-content" class="container-fluid rf-shell py-4{% if request.endpoint in ['processos.todos', 'processos.hoje', 'processos.pendentes', 'processos.em_andamento', 'processos.vinculados', 'titulares.index', 'apresentantes.index', 'admin_users.users_list', 'atividades.historico', 'atividades.auditoria_seguranca'] %} rf-list-page{% endif %}" tabindex="-1">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         <script>

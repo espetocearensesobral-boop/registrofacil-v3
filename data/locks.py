@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime, timedelta
 
 from data.database import executar_query, get_sqlite_connection
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 
 LOCK_TIMEOUT_MINUTES = 15
 

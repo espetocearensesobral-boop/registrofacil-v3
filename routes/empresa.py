@@ -17,7 +17,7 @@ from models import (
 )
 from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token, admin_required, gerar_csrf_token
 from routes.permissoes import permission_required
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 from config import Config
 from utils.file_uploads import get_image_url_for_display, handle_image_upload, remove_image_file, EMPRESA_UPLOAD_FOLDER
 from utils.helpers import validar_telefone, validar_email

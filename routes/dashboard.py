@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, jsonify, session
 from models import executar_query
 from routes.auth import login_status_required
 from routes.permissoes import permission_required
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 from datetime import datetime, timedelta
 
 dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')

@@ -3,7 +3,7 @@
 from flask import Blueprint, request, jsonify, session, render_template, flash, redirect, url_for
 from models import executar_query, gravar_log
 from routes.auth import login_status_required, admin_required, verificar_csrf_token, get_client_ip, gerar_csrf_token
-from utils.logger import logger
+from utils.logger import auth_logger as logger
 import functools
 
 permissoes_bp = Blueprint('permissoes', __name__, url_prefix='/permissoes')

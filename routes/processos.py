@@ -49,7 +49,7 @@ from routes.auth import login_status_required, get_client_ip, proteger_input, ve
 from routes.permissoes import permission_required
 
 # --- Importações de utils.logger ---
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 
 # --- Importações de utils.helpers ---
 from utils.helpers import (

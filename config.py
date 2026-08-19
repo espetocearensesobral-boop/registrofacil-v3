@@ -22,7 +22,7 @@ else:
 
 
 class Config:
-    VERSION = '3.28.43'
+    VERSION = '3.28.44'
     ENVIRONMENT = os.environ.get('REGISTROFACIL_ENV', 'development').strip().lower()
     IS_PRODUCTION = ENVIRONMENT in {'production', 'prod'}
     INITIAL_ADMIN_PASSWORD = os.environ.get('INITIAL_ADMIN_PASSWORD')
@@ -56,6 +56,12 @@ class Config:
 
     # O caminho do banco de dados usa DATA_DIR (gravável, sem exigir admin)
     DATABASE_PATH = os.path.join(DATA_DIR, 'registrofacil.db')
+
+    # Retenção persistente: operação pode ser expurgada; auditoria de segurança
+    # permanece preservada por padrão até o administrador habilitar expurgo.
+    LOG_DB_RETENTION_DAYS = int(os.environ.get('REGISTROFACIL_LOG_DB_RETENTION_DAYS', '365'))
+    SECURITY_LOG_RETENTION_DAYS = int(os.environ.get('REGISTROFACIL_SECURITY_LOG_RETENTION_DAYS', '730'))
+    PURGE_SECURITY_LOGS = os.environ.get('REGISTROFACIL_PURGE_SECURITY_LOGS', 'false').strip().lower() == 'true'
 
     # Define o tempo de vida da sessão por inatividade
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)

@@ -4,8 +4,10 @@
 
 import os
 import sys
-import logging
 import time
+import logging
+import re
+import uuid
 from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime, timedelta
 
@@ -38,10 +40,52 @@ DOMAIN_DIRS = {
 
 # Retenção de logs: 90 dias
 LOG_RETENTION_DAYS = 90
+LOG_MAX_BYTES = 25 * 1024 * 1024
 
-# Formato padrão: [Timestamp] [Nível] [Módulo] [User_ID] [IP] [Mensagem]
-LOG_FORMAT = '[%(asctime)s] [%(levelname)s] [%(module)s] [%(user_id)s] [%(ip)s] %(message)s'
+# Formato padrão retrocompatível, agora com correlação e classificação estruturada.
+LOG_FORMAT = '[%(asctime)s] [%(levelname)s] [%(domain)s] [%(event_type)s] [%(module)s] [%(event_id)s] [%(request_id)s] [%(user_id)s] [%(ip)s] %(message)s'
 LOG_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+_SECRET_PATTERN = re.compile(r'(?i)(password|senha|token|secret|api[_-]?key|encryption[_-]?key|cookie)\s*([:=])\s*([^\s,;]+)')
+
+
+class SizeAndTimeRotatingFileHandler(TimedRotatingFileHandler):
+    """Rotaciona por meia-noite ou ao atingir o limite de bytes."""
+
+    def __init__(self, *args, max_bytes=LOG_MAX_BYTES, **kwargs):
+        self.max_bytes = max_bytes
+        self._size_rollover = False
+        super().__init__(*args, **kwargs)
+
+    def shouldRollover(self, record):  # noqa: N802 - API herdada do logging
+        if self.max_bytes > 0 and self.stream is not None:
+            try:
+                self.stream.seek(0, 2)
+                if self.stream.tell() + len(self.format(record)) + 1 >= self.max_bytes:
+                    self._size_rollover = True
+                    return 1
+            except OSError:
+                pass
+        self._size_rollover = False
+        return super().shouldRollover(record)
+
+    def doRollover(self):  # noqa: N802 - API herdada do logging
+        if not self._size_rollover:
+            return super().doRollover()
+        if self.stream:
+            self.stream.close()
+            self.stream = None
+        stamp = datetime.now().strftime('%Y-%m-%d.%H%M%S')
+        destination = f'{self.baseFilename}.{stamp}'
+        counter = 1
+        while os.path.exists(destination):
+            destination = f'{self.baseFilename}.{stamp}.{counter}'
+            counter += 1
+        try:
+            os.replace(self.baseFilename, destination)
+        except FileNotFoundError:
+            pass
+        self.stream = self._open()
+        self._size_rollover = False
 
 
 # ---------------------------------------------------------------------------
@@ -56,11 +100,28 @@ class RequestContextFilter(logging.Filter):
     """
 
     def filter(self, record: logging.LogRecord) -> bool:
-        # Só busca do contexto Flask se os campos não foram fornecidos explicitamente
+        # Só busca do contexto Flask se os campos não foram fornecidos explicitamente.
         if not hasattr(record, 'user_id'):
             record.user_id = self._get_user_id()
         if not hasattr(record, 'ip'):
             record.ip = self._get_ip()
+        if not hasattr(record, 'event_id'):
+            record.event_id = uuid.uuid4().hex[:20]
+        if not hasattr(record, 'domain'):
+            logger_name = record.name or ''
+            record.domain = next((domain for domain in DOMAIN_DIRS if f'.{domain}' in logger_name), 'legado')
+        if not hasattr(record, 'event_type'):
+            record.event_type = f'{record.module}.generic'[:120]
+        if not hasattr(record, 'entity_id'):
+            record.entity_id = '-'
+        if not hasattr(record, 'request_id'):
+            record.request_id = '-'
+        if not hasattr(record, 'details'):
+            record.details = '-'
+        # Sanitiza a mensagem e os detalhes antes de qualquer handler gravar.
+        record.msg = _SECRET_PATTERN.sub(lambda match: f'{match.group(1)}{match.group(2)}[REDACTED]', str(record.getMessage()))
+        record.args = ()
+        record.details = _SECRET_PATTERN.sub(lambda match: f'{match.group(1)}{match.group(2)}[REDACTED]', str(record.details))
         return True
 
     @staticmethod
@@ -81,10 +142,11 @@ class RequestContextFilter(logging.Filter):
         try:
             from flask import request, has_request_context
             if has_request_context():
-                # Suporte a proxy reverso
-                forwarded = request.headers.get('X-Forwarded-For')
-                if forwarded:
-                    return forwarded.split(',')[0].strip()
+                # Só confia em X-Forwarded-For quando explicitamente habilitado.
+                if getattr(Config, 'TRUST_PROXY_HEADERS', False):
+                    forwarded = request.headers.get('X-Forwarded-For')
+                    if forwarded:
+                        return forwarded.split(',')[0].strip()
                 return request.remote_addr or '0.0.0.0'
         except Exception:
             pass
@@ -100,13 +162,14 @@ def _create_domain_handler(domain: str, level: int = logging.DEBUG) -> TimedRota
     os.makedirs(domain_dir, exist_ok=True)
 
     log_file = os.path.join(domain_dir, f'{domain}.log')
-    handler = TimedRotatingFileHandler(
+    handler = SizeAndTimeRotatingFileHandler(
         filename=log_file,
         when='midnight',
         interval=1,
-        backupCount=0,      # Sem limite interno; a limpeza é feita pela rotina de 90 dias
+        backupCount=0,
         encoding='utf-8',
-        utc=False
+        utc=False,
+        max_bytes=LOG_MAX_BYTES,
     )
     handler.suffix = '%Y-%m-%d'
     handler.setLevel(level)
@@ -245,9 +308,11 @@ def limpar_logs_antigos(retention_days: int = LOG_RETENTION_DAYS,
             # Processa apenas arquivos .log e logs rotacionados (ex: .log.2024-01-01)
             if not (filename.endswith('.log') or '.log.' in filename):
                 continue
-            # Não remove o arquivo de log ativo (sem data no sufixo)
-            # Os rotacionados têm sufixo tipo "auth.log.2024-01-15"
-            if '.' not in filename.split('.log')[-1].lstrip('.') and not filename.endswith('.log'):
+            # Não remove o arquivo ativo. Qualquer arquivo com .log.<sufixo>
+            # é uma rotação e pode ser avaliado pela data de modificação.
+            if filename.endswith('.log'):
+                continue
+            if '.log.' not in filename:
                 continue
 
             stats['verificados'] += 1
@@ -300,3 +365,47 @@ def _build_legacy_logger() -> logging.Logger:
         ch.addFilter(RequestContextFilter())
         legacy.addHandler(ch)
     return legacy
+
+
+# ---------------------------------------------------------------------------
+# Retenção de logs persistentes no SQLite
+# ---------------------------------------------------------------------------
+def limpar_logs_persistidos(base_dir=None):
+    """Remove somente logs operacionais expirados e reporta a auditoria.
+
+    Auditoria administrativa e tentativas de segurança só são removidas se
+    PURGE_SECURITY_LOGS estiver explicitamente habilitado na configuração.
+    """
+    from data.database import executar_query
+    from config import Config as RuntimeConfig
+
+    stats = {'operacionais': 0, 'login_attempts': 0, 'seguranca': 0, 'erros': 0}
+    try:
+        cutoff = (datetime.now() - timedelta(days=RuntimeConfig.LOG_DB_RETENTION_DAYS)).strftime('%Y-%m-%d %H:%M:%S')
+        stats['operacionais'] = executar_query(
+            "DELETE FROM logs WHERE timestamp < ?", [cutoff]
+        ) or 0
+        stats['login_attempts'] = executar_query(
+            "DELETE FROM login_attempts WHERE tempo < ?", [cutoff]
+        ) or 0
+        if RuntimeConfig.PURGE_SECURITY_LOGS:
+            security_cutoff = (datetime.now() - timedelta(days=RuntimeConfig.SECURITY_LOG_RETENTION_DAYS)).strftime('%Y-%m-%d %H:%M:%S')
+            stats['seguranca'] += executar_query(
+                "DELETE FROM auditoria_admin WHERE created_at < ?", [security_cutoff]
+            ) or 0
+            stats['seguranca'] += executar_query(
+                "DELETE FROM tentativas_acesso_nao_autorizado WHERE created_at < ?", [security_cutoff]
+            ) or 0
+        get_sistema_logger().info(
+            f"Retenção persistente concluída: operacional={stats['operacionais']}, "
+            f"login_attempts={stats['login_attempts']}, seguranca={stats['seguranca']}.",
+            extra={'user_id': 'SISTEMA', 'ip': '0.0.0.0', 'domain': 'sistema', 'event_type': 'logs.retention'},
+        )
+    except Exception as exc:
+        stats['erros'] += 1
+        get_sistema_logger().error(
+            f"Falha na retenção persistente de logs: {exc}",
+            extra={'user_id': 'SISTEMA', 'ip': '0.0.0.0', 'domain': 'sistema', 'event_type': 'logs.retention_failed'},
+            exc_info=True,
+        )
+    return stats

@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from flask import url_for
 
 from config import Config
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 
 # Diretório único de imagem utilizado pela aplicação: logo do estabelecimento.
 EMPRESA_UPLOAD_FOLDER = Config.EMPRESA_UPLOAD_FOLDER

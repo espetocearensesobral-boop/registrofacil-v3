@@ -16,7 +16,7 @@ from weasyprint import HTML
 import os
 from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token
 from routes.permissoes import permission_required
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 from utils.helpers import get_contrast_color, formatar_data
 
 titulares_bp = Blueprint('titulares', __name__, url_prefix='/titulares')

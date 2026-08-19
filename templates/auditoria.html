@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Auditoria e Segurança - Registro Fácil{% endblock %}
+{% block page_title %}Auditoria e Segurança{% endblock %}
+
+{% block page_actions %}
+<a href="{{ url_for('atividades.historico') }}" class="nav-btn nav-btn-secondary">
+    <i class="bi bi-activity me-1"></i> Histórico Operacional
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="rf-card admin-list-card">
+    <div class="rf-card-header d-flex justify-content-between align-items-center gap-3 flex-wrap">
+        <div>
+            <h6 class="rf-card-title mb-1"><i class="bi bi-shield-lock me-2"></i>Auditoria e Segurança</h6>
+            <p class="text-muted small mb-0">Alterações administrativas e tentativas de acesso bloqueadas.</p>
+        </div>
+        <span class="rf-badge count">{{ total_registros }}</span>
+    </div>
+    <form method="get" class="rf-filter-toolbar p-3 border-bottom">
+        <div class="row g-2 align-items-end">
+            <div class="col-12 col-md-5">
+                <label for="filtro-acao" class="form-label small fw-semibold">Ação ou tentativa</label>
+                <input id="filtro-acao" name="acao" class="form-control" value="{{ filtro_acao }}" placeholder="Ex.: alteração_role, acesso_admin">
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="filtro-ip" class="form-label small fw-semibold">IP</label>
+                <input id="filtro-ip" name="ip" class="form-control font-monospace" value="{{ filtro_ip }}" placeholder="192.168.0.10">
+            </div>
+            <div class="col-12 col-md-3 d-flex gap-2">
+                <button type="submit" class="nav-btn nav-btn-primary flex-grow-1"><i class="bi bi-search me-1"></i>Filtrar</button>
+                <a href="{{ url_for('atividades.auditoria_seguranca') }}" class="nav-btn nav-btn-secondary" title="Limpar filtros" aria-label="Limpar filtros"><i class="bi bi-x-lg"></i></a>
+            </div>
+        </div>
+    </form>
+    {% if not eventos %}
+    <div class="empty-state py-5">
+        <i class="bi bi-shield-check"></i>
+        <h4 class="mb-2">Nenhum evento encontrado</h4>
+        <p class="text-muted mb-0">A auditoria não possui registros para os filtros informados.</p>
+    </div>
+    {% else %}
+    <div class="table-responsive">
+        <table class="rf-table table-auditoria">
+            <thead>
+                <tr>
+                    <th>Data/Hora</th>
+                    <th>Origem</th>
+                    <th>Ação</th>
+                    <th>Usuário</th>
+                    <th>Alvo</th>
+                    <th>IP</th>
+                    <th>Evento</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for evento in eventos %}
+                <tr>
+                    <td data-label="Data/Hora" class="text-nowrap">{{ evento.created_at | format_datetime_full }}</td>
+                    <td data-label="Origem">
+                        <span class="rf-badge {% if evento.fonte == 'seguranca' %}rf-badge-danger{% else %}rf-badge-warning{% endif %}">{{ 'Segurança' if evento.fonte == 'seguranca' else 'Administração' }}</span>
+                    </td>
+                    <td data-label="Ação"><strong>{{ evento.acao }}</strong>{% if evento.detalhes %}<div class="small text-muted">{{ evento.detalhes }}</div>{% endif %}</td>
+                    <td data-label="Usuário">{{ evento.usuario_nome or evento.usuario_id or 'Sistema' }}</td>
+                    <td data-label="Alvo">{{ evento.alvo_id or '—' }}</td>
+                    <td data-label="IP" class="font-monospace">{{ evento.ip or '—' }}</td>
+                    <td data-label="Evento" class="font-monospace small">{{ evento.event_id or '—' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if total_paginas > 1 %}
+    <div class="d-flex justify-content-between align-items-center p-3 border-top small">
+        <span>Página {{ pagina_atual }} de {{ total_paginas }}</span>
+        <div class="d-flex gap-2">
+            {% if pagina_atual > 1 %}<a class="nav-btn nav-btn-secondary" href="{{ url_for('atividades.auditoria_seguranca', pagina=pagina_atual - 1, acao=filtro_acao, ip=filtro_ip) }}">Anterior</a>{% endif %}
+            {% if pagina_atual < total_paginas %}<a class="nav-btn nav-btn-secondary" href="{{ url_for('atividades.auditoria_seguranca', pagina=pagina_atual + 1, acao=filtro_acao, ip=filtro_ip) }}">Próxima</a>{% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<style>
+.table-auditoria th { white-space: nowrap; }
+.table-auditoria td { vertical-align: top; }
+</style>
+{% endblock %}

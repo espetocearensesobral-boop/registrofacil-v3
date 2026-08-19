@@ -9,7 +9,7 @@ import sqlite3
 from contextlib import contextmanager
 
 from config import Config
-from utils.logger import logger
+from utils.logger import sistema_logger as logger
 
 DATABASE_PATH = Config.DATABASE_PATH
 

@@ -1,7 +1,7 @@
 """Busca global em processos e cadastros."""
 
 from data.database import executar_query
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 
 def busca_full_text(termo, usuario_id=None, limit=50):
     """

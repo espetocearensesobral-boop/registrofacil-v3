@@ -4,7 +4,7 @@ import re
 import sqlite3
 
 from data.database import executar_query
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 
 def validar_formato_matricula(matricula, processo_id=None):
     """

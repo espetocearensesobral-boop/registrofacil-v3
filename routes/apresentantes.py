@@ -13,7 +13,7 @@ from datetime import datetime
 from weasyprint import HTML
 from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token
 from routes.permissoes import permission_required
-from utils.logger import logger
+from utils.logger import operacional_logger as logger
 
 apresentantes_bp = Blueprint('apresentantes', __name__, url_prefix='/apresentantes')
 
