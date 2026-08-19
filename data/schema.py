@@ -392,11 +392,28 @@ def init_db(criar_indices_performance, init_fts):
             # Antes, get_upload_folder() lia esse campo e podia retornar um caminho
             # inconsistente (ex: static/uploads/processos configurado manualmente).
             # Agora o caminho é sempre determinado por Config.UPLOAD_PROCESSOS_DIR.
+            # Esta limpeza ocorre dentro da transação de init_db. Usar
+            # executar_query() sem connection abriria uma segunda conexão
+            # enquanto o schema ainda está sendo alterado, o que pode gerar
+            # "database is locked" no Windows e em inicializações concorrentes.
             try:
-                executar_query("UPDATE backup_configs SET uploads_path = NULL WHERE uploads_path IS NOT NULL")
-                logger.info("Migração: campo uploads_path limpo da tabela backup_configs.")
-            except Exception:
-                pass
+                cursor.execute(
+                    "UPDATE backup_configs SET uploads_path = NULL "
+                    "WHERE uploads_path IS NOT NULL"
+                )
+                if cursor.rowcount > 0:
+                    logger.info(
+                        "Migração: campo uploads_path obsoleto limpo da tabela backup_configs. "
+                        "Registros afetados: %s.",
+                        cursor.rowcount,
+                    )
+            except sqlite3.Error as e:
+                logger.error(
+                    "Falha ao limpar o campo uploads_path obsoleto durante init_db: %s",
+                    e,
+                    exc_info=True,
+                )
+                raise
             add_column_if_not_exists_sqlite('backup_configs', 'created_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
             add_column_if_not_exists_sqlite('backup_configs', 'updated_at', 'TEXT', default_value="strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
 

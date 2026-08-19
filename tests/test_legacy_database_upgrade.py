@@ -26,3 +26,18 @@ def test_legacy_database_upgrade_preserves_data_and_reaches_current_schema(temp_
     assert "representantes" not in tables
     assert user_version == 14
     assert admin == ("admin", "admin")
+
+
+def test_init_db_clears_legacy_uploads_path_without_lock(temp_database):
+    models.executar_query(
+        "UPDATE backup_configs SET uploads_path = ? WHERE id = (SELECT id FROM backup_configs LIMIT 1)",
+        ["C:/legacy/uploads/processos"],
+    )
+
+    models.init_db()
+
+    config = models.executar_query(
+        "SELECT uploads_path FROM backup_configs LIMIT 1",
+        fetch_one=True,
+    )
+    assert config["uploads_path"] is None
