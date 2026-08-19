@@ -3921,10 +3921,11 @@ html body #panel-services .cfg-row-actions .cfg-ibtn.act-on:active {
 
 /* Configurações: superfície contínua, compacta e sem molduras redundantes. */
 html body #main-content .cfg-settings-shell {
-  width: calc(100% + (2 * var(--rf-layout-gutter))) !important;
-  max-width: none !important;
-  margin: 0 calc(-1 * var(--rf-layout-gutter)) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
   padding: 0 !important;
+  overflow-x: hidden !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -4121,8 +4122,17 @@ html body #main-content .cfg-settings-shell .cfg-about-meta > div {
   border: 0 !important;
   background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface, #FFFFFF)) !important;
 }
-@media (max-width: 600px) {
+@media (max-width: 767.98px) {
   html body #main-content .cfg-settings-shell .cfg-about-overview-body {
+    grid-template-columns: 1fr !important;
+    gap: .65rem !important;
+    text-align: left !important;
+  }
+  html body #main-content .cfg-settings-shell .cfg-about-overview-body .cfg-about-logo {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
+  html body #main-content .cfg-settings-shell .cfg-about-meta {
     grid-template-columns: 1fr !important;
   }
 }
