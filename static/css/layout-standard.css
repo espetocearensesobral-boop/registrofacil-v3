@@ -3921,9 +3921,9 @@ html body #panel-services .cfg-row-actions .cfg-ibtn.act-on:active {
 
 /* Configurações: superfície contínua, compacta e sem molduras redundantes. */
 html body #main-content .cfg-settings-shell {
-  width: 100% !important;
+  width: calc(100% + (2 * var(--rf-layout-gutter))) !important;
   max-width: none !important;
-  margin: 0 !important;
+  margin: 0 calc(-1 * var(--rf-layout-gutter)) !important;
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -3946,8 +3946,8 @@ html body #main-content .cfg-settings-shell .rf-tabs {
   padding: .25rem !important;
   border: 0 !important;
   border-radius: var(--rf-radius-surface, 10px) !important;
-  background: var(--rf-surface-card, #FFFFFF) !important;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--rf-border, #D4DCE5) 55%, transparent) !important;
+  background: var(--rf-surface, #FFFFFF) !important;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 18%, transparent) !important;
 }
 html body #main-content .cfg-settings-shell .rf-tab-btn {
   min-height: 2.25rem !important;
@@ -3960,11 +3960,11 @@ html body #main-content .cfg-settings-shell .rf-tab-btn {
 }
 html body #main-content .cfg-settings-shell .rf-tab-btn:hover,
 html body #main-content .cfg-settings-shell .rf-tab-btn:focus-visible {
-  background: var(--rf-surface-muted, #F6F8FA) !important;
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface, #FFFFFF)) !important;
   color: var(--rf-text-primary, #2A2A2A) !important;
 }
 html body #main-content .cfg-settings-shell .rf-tab-btn.active {
-  background: var(--rf-surface-muted, #F6F8FA) !important;
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--rf-surface, #FFFFFF)) !important;
   color: var(--rf-text-strong, #121212) !important;
   box-shadow: inset 0 -2px 0 var(--rf-accent, #CDA865) !important;
 }
@@ -3978,6 +3978,8 @@ html body #main-content .cfg-settings-shell .cfg-ph-icon {
   height: 2rem !important;
   border-radius: var(--rf-radius-sm, 8px) !important;
   font-size: .9rem !important;
+  background: var(--color-primary) !important;
+  color: var(--color-primary-contrast, #FFFFFF) !important;
 }
 html body #main-content .cfg-settings-shell .cfg-card,
 html body #main-content .cfg-settings-shell .cfg-add-row {
@@ -3994,7 +3996,7 @@ html body #main-content .cfg-settings-shell .cfg-card-header {
   min-height: 2.25rem !important;
   padding: .45rem .75rem !important;
   border: 0 !important;
-  background: var(--rf-surface-muted, #F6F8FA) !important;
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface, #FFFFFF)) !important;
   color: var(--rf-text-secondary, #667085) !important;
 }
 html body #main-content .cfg-settings-shell .cfg-card-body {
@@ -4002,7 +4004,7 @@ html body #main-content .cfg-settings-shell .cfg-card-body {
 }
 html body #main-content .cfg-settings-shell .cfg-add-row {
   margin-bottom: .75rem !important;
-  background: var(--rf-surface-muted, #F6F8FA) !important;
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface, #FFFFFF)) !important;
 }
 html body #main-content .cfg-settings-shell #panel-status .cfg-add-row {
   display: grid !important;
@@ -4029,13 +4031,18 @@ html body #main-content .cfg-settings-shell .cfg-tbl td {
   border-bottom: 0 !important;
 }
 html body #main-content .cfg-settings-shell .cfg-tbl tbody tr:nth-child(even) td {
-  background: color-mix(in srgb, var(--rf-surface-muted, #F6F8FA) 72%, var(--rf-surface-card, #FFFFFF)) !important;
+  background: color-mix(in srgb, var(--color-primary) 2.5%, var(--rf-surface, #FFFFFF)) !important;
 }
 html body #main-content .cfg-settings-shell .cfg-tbl tbody tr:hover td {
-  background: color-mix(in srgb, var(--rf-accent, #CDA865) 7%, var(--rf-surface-card, #FFFFFF)) !important;
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface, #FFFFFF)) !important;
 }
 html body #main-content .cfg-settings-shell .cfg-actions-end {
-  margin-top: .75rem !important;
+  display: flex !important;
+  width: 100% !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: .5rem !important;
+  margin: .75rem 0 0 auto !important;
   padding-top: .75rem !important;
   border-top: 0 !important;
 }
@@ -4044,10 +4051,57 @@ html body #main-content .cfg-settings-shell .cfg-warning-note {
   border-top: 0 !important;
   padding-top: .25rem !important;
 }
+html body #main-content .cfg-settings-shell .cfg-about-overview-card {
+  width: 100% !important;
+  max-width: none !important;
+  margin-bottom: .75rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-overview-body {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  padding: 1rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-overview-body .cfg-about-logo {
+  width: 4.25rem !important;
+  height: 4.25rem !important;
+  margin: 0 !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-overview-copy h4 {
+  color: var(--rf-text-strong, #121212) !important;
+  font-size: 1rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-overview-copy p {
+  max-width: 72rem !important;
+  margin: 0 !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  font-size: .875rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-purpose {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: .4rem !important;
+  margin-top: .55rem !important;
+  padding: .5rem .65rem !important;
+  border: 0 !important;
+  border-radius: var(--rf-radius-sm, 8px) !important;
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface, #FFFFFF)) !important;
+  color: var(--rf-text-muted, #667085) !important;
+  font-size: .8125rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-purpose i {
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  flex: 0 0 auto;
+  margin-top: .1rem;
+}
 html body #main-content .cfg-settings-shell .cfg-about-panel-card {
   width: 100% !important;
   max-width: none !important;
   margin-bottom: 0 !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-panel-card .cfg-card-body {
+  text-align: left !important;
 }
 html body #main-content .cfg-settings-shell .cfg-about-meta {
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -4060,9 +4114,17 @@ html body #main-content .cfg-settings-shell .cfg-about-meta {
   }
 }
 html body #main-content .cfg-settings-shell .cfg-about-meta > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
   padding: .6rem .75rem !important;
   border: 0 !important;
-  background: var(--rf-surface-muted, #F6F8FA) !important;
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface, #FFFFFF)) !important;
+}
+@media (max-width: 600px) {
+  html body #main-content .cfg-settings-shell .cfg-about-overview-body {
+    grid-template-columns: 1fr !important;
+  }
 }
 html body #main-content .cfg-settings-shell .cfg-fld input,
 html body #main-content .cfg-settings-shell .cfg-fld select,
