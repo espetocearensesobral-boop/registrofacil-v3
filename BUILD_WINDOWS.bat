@@ -4,7 +4,7 @@ setlocal EnableExtensions EnableDelayedExpansion
 :: ============================================================================
 :: Registro Fácil — Build Windows
 :: Compila o servidor central em modo onedir usando um ambiente de build isolado.
-:: Requer Windows 10/11 x64 ou x86 e Python 3.11 instalado.
+:: Requer Windows 10/11 x64 ou x86 e Python 3.11 ou 3.12 instalado.
 :: ============================================================================
 
 cd /d "%~dp0"
@@ -19,15 +19,21 @@ set "PY_EXE="
 set "PY_ARGS="
 
 if exist "%VENV_DIR%\Scripts\python.exe" (
-    "%VENV_DIR%\Scripts\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+    "%VENV_DIR%\Scripts\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
     if not errorlevel 1 goto :venv_ready
-    echo [INFO] Ambiente virtual existente nao usa Python 3.11; recriando.
+    echo [INFO] Ambiente virtual existente nao usa Python 3.11/3.12; recriando.
     rmdir /s /q "%VENV_DIR%"
 )
 
-:: 1) Python Launcher: funciona mesmo quando python.exe nao esta no PATH.
+:: 1) Python Launcher: prioriza 3.12 e aceita 3.11 como fallback.
 where py >nul 2>&1
 if not errorlevel 1 (
+    py -3.12 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>&1
+    if not errorlevel 1 (
+        set "PY_EXE=py"
+        set "PY_ARGS=-3.12"
+        goto :python_ready
+    )
     py -3.11 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
     if not errorlevel 1 (
         set "PY_EXE=py"
@@ -37,10 +43,10 @@ if not errorlevel 1 (
 )
 
 :: 2) Interpretadores expostos diretamente no PATH.
-for %%C in (python3.11 python3 python) do (
+for %%C in (python3.12 python3.11 python3 python) do (
     where %%C >nul 2>&1
     if not errorlevel 1 (
-        %%C -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+        %%C -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
         if not errorlevel 1 (
             set "PY_EXE=%%C"
             set "PY_ARGS="
@@ -50,9 +56,9 @@ for %%C in (python3.11 python3 python) do (
 )
 
 :: 3) Instalacoes comuns do Python.org fora do PATH.
-for %%P in ("%LocalAppData%\Programs\Python\Python311\python.exe" "%ProgramFiles%\Python311\python.exe" "%ProgramFiles(x86)%\Python311\python.exe") do (
+for %%P in ("%LocalAppData%\Programs\Python\Python312\python.exe" "%LocalAppData%\Programs\Python\Python311\python.exe" "%ProgramFiles%\Python312\python.exe" "%ProgramFiles%\Python311\python.exe" "%ProgramFiles(x86)%\Python312\python.exe" "%ProgramFiles(x86)%\Python311\python.exe") do (
     if exist "%%~P" (
-        "%%~P" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+        "%%~P" -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
         if not errorlevel 1 (
             set "PY_EXE=%%~P"
             set "PY_ARGS="
@@ -63,9 +69,9 @@ for %%P in ("%LocalAppData%\Programs\Python\Python311\python.exe" "%ProgramFiles
 
 :python_ready
 if not defined PY_EXE (
-    echo [ERRO] Python 3.11 nao encontrado.
-    echo        O script tentou o Launcher ^(py -3.11^), PATH e instalacoes padrao.
-    echo        Verifique com "py -0p" ou instale Python 3.11 x64.
+    echo [ERRO] Python 3.11 ou 3.12 nao encontrado.
+    echo        O script tentou py -3.12, py -3.11, PATH e instalacoes padrao.
+    echo        Verifique com "py -0p" ou instale Python 3.12 x64.
     pause
     exit /b 1
 )
