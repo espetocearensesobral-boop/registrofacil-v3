@@ -172,16 +172,16 @@ def _sincronizar_processos_cadastro(
 
     return sorted(set(alteracoes))
 
-def editar_titular(titular_id, nome, telefone, email, connection=None, usuario_id=None):
-    """Atualiza um titular e sincroniza os processos que armazenam seu nome."""
+def editar_titular(titular_id, nome, telefone, email, connection=None, usuario_id=None, expected_updated_at=None):
+    """Atualiza um titular e sincroniza processos, rejeitando edição obsoleta quando informado."""
     from datetime import datetime
 
     if connection is None:
         with get_sqlite_connection() as conn:
-            return editar_titular(titular_id, nome, telefone, email, connection=conn, usuario_id=usuario_id)
+            return editar_titular(titular_id, nome, telefone, email, connection=conn, usuario_id=usuario_id, expected_updated_at=expected_updated_at)
 
     titular_atual = executar_query(
-        "SELECT nome, telefone, email FROM titulares WHERE id = ?",
+        "SELECT nome, telefone, email, updated_at FROM titulares WHERE id = ?",
         [titular_id],
         fetch_one=True,
         connection=connection,
@@ -192,11 +192,15 @@ def editar_titular(titular_id, nome, telefone, email, connection=None, usuario_i
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     nome_anterior = titular_atual['nome']
 
-    executar_query(
-        "UPDATE titulares SET nome = ?, telefone = ?, email = ?, updated_at = ? WHERE id = ?",
-        [nome, telefone, email, now, titular_id],
-        connection=connection,
-    )
+    update_sql = "UPDATE titulares SET nome = ?, telefone = ?, email = ?, updated_at = ? WHERE id = ?"
+    update_params = [nome, telefone, email, now, titular_id]
+    if expected_updated_at:
+        update_sql += " AND updated_at = ?"
+        update_params.append(expected_updated_at)
+
+    rows = executar_query(update_sql, update_params, connection=connection)
+    if expected_updated_at and rows == 0:
+        raise ValueError("Este titular foi alterado por outro usuário. Recarregue a tela antes de salvar.")
 
     _sincronizar_processos_cadastro(
         cadastro_id=titular_id,
@@ -462,16 +466,16 @@ def apresentante_tem_processos(apresentante_id):
     )
     return result['cnt'] > 0 if result else False
 
-def editar_apresentante(apresentante_id, nome, telefone, email, connection=None, usuario_id=None):
-    """Atualiza um apresentante e sincroniza os processos vinculados pelo nome."""
+def editar_apresentante(apresentante_id, nome, telefone, email, connection=None, usuario_id=None, expected_updated_at=None):
+    """Atualiza um apresentante e sincroniza processos, rejeitando edição obsoleta quando informado."""
     from datetime import datetime
 
     if connection is None:
         with get_sqlite_connection() as conn:
-            return editar_apresentante(apresentante_id, nome, telefone, email, connection=conn, usuario_id=usuario_id)
+            return editar_apresentante(apresentante_id, nome, telefone, email, connection=conn, usuario_id=usuario_id, expected_updated_at=expected_updated_at)
 
     apresentante_atual = executar_query(
-        "SELECT nome, telefone, email FROM apresentantes WHERE id = ?",
+        "SELECT nome, telefone, email, updated_at FROM apresentantes WHERE id = ?",
         [apresentante_id],
         fetch_one=True,
         connection=connection,
@@ -482,11 +486,16 @@ def editar_apresentante(apresentante_id, nome, telefone, email, connection=None,
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     nome_anterior = apresentante_atual['nome']
 
-    executar_query(
-        "UPDATE apresentantes SET nome = ?, telefone = ?, email = ?, updated_at = ? WHERE id = ?",
-        [nome, telefone, email, now, apresentante_id],
-        connection=connection,
-    )
+    update_sql = "UPDATE apresentantes SET nome = ?, telefone = ?, email = ?, updated_at = ? WHERE id = ?"
+    update_params = [nome, telefone, email, now, apresentante_id]
+    if expected_updated_at:
+        update_sql += " AND updated_at = ?"
+        update_params.append(expected_updated_at)
+
+    rows = executar_query(update_sql, update_params, connection=connection)
+    if expected_updated_at and rows == 0:
+        raise ValueError("Este apresentante foi alterado por outro usuário. Recarregue a tela antes de salvar.")
+
     _sincronizar_processos_cadastro(
         cadastro_id=apresentante_id,
         nome_anterior=nome_anterior,

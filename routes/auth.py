@@ -12,7 +12,7 @@ import pytz
 
 from models import (
     executar_query, gravar_log, verificar_tentativas_login,
-    registrar_tentativa_login, get_user_by_username, create_user,
+    registrar_tentativa_login,     get_user_by_username, get_user_by_id, create_user,
     set_config,
     get_today_processes_count,
     get_prenotados_processes_count,
@@ -59,43 +59,86 @@ def verificar_csrf_token(token):
 def is_logged_in_status():
     return session.get('logado', False)
 
+
+def _invalidate_current_session(reason=None):
+    if reason:
+        logger.warning(reason)
+    session.clear()
+
+
+def _validate_active_session():
+    """Valida a conta e a versão de sessão diretamente no banco."""
+    if not is_logged_in_status():
+        return False
+
+    user_id = session.get('usuario_id')
+    user_data = get_user_by_id(user_id) if user_id else None
+    if not user_data:
+        _invalidate_current_session(f"Sessão sem usuário válido. User ID: {user_id}")
+        return False
+
+    if user_data.get('ativo') == 0:
+        _invalidate_current_session(f"Sessão invalidada para usuário {user_id}: conta inativa no DB.")
+        return False
+
+    session_epoch = session.get('session_epoch')
+    db_epoch = user_data.get('session_epoch')
+    if session_epoch is not None and db_epoch is not None:
+        try:
+            if int(session_epoch) != int(db_epoch):
+                _invalidate_current_session(
+                    f"Sessão invalidada para usuário {user_id}: epoch de sessão desatualizado."
+                )
+                return False
+        except (TypeError, ValueError):
+            _invalidate_current_session(f"Sessão inválida para usuário {user_id}: epoch malformado.")
+            return False
+    else:
+        # Sessões antigas não carregam epoch. Se o banco já foi incrementado,
+        # elas devem ser revogadas, pois não é possível provar sua validade.
+        if session_epoch is None and db_epoch is not None:
+            try:
+                if int(db_epoch) > 0:
+                    _invalidate_current_session(
+                        f"Sessão legada invalidada para usuário {user_id}: epoch ausente."
+                    )
+                    return False
+            except (TypeError, ValueError):
+                _invalidate_current_session(f"Sessão inválida para usuário {user_id}: epoch malformado.")
+                return False
+
+        # Compatibilidade com sessões criadas antes da migração para session_epoch.
+        session_start_time_str = session.get('session_start_time')
+        invalidate_at = user_data.get('session_invalidate_at')
+        if session_start_time_str and invalidate_at:
+            try:
+                session_invalidate_dt = datetime.strptime(invalidate_at, '%Y-%m-%d %H:%M:%S')
+                session_start_dt = datetime.strptime(session_start_time_str, '%Y-%m-%d %H:%M:%S')
+                if session_start_dt < session_invalidate_dt:
+                    _invalidate_current_session(
+                        f"Sessão legada invalidada para usuário {user_id}: timestamp mais recente."
+                    )
+                    return False
+            except (ValueError, TypeError):
+                logger.warning(
+                    f"Erro ao parsear data da sessão legada para o usuário {user_id}."
+                )
+
+    return True
+
+
 def login_status_required(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        if not is_logged_in_status():
+        if not _validate_active_session():
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return jsonify(success=False, message="Sessão expirada. Por favor, faça login novamente.", redirect=url_for('auth.login'), type='danger'), 401
-            else:
-                flash("Você precisa estar logado para acessar esta página.", 'error')
-                logger.warning(f"Acesso não autorizado. IP: {get_client_ip()}")
-                return redirect(url_for('auth.login'))
-        
-        user_id = session.get('usuario_id')
-        session_start_time_str = session.get('session_start_time')
-
-        if user_id and session_start_time_str:
-            user_data_from_db = get_user_by_username(session.get('usuario_username'))
-            
-            if user_data_from_db and user_data_from_db['ativo'] == 0:
-                session.clear()
-                flash("Sua conta foi inativada. Por favor, entre em contato com o administrador.", 'error')
-                logger.warning(f"Sessão invalidada para usuário {user_id}: conta inativa no DB.")
-                return redirect(url_for('auth.login'))
-
-            if user_data_from_db and user_data_from_db['session_invalidate_at']:
-                try:
-                    session_invalidate_dt = datetime.strptime(user_data_from_db['session_invalidate_at'], '%Y-%m-%d %H:%M:%S')
-                    session_start_dt = datetime.strptime(session_start_time_str, '%Y-%m-%d %H:%M:%S')
-
-                    if session_start_dt < session_invalidate_dt:
-                        session.clear()
-                        flash("Sua conta foi acessada em um novo local. Esta sessão foi encerrada por segurança.", 'warning')
-                        logger.warning(f"Sessão invalidada para usuário {user_id}: timestamp de invalidação mais recente.")
-                        return redirect(url_for('auth.login'))
-                except (ValueError, TypeError):
-                    logger.warning(f"Erro ao parsear data da sessão para o usuário {user_id}. A sessão continuará, mas verifique os formatos.")
+            flash("Você precisa estar logado para acessar esta página.", 'error')
+            logger.warning(f"Acesso não autorizado. IP: {get_client_ip()}")
+            return redirect(url_for('auth.login'))
 
         # Força troca de senha se sinalizado - redireciona para perfil exceto se já estiver lá
+
         if session.get('force_password_change'):
             from flask import request as _req
             # Permite acesso ao perfil e ao logout; bloqueia todo o resto
@@ -111,21 +154,28 @@ def login_status_required(f):
 def admin_required(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        if not is_logged_in_status():
+        if not _validate_active_session():
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return jsonify(success=False, message="Sessão expirada. Por favor, faça login novamente.", redirect=url_for('auth.login'), type='danger'), 401
-            else:
-                flash("Você precisa estar logado para acessar esta página.", 'error')
-                logger.warning(f"Tentativa de acesso de admin sem estar logado. IP: {get_client_ip()}")
-                return redirect(url_for('auth.login'))
-        
-        if session.get('usuario_role') not in ['admin', 'suporte']:
+            flash("Você precisa estar logado para acessar esta página.", 'error')
+            logger.warning(f"Tentativa de acesso administrativo sem sessão válida. IP: {get_client_ip()}")
+            return redirect(url_for('auth.login'))
+
+        user = get_user_by_id(session.get('usuario_id'))
+        session_role = session.get('usuario_role')
+        if (
+            not user
+            or user.get('role') not in ['admin', 'suporte']
+            or session_role != user.get('role')
+        ):
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return jsonify(success=False, message="Acesso restrito a administradores.", type='danger'), 403
-            else:
-                flash("Acesso restrito a administradores.", 'error')
-                logger.warning(f"Acesso de administrador negado para Usuário ID: {session.get('usuario_id')}, Role: {session.get('usuario_role')}, IP: {get_client_ip()}")
-                return redirect(url_for('auth.dashboard'))
+            flash("Acesso restrito a administradores.", 'error')
+            logger.warning(
+                f"Acesso de administrador negado para Usuário ID: {session.get('usuario_id')}, "
+                f"Role no DB: {user.get('role') if user else None}, IP: {get_client_ip()}"
+            )
+            return redirect(url_for('auth.dashboard'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -154,6 +204,31 @@ def get_client_ip():
     if Config.TRUST_PROXY_HEADERS and request.headers.get('X-Forwarded-For'):
         return request.headers.get('X-Forwarded-For').split(',')[0].strip()
     return request.remote_addr
+
+
+def validate_user_role(role):
+    """Aceita somente roles reconhecidas pelo modelo de autorização."""
+    valid_roles = {'admin', 'suporte', 'user'}
+    if role not in valid_roles:
+        raise ValueError('A função informada é inválida.')
+    return role
+
+
+def ensure_admin_safety(user_data, target_role, target_active, current_user_id=None):
+    """Impede auto-bloqueio e remoção do último administrador ativo."""
+    if user_data['id'] == current_user_id and (
+        target_role != user_data['role'] or not target_active
+    ):
+        raise ValueError('Você não pode remover ou reduzir os próprios privilégios nesta tela.')
+
+    if user_data['role'] == 'admin' and (target_role != 'admin' or not target_active):
+        active_admins = executar_query(
+            "SELECT COUNT(*) AS total FROM usuarios WHERE role = 'admin' AND ativo = 1",
+            fetch_one=True
+        )
+        if (active_admins or {}).get('total', 0) <= 1:
+            raise ValueError('O sistema precisa manter pelo menos um administrador ativo.')
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -227,7 +302,7 @@ def login():
                                        usuario=usuario_input, logo_url=logo_url_for_template)
 
             if user['ativo'] == 0:
-                flash("Sua conta está inativa. Entre em contato com o administrador.", 'error')
+                flash("Usuário ou senha inválidos. Verifique suas credenciais.", 'error')
                 action_log = f"Falha de login: Conta inativa para usuário '{usuario_input}'"
                 logger.warning(action_log)
                 gravar_log(action_log, None, user['id'], ip) 
@@ -247,18 +322,24 @@ def login():
             # Define o timestamp atual para invalidar sessões antigas e marcar o início desta.
             agora_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             executar_query(
-                "UPDATE usuarios SET session_invalidate_at = ? WHERE id = ?",
+                "UPDATE usuarios SET session_epoch = COALESCE(session_epoch, 0) + 1, "
+                "session_invalidate_at = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') WHERE id = ?",
                 [agora_str, user['id']]
             )
+            novo_session_epoch = int(user.get('session_epoch') or 0) + 1
             # --- FIM DA ATUALIZAÇÃO ---
 
+            # Rotaciona o conteúdo da sessão após autenticação para evitar session fixation.
+            session.clear()
+            session.permanent = True
             session['logado'] = True
             session['usuario_id'] = user['id']
             session['usuario_nome'] = user['nome']
             session['usuario_email'] = user['email']
             session['usuario_username'] = user['usuario']
             session['usuario_role'] = user['role']
-            session['session_start_time'] = agora_str # Usa o mesmo timestamp do ponto de invalidação
+            session['session_epoch'] = novo_session_epoch
+            session['session_start_time'] = agora_str # Compatibilidade e diagnóstico
             
             # Set empresa logo in session so sidebar and all pages use it
             try:
@@ -367,7 +448,6 @@ def logout():
             logger.error(f"Erro ao gravar log ou liberar locks durante o logout: {e}", exc_info=True)
             
         session.clear()
-        session.pop('custom_greeting', None) 
         flash("Logout realizado com sucesso!", 'success')
         return redirect(url_for('auth.login'))
     else:
@@ -479,7 +559,7 @@ def recuperar_senha():
                 gravar_log(f"Link de recuperação de senha enviado para {user['email']}", None, user['id'], get_client_ip()) 
                 logger.info(f"Link de recuperação de senha enviado para {user['email']}. IP: {get_client_ip()}")
             else:
-                flash(f"Ocorreu um problema ao enviar o e-mail de recuperação. Por favor, verifique as configurações de e-mail e tente novamente. Detalhes: {email_msg}", 'error')
+                flash("Não foi possível enviar o e-mail de recuperação no momento. Tente novamente mais tarde.", 'error')
                 logger.error(f"Falha ao enviar e-mail de recuperação para {user['email']}: {email_msg}. IP: {get_client_ip()}")
 
         except Exception as e:
@@ -578,7 +658,7 @@ def reset_password(short_id):
             # Atualizar senha e marcar token como usado em uma transação atômica
             with get_sqlite_connection() as conn:
                 # 1. Atualizar senha (usa 'senha' como o nome da coluna no DB)
-                conn.execute("UPDATE usuarios SET senha = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') WHERE id = ?", (new_password_hash, user_id))
+                conn.execute("UPDATE usuarios SET senha = ?, must_change_password = 0, session_epoch = COALESCE(session_epoch, 0) + 1, session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') WHERE id = ?", (new_password_hash, user_id))
                 
                 # 2. Marcar token como usado
                 mark_password_reset_token_as_used(token_data['token_id'], connection=conn)
@@ -600,7 +680,7 @@ def reset_password(short_id):
 
         except Exception as e:
             # Erro genérico
-            flash(f"Ocorreu um erro inesperado ao redefinir a senha. Tente novamente: {e}", 'error')
+            flash("Ocorreu um erro inesperado ao redefinir a senha. Tente novamente mais tarde.", 'error')
             logger.exception(f"Erro inesperado ao redefinir senha (short_id: {short_id[:6]}..., User ID: {user_id}): {e}. IP: {get_client_ip()}")
             return render_template('reset_password.html', token=short_id, logo_url=logo_url_for_template, csrf_token=gerar_csrf_token())
 

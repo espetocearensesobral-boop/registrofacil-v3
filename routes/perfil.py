@@ -5,12 +5,15 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import re
 
 from models import (
-    executar_query, gravar_log, get_user_by_username,
+    executar_query, gravar_log, get_user_by_username, get_user_by_id,
     get_sqlite_connection, gravar_auditoria_admin, 
     gravar_tentativa_nao_autorizada, criar_notificacao_usuario,
     mascarar_email
 )
-from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token, gerar_csrf_token
+from routes.auth import (
+    login_status_required, get_client_ip, proteger_input, verificar_csrf_token,
+    gerar_csrf_token, validate_user_role, ensure_admin_safety
+)
 from utils.logger import logger
 from utils.notification_contract import success, error, warning
 
@@ -150,7 +153,7 @@ def index(user_id=None):
                     params = [nome, email]
                     
                     if nova_senha and senha_atual:
-                        sql += ", senha = ?"
+                        sql += ", senha = ?, must_change_password = 0, session_epoch = COALESCE(session_epoch, 0) + 1, session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
                         params.append(generate_password_hash(nova_senha))
                     
                     sql += " WHERE id = ?"
@@ -169,10 +172,9 @@ def index(user_id=None):
                     mensagem = 'Perfil e senha atualizados com sucesso!'
                     # Limpa flag de troca obrigatória e atualiza o BD
                     session.pop('force_password_change', None)
-                    executar_query(
-                        "UPDATE usuarios SET must_change_password = 0 WHERE id = ?",
-                        [target_user_id]
-                    )
+                    updated_session_user = get_user_by_id(target_user_id)
+                    if updated_session_user:
+                        session['session_epoch'] = updated_session_user.get('session_epoch', session.get('session_epoch', 0))
                 
                 return jsonify(
                     success=True,
@@ -200,6 +202,7 @@ def index(user_id=None):
             justificativa = request.form.get('justificativa', '').strip()
             
             try:
+                role = validate_user_role(role)
                 # Validações
                 if not senha_admin:
                     raise ValueError('Digite sua senha para confirmar as alterações.')
@@ -228,6 +231,13 @@ def index(user_id=None):
                 
                 if not mudancas:
                     return jsonify(success=False, message='Nenhuma alteração detectada.', type='warning'), 400
+
+                ensure_admin_safety(
+                    user_data,
+                    target_role=role,
+                    target_active=bool(ativo),
+                    current_user_id=current_user_id,
+                )
                 
                 # Aplicar mudanças
                 with get_sqlite_connection() as conn:
@@ -243,8 +253,10 @@ def index(user_id=None):
                     if user_data['ativo'] != (1 if ativo else 0):
                         sql_updates.append("ativo = ?")
                         params.append(1 if ativo else 0)
-                        if not ativo:
-                            sql_updates.append("session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+
+                    if user_data['role'] != role or user_data['ativo'] != (1 if ativo else 0):
+                        sql_updates.append("session_epoch = COALESCE(session_epoch, 0) + 1")
+                        sql_updates.append("session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
                     
                     if sql_updates:
                         params.append(target_user_id)

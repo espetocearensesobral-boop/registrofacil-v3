@@ -2,6 +2,7 @@
 
 from flask import Blueprint, request, jsonify, session, url_for
 from routes.auth import is_logged_in_status, login_status_required, get_client_ip, proteger_input, verificar_csrf_token
+from routes.permissoes import permission_required
 
 from models import (
     executar_query,
@@ -14,9 +15,29 @@ from utils.logger import logger
 from utils.helpers import formatar_data, get_contrast_color
 
 search_bp = Blueprint('search', __name__, url_prefix='/api')
+ALLOWED_LOCK_TABLES = frozenset({'processos', 'titulares', 'apresentantes'})
+
+
+def _json_payload():
+    return request.get_json(silent=True) or {}
+
+
+def _csrf_token_from_request(data=None):
+    data = data or {}
+    return (
+        request.headers.get('X-CSRFToken')
+        or request.headers.get('X-CSRF-Token')
+        or data.get('csrf_token')
+        or request.form.get('csrf_token')
+    )
+
+
+def _validate_lock_table(table_name):
+    return table_name in ALLOWED_LOCK_TABLES
 
 @search_bp.route('/global_search', methods=['GET'])
 @login_status_required
+@permission_required('processos_visualizar')
 def global_search():
     query = proteger_input(request.args.get('q', ''))
     usuario_id = session.get('usuario_id')
@@ -97,6 +118,7 @@ def global_search():
 
 @search_bp.route('/smart_search', methods=['GET'])
 @login_status_required
+@permission_required('processos_visualizar')
 def smart_search():
     """Busca completa de processos para o modal Buscar."""
     query = proteger_input(request.args.get('q', '').strip())
@@ -124,12 +146,13 @@ def smart_search():
 @search_bp.route('/acquire_lock', methods=['POST'])
 @login_status_required
 def api_acquire_lock():
-    if not verificar_csrf_token(request.json.get('csrf_token')):
+    data = _json_payload()
+    if not verificar_csrf_token(_csrf_token_from_request(data)):
         logger.error(f"Token CSRF inválido em api_acquire_lock. IP: {get_client_ip()}")
         return jsonify(success=False, message="Token de segurança inválido.", type='danger'), 403
 
-    table_name = request.json.get('table_name')
-    record_id_raw = request.json.get('record_id')
+    table_name = data.get('table_name')
+    record_id_raw = data.get('record_id')
     ip = get_client_ip()
 
     try:
@@ -143,6 +166,8 @@ def api_acquire_lock():
 
     if not all([table_name, user_id]):
         return jsonify(success=False, message="Dados incompletos para adquirir bloqueio.", type='warning'), 400
+    if not _validate_lock_table(table_name):
+        return jsonify(success=False, message="Tabela não permitida para bloqueio.", type='danger'), 400
     
     from models import acquire_lock 
 
@@ -158,12 +183,13 @@ def api_acquire_lock():
 @search_bp.route('/renew_lock', methods=['POST'])
 @login_status_required
 def api_renew_lock():
-    if not verificar_csrf_token(request.json.get('csrf_token')):
+    data = _json_payload()
+    if not verificar_csrf_token(_csrf_token_from_request(data)):
         logger.error(f"Token CSRF inválido em api_renew_lock. IP: {get_client_ip()}")
         return jsonify(success=False, message="Token de segurança inválido.", type='danger'), 403
 
-    table_name = request.json.get('table_name')
-    record_id_raw = request.json.get('record_id')
+    table_name = data.get('table_name')
+    record_id_raw = data.get('record_id')
     ip = get_client_ip()
     
     try:
@@ -177,6 +203,8 @@ def api_renew_lock():
 
     if not all([table_name, user_id]):
         return jsonify(success=False, message="Dados incompletos para renovar bloqueio.", type='warning'), 400
+    if not _validate_lock_table(table_name):
+        return jsonify(success=False, message="Tabela não permitida para bloqueio.", type='danger'), 400
 
     from models import renew_lock
     result = renew_lock(table_name, record_id, user_id, LOCK_TIMEOUT_MINUTES)
@@ -215,6 +243,8 @@ def api_release_lock():
 
     if not all([table_name, record_id]):
         return jsonify(success=False, message="Dados incompletos para liberar bloqueio.", type='warning'), 400
+    if not _validate_lock_table(table_name):
+        return jsonify(success=False, message="Tabela não permitida para bloqueio.", type='danger'), 400
 
     from models import release_lock
     result = release_lock(table_name, record_id, user_id)

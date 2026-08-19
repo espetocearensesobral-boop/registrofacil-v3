@@ -101,6 +101,17 @@
                                         <i class="bi bi-shield-check me-1"></i> Administrador
                                     </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           name="role"
+                                           id="role_suporte"
+                                           value="suporte"
+                                           {% if user_data.role == 'suporte' %}checked{% endif %}>
+                                    <label class="form-check-label" for="role_suporte">
+                                        <i class="bi bi-headset me-1"></i> Suporte
+                                    </label>
+                                </div>
                             </div>
                             <small class="text-muted">
                                 Administradores têm acesso completo ao sistema.

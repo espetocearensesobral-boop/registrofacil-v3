@@ -130,13 +130,8 @@ def create_app():
         
         def check_permission(permission_name):
             user_id = session.get('usuario_id')
-            user_role = session.get('usuario_role')
-            
-            # Admins sempre têm acesso
-            if user_role in ['admin', 'suporte']:
-                return True
-            
-            # Verifica permissão
+            # O helper consulta a role persistida; não confia em role armazenada
+            # na sessão, que pode ter ficado obsoleta após uma alteração admin.
             return has_permission(user_id, permission_name) if user_id else False
         
         return dict(has_permission=check_permission)

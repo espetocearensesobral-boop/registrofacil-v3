@@ -11,7 +11,7 @@ from io import BytesIO
 from flask import Response
 from datetime import datetime
 from weasyprint import HTML
-from routes.auth import login_status_required, get_client_ip, proteger_input
+from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token
 from routes.permissoes import permission_required
 from utils.logger import logger
 
@@ -61,6 +61,12 @@ def editar(apresentante_id):
         return redirect(url_for('apresentantes.index'))
 
     if request.method == 'POST':
+        if not verificar_csrf_token(request.form.get('csrf_token')):
+            flash("Token de segurança inválido. Por favor, recarregue o formulário.", "danger")
+            logger.warning(f"CSRF inválido ao editar apresentante {apresentante_id}. Usuário ID: {session.get('usuario_id')}")
+            return render_template('apresentantes/editar.html', apresentante=apresentante)
+
+        expected_updated_at = request.form.get('updated_at', '').strip() or None
         nome = proteger_input(request.form.get('nome', '').strip().upper())
         telefone = proteger_input(request.form.get('telefone', '').strip())
         email = proteger_input(request.form.get('email', '').strip().lower())
@@ -87,6 +93,7 @@ def editar(apresentante_id):
                 telefone if telefone else None,
                 email if email else None,
                 usuario_id=session.get('usuario_id'),
+                expected_updated_at=expected_updated_at,
             )
             gravar_log("Editou apresentante", None, session.get('usuario_id'), get_client_ip(), f"Apresentante ID {apresentante_id}: {nome}")
             flash("Apresentante atualizado com sucesso!", "success")
@@ -151,6 +158,11 @@ def visualizar(apresentante_id):
 @permission_required('apresentantes_criar')
 def novo():
     if request.method == 'POST':
+        if not verificar_csrf_token(request.form.get('csrf_token')):
+            flash("Token de segurança inválido. Por favor, recarregue o formulário.", "danger")
+            logger.warning(f"CSRF inválido ao cadastrar apresentante. Usuário ID: {session.get('usuario_id')}")
+            return render_template('apresentantes/novo.html')
+
         nome = proteger_input(request.form.get('nome', '').strip().upper())
         telefone = proteger_input(request.form.get('telefone', '').strip())
         email = proteger_input(request.form.get('email', '').strip().lower())

@@ -33,6 +33,7 @@
 <div class="form-card rf-form-card rf-wide">
     <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.editar', processo_id=processo_id) }}" data-rf-submit-state data-submit-label="Salvar Alterações">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="updated_at" value="{{ dados_form.updated_at or processo.updated_at or '' }}">
         {# Campo oculto para o ID do processo, usado no JavaScript para o controle de lock #}
         <input type="hidden" name="id" value="{{ processo_id }}">
 

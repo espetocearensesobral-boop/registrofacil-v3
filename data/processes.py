@@ -87,7 +87,7 @@ def get_processo_by_id(processo_id):
     """
     return executar_query(query, [processo_id], fetch_one=True)
 
-def update_processo(processo_id, titular, titular_telefone, titular_email, matricula, tipo_id, data_entrada, status_id, prazo_final, apresentante, apresentante_telefone, apresentante_email, responsavel_id, envolvido_notas, observacoes, data_conclusao, possui_matricula=0, connection=None, titular_id=None, apresentante_id=None):
+def update_processo(processo_id, titular, titular_telefone, titular_email, matricula, tipo_id, data_entrada, status_id, prazo_final, apresentante, apresentante_telefone, apresentante_email, responsavel_id, envolvido_notas, observacoes, data_conclusao, possui_matricula=0, connection=None, titular_id=None, apresentante_id=None, expected_updated_at=None):
     try:
         old_processo_data = get_processo_by_id(processo_id)
         if not old_processo_data:
@@ -113,6 +113,9 @@ def update_processo(processo_id, titular, titular_telefone, titular_email, matri
             responsavel_id, envolvido_notas, observacoes, formatted_data_conclusao,
             processo_id
         ]
+        if expected_updated_at:
+            query = query.replace("WHERE id = ?", "WHERE id = ? AND updated_at = ?")
+            params.append(expected_updated_at)
 
         cursor = connection.cursor()
 
@@ -166,6 +169,8 @@ def update_processo(processo_id, titular, titular_telefone, titular_email, matri
             else:
                 raise
         rows_affected = cursor.rowcount
+        if expected_updated_at and not rows_affected:
+            raise ValueError("Este processo foi alterado por outro usuário. Recarregue a tela antes de salvar.")
 
         if rows_affected:
             current_data = {

@@ -16,6 +16,7 @@ from utils.logger import logger, security_logger
 
 TENTATIVAS_MAX = Config.TENTATIVAS_MAX
 BLOQUEIO_TEMPO = Config.BLOQUEIO_TEMPO
+VALID_USER_ROLES = frozenset({'admin', 'suporte', 'user'})
 
 def verificar_tentativas_login(ip):
     tempo_limite = datetime.now() - timedelta(seconds=BLOQUEIO_TEMPO)
@@ -36,28 +37,67 @@ def registrar_tentativa_login(ip, sucesso):
         [ip, 1 if sucesso else 0]
     )
 
+def _select_user_query(where_clause):
+    return (
+        "SELECT id, nome, email, usuario, senha, ativo, role, "
+        "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at, "
+        "session_epoch, must_change_password FROM usuarios " + where_clause
+    )
+
+
 def get_user_by_username(username):
-    # Solução Completa (Recomendada) para lidar com a coluna session_invalidate_at
     try:
         return executar_query(
-            "SELECT id, nome, email, usuario, senha, ativo, role, "
-            "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at, "
-            "must_change_password FROM usuarios WHERE usuario = ?",
+            _select_user_query("WHERE usuario = ?"),
             [username],
             fetch_one=True
         )
     except sqlite3.OperationalError as e:
-        if "no such column: session_invalidate_at" in str(e):
-            # Se a coluna não existe, retorna sem ela e loga um aviso
-            logger.warning(f"Coluna 'session_invalidate_at' não encontrada durante a inicialização/migração. Selecionando usuário sem ela. Erro: {e}")
+        if "no such column: session_epoch" in str(e) or "no such column: session_invalidate_at" in str(e):
+            logger.warning("Coluna de sessão ausente durante migração; usando consulta compatível.")
             return executar_query(
                 "SELECT id, nome, email, usuario, senha, ativo, role, "
-                "created_at, updated_at, deleted_at, last_login_at, must_change_password "
-                "FROM usuarios WHERE usuario = ?",
+                "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at, "
+                "must_change_password FROM usuarios WHERE usuario = ?",
                 [username],
                 fetch_one=True
             )
-        raise # Re-lança outros erros de OperationalError
+        raise
+
+
+def get_user_by_id(user_id):
+    """Busca um usuário pelo ID com campos necessários ao guard de sessão."""
+    try:
+        return executar_query(_select_user_query("WHERE id = ?"), [user_id], fetch_one=True)
+    except sqlite3.OperationalError as e:
+        if "no such column: session_epoch" in str(e) or "no such column: session_invalidate_at" in str(e):
+            return executar_query(
+                "SELECT id, nome, email, usuario, senha, ativo, role, "
+                "created_at, updated_at, deleted_at, last_login_at, session_invalidate_at, "
+                "must_change_password FROM usuarios WHERE id = ?",
+                [user_id], fetch_one=True
+            )
+        raise
+
+
+def bump_user_session_epoch(user_id, connection=None):
+    """Revoga todas as sessões do usuário de forma atômica."""
+    query = (
+        "UPDATE usuarios SET session_epoch = COALESCE(session_epoch, 0) + 1, "
+        "session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), "
+        "updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') WHERE id = ?"
+    )
+    try:
+        return executar_query(query, [user_id], connection=connection)
+    except sqlite3.OperationalError as e:
+        if "no such column: session_epoch" in str(e):
+            # Compatibilidade temporária para uma instalação que ainda não executou init_db.
+            return executar_query(
+                "UPDATE usuarios SET session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), "
+                "updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') WHERE id = ?",
+                [user_id], connection=connection
+            )
+        raise
 
 def update_user_last_login(user_id):
     fortaleza_tz = pytz.timezone('America/Fortaleza')
@@ -71,9 +111,13 @@ def update_user_last_login(user_id):
 
 def create_user(nome, email, usuario, senha_hash, role='user'):
     """
-    Cria um novo usuário no sistema e concede permissões básicas
+    Cria um novo usuário no sistema e concede permissões básicas.
     """
     try:
+        if role not in VALID_USER_ROLES:
+            logger.warning(f"Tentativa de criar usuário com role inválida: {role!r}")
+            return None
+
         # Inserir usuário no banco
         rows_affected = executar_query(
             "INSERT INTO usuarios (nome, email, usuario, senha, ativo, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
@@ -135,8 +179,9 @@ def create_password_reset_token(user_id, expires_in_minutes=60):
     expires_at_str = expires_at.strftime('%Y-%m-%d %H:%M:%S')
 
     try:
+        # Um novo pedido revoga links anteriores ainda não utilizados.
         executar_query(
-            "DELETE FROM password_reset_tokens WHERE user_id = ? AND is_used = 0 AND expires_at < strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')",
+            "DELETE FROM password_reset_tokens WHERE user_id = ? AND is_used = 0",
             [user_id]
         )
         executar_query(

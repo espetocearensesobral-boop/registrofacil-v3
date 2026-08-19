@@ -25,6 +25,7 @@
         </div>
         <form id="form-apresentante" method="post" novalidate action="{{ url_for('apresentantes.editar', apresentante_id=apresentante.id) }}" data-rf-submit-state data-submit-label="Salvar Alterações">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="updated_at" value="{{ apresentante.updated_at or '' }}">
             <div class="nt-body">
                 <div class="nt-fld">
                     <label>Nome Completo <span class="req">*</span></label>

@@ -14,7 +14,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from weasyprint import HTML
 import os
-from routes.auth import login_status_required, get_client_ip, proteger_input
+from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token
 from routes.permissoes import permission_required
 from utils.logger import logger
 from utils.helpers import get_contrast_color, formatar_data
@@ -65,6 +65,12 @@ def editar(titular_id):
         return redirect(url_for('titulares.index'))
 
     if request.method == 'POST':
+        if not verificar_csrf_token(request.form.get('csrf_token')):
+            flash("Token de segurança inválido. Por favor, recarregue o formulário.", "danger")
+            logger.warning(f"CSRF inválido ao editar titular {titular_id}. Usuário ID: {session.get('usuario_id')}")
+            return render_template('titulares/editar.html', titular=titular)
+
+        expected_updated_at = request.form.get('updated_at', '').strip() or None
         nome = proteger_input(request.form.get('nome', '').strip().upper())
         telefone = proteger_input(request.form.get('telefone', '').strip())
         email = proteger_input(request.form.get('email', '').strip().lower())
@@ -96,6 +102,7 @@ def editar(titular_id):
                 telefone if telefone else None,
                 email if email else None,
                 usuario_id=session.get('usuario_id'),
+                expected_updated_at=expected_updated_at,
             )
             gravar_log("Editou titular", None, session.get('usuario_id'), get_client_ip(), f"Titular ID {titular_id}: {nome}")
             flash("Titular atualizado com sucesso!", "success")
@@ -167,6 +174,11 @@ def visualizar(titular_id):
 @permission_required('titulares_criar')
 def novo():
     if request.method == 'POST':
+        if not verificar_csrf_token(request.form.get('csrf_token')):
+            flash("Token de segurança inválido. Por favor, recarregue o formulário.", "danger")
+            logger.warning(f"CSRF inválido ao cadastrar titular. Usuário ID: {session.get('usuario_id')}")
+            return render_template('titulares/novo.html')
+
         nome = proteger_input(request.form.get('nome', '').strip().upper())
         telefone = proteger_input(request.form.get('telefone', '').strip())
         email = proteger_input(request.form.get('email', '').strip().lower())

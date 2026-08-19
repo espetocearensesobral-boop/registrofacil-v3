@@ -52,6 +52,8 @@ def status():
 @system_updates_bp.post("/check")
 @admin_required
 def check():
+    if not _require_csrf():
+        return _csrf_failure()
     return jsonify(success=True, **detect_available_version())
 
 

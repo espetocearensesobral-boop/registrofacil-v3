@@ -62,6 +62,7 @@ from utils.file_uploads import get_image_url_for_display
 
 
 processos_bp = Blueprint('processos', __name__, url_prefix='/processos')
+ALLOWED_LOCK_TABLES = frozenset({'processos', 'titulares', 'apresentantes'})
 
 
 def get_mime_type_from_file(filepath, filename):
@@ -1084,7 +1085,8 @@ def editar(processo_id):
             'apresentante_email': processo_original['apresentante_email'],
             'prazo_final': processo_original['prazo_final'],
             'envolvido_notas': processo_original['envolvido_notas'], 'observacoes': processo_original['observacoes'],
-            'data_entrada': processo_original['data_entrada']
+            'data_entrada': processo_original['data_entrada'],
+            'updated_at': processo_original.get('updated_at') or ''
         }
         
         if dados_form['data_entrada']:
@@ -1140,12 +1142,26 @@ def editar(processo_id):
             'prazo_final': request.form.get('prazo_final', ''),
             'envolvido_notas': request.form.get('envolvido_notas', type=int),
             'observacoes': request.form.get('observacoes', ''),
-            'data_entrada': request.form.get('data_entrada', '')
+            'data_entrada': request.form.get('data_entrada', ''),
+            'updated_at': request.form.get('updated_at', '')
         })
 
         processo_original = get_processo_by_id(processo_id)
         if not processo_original:
             return jsonify(success=False, message="Processo não encontrado para atualização.", type='danger'), 404
+
+        expected_updated_at = (dados_form.get('updated_at') or '').strip() or None
+        if expected_updated_at and processo_original.get('updated_at') != expected_updated_at:
+            logger.warning(
+                f"Conflito de versão ao editar processo {processo_id}. "
+                f"Esperado: {expected_updated_at}; atual: {processo_original.get('updated_at')}"
+            )
+            return jsonify(
+                success=False,
+                message="Este processo foi alterado por outro usuário. Recarregue a tela antes de salvar.",
+                type='warning',
+                conflict=True,
+            ), 409
 
         # Processo finalizado: permite salvar mas registra aviso no log
         if processo_original.get('status_nome_original') == 'Finalizado' or processo_original.get('data_conclusao'):
@@ -1337,7 +1353,8 @@ def editar(processo_id):
                     possui_matricula=possui_matricula,
                     connection=conn,
                     titular_id=titular_id,
-                    apresentante_id=apresentante_id
+                    apresentante_id=apresentante_id,
+                    expected_updated_at=expected_updated_at
                 )
                 
                 if not rows_affected:
@@ -2079,9 +2096,21 @@ def release_lock_ajax():
             logger.warning(f"Chamada a release-lock-ajax sem corpo JSON. IP: {get_client_ip()}")
             return jsonify({'success': False, 'error': 'Request sem dados'}), 400
 
+        csrf_token = (
+            request.headers.get('X-CSRFToken')
+            or request.headers.get('X-CSRF-Token')
+            or data.get('csrf_token')
+        )
+        if not verificar_csrf_token(csrf_token):
+            logger.warning(f"CSRF inválido ao liberar lock via AJAX. IP: {get_client_ip()}")
+            return jsonify({'success': False, 'error': 'Token de segurança inválido.'}), 403
+
         record_id = data.get('record_id')
         table_name = data.get('table_name')
         usuario_id = session.get('usuario_id')
+
+        if table_name not in ALLOWED_LOCK_TABLES:
+            return jsonify({'success': False, 'error': 'Tabela não permitida para bloqueio.'}), 400
 
         if record_id and table_name and usuario_id:
             # A função release_lock (do models.py) lida com a lógica de libertação.

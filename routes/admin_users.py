@@ -16,10 +16,14 @@ from models import (
     get_users_for_admin_list,
     get_sqlite_connection,
     gravar_auditoria_admin, gravar_tentativa_nao_autorizada,
-    criar_notificacao_usuario, mascarar_email
+    criar_notificacao_usuario, mascarar_email,
+    bump_user_session_epoch
 )
-from routes.auth import login_status_required, get_client_ip, proteger_input, verificar_csrf_token, admin_required, gerar_csrf_token
-from routes.permissoes import permission_required
+from routes.auth import (
+    login_status_required, get_client_ip, proteger_input, verificar_csrf_token,
+    admin_required, gerar_csrf_token, validate_user_role, ensure_admin_safety
+)
+from routes.permissoes import permission_required, has_permission
 from utils.logger import logger
 from utils.notification_contract import success, error, warning
 
@@ -43,6 +47,10 @@ def users_list():
             return redirect(url_for('admin_users.users_list'))
 
         if action == 'inativar_usuario':
+            if not has_permission(current_user_id, 'admin_usuarios_ativar'):
+                flash('Você não tem permissão para ativar ou inativar usuários.', 'error')
+                return redirect(url_for('admin_users.users_list'))
+
             user_id_to_inactivate = request.form.get('id_usuario', type=int)
             senha_admin_confirmacao = request.form.get('senha_admin', '') 
 
@@ -54,6 +62,13 @@ def users_list():
                 
                 if user_id_to_inactivate == current_user_id:
                     raise ValueError('Você não pode inativar seu próprio usuário!')
+
+                ensure_admin_safety(
+                    target_user_data,
+                    target_role=target_user_data['role'],
+                    target_active=False,
+                    current_user_id=current_user_id,
+                )
                 
                 if not target_user_data['ativo']:
                     raise ValueError('Usuário já está inativo.')
@@ -79,7 +94,7 @@ def users_list():
 
                     # ADICIONADO: Atualiza session_invalidate_at ao inativar usuário
                     cursor.execute(
-                        "UPDATE usuarios SET ativo = 0, deleted_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') WHERE id = ?",
+                        "UPDATE usuarios SET ativo = 0, deleted_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), session_epoch = COALESCE(session_epoch, 0) + 1, session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') WHERE id = ?",
                         (user_id_to_inactivate,)
                     )
 
@@ -220,20 +235,18 @@ def edit_user(user_id):
         nome = proteger_input(request.form.get('nome'))
         email = proteger_input(request.form.get('email'))
         
-        # --- INÍCIO DA CORREÇÃO ---
+        # --- Política de role/status ---
         role_post = proteger_input(request.form.get('role'))
-        
-        # Inicia com o valor atual do usuário como padrão.
-        role = user_data.get('role', 'user')
+
+        role = validate_user_role(user_data.get('role', 'user'))
         ativo = user_data.get('ativo', 0)
 
-        # Apenas um administrador pode alterar a role e o status de um usuário.
+        # Apenas admin (ou um fluxo granular específico) pode alterar role/status.
         if current_user_role == 'admin':
-            role = role_post
-            # A presença da chave 'ativo' no formulário significa que o checkbox foi marcado.
-            # Sua ausência significa que foi desmarcado.
+            role = validate_user_role(role_post or role)
+            # A presença da chave 'ativo' significa checkbox marcado.
             ativo = 'ativo' in request.form
-        # --- FIM DA CORREÇÃO ---
+        # --- FIM DA POLÍTICA ---
 
         nova_senha = request.form.get('nova_senha')
         confirmar_senha = request.form.get('confirmar_senha')
@@ -254,19 +267,24 @@ def edit_user(user_id):
                 if nova_senha != confirmar_senha: raise ValueError('As senhas não coincidem.')
                 if len(nova_senha) < 8: raise ValueError('A nova senha deve ter pelo menos 8 caracteres.')
 
+            ensure_admin_safety(user_data, role, bool(ativo), current_user_id=current_user_id)
+            security_change = (
+                user_data['role'] != role
+                or user_data['ativo'] != (1 if ativo else 0)
+                or bool(nova_senha)
+            )
+
             with get_sqlite_connection() as conn:
                 cursor = conn.cursor()
 
-                # ADICIONADO: Lógica para atualizar session_invalidate_at se o status ativo mudar para inativo
-                if user_data['ativo'] == 1 and ativo == 0: # Se o status antigo era ativo e o novo é inativo
-                    sql = "UPDATE usuarios SET nome = ?, email = ?, ativo = ?, role = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
-                else:
-                    sql = "UPDATE usuarios SET nome = ?, email = ?, ativo = ?, role = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
+                sql = "UPDATE usuarios SET nome = ?, email = ?, ativo = ?, role = ?, updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
+                if security_change:
+                    sql += ", session_epoch = COALESCE(session_epoch, 0) + 1, session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
 
                 params = [nome, email, (1 if ativo else 0), role]
 
                 if nova_senha:
-                    sql += ", senha = ?"
+                    sql += ", senha = ?, must_change_password = 0"
                     params.append(generate_password_hash(nova_senha))
 
                 sql += " WHERE id = ?"
@@ -379,6 +397,7 @@ def gerenciar_usuario(user_id):
         justificativa = request.form.get('justificativa', '').strip()
         
         try:
+            role = validate_user_role(role)
             # Validações
             if not senha_admin:
                 raise ValueError('Digite sua senha para confirmar as alterações.')
@@ -409,6 +428,13 @@ def gerenciar_usuario(user_id):
             
             if not mudancas:
                 return jsonify(success=False, message='Nenhuma alteração detectada.', type='warning'), 400
+
+            ensure_admin_safety(
+                user_data,
+                target_role=role,
+                target_active=bool(ativo),
+                current_user_id=current_user_id,
+            )
             
             # Aplicar mudanças
             with get_sqlite_connection() as conn:
@@ -420,8 +446,10 @@ def gerenciar_usuario(user_id):
                 
                 if user_data['ativo'] != (1 if ativo else 0):
                     sql_updates.append("ativo = ?")
-                    if not ativo:  # Se está inativando
-                        sql_updates.append("session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
+
+                if user_data['role'] != role or user_data['ativo'] != (1 if ativo else 0):
+                    sql_updates.append("session_epoch = COALESCE(session_epoch, 0) + 1")
+                    sql_updates.append("session_invalidate_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')")
                 
                 if sql_updates:
                     params = []

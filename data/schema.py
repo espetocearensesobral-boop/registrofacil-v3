@@ -44,7 +44,8 @@ def init_db(criar_indices_performance, init_fts):
                     updated_at TEXT,
                     deleted_at TEXT,
                     last_login_at TEXT,
-                    session_invalidate_at TEXT, -- Adicionado diretamente na criação da tabela
+                    session_invalidate_at TEXT, -- Compatibilidade com sessões antigas
+                    session_epoch INTEGER DEFAULT 0 NOT NULL, -- Revoga sessões após senha, role, status ou permissões
                     must_change_password INTEGER DEFAULT 0 -- 1 = exige troca de senha no próximo login
                 );
             """)
@@ -57,6 +58,7 @@ def init_db(criar_indices_performance, init_fts):
             add_column_if_not_exists_sqlite('usuarios', 'last_login_at', 'TEXT')
             # Mantido aqui como fallback para bases de dados mais antigas que já existiam antes da mudança no CREATE TABLE
             add_column_if_not_exists_sqlite('usuarios', 'session_invalidate_at', 'TEXT')
+            add_column_if_not_exists_sqlite('usuarios', 'session_epoch', 'INTEGER', default_value='0')
             add_column_if_not_exists_sqlite('usuarios', 'must_change_password', 'INTEGER', default_value='0')
 
         if not table_exists("login_attempts"):

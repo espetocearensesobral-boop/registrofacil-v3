@@ -121,6 +121,7 @@
                                     <select class="form-select" id="role" name="role">
                                         <option value="user" {% if user_data.role == 'user' %}selected{% endif %}>Usuário Padrão</option>
                                         <option value="admin" {% if user_data.role == 'admin' %}selected{% endif %}>Administrador</option>
+                                        <option value="suporte" {% if user_data.role == 'suporte' %}selected{% endif %}>Suporte</option>
                                     </select>
                                     <label for="role">Permissão (Role)</label>
                                 </div>

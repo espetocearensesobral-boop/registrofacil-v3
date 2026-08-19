@@ -257,13 +257,20 @@ class NotificationManager {
         }
     }
 
+    getCsrfToken() {
+        const metaToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const inputToken = document.querySelector('input[name="csrf_token"]')?.value;
+        return metaToken || inputToken || '';
+    }
+
     async markAsRead(notificacaoId) {
         try {
             const response = await fetch(`/notificacoes/api/${notificacaoId}/marcar-lida`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ csrf_token: this.getCsrfToken() })
             });
 
             const data = await response.json();
@@ -283,7 +290,8 @@ class NotificationManager {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ csrf_token: this.getCsrfToken() })
             });
 
             const data = await response.json();

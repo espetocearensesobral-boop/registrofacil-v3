@@ -4,12 +4,29 @@
 from flask import Blueprint, jsonify, session, request
 from models import (executar_query, criar_notificacao, listar_notificacoes_pendentes,
                     marcar_notificacao_lida, marcar_todas_lidas)
-from routes.auth import login_status_required
+from routes.auth import login_status_required, verificar_csrf_token
 from utils.logger import logger
 from utils.notification_contract import success, error, warning, info
 from datetime import datetime
 
 notificacoes_bp = Blueprint('notificacoes', __name__, url_prefix='/notificacoes')
+
+
+def _csrf_token_from_request():
+    data = request.get_json(silent=True) if request.is_json else request.form
+    data = data or {}
+    return (
+        request.headers.get('X-CSRFToken')
+        or request.headers.get('X-CSRF-Token')
+        or data.get('csrf_token')
+    )
+
+
+def _require_csrf():
+    if verificar_csrf_token(_csrf_token_from_request()):
+        return None
+    logger.warning(f"CSRF inválido em notificações. Usuário ID: {session.get('usuario_id')}")
+    return jsonify(**error('Token de segurança inválido.'), success=False), 403
 
 
 @notificacoes_bp.route('/api/pendentes', methods=['GET'])
@@ -110,6 +127,9 @@ def api_pendentes():
 @login_status_required
 def api_marcar_lida(notificacao_id):
     """Marca uma notificação como lida."""
+    csrf_error = _require_csrf()
+    if csrf_error:
+        return csrf_error
     try:
         usuario_id = session.get('usuario_id')
         resultado = marcar_notificacao_lida(notificacao_id, usuario_id)
@@ -131,6 +151,9 @@ def api_marcar_lida(notificacao_id):
 @login_status_required
 def api_marcar_todas_lidas():
     """Marca todas as notificações do usuário como lidas."""
+    csrf_error = _require_csrf()
+    if csrf_error:
+        return csrf_error
     try:
         usuario_id = session.get('usuario_id')
         resultado = marcar_todas_lidas(usuario_id)
@@ -152,6 +175,9 @@ def api_marcar_todas_lidas():
 @login_status_required
 def api_criar_notificacao():
     """Cria uma nova notificação (admin/sistema)."""
+    csrf_error = _require_csrf()
+    if csrf_error:
+        return csrf_error
     try:
         usuario_id = session.get('usuario_id')
         data = request.get_json()
@@ -290,7 +316,10 @@ def api_configuracoes():
             })
         
         else:  # POST
-            data = request.get_json()
+            csrf_error = _require_csrf()
+            if csrf_error:
+                return csrf_error
+            data = request.get_json(silent=True) or {}
             from models import atualizar_preferencias_usuario
             
             resultado = atualizar_preferencias_usuario(usuario_id, {

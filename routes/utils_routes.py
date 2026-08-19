@@ -2,7 +2,7 @@
 import os
 import platform
 from flask import Blueprint, jsonify, request, session
-from routes.auth import login_status_required, admin_required
+from routes.auth import login_status_required, admin_required, verificar_csrf_token
 
 utils_bp = Blueprint('utils', __name__, url_prefix='/utils')
 
@@ -11,7 +11,14 @@ utils_bp = Blueprint('utils', __name__, url_prefix='/utils')
 @admin_required
 def list_dirs():
     """Lista diretórios para o seletor de pastas."""
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
+    csrf_token = (
+        request.headers.get('X-CSRFToken')
+        or request.headers.get('X-CSRF-Token')
+        or data.get('csrf_token')
+    )
+    if not verificar_csrf_token(csrf_token):
+        return jsonify(success=False, message="Token de segurança inválido.", type='danger'), 403
     current_path = data.get('path', '')
 
     # Se o caminho estiver vazio, tenta obter a raiz do sistema ou o diretório do usuário

@@ -47,14 +47,22 @@ def permission_required(permission_name):
         @functools.wraps(f)
         def decorated_function(*args, **kwargs):
             user_id = session.get('usuario_id')
-            user_role = session.get('usuario_role')
-            
-            # Admins e suporte sempre têm acesso
-            if user_role in ['admin', 'suporte']:
-                return f(*args, **kwargs)
-            
-            # Verifica permissão específica
-            if not has_permission(user_id, permission_name):
+            session_role = session.get('usuario_role')
+            persisted_user = executar_query(
+                "SELECT role, ativo FROM usuarios WHERE id = ?",
+                [user_id],
+                fetch_one=True
+            ) if user_id else None
+
+            # A role persistida e a role da sessão precisam coincidir. Isso
+            # bloqueia sessões obsoletas mesmo quando a epoch ainda não foi
+            # carregada por uma instalação legada.
+            role_consistente = (
+                persisted_user
+                and persisted_user.get('ativo') == 1
+                and persisted_user.get('role') == session_role
+            )
+            if not role_consistente or not has_permission(user_id, permission_name):
                 if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                     return jsonify(
                         success=False, 
