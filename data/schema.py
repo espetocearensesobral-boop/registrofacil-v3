@@ -35,7 +35,18 @@ def init_db(criar_indices_performance, init_fts):
             if default_value is not None and not (
                 isinstance(default_value, str) and default_value.startswith('strftime(')
             ):
-                alter_definition = f"{definition} DEFAULT {default_value}"
+                sql_default = default_value
+                if isinstance(default_value, str):
+                    normalized_default = default_value.strip()
+                    is_quoted = (
+                        len(normalized_default) >= 2
+                        and normalized_default[0] in ("'", '"')
+                        and normalized_default[-1] == normalized_default[0]
+                    )
+                    is_numeric = normalized_default.replace('.', '', 1).lstrip('-').isdigit()
+                    if not is_quoted and not is_numeric:
+                        sql_default = "'" + normalized_default.replace("'", "''") + "'"
+                alter_definition = f"{definition} DEFAULT {sql_default}"
             cursor.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {alter_definition}")
             if isinstance(default_value, str) and default_value.startswith('strftime('):
                 cursor.execute(

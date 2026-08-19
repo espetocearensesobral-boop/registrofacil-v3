@@ -41,3 +41,41 @@ def test_init_db_clears_legacy_uploads_path_without_lock(temp_database):
         fetch_one=True,
     )
     assert config["uploads_path"] is None
+
+
+def test_init_db_quotes_theme_default_with_hyphen(tmp_path, monkeypatch):
+    db_path = tmp_path / "legacy-theme.db"
+    from data import database, migrations, backup, processes
+
+    monkeypatch.setattr(database, "DATABASE_PATH", str(db_path))
+    monkeypatch.setattr(migrations, "DATABASE_PATH", str(db_path))
+    monkeypatch.setattr(backup, "DATABASE_PATH", str(db_path))
+    monkeypatch.setattr(processes, "DATABASE_PATH", str(db_path))
+
+    with sqlite3.connect(db_path) as connection:
+        connection.execute(
+            """
+            CREATE TABLE user_preferences (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                usuario_id INTEGER NOT NULL UNIQUE,
+                tema TEXT DEFAULT 'light',
+                notificacoes_push INTEGER DEFAULT 1,
+                notificacoes_email INTEGER DEFAULT 1,
+                dashboard_layout TEXT,
+                filtros_salvos TEXT,
+                created_at TEXT,
+                updated_at TEXT
+            )
+            """
+        )
+        connection.commit()
+
+    models.init_db()
+
+    with sqlite3.connect(db_path) as connection:
+        connection.execute("INSERT INTO user_preferences (usuario_id) VALUES (1)")
+        theme = connection.execute(
+            "SELECT tema_cor FROM user_preferences WHERE usuario_id = 1"
+        ).fetchone()[0]
+
+    assert theme == "paleta-01"
