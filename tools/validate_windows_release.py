@@ -35,6 +35,8 @@ def main() -> int:
     required_diagnostics = ("RF_BUILD_LOG", "call :build_main", "type \"%RF_BUILD_LOG%\"")
     if any(marker not in build for marker in required_diagnostics):
         raise SystemExit("Build não preserva diagnóstico quando aberto pelo Explorer")
+    if "call :build_main >" in build or "call :build_main 1>" in build:
+        raise SystemExit("Build está ocultando o progresso do console")
     required_labels = {
         "build_main", "check_existing_venv", "recreate_venv", "discover_python", "create_venv", "venv_ready",
         "python_not_found", "missing_templates", "missing_static", "missing_routes", "missing_data", "missing_utils", "fail",

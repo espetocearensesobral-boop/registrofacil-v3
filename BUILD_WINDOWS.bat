@@ -15,13 +15,19 @@ if /i "%CI%"=="true" goto build_main
 set "RF_BUILD_LOG=%TEMP%\RegistroFacil_BUILD.log"
 echo Registro Facil - diagnostico do build > "%RF_BUILD_LOG%"
 echo Iniciando em %DATE% %TIME% >> "%RF_BUILD_LOG%"
-echo Diretório: %~dp0 >> "%RF_BUILD_LOG%"
-call :build_main > "%RF_BUILD_LOG%" 2>&1
+echo Diretorio: %~dp0 >> "%RF_BUILD_LOG%"
+echo.
+echo Registro Facil - build iniciado em %DATE% %TIME%
+echo O progresso sera exibido nesta janela.
+echo Log de inicio: %RF_BUILD_LOG%
+echo.
+call :build_main
 set "RF_BUILD_EXIT=%ERRORLEVEL%"
+echo Build finalizado com codigo %RF_BUILD_EXIT% em %DATE% %TIME%>> "%RF_BUILD_LOG%"
 
 echo.
 echo O build terminou com codigo %RF_BUILD_EXIT%.
-echo O log completo foi salvo em:
+echo O resumo do diagnostico foi salvo em:
 echo %RF_BUILD_LOG%
 echo.
 type "%RF_BUILD_LOG%"
