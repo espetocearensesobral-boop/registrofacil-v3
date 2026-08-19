@@ -32,6 +32,9 @@ def main() -> int:
     required_python_probes = ("py -3.12", "py -3.11", "python3.12", "python3.11", "Python312", "PY_EXE", "PY_ARGS")
     if any(marker not in build for marker in required_python_probes):
         raise SystemExit("Build não possui descoberta robusta de Python 3.11/3.12")
+    required_diagnostics = ("RF_BUILD_CHILD", "RF_BUILD_LOG", "cmd /d /c", "type \"%RF_BUILD_LOG%\"")
+    if any(marker not in build for marker in required_diagnostics):
+        raise SystemExit("Build não preserva diagnóstico quando aberto pelo Explorer")
     if "--no-browser" not in installer or "--host 0.0.0.0" not in installer:
         raise SystemExit("Tarefa central não está configurada sem navegador e na rede local")
     if "remoteip=localsubnet" not in installer or "profile=private" not in installer:

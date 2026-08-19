@@ -1,6 +1,28 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
+:: Quando aberto pelo Explorer, executa em uma janela persistente e grava diagnóstico.
+:: O modo filho evita recursão e mantém o fluxo normal no mesmo arquivo.
+if /i "%RF_BUILD_CHILD%"=="1" goto :build_main
+if /i "%CI%"=="true" goto :build_main
+set "RF_BUILD_CHILD=1"
+set "RF_BUILD_LOG=%TEMP%\RegistroFacil_BUILD.log"
+echo Registro Facil - diagnostico do build > "%RF_BUILD_LOG%"
+echo Iniciando em %DATE% %TIME% >> "%RF_BUILD_LOG%"
+cmd /d /c call "%~f0" >> "%RF_BUILD_LOG%" 2>&1
+set "RF_BUILD_EXIT=%ERRORLEVEL%"
+echo.
+echo O build terminou com codigo %RF_BUILD_EXIT%.
+echo O log completo foi salvo em:
+echo %RF_BUILD_LOG%
+echo.
+type "%RF_BUILD_LOG%"
+echo.
+pause
+exit /b %RF_BUILD_EXIT%
+
+:build_main
+
 :: ============================================================================
 :: Registro Fácil — Build Windows
 :: Compila o servidor central em modo onedir usando um ambiente de build isolado.
@@ -72,7 +94,6 @@ if not defined PY_EXE (
     echo [ERRO] Python 3.11 ou 3.12 nao encontrado.
     echo        O script tentou py -3.12, py -3.11, PATH e instalacoes padrao.
     echo        Verifique com "py -0p" ou instale Python 3.12 x64.
-    pause
     exit /b 1
 )
 
@@ -81,7 +102,6 @@ echo [1/7] Criando ambiente virtual de build...
 "%PY_EXE%" %PY_ARGS% -m venv "%VENV_DIR%"
 if errorlevel 1 (
     echo [ERRO] Falha ao criar o ambiente virtual.
-    pause
     exit /b 1
 )
 
@@ -89,14 +109,12 @@ if errorlevel 1 (
 set "BUILD_PY=%VENV_DIR%\Scripts\python.exe"
 if not exist "%BUILD_PY%" (
     echo [ERRO] Python do ambiente de build nao encontrado em %BUILD_PY%.
-    pause
     exit /b 1
 )
 
 for /f "tokens=3 delims=' " %%v in ('findstr /C:"VERSION =" config.py') do set "APP_VERSION=%%v"
 if not defined APP_VERSION (
     echo [ERRO] Nao foi possivel obter Config.VERSION.
-    pause
     exit /b 1
 )
 
@@ -205,7 +223,6 @@ echo.
 echo Para gerar o instalador, compile INSTALADOR_RegistroFacil.iss com:
 echo ISCC.exe /DMyAppVersion=%APP_VERSION% INSTALADOR_RegistroFacil.iss
 if /i not "%CI%"=="true" explorer "%OUT_DIR%"
-pause
 exit /b 0
 
 :missing_templates
@@ -226,5 +243,4 @@ exit /b 0
 :fail
 echo.
 echo [ERRO] Build interrompido. Nenhum instalador deve ser gerado.
-pause
 exit /b 1
