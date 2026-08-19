@@ -217,9 +217,238 @@
 .cfg-activity-table .cfg-activity-action { max-width: 320px; white-space: normal; }
 @media (max-width: 700px) { .cfg-about-meta { grid-template-columns: 1fr; } .cfg-panel-header { align-items: flex-start; flex-wrap: wrap; } .cfg-panel-header .ms-auto { margin-left: 44px !important; } }
 </style>
+<style>
+/* Reconstrução visual de Configurações: estrutura simples, temática e responsiva. */
+.cfg-settings-rebuild,
+.cfg-settings-rebuild * { box-sizing: border-box; }
+.cfg-settings-rebuild {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x: clip;
+    color: var(--rf-text-body);
+}
+.cfg-settings-tabs-wrap {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 .75rem;
+    padding: .25rem;
+    border: 0;
+    border-radius: var(--rf-radius-surface, 10px);
+    background: var(--rf-surface, var(--background-color-card));
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+.cfg-settings-rebuild .rf-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+.cfg-settings-rebuild .rf-tab-btn {
+    flex: 0 1 auto;
+    min-height: 2.25rem;
+    padding: .45rem .75rem;
+    border: 0;
+    border-radius: var(--rf-radius-sm, 8px);
+    background: transparent;
+    color: var(--rf-text-muted);
+    font-size: .875rem;
+    white-space: nowrap;
+}
+.cfg-settings-rebuild .rf-tab-btn:hover,
+.cfg-settings-rebuild .rf-tab-btn:focus-visible {
+    background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface));
+    color: var(--rf-text-strong);
+}
+.cfg-settings-rebuild .rf-tab-btn.active {
+    background: color-mix(in srgb, var(--color-primary) 9%, var(--rf-surface));
+    color: var(--rf-text-strong);
+    box-shadow: inset 0 -2px 0 var(--rf-accent);
+}
+.cfg-settings-content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+}
+.cfg-settings-rebuild .cfg-panel { width: 100%; max-width: 100%; min-width: 0; }
+.cfg-settings-rebuild .cfg-panel-header {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    min-height: 2.25rem;
+    margin: 0 0 .75rem;
+    padding: 0;
+}
+.cfg-settings-rebuild .cfg-panel-header h5 { margin: 0; color: var(--rf-text-strong); font-size: 1rem; }
+.cfg-settings-rebuild .cfg-panel-header .cfg-appearance-intro { color: var(--rf-text-muted); font-size: .8125rem; }
+.cfg-settings-rebuild .cfg-ph-icon {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    border-radius: var(--rf-radius-sm, 8px);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast, #fff);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .875rem;
+}
+.cfg-settings-rebuild .cfg-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0 0 .75rem;
+    border: 0 !important;
+    border-radius: var(--rf-radius-surface, 10px);
+    overflow: hidden;
+    background: var(--rf-surface, var(--background-color-card)) !important;
+    box-shadow: none !important;
+}
+.cfg-settings-rebuild .cfg-card-header {
+    min-height: 2.25rem;
+    padding: .5rem .75rem !important;
+    border: 0 !important;
+    background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface)) !important;
+    color: var(--rf-text-muted) !important;
+    font-size: .75rem;
+}
+.cfg-settings-rebuild .cfg-card-body {
+    min-width: 0;
+    padding: .75rem !important;
+    background: var(--rf-surface) !important;
+}
+.cfg-settings-rebuild .cfg-add-row {
+    display: grid !important;
+    align-items: end;
+    gap: .5rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 .75rem;
+    padding: .65rem .75rem;
+    border: 0 !important;
+    border-radius: var(--rf-radius-surface, 10px);
+    background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface)) !important;
+}
+.cfg-settings-rebuild #panel-status .cfg-add-row { grid-template-columns: minmax(0, 1fr) auto auto; }
+.cfg-settings-rebuild #panel-services .cfg-add-row { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.7fr) 90px auto; }
+.cfg-settings-rebuild .cfg-add-row .cfg-fg { min-width: 0; gap: 3px; }
+.cfg-settings-rebuild .cfg-add-row .cfg-fg input,
+.cfg-settings-rebuild .cfg-fld input,
+.cfg-settings-rebuild .cfg-fld select,
+.cfg-settings-rebuild .cfg-modal-input {
+    width: 100%;
+    min-width: 0;
+    height: 2.25rem !important;
+    min-height: 2.25rem !important;
+    border-color: var(--rf-border-input) !important;
+    background: var(--rf-surface-input, var(--rf-surface)) !important;
+    color: var(--rf-text-body) !important;
+    font-size: .875rem !important;
+}
+.cfg-settings-rebuild .cfg-btn-add {
+    height: 2.25rem;
+    min-height: 2.25rem;
+    padding-inline: .75rem;
+    background: var(--color-primary);
+    color: var(--color-primary-contrast, #fff);
+}
+.cfg-settings-rebuild .cfg-tbl {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    color: var(--rf-text-body);
+    font-size: .875rem;
+}
+.cfg-settings-rebuild .cfg-tbl thead { background: transparent !important; border: 0 !important; }
+.cfg-settings-rebuild .cfg-tbl th {
+    padding: .5rem .65rem !important;
+    border: 0 !important;
+    background: color-mix(in srgb, var(--color-primary) 3%, var(--rf-surface)) !important;
+    color: var(--rf-text-muted) !important;
+    font-size: .6875rem !important;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+.cfg-settings-rebuild .cfg-tbl td {
+    padding: .55rem .65rem !important;
+    border: 0 !important;
+    vertical-align: middle;
+}
+.cfg-settings-rebuild .cfg-tbl tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--color-primary) 1.5%, var(--rf-surface)); }
+.cfg-settings-rebuild .cfg-tbl tbody tr:hover td { background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface)); }
+.cfg-settings-rebuild .cfg-row-actions { gap: .25rem; }
+.cfg-settings-rebuild .cfg-actions-end {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: .5rem;
+    width: 100%;
+    margin: .75rem 0 0;
+}
+.cfg-settings-rebuild .cfg-section-stack { gap: .75rem; }
+.cfg-settings-rebuild .cfg-record-body { gap: .5rem; }
+.cfg-settings-rebuild .cfg-divider-row,
+.cfg-settings-rebuild .cfg-warning-note { border: 0 !important; padding-top: .25rem; }
+.cfg-settings-rebuild .cfg-about-overview-card,
+.cfg-settings-rebuild .cfg-about-panel-card { width: 100%; max-width: none; }
+.cfg-settings-rebuild .cfg-about-overview-body {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem !important;
+}
+.cfg-settings-rebuild .cfg-about-overview-body .cfg-about-logo { width: 4.25rem; height: 4.25rem; margin: 0; }
+.cfg-settings-rebuild .cfg-about-overview-copy h4 { color: var(--rf-text-strong); font-size: 1rem; }
+.cfg-settings-rebuild .cfg-about-overview-copy p { color: var(--rf-text-body); font-size: .875rem; }
+.cfg-settings-rebuild .cfg-about-purpose {
+    display: flex;
+    gap: .4rem;
+    margin-top: .5rem;
+    padding: .5rem .65rem;
+    border: 0;
+    border-radius: var(--rf-radius-sm, 8px);
+    background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface));
+    color: var(--rf-text-muted);
+    font-size: .8125rem;
+}
+.cfg-settings-rebuild .cfg-about-purpose i { color: var(--rf-accent); }
+.cfg-settings-rebuild .cfg-about-panel-card .cfg-card-body { text-align: left !important; }
+.cfg-settings-rebuild .cfg-about-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+.cfg-settings-rebuild .cfg-about-meta > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: .6rem .75rem;
+    border: 0;
+    background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface));
+}
+@media (max-width: 767.98px) {
+    .cfg-settings-rebuild #panel-status .cfg-add-row,
+    .cfg-settings-rebuild #panel-services .cfg-add-row { grid-template-columns: 1fr; }
+    .cfg-settings-rebuild .cfg-about-overview-body { grid-template-columns: 1fr; gap: .65rem; }
+    .cfg-settings-rebuild .cfg-about-overview-body .cfg-about-logo { width: 3.5rem; height: 3.5rem; }
+    .cfg-settings-rebuild .cfg-about-meta { grid-template-columns: 1fr; }
+    .cfg-settings-rebuild .cfg-panel-header { align-items: flex-start; flex-wrap: wrap; }
+    .cfg-settings-rebuild .cfg-panel-header .ms-auto { margin-left: auto !important; }
+}
+@media (max-width: 575.98px) {
+    .cfg-settings-rebuild .rf-tab-btn { flex: 1 1 auto; min-width: 0; padding-inline: .55rem; font-size: .8125rem; }
+    .cfg-settings-rebuild .cfg-card-body { padding: .65rem !important; }
+}
+</style>
 
-<div class="rf-card cfg-settings-shell">
-    <div class="rf-card-body cfg-card-body-tight">
+<div class="cfg-settings-rebuild">
+    <div class="cfg-settings-tabs-wrap">
         <div class="rf-tabs" id="cfg-tabs">
             <button class="rf-tab-btn{% if not active_tab or active_tab == 'status' %} active{% endif %}" data-panel="status" onclick="cfgSwitch(this)">
                 <i class="bi bi-palette-fill"></i> Status
@@ -245,7 +474,7 @@
             </button>
         </div>
     </div>
-    <div class="rf-card-body">
+    <div class="cfg-settings-content">
     <div>
 
         <!-- STATUS -->
