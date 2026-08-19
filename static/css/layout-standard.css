@@ -3919,6 +3919,193 @@ html body #panel-services .cfg-row-actions .cfg-ibtn.act-on:active {
   background: color-mix(in srgb, var(--rf-success, #1E5C3E) 22%, var(--rf-surface-card, #FFFFFF)) !important;
 }
 
+/* Configurações: superfície contínua, compacta e sem molduras redundantes. */
+html body #main-content .cfg-settings-shell {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body #main-content .cfg-settings-shell > .cfg-card-body-tight {
+  padding: 0 0 .75rem !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+html body #main-content .cfg-settings-shell > .rf-card-body:last-child {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+html body #main-content .cfg-settings-shell .rf-tabs {
+  gap: .25rem !important;
+  margin: 0 !important;
+  padding: .25rem !important;
+  border: 0 !important;
+  border-radius: var(--rf-radius-surface, 10px) !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--rf-border, #D4DCE5) 55%, transparent) !important;
+}
+html body #main-content .cfg-settings-shell .rf-tab-btn {
+  min-height: 2.25rem !important;
+  padding: .45rem .8rem !important;
+  border: 0 !important;
+  border-radius: var(--rf-radius-sm, 8px) !important;
+  background: transparent !important;
+  color: var(--rf-text-secondary, #667085) !important;
+  white-space: nowrap !important;
+}
+html body #main-content .cfg-settings-shell .rf-tab-btn:hover,
+html body #main-content .cfg-settings-shell .rf-tab-btn:focus-visible {
+  background: var(--rf-surface-muted, #F6F8FA) !important;
+  color: var(--rf-text-primary, #2A2A2A) !important;
+}
+html body #main-content .cfg-settings-shell .rf-tab-btn.active {
+  background: var(--rf-surface-muted, #F6F8FA) !important;
+  color: var(--rf-text-strong, #121212) !important;
+  box-shadow: inset 0 -2px 0 var(--rf-accent, #CDA865) !important;
+}
+html body #main-content .cfg-settings-shell .cfg-panel-header {
+  margin: 0 0 .75rem !important;
+  padding: 0 !important;
+  min-height: 2.5rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-ph-icon {
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: var(--rf-radius-sm, 8px) !important;
+  font-size: .9rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-card,
+html body #main-content .cfg-settings-shell .cfg-add-row {
+  border: 0 !important;
+  border-radius: var(--rf-radius-surface, 10px) !important;
+  box-shadow: none !important;
+}
+html body #main-content .cfg-settings-shell .cfg-card {
+  margin-bottom: .75rem !important;
+  overflow: visible !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content .cfg-settings-shell .cfg-card-header {
+  min-height: 2.25rem !important;
+  padding: .45rem .75rem !important;
+  border: 0 !important;
+  background: var(--rf-surface-muted, #F6F8FA) !important;
+  color: var(--rf-text-secondary, #667085) !important;
+}
+html body #main-content .cfg-settings-shell .cfg-card-body {
+  padding: .75rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-add-row {
+  margin-bottom: .75rem !important;
+  background: var(--rf-surface-muted, #F6F8FA) !important;
+}
+html body #main-content .cfg-settings-shell #panel-status .cfg-add-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto auto !important;
+  align-items: end !important;
+}
+html body #main-content .cfg-settings-shell #panel-services .cfg-add-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.7fr) 90px auto !important;
+  align-items: end !important;
+}
+html body #main-content .cfg-settings-shell #panel-status .cfg-add-row .cfg-fg,
+html body #main-content .cfg-settings-shell #panel-services .cfg-add-row .cfg-fg {
+  min-width: 0 !important;
+}
+html body #main-content .cfg-settings-shell .cfg-tbl thead {
+  border-bottom: 0 !important;
+  background: transparent !important;
+}
+html body #main-content .cfg-settings-shell .cfg-tbl th {
+  color: var(--rf-text-secondary, #667085) !important;
+}
+html body #main-content .cfg-settings-shell .cfg-tbl td {
+  border-bottom: 0 !important;
+}
+html body #main-content .cfg-settings-shell .cfg-tbl tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--rf-surface-muted, #F6F8FA) 72%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content .cfg-settings-shell .cfg-tbl tbody tr:hover td {
+  background: color-mix(in srgb, var(--rf-accent, #CDA865) 7%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content .cfg-settings-shell .cfg-actions-end {
+  margin-top: .75rem !important;
+  padding-top: .75rem !important;
+  border-top: 0 !important;
+}
+html body #main-content .cfg-settings-shell .cfg-divider-row,
+html body #main-content .cfg-settings-shell .cfg-warning-note {
+  border-top: 0 !important;
+  padding-top: .25rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-panel-card {
+  width: 100% !important;
+  max-width: none !important;
+  margin-bottom: 0 !important;
+}
+html body #main-content .cfg-settings-shell .cfg-about-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: .5rem !important;
+}
+@media (max-width: 767.98px) {
+  html body #main-content .cfg-settings-shell #panel-status .cfg-add-row,
+  html body #main-content .cfg-settings-shell #panel-services .cfg-add-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+html body #main-content .cfg-settings-shell .cfg-about-meta > div {
+  padding: .6rem .75rem !important;
+  border: 0 !important;
+  background: var(--rf-surface-muted, #F6F8FA) !important;
+}
+html body #main-content .cfg-settings-shell .cfg-fld input,
+html body #main-content .cfg-settings-shell .cfg-fld select,
+html body #main-content .cfg-settings-shell .cfg-modal-input {
+  height: 2.25rem !important;
+  min-height: 2.25rem !important;
+  font-size: .875rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-sbtn,
+html body #main-content .cfg-settings-shell .cfg-obtn,
+html body #main-content .cfg-settings-shell .cfg-logo-action {
+  min-height: 2.25rem !important;
+  height: 2.25rem !important;
+  padding-block: .35rem !important;
+  font-size: .8125rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-switches {
+  gap: .75rem !important;
+  margin-bottom: .75rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-section-stack {
+  gap: .75rem !important;
+}
+html body #main-content .cfg-settings-shell .cfg-record-body {
+  gap: .5rem !important;
+}
+html body #editStatusModal .modal-content,
+html body #editServiceModal .modal-content,
+html body #dirSelectorModal .modal-content {
+  border: 0 !important;
+  border-radius: var(--rf-radius-modal, 10px) !important;
+  box-shadow: var(--rf-shadow-lg, 0 16px 40px rgba(18, 18, 18, .16)) !important;
+}
+html body #editStatusModal .modal-header,
+html body #editStatusModal .modal-footer,
+html body #editServiceModal .modal-header,
+html body #editServiceModal .modal-footer,
+html body #dirSelectorModal .modal-header,
+html body #dirSelectorModal .modal-footer {
+  border: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+
 html body #main-content > .admin-list-card .rf-admin-status-note {
   margin: 0 0 var(--rf-layout-section-gap, 1rem) !important;
   padding: .75rem 1rem !important;
