@@ -35,6 +35,14 @@ def main() -> int:
     required_diagnostics = ("RF_BUILD_CHILD", "RF_BUILD_LOG", "cmd /d /c", "type \"%RF_BUILD_LOG%\"")
     if any(marker not in build for marker in required_diagnostics):
         raise SystemExit("Build não preserva diagnóstico quando aberto pelo Explorer")
+    required_labels = {
+        "build_main", "discover_python", "python_ready", "create_venv", "venv_ready",
+        "missing_templates", "missing_static", "missing_routes", "missing_data", "missing_utils", "fail",
+    }
+    found_labels = set(re.findall(r"(?m)^:([A-Za-z0-9_]+)\s*$", build))
+    missing_labels = sorted(required_labels - found_labels)
+    if missing_labels:
+        raise SystemExit(f"Labels ausentes no BUILD_WINDOWS.bat: {missing_labels}")
     if "--no-browser" not in installer or "--host 0.0.0.0" not in installer:
         raise SystemExit("Tarefa central não está configurada sem navegador e na rede local")
     if "remoteip=localsubnet" not in installer or "profile=private" not in installer:

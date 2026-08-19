@@ -40,63 +40,125 @@ set "OUT_DIR=%DIST_DIR%\%APP_NAME%"
 set "PY_EXE="
 set "PY_ARGS="
 
-if exist "%VENV_DIR%\Scripts\python.exe" (
-    "%VENV_DIR%\Scripts\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
-    if not errorlevel 1 goto :venv_ready
-    echo [INFO] Ambiente virtual existente nao usa Python 3.11/3.12; recriando.
-    rmdir /s /q "%VENV_DIR%"
-)
+if not exist "%VENV_DIR%\Scripts\python.exe" goto :discover_python
+"%VENV_DIR%\Scripts\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
+if errorlevel 1 goto :recreate_venv
+goto :venv_ready
 
+:recreate_venv
+echo [INFO] Ambiente virtual existente nao usa Python 3.11/3.12; recriando.
+rmdir /s /q "%VENV_DIR%"
+
+:discover_python
 :: 1) Python Launcher: prioriza 3.12 e aceita 3.11 como fallback.
 where py >nul 2>&1
-if not errorlevel 1 (
-    py -3.12 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>&1
-    if not errorlevel 1 (
-        set "PY_EXE=py"
-        set "PY_ARGS=-3.12"
-        goto :python_ready
-    )
-    py -3.11 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
-    if not errorlevel 1 (
-        set "PY_EXE=py"
-        set "PY_ARGS=-3.11"
-        goto :python_ready
-    )
-)
+if errorlevel 1 goto :probe_path_python312
+py -3.12 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>&1
+if errorlevel 1 goto :try_py311_launcher
+set "PY_EXE=py"
+set "PY_ARGS=-3.12"
+goto :python_ready
+
+:try_py311_launcher
+py -3.11 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_path_python312
+set "PY_EXE=py"
+set "PY_ARGS=-3.11"
+goto :python_ready
 
 :: 2) Interpretadores expostos diretamente no PATH.
-for %%C in (python3.12 python3.11 python3 python) do (
-    where %%C >nul 2>&1
-    if not errorlevel 1 (
-        %%C -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
-        if not errorlevel 1 (
-            set "PY_EXE=%%C"
-            set "PY_ARGS="
-            goto :python_ready
-        )
-    )
-)
+:probe_path_python312
+where python3.12 >nul 2>&1
+if errorlevel 1 goto :probe_path_python311
+python3.12 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_path_python311
+set "PY_EXE=python3.12"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_path_python311
+where python3.11 >nul 2>&1
+if errorlevel 1 goto :probe_path_python3
+python3.11 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_path_python3
+set "PY_EXE=python3.11"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_path_python3
+where python3 >nul 2>&1
+if errorlevel 1 goto :probe_path_python
+python3 -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_path_python
+set "PY_EXE=python3"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_path_python
+where python >nul 2>&1
+if errorlevel 1 goto :probe_standard_python312
+python -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_standard_python312
+set "PY_EXE=python"
+set "PY_ARGS="
+goto :python_ready
 
 :: 3) Instalacoes comuns do Python.org fora do PATH.
-for %%P in ("%LocalAppData%\Programs\Python\Python312\python.exe" "%LocalAppData%\Programs\Python\Python311\python.exe" "%ProgramFiles%\Python312\python.exe" "%ProgramFiles%\Python311\python.exe" "%ProgramFiles(x86)%\Python312\python.exe" "%ProgramFiles(x86)%\Python311\python.exe") do (
-    if exist "%%~P" (
-        "%%~P" -c "import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 11), (3, 12)) else 1)" >nul 2>&1
-        if not errorlevel 1 (
-            set "PY_EXE=%%~P"
-            set "PY_ARGS="
-            goto :python_ready
-        )
-    )
-)
+:probe_standard_python312
+if not exist "%LocalAppData%\Programs\Python\Python312\python.exe" goto :probe_standard_python311
+"%LocalAppData%\Programs\Python\Python312\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_standard_python311
+set "PY_EXE=%LocalAppData%\Programs\Python\Python312\python.exe"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_standard_python311
+if not exist "%LocalAppData%\Programs\Python\Python311\python.exe" goto :probe_programfiles_python312
+"%LocalAppData%\Programs\Python\Python311\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_programfiles_python312
+set "PY_EXE=%LocalAppData%\Programs\Python\Python311\python.exe"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_programfiles_python312
+if not exist "%ProgramFiles%\Python312\python.exe" goto :probe_programfiles_python311
+"%ProgramFiles%\Python312\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_programfiles_python311
+set "PY_EXE=%ProgramFiles%\Python312\python.exe"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_programfiles_python311
+if not exist "%ProgramFiles%\Python311\python.exe" goto :probe_programfiles_x86_python312
+"%ProgramFiles%\Python311\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_programfiles_x86_python312
+set "PY_EXE=%ProgramFiles%\Python311\python.exe"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_programfiles_x86_python312
+if not exist "%ProgramFiles(x86)%\Python312\python.exe" goto :probe_programfiles_x86_python311
+"%ProgramFiles(x86)%\Python312\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>&1
+if errorlevel 1 goto :probe_programfiles_x86_python311
+set "PY_EXE=%ProgramFiles(x86)%\Python312\python.exe"
+set "PY_ARGS="
+goto :python_ready
+
+:probe_programfiles_x86_python311
+if not exist "%ProgramFiles(x86)%\Python311\python.exe" goto :python_ready
+"%ProgramFiles(x86)%\Python311\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
+if errorlevel 1 goto :python_ready
+set "PY_EXE=%ProgramFiles(x86)%\Python311\python.exe"
+set "PY_ARGS="
 
 :python_ready
-if not defined PY_EXE (
-    echo [ERRO] Python 3.11 ou 3.12 nao encontrado.
-    echo        O script tentou py -3.12, py -3.11, PATH e instalacoes padrao.
-    echo        Verifique com "py -0p" ou instale Python 3.12 x64.
-    exit /b 1
-)
+if defined PY_EXE goto :create_venv
+echo [ERRO] Python 3.11 ou 3.12 nao encontrado.
+echo        O script tentou py -3.12, py -3.11, PATH e instalacoes padrao.
+echo        Verifique com "py -0p" ou instale Python 3.12 x64.
+exit /b 1
 
+:create_venv
 echo [INFO] Interpretador selecionado: %PY_EXE% %PY_ARGS%
 echo [1/7] Criando ambiente virtual de build...
 "%PY_EXE%" %PY_ARGS% -m venv "%VENV_DIR%"
@@ -137,7 +199,7 @@ if errorlevel 1 goto :fail
 if errorlevel 1 (
     echo [ERRO] Dependencia runtime ausente ou sem suporte nativo.
     echo        PDF exige WeasyPrint e suas bibliotecas nativas.
-    goto :fail
+    exit /b 1
 )
 
 for /f "usebackq delims=" %%v in (`"%BUILD_PY%" -m PyInstaller --version`) do set "PI_VERSION=%%v"
@@ -150,7 +212,7 @@ if exist "%APP_NAME%.spec" del /q "%APP_NAME%.spec"
 
 if not exist "%ICON_PATH%" (
     echo [ERRO] Icone nao encontrado: %ICON_PATH%
-    goto :fail
+    exit /b 1
 )
 
 echo [4/7] Validando arquivos de interface...
@@ -202,7 +264,7 @@ if errorlevel 1 goto :fail
 echo [6/7] Verificando executavel e metadados...
 if not exist "%OUT_DIR%\%APP_NAME%.exe" (
     echo [ERRO] Executavel nao encontrado em %OUT_DIR%.
-    goto :fail
+    exit /b 1
 )
 "%BUILD_PY%" -c "from pathlib import Path; p=Path(r'%OUT_DIR%'); required=['RegistroFacil.exe','_internal']; missing=[x for x in required if not (p/x).exists()]; raise SystemExit('Arquivos ausentes: '+str(missing)) if missing else None"
 if errorlevel 1 goto :fail
