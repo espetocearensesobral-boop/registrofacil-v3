@@ -37,6 +37,10 @@ def main() -> int:
         raise SystemExit("Build não isola corretamente o Python e o cache do pip")
     if 'for /f "delims=" %%a in (\'"%BUILD_PY%"' in build or 'for /f "delims=" %%v in (\'"%BUILD_PY%"' in build:
         raise SystemExit("Build ainda executa Python dentro de for /f com risco de aspas")
+    if "--hidden-import \"email_validator\"" in build:
+        raise SystemExit("Build referencia hidden import email_validator não instalado")
+    if "assert not missing" not in build or "raise SystemExit('Arquivos ausentes:'" in build:
+        raise SystemExit("Verificação final de artefatos pode gerar TypeError")
     required_diagnostics = ("RF_BUILD_LOG", "call :build_main", "type \"%RF_BUILD_LOG%\"")
     if any(marker not in build for marker in required_diagnostics):
         raise SystemExit("Build não preserva diagnóstico quando aberto pelo Explorer")

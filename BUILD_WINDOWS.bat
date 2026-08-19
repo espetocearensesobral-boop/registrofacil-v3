@@ -249,7 +249,6 @@ echo [5/7] Compilando executavel onedir...
     --hidden-import "openpyxl" ^
     --hidden-import "paramiko" ^
     --hidden-import "nacl" ^
-    --hidden-import "email_validator" ^
     --hidden-import "flask_mail" ^
     --hidden-import "magic" ^
     --collect-submodules "data" ^
@@ -269,7 +268,7 @@ if errorlevel 1 goto fail
 
 echo [6/7] Verificando executavel e metadados...
 if not exist "%OUT_DIR%\%APP_NAME%.exe" goto fail
-"%BUILD_PY%" -c "from pathlib import Path; p=Path(r'%OUT_DIR%'); required=['RegistroFacil.exe','_internal']; missing=[x for x in required if not (p/x).exists()]; raise SystemExit('Arquivos ausentes: '+str(missing)) if missing else None"
+"%BUILD_PY%" -c "from pathlib import Path; p=Path(r'%OUT_DIR%'); required=['RegistroFacil.exe','_internal']; missing=[x for x in required if not (p/x).exists()]; assert not missing, 'Arquivos ausentes: '+str(missing)"
 if errorlevel 1 goto fail
 (
     echo RegistroFacil v%APP_VERSION%
