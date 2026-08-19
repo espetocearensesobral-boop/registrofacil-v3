@@ -1,6 +1,7 @@
 # registrofacil/app.py
 
 import os
+import socket
 import sys  # <<< ADIÇÃO 1: Importa o módulo 'sys'
 from flask import Flask, redirect, url_for, request, session
 from jinja2 import Environment
@@ -290,7 +291,53 @@ def create_app():
 
     return app
 
+
+def _cli_option(name: str, default: str | None = None) -> str | None:
+    """Lê uma opção simples do executável sem introduzir dependência de argparse."""
+    arguments = sys.argv[1:]
+    for index, argument in enumerate(arguments):
+        if argument == name and index + 1 < len(arguments):
+            return arguments[index + 1]
+        if argument.startswith(name + '='):
+            return argument.split('=', 1)[1]
+    return default
+
+
+def _server_port_available(host: str, port: int) -> bool:
+    """Evita inicializar uma segunda aplicação central na mesma porta."""
+    probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        probe.bind((host, port))
+        return True
+    except OSError:
+        return False
+    finally:
+        probe.close()
+
+
 if __name__ == '__main__':
+    cli_args = set(sys.argv[1:])
+
+    # O mesmo executável pode atuar como servidor, worker de atualização ou
+    # executor de backup sem depender de uma instalação Python no servidor.
+    if '--update-worker' in cli_args:
+        from data.update_worker import main as update_worker_main
+        raise SystemExit(update_worker_main())
+    if '--backup-runner' in cli_args:
+        from utils.backup_runner import main as backup_runner_main
+        raise SystemExit(backup_runner_main(['--source', 'scheduled']))
+
+    host = _cli_option('--host', os.environ.get('REGISTROFACIL_HOST', '0.0.0.0')) or '0.0.0.0'
+    port_raw = _cli_option('--port', os.environ.get('REGISTROFACIL_PORT', '5000')) or '5000'
+    try:
+        port = int(port_raw)
+    except (TypeError, ValueError):
+        port = 5000
+    if not _server_port_available(host, port):
+        print(f'ERRO: a porta {port} já está em uso. O servidor central já pode estar em execução.')
+        raise SystemExit(1)
+
     app = create_app()
 
     # ── 1. Lock do arquivo de banco de dados ─────────────────────────────────
@@ -305,12 +352,17 @@ if __name__ == '__main__':
     except Exception as _lock_err:
         logger.error(f"Erro ao adquirir lock do banco: {_lock_err}", exc_info=True)
 
-    # ── 2. Abrir navegador em janela separada com fullscreen ──────────────────
-    try:
-        from utils.browser_launcher import abrir_navegador
-        abrir_navegador(url="http://localhost:5000", delay=1.8)
-    except Exception as _browser_err:
-        logger.warning(f"Não foi possível abrir navegador automaticamente: {_browser_err}")
+    # ── 2. Abrir navegador somente no modo interativo ─────────────────────────
+    open_browser = '--no-browser' not in cli_args
+    if os.environ.get('REGISTROFACIL_OPEN_BROWSER', 'true').strip().lower() in {'0', 'false', 'no'}:
+        open_browser = False
+    if open_browser:
+        try:
+            from utils.browser_launcher import abrir_navegador
+            browser_host = '127.0.0.1' if host in {'0.0.0.0', '::'} else host
+            abrir_navegador(url=f"http://{browser_host}:{port}", delay=1.8)
+        except Exception as _browser_err:
+            logger.warning(f"Não foi possível abrir navegador automaticamente: {_browser_err}")
 
     logger.info("Iniciando aplicação Flask 'Registro Fácil' com Waitress...")
-    serve(app, host='0.0.0.0', port=5000, threads=8)
+    serve(app, host=host, port=port, threads=8)

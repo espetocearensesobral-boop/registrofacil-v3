@@ -1,5 +1,5 @@
 ; ============================================================================
-;  RegistroFacil v3.17.6 - Script de Instalador Profissional
+;  RegistroFacil - Script de Instalador Profissional
 ;  Gerado para Inno Setup 6.x (download: https://jrsoftware.org/isinfo.php)
 ;
 ;  Recursos:
@@ -14,7 +14,9 @@
 ; ============================================================================
 
 #define MyAppName        "Registro Facil"
-#define MyAppVersion     "3.17.6"
+#ifndef MyAppVersion
+#define MyAppVersion     "3.28.43"
+#endif
 #define MyAppPublisher   "Tauan Pires"
 #define MyAppExeName     "RegistroFacil.exe"
 #define MyAppId          "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
@@ -30,9 +32,9 @@ AppName                 = {#MyAppName}
 AppVersion              = {#MyAppVersion}
 AppVerName              = {#MyAppName} {#MyAppVersion}
 AppPublisher            = {#MyAppPublisher}
-AppPublisherURL         = http://localhost:5000
-AppSupportURL           = http://localhost:5000
-AppUpdatesURL           = http://localhost:5000
+AppPublisherURL         = https://github.com/espetocearensesobral-boop/registrofacil-v3
+AppSupportURL           = https://github.com/espetocearensesobral-boop/registrofacil-v3/issues
+AppUpdatesURL           = https://github.com/espetocearensesobral-boop/registrofacil-v3/releases
 AppCopyright            = Copyright (C) 2025 {#MyAppPublisher}
 
 ; ── Pasta de instalacao padrao ─────────────────────────────────────────────
@@ -111,14 +113,14 @@ Name: "launchafterinstall"; Description: "{cm:LaunchAfterInstall}";         Grou
 [Dirs]
 ; {app} = C:\Program Files\Registro Facil  → apenas leitura (exe e assets)
 ; Dados gravados em C:\ProgramData\RegistroFacil → acessivel sem admin
-Name: "{commonappdata}\RegistroFacil";                  Permissions: users-full
-Name: "{commonappdata}\RegistroFacil\logs";             Permissions: users-full
-Name: "{commonappdata}\RegistroFacil\backups";          Permissions: users-full
-Name: "{commonappdata}\RegistroFacil\uploads";           Permissions: users-full
-Name: "{commonappdata}\RegistroFacil\uploads\processos"; Permissions: users-full
-Name: "{commonappdata}\RegistroFacil\uploads\perfil";    Permissions: users-full
-Name: "{commonappdata}\RegistroFacil\uploads\empresa";   Permissions: users-full
-Name: "{commonappdata}\RegistroFacil\temp";             Permissions: users-full
+Name: "{commonappdata}\RegistroFacil";                  Permissions: users-modify
+Name: "{commonappdata}\RegistroFacil\logs";             Permissions: users-modify
+Name: "{commonappdata}\RegistroFacil\backups";          Permissions: users-modify
+Name: "{commonappdata}\RegistroFacil\uploads";          Permissions: users-modify
+Name: "{commonappdata}\RegistroFacil\uploads\processos"; Permissions: users-modify
+Name: "{commonappdata}\RegistroFacil\uploads\perfil";    Permissions: users-modify
+Name: "{commonappdata}\RegistroFacil\uploads\empresa";   Permissions: users-modify
+Name: "{commonappdata}\RegistroFacil\temp";             Permissions: users-modify
 
 [Files]
 ; ── Arquivos do executavel compilado ──────────────────────────────────────
@@ -137,7 +139,6 @@ Name: "{group}\Desinstalar {#MyAppName}";           FileName: "{uninstallexe}"; 
 Name: "{autodesktop}\{#MyAppName}";                 FileName: "{app}\{#MyAppExeName}"; IconFilename: "{app}\certificate.ico"; Comment: "Abrir o Sistema Registro Fácil"; Tasks: desktopicon
 
 ; ── Atalho de Inicio Rapido / Taskbar (Windows 10/11) ────────────────────
-Name: "{userprograms}\{#MyAppName}";                FileName: "{app}\{#MyAppExeName}"; IconFilename: "{app}\certificate.ico"
 
 [Registry]
 ; ── Informacoes de desinstalacao no Painel de Controle ───────────────────
@@ -162,7 +163,7 @@ Root: HKLM; Subkey: "Software\{#MyAppPublisher}\{#MyAppName}"; ValueType: string
 
 [Run]
 ; ── Criar regra de firewall (apenas se instalado como admin) ─────────────
-Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""{#MyAppName}"" dir=in action=allow program=""{app}\{#MyAppExeName}"" enable=yes profile=any"; StatusMsg: "Configurando firewall..."; Flags: runhidden; Check: IsAdminInstallMode
+Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""{#MyAppName}"" dir=in action=allow program=""{app}\{#MyAppExeName}"" protocol=TCP localport=5000 remoteip=localsubnet enable=yes profile=private"; StatusMsg: "Configurando firewall para a rede local..."; Flags: runhidden; Check: IsAdminInstallMode
 
 ; ── Tarefa Agendada criada via Code (ver CurStepChanged abaixo) ──────────
 ; PowerShell e usado para garantir quoting correto de caminhos com espacos.
@@ -201,7 +202,7 @@ begin
   //   $s = New-ScheduledTaskSettingsSet -ExecutionTimeLimit 0 -StartWhenAvailable -MultipleInstances IgnoreNew
   //   Register-ScheduledTask -TaskName 'Registro Facil' -Action $a -Trigger $t -Settings $s -RunLevel Highest -Force
   PSCmd :=
-    '$a = New-ScheduledTaskAction -Execute ''' + ExePath + '''; ' +
+    '$a = New-ScheduledTaskAction -Execute ''' + ExePath + ''' -Argument ''--no-browser --host 0.0.0.0 --port 5000''; ' +
     '$t = New-ScheduledTaskTrigger -AtLogOn; ' +
     '$s = New-ScheduledTaskSettingsSet -ExecutionTimeLimit 0 -StartWhenAvailable -MultipleInstances IgnoreNew; ' +
     'Register-ScheduledTask -TaskName ''{#MyAppName}'' -Action $a -Trigger $t -Settings $s -RunLevel Highest -Force';

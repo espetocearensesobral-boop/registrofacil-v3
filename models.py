@@ -141,6 +141,7 @@ from data.templates import (
 from data.audit_logs import obter_logs_auditoria
 from data.logging import gravar_log
 from data.admin_queries import obter_usuarios_para_selecao, get_users_for_admin_list
+from data.presence import touch_user_presence, clear_user_presence, list_users_presence, summarize_presence
 from data.indexes import criar_indices_performance
 from data.validators import (
     validar_formato_matricula,

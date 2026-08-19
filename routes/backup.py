@@ -17,7 +17,10 @@ import gc
 # Importações de outros módulos
 from routes.auth import login_status_required, admin_required, verificar_csrf_token, get_client_ip, gerar_csrf_token
 from routes.permissoes import permission_required
-from models import gravar_log, DATABASE_PATH, get_backup_config, get_upload_folder
+from models import (
+    gravar_log, DATABASE_PATH, get_backup_config, get_upload_folder,
+    list_users_presence, summarize_presence,
+)
 from config import Config 
 from data.system_updates import begin_restore_maintenance, end_restore_maintenance
 from utils.logger import logger
@@ -159,7 +162,7 @@ def index():
     csrf_token_val = gerar_csrf_token()
     db_config = {'path_completo': DATABASE_PATH}
     backup_config = get_backup_config()
-    return render_template('backup.html', 
+    return render_template('backup.html',
                          backups=backups_list, 
                          csrf_token=csrf_token_val, 
                          config=Config,
@@ -171,6 +174,30 @@ def index():
                          DEFAULT_BACKUP_PATH=Config.DEFAULT_BACKUP_PATH,
                          UPLOAD_PROCESSOS_DIR=Config.UPLOAD_PROCESSOS_DIR,
                          backup_status=backup_status)
+
+
+@backup_bp.route('/presence/heartbeat', methods=['POST'])
+@login_status_required
+def presence_heartbeat():
+    """Registra atividade da sessão atual sem expor dados de outros usuários."""
+    if not verificar_csrf_token(request.headers.get('X-CSRFToken') or request.form.get('csrf_token')):
+        return jsonify(success=False, message='Token de segurança inválido.', type='danger'), 400
+    return jsonify(success=True)
+
+
+@backup_bp.route('/users-presence', methods=['GET'])
+@login_status_required
+@admin_required
+def users_presence():
+    """Retorna a presença operacional dos usuários para administradores."""
+    users = list_users_presence()
+    return jsonify(
+        success=True,
+        users=users,
+        summary=summarize_presence(users),
+        online_window_seconds=120,
+        server_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+    )
 
 
 @backup_bp.route('/manual', methods=['POST'])

@@ -59,5 +59,8 @@ jobs:
       - name: Verify generated theme CSS
         run: python tools/verificar_themes.py
 
+      - name: Validate Windows release contract
+        run: python tools/validate_windows_release.py
+
       - name: Run test suite
         run: python -m pytest -q

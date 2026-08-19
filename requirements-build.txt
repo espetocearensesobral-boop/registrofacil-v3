@@ -1,0 +1,3 @@
+# Ferramentas usadas somente para gerar o executável Windows.
+# O runtime continua em requirements.txt.
+PyInstaller==6.13.0

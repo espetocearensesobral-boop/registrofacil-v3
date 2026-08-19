@@ -468,9 +468,46 @@
             uploadsEmpresaBase: "{{ url_for('serve_upload', filepath='empresa/') }}",
             empresaIndex: "{{ url_for('empresa.index') }}",
             backupIndex: "{{ url_for('backup.index') }}", // Adicionado o link para a página de backup
+            presenceHeartbeat: "{{ url_for('backup.presence_heartbeat') }}",
             perfilIndex: "{{ url_for('perfil.index') }}" // NOVA ROTA DE PERFIL
         };
     </script>
+    {% if session.get('logado') %}
+    <script>
+    (() => {
+        const heartbeatUrl = FlaskRoutes.presenceHeartbeat;
+        const csrfToken = {{ csrf_token|tojson }};
+        let heartbeatTimer = null;
+        let heartbeatInFlight = false;
+
+        async function sendPresenceHeartbeat() {
+            if (heartbeatInFlight || document.visibilityState === 'hidden') return;
+            heartbeatInFlight = true;
+            try {
+                await fetch(heartbeatUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'same-origin',
+                    cache: 'no-store'
+                });
+            } catch (_) {
+                // A presença é auxiliar; falhas de rede não devem interromper a tela.
+            } finally {
+                heartbeatInFlight = false;
+            }
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') sendPresenceHeartbeat();
+        });
+        heartbeatTimer = window.setInterval(sendPresenceHeartbeat, 60000);
+        window.addEventListener('pagehide', () => window.clearInterval(heartbeatTimer), {once: true});
+    })();
+    </script>
+    {% endif %}
     
     {# Importações dos novos módulos JavaScript - IMPORTANTES: type="module" e a ordem de dependência #}
     <script type="module" src="{{ url_for('static', filename='js/utils/dom_helpers.js', v=app_version) }}"></script>

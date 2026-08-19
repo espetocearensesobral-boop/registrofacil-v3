@@ -61,6 +61,21 @@ def init_db(criar_indices_performance, init_fts):
             add_column_if_not_exists_sqlite('usuarios', 'session_epoch', 'INTEGER', default_value='0')
             add_column_if_not_exists_sqlite('usuarios', 'must_change_password', 'INTEGER', default_value='0')
 
+        if not table_exists("user_presence"):
+            cursor.execute("""
+                CREATE TABLE user_presence (
+                    user_id INTEGER PRIMARY KEY,
+                    last_seen_at TEXT,
+                    last_ip TEXT,
+                    updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
+                    FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE CASCADE
+                );
+            """)
+            logger.info("Tabela 'user_presence' criada no SQLite.")
+        else:
+            logger.info("Tabela 'user_presence' já existe.")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_user_presence_last_seen ON user_presence(last_seen_at)")
+
         if not table_exists("login_attempts"):
             cursor.execute("""
                 CREATE TABLE login_attempts (

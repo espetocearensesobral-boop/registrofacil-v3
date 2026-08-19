@@ -5,6 +5,11 @@
 {% block page_title %}Cópia de Segurança{% endblock %}
 
 {% block page_actions %}
+    {% if session.get('usuario_role') in ['admin', 'suporte'] %}
+    <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#backupUsersPresenceModal">
+        <i class="bi bi-people me-1"></i> Usuários na rede
+    </button>
+    {% endif %}
     <button type="button" class="nav-btn nav-btn-primary" data-bs-toggle="modal" data-bs-target="#backupSettingsModal">
         <i class="bi bi-sliders me-1"></i> Configurar
     </button>
@@ -35,6 +40,25 @@
 #backupSettingsModal .week-chips { display: flex; flex-wrap: wrap; gap: 5px; }
 #backupSettingsModal .wchip { padding: 4px 9px; }
 @media (max-width: 640px) { #backupSettingsModal .cfg-form-2, #backupSettingsModal .cfg-form-3 { grid-template-columns: 1fr; } #backupSettingsModal .cfg-inline-end { flex-wrap: wrap; } }
+.backup-presence-modal { border-radius: 10px; overflow: hidden; }
+.backup-presence-body { background: var(--background-color-body); padding: 14px; }
+.backup-presence-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.backup-presence-summary-card { background: var(--background-color-card); border: 1px solid var(--border-color-default); border-radius: 8px; padding: 9px 10px; }
+.backup-presence-summary-label { display: block; color: var(--text-color-secondary); font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+.backup-presence-summary-value { display: block; margin-top: 2px; color: var(--text-color-primary); font-size: 1.25rem; font-weight: 800; }
+.backup-presence-list { display: grid; gap: 7px; max-height: 48vh; overflow-y: auto; }
+.backup-presence-user { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--background-color-card); border: 1px solid var(--border-color-default); border-radius: 8px; padding: 10px 12px; }
+.backup-presence-user-main { min-width: 0; }
+.backup-presence-user-name { display: flex; align-items: center; gap: 7px; min-width: 0; color: var(--text-color-primary); font-size: .88rem; font-weight: 800; }
+.backup-presence-user-name span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.backup-presence-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--text-color-secondary); }
+.backup-presence-dot.online { background: var(--color-success, #198754); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-success, #198754) 15%, transparent); }
+.backup-presence-meta { display: flex; flex-wrap: wrap; gap: 5px 12px; margin-top: 4px; color: var(--text-color-secondary); font-size: .74rem; }
+.backup-presence-status { min-width: 72px; padding: 4px 8px; border-radius: 999px; text-align: center; font-size: .7rem; font-weight: 800; }
+.backup-presence-status.online { color: var(--color-success, #198754); background: color-mix(in srgb, var(--color-success, #198754) 12%, var(--background-color-card)); }
+.backup-presence-status.offline { color: var(--text-color-secondary); background: color-mix(in srgb, var(--text-color-secondary) 10%, var(--background-color-card)); }
+.backup-presence-empty, .backup-presence-error { padding: 20px 12px; border-radius: 8px; background: var(--background-color-card); color: var(--text-color-secondary); text-align: center; font-size: .82rem; }
+@media (max-width: 640px) { .backup-presence-summary { grid-template-columns: 1fr 1fr 1fr; gap: 5px; } .backup-presence-summary-card { padding: 8px 6px; } .backup-presence-summary-value { font-size: 1.05rem; } .backup-presence-user { grid-template-columns: 1fr; gap: 7px; } .backup-presence-status { justify-self: start; } }
 </style>
 
 
@@ -314,6 +338,38 @@
 </div>
 
 
+<!-- Modal administrativo de usuários e presença na rede -->
+<div class="modal fade" id="backupUsersPresenceModal" tabindex="-1" aria-labelledby="backupUsersPresenceModalLabel" aria-hidden="true" data-presence-url="{{ url_for('backup.users_presence') }}">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content backup-presence-modal">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="backupUsersPresenceModalLabel"><i class="bi bi-people me-2"></i>Usuários na rede</h5>
+                    <p class="backup-settings-subtitle mb-0">Presença baseada na última atividade registrada no servidor central.</p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="nav-btn nav-btn-secondary btn-sm" id="btn-refresh-users-presence" title="Atualizar usuários" aria-label="Atualizar usuários"><i class="bi bi-arrow-clockwise"></i></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar usuários na rede"></button>
+                </div>
+            </div>
+            <div class="modal-body backup-presence-body">
+                <div class="backup-presence-summary" aria-live="polite">
+                    <div class="backup-presence-summary-card"><span class="backup-presence-summary-label">Cadastrados</span><strong class="backup-presence-summary-value" id="presence-total">—</strong></div>
+                    <div class="backup-presence-summary-card"><span class="backup-presence-summary-label">Online</span><strong class="backup-presence-summary-value" id="presence-online">—</strong></div>
+                    <div class="backup-presence-summary-card"><span class="backup-presence-summary-label">Offline</span><strong class="backup-presence-summary-value" id="presence-offline">—</strong></div>
+                </div>
+                <div id="backup-presence-list" class="backup-presence-list" aria-live="polite" aria-busy="true">
+                    <div class="backup-presence-empty"><span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Carregando usuários...</div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <small class="text-muted" id="presence-updated-at">Atualização automática a cada 30 segundos.</small>
+                <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Seletor de diretório do modal de Backup -->
 <div class="modal fade" id="dirSelectorModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -512,6 +568,110 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.setAttribute('data-bs-toggle', 'modal');
         btn.setAttribute('data-bs-target', '#confirmDeleteBackupModal');
     });
+
+    const presenceModal = document.getElementById('backupUsersPresenceModal');
+    const presenceList = document.getElementById('backup-presence-list');
+    const presenceRefresh = document.getElementById('btn-refresh-users-presence');
+    const presenceTotal = document.getElementById('presence-total');
+    const presenceOnline = document.getElementById('presence-online');
+    const presenceOffline = document.getElementById('presence-offline');
+    const presenceUpdatedAt = document.getElementById('presence-updated-at');
+    let presenceTimer = null;
+
+    function presenceText(value, fallback = 'Não registrado') {
+        return value === null || value === undefined || value === '' ? fallback : String(value);
+    }
+
+    function renderPresence(payload) {
+        const users = Array.isArray(payload.users) ? payload.users : [];
+        const summary = payload.summary || {};
+        presenceTotal.textContent = String(summary.total ?? users.length);
+        presenceOnline.textContent = String(summary.online ?? users.filter(user => user.online).length);
+        presenceOffline.textContent = String(summary.offline ?? users.filter(user => !user.online).length);
+        presenceList.replaceChildren();
+
+        if (!users.length) {
+            const empty = document.createElement('div');
+            empty.className = 'backup-presence-empty';
+            empty.textContent = 'Nenhum usuário cadastrado.';
+            presenceList.appendChild(empty);
+        } else {
+            users.forEach(user => {
+                const card = document.createElement('article');
+                card.className = 'backup-presence-user';
+
+                const main = document.createElement('div');
+                main.className = 'backup-presence-user-main';
+                const name = document.createElement('div');
+                name.className = 'backup-presence-user-name';
+                const dot = document.createElement('span');
+                dot.className = `backup-presence-dot${user.online ? ' online' : ''}`;
+                dot.setAttribute('aria-hidden', 'true');
+                const label = document.createElement('span');
+                label.textContent = presenceText(user.nome, user.usuario);
+                name.append(dot, label);
+                const meta = document.createElement('div');
+                meta.className = 'backup-presence-meta';
+                const username = document.createElement('span');
+                username.textContent = `Usuário: ${presenceText(user.usuario, '—')}`;
+                const ip = document.createElement('span');
+                ip.textContent = `IP: ${presenceText(user.last_ip)}`;
+                const activity = document.createElement('span');
+                activity.textContent = `Última atividade: ${presenceText(user.last_seen_at)}`;
+                meta.append(username, ip, activity);
+                main.append(name, meta);
+
+                const status = document.createElement('span');
+                status.className = `backup-presence-status ${user.online ? 'online' : 'offline'}`;
+                status.textContent = user.online ? 'Online' : 'Offline';
+                card.append(main, status);
+                presenceList.appendChild(card);
+            });
+        }
+        presenceList.setAttribute('aria-busy', 'false');
+        presenceUpdatedAt.textContent = payload.server_time ? `Atualizado em ${payload.server_time} · atualização automática a cada 30 segundos.` : 'Atualização automática a cada 30 segundos.';
+    }
+
+    async function loadPresence() {
+        if (!presenceModal || !presenceList) return;
+        presenceList.setAttribute('aria-busy', 'true');
+        if (!presenceList.children.length) {
+            const loading = document.createElement('div');
+            loading.className = 'backup-presence-empty';
+            loading.textContent = 'Carregando usuários...';
+            presenceList.replaceChildren(loading);
+        }
+        try {
+            const response = await fetch(presenceModal.dataset.presenceUrl, {
+                headers: {'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest'},
+                credentials: 'same-origin',
+                cache: 'no-store'
+            });
+            const payload = await response.json();
+            if (!response.ok || !payload.success) throw new Error(payload.message || 'Não foi possível carregar a presença.');
+            renderPresence(payload);
+        } catch (error) {
+            presenceList.replaceChildren();
+            const failure = document.createElement('div');
+            failure.className = 'backup-presence-error';
+            failure.textContent = error.message || 'Não foi possível carregar os usuários.';
+            presenceList.appendChild(failure);
+            presenceList.setAttribute('aria-busy', 'false');
+        }
+    }
+
+    if (presenceModal) {
+        presenceModal.addEventListener('show.bs.modal', function() {
+            loadPresence();
+            window.clearInterval(presenceTimer);
+            presenceTimer = window.setInterval(loadPresence, 30000);
+        });
+        presenceModal.addEventListener('hidden.bs.modal', function() {
+            window.clearInterval(presenceTimer);
+            presenceTimer = null;
+        });
+    }
+    if (presenceRefresh) presenceRefresh.addEventListener('click', loadPresence);
 });
 
 function confirmarRestauracao(filename) {

@@ -25,6 +25,8 @@ from models import (
     get_status_id_by_name,
     get_concluidos_processes_count,
     update_user_last_login,
+    touch_user_presence,
+    clear_user_presence,
     get_empresa_info, 
     create_password_reset_token, 
     get_password_reset_token, 
@@ -127,6 +129,27 @@ def _validate_active_session():
     return True
 
 
+def _touch_authenticated_presence():
+    """Atualiza a presença no máximo uma vez a cada 30 segundos por sessão."""
+    user_id = session.get('usuario_id')
+    if not user_id:
+        return
+    now = datetime.now()
+    previous = session.get('presence_touch_at')
+    if previous:
+        try:
+            previous_dt = datetime.strptime(previous, '%Y-%m-%d %H:%M:%S')
+            if (now - previous_dt).total_seconds() < 30:
+                return
+        except (TypeError, ValueError):
+            pass
+    try:
+        if touch_user_presence(user_id, get_client_ip()):
+            session['presence_touch_at'] = now.strftime('%Y-%m-%d %H:%M:%S')
+    except Exception as exc:
+        logger.warning(f'Não foi possível atualizar a presença do usuário {user_id}: {exc}')
+
+
 def login_status_required(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
@@ -138,6 +161,8 @@ def login_status_required(f):
             return redirect(url_for('auth.login'))
 
         # Força troca de senha se sinalizado - redireciona para perfil exceto se já estiver lá
+
+        _touch_authenticated_presence()
 
         if session.get('force_password_change'):
             from flask import request as _req
@@ -348,7 +373,8 @@ def login():
             except Exception:
                 session['empresa_logo_url'] = url_for('static', filename='img/registrofacil.png')
             
-            update_user_last_login(user['id']) 
+            update_user_last_login(user['id'])
+            touch_user_presence(user['id'], ip)
 
             custom_greeting = ""
             user_name = user['nome']
@@ -439,6 +465,7 @@ def logout():
         try:
             usuario_id = session.get('usuario_id')
             if usuario_id:
+                clear_user_presence(usuario_id)
                 gravar_log("Logout do sistema", None, usuario_id, get_client_ip()) 
                 logger.info(f"Usuário {session.get('usuario_nome')} (ID: {usuario_id}) realizou logout.")
                 

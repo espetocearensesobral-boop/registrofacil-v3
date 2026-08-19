@@ -38,7 +38,7 @@ def _restart_command() -> list[str] | None:
 
 
 def _health_url() -> str:
-    return os.environ.get("REGISTROFACIL_HEALTH_URL", "http://127.0.0.1:5000/api/system/health")
+    return os.environ.get("REGISTROFACIL_HEALTH_URL", "http://127.0.0.1:5000/api/system/update/health")
 
 
 def _wait_for_health(timeout: int = 60) -> bool:

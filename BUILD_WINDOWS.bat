@@ -1,204 +1,127 @@
 @echo off
-:: ============================================================================
-::  RegistroFacil v3.27.0 - Script de Compilacao para Windows
-::  Gera um executavel standalone (.exe) via PyInstaller
-::  Compativel com: Windows 10/11, x64 e x86
-:: ============================================================================
-setlocal EnableDelayedExpansion
+setlocal EnableExtensions EnableDelayedExpansion
 
-:: ── Configuraçoes do projeto ─────────────────────────────────────────────────
+:: ============================================================================
+:: Registro Fácil — Build Windows
+:: Compila o servidor central em modo onedir usando um ambiente de build isolado.
+:: Requer Windows 10/11 x64 ou x86 e Python 3.11 instalado.
+:: ============================================================================
+
+cd /d "%~dp0"
 set "APP_NAME=RegistroFacil"
-set "APP_VERSION=3.27.0"
 set "MAIN_SCRIPT=app.py"
 set "ICON_PATH=static\img\certificate.ico"
 set "DIST_DIR=dist"
 set "BUILD_DIR=build_temp"
-set "SPEC_DIR=."
+set "VENV_DIR=.venv-build"
+set "OUT_DIR=%DIST_DIR%\%APP_NAME%"
+set "PY_CMD=python"
 
-:: ── Pasta de trabalho = pasta do script ──────────────────────────────────────
-:: CORRIGIDO: o .bat já está dentro da pasta do projeto, não usar subpasta
-cd /d "%~dp0"
+if exist "%VENV_DIR%\Scripts\python.exe" goto :venv_ready
 
-:: ── Banner ───────────────────────────────────────────────────────────────────
-echo.
-echo  ==========================================================
-echo   RegistroFacil v%APP_VERSION% - Compilador de Executavel
-echo  ==========================================================
-echo.
+where py >nul 2>&1
+if not errorlevel 1 set "PY_CMD=py -3.11"
 
-:: ── 1. Verificar Python ──────────────────────────────────────────────────────
-echo [1/7] Verificando Python...
-python --version >nul 2>&1
+%PY_CMD% -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)" >nul 2>&1
 if errorlevel 1 (
-    echo  [ERRO] Python nao encontrado no PATH.
-    echo         Instale Python 3.10+ e adicione ao PATH do sistema.
-    echo         Download: https://www.python.org/downloads/
-    pause
-    exit /b 1
-)
-for /f "tokens=2" %%v in ('python --version 2^>^&1') do set PY_VER=%%v
-echo  Python !PY_VER! encontrado.
-
-:: ── 2. Verificar/Instalar pip ────────────────────────────────────────────────
-echo.
-echo [2/7] Verificando pip e dependencias...
-python -m pip --version >nul 2>&1
-if errorlevel 1 (
-    echo  [ERRO] pip nao encontrado. Reinstale Python com pip incluido.
+    echo [ERRO] Python 3.11 nao encontrado.
+    echo        Instale Python 3.11 x64 e execute novamente.
     pause
     exit /b 1
 )
 
-:: Atualizar pip silenciosamente
-python -m pip install --upgrade pip --quiet
-
-:: Instalar dependencias do projeto
-echo  Instalando dependencias do requirements.txt...
-python -m pip install -r requirements.txt --quiet
+echo [1/7] Criando ambiente virtual de build...
+%PY_CMD% -m venv "%VENV_DIR%"
 if errorlevel 1 (
-    echo  [AVISO] Alguns pacotes podem nao ter instalado corretamente.
-    echo          Verifique o requirements.txt manualmente se houver erros.
-)
-
-:: Instalar PyInstaller
-echo  Instalando/atualizando PyInstaller...
-python -m pip install pyinstaller --upgrade --quiet
-if errorlevel 1 (
-    echo  [ERRO] Falha ao instalar PyInstaller.
+    echo [ERRO] Falha ao criar o ambiente virtual.
     pause
     exit /b 1
 )
-for /f "tokens=*" %%v in ('python -m PyInstaller --version 2^>^&1') do set PI_VER=%%v
-echo  PyInstaller !PI_VER! pronto.
 
-:: ── 3. Limpar compilacoes anteriores ─────────────────────────────────────────
-echo.
-echo [3/7] Limpando compilacoes anteriores...
-if exist "%DIST_DIR%\%APP_NAME%" (
-    rmdir /s /q "%DIST_DIR%\%APP_NAME%"
-    echo  Pasta dist anterior removida.
+:venv_ready
+set "BUILD_PY=%VENV_DIR%\Scripts\python.exe"
+if not exist "%BUILD_PY%" (
+    echo [ERRO] Python do ambiente de build nao encontrado em %BUILD_PY%.
+    pause
+    exit /b 1
 )
-if exist "%BUILD_DIR%" (
-    rmdir /s /q "%BUILD_DIR%"
-    echo  Pasta build anterior removida.
-)
-if exist "%APP_NAME%.spec" (
-    del /q "%APP_NAME%.spec"
-    echo  Arquivo .spec anterior removido.
-)
-echo  Limpeza concluida.
 
-:: ── 4. Verificar ativo WeasyPrint (dependencias nativas) ─────────────────────
+for /f "tokens=3 delims=' " %%v in ('findstr /C:"VERSION =" config.py') do set "APP_VERSION=%%v"
+if not defined APP_VERSION (
+    echo [ERRO] Nao foi possivel obter Config.VERSION.
+    pause
+    exit /b 1
+)
+
+for /f "usebackq delims=" %%a in (`"%BUILD_PY%" -c "import platform; print(platform.machine())"`) do set "SYS_ARCH=%%a"
+
 echo.
-echo [4/7] Verificando dependencias nativas (WeasyPrint/GTK)...
-python -c "import weasyprint; print('  WeasyPrint OK')" 2>nul
+echo ==========================================================
+echo  Registro Facil v%APP_VERSION% - Build do servidor central
+echo ==========================================================
+echo  Arquitetura: %SYS_ARCH%
+echo.
+
+echo [2/7] Instalando dependencias fixadas...
+"%BUILD_PY%" -m pip install --upgrade pip
+if errorlevel 1 goto :fail
+"%BUILD_PY%" -m pip install -r requirements.txt -r requirements-build.txt
+if errorlevel 1 goto :fail
+
+"%BUILD_PY%" -c "import flask, waitress, weasyprint, magic, openpyxl, paramiko, cryptography; print('Dependencias runtime verificadas')"
 if errorlevel 1 (
-    echo  [AVISO] WeasyPrint nao encontrado ou sem GTK instalado.
-    echo         A geracao de PDF pode nao funcionar no executavel.
-    echo         Para suporte a PDF, instale GTK3 Runtime:
-    echo         https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer
-    echo.
-    echo  Continuando compilacao sem WeasyPrint nativo...
-    set "WEASYPRINT_EXCLUDE=--exclude-module weasyprint --exclude-module cairocffi --exclude-module cairosvg --exclude-module tinycss2 --exclude-module cssselect2"
-) else (
-    set "WEASYPRINT_EXCLUDE="
+    echo [ERRO] Dependencia runtime ausente ou sem suporte nativo.
+    echo        PDF exige WeasyPrint e suas bibliotecas nativas.
+    goto :fail
 )
 
-:: ── 5. Detectar arquitetura e configurar ─────────────────────────────────────
-echo.
-echo [5/7] Detectando arquitetura do sistema...
-python -c "import platform; print(platform.machine())" > %TEMP%\arch.tmp 2>nul
-set /p SYS_ARCH=<%TEMP%\arch.tmp
-del %TEMP%\arch.tmp
-echo  Arquitetura detectada: !SYS_ARCH!
+for /f "usebackq delims=" %%v in (`"%BUILD_PY%" -m PyInstaller --version`) do set "PI_VERSION=%%v"
+echo  PyInstaller: %PI_VERSION%
 
-:: ── 6. Compilar com PyInstaller ──────────────────────────────────────────────
-echo.
-echo [6/7] Compilando executavel (pode demorar alguns minutos)...
-echo.
+echo [3/7] Limpando artefatos anteriores...
+if exist "%DIST_DIR%\%APP_NAME%" rmdir /s /q "%DIST_DIR%\%APP_NAME%"
+if exist "%BUILD_DIR%" rmdir /s /q "%BUILD_DIR%"
+if exist "%APP_NAME%.spec" del /q "%APP_NAME%.spec"
 
-python -m PyInstaller ^
+if not exist "%ICON_PATH%" (
+    echo [ERRO] Icone nao encontrado: %ICON_PATH%
+    goto :fail
+)
+
+echo [4/7] Validando arquivos de interface...
+if not exist "templates" goto :missing_templates
+if not exist "static" goto :missing_static
+if not exist "routes" goto :missing_routes
+if not exist "data" goto :missing_data
+if not exist "utils" goto :missing_utils
+
+echo [5/7] Compilando executavel onedir...
+"%BUILD_PY%" -m PyInstaller ^
     --name "%APP_NAME%" ^
     --onedir ^
     --windowed ^
     --icon="%ICON_PATH%" ^
     --distpath="%DIST_DIR%" ^
     --workpath="%BUILD_DIR%" ^
-    --specpath="%SPEC_DIR%" ^
+    --specpath="." ^
     --add-data "templates;templates" ^
     --add-data "static;static" ^
-    --add-data "config.py;." ^
-    --add-data "models.py;." ^
-    --add-data "routes;routes" ^
-    --add-data "utils;utils" ^
     --hidden-import "flask" ^
-    --hidden-import "flask.templating" ^
-    --hidden-import "flask.json" ^
     --hidden-import "jinja2" ^
-    --hidden-import "jinja2.ext" ^
-    --hidden-import "jinja2.loaders" ^
-    --hidden-import "jinja2.environment" ^
     --hidden-import "waitress" ^
-    --hidden-import "waitress.server" ^
-    --hidden-import "waitress.task" ^
-    --hidden-import "waitress.channel" ^
     --hidden-import "bcrypt" ^
     --hidden-import "cryptography" ^
     --hidden-import "cryptography.fernet" ^
-    --hidden-import "cryptography.hazmat.primitives" ^
-    --hidden-import "cryptography.hazmat.backends" ^
-    --hidden-import "cryptography.hazmat.backends.openssl" ^
-    --hidden-import "cryptography.hazmat.primitives.kdf.pbkdf2" ^
     --hidden-import "apscheduler" ^
-    --hidden-import "apscheduler.schedulers.background" ^
-    --hidden-import "apscheduler.triggers.interval" ^
-    --hidden-import "apscheduler.triggers.cron" ^
-    --hidden-import "apscheduler.executors.pool" ^
     --hidden-import "openpyxl" ^
-    --hidden-import "openpyxl.styles" ^
-    --hidden-import "openpyxl.utils" ^
-    --hidden-import "openpyxl.writer.excel" ^
-    --hidden-import "openpyxl.reader.excel" ^
     --hidden-import "paramiko" ^
-    --hidden-import "paramiko.transport" ^
-    --hidden-import "paramiko.auth_handler" ^
-    --hidden-import "pytz" ^
-    --hidden-import "pytz.tzinfo" ^
     --hidden-import "nacl" ^
-    --hidden-import "nacl.secret" ^
-    --hidden-import "nacl.utils" ^
-    --hidden-import "sqlite3" ^
     --hidden-import "email_validator" ^
     --hidden-import "flask_mail" ^
-    --hidden-import "werkzeug" ^
-    --hidden-import "werkzeug.security" ^
-    --hidden-import "werkzeug.serving" ^
-    --hidden-import "pkg_resources" ^
-    --hidden-import "pkg_resources.py2_warn" ^
-    --hidden-import "routes.auth" ^
-    --hidden-import "routes.processos" ^
-    --hidden-import "routes.titulares" ^
-    --hidden-import "routes.atividades" ^
-    --hidden-import "routes.search" ^
-    --hidden-import "routes.admin_users" ^
-    --hidden-import "routes.configuracoes" ^
-    --hidden-import "routes.dashboard" ^
-    --hidden-import "routes.backup" ^
-    --hidden-import "routes.empresa" ^
-    --hidden-import "routes.notificacoes" ^
-    --hidden-import "routes.permissoes" ^
-    --hidden-import "routes.perfil" ^
-    --hidden-import "utils.logger" ^
-    --hidden-import "utils.logger_config" ^
-    --hidden-import "utils.helpers" ^
-    --hidden-import "utils.browser_launcher" ^
-    --hidden-import "utils.db_lock" ^
-    --hidden-import "utils.db_crypto" ^
-    --hidden-import "utils.file_uploads" ^
-    --hidden-import "utils.messages" ^
-    --hidden-import "utils.scheduler" ^
-    --hidden-import "utils.permissions_helper" ^
-    --hidden-import "utils.startup_auth" ^
+    --hidden-import "magic" ^
+    --collect-submodules "data" ^
+    --collect-submodules "routes" ^
+    --collect-submodules "utils" ^
     --collect-submodules "flask" ^
     --collect-submodules "jinja2" ^
     --collect-submodules "waitress" ^
@@ -209,57 +132,52 @@ python -m PyInstaller ^
     --noconfirm ^
     --clean ^
     "%MAIN_SCRIPT%"
+if errorlevel 1 goto :fail
 
-if errorlevel 1 (
-    echo.
-    echo  [ERRO] A compilacao falhou. Verifique as mensagens acima.
-    echo         Dicas comuns de solucao:
-    echo         - Execute como Administrador
-    echo         - Desative o Antivirus temporariamente
-    echo         - Verifique se todas as dependencias estao instaladas
-    pause
-    exit /b 1
-)
-
-:: ── 7. Pos-compilacao: ajustes e verificacao ──────────────────────────────────
-echo.
-echo [7/7] Finalizando e verificando saida...
-
-set "OUT_DIR=%DIST_DIR%\%APP_NAME%"
-
-:: Verificar se o exe foi gerado
+echo [6/7] Verificando executavel e metadados...
 if not exist "%OUT_DIR%\%APP_NAME%.exe" (
-    echo  [ERRO] Executavel nao encontrado em %OUT_DIR%\
-    pause
-    exit /b 1
+    echo [ERRO] Executavel nao encontrado em %OUT_DIR%.
+    goto :fail
 )
+"%BUILD_PY%" -c "from pathlib import Path; p=Path(r'%OUT_DIR%'); required=['RegistroFacil.exe','_internal']; missing=[x for x in required if not (p/x).exists()]; raise SystemExit('Arquivos ausentes: '+str(missing)) if missing else None"
+if errorlevel 1 goto :fail
+(
+    echo RegistroFacil v%APP_VERSION%
+    echo Compilado em: %DATE% %TIME%
+    echo Arquitetura: %SYS_ARCH%
+    echo PyInstaller: %PI_VERSION%
+) > "%OUT_DIR%\versao.txt"
 
-:: Criar arquivo de versao
-echo RegistroFacil v%APP_VERSION% > "%OUT_DIR%\versao.txt"
-echo Compilado em: %DATE% %TIME% >> "%OUT_DIR%\versao.txt"
-echo Arquitetura: !SYS_ARCH! >> "%OUT_DIR%\versao.txt"
-
-:: Tamanho da pasta de saida
-for /f "tokens=3" %%s in ('dir /s "%OUT_DIR%" ^| find "File(s)"') do set DIR_SIZE=%%s
+for /f "tokens=3" %%s in ('dir /s "%OUT_DIR%" ^| find "File(s)"') do set "DIR_SIZE=%%s"
+echo [7/7] Build concluido.
 echo.
-echo  ==========================================================
-echo   COMPILACAO CONCLUIDA COM SUCESSO!
-echo  ==========================================================
+echo Executavel: %OUT_DIR%\%APP_NAME%.exe
+echo Versao:     %APP_VERSION%
+echo Tamanho:    %DIR_SIZE%
 echo.
-echo   Executavel: %OUT_DIR%\%APP_NAME%.exe
-echo   Versao:     %APP_VERSION%
-echo   Sistema:    !SYS_ARCH!
-echo.
-echo   PROXIMOS PASSOS:
-echo   1. Teste o executavel em %OUT_DIR%\
-echo   2. Execute o Inno Setup com INSTALADOR_RegistroFacil.iss
-echo      para gerar o instalador profissional.
-echo.
-echo  ==========================================================
-echo.
-
-:: Abrir pasta de saida no Explorer
-explorer "%OUT_DIR%"
-
+echo Para gerar o instalador, compile INSTALADOR_RegistroFacil.iss com:
+echo ISCC.exe /DMyAppVersion=%APP_VERSION% INSTALADOR_RegistroFacil.iss
+if /i not "%CI%"=="true" explorer "%OUT_DIR%"
 pause
 exit /b 0
+
+:missing_templates
+ echo [ERRO] Pasta templates nao encontrada.
+ goto :fail
+:missing_static
+ echo [ERRO] Pasta static nao encontrada.
+ goto :fail
+:missing_routes
+ echo [ERRO] Pasta routes nao encontrada.
+ goto :fail
+:missing_data
+ echo [ERRO] Pasta data nao encontrada.
+ goto :fail
+:missing_utils
+ echo [ERRO] Pasta utils nao encontrada.
+ goto :fail
+:fail
+echo.
+echo [ERRO] Build interrompido. Nenhum instalador deve ser gerado.
+pause
+exit /b 1
