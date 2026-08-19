@@ -3860,31 +3860,56 @@ html body #main-content > .admin-list-card .tbl-actions .tbl-btn.is-disabled:foc
   outline: 0 !important;
 }
 
-/* Ações administrativas: semântica de cor visível no estado normal. */
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.edit {
+/* Configurações > Serviços e Status: sobrescreve o contrato global de cfg-ibtn. */
+html body #panel-status .cfg-row-actions .cfg-ibtn.edit,
+html body #panel-services .cfg-row-actions .cfg-ibtn.edit {
   color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
-  border-color: color-mix(in srgb, var(--rf-accent, #CDA865) 52%, var(--rf-border, #C8CFD0)) !important;
+  border-color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
   background: transparent !important;
 }
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.edit:hover,
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.edit:focus-visible,
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.edit:active {
+html body #panel-status .cfg-row-actions .cfg-ibtn.edit:hover,
+html body #panel-status .cfg-row-actions .cfg-ibtn.edit:focus-visible,
+html body #panel-status .cfg-row-actions .cfg-ibtn.edit:active,
+html body #panel-services .cfg-row-actions .cfg-ibtn.edit:hover,
+html body #panel-services .cfg-row-actions .cfg-ibtn.edit:focus-visible,
+html body #panel-services .cfg-row-actions .cfg-ibtn.edit:active {
   color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
   border-color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
-  background: color-mix(in srgb, var(--rf-accent, #CDA865) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+  background: color-mix(in srgb, var(--rf-accent, #CDA865) 14%, var(--rf-surface-card, #FFFFFF)) !important;
 }
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.del {
+html body #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle,
+html body #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle {
   color: var(--rf-danger, var(--color-error, #98424C)) !important;
-  border-color: color-mix(in srgb, var(--rf-danger, #98424C) 52%, var(--rf-border, #C8CFD0)) !important;
+  border-color: var(--rf-danger, var(--color-error, #98424C)) !important;
   background: transparent !important;
 }
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.del:hover,
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.del:focus-visible,
-html body #main-content > .admin-list-card .tbl-actions .tbl-btn.del:active {
+html body #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:hover,
+html body #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:focus-visible,
+html body #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:active,
+html body #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:hover,
+html body #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:focus-visible,
+html body #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:active {
   color: var(--rf-danger-hover, var(--color-error, #98424C)) !important;
   border-color: var(--rf-danger, var(--color-error, #98424C)) !important;
-  background: color-mix(in srgb, var(--rf-danger, #98424C) 10%, var(--rf-surface-card, #FFFFFF)) !important;
+  background: color-mix(in srgb, var(--rf-danger, #98424C) 12%, var(--rf-surface-card, #FFFFFF)) !important;
 }
+html body #panel-status .cfg-row-actions .cfg-ibtn.act-on,
+html body #panel-services .cfg-row-actions .cfg-ibtn.act-on {
+  color: var(--rf-success, var(--color-success, #1E5C3E)) !important;
+  border-color: var(--rf-success, var(--color-success, #1E5C3E)) !important;
+  background: transparent !important;
+}
+html body #panel-status .cfg-row-actions .cfg-ibtn.act-on:hover,
+html body #panel-status .cfg-row-actions .cfg-ibtn.act-on:focus-visible,
+html body #panel-status .cfg-row-actions .cfg-ibtn.act-on:active,
+html body #panel-services .cfg-row-actions .cfg-ibtn.act-on:hover,
+html body #panel-services .cfg-row-actions .cfg-ibtn.act-on:focus-visible,
+html body #panel-services .cfg-row-actions .cfg-ibtn.act-on:active {
+  color: var(--rf-success, var(--color-success, #1E5C3E)) !important;
+  border-color: var(--rf-success, var(--color-success, #1E5C3E)) !important;
+  background: color-mix(in srgb, var(--rf-success, #1E5C3E) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+
 html body #main-content > .admin-list-card .rf-admin-status-note {
   margin: 0 0 var(--rf-layout-section-gap, 1rem) !important;
   padding: .75rem 1rem !important;

@@ -70,9 +70,12 @@
     font-size: 12px; cursor: pointer; color: var(--text-color-secondary); transition: all .15s;
 }
 .cfg-ibtn:hover { background: var(--background-color-body); color: var(--text-color-primary); border-color: #bbb; }
-.cfg-ibtn.edit:hover { color: #FF8C00; border-color: #FF8C00; }
-.cfg-ibtn.act-on:hover { color: var(--color-success); border-color: var(--color-success); }
-.cfg-ibtn.del:hover { color: var(--color-error); border-color: var(--color-error); }
+.cfg-ibtn.edit { color: var(--rf-accent, var(--color-gold-primary, #CDA865)); border-color: var(--rf-accent, var(--color-gold-primary, #CDA865)); }
+.cfg-ibtn.edit:hover, .cfg-ibtn.edit:focus-visible { color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)); border-color: var(--rf-accent, var(--color-gold-primary, #CDA865)); background: color-mix(in srgb, var(--rf-accent, #CDA865) 14%, var(--rf-surface-card, #FFFFFF)); }
+.cfg-ibtn.cfg-destructive-toggle { color: var(--rf-danger, var(--color-error, #98424C)); border-color: var(--rf-danger, var(--color-error, #98424C)); }
+.cfg-ibtn.cfg-destructive-toggle:hover, .cfg-ibtn.cfg-destructive-toggle:focus-visible { color: var(--rf-danger-hover, var(--color-error, #98424C)); border-color: var(--rf-danger, var(--color-error, #98424C)); background: color-mix(in srgb, var(--rf-danger, #98424C) 12%, var(--rf-surface-card, #FFFFFF)); }
+.cfg-ibtn.act-on { color: var(--rf-success, var(--color-success, #1E5C3E)); border-color: var(--rf-success, var(--color-success, #1E5C3E)); }
+.cfg-ibtn.act-on:hover, .cfg-ibtn.act-on:focus-visible { color: var(--rf-success, var(--color-success, #1E5C3E)); border-color: var(--rf-success, var(--color-success, #1E5C3E)); background: color-mix(in srgb, var(--rf-success, #1E5C3E) 12%, var(--rf-surface-card, #FFFFFF)); }
 
 .cfg-info-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border-color-default); font-size: 13px; }
 .cfg-info-row:last-child { border-bottom: none; }
