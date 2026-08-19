@@ -1,0 +1,280 @@
+{
+  "timestamp": "2026-08-19T16:30:58",
+  "python": "3.12.3",
+  "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+  "cpu_count": 6,
+  "waitress_threads": 8,
+  "database_path": "/tmp/registrofacil-stress-odutc7gy/data/stress.db",
+  "sqlite_journal_mode": "wal",
+  "sqlite_busy_timeout": "5000",
+  "virtual_user_counts": [
+    10,
+    20,
+    30
+  ],
+  "rounds_per_user": 5,
+  "scenarios": [
+    {
+      "scenario": "dashboard_read",
+      "virtual_users": 10,
+      "requests": 50,
+      "duration_seconds": 0.561,
+      "throughput_rps": 89.08,
+      "latency_ms": {
+        "mean": 106.75,
+        "p50": 104.51,
+        "p95": 141.39,
+        "p99": 145.82,
+        "max": 145.82
+      },
+      "successes": 50,
+      "errors": 0,
+      "status_counts": {
+        "200": 50
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "presence_write",
+      "virtual_users": 10,
+      "requests": 50,
+      "duration_seconds": 0.185,
+      "throughput_rps": 269.89,
+      "latency_ms": {
+        "mean": 32.39,
+        "p50": 32.12,
+        "p95": 46.33,
+        "p99": 48.54,
+        "max": 48.54
+      },
+      "successes": 50,
+      "errors": 0,
+      "status_counts": {
+        "200": 50
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "presence_read",
+      "virtual_users": 10,
+      "requests": 50,
+      "duration_seconds": 0.351,
+      "throughput_rps": 142.61,
+      "latency_ms": {
+        "mean": 66.06,
+        "p50": 66.55,
+        "p95": 96.46,
+        "p99": 104.91,
+        "max": 104.91
+      },
+      "successes": 50,
+      "errors": 0,
+      "status_counts": {
+        "200": 50
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "sqlite_process_write",
+      "virtual_users": 10,
+      "requests": 50,
+      "duration_seconds": 0.093,
+      "throughput_rps": 538.25,
+      "latency_ms": {
+        "mean": 14.91,
+        "p50": 10.42,
+        "p95": 46.6,
+        "p99": 90.45,
+        "max": 90.45
+      },
+      "successes": 50,
+      "errors": 0,
+      "status_counts": {
+        "committed": 50
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "dashboard_read",
+      "virtual_users": 20,
+      "requests": 100,
+      "duration_seconds": 1.858,
+      "throughput_rps": 53.81,
+      "latency_ms": {
+        "mean": 343.11,
+        "p50": 349.76,
+        "p95": 399.55,
+        "p99": 438.01,
+        "max": 481.05
+      },
+      "successes": 100,
+      "errors": 0,
+      "status_counts": {
+        "200": 100
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "presence_write",
+      "virtual_users": 20,
+      "requests": 100,
+      "duration_seconds": 0.407,
+      "throughput_rps": 245.59,
+      "latency_ms": {
+        "mean": 73.74,
+        "p50": 73.56,
+        "p95": 107.21,
+        "p99": 129.19,
+        "max": 157.89
+      },
+      "successes": 100,
+      "errors": 0,
+      "status_counts": {
+        "200": 100
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "presence_read",
+      "virtual_users": 20,
+      "requests": 100,
+      "duration_seconds": 0.74,
+      "throughput_rps": 135.09,
+      "latency_ms": {
+        "mean": 137.56,
+        "p50": 140.43,
+        "p95": 171.38,
+        "p99": 185.29,
+        "max": 186.52
+      },
+      "successes": 100,
+      "errors": 0,
+      "status_counts": {
+        "200": 100
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "sqlite_process_write",
+      "virtual_users": 20,
+      "requests": 100,
+      "duration_seconds": 0.17,
+      "throughput_rps": 587.07,
+      "latency_ms": {
+        "mean": 28.69,
+        "p50": 14.94,
+        "p95": 93.72,
+        "p99": 146.28,
+        "max": 148.93
+      },
+      "successes": 100,
+      "errors": 0,
+      "status_counts": {
+        "committed": 100
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "dashboard_read",
+      "virtual_users": 30,
+      "requests": 150,
+      "duration_seconds": 2.874,
+      "throughput_rps": 52.19,
+      "latency_ms": {
+        "mean": 528.87,
+        "p50": 558.86,
+        "p95": 642.86,
+        "p99": 646.88,
+        "max": 665.77
+      },
+      "successes": 150,
+      "errors": 0,
+      "status_counts": {
+        "200": 150
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "presence_write",
+      "virtual_users": 30,
+      "requests": 150,
+      "duration_seconds": 0.566,
+      "throughput_rps": 264.8,
+      "latency_ms": {
+        "mean": 102.0,
+        "p50": 106.01,
+        "p95": 130.97,
+        "p99": 166.32,
+        "max": 180.56
+      },
+      "successes": 150,
+      "errors": 0,
+      "status_counts": {
+        "200": 150
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "presence_read",
+      "virtual_users": 30,
+      "requests": 150,
+      "duration_seconds": 1.161,
+      "throughput_rps": 129.2,
+      "latency_ms": {
+        "mean": 211.32,
+        "p50": 226.93,
+        "p95": 267.09,
+        "p99": 277.63,
+        "max": 287.15
+      },
+      "successes": 150,
+      "errors": 0,
+      "status_counts": {
+        "200": 150
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "sqlite_process_write",
+      "virtual_users": 30,
+      "requests": 150,
+      "duration_seconds": 0.394,
+      "throughput_rps": 381.18,
+      "latency_ms": {
+        "mean": 57.44,
+        "p50": 32.05,
+        "p95": 198.79,
+        "p99": 356.09,
+        "max": 363.04
+      },
+      "successes": 150,
+      "errors": 0,
+      "status_counts": {
+        "committed": 150
+      },
+      "error_samples": []
+    },
+    {
+      "scenario": "health_read",
+      "virtual_users": 30,
+      "requests": 150,
+      "duration_seconds": 0.267,
+      "throughput_rps": 561.36,
+      "latency_ms": {
+        "mean": 45.77,
+        "p50": 49.73,
+        "p95": 56.09,
+        "p99": 59.27,
+        "max": 59.33
+      },
+      "successes": 150,
+      "errors": 0,
+      "status_counts": {
+        "200": 150
+      },
+      "error_samples": []
+    }
+  ],
+  "lock_errors": [],
+  "isolated_database": true
+}
