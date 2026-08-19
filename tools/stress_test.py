@@ -10,6 +10,7 @@ são redirecionados para um diretório temporário e removidos ao final.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import platform
 import re
@@ -34,6 +35,7 @@ from config import Config
 from data import backup as backup_data
 from data import database, migrations, processes, schema
 from routes import backup as backup_routes
+from utils import logger_config
 
 
 PASSWORD = "Stress-Test-2026!"
@@ -69,6 +71,24 @@ def _patch_runtime_paths(root: Path) -> Path:
     Config.EMPRESA_UPLOAD_FOLDER = str(data_dir / "uploads" / "empresa")
     Config.TEMP_DIR = str(data_dir / "temp")
 
+    # Os módulos de logger podem ter sido importados antes do redirecionamento.
+    # Remove handlers antigos e recria todos os destinos dentro do sandbox.
+    logger_config.LOG_BASE_DIR = Config.LOG_DIR
+    logger_config.DOMAIN_DIRS = {
+        'auth': Config.AUTH_LOG_DIR,
+        'operacional': Config.OPERACIONAL_LOG_DIR,
+        'sistema': Config.SISTEMA_LOG_DIR,
+        'manutencao': Config.MANUTENCAO_LOG_DIR,
+    }
+    for logger_name in ('registrofacil.auth', 'registrofacil.operacional', 'registrofacil.sistema', 'registrofacil.manutencao', 'registrofacil_app'):
+        runtime_logger = logging.getLogger(logger_name)
+        for handler in runtime_logger.handlers[:]:
+            runtime_logger.removeHandler(handler)
+            try:
+                handler.close()
+            except Exception:
+                pass
+
     for path in (
         Config.LOG_DIR,
         Config.AUTH_LOG_DIR,
@@ -81,6 +101,9 @@ def _patch_runtime_paths(root: Path) -> Path:
         Config.TEMP_DIR,
     ):
         Path(path).mkdir(parents=True, exist_ok=True)
+
+    logger_config.setup_all_loggers(console=False)
+    logger_config._build_legacy_logger()
 
     for module in (database, migrations, backup_data, processes):
         if hasattr(module, "DATABASE_PATH"):
