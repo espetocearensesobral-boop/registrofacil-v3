@@ -77,6 +77,47 @@
 .cfg-ibtn.act-on { color: var(--rf-success, var(--color-success, #1E5C3E)); border-color: var(--rf-success, var(--color-success, #1E5C3E)); background: color-mix(in srgb, var(--rf-success, #1E5C3E) 14%, var(--rf-surface-card, #FFFFFF)); }
 .cfg-ibtn.act-on:hover, .cfg-ibtn.act-on:focus-visible { color: var(--rf-success, var(--color-success, #1E5C3E)); border-color: var(--rf-success, var(--color-success, #1E5C3E)); background: color-mix(in srgb, var(--rf-success, #1E5C3E) 22%, var(--rf-surface-card, #FFFFFF)); }
 
+/* Tabelas de Status e Serviços: densidade vertical compacta. */
+#panel-status .cfg-add-row,
+#panel-services .cfg-add-row {
+    gap: 6px;
+    padding: 8px 12px;
+    margin-bottom: .75rem;
+}
+#panel-status .cfg-add-row .cfg-fg,
+#panel-services .cfg-add-row .cfg-fg { gap: 3px; }
+#panel-status .cfg-add-row .cfg-fg input[type=text],
+#panel-status .cfg-add-row .cfg-fg input[type=number],
+#panel-services .cfg-add-row .cfg-fg input[type=text],
+#panel-services .cfg-add-row .cfg-fg input[type=number],
+#panel-status .cfg-add-row .cfg-fg input[type=color] {
+    height: 30px;
+}
+#panel-status .cfg-btn-add,
+#panel-services .cfg-btn-add {
+    height: 30px;
+    padding-inline: 12px;
+    font-size: 12px;
+}
+#panel-status .cfg-card-header,
+#panel-services .cfg-card-header {
+    padding: 7px 12px;
+    font-size: .7rem;
+}
+#panel-status .cfg-tbl,
+#panel-services .cfg-tbl { font-size: 12.5px; }
+#panel-status .cfg-tbl th,
+#panel-services .cfg-tbl th {
+    padding: 6px 10px;
+    font-size: .7rem;
+}
+#panel-status .cfg-tbl td,
+#panel-services .cfg-tbl td {
+    padding: 6px 10px;
+}
+#panel-status .cfg-status-inline,
+#panel-services .cfg-status-inline { gap: 5px; }
+
 .cfg-info-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border-color-default); font-size: 13px; }
 .cfg-info-row:last-child { border-bottom: none; }
 .cfg-info-lbl { width: 130px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-secondary); flex-shrink: 0; }

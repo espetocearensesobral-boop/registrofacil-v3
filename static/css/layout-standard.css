@@ -3861,6 +3861,15 @@ html body #main-content > .admin-list-card .tbl-actions .tbl-btn.is-disabled:foc
 }
 
 /* Configurações > Serviços e Status: sobrescreve o contrato global de cfg-ibtn. */
+html body #panel-status .cfg-row-actions .cfg-ibtn,
+html body #panel-services .cfg-row-actions .cfg-ibtn {
+  width: 1.75rem !important;
+  min-width: 1.75rem !important;
+  height: 1.75rem !important;
+  min-height: 1.75rem !important;
+  font-size: .7rem !important;
+}
+
 html body #panel-status .cfg-row-actions .cfg-ibtn.edit,
 html body #panel-services .cfg-row-actions .cfg-ibtn.edit {
   color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
