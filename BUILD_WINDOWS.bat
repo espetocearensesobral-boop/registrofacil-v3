@@ -191,7 +191,8 @@ if not exist "%PIP_CACHE_DIR%" mkdir "%PIP_CACHE_DIR%" >nul 2>&1
 for /f "tokens=3 delims=' " %%v in ('findstr /C:"VERSION =" config.py') do set "APP_VERSION=%%v"
 if not defined APP_VERSION goto fail
 
-for /f "delims=" %%a in ('"%BUILD_PY%" -c "import platform; print(platform.machine())"') do set "SYS_ARCH=%%a"
+set "SYS_ARCH=%PROCESSOR_ARCHITECTURE%"
+if not defined SYS_ARCH set "SYS_ARCH=desconhecida"
 
 echo.
 echo ==========================================================
@@ -209,8 +210,10 @@ if errorlevel 1 goto fail
 "%BUILD_PY%" -c "import flask, waitress, weasyprint, magic, openpyxl, paramiko, cryptography; print('Dependencias runtime verificadas')"
 if errorlevel 1 goto fail
 
-for /f "delims=" %%v in ('"%BUILD_PY%" -m PyInstaller --version') do set "PI_VERSION=%%v"
+set "PI_VERSION=fixado em requirements-build.txt"
 echo  PyInstaller: %PI_VERSION%
+"%BUILD_PY%" -m PyInstaller --version
+if errorlevel 1 goto fail
 
 echo [3/7] Limpando artefatos anteriores...
 if exist "%DIST_DIR%\%APP_NAME%" rmdir /s /q "%DIST_DIR%\%APP_NAME%"

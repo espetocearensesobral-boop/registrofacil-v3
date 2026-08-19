@@ -35,6 +35,8 @@ def main() -> int:
     required_dependency_safety = ("set \"BUILD_PY=%CD%\\%VENV_DIR%", "set \"PIP_CACHE_DIR=%TEMP%", "--no-cache-dir", "--disable-pip-version-check")
     if any(marker not in build for marker in required_dependency_safety):
         raise SystemExit("Build não isola corretamente o Python e o cache do pip")
+    if 'for /f "delims=" %%a in (\'"%BUILD_PY%"' in build or 'for /f "delims=" %%v in (\'"%BUILD_PY%"' in build:
+        raise SystemExit("Build ainda executa Python dentro de for /f com risco de aspas")
     required_diagnostics = ("RF_BUILD_LOG", "call :build_main", "type \"%RF_BUILD_LOG%\"")
     if any(marker not in build for marker in required_diagnostics):
         raise SystemExit("Build não preserva diagnóstico quando aberto pelo Explorer")
