@@ -181,6 +181,53 @@
 }
 .cfg-settings-rebuild .cfg-tbl tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--color-primary) 1.5%, var(--rf-surface)); }
 .cfg-settings-rebuild .cfg-tbl tbody tr:hover td { background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface)); }
+@media (max-width: 767.98px) {
+    .cfg-settings-rebuild .table-responsive { overflow: visible !important; }
+    .cfg-settings-rebuild .cfg-tbl {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed;
+        overflow: hidden;
+    }
+    .cfg-settings-rebuild .cfg-tbl tbody,
+    .cfg-settings-rebuild .cfg-tbl tr { display: block !important; width: 100% !important; max-width: 100% !important; }
+    .cfg-settings-rebuild .cfg-tbl td { display: flex !important; width: 100% !important; max-width: 100% !important; }
+    .cfg-settings-rebuild .cfg-tbl thead { display: none !important; }
+    .cfg-settings-rebuild .cfg-tbl tbody { display: grid !important; gap: .45rem; }
+    .cfg-settings-rebuild .cfg-tbl tbody tr {
+        padding: .5rem .65rem;
+        border-radius: var(--rf-radius-sm, 8px);
+        background: var(--rf-surface);
+        box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 10%, transparent);
+    }
+    .cfg-settings-rebuild .cfg-tbl tbody tr:nth-child(even) { background: color-mix(in srgb, var(--color-primary) 2%, var(--rf-surface)); }
+    .cfg-settings-rebuild .cfg-tbl tbody tr:hover { background: color-mix(in srgb, var(--color-primary) 5%, var(--rf-surface)); }
+    .cfg-settings-rebuild .cfg-tbl td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: .75rem;
+        min-width: 0;
+        padding: .25rem 0 !important;
+        text-align: right;
+    }
+    .cfg-settings-rebuild .cfg-tbl td::before {
+        content: attr(data-label);
+        flex: 0 0 36%;
+        color: var(--rf-text-muted);
+        font-size: .6875rem;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-align: left;
+        text-transform: uppercase;
+    }
+    .cfg-settings-rebuild .cfg-tbl td[data-label="Ações"] { justify-content: flex-end; padding-top: .45rem !important; }
+    .cfg-settings-rebuild .cfg-tbl td[data-label="Ações"]::before { display: none; }
+    .cfg-settings-rebuild .cfg-tbl td[data-label="Nome"] { text-align: left; }
+    .cfg-settings-rebuild .cfg-tbl td[data-label="Nome"]::before { display: none; }
+}
 .cfg-settings-rebuild .cfg-row-actions { gap: .25rem; }
 .cfg-settings-rebuild .cfg-actions-end {
     display: flex !important;
@@ -339,20 +386,20 @@
                         {% if status_list %}
                             {% for s in status_list %}
                             <tr class="{% if not s.ativo %}row-off{% endif %}">
-                                <td>
+                                <td data-label="Nome">
                                     <span class="cfg-status-inline">
                                         <span class="cfg-status-dot" style="background:{{s.hex_color}};"></span>
                                         <strong>{{s.nome}}</strong>
                                     </span>
                                 </td>
-                                <td><code class="cfg-status-code">{{s.hex_color}}</code></td>
-                                <td class="cfg-value-strong">{{s.total_processos|default(0)}}</td>
-                                <td>
+                                <td data-label="Cor"><code class="cfg-status-code">{{s.hex_color}}</code></td>
+                                <td data-label="Processos" class="cfg-value-strong">{{s.total_processos|default(0)}}</td>
+                                <td data-label="Situação">
                                     <span class="cfg-status-badge" style="background:{% if s.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};">
                                         {% if s.ativo %}Ativo{% else %}Inativo{% endif %}
                                     </span>
                                 </td>
-                                <td>
+                                <td data-label="Ações" class="cfg-actions-cell">
                                     <div class="cfg-row-actions">
                                         <button class="cfg-ibtn edit" data-bs-toggle="modal" data-bs-target="#editStatusModal"
                                                 data-id="{{s.id}}" data-nome="{{s.nome}}" data-hex_color="{{s.hex_color}}" data-ativo="{{s.ativo}}" title="Editar">
@@ -412,15 +459,15 @@
                         {% if tipos_processo %}
                             {% for sv in tipos_processo %}
                             <tr class="{% if not sv.ativo %}row-off{% endif %}">
-                                <td><strong>{{sv.nome}}</strong></td>
-                                <td style="color:var(--text-color-secondary);">{{sv.descricao or '—'}}</td>
-                                <td class="cfg-value-strong">{{sv.prazo_padrao or '—'}}</td>
-                                <td>
+                                <td data-label="Nome"><strong>{{sv.nome}}</strong></td>
+                                <td data-label="Descrição" style="color:var(--text-color-secondary);">{{sv.descricao or '—'}}</td>
+                                <td data-label="Dias" class="cfg-value-strong">{{sv.prazo_padrao or '—'}}</td>
+                                <td data-label="Situação">
                                     <span class="cfg-status-badge" style="background:{% if sv.ativo %}var(--color-success){% else %}var(--text-color-secondary){% endif %};">
                                         {% if sv.ativo %}Ativo{% else %}Inativo{% endif %}
                                     </span>
                                 </td>
-                                <td>
+                                <td data-label="Ações" class="cfg-actions-cell">
                                     <div class="cfg-row-actions">
                                         <button class="cfg-ibtn edit" data-bs-toggle="modal" data-bs-target="#editServiceModal"
                                                 data-id="{{sv.id}}" data-nome="{{sv.nome}}" data-descricao="{{sv.descricao or ''}}" data-prazo="{{sv.prazo_padrao or ''}}" title="Editar">
