@@ -184,3 +184,16 @@ def test_recovery_link_keeps_non_loopback_request_host(monkeypatch, app_client):
         link = construir_link_recuperacao("token-host")
 
     assert link == "http://10.0.0.8:5000/reset_password/token-host"
+
+
+def test_settings_visual_contract_uses_light_tabs_surfaces_and_standard_controls():
+    template = read("templates/configuracoes.html")
+
+    assert "border-bottom: 1px solid var(--rf-border-subtle)" in template
+    assert "border-radius: 0 !important" in template
+    assert "border-bottom-color: var(--rf-accent) !important" in template
+    assert "background: var(--rf-surface) !important" in template
+    assert "border-radius: var(--rf-radius-sm, 8px) !important" in template
+    assert "background: transparent !important" in template
+    assert "color-mix(in srgb, var(--rf-surface) 97%, var(--rf-border))" in template
+    assert "#F8F8F8 !important" not in template
