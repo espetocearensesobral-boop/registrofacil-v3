@@ -100,9 +100,15 @@ def index():
                 
                 use_tls = 1 if request.form.get('mail_use_tls') == '1' else 0
                 use_ssl = 1 if request.form.get('mail_use_ssl') == '1' else 0
+                if use_tls and use_ssl:
+                    raise ValueError("Escolha apenas uma opção de segurança: TLS ou SSL.")
                 smtp_encryption = 'tls' if use_tls else ('ssl' if use_ssl else 'none')
-                
+
                 ativo = 1 if request.form.get('ativo') in ['1', 'on'] else 0
+                notify_password_recovery = 1 if request.form.get('notify_password_recovery') in ['1', 'on'] else 0
+                notify_deadlines = 1 if request.form.get('notify_deadlines') in ['1', 'on'] else 0
+                notify_backup_failures = 1 if request.form.get('notify_backup_failures') in ['1', 'on'] else 0
+                notify_security_events = 1 if request.form.get('notify_security_events') in ['1', 'on'] else 0
                 config_id_raw = request.form.get('id')
                 config_id = int(config_id_raw) if config_id_raw and config_id_raw.isdigit() else None
 
@@ -124,7 +130,11 @@ def index():
                     'smtp_password': smtp_password,
                     'sender_email': sender_email,
                     'sender_name': sender_name,
-                    'ativo': ativo
+                    'ativo': ativo,
+                    'notify_password_recovery': notify_password_recovery,
+                    'notify_deadlines': notify_deadlines,
+                    'notify_backup_failures': notify_backup_failures,
+                    'notify_security_events': notify_security_events,
                 }
 
                 # Se for apenas teste

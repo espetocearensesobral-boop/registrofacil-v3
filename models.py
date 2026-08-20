@@ -35,6 +35,7 @@ from data.configuration import (
     obter_status_processo_config,
     get_email_config,
     save_email_config,
+    email_notification_enabled,
     send_email,
     get_backup_config,
     save_backup_config,

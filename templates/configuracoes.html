@@ -508,17 +508,17 @@
                         <div class="cfg-form-3 cfg-form-3-gap">
                             <div class="cfg-fld">
                                 <label>Servidor SMTP <span class="cfg-required">*</span></label>
-                                <input type="text" name="mail_server" id="mail_server" value="{{ email_config.mail_server if email_config else '' }}" required placeholder="smtp.gmail.com">
+                                <input type="text" name="mail_server" id="mail_server" value="{{ email_config.smtp_host if email_config else '' }}" required placeholder="smtp.gmail.com">
                             </div>
                             <div class="cfg-fld" style="width:85px;">
                                 <label>Porta <span class="cfg-required">*</span></label>
-                                <input type="number" name="mail_port" id="mail_port" value="{{ email_config.mail_port if email_config else 587 }}" required>
+                                <input type="number" name="mail_port" id="mail_port" value="{{ email_config.smtp_port if email_config else 587 }}" required>
                             </div>
                         </div>
                         <div class="cfg-form-2 cfg-form-2-gap">
                             <div class="cfg-fld">
                                 <label>Usuário / E-mail <span class="cfg-required">*</span></label>
-                                <input type="email" name="mail_username" id="mail_username" value="{{ email_config.mail_username if email_config else '' }}" required placeholder="usuario@email.com">
+                                <input type="email" name="mail_username" id="mail_username" value="{{ email_config.smtp_username if email_config else '' }}" required placeholder="usuario@email.com">
                             </div>
                             <div class="cfg-fld">
                                 <label>Senha SMTP</label>
@@ -527,12 +527,24 @@
                         </div>
                         <div class="cfg-fld" style="margin-bottom:12px;">
                             <label>E-mail Remetente <span class="cfg-required">*</span></label>
-                            <input type="email" name="mail_default_sender" id="mail_default_sender" value="{{ email_config.mail_default_sender if email_config else '' }}" required placeholder="no-reply@empresa.com">
+                            <input type="email" name="mail_default_sender" id="mail_default_sender" value="{{ email_config.sender_email if email_config else '' }}" required placeholder="no-reply@empresa.com">
                         </div>
                         <div class="cfg-switches" style="margin-bottom:14px;">
-                            <label class="cfg-sw"><input class="form-check-input" type="checkbox" name="mail_use_tls" value="1" {% if email_config and email_config.mail_use_tls %}checked{% endif %}> TLS</label>
-                            <label class="cfg-sw"><input class="form-check-input" type="checkbox" name="mail_use_ssl" value="1" {% if email_config and email_config.mail_use_ssl %}checked{% endif %}> SSL</label>
-                            <label class="cfg-sw"><input class="form-check-input" type="checkbox" name="ativo" value="1" {% if email_config and email_config.ativo %}checked{% endif %}> Ativo</label>
+                            <label class="cfg-sw cfg-email-option" for="mail_use_tls"><input class="form-check-input" type="checkbox" id="mail_use_tls" name="mail_use_tls" value="1" data-email-encryption="tls" {% if email_config and email_config.smtp_encryption == 'tls' %}checked{% endif %}> TLS</label>
+                            <label class="cfg-sw cfg-email-option" for="mail_use_ssl"><input class="form-check-input" type="checkbox" id="mail_use_ssl" name="mail_use_ssl" value="1" data-email-encryption="ssl" {% if email_config and email_config.smtp_encryption == 'ssl' %}checked{% endif %}> SSL</label>
+                            <label class="cfg-sw cfg-email-option" for="email_config_ativo"><input class="form-check-input" type="checkbox" id="email_config_ativo" name="ativo" value="1" {% if email_config and email_config.ativo %}checked{% endif %}> Ativo</label>
+                        </div>
+                        <div class="cfg-card cfg-card-gap-sm cfg-email-notifications" role="group" aria-labelledby="email-notifications-title">
+                            <div class="cfg-card-header" id="email-notifications-title">Opções de envio e notificações</div>
+                            <div class="cfg-card-body">
+                                <p class="cfg-help-text mb-2">Escolha quais eventos podem gerar mensagens de e-mail. O usuário também precisa possuir um endereço válido quando aplicável.</p>
+                                <div class="cfg-switches cfg-email-notification-grid">
+                                    <label class="cfg-sw" for="notify_password_recovery"><input class="form-check-input" type="checkbox" id="notify_password_recovery" name="notify_password_recovery" value="1" {% if not email_config or email_config.notify_password_recovery %}checked{% endif %}> Recuperação de acesso</label>
+                                    <label class="cfg-sw" for="notify_deadlines"><input class="form-check-input" type="checkbox" id="notify_deadlines" name="notify_deadlines" value="1" {% if not email_config or email_config.notify_deadlines %}checked{% endif %}> Prazos de processos</label>
+                                    <label class="cfg-sw" for="notify_backup_failures"><input class="form-check-input" type="checkbox" id="notify_backup_failures" name="notify_backup_failures" value="1" {% if not email_config or email_config.notify_backup_failures %}checked{% endif %}> Falhas de backup</label>
+                                    <label class="cfg-sw" for="notify_security_events"><input class="form-check-input" type="checkbox" id="notify_security_events" name="notify_security_events" value="1" {% if not email_config or email_config.notify_security_events %}checked{% endif %}> Eventos de segurança</label>
+                                </div>
+                            </div>
                         </div>
                         <div style="display:flex;gap:8px;justify-content:flex-end;">
                             <button type="button" class="cfg-sbtn blue" id="btn-test-email">
@@ -919,6 +931,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnSE = document.getElementById('btn-save-email');
     const btnTE = document.getElementById('btn-test-email');
     const fE = document.getElementById('form-email-config');
+    const encryptionInputs = fE ? Array.from(fE.querySelectorAll('[data-email-encryption]')) : [];
+
+    encryptionInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            if (!input.checked) return;
+            encryptionInputs.forEach(other => {
+                if (other !== input) other.checked = false;
+            });
+        });
+    });
 
     function showConfigToast(msg, ok=true) {
         const c = document.querySelector('.toast-container');

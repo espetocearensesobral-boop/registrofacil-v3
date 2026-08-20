@@ -340,6 +340,10 @@ def init_db(criar_indices_performance, init_fts):
                     sender_email TEXT NOT NULL,
                     sender_name TEXT NOT NULL,
                     ativo INTEGER DEFAULT 0,
+                    notify_password_recovery INTEGER DEFAULT 1,
+                    notify_deadlines INTEGER DEFAULT 1,
+                    notify_backup_failures INTEGER DEFAULT 1,
+                    notify_security_events INTEGER DEFAULT 1,
                     created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
                     updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
                 );
@@ -347,6 +351,10 @@ def init_db(criar_indices_performance, init_fts):
             logger.info("Tabela 'email_config' criada no SQLite.")
         else:
             logger.info("Tabela 'email_config' já existe.")
+            ensure_column('email_config', 'notify_password_recovery', 'INTEGER', default_value=1)
+            ensure_column('email_config', 'notify_deadlines', 'INTEGER', default_value=1)
+            ensure_column('email_config', 'notify_backup_failures', 'INTEGER', default_value=1)
+            ensure_column('email_config', 'notify_security_events', 'INTEGER', default_value=1)
 
         if not table_exists("empresa"):
             cursor.execute("""

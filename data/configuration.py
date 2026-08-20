@@ -42,19 +42,44 @@ def get_email_config():
         'smtp_password': '',
         'sender_email': '',
         'sender_name': 'Registro Fácil',
-        'ativo': 0
+        'ativo': 0,
+        'notify_password_recovery': 1,
+        'notify_deadlines': 1,
+        'notify_backup_failures': 1,
+        'notify_security_events': 1,
     }
-    
-    result = executar_query("SELECT id, smtp_host, smtp_port, smtp_encryption, smtp_username, smtp_password, sender_email, sender_name, ativo FROM email_config LIMIT 1", fetch_one=True)
+
+    result = executar_query("SELECT * FROM email_config LIMIT 1", fetch_one=True)
     if result:
-        config.update(result)
+        config.update({key: result[key] for key in result.keys()})
         if config['smtp_password']:
             decrypted_pass = decrypt(config['smtp_password'])
             config['smtp_password'] = decrypted_pass if decrypted_pass is not None else ''
         else:
             config['smtp_password'] = ''
-    
+
+    encryption = config.get('smtp_encryption') or 'tls'
+    if encryption not in {'none', 'tls', 'ssl'}:
+        encryption = 'tls'
+    config['smtp_encryption'] = encryption
+
+    # Aliases de compatibilidade com o formulário administrativo legado.
+    config.update({
+        'mail_server': config.get('smtp_host', ''),
+        'mail_port': config.get('smtp_port', 587),
+        'mail_username': config.get('smtp_username', ''),
+        'mail_default_sender': config.get('sender_email', ''),
+        'mail_use_tls': encryption == 'tls',
+        'mail_use_ssl': encryption == 'ssl',
+    })
     return config
+
+
+def email_notification_enabled(notification_key: str) -> bool:
+    """Retorna se o SMTP e uma política específica de notificação estão ativos."""
+    config = get_email_config()
+    return bool(config.get('ativo')) and bool(config.get(notification_key, 1))
+
 
 def save_email_config(config_data, is_new_config=False, connection=None):
     smtp_password_raw = config_data.get('smtp_password')
@@ -104,11 +129,14 @@ def save_email_config(config_data, is_new_config=False, connection=None):
         if not smtp_password_raw:
             raise ValueError("A senha SMTP é obrigatória para uma nova configuração.")
         res = executar_query(
-            """INSERT INTO email_config (smtp_host, smtp_port, smtp_encryption, smtp_username, smtp_password, sender_email, sender_name, ativo, created_at, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))""",
+            """INSERT INTO email_config (smtp_host, smtp_port, smtp_encryption, smtp_username, smtp_password, sender_email, sender_name, ativo,
+               notify_password_recovery, notify_deadlines, notify_backup_failures, notify_security_events, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))""",
             [config_data['smtp_host'], config_data['smtp_port'], config_data['smtp_encryption'],
              config_data['smtp_username'], encrypted_password, config_data['sender_email'],
-             config_data['sender_name'], config_data['ativo']],
+             config_data['sender_name'], config_data['ativo'],
+             config_data.get('notify_password_recovery', 1), config_data.get('notify_deadlines', 1),
+             config_data.get('notify_backup_failures', 1), config_data.get('notify_security_events', 1)],
             connection=connection
         )
         return bool(res)
@@ -116,11 +144,14 @@ def save_email_config(config_data, is_new_config=False, connection=None):
         res = executar_query(
             """UPDATE email_config SET smtp_host = ?, smtp_port = ?, smtp_encryption = ?,
                smtp_username = ?, smtp_password = ?, sender_email = ?, sender_name = ?, ativo = ?,
+               notify_password_recovery = ?, notify_deadlines = ?, notify_backup_failures = ?, notify_security_events = ?,
                updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
                WHERE id = ?""",
             [config_data['smtp_host'], config_data['smtp_port'], config_data['smtp_encryption'],
              config_data['smtp_username'], encrypted_password, config_data['sender_email'],
-             config_data['sender_name'], config_data['ativo'], config_id],
+             config_data['sender_name'], config_data['ativo'],
+             config_data.get('notify_password_recovery', 1), config_data.get('notify_deadlines', 1),
+             config_data.get('notify_backup_failures', 1), config_data.get('notify_security_events', 1), config_id],
             connection=connection
         )
         return bool(res)

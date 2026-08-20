@@ -20,7 +20,7 @@ from models import (
     get_in_progress_processes_count,
     get_user_linked_processes_count,
     get_recent_processes, get_critical_deadline_processes, 
-    release_all_locks, send_email,
+    release_all_locks, send_email, email_notification_enabled,
     obter_status_processo_config,
     get_status_id_by_name,
     get_concluidos_processes_count,
@@ -558,6 +558,11 @@ def recuperar_senha():
             if not user:
                 flash("Se o e-mail estiver cadastrado, um link de recuperação será enviado para sua caixa de entrada.", 'info')
                 logger.info(f"Tentativa de recuperação de senha para e-mail não existente/inativo: {email_input}. IP: {get_client_ip()}")
+                return render_template('recuperar_senha.html', logo_url=logo_url_for_template, email=email_input, csrf_token=gerar_csrf_token())
+
+            if not email_notification_enabled('notify_password_recovery'):
+                flash("Se o e-mail estiver cadastrado, um link de recuperação será enviado para sua caixa de entrada.", 'info')
+                logger.info(f"Recuperação de senha não enviada: política de e-mail desativada. Usuário ID: {user['id']}. IP: {get_client_ip()}")
                 return render_template('recuperar_senha.html', logo_url=logo_url_for_template, email=email_input, csrf_token=gerar_csrf_token())
 
             reset_token = create_password_reset_token(user['id'])
