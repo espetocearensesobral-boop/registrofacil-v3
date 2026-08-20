@@ -61,3 +61,13 @@ def test_email_notification_columns_exist_after_schema_bootstrap(temp_database):
         "notify_security_events",
     }.issubset(columns)
 
+
+
+def test_email_checkboxes_are_explicitly_clickable():
+    template = read("templates/configuracoes.html")
+
+    assert '#panel-email .cfg-sw input[type="checkbox"]' in template
+    assert 'pointer-events: auto !important' in template
+    assert 'appearance: auto !important' in template
+    assert 'visibility: visible !important' in template
+    assert 'cursor: pointer !important' in template

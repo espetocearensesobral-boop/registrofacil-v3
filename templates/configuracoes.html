@@ -21,6 +21,50 @@
     overflow-x: clip;
     color: var(--rf-text-body);
 }
+
+/* Os controles de e-mail precisam permanecer nativos e clicáveis. */
+.cfg-settings-rebuild #panel-email .cfg-sw {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    min-height: 2.25rem;
+    margin: 0;
+    padding: .35rem .65rem;
+    border: 1px solid var(--rf-border-input, rgba(100, 116, 139, .28));
+    border-radius: var(--rf-radius-sm, 8px);
+    background: var(--rf-surface-input, var(--rf-surface));
+    color: var(--rf-text-body);
+    cursor: pointer;
+    user-select: none;
+}
+.cfg-settings-rebuild #panel-email .cfg-sw:hover,
+.cfg-settings-rebuild #panel-email .cfg-sw:has(input:focus-visible) {
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 6%, var(--rf-surface));
+}
+.cfg-settings-rebuild #panel-email .cfg-sw input[type="checkbox"] {
+    position: relative !important;
+    z-index: 3 !important;
+    display: inline-block !important;
+    width: 1.05rem !important;
+    height: 1.05rem !important;
+    min-width: 1.05rem !important;
+    min-height: 1.05rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    appearance: auto !important;
+    cursor: pointer !important;
+}
+.cfg-settings-rebuild #panel-email .cfg-sw:has(input:checked) {
+    border-color: color-mix(in srgb, var(--color-primary) 55%, var(--rf-border-input));
+    background: color-mix(in srgb, var(--color-primary) 10%, var(--rf-surface));
+    color: var(--rf-text-strong);
+}
 .cfg-settings-tabs-wrap {
     width: 100%;
     max-width: 100%;
