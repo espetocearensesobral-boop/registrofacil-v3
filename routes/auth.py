@@ -5,7 +5,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import re
 import secrets
 import os
-import socket
 from urllib.parse import urlsplit
 from datetime import datetime, timedelta
 import functools
@@ -41,6 +40,7 @@ from config import Config
 from utils.helpers import get_contrast_color, formatar_data
 from utils.file_uploads import get_image_url_for_display
 from utils.messages import GREETING_PHRASES
+from utils.network import descobrir_ip_lan
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/')
@@ -60,12 +60,9 @@ def construir_link_recuperacao(short_id):
     loopback_hosts = {'127.0.0.1', 'localhost', '::1'}
 
     if host in loopback_hosts:
-        try:
-            lan_host = socket.gethostbyname(socket.gethostname())
-            if lan_host not in loopback_hosts:
-                host = lan_host
-        except OSError:
-            pass
+        lan_host = descobrir_ip_lan()
+        if lan_host:
+            host = lan_host
 
     default_ports = {'http': '80', 'https': '443'}
     netloc = host

@@ -91,3 +91,96 @@ def test_recovery_link_uses_configured_public_base_url(app_client):
         link = construir_link_recuperacao("token-de-teste")
 
     assert link == "http://192.168.0.10:5000/reset_password/token-de-teste"
+
+
+
+def test_discover_lan_ip_prefers_ip_selected_by_udp_route(monkeypatch):
+    from utils import network
+
+    class FakeSocket:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, traceback):
+            return False
+
+        def connect(self, address):
+            assert address == ("8.8.8.8", 80)
+
+        def getsockname(self):
+            return ("192.168.0.25", 5000)
+
+    monkeypatch.setattr(network.socket, "socket", lambda *args, **kwargs: FakeSocket())
+    monkeypatch.setattr(network.socket, "gethostbyname", lambda hostname: "127.0.0.1")
+
+    assert network.descobrir_ip_lan() == "192.168.0.25"
+
+
+
+def test_discover_lan_ip_falls_back_to_hostname_when_route_is_unavailable(monkeypatch):
+    from utils import network
+
+    class FailingSocket:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, traceback):
+            return False
+
+        def connect(self, address):
+            raise OSError("rota indisponível")
+
+    monkeypatch.setattr(network.socket, "socket", lambda *args, **kwargs: FailingSocket())
+    monkeypatch.setattr(network.socket, "gethostbyname", lambda hostname: "10.0.0.7")
+
+    assert network.descobrir_ip_lan() == "10.0.0.7"
+
+
+
+def test_discover_lan_ip_returns_none_without_private_or_public_interface(monkeypatch):
+    from utils import network
+
+    class FailingSocket:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, traceback):
+            return False
+
+        def connect(self, address):
+            raise OSError("rota indisponível")
+
+    monkeypatch.setattr(network.socket, "socket", lambda *args, **kwargs: FailingSocket())
+    monkeypatch.setattr(network.socket, "gethostbyname", lambda hostname: "169.254.10.20")
+
+    assert network.descobrir_ip_lan() is None
+
+
+
+def test_recovery_link_uses_discovered_lan_ip_for_loopback_request(monkeypatch, app_client):
+    from routes import auth
+    from routes.auth import construir_link_recuperacao
+
+    flask_app = app_client.application
+    flask_app.config["PUBLIC_BASE_URL"] = ""
+    monkeypatch.setattr(auth, "descobrir_ip_lan", lambda: "192.168.0.25")
+
+    with flask_app.test_request_context("/", base_url="http://127.0.0.1:5000"):
+        link = construir_link_recuperacao("token-lan")
+
+    assert link == "http://192.168.0.25:5000/reset_password/token-lan"
+
+
+
+def test_recovery_link_keeps_non_loopback_request_host(monkeypatch, app_client):
+    from routes import auth
+    from routes.auth import construir_link_recuperacao
+
+    flask_app = app_client.application
+    flask_app.config["PUBLIC_BASE_URL"] = ""
+    monkeypatch.setattr(auth, "descobrir_ip_lan", lambda: "192.168.0.25")
+
+    with flask_app.test_request_context("/", base_url="http://10.0.0.8:5000"):
+        link = construir_link_recuperacao("token-host")
+
+    assert link == "http://10.0.0.8:5000/reset_password/token-host"
