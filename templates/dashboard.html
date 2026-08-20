@@ -54,92 +54,8 @@
     </div>
 
     {% set analytics = dashboard_info.analytics %}
-    <section class="dashboard-insights-grid" aria-label="Indicadores complementares">
-        <article class="dashboard-insight-card dashboard-insight-blue">
-            <div class="dashboard-insight-icon"><i class="bi bi-activity"></i></div>
-            <div class="dashboard-insight-content">
-                <span class="dashboard-insight-label">Movimentação · 7 dias</span>
-                <strong>{{ analytics.movimentacao_7_dias }}</strong>
-                <small>Pico de {{ analytics.pico_movimentacao.total }} em {{ analytics.pico_movimentacao.label }}</small>
-            </div>
-        </article>
-        <article class="dashboard-insight-card dashboard-insight-green">
-            <div class="dashboard-insight-icon"><i class="bi bi-graph-up-arrow"></i></div>
-            <div class="dashboard-insight-content">
-                <span class="dashboard-insight-label">Taxa de conclusão</span>
-                <strong>{{ '%.1f'|format(analytics.taxa_conclusao) }}%</strong>
-                <small>{{ analytics.total_concluidos }} de {{ analytics.total_processos }} processos</small>
-            </div>
-        </article>
-        <article class="dashboard-insight-card dashboard-insight-red">
-            <div class="dashboard-insight-icon"><i class="bi bi-alarm"></i></div>
-            <div class="dashboard-insight-content">
-                <span class="dashboard-insight-label">Atenção a prazos</span>
-                <strong>{{ analytics.total_vencidos + analytics.total_vencem_hoje }}</strong>
-                <small>{{ analytics.total_vencidos }} vencidos · {{ analytics.total_vencem_hoje }} hoje</small>
-            </div>
-        </article>
-        <article class="dashboard-insight-card dashboard-insight-gold">
-            <div class="dashboard-insight-icon"><i class="bi bi-stopwatch"></i></div>
-            <div class="dashboard-insight-content">
-                <span class="dashboard-insight-label">Tempo médio de conclusão</span>
-                <strong>{{ '%.1f'|format(analytics.media_dias_conclusao) }} <em>dias</em></strong>
-                <small>{{ '%.1f'|format(analytics.taxa_no_prazo) }}% concluídos no prazo</small>
-            </div>
-        </article>
-    </section>
-
-    <section class="dashboard-analytics-grid" aria-label="Análises do movimento">
-        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
-            <div class="rf-card-header dashboard-chart-header">
-                <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-line me-1"></i>Movimentação diária</h6>
-                    <span class="dashboard-chart-subtitle">Entradas registradas nos últimos sete dias</span>
-                </div>
-                <span class="dashboard-chart-kicker">PICO {{ analytics.pico_movimentacao.total }}</span>
-            </div>
-            <div class="dashboard-chart-body"><canvas id="dashboardMovementChart" aria-label="Gráfico de barras da movimentação diária"></canvas></div>
-        </article>
-        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-status">
-            <div class="rf-card-header dashboard-chart-header">
-                <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-pie-chart me-1"></i>Distribuição por status</h6>
-                    <span class="dashboard-chart-subtitle">Carteira atual de processos</span>
-                </div>
-            </div>
-            <div class="dashboard-chart-body dashboard-status-chart-body"><canvas id="dashboardStatusChart" aria-label="Gráfico da distribuição por status"></canvas></div>
-            <div class="dashboard-status-legend" id="dashboardStatusLegend"></div>
-        </article>
-    </section>
-
-    <section class="dashboard-analytics-grid dashboard-analytics-grid-secondary" aria-label="Detalhamento operacional">
-        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
-            <div class="rf-card-header dashboard-chart-header">
-                <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-steps me-1"></i>Serviços mais movimentados</h6>
-                    <span class="dashboard-chart-subtitle">Tipos com maior volume acumulado</span>
-                </div>
-            </div>
-            <div class="dashboard-chart-body dashboard-services-chart-body"><canvas id="dashboardServicesChart" aria-label="Gráfico dos serviços mais movimentados"></canvas></div>
-        </article>
-        <article class="rf-card dashboard-chart-panel dashboard-operational-panel">
-            <div class="rf-card-header dashboard-chart-header">
-                <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-speedometer2 me-1"></i>Leitura operacional</h6>
-                    <span class="dashboard-chart-subtitle">Resumo acionável do momento</span>
-                </div>
-            </div>
-            <div class="dashboard-operational-list">
-                <div><span>Processos abertos</span><strong>{{ analytics.total_abertos }}</strong></div>
-                <div><span>Próximos 5 dias</span><strong>{{ analytics.total_proximos }}</strong></div>
-                <div><span>Minha carteira</span><strong>{{ dashboard_info.processos_vinculados_a_mim }}</strong></div>
-                <div><span>Concluídos no prazo</span><strong>{{ '%.1f'|format(analytics.taxa_no_prazo) }}%</strong></div>
-            </div>
-        </article>
-    </section>
 
     <div class="row g-3 dashboard-panels-row">
-
         {# Card: Processos Recentes — interativo #}
         <div class="col-lg-6">
             <div class="rf-card dashboard-panel">
@@ -252,6 +168,55 @@
         </div>
 
     </div>
+
+    <section class="dashboard-analytics-grid" aria-label="Análises do movimento">
+        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-line me-1"></i>Movimentação diária</h6>
+                    <span class="dashboard-chart-subtitle">Entradas registradas nos últimos sete dias</span>
+                </div>
+                <span class="dashboard-chart-kicker">PICO {{ analytics.pico_movimentacao.total }}</span>
+            </div>
+            <div class="dashboard-chart-body"><canvas id="dashboardMovementChart" aria-label="Gráfico de barras da movimentação diária"></canvas></div>
+        </article>
+        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-status">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-pie-chart me-1"></i>Distribuição por status</h6>
+                    <span class="dashboard-chart-subtitle">Carteira atual de processos</span>
+                </div>
+            </div>
+            <div class="dashboard-chart-body dashboard-status-chart-body"><canvas id="dashboardStatusChart" aria-label="Gráfico da distribuição por status"></canvas></div>
+            <div class="dashboard-status-legend" id="dashboardStatusLegend"></div>
+        </article>
+    </section>
+
+    <section class="dashboard-analytics-grid dashboard-analytics-grid-secondary" aria-label="Detalhamento operacional">
+        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-steps me-1"></i>Serviços mais movimentados</h6>
+                    <span class="dashboard-chart-subtitle">Tipos com maior volume acumulado</span>
+                </div>
+            </div>
+            <div class="dashboard-chart-body dashboard-services-chart-body"><canvas id="dashboardServicesChart" aria-label="Gráfico dos serviços mais movimentados"></canvas></div>
+        </article>
+        <article class="rf-card dashboard-chart-panel dashboard-operational-panel">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-speedometer2 me-1"></i>Leitura operacional</h6>
+                    <span class="dashboard-chart-subtitle">Resumo acionável do momento</span>
+                </div>
+            </div>
+            <div class="dashboard-operational-list">
+                <div><span>Processos abertos</span><strong>{{ analytics.total_abertos }}</strong></div>
+                <div><span>Próximos 5 dias</span><strong>{{ analytics.total_proximos }}</strong></div>
+                <div><span>Minha carteira</span><strong>{{ dashboard_info.processos_vinculados_a_mim }}</strong></div>
+                <div><span>Concluídos no prazo</span><strong>{{ '%.1f'|format(analytics.taxa_no_prazo) }}%</strong></div>
+            </div>
+        </article>
+    </section>
 
     {# Script: linhas clicáveis dos cards do dashboard #}
     <script>
