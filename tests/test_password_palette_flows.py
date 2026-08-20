@@ -111,6 +111,8 @@ def test_profile_uses_compact_two_column_layout_without_profile_photo_controls(a
     assert 'profile-side-column' in body
     assert 'profile-theme-current' in body
     assert 'profile-password-grid' in body
+    assert 'Dicas de segurança' not in body
+    assert 'profile-security-card' not in body
     assert 'perfil-paleta-atual-nome' in body
     assert 'profile-photo' not in body
     palette_js = (Path(__file__).resolve().parents[1] / 'static/js/paleta.js').read_text(encoding='utf-8')

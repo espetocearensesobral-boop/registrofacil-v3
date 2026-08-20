@@ -4522,12 +4522,16 @@ html body #main-content.rf-list-page .rf-infinite-status {
 }
 #main-content .profile-side-column {
   display: grid;
+  grid-template-rows: auto auto;
   align-content: start;
-  gap: var(--rf-layout-section-gap, 1rem);
+  align-items: stretch;
+  gap: .75rem;
 }
 #main-content .profile-main-card,
 #main-content .profile-side-card {
+  width: 100%;
   min-width: 0;
+  margin: 0 !important;
   overflow: hidden;
   border-radius: var(--rf-radius-lg, 10px) !important;
   box-shadow: var(--rf-shadow-sm) !important;
@@ -4701,26 +4705,6 @@ html body #main-content.rf-list-page .rf-infinite-status {
   color: var(--rf-text-strong);
   font-size: .78rem;
 }
-#main-content .profile-security-card .rf-card-body {
-  padding: .7rem .8rem !important;
-}
-#main-content .profile-security-card ul {
-  display: grid;
-  gap: .45rem;
-}
-#main-content .profile-security-card li {
-  display: flex;
-  align-items: flex-start;
-  gap: .4rem;
-  margin: 0 !important;
-  color: var(--rf-text-body);
-  font-size: .76rem;
-  line-height: 1.35;
-}
-#main-content .profile-security-card li i {
-  flex: 0 0 auto;
-  margin: .08rem 0 0 !important;
-}
 @media (max-width: 900px) {
   #main-content .profile-page-layout {
     grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
@@ -4730,13 +4714,11 @@ html body #main-content.rf-list-page .rf-infinite-status {
 @media (max-width: 720px) {
   #main-content .profile-page-layout { grid-template-columns: 1fr; }
   #main-content .profile-side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #main-content .profile-security-card { grid-column: 1 / -1; }
 }
 @media (max-width: 575.98px) {
   #main-content .profile-field-grid,
   #main-content .profile-password-grid,
   #main-content .profile-side-column { grid-template-columns: 1fr; }
-  #main-content .profile-security-card { grid-column: auto; }
   #main-content .profile-main-card .rf-form-actions {
     align-items: stretch;
     flex-wrap: wrap;
