@@ -30,3 +30,14 @@ def test_global_submit_handler_preserves_named_submitter_values():
     assert "submitterProxy.name = submitterName" in main_js
     assert "submitterProxy.dataset.rfSubmitProxy = 'true'" in main_js
     assert "form.querySelectorAll('[data-rf-submit-proxy]').forEach(proxy => proxy.remove())" in main_js
+
+
+
+def test_backup_settings_modal_uses_compact_dialog_contract():
+    template = read("templates/backup.html")
+
+    assert 'class="modal-dialog backup-settings-dialog modal-dialog-centered modal-dialog-scrollable"' in template
+    assert 'width: min(100% - 1.5rem, 44rem)' in template
+    assert '#backupSettingsModal .backup-settings-body' in template
+    assert '#backupSettingsModal .cfg-card {\n    margin-bottom: 6px;' in template
+    assert '#backupSettingsModal .cfg-inline-end .cfg-sbtn' in template

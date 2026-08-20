@@ -18,28 +18,129 @@
 {% block content %}
 
 <style>
-.backup-settings-modal { border-radius: 10px; }
-.backup-settings-subtitle { color: var(--text-color-secondary); font-size: 12px; }
-.backup-settings-body { padding: 12px; background: var(--background-color-body); }
-#backupSettingsModal .cfg-card { margin-bottom: 10px; border-radius: 8px; }
-#backupSettingsModal .cfg-card-header { padding: 8px 12px; font-size: .72rem; }
-#backupSettingsModal .cfg-card-body { padding: 10px 12px; }
-#backupSettingsModal .cfg-section-stack-tight { display: flex; flex-direction: column; gap: 8px; }
-#backupSettingsModal .cfg-fld label { display: block; margin-bottom: 4px; font-size: .72rem; font-weight: 700; color: var(--text-color-secondary); }
-#backupSettingsModal .cfg-fld input, #backupSettingsModal .cfg-fld select { height: 34px; width: 100%; border: 1px solid var(--border-color-input); border-radius: 6px; padding: 0 9px; background: var(--background-color-card); color: var(--text-color-primary); font-size: 13px; }
-#backupSettingsModal .cfg-form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-#backupSettingsModal .cfg-form-2-gap, #backupSettingsModal .cfg-form-3-gap { margin-bottom: 10px; }
-#backupSettingsModal .cfg-form-3 { display: grid; grid-template-columns: 1fr 90px 1fr; gap: 10px; align-items: end; }
-#backupSettingsModal .cfg-path-row { display: flex; height: 34px; }
-#backupSettingsModal .cfg-path-input { flex: 1; min-width: 0; border: 1px solid var(--border-color-input); border-right: 0; border-radius: 6px 0 0 6px; padding: 0 9px; font-size: 13px; }
-#backupSettingsModal .cfg-browse-dir { width: 38px; height: 34px; border: 1px solid var(--border-color-input); border-radius: 0 6px 6px 0; background: var(--background-color-body); color: var(--text-color-secondary); }
-#backupSettingsModal .cfg-managed-path { height: 34px; width: 100%; border: 1px solid var(--border-color-input); border-radius: 6px; padding: 0 9px; font-size: 13px; }
-#backupSettingsModal .cfg-switch-header { margin: 0; font-size: 13px; text-transform: none; letter-spacing: normal; }
-#backupSettingsModal .cfg-auto-body { padding: 10px 12px !important; }
-#backupSettingsModal .cfg-inline-end { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
-#backupSettingsModal .week-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-#backupSettingsModal .wchip { padding: 4px 9px; }
-@media (max-width: 640px) { #backupSettingsModal .cfg-form-2, #backupSettingsModal .cfg-form-3 { grid-template-columns: 1fr; } #backupSettingsModal .cfg-inline-end { flex-wrap: wrap; } }
+#backupSettingsModal .backup-settings-dialog {
+    width: min(100% - 1.5rem, 44rem);
+    max-width: 44rem;
+    margin-inline: auto;
+}
+#backupSettingsModal .backup-settings-modal {
+    border-radius: 10px;
+}
+#backupSettingsModal .backup-settings-modal .modal-header {
+    min-height: 0;
+    padding: .75rem 1rem !important;
+}
+.backup-settings-subtitle { color: var(--text-color-secondary); font-size: 11px; }
+#backupSettingsModal .backup-settings-body {
+    padding: .75rem !important;
+    background: var(--background-color-body);
+}
+#backupSettingsModal .cfg-card {
+    margin-bottom: 6px;
+    border-radius: 8px;
+}
+#backupSettingsModal .cfg-card-header {
+    min-height: 2.25rem;
+    padding: .45rem .7rem !important;
+    font-size: .7rem;
+}
+#backupSettingsModal .cfg-card-body {
+    padding: .65rem .7rem !important;
+}
+#backupSettingsModal .cfg-section-stack-tight {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+#backupSettingsModal .cfg-fld label {
+    display: block;
+    margin-bottom: 3px;
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--text-color-secondary);
+    line-height: 1.2;
+}
+#backupSettingsModal .cfg-fld input,
+#backupSettingsModal .cfg-fld select {
+    height: 32px;
+    width: 100%;
+    border: 1px solid var(--border-color-input);
+    border-radius: 6px;
+    padding: 0 8px;
+    background: var(--background-color-card);
+    color: var(--text-color-primary);
+    font-size: 12px;
+}
+#backupSettingsModal .cfg-form-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+#backupSettingsModal .cfg-form-2-gap,
+#backupSettingsModal .cfg-form-3-gap {
+    margin-bottom: 7px;
+}
+#backupSettingsModal .cfg-form-3 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 4.75rem minmax(0, 1fr);
+    gap: 8px;
+    align-items: end;
+}
+#backupSettingsModal .cfg-path-row { display: flex; height: 32px; }
+#backupSettingsModal .cfg-path-input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--border-color-input);
+    border-right: 0;
+    border-radius: 6px 0 0 6px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+#backupSettingsModal .cfg-browse-dir {
+    width: 34px;
+    height: 32px;
+    border: 1px solid var(--border-color-input);
+    border-radius: 0 6px 6px 0;
+    background: var(--background-color-body);
+    color: var(--text-color-secondary);
+}
+#backupSettingsModal .cfg-managed-path {
+    height: 32px;
+    width: 100%;
+    border: 1px solid var(--border-color-input);
+    border-radius: 6px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+#backupSettingsModal .cfg-switch-header {
+    margin: 0;
+    font-size: 12px;
+    text-transform: none;
+    letter-spacing: normal;
+}
+#backupSettingsModal .cfg-auto-body { padding: .65rem .7rem !important; }
+#backupSettingsModal .cfg-inline-end {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 6px;
+}
+#backupSettingsModal .cfg-inline-end .cfg-sbtn {
+    min-height: 2.25rem;
+    padding: .35rem .7rem;
+    font-size: .78rem;
+}
+#backupSettingsModal .week-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+#backupSettingsModal .wchip { padding: 3px 7px; font-size: .75rem; }
+#backupSettingsModal .cfg-help-text { margin-top: .35rem !important; font-size: .7rem; line-height: 1.3; }
+#backupSettingsModal .cfg-margin-top-8 { margin-top: 6px !important; }
+@media (max-width: 640px) {
+    #backupSettingsModal .backup-settings-dialog { width: calc(100% - 1rem); }
+    #backupSettingsModal .cfg-form-2,
+    #backupSettingsModal .cfg-form-3 { grid-template-columns: 1fr; }
+    #backupSettingsModal .cfg-inline-end { flex-wrap: wrap; }
+    #backupSettingsModal .cfg-inline-end .cfg-sbtn { flex: 1 1 10rem; }
+}
 .backup-presence-modal { border-radius: 10px; overflow: hidden; }
 .backup-presence-body { background: var(--background-color-body); padding: 14px; }
 .backup-presence-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
@@ -225,7 +326,7 @@
 
 <!-- Modal compacto de configuração de Backup -->
 <div class="modal fade" id="backupSettingsModal" tabindex="-1" aria-labelledby="backupSettingsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog backup-settings-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content backup-settings-modal">
             <div class="modal-header">
                 <div>
