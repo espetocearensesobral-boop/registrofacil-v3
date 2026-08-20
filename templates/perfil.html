@@ -8,39 +8,20 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-lg-8">
-        <div class="rf-card profile-appearance-card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="bi bi-palette-fill me-2"></i>Aparência do Sistema
-                </h5>
-                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPaletas">
-                    <i class="bi bi-brush-fill me-1"></i>
-                    Aparência
-                </button>
-            </div>
-            <div class="rf-card-body">
-                <p class="text-muted mb-2">
-                    Escolha um dos vinte temas institucionais. Cada tema controla integralmente o sistema, incluindo a sidebar, telas, componentes e modais.
-                </p>
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <span class="text-muted">Tema atual:</span>
-                    <span class="badge badge-primary" id="paleta-atual-badge" style="background-color: var(--color-primary); color: white;">
-                        <i class="bi bi-check-circle-fill me-1"></i>
-                        <span id="paleta-atual-nome">Tema 01</span>
-                    </span>
+<div class="profile-page-layout">
+    <div class="profile-main-column">
+        <div class="rf-card profile-main-card">
+            <div class="rf-card-header profile-card-header">
+                <div>
+                    <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Dados pessoais e segurança</h5>
+                    <p class="profile-card-subtitle mb-0">Atualize seus dados e credenciais de acesso.</p>
                 </div>
             </div>
-        </div>
-        <div class="rf-card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Dados Pessoais</h5>
-            </div>
-            <div class="rf-card-body">
+            <div class="rf-card-body profile-form-body">
                 <form id="form-perfil" method="post" data-rf-submit-state data-submit-label="Salvar Alterações">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     
+                    <div class="profile-field-grid">
                     {# Nome Completo #}
                     <div class="mb-3">
                         <label for="nome" class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">
@@ -67,8 +48,9 @@
                                value="{{ user_data.email }}" 
                                required>
                     </div>
+                    </div>
                     
-                    <hr class="my-4">
+                    <hr class="profile-section-divider">
                     
                     {# Alterar Senha #}
                     <h6 class="mb-3"><i class="bi bi-key me-2"></i>Alterar Senha</h6>
@@ -83,6 +65,7 @@
                     </p>
                     {% endif %}
                     
+                    <div class="profile-password-grid">
                     <div class="mb-3">
                         <label for="senha_atual" class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Senha Atual</label>
                         <div class="input-group">
@@ -134,8 +117,9 @@
                             </button>
                         </div>
                     </div>
+                    </div>
                     
-                    <hr class="my-4">
+                    <hr class="profile-section-divider">
                     
                     {# Botões #}
                     <div class="rf-form-actions" data-action-bar>
@@ -147,14 +131,36 @@
             </div>
         </div>
     </div>
-    
-    <div class="col-lg-4">
-        {# Informações da Conta (Somente Leitura) #}
-        <div class="card shadow-sm mb-3">
-            <div class="card-header bg-light">
-                <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informações da Conta</h6>
+
+    <aside class="profile-side-column">
+        {# Aparência fica junto dos cartões auxiliares para reduzir a coluna principal. #}
+        <div class="rf-card profile-side-card profile-appearance-card">
+            <div class="rf-card-header profile-side-header">
+                <div>
+                    <h6 class="mb-0"><i class="bi bi-palette-fill me-2"></i>Aparência do sistema</h6>
+                    <span class="profile-side-caption">Identidade visual da aplicação</span>
+                </div>
+                <button class="nav-btn nav-btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPaletas" aria-label="Alterar aparência">
+                    <i class="bi bi-brush-fill"></i><span class="d-none d-xl-inline">Alterar</span>
+                </button>
             </div>
-            <div class="rf-card-body">
+            <div class="rf-card-body profile-appearance-body">
+                <div class="profile-theme-current">
+                    <span class="profile-theme-dot" aria-hidden="true"></span>
+                    <div>
+                        <span class="profile-side-caption">Tema atual</span>
+                        <strong id="perfil-paleta-atual-nome">Tema 01</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Informações da Conta (Somente Leitura) #}
+        <div class="rf-card profile-side-card profile-account-card">
+            <div class="rf-card-header profile-side-header">
+                <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informações da conta</h6>
+            </div>
+            <div class="rf-card-body profile-meta-list">
                 <div class="mb-3">
                     <label class="fw-bold text-muted small text-uppercase">Usuário</label>
                     <div class="p-2 bg-light rounded border small">
@@ -202,9 +208,9 @@
         </div>
         
         {# Dicas de Segurança #}
-        <div class="card shadow-sm border-primary">
-            <div class="card-header bg-primary text-white">
-                <h6 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Dicas de Segurança</h6>
+        <div class="rf-card profile-side-card profile-security-card">
+            <div class="rf-card-header profile-side-header">
+                <h6 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Dicas de segurança</h6>
             </div>
             <div class="rf-card-body">
                 <ul class="list-unstyled mb-0 small">
@@ -227,7 +233,7 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </aside>
 </div>
 
 <style>

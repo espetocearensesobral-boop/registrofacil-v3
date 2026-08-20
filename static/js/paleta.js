@@ -30,8 +30,9 @@ function atualizarEstadoCards(tema) {
         const label = choice.querySelector('.theme-choice-action-label');
         if (label) label.textContent = selected ? 'Tema selecionado' : 'Selecionar tema';
     });
-    const currentName = document.getElementById('paleta-atual-nome');
-    if (currentName) currentName.textContent = obterNomeTema(tema);
+    document.querySelectorAll('#paleta-atual-nome, #perfil-paleta-atual-nome').forEach((currentName) => {
+        currentName.textContent = obterNomeTema(tema);
+    });
     const badge = document.getElementById('paleta-atual-badge');
     if (badge) badge.dataset.currentTheme = tema;
 }

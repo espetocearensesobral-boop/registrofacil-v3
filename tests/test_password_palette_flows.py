@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from werkzeug.security import check_password_hash
 
 import models
@@ -82,7 +84,7 @@ def test_profile_exposes_twenty_institutional_themes_without_sidebar_palette(app
     for numero in range(1, 21):
         assert f'Tema {numero:02d}' in body
     assert '30 paletas profissionais' not in body
-    assert 'vinte temas institucionais' in body
+    assert '30 temas disponíveis' in body
     assert 'sidebar-color-grid' not in body
     assert 'Cor de seleção da sidebar' not in body
 
@@ -95,3 +97,21 @@ def test_sidebar_palette_endpoint_is_removed(app_client):
         headers={'X-CSRFToken': csrf},
     )
     assert response.status_code == 404
+
+
+
+def test_profile_uses_compact_two_column_layout_without_profile_photo_controls(app_client):
+    _login(app_client)
+    response = app_client.get('/perfil/')
+    assert response.status_code == 200
+    body = response.get_data(as_text=True)
+
+    assert 'profile-page-layout' in body
+    assert 'profile-main-column' in body
+    assert 'profile-side-column' in body
+    assert 'profile-theme-current' in body
+    assert 'profile-password-grid' in body
+    assert 'perfil-paleta-atual-nome' in body
+    assert 'profile-photo' not in body
+    palette_js = (Path(__file__).resolve().parents[1] / 'static/js/paleta.js').read_text(encoding='utf-8')
+    assert "document.querySelectorAll('#paleta-atual-nome, #perfil-paleta-atual-nome')" in palette_js
