@@ -591,6 +591,138 @@ def get_critical_deadline_processes(limit=5):
             r['prazo_final_dt'] = None
     return results
 
+def get_dashboard_analytics():
+    """Retorna indicadores agregados do Dashboard usando somente dados reais do sistema.
+
+    A janela de movimentação considera os últimos sete dias, incluindo o dia atual.
+    As consultas usam as tabelas existentes e retornam estruturas prontas para os
+    cards e gráficos, sem gerar dados sintéticos.
+    """
+    daily_query = """
+        SELECT * FROM (
+            WITH RECURSIVE dias(dia) AS (
+                SELECT date('now', 'localtime', '-6 days')
+                UNION ALL
+                SELECT date(dia, '+1 day') FROM dias
+                WHERE dia < date('now', 'localtime')
+            )
+            SELECT
+                dias.dia,
+                COUNT(P.id) AS total
+            FROM dias
+            LEFT JOIN processos P
+                ON date(COALESCE(NULLIF(P.data_entrada, ''), P.created_at)) = dias.dia
+            GROUP BY dias.dia
+            ORDER BY dias.dia ASC
+        )
+    """
+    daily_rows = executar_query(daily_query, fetch_all=True) or []
+
+    status_rows = executar_query(
+        """
+        SELECT SP.nome, SP.hex_color, COUNT(P.id) AS total
+        FROM status_processo SP
+        LEFT JOIN processos P ON P.status_id = SP.id
+        GROUP BY SP.id, SP.nome, SP.hex_color
+        HAVING COUNT(P.id) > 0
+        ORDER BY total DESC, SP.nome COLLATE NOCASE ASC
+        """,
+        fetch_all=True,
+    ) or []
+
+    service_rows = executar_query(
+        """
+        SELECT COALESCE(TS.nome, 'Sem tipo') AS nome, COUNT(P.id) AS total
+        FROM processos P
+        LEFT JOIN tipos_servico TS ON P.tipo_id = TS.id
+        GROUP BY P.tipo_id, TS.nome
+        ORDER BY total DESC, nome COLLATE NOCASE ASC
+        LIMIT 5
+        """,
+        fetch_all=True,
+    ) or []
+
+    summary = executar_query(
+        """
+        SELECT
+            COUNT(P.id) AS total_processos,
+            SUM(CASE WHEN SP.nome = 'Finalizado' OR P.data_conclusao IS NOT NULL THEN 1 ELSE 0 END) AS total_concluidos,
+            SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado' THEN 1 ELSE 0 END) AS total_abertos,
+            SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado' AND P.prazo_final < date('now', 'localtime') THEN 1 ELSE 0 END) AS total_vencidos,
+            SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado' AND P.prazo_final = date('now', 'localtime') THEN 1 ELSE 0 END) AS total_vencem_hoje,
+            SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado' AND P.prazo_final > date('now', 'localtime') AND P.prazo_final <= date('now', 'localtime', '+5 days') THEN 1 ELSE 0 END) AS total_proximos,
+            SUM(CASE WHEN date(COALESCE(NULLIF(P.data_entrada, ''), P.created_at)) >= date('now', 'localtime', '-6 days') THEN 1 ELSE 0 END) AS movimentacao_7_dias
+        FROM processos P
+        JOIN status_processo SP ON P.status_id = SP.id
+        """,
+        fetch_one=True,
+    ) or {}
+
+    performance = executar_query(
+        """
+        SELECT
+            COALESCE(ROUND(AVG(CASE
+                WHEN P.data_conclusao IS NOT NULL
+                 AND P.data_entrada IS NOT NULL
+                 AND julianday(P.data_conclusao) >= julianday(P.data_entrada)
+                THEN julianday(P.data_conclusao) - julianday(P.data_entrada)
+            END), 1), 0) AS media_dias_conclusao,
+            SUM(CASE
+                WHEN P.data_conclusao IS NOT NULL
+                 AND P.prazo_final IS NOT NULL
+                 AND date(P.data_conclusao) <= date(P.prazo_final)
+                THEN 1 ELSE 0
+            END) AS concluidos_no_prazo,
+            SUM(CASE WHEN P.data_conclusao IS NOT NULL OR SP.nome = 'Finalizado' THEN 1 ELSE 0 END) AS concluidos_com_data
+        FROM processos P
+        JOIN status_processo SP ON P.status_id = SP.id
+        """,
+        fetch_one=True,
+    ) or {}
+
+    daily = []
+    for row in daily_rows:
+        dia = row.get('dia')
+        try:
+            label = datetime.strptime(dia, '%Y-%m-%d').strftime('%d/%m')
+        except (TypeError, ValueError):
+            label = dia or '—'
+        daily.append({'dia': dia, 'label': label, 'total': int(row.get('total') or 0)})
+
+    total_processos = int(summary.get('total_processos') or 0)
+    total_concluidos = int(summary.get('total_concluidos') or 0)
+    concluidos_com_data = int(performance.get('concluidos_com_data') or 0)
+    concluidos_no_prazo = int(performance.get('concluidos_no_prazo') or 0)
+    pico = max(daily, key=lambda item: item['total'], default={'dia': None, 'label': '—', 'total': 0})
+
+    return {
+        'movimentacao_diaria': daily,
+        'status_distribuicao': [
+            {
+                'nome': row.get('nome') or 'Sem status',
+                'cor': row.get('hex_color') or '#6B7280',
+                'total': int(row.get('total') or 0),
+            }
+            for row in status_rows
+        ],
+        'servicos_principais': [
+            {'nome': row.get('nome') or 'Sem tipo', 'total': int(row.get('total') or 0)}
+            for row in service_rows
+        ],
+        'total_processos': total_processos,
+        'total_concluidos': total_concluidos,
+        'total_abertos': int(summary.get('total_abertos') or 0),
+        'total_vencidos': int(summary.get('total_vencidos') or 0),
+        'total_vencem_hoje': int(summary.get('total_vencem_hoje') or 0),
+        'total_proximos': int(summary.get('total_proximos') or 0),
+        'movimentacao_7_dias': int(summary.get('movimentacao_7_dias') or 0),
+        'pico_movimentacao': pico,
+        'media_dias_conclusao': float(performance.get('media_dias_conclusao') or 0),
+        'taxa_conclusao': round((total_concluidos / total_processos) * 100, 1) if total_processos else 0,
+        'taxa_no_prazo': round((concluidos_no_prazo / concluidos_com_data) * 100, 1) if concluidos_com_data else 0,
+    }
+
+
 def obter_anexos_processo(processo_id):
     query = "SELECT id, nome_original, nome_arquivo, tipo, tamanho, data_upload FROM anexos_processos WHERE processo_id = ?"
     return executar_query(query, [processo_id])

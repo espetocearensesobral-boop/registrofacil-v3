@@ -86,6 +86,7 @@ from data.processes import (
     get_user_linked_processes_count,
     get_recent_processes,
     get_critical_deadline_processes,
+    get_dashboard_analytics,
     obter_anexos_processo,
     inserir_anexo_processo,
     excluir_anexo_processo,

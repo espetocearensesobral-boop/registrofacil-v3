@@ -26,3 +26,191 @@
 .prazo-chip-hoje { color: var(--color-warning); background: color-mix(in srgb, var(--color-warning) 12%, transparent); border-color: color-mix(in srgb, var(--color-warning) 35%, transparent); }
 .prazo-chip-futuro { color: var(--color-info); background: color-mix(in srgb, var(--color-info) 10%, transparent); border-color: color-mix(in srgb, var(--color-info) 35%, transparent); }
 @media (max-width: 991.98px) { .dash-card-body, .dashboard-panel-body { flex-basis: auto; overflow: visible; } }
+
+/* -------------------------------------------------------------------------
+   Dashboard analítico — leitura compacta, visual e acionável
+   ------------------------------------------------------------------------- */
+.dashboard-insights-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .75rem;
+}
+.dashboard-insight-card {
+    --insight-color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    min-width: 0;
+    min-height: 5.25rem;
+    padding: .8rem .85rem;
+    border: 1px solid var(--rf-border);
+    border-top: 3px solid var(--insight-color);
+    border-radius: var(--rf-radius-md);
+    background: var(--rf-surface);
+    box-shadow: var(--rf-shadow-sm);
+}
+.dashboard-insight-blue { --insight-color: var(--color-info); }
+.dashboard-insight-green { --insight-color: var(--color-success); }
+.dashboard-insight-red { --insight-color: var(--color-error); }
+.dashboard-insight-gold { --insight-color: var(--color-primary); }
+.dashboard-insight-icon {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    border-radius: var(--rf-radius-sm);
+    background: color-mix(in srgb, var(--insight-color) 12%, var(--rf-surface));
+    color: var(--insight-color);
+    font-size: .95rem;
+}
+.dashboard-insight-content { min-width: 0; }
+.dashboard-insight-label,
+.dashboard-insight-content small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.dashboard-insight-label {
+    color: var(--rf-text-muted);
+    font-size: .66rem;
+    font-weight: 750;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+.dashboard-insight-content strong {
+    display: block;
+    margin-top: .15rem;
+    color: var(--rf-text-strong);
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.05;
+}
+.dashboard-insight-content strong em {
+    font-size: .7rem;
+    font-style: normal;
+    font-weight: 700;
+}
+.dashboard-insight-content small {
+    margin-top: .25rem;
+    color: var(--rf-text-muted);
+    font-size: .68rem;
+}
+.dashboard-analytics-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(16rem, .85fr);
+    gap: .75rem;
+}
+.dashboard-chart-panel {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    overflow: hidden;
+}
+.dashboard-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    min-height: 3.35rem;
+    padding: .7rem .85rem !important;
+}
+.dashboard-chart-header > div { min-width: 0; }
+.dashboard-chart-subtitle {
+    display: block;
+    margin-top: .18rem;
+    color: var(--rf-text-muted);
+    font-size: .68rem;
+    line-height: 1.25;
+}
+.dashboard-chart-kicker {
+    flex: 0 0 auto;
+    padding: .25rem .45rem;
+    border: 1px solid var(--rf-border);
+    border-radius: 999px;
+    color: var(--rf-text-muted);
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+}
+.dashboard-chart-body {
+    position: relative;
+    height: 13rem;
+    min-height: 0;
+    padding: .55rem .85rem .7rem;
+}
+.dashboard-chart-body canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+.dashboard-status-chart-body { height: 9.6rem; padding-bottom: .25rem; }
+.dashboard-services-chart-body { height: 12rem; }
+.dashboard-status-legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .35rem .7rem;
+    padding: .15rem .85rem .75rem;
+}
+.dashboard-status-legend-item {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: .35rem;
+    color: var(--rf-text-muted);
+    font-size: .68rem;
+}
+.dashboard-status-legend-dot {
+    width: .5rem;
+    height: .5rem;
+    flex: 0 0 .5rem;
+    border-radius: 50%;
+    background: var(--legend-color);
+}
+.dashboard-status-legend-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.dashboard-status-legend-total {
+    margin-left: auto;
+    color: var(--rf-text-strong);
+    font-weight: 750;
+}
+.dashboard-operational-panel { min-height: 0; }
+.dashboard-operational-list {
+    display: grid;
+    gap: 0;
+    padding: .25rem .85rem .6rem;
+}
+.dashboard-operational-list > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    min-height: 2.25rem;
+    border-bottom: 1px solid var(--rf-border-subtle);
+    color: var(--rf-text-muted);
+    font-size: .76rem;
+}
+.dashboard-operational-list > div:last-child { border-bottom: 0; }
+.dashboard-operational-list strong {
+    color: var(--rf-text-strong);
+    font-size: .88rem;
+}
+@media (max-width: 1100px) {
+    .dashboard-insights-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+    .dashboard-analytics-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 575.98px) {
+    .dashboard-insights-grid { grid-template-columns: 1fr; }
+    .dashboard-insight-card { min-height: 4.75rem; }
+    .dashboard-chart-header { align-items: flex-start; }
+    .dashboard-chart-body { height: 11.5rem; padding-inline: .65rem; }
+    .dashboard-status-chart-body { height: 9rem; }
+    .dashboard-status-legend { padding-inline: .65rem; }
+}

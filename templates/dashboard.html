@@ -53,6 +53,91 @@
         </a>
     </div>
 
+    {% set analytics = dashboard_info.analytics %}
+    <section class="dashboard-insights-grid" aria-label="Indicadores complementares">
+        <article class="dashboard-insight-card dashboard-insight-blue">
+            <div class="dashboard-insight-icon"><i class="bi bi-activity"></i></div>
+            <div class="dashboard-insight-content">
+                <span class="dashboard-insight-label">Movimentação · 7 dias</span>
+                <strong>{{ analytics.movimentacao_7_dias }}</strong>
+                <small>Pico de {{ analytics.pico_movimentacao.total }} em {{ analytics.pico_movimentacao.label }}</small>
+            </div>
+        </article>
+        <article class="dashboard-insight-card dashboard-insight-green">
+            <div class="dashboard-insight-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="dashboard-insight-content">
+                <span class="dashboard-insight-label">Taxa de conclusão</span>
+                <strong>{{ '%.1f'|format(analytics.taxa_conclusao) }}%</strong>
+                <small>{{ analytics.total_concluidos }} de {{ analytics.total_processos }} processos</small>
+            </div>
+        </article>
+        <article class="dashboard-insight-card dashboard-insight-red">
+            <div class="dashboard-insight-icon"><i class="bi bi-alarm"></i></div>
+            <div class="dashboard-insight-content">
+                <span class="dashboard-insight-label">Atenção a prazos</span>
+                <strong>{{ analytics.total_vencidos + analytics.total_vencem_hoje }}</strong>
+                <small>{{ analytics.total_vencidos }} vencidos · {{ analytics.total_vencem_hoje }} hoje</small>
+            </div>
+        </article>
+        <article class="dashboard-insight-card dashboard-insight-gold">
+            <div class="dashboard-insight-icon"><i class="bi bi-stopwatch"></i></div>
+            <div class="dashboard-insight-content">
+                <span class="dashboard-insight-label">Tempo médio de conclusão</span>
+                <strong>{{ '%.1f'|format(analytics.media_dias_conclusao) }} <em>dias</em></strong>
+                <small>{{ '%.1f'|format(analytics.taxa_no_prazo) }}% concluídos no prazo</small>
+            </div>
+        </article>
+    </section>
+
+    <section class="dashboard-analytics-grid" aria-label="Análises do movimento">
+        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-line me-1"></i>Movimentação diária</h6>
+                    <span class="dashboard-chart-subtitle">Entradas registradas nos últimos sete dias</span>
+                </div>
+                <span class="dashboard-chart-kicker">PICO {{ analytics.pico_movimentacao.total }}</span>
+            </div>
+            <div class="dashboard-chart-body"><canvas id="dashboardMovementChart" aria-label="Gráfico de barras da movimentação diária"></canvas></div>
+        </article>
+        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-status">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-pie-chart me-1"></i>Distribuição por status</h6>
+                    <span class="dashboard-chart-subtitle">Carteira atual de processos</span>
+                </div>
+            </div>
+            <div class="dashboard-chart-body dashboard-status-chart-body"><canvas id="dashboardStatusChart" aria-label="Gráfico da distribuição por status"></canvas></div>
+            <div class="dashboard-status-legend" id="dashboardStatusLegend"></div>
+        </article>
+    </section>
+
+    <section class="dashboard-analytics-grid dashboard-analytics-grid-secondary" aria-label="Detalhamento operacional">
+        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-steps me-1"></i>Serviços mais movimentados</h6>
+                    <span class="dashboard-chart-subtitle">Tipos com maior volume acumulado</span>
+                </div>
+            </div>
+            <div class="dashboard-chart-body dashboard-services-chart-body"><canvas id="dashboardServicesChart" aria-label="Gráfico dos serviços mais movimentados"></canvas></div>
+        </article>
+        <article class="rf-card dashboard-chart-panel dashboard-operational-panel">
+            <div class="rf-card-header dashboard-chart-header">
+                <div>
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-speedometer2 me-1"></i>Leitura operacional</h6>
+                    <span class="dashboard-chart-subtitle">Resumo acionável do momento</span>
+                </div>
+            </div>
+            <div class="dashboard-operational-list">
+                <div><span>Processos abertos</span><strong>{{ analytics.total_abertos }}</strong></div>
+                <div><span>Próximos 5 dias</span><strong>{{ analytics.total_proximos }}</strong></div>
+                <div><span>Minha carteira</span><strong>{{ dashboard_info.processos_vinculados_a_mim }}</strong></div>
+                <div><span>Concluídos no prazo</span><strong>{{ '%.1f'|format(analytics.taxa_no_prazo) }}%</strong></div>
+            </div>
+        </article>
+    </section>
+
     <div class="row g-3 dashboard-panels-row">
 
         {# Card: Processos Recentes — interativo #}
@@ -234,5 +319,142 @@
         const textColor = '#212529';
         const gridColor = 'rgba(0, 0, 0, 0.1)';
     });
+    </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Chart === 'undefined') return;
+
+    const analytics = {{ dashboard_info.analytics | tojson }};
+    const rootStyles = getComputedStyle(document.body);
+    const token = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
+    const colors = {
+        primary: token('--color-primary', '#CDA865'),
+        dark: token('--rf-text-strong', '#121212'),
+        muted: token('--rf-text-muted', '#6B7280'),
+        border: token('--rf-border-subtle', '#E2E2E2'),
+        info: token('--color-info', '#2D6A8A'),
+        success: token('--color-success', '#3E7C59'),
+        error: token('--color-error', '#9B3A3A'),
+    };
+    const movement = analytics.movimentacao_diaria || [];
+    const status = analytics.status_distribuicao || [];
+    const services = analytics.servicos_principais || [];
+    const chartDefaults = {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 450 },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: colors.dark,
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                padding: 10,
+                cornerRadius: 7,
+            },
+        },
+    };
+    const grid = { color: colors.border, drawBorder: false };
+    const axis = { color: colors.muted, font: { size: 10 } };
+
+    const movementCanvas = document.getElementById('dashboardMovementChart');
+    if (movementCanvas) {
+        new Chart(movementCanvas, {
+            type: 'bar',
+            data: {
+                labels: movement.map(item => item.label),
+                datasets: [{
+                    label: 'Entradas',
+                    data: movement.map(item => item.total),
+                    backgroundColor: colors.primary,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    maxBarThickness: 34,
+                }],
+            },
+            options: {
+                ...chartDefaults,
+                scales: {
+                    x: { grid: { display: false }, ticks: axis },
+                    y: { beginAtZero: true, ticks: { ...axis, precision: 0 }, grid },
+                },
+            },
+        });
+    }
+
+    const statusCanvas = document.getElementById('dashboardStatusChart');
+    if (statusCanvas) {
+        new Chart(statusCanvas, {
+            type: 'doughnut',
+            data: {
+                labels: status.map(item => item.nome),
+                datasets: [{
+                    data: status.map(item => item.total),
+                    backgroundColor: status.map(item => item.cor),
+                    borderColor: token('--rf-surface', '#FFFFFF'),
+                    borderWidth: 3,
+                    hoverOffset: 5,
+                }],
+            },
+            options: {
+                ...chartDefaults,
+                cutout: '66%',
+                plugins: {
+                    ...chartDefaults.plugins,
+                    tooltip: {
+                        ...chartDefaults.plugins.tooltip,
+                        callbacks: { label: context => ` ${context.label}: ${context.raw}` },
+                    },
+                },
+            },
+        });
+    }
+
+    const legend = document.getElementById('dashboardStatusLegend');
+    if (legend) {
+        status.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'dashboard-status-legend-item';
+            const dot = document.createElement('span');
+            dot.className = 'dashboard-status-legend-dot';
+            dot.style.setProperty('--legend-color', item.cor);
+            const name = document.createElement('span');
+            name.className = 'dashboard-status-legend-name';
+            name.textContent = item.nome;
+            const total = document.createElement('strong');
+            total.className = 'dashboard-status-legend-total';
+            total.textContent = item.total;
+            row.append(dot, name, total);
+            legend.appendChild(row);
+        });
+    }
+
+    const servicesCanvas = document.getElementById('dashboardServicesChart');
+    if (servicesCanvas) {
+        new Chart(servicesCanvas, {
+            type: 'bar',
+            data: {
+                labels: services.map(item => item.nome),
+                datasets: [{
+                    label: 'Processos',
+                    data: services.map(item => item.total),
+                    backgroundColor: colors.info,
+                    borderRadius: 5,
+                    borderSkipped: false,
+                    barPercentage: .62,
+                }],
+            },
+            options: {
+                ...chartDefaults,
+                indexAxis: 'y',
+                scales: {
+                    x: { beginAtZero: true, ticks: { ...axis, precision: 0 }, grid },
+                    y: { grid: { display: false }, ticks: { ...axis, autoSkip: false } },
+                },
+            },
+        });
+    }
+});
 </script>
 {% endblock scripts %}
