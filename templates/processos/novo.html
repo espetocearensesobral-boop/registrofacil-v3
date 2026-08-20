@@ -13,7 +13,7 @@
 
 {% block content %}
 <div class="form-card rf-form-card rf-wide">
-    <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.novo') }}" data-rf-submit-state data-submit-label="Cadastrar Processo">
+    <form id="form-processo" method="post" enctype="multipart/form-data" novalidate action="{{ url_for('processos.novo') }}" data-rf-submit-state data-rf-submit-managed data-submit-label="Cadastrar Processo">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         
         <div class="form-section">

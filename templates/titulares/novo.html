@@ -20,7 +20,7 @@
                 <small>Preencha as informações para cadastrar um novo titular</small>
             </div>
         </div>
-        <form id="form-titular" method="post" novalidate action="{{ url_for('titulares.novo') }}" data-rf-submit-state data-submit-label="Cadastrar Titular">
+        <form id="form-titular" method="post" novalidate action="{{ url_for('titulares.novo') }}" data-rf-submit-state data-rf-submit-managed data-submit-label="Cadastrar Titular">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <div class="nt-body">
                 <div class="nt-fld">

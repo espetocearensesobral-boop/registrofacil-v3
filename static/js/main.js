@@ -77,15 +77,34 @@ document.addEventListener('DOMContentLoaded', inicializarLoadingNavegacao);
  * Estado visual comum para ações de envio: confirma o clique, evita duplo envio
  * e preserva o texto específico de cada ação sem alterar o fluxo do backend.
  */
+function restaurarEstadoDeEnvio(form, submitButton = null) {
+    if (!form) return;
+    const button = submitButton || form.querySelector('button[type="submit"][data-rf-submitting]');
+    if (button) {
+        if (Object.prototype.hasOwnProperty.call(button.dataset, 'rfOriginalHtml')) {
+            button.innerHTML = button.dataset.rfOriginalHtml;
+        }
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+        delete button.dataset.rfSubmitting;
+        delete button.dataset.rfOriginalHtml;
+    }
+    form.removeAttribute('aria-busy');
+    if (typeof window.hidePageLoading === 'function') window.hidePageLoading();
+}
+
+window.resetSubmitState = restaurarEstadoDeEnvio;
+
 function inicializarEstadosDeEnvio() {
     document.querySelectorAll('form').forEach(form => {
         const declaredSubmitState = form.hasAttribute('data-rf-submit-state');
         const declaredSubmitButton = form.querySelector('button[type="submit"][data-loading-text]');
-        if (!declaredSubmitState && !declaredSubmitButton) return;
+        const customSubmitHandler = form.hasAttribute('data-rf-submit-managed') || form.dataset.rfSubmitManaged === 'true';
+        if ((!declaredSubmitState && !declaredSubmitButton) || customSubmitHandler) return;
         if (form.dataset.rfSubmitStateReady === 'true') return;
         form.dataset.rfSubmitStateReady = 'true';
         form.addEventListener('submit', function(event) {
-            // Handlers AJAX existentes exibem seus próprios toasts e loading; não duplicar.
+            // Formulários com validação/AJAX próprios controlam o estado localmente.
             if (event.defaultPrevented) return;
             const submitButton = event.submitter || this.querySelector('button[type="submit"]:not([data-no-submit-state])');
             if (!submitButton || submitButton.dataset.rfSubmitting === 'true') return;
@@ -100,6 +119,13 @@ function inicializarEstadosDeEnvio() {
         });
     });
 }
+
+window.addEventListener('pageshow', () => {
+    document.querySelectorAll('form[data-rf-submit-state]').forEach(form => {
+        if (form.hasAttribute('data-rf-submit-managed') || form.dataset.rfSubmitManaged === 'true') return;
+        restaurarEstadoDeEnvio(form);
+    });
+});
 
 document.addEventListener('DOMContentLoaded', inicializarEstadosDeEnvio);
 
