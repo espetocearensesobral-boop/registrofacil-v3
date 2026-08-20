@@ -388,14 +388,14 @@ html body #modalPaletas .theme-choice,
 html body #modalPaletas .theme-choice:hover,
 html body #modalPaletas .theme-choice:focus,
 html body #modalPaletas .theme-choice.selected {
-  background: #FFFFFF !important;
-  background-color: #FFFFFF !important;
-  color: #2A2A2A !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  background-color: var(--rf-surface-card, #FFFFFF) !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
 }
 html body #modalPaletas .theme-choice strong,
 html body #modalPaletas .theme-choice small,
 html body #modalPaletas .theme-choice .theme-choice-action {
-  color: #2A2A2A !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
 }
 html body #modalPaletas .theme-choice .theme-choice-number,
 html body #modalPaletas .theme-choice .theme-choice-action i {
@@ -405,7 +405,7 @@ html body #modalPaletas .theme-choice.selected .theme-choice-action-label {
   color: var(--color-primary-dark, #243B53) !important;
 }
 html body #modalPaletas .theme-choice-check {
-  background: #FFFFFF !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
   color: transparent !important;
 }
 html body #modalPaletas .theme-choice.selected .theme-choice-check {
@@ -1151,31 +1151,31 @@ html body #globalSearchModal #modal-global-search-clear {
 
 html body #globalSearchModal .rf-process-report-actions .nav-btn-secondary,
 html body #globalSearchModal #modal-global-search-clear {
-  background: #ffffff !important;
-  border: 1px solid #8b949e !important;
-  color: #1f2933 !important;
+  background: var(--rf-surface-modal, #FFFFFF) !important;
+  border: 1px solid var(--rf-border-input, #AEBBC4) !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
 }
 
 html body #globalSearchModal .rf-process-report-actions .nav-btn-secondary:hover,
 html body #globalSearchModal .rf-process-report-actions .nav-btn-secondary:focus-visible,
 html body #globalSearchModal #modal-global-search-clear:hover,
 html body #globalSearchModal #modal-global-search-clear:focus-visible {
-  background: #eef1f4 !important;
-  border-color: #4b5563 !important;
-  color: #111827 !important;
+  background: var(--rf-surface-muted, #EDF2F4) !important;
+  border-color: var(--rf-border-strong, #AEBBC4) !important;
+  color: var(--rf-text-heading, #121212) !important;
 }
 
 html body #globalSearchModal .rf-process-report-actions .nav-btn-primary {
-  background: #161a1f !important;
-  border: 1px solid #161a1f !important;
-  color: #ffffff !important;
+  background: var(--rf-action-primary, var(--color-primary)) !important;
+  border: 1px solid var(--rf-action-primary, var(--color-primary)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
 }
 
 html body #globalSearchModal .rf-process-report-actions .nav-btn-primary:hover,
 html body #globalSearchModal .rf-process-report-actions .nav-btn-primary:focus-visible {
-  background: #2d333b !important;
-  border-color: #2d333b !important;
-  color: #ffffff !important;
+  background: var(--rf-action-primary-hover, var(--color-primary-light)) !important;
+  border-color: var(--rf-action-primary-hover, var(--color-primary-light)) !important;
+  color: var(--rf-text-on-primary, #FFFFFF) !important;
 }
 
 html body #globalSearchModal .gs-empty,
@@ -1191,13 +1191,13 @@ html body #globalSearchModal .gs-loading {
 
 html body #globalSearchModal .gs-empty i {
   margin-bottom: .5rem;
-  color: #6b7280;
+  color: var(--rf-text-muted, #2A2A2A);
   font-size: 1.75rem;
 }
 
 html body #globalSearchModal .gs-empty p {
   margin: 0;
-  color: #1f2933;
+  color: var(--rf-text-heading, #121212);
   font-size: .9375rem;
   font-weight: 700;
 }
@@ -1205,7 +1205,7 @@ html body #globalSearchModal .gs-empty p {
 html body #globalSearchModal .gs-empty .rf-search-hint {
   max-width: 30rem;
   margin-top: .3rem;
-  color: #59636e;
+  color: var(--rf-text-secondary, #2A2A2A);
   font-size: .8125rem;
   font-weight: 400;
   line-height: 1.45;
@@ -1618,13 +1618,13 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
 #main-content .filter-bar.process-filter-surface .process-filter-search input {
   border-color: var(--rf-border-strong, #c9cfd6) !important;
   border-radius: .45rem !important;
-  background: #fff !important;
+  background: var(--rf-surface-input, var(--rf-surface-card, #FFFFFF)) !important;
   color: var(--rf-text-body, #2a2a2a) !important;
 }
 #main-content .filter-bar.process-filter-surface .process-filter-select {
   border-color: var(--rf-border-strong, #c9cfd6) !important;
   border-radius: .45rem !important;
-  background-color: #fff !important;
+  background-color: var(--rf-surface-input, var(--rf-surface-card, #FFFFFF)) !important;
   color: var(--rf-text-body, #2a2a2a) !important;
 }
 @media (max-width: 800px) {
@@ -1747,10 +1747,10 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
 }
 #main-content .filter-bar.process-filter-surface .process-filter-chip {
   flex: 0 0 auto;
-  border: 1px solid #d0d5dd !important;
+  border: 1px solid var(--rf-border, #D2DBE0) !important;
   border-radius: 999px !important;
-  background: #f8fafc !important;
-  color: #344054 !important;
+  background: var(--rf-surface-muted, #EDF2F4) !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
   font-size: .75rem;
   font-weight: 500;
   line-height: 1.25;
@@ -1762,8 +1762,8 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
 }
 #main-content .filter-bar.process-filter-surface .process-filter-chip button:hover,
 #main-content .filter-bar.process-filter-surface .process-filter-chip button:focus-visible {
-  background: #e4e7ec;
-  color: #1d2939 !important;
+  background: var(--rf-surface-hover, #E5ECEF);
+  color: var(--rf-text-heading, #121212) !important;
   outline: 0;
 }
 
@@ -2012,7 +2012,7 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   min-height: 2rem;
   border: 1px solid var(--rf-border-strong, #c9cfd6);
   border-radius: .45rem;
-  background: #fff;
+  background: var(--rf-surface-input, var(--rf-surface-card, #FFFFFF));
   color: var(--rf-text-body, #2a2a2a);
   font-size: .8125rem;
 }
@@ -2130,7 +2130,7 @@ html body #globalSearchModal .rf-process-report-actions .nav-btn {
   min-height: 2rem;
   border: 1px solid var(--rf-border-strong, #c9cfd6);
   border-radius: .45rem;
-  background: #fff;
+  background: var(--rf-surface-input, var(--rf-surface-card, #FFFFFF));
   color: var(--rf-text-body, #2a2a2a);
   font-size: .8125rem;
 }

@@ -63,9 +63,9 @@ SEMANTICO = """
     --rf-text-strong: #121212;
     --rf-text-body: #2A2A2A;
 
-    --rf-bg-cold: #F8F8F8;
-    --rf-bg-warm: #FDF8F0;
-    --rf-surface-modal: #FFFFFF;
+    --rf-bg-cold: #F6F8F9;
+    --rf-bg-warm: #F3F6F7;
+    --rf-surface-modal: var(--background-color-card);
     --rf-text-on-primary: var(--color-primary-contrast, #FFFFFF);
     --rf-text-on-sidebar: var(--sidebar-text);
     --rf-text-link: var(--text-color-link);
@@ -75,10 +75,9 @@ SEMANTICO = """
     --rf-surface-muted: var(--background-color-hover);
     --rf-surface-input: var(--background-color-input-bg);
     --rf-surface-hover: var(--background-color-hover);
-    --rf-surface-overlay: color-mix(in srgb, var(--background-color-body) 88%, #000000);
+    --rf-surface-overlay: rgba(15, 23, 42, .48);
     --rf-surface: var(--background-color-card);
     --rf-page: var(--background-color-body);
-    --rf-surface-modal: #FFFFFF;
 
     --rf-border: var(--border-color-default);
     --rf-border-subtle: color-mix(in srgb, var(--border-color-default) 60%, transparent);
@@ -148,11 +147,20 @@ WARM_FAMILIES = {
     'fiery-sunset', 'terra-musgo',
 }
 
+# Fundação secundária compartilhada. As cinco cores de cada paleta continuam
+# intactas; estes tokens controlam apenas o espaço de leitura dos componentes.
+SECONDARY_PAGE_COOL = '#F6F8F9'
+SECONDARY_PAGE_WARM = '#F3F6F7'
+SECONDARY_SURFACE = '#FFFFFF'
+SECONDARY_HOVER = '#EDF2F4'
+SECONDARY_BORDER = '#D2DBE0'
+SECONDARY_INPUT_BORDER = '#AEBBC4'
+
 
 def foundations(p: dict) -> tuple[str, str]:
-    """Retorna fundo de página e superfície limpa para a família do tema."""
-    page = '#FDF8F0' if p['familia'] in WARM_FAMILIES else '#F8F8F8'
-    return page, '#FFFFFF'
+    """Retorna fundo de página frio e superfície limpa para a família do tema."""
+    page = SECONDARY_PAGE_WARM if p['familia'] in WARM_FAMILIES else SECONDARY_PAGE_COOL
+    return page, SECONDARY_SURFACE
 
 
 def render_fallback(p: dict) -> str:
@@ -183,15 +191,15 @@ def render_fallback(p: dict) -> str:
     --background-color-body: {page};
     --background-color-card: {surface};
     --background-color-header: {surface};
-    --background-color-hover: color-mix(in srgb, {page} 90%, {p['primary']});
+    --background-color-hover: {SECONDARY_HOVER};
     --background-color-input-bg: {surface};
 
     --text-color-primary: #121212;
     --text-color-secondary: #2A2A2A;
     --text-color-link: {p['primary']};
 
-    --border-color-default: {p['line']};
-    --border-color-input: color-mix(in srgb, {p['line']} 78%, {p['primary']});
+    --border-color-default: {SECONDARY_BORDER};
+    --border-color-input: {SECONDARY_INPUT_BORDER};
     --border-color-dark: {p['primary_dark']};
 
     --sidebar: {p['sidebar']};
@@ -226,10 +234,10 @@ def render_paleta(pid: str, p: dict) -> str:
     --rf-palette-color-4: {p['cores'][3]}; --rf-palette-color-5: {p['cores'][4]};
     --color-gold-primary: {p['accent']}; --color-gold-dark: color-mix(in srgb, {p['accent']} 72%, #000);
     --background-color-body: {page}; --background-color-card: {surface}; --background-color-header: {surface};
-    --background-color-hover: color-mix(in srgb, {page} 90%, {p['primary']}); --background-color-input-bg: {surface};
+    --background-color-hover: {SECONDARY_HOVER}; --background-color-input-bg: {surface};
     --sidebar: {p['sidebar']}; --sidebar-hover: {p['sidebar_hover']}; --sidebar-text: {p['sidebar_text']}; --sidebar-active-text: {p['sidebar_active_text']};
     --text-color-primary: #121212; --text-color-secondary: #2A2A2A; --text-color-link: {p['primary']};
-    --border-color-default: {p['line']}; --border-color-input: color-mix(in srgb, {p['line']} 78%, {p['primary']}); --border-color-dark: {p['primary_dark']};
+    --border-color-default: {SECONDARY_BORDER}; --border-color-input: {SECONDARY_INPUT_BORDER}; --border-color-dark: {p['primary_dark']};
     --color-success: {p['success_text']}; --color-error: {p['danger_text']}; --color-warning: {p['warning_text']}; --color-info: {p['info_text']};
     --danger-bg: color-mix(in srgb, {p['danger_text']} 10%, {surface}); --danger-text: {p['danger_text']};
     --warning-bg: color-mix(in srgb, {p['warning_text']} 12%, {surface}); --warning-text: {p['warning_text']};
