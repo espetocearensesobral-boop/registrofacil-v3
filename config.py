@@ -27,6 +27,9 @@ class Config:
     IS_PRODUCTION = ENVIRONMENT in {'production', 'prod'}
     INITIAL_ADMIN_PASSWORD = os.environ.get('INITIAL_ADMIN_PASSWORD')
     TRUST_PROXY_HEADERS = os.environ.get('TRUST_PROXY_HEADERS', 'false').strip().lower() == 'true'
+    # URL usada em links enviados por e-mail. Em rede local, configure como
+    # http://IP-DO-SERVIDOR:5000; em produção, prefira HTTPS.
+    PUBLIC_BASE_URL = os.environ.get('REGISTROFACIL_PUBLIC_URL', '').strip().rstrip('/')
     # Defina false quando o Agendador de Tarefas/cron externo assumir os backups.
     INTERNAL_BACKUP_SCHEDULER_ENABLED = os.environ.get(
         'REGISTROFACIL_INTERNAL_BACKUP_SCHEDULER', 'true'

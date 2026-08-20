@@ -4,6 +4,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
 import secrets
+import os
+import socket
+from urllib.parse import urlsplit
 from datetime import datetime, timedelta
 import functools
 import sqlite3
@@ -41,6 +44,35 @@ from utils.messages import GREETING_PHRASES
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/')
+
+
+def construir_link_recuperacao(short_id):
+    """Gera um link de recuperação acessível pelo servidor e pelos terminais."""
+    path = url_for('auth.reset_password', short_id=short_id)
+    configured_base = (current_app.config.get('PUBLIC_BASE_URL') or '').strip().rstrip('/')
+    parsed = urlsplit(configured_base) if configured_base else None
+    if parsed and parsed.scheme in {'http', 'https'} and parsed.netloc and not parsed.username and not parsed.password:
+        return f"{configured_base}{path}"
+
+    scheme = 'https' if request.is_secure else 'http'
+    host = request.host.rsplit(':', 1)[0].strip('[]')
+    port = request.environ.get('SERVER_PORT', '')
+    loopback_hosts = {'127.0.0.1', 'localhost', '::1'}
+
+    if host in loopback_hosts:
+        try:
+            lan_host = socket.gethostbyname(socket.gethostname())
+            if lan_host not in loopback_hosts:
+                host = lan_host
+        except OSError:
+            pass
+
+    default_ports = {'http': '80', 'https': '443'}
+    netloc = host
+    if port and port != default_ports.get(scheme):
+        netloc = f"{host}:{port}"
+    return f"{scheme}://{netloc}{path}"
+
 
 def gerar_csrf_token():
     """Retorna o token da sessão, criando-o apenas quando necessário.
@@ -568,7 +600,7 @@ def recuperar_senha():
             reset_token = create_password_reset_token(user['id'])
 
             # O endpoint agora existe e o link será gerado corretamente
-            recover_link = url_for('auth.reset_password', short_id=reset_token, _external=True)
+            recover_link = construir_link_recuperacao(reset_token)
             email_body = f"""
                 Olá {user['nome']},
 

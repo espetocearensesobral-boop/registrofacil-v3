@@ -137,16 +137,51 @@ def index():
                     'notify_security_events': notify_security_events,
                 }
 
-                # Se for apenas teste
+                # Teste SMTP sem gravar: usa os valores atuais do formulário e envia
+                # uma mensagem consolidada com as políticas de notificação marcadas.
                 if request.form.get('test_email') == '1':
+                    stored_email_config = get_email_config()
+                    test_password = smtp_password or stored_email_config.get('smtp_password', '')
+                    if not test_password:
+                        raise ValueError("Informe a senha SMTP para executar o teste.")
+
+                    notification_tests = []
+                    if notify_password_recovery:
+                        notification_tests.append("Recuperação de acesso")
+                    if notify_deadlines:
+                        notification_tests.append("Prazos de processos")
+                    if notify_backup_failures:
+                        notification_tests.append("Falhas de backup")
+                    if notify_security_events:
+                        notification_tests.append("Eventos de segurança")
+                    notification_summary = (
+                        "\\n".join(f"- {item}: habilitado para teste" for item in notification_tests)
+                        if notification_tests else "- Nenhuma notificação automática habilitada"
+                    )
+                    test_body = f"""Teste de configuração de e-mail — Registro Fácil
+
+Este é um teste de conectividade SMTP. Se esta mensagem foi recebida, o servidor, a porta, a autenticação e a criptografia foram aceitos.
+
+Políticas de notificação selecionadas:
+{notification_summary}
+
+O teste não cria processos, não dispara backup e não altera a senha de nenhum usuário. Ele apenas valida o envio e apresenta as políticas selecionadas."""
+                    test_email_config = {
+                        **email_data,
+                        'smtp_password': test_password,
+                        'ativo': 1,
+                    }
                     success, message = send_email(
                         to_address=sender_email,
-                        subject="Teste de Configuração - Registro Fácil",
-                        body="Se você recebeu este e-mail, sua configuração SMTP está funcionando corretamente.",
+                        subject="Teste SMTP e notificações - Registro Fácil",
+                        body=test_body,
                         sender_name=sender_name,
                         sender_email=sender_email,
-                        app_instance=current_app._get_current_object()
+                        app_instance=current_app._get_current_object(),
+                        email_config_override=test_email_config,
                     )
+                    if success:
+                        message = f"Teste enviado para {sender_email}. Políticas incluídas: {len(notification_tests)}."
                     return jsonify({'success': success, 'message': message})
 
                 # Se não houver ID, é uma nova configuração

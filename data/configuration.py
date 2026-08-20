@@ -156,14 +156,14 @@ def save_email_config(config_data, is_new_config=False, connection=None):
         )
         return bool(res)
 
-def send_email(to_address, subject, body, sender_name=None, sender_email=None, app_instance=None):
+def send_email(to_address, subject, body, sender_name=None, sender_email=None, app_instance=None, email_config_override=None):
     from flask_mail import Message, Mail # Mantenha a importação aqui
 
     if app_instance is None:
         logger.error("send_email chamado sem a instância 'app_instance'. Não é possível enviar o e-mail.")
         return False, "Erro interno: Instância do aplicativo Flask não fornecida para envio de e-mail."
 
-    email_config = get_email_config()
+    email_config = email_config_override or get_email_config()
     if not email_config or not email_config.get('ativo'):
         logger.warning("Tentativa de enviar e-mail, mas a configuração de e-mail não está ativa ou não foi encontrada.")
         return False, "Configuração de e-mail não ativa ou não encontrada."

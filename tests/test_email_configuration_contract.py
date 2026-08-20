@@ -71,3 +71,23 @@ def test_email_checkboxes_are_explicitly_clickable():
     assert 'appearance: auto !important' in template
     assert 'visibility: visible !important' in template
     assert 'cursor: pointer !important' in template
+
+
+def test_email_test_flow_uses_unsaved_form_values_and_notification_summary():
+    route = read("routes/configuracoes.py")
+
+    assert "email_config_override=test_email_config" in route
+    assert "Teste SMTP e notificações - Registro Fácil" in route
+    assert "Políticas de notificação selecionadas:" in route
+    assert "test_password = smtp_password or stored_email_config.get('smtp_password', '')" in route
+
+
+def test_recovery_link_uses_configured_public_base_url(app_client):
+    from routes.auth import construir_link_recuperacao
+
+    flask_app = app_client.application
+    flask_app.config["PUBLIC_BASE_URL"] = "http://192.168.0.10:5000"
+    with flask_app.test_request_context("/", base_url="http://127.0.0.1:5000"):
+        link = construir_link_recuperacao("token-de-teste")
+
+    assert link == "http://192.168.0.10:5000/reset_password/token-de-teste"
