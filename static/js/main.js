@@ -89,6 +89,7 @@ function restaurarEstadoDeEnvio(form, submitButton = null) {
         delete button.dataset.rfSubmitting;
         delete button.dataset.rfOriginalHtml;
     }
+    form.querySelectorAll('[data-rf-submit-proxy]').forEach(proxy => proxy.remove());
     form.removeAttribute('aria-busy');
     if (typeof window.hidePageLoading === 'function') window.hidePageLoading();
 }
@@ -108,6 +109,15 @@ function inicializarEstadosDeEnvio() {
             if (event.defaultPrevented) return;
             const submitButton = event.submitter || this.querySelector('button[type="submit"]:not([data-no-submit-state])');
             if (!submitButton || submitButton.dataset.rfSubmitting === 'true') return;
+            const submitterName = submitButton.getAttribute('name');
+            if (submitterName) {
+                const submitterProxy = document.createElement('input');
+                submitterProxy.type = 'hidden';
+                submitterProxy.name = submitterName;
+                submitterProxy.value = submitButton.value || '';
+                submitterProxy.dataset.rfSubmitProxy = 'true';
+                this.appendChild(submitterProxy);
+            }
             submitButton.dataset.rfSubmitting = 'true';
             submitButton.dataset.rfOriginalHtml = submitButton.innerHTML;
             const loadingText = submitButton.dataset.loadingText || this.dataset.submitLabel || 'Processando...';
