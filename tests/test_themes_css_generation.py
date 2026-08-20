@@ -21,11 +21,11 @@ def test_theme_identity_colors_are_preserved_while_secondary_foundation_is_coole
     )
 
     generated = render()
-    assert SECONDARY_PAGE_COOL == "#F6F8F9"
-    assert SECONDARY_PAGE_WARM == "#F3F6F7"
-    assert SECONDARY_HOVER == "#EDF2F4"
-    assert SECONDARY_BORDER == "#D2DBE0"
-    assert SECONDARY_INPUT_BORDER == "#AEBBC4"
+    assert SECONDARY_PAGE_COOL == "#F7F8F8"
+    assert SECONDARY_PAGE_WARM == "#F8F8F7"
+    assert SECONDARY_HOVER == "#EFF1F1"
+    assert SECONDARY_BORDER == "#CCD2D3"
+    assert SECONDARY_INPUT_BORDER == "#AEB8BA"
 
     for palette_id, palette in PALETAS_INSTITUCIONAIS.items():
         start = generated.index(f'[data-cor="{palette_id}"]')

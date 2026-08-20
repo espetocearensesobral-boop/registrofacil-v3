@@ -149,12 +149,15 @@ WARM_FAMILIES = {
 
 # Fundação secundária compartilhada. As cinco cores de cada paleta continuam
 # intactas; estes tokens controlam apenas o espaço de leitura dos componentes.
-SECONDARY_PAGE_COOL = '#F6F8F9'
-SECONDARY_PAGE_WARM = '#F3F6F7'
+# Os fundos agora são quase neutros, com uma diferença cromática mínima entre
+# famílias. Isso preserva a identidade da sidebar e reduz o efeito azulado nas
+# áreas extensas da aplicação.
+SECONDARY_PAGE_COOL = '#F7F8F8'
+SECONDARY_PAGE_WARM = '#F8F8F7'
 SECONDARY_SURFACE = '#FFFFFF'
-SECONDARY_HOVER = '#EDF2F4'
-SECONDARY_BORDER = '#D2DBE0'
-SECONDARY_INPUT_BORDER = '#AEBBC4'
+SECONDARY_HOVER = '#EFF1F1'
+SECONDARY_BORDER = '#CCD2D3'
+SECONDARY_INPUT_BORDER = '#AEB8BA'
 
 
 def foundations(p: dict) -> tuple[str, str]:
