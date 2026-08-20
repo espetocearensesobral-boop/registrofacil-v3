@@ -37,6 +37,14 @@
         {% else %}
             <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('atividades.historico') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ itens_por_pagina }}" data-page-size-param="itens_por_pagina">
                 <table class="rf-table table-atividades">
+                    <colgroup>
+                        <col class="activity-col-id">
+                        <col class="activity-col-user">
+                        <col class="activity-col-action">
+                        <col class="activity-col-process">
+                        <col class="activity-col-ip">
+                        <col class="activity-col-datetime">
+                    </colgroup>
                     {# Macro de ordenação para atividades #}
                     {% macro sort_th_atv(label, col) %}
                     {% set cur = request.args.to_dict() %}

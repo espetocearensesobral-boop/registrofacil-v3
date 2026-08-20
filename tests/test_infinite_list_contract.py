@@ -105,3 +105,27 @@ def test_process_lists_order_entry_deadline_status_in_headers_and_rows():
         assert text.count('Entrada') >= 1, relative
         assert text.count('Prazo') >= 1, relative
         assert text.count('Status') >= 1, relative
+
+
+
+def test_activity_table_uses_proportional_columns_and_wraps_only_long_content():
+    template = read('templates/atividades.html')
+    css = read('static/css/layout-standard.css')
+
+    for column in (
+        'activity-col-id',
+        'activity-col-user',
+        'activity-col-action',
+        'activity-col-process',
+        'activity-col-ip',
+        'activity-col-datetime',
+    ):
+        assert f'class="{column}"' in template
+
+    assert '.rf-table.table-atividades {' in css
+    assert 'table-layout: fixed !important' in css
+    assert 'col.activity-col-user { width: 14%' in css
+    assert 'col.activity-col-action { width: 48%' in css
+    assert 'td[data-label="Usuário"]' in css
+    assert 'td[data-label="Ação"] .btn-acao-clicavel' in css
+    assert 'min-width: 0 !important' in css

@@ -3813,9 +3813,37 @@ html body #main-content > .admin-list-card .rf-table.table-atividades td[data-la
   white-space: nowrap !important;
   overflow-wrap: normal !important;
 }
+html body #main-content > .admin-list-card .rf-table.table-atividades {
+  table-layout: fixed !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-atividades col.activity-col-id { width: 6% !important; }
+html body #main-content > .admin-list-card .rf-table.table-atividades col.activity-col-user { width: 14% !important; }
+html body #main-content > .admin-list-card .rf-table.table-atividades col.activity-col-action { width: 48% !important; }
+html body #main-content > .admin-list-card .rf-table.table-atividades col.activity-col-process { width: 9% !important; }
+html body #main-content > .admin-list-card .rf-table.table-atividades col.activity-col-ip { width: 11% !important; }
+html body #main-content > .admin-list-card .rf-table.table-atividades col.activity-col-datetime { width: 12% !important; }
+html body #main-content > .admin-list-card .rf-table.table-atividades th,
+html body #main-content > .admin-list-card .rf-table.table-atividades th a {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Usuário"] {
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+}
 html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Ação"] {
-  white-space: normal !important;
-  min-width: 14rem !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Ação"] .btn-acao-clicavel,
+html body #main-content > .admin-list-card .rf-table.table-atividades td[data-label="Ação"] .acao-texto {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }
 html body #main-content > .admin-list-card .rf-table.table-atividades .rf-table-inline-link {
   color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
