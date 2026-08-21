@@ -166,6 +166,10 @@ def test_cadastros_auditoria_and_users_use_clean_white_list_shell():
     assert 'table-titulares' in css
     assert 'table-usuarios' in css
     assert 'table-auditoria' in css
+    assert '.rf-clean-list-card .tbl-actions .tbl-btn' in css
+    assert '.rf-clean-list-card .tbl-actions .tbl-btn.view' in css
+    assert '.rf-clean-list-card .tbl-actions .tbl-btn.edit' in css
+    assert '.rf-clean-list-card .tbl-actions .tbl-btn.del' in css
 
 
 def test_process_action_buttons_have_complete_semantic_visual_contract():
