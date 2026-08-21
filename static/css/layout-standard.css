@@ -5312,3 +5312,127 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn i {
     min-width: 4.35rem !important;
   }
 }
+
+
+/* =====================================================================
+   CASCATA FINAL — garante que os contratos de ações sejam vencedores.
+   ===================================================================== */
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: .35rem !important;
+  white-space: nowrap !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn {
+  display: inline-flex !important;
+  width: 2rem !important;
+  min-width: 2rem !important;
+  height: 2rem !important;
+  min-height: 2rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border: 1px solid var(--rf-border-strong, #AEB8BA) !important;
+  border-radius: var(--rf-radius-action, 9px) !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn i,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn i {
+  display: inline-block !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  color: inherit !important;
+  font-size: .875rem !important;
+  line-height: 1 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.view,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.view {
+  border-color: var(--rf-info, var(--color-info, #3C6570)) !important;
+  color: var(--rf-info, var(--color-info, #3C6570)) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.edit,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.edit {
+  border-color: var(--color-gold-primary, #CDA865) !important;
+  color: var(--color-gold-dark, #8B6332) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.del,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.del {
+  border-color: var(--color-error, #98424C) !important;
+  color: var(--color-error, #98424C) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.view:hover,
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.view:focus-visible,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.view:hover,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.view:focus-visible {
+  background-color: color-mix(in srgb, var(--rf-info, var(--color-info, #3C6570)) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.edit:hover,
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.edit:focus-visible,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.edit:hover,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.edit:focus-visible {
+  background-color: color-mix(in srgb, var(--color-gold-primary, #CDA865) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.del:hover,
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.del:focus-visible,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.del:hover,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.del:focus-visible {
+  background-color: color-mix(in srgb, var(--color-error, #98424C) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.is-disabled,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.is-disabled {
+  border-color: var(--rf-border-subtle) !important;
+  background-color: var(--rf-surface-card, #FFFFFF) !important;
+  color: var(--rf-text-muted) !important;
+  opacity: .62 !important;
+}
+
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: var(--color-gold-primary, #CDA865) !important;
+  color: var(--color-gold-dark, #8B6332) !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: var(--color-error, #98424C) !important;
+  color: var(--color-error, #98424C) !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.act-on,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.act-on {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: var(--color-success, #1E5C3E) !important;
+  color: var(--color-success, #1E5C3E) !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit:hover,
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit:focus-visible,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit:hover,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit:focus-visible {
+  background-color: color-mix(in srgb, var(--color-gold-primary, #CDA865) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:hover,
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:focus-visible,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:hover,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:focus-visible {
+  background-color: color-mix(in srgb, var(--color-error, #98424C) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.act-on:hover,
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.act-on:focus-visible,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.act-on:hover,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.act-on:focus-visible {
+  background-color: color-mix(in srgb, var(--color-success, #1E5C3E) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+}
