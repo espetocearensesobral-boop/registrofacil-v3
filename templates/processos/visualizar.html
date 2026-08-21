@@ -48,7 +48,7 @@
                         <div class="det-lbl">Telefone</div>
                         <div class="det-val">
                             {% if processo.titular_telefone %}
-                            <a href="https://wa.me/55{{ processo.titular_telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" class="d-flex align-items-center gap-2" style="color:var(--color-success);text-decoration:none;">
+                            <a href="https://wa.me/55{{ processo.titular_telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" rel="noopener noreferrer" class="d-flex align-items-center gap-2" style="color:var(--color-success);text-decoration:none;">
                                 <i class="bi bi-whatsapp"></i>{{ processo.titular_telefone }}
                             </a>
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
@@ -87,7 +87,7 @@
                         <div class="det-lbl">Telefone</div>
                         <div class="det-val">
                             {% if processo.apresentante_telefone %}
-                            <a href="https://wa.me/55{{ processo.apresentante_telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" class="d-flex align-items-center gap-2" style="color:var(--color-success);text-decoration:none;">
+                            <a href="https://wa.me/55{{ processo.apresentante_telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" rel="noopener noreferrer" class="d-flex align-items-center gap-2" style="color:var(--color-success);text-decoration:none;">
                                 <i class="bi bi-whatsapp"></i>{{ processo.apresentante_telefone }}
                             </a>
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
@@ -392,12 +392,12 @@
                 <h5 class="modal-title fw-bold" id="reportOptionsModalLabel">
                     <i class="bi bi-printer me-2"></i>Opções de Relatório — Processo #{{ '%04d' % processo.id }}
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body text-center">
                 <p class="mb-3" style="font-size:13px;color:var(--text-color-secondary);">Escolha como deseja gerar o relatório deste processo:</p>
                 <div class="d-grid gap-3">
-                    <a href="{{ url_for('processos.gerar_pdf', processo_id=processo.id) }}" target="_blank" class="btn btn-dark btn-lg">
+                    <a href="{{ url_for('processos.gerar_pdf', processo_id=processo.id) }}" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-lg">
                         <i class="bi bi-file-earmark-pdf-fill me-2"></i> Baixar como PDF
                     </a>
                     <button type="button" class="btn btn-dark btn-lg" onclick="generateReport('print')">
@@ -418,7 +418,7 @@
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title fw-bold"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <p>Tem certeza que deseja excluir o processo <strong>#{{ '%04d' % processo.id }}</strong>?</p>
@@ -462,7 +462,7 @@
                 break;
             default: return;
         }
-        const newWindow = window.open(url, '_blank');
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
         if (!newWindow || newWindow.closed || typeof newWindow.focus !== 'function') {
             alert('Pop-up bloqueado. Permita pop-ups para este site para gerar o relatório.');
         } else {

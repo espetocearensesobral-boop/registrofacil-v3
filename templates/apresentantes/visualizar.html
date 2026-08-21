@@ -61,7 +61,7 @@
                 <div class="rf-entity-contact">
                     <h5 class="m-0 rf-entity-title">{{ apresentante.nome }}</h5>
                     {% if apresentante.telefone %}
-                    <a href="https://wa.me/55{{ apresentante.telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" class="rf-contact-link rf-contact-success">
+                    <a href="https://wa.me/55{{ apresentante.telefone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}" target="_blank" rel="noopener noreferrer" class="rf-contact-link rf-contact-success">
                         <i class="bi bi-whatsapp"></i>{{ apresentante.telefone }}
                     </a>
                     {% endif %}

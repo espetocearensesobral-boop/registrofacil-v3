@@ -601,7 +601,6 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
   #main-content .rf-pagination-meta { text-align: center; }
 }
 
-#main-content .rf-heading-icon { color: var(--color-gold-primary); }
 #main-content .rf-muted-value { color: var(--rf-text-muted); }
 #main-content .rf-sort-active { opacity: .8; }
 #main-content .rf-sort-inactive { opacity: .3; }
@@ -613,43 +612,6 @@ html body #modalPaletas .theme-choice.selected .theme-choice-check {
 #main-content .rf-card + .rf-card { margin-top: var(--rf-layout-section-gap) !important; }
 #main-content .rf-card > .rf-card-header + .rf-card-body,
 #main-content .rf-card > .card-header + .card-body { margin-top: 0; }
-
-/* ------------------------------------------------------------
-   Tela de dados da organização
-   ------------------------------------------------------------ */
-#main-content .emp-card-stack { display: flex; flex-direction: column; gap: var(--rf-space-4); }
-#main-content .emp-row-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--rf-space-4); }
-#main-content .emp-fld label { display: block; margin-bottom: var(--rf-space-2); color: var(--rf-text-strong); font-size: .875rem; font-weight: 650; line-height: 1.25; }
-#main-content .emp-fld label .req { color: var(--rf-danger); }
-#main-content .emp-fld input,
-#main-content .emp-fld textarea { width: 100%; border: 1px solid var(--rf-border-strong); border-radius: var(--rf-radius-sm); background: var(--rf-surface-input); color: var(--rf-text-body); font-size: .9375rem; }
-#main-content .emp-fld input { height: var(--rf-control-height); padding-inline: .875rem; }
-#main-content .emp-fld textarea { min-height: 5.5rem; padding: .75rem .875rem; resize: vertical; }
-#main-content .emp-fld input:focus,
-#main-content .emp-fld textarea:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--rf-focus-ring); }
-#main-content .emp-fld .invalid-feedback { display: none; margin-top: var(--rf-space-1); color: var(--rf-danger); font-size: .8125rem; }
-#main-content .emp-fld input.is-invalid ~ .invalid-feedback,
-#main-content .emp-fld textarea.is-invalid ~ .invalid-feedback { display: block; }
-#main-content .emp-logo-body { display: flex; flex-direction: column; align-items: center; gap: var(--rf-space-4); }
-#main-content .logo-preview-container { width: 10rem; height: 10rem; overflow: hidden; border: 3px solid var(--rf-border); border-radius: 50%; cursor: pointer; transition: box-shadow .2s; }
-#main-content .logo-preview-container:hover { box-shadow: var(--rf-shadow-md); }
-#main-content .logo-preview-image { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
-#main-content .logo-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; background: rgba(0,0,0,.65); transition: opacity .2s; }
-#main-content .logo-preview-container:hover .logo-overlay { opacity: 1; }
-#main-content .logo-overlay-content { color: #fff; text-align: center; }
-#main-content .logo-overlay-icon { display: block; margin-bottom: var(--rf-space-1); font-size: 1.4rem; }
-#main-content .logo-overlay-label { font-size: .75rem; font-weight: 650; }
-#main-content .logo-file-info { width: 100%; padding: .5rem .75rem; border: 1px solid var(--rf-border); border-radius: var(--rf-radius-md); background: var(--rf-surface-muted); font-size: .8125rem; }
-#main-content .logo-file-row { display: flex; align-items: center; justify-content: space-between; gap: var(--rf-space-2); }
-#main-content .logo-file-name { max-width: 8.75rem; overflow: hidden; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
-#main-content .logo-file-size { flex: 0 0 auto; margin-left: var(--rf-space-2); color: var(--rf-text-muted); }
-#main-content .logo-cancel-upload { margin-top: var(--rf-space-1); padding: .125rem 0; border: 0; background: transparent; color: var(--rf-danger); cursor: pointer; font-size: .75rem; }
-#main-content .btn-w-full { width: 100%; justify-content: center; }
-#main-content .emp-helper-text { margin: 0; color: var(--rf-text-muted); font-size: .8125rem; text-align: center; line-height: 1.45; }
-#main-content .emp-system-value { color: var(--rf-text-strong); font-size: .875rem; font-weight: 650; }
-#main-content .emp-system-divider { padding-top: var(--rf-space-3); border-top: 1px solid var(--rf-border); }
-#main-content .emp-restriction-note { display: flex; align-items: center; gap: var(--rf-space-2); color: var(--rf-warning-text); font-size: .8125rem; line-height: 1.4; }
-@media (max-width: 575.98px) { #main-content .emp-row-2 { grid-template-columns: 1fr; } }
 
 /* ------------------------------------------------------------
    Ajuste fino pós-auditoria: topo do dashboard e densidade dos cadastros

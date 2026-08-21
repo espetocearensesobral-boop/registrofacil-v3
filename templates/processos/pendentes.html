@@ -168,15 +168,15 @@
                 <h5 class="modal-title fw-bold" id="printListModalLabel">
                     <i class="bi bi-printer me-2"></i>Opções de Relatório
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body text-center">
                 <p class="mb-3" style="font-size:13px;color:var(--text-color-secondary);">Escolha como deseja gerar o relatório desta listagem:</p>
                 <div class="d-grid gap-3">
-                    <a id="btnPdfLista" href="#" target="_blank" class="btn btn-dark btn-lg">
+                    <a id="btnPdfLista" href="{{ url_for('processos.gerar_pdf_lista', **(request.args.to_dict() | combine({'view_mode': 'pendentes'}))) }}" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-lg">
                         <i class="bi bi-file-earmark-pdf-fill me-2"></i> Baixar como PDF
                     </a>
-                    <a id="btnImprimirLista" href="#" target="_blank" class="btn btn-dark btn-lg">
+                    <a id="btnImprimirLista" href="{{ url_for('processos.imprimir_lista', **(request.args.to_dict() | combine({'view_mode': 'pendentes'}))) }}" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-lg">
                         <i class="bi bi-printer me-2"></i> Imprimir
                     </a>
                 </div>

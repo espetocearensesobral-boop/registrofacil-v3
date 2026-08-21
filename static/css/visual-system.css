@@ -831,7 +831,6 @@ body .nav-btn-danger,
 body .btn-delete-backup,
 body .btn-excluir-titular,
 body .btn-excluir-apresentante,
-body .btn-excluir-representante,
 body .btn-revoke,
 body .cfg-obtn {
   background: var(--color-gold-primary) !important;
@@ -845,7 +844,6 @@ body .nav-btn-danger:hover,
 body .btn-delete-backup:hover,
 body .btn-excluir-titular:hover,
 body .btn-excluir-apresentante:hover,
-body .btn-excluir-representante:hover,
 body .btn-revoke:hover,
 body .cfg-obtn:hover { background: var(--color-gold-dark) !important; border-color: var(--color-gold-dark) !important; color: #FFFFFF !important; }
 body .btn-outline-danger { background: transparent !important; border-color: var(--color-gold-primary) !important; color: var(--color-gold-primary) !important; }
@@ -983,8 +981,7 @@ html body .nt-btn-save:hover {
 html body .btn-remove-file,
 html body .btn-delete-backup,
 html body .btn-excluir-titular,
-html body .btn-excluir-apresentante,
-html body .btn-excluir-representante { background: var(--color-gold-primary) !important; border-color: var(--color-gold-primary) !important; color: #FFFFFF !important; }
+html body .btn-excluir-apresentante { background: var(--color-gold-primary) !important; border-color: var(--color-gold-primary) !important; color: #FFFFFF !important; }
 
 /* Compatibilidade para estilos inline antigos; os tokens semânticos do tema permanecem intactos. */
 body {
@@ -1438,7 +1435,6 @@ body .btn-delete-backup,
 body .btn-remove-file,
 body .btn-excluir-titular,
 body .btn-excluir-apresentante,
-body .btn-excluir-representante,
 body .btn-revoke,
 body .btn-inativar,
 body .btn-desativar,
@@ -1469,7 +1465,6 @@ body .btn-delete-backup:hover,
 body .btn-remove-file:hover,
 body .btn-excluir-titular:hover,
 body .btn-excluir-apresentante:hover,
-body .btn-excluir-representante:hover,
 body .btn-revoke:hover,
 body .btn-inativar:hover,
 body .btn-desativar:hover,

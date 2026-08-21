@@ -240,3 +240,21 @@ def test_disabled_cadastro_actions_keep_semantic_contrast_without_reenabling_bus
 
     # Os controles continuam visualmente identificáveis, mas não são reativados.
     assert 'opacity: .82 !important;' in css
+
+
+
+def test_process_list_report_modals_use_real_export_and_print_routes():
+    expected_views = {
+        'templates/processos/todos.html': 'todos',
+        'templates/processos/hoje.html': 'hoje',
+        'templates/processos/pendentes.html': 'pendentes',
+        'templates/processos/em_andamento.html': 'em_andamento',
+        'templates/processos/vinculados.html': 'vinculados',
+    }
+
+    for relative, view_mode in expected_views.items():
+        text = read(relative)
+        assert 'href="#"' not in text, relative
+        assert "processos.gerar_pdf_lista" in text, relative
+        assert "processos.imprimir_lista" in text, relative
+        assert f"'view_mode': '{view_mode}'" in text, relative

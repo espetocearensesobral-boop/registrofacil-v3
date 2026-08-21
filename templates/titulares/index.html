@@ -8,13 +8,13 @@
     <a href="{{ url_for('titulares.novo') }}" class="nav-btn nav-btn-primary">
         <i class="bi bi-plus-circle"></i> Novo Titular
     </a>
-    <button type="button" class="nav-btn nav-btn-secondary" onclick="window.open('{{ url_for('titulares.imprimir', **request.args.to_dict()) }}', '_blank')">
+    <button type="button" class="nav-btn nav-btn-secondary" onclick="window.open('{{ url_for('titulares.imprimir', **request.args.to_dict()) }}', '_blank', 'noopener,noreferrer')">
         <i class="bi bi-printer"></i> Imprimir
     </button>
     <a class="nav-btn nav-btn-secondary" href="{{ url_for('titulares.exportar_excel', **request.args.to_dict()) }}">
         <i class="bi bi-filetype-xlsx"></i> Exportar Excel
     </a>
-    <a class="nav-btn nav-btn-secondary" href="{{ url_for('titulares.gerar_pdf', **request.args.to_dict()) }}" target="_blank" rel="noopener">
+    <a class="nav-btn nav-btn-secondary" href="{{ url_for('titulares.gerar_pdf', **request.args.to_dict()) }}" target="_blank" rel="noopener noreferrer">
         <i class="bi bi-file-earmark-pdf"></i> Baixar PDF
     </a>
 {% endblock %}
