@@ -82,3 +82,22 @@ def test_all_active_new_tab_paths_use_opener_isolation():
         assert 'target="_blank"' not in text or 'rel="noopener noreferrer"' in text, relative
         if 'window.open(' in text:
             assert 'noopener,noreferrer' in text, relative
+
+
+
+def test_configuration_action_buttons_use_outline_semantic_contract():
+    css = read('static/css/layout-standard.css')
+    legacy_css = read('static/css/visual-system.css')
+    html = read('templates/configuracoes.html')
+
+    assert 'cfg-ibtn edit' in html
+    assert 'cfg-destructive-toggle' in html
+    assert 'act-on' in html
+    assert 'body .cfg-ibtn' not in legacy_css
+    assert 'html body #panel-status .cfg-row-actions .cfg-ibtn' not in css
+    assert 'html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit' in css
+    assert 'html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit' in css
+    assert 'background-color: transparent !important;' in css
+    assert 'color-mix(in srgb, var(--color-gold-primary' in css
+    assert 'color-mix(in srgb, var(--color-error' in css
+    assert 'color-mix(in srgb, var(--color-success' in css

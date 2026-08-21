@@ -375,7 +375,6 @@ input[type="button"],
 .cfg-obtn,
 .nt-btn-save,
 .auth-btn,
-.cfg-ibtn,
 .action-btn,
 .icon-btn {
     background: var(--rf-action-primary) !important;
@@ -400,7 +399,6 @@ input[type="button"]:hover,
 .cfg-obtn:hover,
 .nt-btn-save:hover,
 .auth-btn:hover,
-.cfg-ibtn:hover,
 .action-btn:hover,
 .icon-btn:hover,
 button:not(.btn-close):active,
@@ -414,7 +412,6 @@ input[type="button"]:active,
 .cfg-obtn:active,
 .nt-btn-save:active,
 .auth-btn:active,
-.cfg-ibtn:active,
 .action-btn:active,
 .icon-btn:active {
     background: var(--rf-action-primary) !important;
@@ -450,7 +447,6 @@ a.btn:focus-visible,
 .cfg-obtn:focus-visible,
 .nt-btn-save:focus-visible,
 .auth-btn:focus-visible,
-.cfg-ibtn:focus-visible,
 .action-btn:focus-visible,
 .icon-btn:focus-visible {
     outline: 3px solid var(--rf-accent) !important;
@@ -857,13 +853,13 @@ body .btn-warning:hover, body .nav-btn-warning:hover { background: var(--color-g
 body .btn-info:hover, body .nav-btn-info:hover { background: var(--color-primary) !important; border-color: var(--color-primary) !important; }
 
 /* Botões compactos de tabelas e abas. */
-body .tbl-btn, body .rf-tab-btn, body .metricas-tab-btn, body .cat-toggle-btn, body .cfg-ibtn {
+body .tbl-btn, body .rf-tab-btn, body .metricas-tab-btn, body .cat-toggle-btn {
   background: var(--background-color-card) !important;
   border-color: var(--border-color-default) !important;
   color: var(--color-primary) !important;
   box-shadow: none;
 }
-body .tbl-btn:hover, body .rf-tab-btn:hover, body .metricas-tab-btn:hover, body .cat-toggle-btn:hover, body .cfg-ibtn:hover,
+body .tbl-btn:hover, body .rf-tab-btn:hover, body .metricas-tab-btn:hover, body .cat-toggle-btn:hover,
 body .rf-tab-btn.active, body .metricas-tab-btn.active { background: var(--background-color-body) !important; border-color: var(--color-primary, var(--color-primary)) !important; color: var(--color-primary, var(--color-primary)) !important; }
 body .tbl-btn.del, body .tbl-btn.delete { color: var(--color-gold-primary) !important; }
 
@@ -1302,7 +1298,6 @@ body .tbl-btn,
 body .rf-tab-btn,
 body .metricas-tab-btn,
 body .cat-toggle-btn,
-body .cfg-ibtn,
 body .cfg-obtn,
 body .cfg-sbtn,
 body .nt-btn-save,
@@ -1442,7 +1437,6 @@ body .btn-rejeitar,
 body .btn-descartar,
 body .btn-cancel-action,
 body .nt-btn-cancel,
-body .cfg-ibtn.cfg-destructive-toggle,
 body .btn-download,
 body .download-btn,
 body a[href*="download"],
@@ -1472,7 +1466,6 @@ body .btn-rejeitar:hover,
 body .btn-descartar:hover,
 body .btn-cancel-action:hover,
 body .nt-btn-cancel:hover,
-body .cfg-ibtn.cfg-destructive-toggle:hover,
 body .btn-download:hover,
 body .download-btn:hover,
 body a[href*="download"]:hover,
@@ -1487,8 +1480,7 @@ body .btn-filter-clear:focus-visible,
 body .btn-limpar:focus-visible,
 body .cfg-obtn:focus-visible,
 body .btn-cancel-action:focus-visible,
-body .nt-btn-cancel:focus-visible,
-body .cfg-ibtn.cfg-destructive-toggle:focus-visible {
+body .nt-btn-cancel:focus-visible {
   background-color: var(--rf-action-tertiary-hover, #8E702F) !important;
   border-color: var(--rf-action-tertiary-hover, #8E702F) !important;
   color: var(--rf-text-on-primary, #FFFFFF) !important;
@@ -1498,8 +1490,7 @@ body .cfg-ibtn.cfg-destructive-toggle:focus-visible {
 body .tbl-btn,
 body .rf-tab-btn,
 body .metricas-tab-btn,
-body .cat-toggle-btn,
-body .cfg-ibtn {
+body .cat-toggle-btn {
   background-color: var(--color-primary-light, #1B4368) !important;
   border-color: var(--color-primary-light, #1B4368) !important;
   color: var(--color-primary-contrast, #FFFFFF) !important;
@@ -1508,13 +1499,11 @@ body .tbl-btn:hover,
 body .rf-tab-btn:hover,
 body .metricas-tab-btn:hover,
 body .cat-toggle-btn:hover,
-body .cfg-ibtn:hover,
 body .rf-tab-btn.active,
 body .metricas-tab-btn.active,
 body .rf-tab-btn:focus-visible,
 body .metricas-tab-btn:focus-visible,
-body .cat-toggle-btn:focus-visible,
-body .cfg-ibtn:focus-visible {
+body .cat-toggle-btn:focus-visible {
   background-color: var(--color-primary-dark, #0A1E30) !important;
   border-color: var(--color-primary-dark, #0A1E30) !important;
   color: var(--color-primary-contrast, #FFFFFF) !important;
