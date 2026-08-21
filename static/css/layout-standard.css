@@ -4902,3 +4902,99 @@ html body #main-content .rf-clean-list-card .rf-list-context-note {
     padding-inline: 0 !important;
   }
 }
+
+
+/* =====================================================================
+   MEU PERFIL — controles de senha e cartões laterais compactos
+   ===================================================================== */
+#main-content .profile-password-grid .input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+#main-content .profile-password-grid .input-group .form-control {
+  width: 100%;
+  padding-right: 2.65rem !important;
+  border-radius: var(--rf-radius-sm, 8px) !important;
+}
+#main-content .profile-password-grid .profile-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: .25rem;
+  z-index: 2;
+  display: inline-flex !important;
+  width: 2rem !important;
+  min-width: 2rem !important;
+  height: 2rem !important;
+  min-height: 2rem !important;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: translateY(-50%);
+  border: 0 !important;
+  border-radius: var(--rf-radius-sm, 8px) !important;
+  background: transparent !important;
+  color: var(--rf-text-muted) !important;
+  line-height: 1;
+  box-shadow: none !important;
+}
+#main-content .profile-password-grid .profile-password-toggle:hover,
+#main-content .profile-password-grid .profile-password-toggle:focus-visible {
+  transform: translateY(-50%);
+  background: var(--rf-surface-hover) !important;
+  color: var(--rf-text-strong) !important;
+  outline: 0;
+}
+#main-content .profile-password-grid .profile-password-toggle i {
+  font-size: .875rem;
+  line-height: 1;
+}
+#main-content .profile-side-column {
+  gap: .5rem;
+  grid-template-rows: max-content max-content;
+}
+#main-content .profile-side-card {
+  border: 1px solid var(--rf-border) !important;
+  border-radius: var(--rf-radius-lg, 10px) !important;
+  box-shadow: none !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+#main-content .profile-side-header {
+  min-height: 2.5rem;
+  padding: .55rem .75rem !important;
+  border-bottom: 1px solid var(--rf-border-subtle) !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+#main-content .profile-side-header h6 {
+  font-size: .8rem;
+}
+#main-content .profile-appearance-body {
+  padding: .55rem .75rem !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+#main-content .profile-theme-current {
+  min-height: 2rem;
+  padding: .4rem .5rem;
+  border: 1px solid var(--rf-border-subtle);
+  background: var(--rf-surface-card, #FFFFFF);
+}
+#main-content .profile-meta-list {
+  gap: .35rem;
+  padding: .55rem .75rem !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+#main-content .profile-account-card .profile-meta-list > .mb-3 {
+  margin-bottom: 0 !important;
+}
+#main-content .profile-account-card .profile-meta-list .bg-light {
+  min-height: 1.85rem;
+  padding: .3rem .5rem !important;
+  border: 1px solid var(--rf-border-subtle) !important;
+  border-radius: var(--rf-radius-sm, 8px) !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+@media (max-width: 720px) {
+  #main-content .profile-side-column { gap: .5rem; }
+}

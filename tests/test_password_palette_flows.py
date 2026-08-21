@@ -117,3 +117,11 @@ def test_profile_uses_compact_two_column_layout_without_profile_photo_controls(a
     assert 'profile-photo' not in body
     palette_js = (Path(__file__).resolve().parents[1] / 'static/js/paleta.js').read_text(encoding='utf-8')
     assert "document.querySelectorAll('#paleta-atual-nome, #perfil-paleta-atual-nome')" in palette_js
+    template = (Path(__file__).resolve().parents[1] / 'templates/perfil.html').read_text(encoding='utf-8')
+    css = (Path(__file__).resolve().parents[1] / 'static/css/layout-standard.css').read_text(encoding='utf-8')
+    assert template.count('profile-password-toggle') == 3
+    assert 'aria-label="Mostrar ou ocultar senha atual"' in template
+    assert 'padding-right: 2.65rem !important' in css
+    assert 'profile-side-card' in css
+    assert 'profile-theme-current' in css
+    assert 'border: 1px solid var(--rf-border)' in css

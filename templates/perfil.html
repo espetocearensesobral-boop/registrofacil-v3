@@ -74,9 +74,11 @@
                                    id="senha_atual" 
                                    name="senha_atual"
                                    autocomplete="current-password">
-                            <button class="btn btn-outline-secondary" 
+                            <button class="btn btn-outline-secondary profile-password-toggle"
                                     type="button" 
-                                    onclick="togglePassword('senha_atual')">
+                                    onclick="togglePassword('senha_atual')"
+                                    aria-label="Mostrar ou ocultar senha atual"
+                                    title="Mostrar ou ocultar senha atual">
                                 <i class="bi bi-eye" id="senha_atual-icon"></i>
                             </button>
                         </div>
@@ -92,9 +94,11 @@
                                    name="nova_senha"
                                    minlength="8"
                                    autocomplete="new-password">
-                            <button class="btn btn-outline-secondary" 
+                            <button class="btn btn-outline-secondary profile-password-toggle"
                                     type="button" 
-                                    onclick="togglePassword('nova_senha')">
+                                    onclick="togglePassword('nova_senha')"
+                                    aria-label="Mostrar ou ocultar nova senha"
+                                    title="Mostrar ou ocultar nova senha">
                                 <i class="bi bi-eye" id="nova_senha-icon"></i>
                             </button>
                         </div>
@@ -110,9 +114,11 @@
                                    name="confirmar_senha"
                                    minlength="8"
                                    autocomplete="new-password">
-                            <button class="btn btn-outline-secondary" 
+                            <button class="btn btn-outline-secondary profile-password-toggle"
                                     type="button" 
-                                    onclick="togglePassword('confirmar_senha')">
+                                    onclick="togglePassword('confirmar_senha')"
+                                    aria-label="Mostrar ou ocultar confirmação da nova senha"
+                                    title="Mostrar ou ocultar confirmação da nova senha">
                                 <i class="bi bi-eye" id="confirmar_senha-icon"></i>
                             </button>
                         </div>
