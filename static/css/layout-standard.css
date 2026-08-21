@@ -4774,3 +4774,131 @@ html body #main-content .process-list-card .table-processos thead th {
     padding-bottom: .65rem !important;
   }
 }
+
+
+/* =====================================================================
+   LISTAS ADMINISTRATIVAS E CADASTROS — mesma composição limpa das listas
+   de processos: título global, filtro integrado e superfície branca.
+   ===================================================================== */
+html body #main-content .rf-clean-list-card {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-inline: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: none !important;
+}
+html body #main-content .rf-clean-list-card > .rf-card-header,
+html body #main-content .rf-clean-list-card > .card-header {
+  display: none !important;
+}
+html body #main-content .rf-clean-list-card > .cadastro-filter-surface,
+html body #main-content .rf-clean-list-card > .admin-filter-surface,
+html body #main-content .rf-clean-list-card > .rf-filter-toolbar {
+  width: 100% !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--rf-border-subtle) !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: none !important;
+}
+html body #main-content .rf-clean-list-card > .rf-filter-toolbar {
+  padding: .5rem 0 .75rem !important;
+}
+html body #main-content .rf-clean-list-card > .rf-filter-toolbar .row {
+  margin-inline: 0 !important;
+}
+html body #main-content .rf-clean-list-card > .cadastro-filter-surface .cadastro-filter-toolbar,
+html body #main-content .rf-clean-list-card > .admin-filter-surface .admin-filter-toolbar {
+  padding-inline: 0 !important;
+}
+html body #main-content .rf-clean-list-card > .card-body {
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content .rf-clean-list-card > .card-body > .table-responsive,
+html body #main-content .rf-clean-list-card > .card-body > .table-responsive > table {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  box-shadow: none !important;
+}
+html body #main-content .rf-clean-list-card > .card-body > .table-responsive {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+html body #main-content .rf-clean-list-card .table-apresentantes,
+html body #main-content .rf-clean-list-card .table-titulares,
+html body #main-content .rf-clean-list-card .table-usuarios,
+html body #main-content .rf-clean-list-card .table-auditoria {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+html body #main-content .rf-clean-list-card .table-apresentantes thead th,
+html body #main-content .rf-clean-list-card .table-titulares thead th,
+html body #main-content .rf-clean-list-card .table-usuarios thead th,
+html body #main-content .rf-clean-list-card .table-auditoria thead th {
+  background: var(--rf-surface-card, #FFFFFF) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--rf-border) !important;
+  color: var(--rf-text-strong) !important;
+}
+html body #main-content .rf-clean-list-card .table-apresentantes tbody tr,
+html body #main-content .rf-clean-list-card .table-titulares tbody tr,
+html body #main-content .rf-clean-list-card .table-usuarios tbody tr,
+html body #main-content .rf-clean-list-card .table-auditoria tbody tr,
+html body #main-content .rf-clean-list-card .table-apresentantes tbody tr:nth-child(even),
+html body #main-content .rf-clean-list-card .table-titulares tbody tr:nth-child(even),
+html body #main-content .rf-clean-list-card .table-usuarios tbody tr:nth-child(even),
+html body #main-content .rf-clean-list-card .table-auditoria tbody tr:nth-child(even) {
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content .rf-clean-list-card .table-apresentantes tbody td,
+html body #main-content .rf-clean-list-card .table-titulares tbody td,
+html body #main-content .rf-clean-list-card .table-usuarios tbody td,
+html body #main-content .rf-clean-list-card .table-auditoria tbody td {
+  border: 0 !important;
+  border-bottom: 1px solid var(--rf-border-subtle) !important;
+  background: transparent !important;
+}
+html body #main-content .rf-clean-list-card .table-apresentantes tbody tr:hover,
+html body #main-content .rf-clean-list-card .table-titulares tbody tr:hover,
+html body #main-content .rf-clean-list-card .table-usuarios tbody tr:hover,
+html body #main-content .rf-clean-list-card .table-auditoria tbody tr:hover {
+  background: var(--rf-surface-hover) !important;
+}
+html body #main-content .rf-clean-list-card .table-apresentantes tbody tr:hover td,
+html body #main-content .rf-clean-list-card .table-titulares tbody tr:hover td,
+html body #main-content .rf-clean-list-card .table-usuarios tbody tr:hover td,
+html body #main-content .rf-clean-list-card .table-auditoria tbody tr:hover td {
+  background: transparent !important;
+}
+html body #main-content .rf-clean-list-card .rf-list-context-note {
+  margin: 0 0 .5rem !important;
+  padding: .55rem 0 !important;
+  border-bottom: 1px solid var(--rf-border-subtle) !important;
+  color: var(--rf-text-muted) !important;
+  font-size: .8125rem;
+  line-height: 1.35;
+}
+@media (max-width: 700px) {
+  html body #main-content .rf-clean-list-card > .cadastro-filter-surface .cadastro-filter-toolbar,
+  html body #main-content .rf-clean-list-card > .admin-filter-surface .admin-filter-toolbar {
+    padding-inline: 0 !important;
+  }
+  html body #main-content .rf-clean-list-card > .rf-filter-toolbar {
+    padding-inline: 0 !important;
+  }
+}

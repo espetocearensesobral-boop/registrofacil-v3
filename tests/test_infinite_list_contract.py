@@ -143,3 +143,26 @@ def test_activity_table_uses_proportional_columns_and_wraps_only_long_content():
     assert 'td[data-label="Usuário"]' in css
     assert 'td[data-label="Ação"] .btn-acao-clicavel' in css
     assert 'min-width: 0 !important' in css
+
+
+def test_cadastros_auditoria_and_users_use_clean_white_list_shell():
+    css = read('static/css/layout-standard.css')
+    templates = (
+        'templates/apresentantes/index.html',
+        'templates/titulares/index.html',
+        'templates/auditoria.html',
+        'templates/admin/usuarios.html',
+    )
+
+    for relative in templates:
+        text = read(relative)
+        assert 'rf-clean-list-card' in text, relative
+        assert 'rf-card-header' not in text, relative
+        assert 'rf-badge count' not in text, relative
+
+    assert '.rf-clean-list-card' in css
+    assert 'background: var(--rf-surface-card, #FFFFFF) !important;' in css
+    assert 'table-apresentantes' in css
+    assert 'table-titulares' in css
+    assert 'table-usuarios' in css
+    assert 'table-auditoria' in css
