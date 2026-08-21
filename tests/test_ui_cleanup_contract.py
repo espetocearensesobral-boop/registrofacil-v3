@@ -90,14 +90,37 @@ def test_configuration_action_buttons_use_outline_semantic_contract():
     legacy_css = read('static/css/visual-system.css')
     html = read('templates/configuracoes.html')
 
-    assert 'cfg-ibtn edit' in html
-    assert 'cfg-destructive-toggle' in html
-    assert 'act-on' in html
+    assert 'cfg-settings-action cfg-settings-action-edit' in html
+    assert 'cfg-settings-action-danger' in html
+    assert 'cfg-settings-action-success' in html
     assert 'body .cfg-ibtn' not in legacy_css
+    assert 'cfg-ibtn edit' not in html
+    assert 'cfg-destructive-toggle' not in html
+    assert 'act-on' not in html
     assert 'html body #panel-status .cfg-row-actions .cfg-ibtn' not in css
-    assert 'html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit' in css
-    assert 'html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit' in css
-    assert 'background-color: transparent !important;' in css
-    assert 'color-mix(in srgb, var(--color-gold-primary' in css
-    assert 'color-mix(in srgb, var(--color-error' in css
-    assert 'color-mix(in srgb, var(--color-success' in css
+    assert 'html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-settings-action' in html
+    assert 'html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-action' in html
+    assert 'background: transparent !important;' in html
+    assert 'color-mix(in srgb, var(--color-gold-primary' in html
+    assert 'color-mix(in srgb, var(--color-error' in html
+    assert 'color-mix(in srgb, var(--color-success' in html
+
+
+
+def test_configuration_route_renders_namespaced_action_classes(app_client):
+    with app_client.session_transaction() as session:
+        session.update(
+            logado=True,
+            usuario_id=1,
+            usuario_role='admin',
+            usuario_username='admin',
+            csrf_token='csrf-test',
+        )
+
+    response = app_client.get('/configuracoes/')
+    assert response.status_code == 200
+    body = response.get_data(as_text=True)
+    assert 'cfg-settings-action cfg-settings-action-edit' in body
+    assert 'cfg-settings-action-danger' in body
+    assert 'cfg-settings-action-success' in body
+    assert 'cfg-ibtn' not in body

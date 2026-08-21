@@ -172,8 +172,11 @@ def test_cadastros_auditoria_and_users_use_clean_white_list_shell():
     assert '.rf-clean-list-card .tbl-actions .tbl-btn.del' in css
     assert '#main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.edit' in css
     assert '#main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.del' in css
-    assert '.cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit' in css
-    assert '.cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.act-on' in css
+    assert 'cfg-settings-action cfg-settings-action-edit' in read('templates/configuracoes.html')
+    assert 'cfg-settings-action-danger' in read('templates/configuracoes.html')
+    assert 'cfg-settings-action-success' in read('templates/configuracoes.html')
+    assert '.cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn' not in css
+    assert '.cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn' not in css
 
 
 def test_process_action_buttons_have_complete_semantic_visual_contract():

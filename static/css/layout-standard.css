@@ -5183,28 +5183,6 @@ html body .cfg-settings-rebuild #panel-services .cfg-actions-cell {
   text-align: right !important;
   white-space: nowrap !important;
 }
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn {
-  display: inline-flex !important;
-  width: 2rem !important;
-  min-width: 2rem !important;
-  height: 2rem !important;
-  min-height: 2rem !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex: 0 0 2rem !important;
-  padding: 0 !important;
-  border-radius: var(--rf-radius-action, 9px) !important;
-  line-height: 1 !important;
-}
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn i,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn i {
-  display: inline-block !important;
-  width: 1rem !important;
-  height: 1rem !important;
-  font-size: .875rem !important;
-  line-height: 1 !important;
-}
 @media (max-width: 767.98px) {
   html body .cfg-settings-rebuild #panel-status .cfg-actions-cell,
   html body .cfg-settings-rebuild #panel-services .cfg-actions-cell {
@@ -5312,44 +5290,4 @@ html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions 
   border-color: color-mix(in srgb, var(--color-error, #98424C) 68%, var(--rf-border-strong, #AEB8BA)) !important;
   color: var(--color-error, #98424C) !important;
   opacity: .82 !important;
-}
-
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit {
-  background-color: transparent !important;
-  background-image: none !important;
-  border-color: var(--color-gold-primary, #CDA865) !important;
-  color: var(--color-gold-dark, #8B6332) !important;
-}
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle {
-  background-color: transparent !important;
-  background-image: none !important;
-  border-color: var(--color-error, #98424C) !important;
-  color: var(--color-error, #98424C) !important;
-}
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.act-on,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.act-on {
-  background-color: transparent !important;
-  background-image: none !important;
-  border-color: var(--color-success, #1E5C3E) !important;
-  color: var(--color-success, #1E5C3E) !important;
-}
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit:hover,
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit:focus-visible,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit:hover,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.edit:focus-visible {
-  background-color: color-mix(in srgb, var(--color-gold-primary, #CDA865) 12%, var(--rf-surface-card, #FFFFFF)) !important;
-}
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:hover,
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:focus-visible,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:hover,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.cfg-destructive-toggle:focus-visible {
-  background-color: color-mix(in srgb, var(--color-error, #98424C) 12%, var(--rf-surface-card, #FFFFFF)) !important;
-}
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.act-on:hover,
-html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.act-on:focus-visible,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.act-on:hover,
-html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn.act-on:focus-visible {
-  background-color: color-mix(in srgb, var(--color-success, #1E5C3E) 12%, var(--rf-surface-card, #FFFFFF)) !important;
 }
