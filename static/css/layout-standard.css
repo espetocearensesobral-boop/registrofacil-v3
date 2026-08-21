@@ -5395,6 +5395,20 @@ html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions 
   background-color: var(--rf-surface-card, #FFFFFF) !important;
   color: var(--rf-text-muted) !important;
   opacity: .62 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.edit.is-disabled,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.edit.is-disabled {
+  border-color: color-mix(in srgb, var(--color-gold-primary, #CDA865) 68%, var(--rf-border-strong, #AEB8BA)) !important;
+  color: var(--color-gold-dark, #8B6332) !important;
+  opacity: .82 !important;
+}
+html body #main-content > .cadastro-list-card .table-titulares .tbl-actions .tbl-btn.del.is-disabled,
+html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions .tbl-btn.del.is-disabled {
+  border-color: color-mix(in srgb, var(--color-error, #98424C) 68%, var(--rf-border-strong, #AEB8BA)) !important;
+  color: var(--color-error, #98424C) !important;
+  opacity: .82 !important;
 }
 
 html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn.edit,

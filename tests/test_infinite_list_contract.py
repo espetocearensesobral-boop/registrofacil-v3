@@ -219,3 +219,24 @@ def test_complementary_action_groups_share_spacing_and_visibility_contract():
     assert '#panel-services .cfg-actions-cell' in css
     assert 'id="panel-status"' in config_template
     assert 'id="panel-services"' in config_template
+
+
+
+def test_disabled_cadastro_actions_keep_semantic_contrast_without_reenabling_business_actions():
+    css = read('static/css/layout-standard.css')
+    titulares = read('templates/titulares/index.html')
+    apresentantes = read('templates/apresentantes/index.html')
+
+    for text in (titulares, apresentantes):
+        assert 'class="tbl-btn edit is-disabled"' in text
+        assert 'class="tbl-btn del is-disabled"' in text
+
+    assert '.tbl-btn.edit.is-disabled' in css
+    assert '.tbl-btn.del.is-disabled' in css
+    assert 'color: var(--color-gold-dark, #8B6332) !important;' in css
+    assert 'color: var(--color-error, #98424C) !important;' in css
+    assert 'pointer-events: none !important;' in css
+    assert 'cursor: not-allowed !important;' in css
+
+    # Os controles continuam visualmente identificáveis, mas não são reativados.
+    assert 'opacity: .82 !important;' in css
