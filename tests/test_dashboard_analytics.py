@@ -60,3 +60,31 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert 'dashboard_info.analytics | tojson' in dashboard_template
     assert "type: 'bar'" in dashboard_template
     assert "type: 'doughnut'" in dashboard_template
+
+
+
+def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
+    _login(app_client)
+    response = app_client.get('/dashboard')
+    assert response.status_code == 200
+    body = response.get_data(as_text=True)
+    css = (ROOT / 'static/css/dashboard.css').read_text(encoding='utf-8')
+
+    expected_classes = (
+        'kpi-status-completed',
+        'kpi-status-prenoted',
+        'kpi-status-pending',
+        'kpi-status-progress',
+    )
+    for class_name in expected_classes:
+        assert class_name in body
+        assert f'#main-content .kpi-card.{class_name}' in css
+
+    assert '#3F7F5F' in css
+    assert '#4B7E9C' in css
+    assert '#B05B63' in css
+    assert '#C09545' in css
+    assert '#2F6B50' in css
+    assert '#315E78' in css
+    assert '#8F404A' in css
+    assert '#7A5A22' in css

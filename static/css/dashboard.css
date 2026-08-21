@@ -214,3 +214,70 @@
     .dashboard-status-chart-body { height: 9rem; }
     .dashboard-status-legend { padding-inline: .65rem; }
 }
+
+
+/* -------------------------------------------------------------------------
+   Cards de status — semântica fixa, levemente saturada e independente do tema
+   ------------------------------------------------------------------------- */
+#main-content .kpi-card.kpi-status-completed {
+    --kpi-status-color: #3F7F5F;
+    --kpi-status-text: #2F6B50;
+    --kpi-status-surface: #F1F7F3;
+}
+#main-content .kpi-card.kpi-status-prenoted {
+    --kpi-status-color: #4B7E9C;
+    --kpi-status-text: #315E78;
+    --kpi-status-surface: #F1F6F9;
+}
+#main-content .kpi-card.kpi-status-pending {
+    --kpi-status-color: #B05B63;
+    --kpi-status-text: #8F404A;
+    --kpi-status-surface: #FBF2F3;
+}
+#main-content .kpi-card.kpi-status-progress {
+    --kpi-status-color: #C09545;
+    --kpi-status-text: #7A5A22;
+    --kpi-status-surface: #FCF8EF;
+}
+#main-content .kpi-card.kpi-status-completed,
+#main-content .kpi-card.kpi-status-prenoted,
+#main-content .kpi-card.kpi-status-pending,
+#main-content .kpi-card.kpi-status-progress {
+    border-top: 4px solid var(--kpi-status-color) !important;
+    background: var(--kpi-status-surface) !important;
+}
+#main-content .kpi-card.kpi-status-completed .kpi-value,
+#main-content .kpi-card.kpi-status-prenoted .kpi-value,
+#main-content .kpi-card.kpi-status-pending .kpi-value,
+#main-content .kpi-card.kpi-status-progress .kpi-value {
+    color: var(--kpi-status-text) !important;
+}
+#main-content .kpi-card.kpi-status-completed .kpi-bg-icon,
+#main-content .kpi-card.kpi-status-prenoted .kpi-bg-icon,
+#main-content .kpi-card.kpi-status-pending .kpi-bg-icon,
+#main-content .kpi-card.kpi-status-progress .kpi-bg-icon {
+    color: var(--kpi-status-color) !important;
+    opacity: .13 !important;
+}
+#main-content .kpi-card.kpi-status-completed .kpi-label,
+#main-content .kpi-card.kpi-status-prenoted .kpi-label,
+#main-content .kpi-card.kpi-status-pending .kpi-label,
+#main-content .kpi-card.kpi-status-progress .kpi-label {
+    color: var(--rf-text-strong, #2A2A2A) !important;
+}
+#main-content .kpi-card.kpi-status-completed .kpi-sub,
+#main-content .kpi-card.kpi-status-prenoted .kpi-sub,
+#main-content .kpi-card.kpi-status-pending .kpi-sub,
+#main-content .kpi-card.kpi-status-progress .kpi-sub {
+    color: var(--rf-text-body, #475467) !important;
+}
+#main-content .kpi-card.kpi-status-completed:hover,
+#main-content .kpi-card.kpi-status-completed:focus-visible,
+#main-content .kpi-card.kpi-status-prenoted:hover,
+#main-content .kpi-card.kpi-status-prenoted:focus-visible,
+#main-content .kpi-card.kpi-status-pending:hover,
+#main-content .kpi-card.kpi-status-pending:focus-visible,
+#main-content .kpi-card.kpi-status-progress:hover,
+#main-content .kpi-card.kpi-status-progress:focus-visible {
+    border-top-color: var(--kpi-status-text) !important;
+}

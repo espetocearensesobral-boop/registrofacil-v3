@@ -27,27 +27,27 @@
 
     <!-- KPI Cards -->
     <div class="kpi-grid">
-        <a class="kpi-card kpi-success kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
+        <a class="kpi-card kpi-status-completed kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
             <div class="kpi-label">Concluídos</div>
-            <div class="kpi-value kpi-success">{{ dashboard_info.processos_concluidos }}</div>
+            <div class="kpi-value kpi-status-value kpi-status-completed">{{ dashboard_info.processos_concluidos }}</div>
             <div class="kpi-sub">Processos finalizados</div>
             <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
         </a>
-        <a class="kpi-card kpi-info kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
+        <a class="kpi-card kpi-status-prenoted kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
             <div class="kpi-label">Prenotados</div>
-            <div class="kpi-value kpi-info">{{ dashboard_info.processos_prenotados }}</div>
+            <div class="kpi-value kpi-status-value kpi-status-prenoted">{{ dashboard_info.processos_prenotados }}</div>
             <div class="kpi-sub">Processos prenotados</div>
             <i class="bi bi-pencil-square kpi-bg-icon"></i>
         </a>
-        <a class="kpi-card kpi-warning kpi-link" href="{{ url_for('processos.pendentes') }}">
+        <a class="kpi-card kpi-status-pending kpi-link" href="{{ url_for('processos.pendentes') }}">
             <div class="kpi-label">Pendentes</div>
-            <div class="kpi-value kpi-warning">{{ dashboard_info.processos_pendentes }}</div>
+            <div class="kpi-value kpi-status-value kpi-status-pending">{{ dashboard_info.processos_pendentes }}</div>
             <div class="kpi-sub">Aguardando conclusão</div>
             <i class="bi bi-hourglass-split kpi-bg-icon"></i>
         </a>
-        <a class="kpi-card kpi-gold kpi-link" href="{{ url_for('processos.em_andamento') }}">
+        <a class="kpi-card kpi-status-progress kpi-link" href="{{ url_for('processos.em_andamento') }}">
             <div class="kpi-label">Em Andamento</div>
-            <div class="kpi-value kpi-gold">{{ dashboard_info.processos_em_andamento }}</div>
+            <div class="kpi-value kpi-status-value kpi-status-progress">{{ dashboard_info.processos_em_andamento }}</div>
             <div class="kpi-sub">Processos ativos</div>
             <i class="bi bi-arrow-repeat kpi-bg-icon"></i>
         </a>
