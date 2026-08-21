@@ -125,3 +125,9 @@ def test_profile_uses_compact_two_column_layout_without_profile_photo_controls(a
     assert 'profile-side-card' in css
     assert 'profile-theme-current' in css
     assert 'border: 1px solid var(--rf-border)' in css
+    assert 'profile-page-layout' in css
+    assert 'align-items: stretch;' in css
+    assert 'profile-main-column' in css
+    assert 'profile-side-column' in css
+    assert 'height: 100%;' in css
+    assert 'grid-template-rows: auto minmax(0, 1fr);' in css

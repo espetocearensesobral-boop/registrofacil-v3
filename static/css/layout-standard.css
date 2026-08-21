@@ -5291,3 +5291,51 @@ html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions 
   color: var(--color-error, #98424C) !important;
   opacity: .82 !important;
 }
+
+
+/* -------------------------------------------------------------------------
+   Meu Perfil — alinhamento estrutural das bordas entre colunas
+   ------------------------------------------------------------------------- */
+@media (min-width: 721px) {
+  #main-content .profile-page-layout {
+    align-items: stretch;
+  }
+  #main-content .profile-main-column,
+  #main-content .profile-side-column {
+    align-self: stretch;
+  }
+  #main-content .profile-main-column {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+  }
+  #main-content .profile-main-card {
+    height: 100%;
+    min-height: 0;
+    border: 1px solid var(--rf-border, #D4DCE5) !important;
+    border-radius: var(--rf-radius-lg, .875rem) !important;
+    box-shadow: var(--rf-shadow-sm, 0 1px 6px rgba(18, 18, 18, .06)) !important;
+  }
+  #main-content .profile-side-column {
+    align-content: stretch;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  #main-content .profile-side-card {
+    width: 100%;
+    border: 1px solid var(--rf-border, #D4DCE5) !important;
+    border-radius: var(--rf-radius-lg, .875rem) !important;
+    box-shadow: var(--rf-shadow-sm, 0 1px 6px rgba(18, 18, 18, .06)) !important;
+  }
+  #main-content .profile-side-column > .profile-side-card:last-child {
+    min-height: 0;
+  }
+}
+@media (max-width: 720px) {
+  #main-content .profile-page-layout,
+  #main-content .profile-main-column,
+  #main-content .profile-side-column,
+  #main-content .profile-main-card,
+  #main-content .profile-side-card {
+    height: auto;
+  }
+}
