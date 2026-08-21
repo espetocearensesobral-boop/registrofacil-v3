@@ -90,8 +90,8 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert '#7A5A22' in css
     assert 'kpi-status-completed::before' in css
     assert 'display: none !important;' in css
-    assert 'align-items: stretch;' in css
+    assert 'align-items: start;' in css
     assert 'dashboard-analytics-grid > .dashboard-chart-panel' in css
-    assert 'height: 100%;' in css
+    assert 'height: auto;' in css
     assert 'border: 1px solid var(--rf-border' in css
-    assert 'grid-template-rows: repeat(4, minmax(0, 1fr));' in css
+    assert 'grid-template-rows: none;' in css

@@ -292,13 +292,14 @@
 
 
 /* -------------------------------------------------------------------------
-   Painéis analíticos — bordas e alturas alinhadas por linha
+   Painéis analíticos — bordas uniformes sem estiramento artificial
    ------------------------------------------------------------------------- */
 #main-content .dashboard-analytics-grid {
-    align-items: stretch;
+    align-items: start;
 }
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel {
-    height: 100%;
+    align-self: start;
+    height: auto;
     min-height: 0;
     border: 1px solid var(--rf-border, #D4DCE5) !important;
     border-radius: var(--rf-radius-lg, .875rem) !important;
@@ -309,17 +310,12 @@
     border-bottom: 1px solid var(--rf-border-subtle, #E6EAEB) !important;
 }
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel .dashboard-chart-body {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
 }
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel .dashboard-status-legend {
     flex: 0 0 auto;
 }
 #main-content .dashboard-analytics-grid > .dashboard-operational-panel .dashboard-operational-list {
-    flex: 1 1 auto;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-}
-@media (max-width: 900px) {
-    #main-content .dashboard-analytics-grid > .dashboard-chart-panel {
-        height: auto;
-    }
+    flex: 0 0 auto;
+    grid-template-rows: none;
 }
