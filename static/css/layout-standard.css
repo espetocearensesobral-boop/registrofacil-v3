@@ -4731,3 +4731,46 @@ html body #main-content.rf-list-page .rf-infinite-status {
     flex: 1 1 0;
   }
 }
+
+
+/* =====================================================================
+   LISTAS DE PROCESSOS — composição limpa e superfície branca
+   Título global na página; filtro integrado; tabela sem caixa cinza.
+   ===================================================================== */
+html body #main-content.rf-list-page,
+html body #main-content .process-list-card,
+html body #main-content .process-list-card > .filter-bar.process-filter-surface,
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-toolbar,
+html body #main-content .process-list-card > .card-body,
+html body #main-content .process-list-card > .card-body > .table-responsive,
+html body #main-content .process-list-card .table-processos {
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-toolbar {
+  padding-top: 0 !important;
+  padding-bottom: .75rem !important;
+}
+html body #main-content .process-list-card .table-processos {
+  --rf-process-row-base: var(--rf-surface-card, #FFFFFF);
+  --rf-process-row-alt: var(--rf-surface-card, #FFFFFF);
+}
+html body #main-content .process-list-card .table-processos tbody tr,
+html body #main-content .process-list-card .table-processos tbody tr:nth-child(even) {
+  background: var(--rf-process-row-base) !important;
+}
+html body #main-content .process-list-card .table-processos tbody tr:hover {
+  background: var(--rf-process-hover) !important;
+}
+html body #main-content .process-list-card .table-processos thead th {
+  background: var(--rf-surface-card, #FFFFFF) !important;
+}
+@media (max-width: 575.98px) {
+  html body #main-content .process-list-card > .filter-bar.process-filter-surface .process-filter-toolbar {
+    padding-top: 0 !important;
+    padding-bottom: .65rem !important;
+  }
+}

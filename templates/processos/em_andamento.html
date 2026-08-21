@@ -19,10 +19,6 @@
 
 {% block content %}
 <div class="card process-list-card">
-    <div class="rf-card-header">
-        <h6 class="rf-card-title mb-0"><i class="bi bi-table"></i> Processos em Andamento</h6>
-        <span class="rf-badge count">{{ total_registros }}</span>
-    </div>
     {% include "processos/_filter_toolbar.html" %}
     <div class="card-body p-0">
         {% if not processos %}

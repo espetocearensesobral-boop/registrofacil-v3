@@ -107,6 +107,20 @@ def test_process_lists_order_entry_deadline_status_in_headers_and_rows():
         assert text.count('Status') >= 1, relative
 
 
+def test_process_lists_use_global_title_and_white_integrated_filter_shell():
+    css = read('static/css/layout-standard.css')
+    for relative in LIST_TEMPLATES[:5]:
+        text = read(relative)
+        assert 'process-list-card' in text, relative
+        assert 'rf-card-header' not in text, relative
+        assert 'rf-badge count' not in text, relative
+        assert 'processos/_filter_toolbar.html' in text, relative
+
+    assert 'background: var(--rf-surface-card, #FFFFFF) !important;' in css
+    assert 'background: var(--rf-surface, #fff) !important;' in css
+    assert 'process-list-card .table-processos' in css
+
+
 
 def test_activity_table_uses_proportional_columns_and_wraps_only_long_content():
     template = read('templates/atividades.html')
