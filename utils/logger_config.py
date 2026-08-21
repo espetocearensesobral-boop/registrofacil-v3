@@ -54,9 +54,12 @@ class SizeAndTimeRotatingFileHandler(TimedRotatingFileHandler):
     def __init__(self, *args, max_bytes=LOG_MAX_BYTES, **kwargs):
         self.max_bytes = max_bytes
         self._size_rollover = False
+        self._rollover_retry_after = 0.0
         super().__init__(*args, **kwargs)
 
     def shouldRollover(self, record):  # noqa: N802 - API herdada do logging
+        if time.monotonic() < self._rollover_retry_after:
+            return 0
         if self.max_bytes > 0 and self.stream is not None:
             try:
                 self.stream.seek(0, 2)
@@ -70,7 +73,14 @@ class SizeAndTimeRotatingFileHandler(TimedRotatingFileHandler):
 
     def doRollover(self):  # noqa: N802 - API herdada do logging
         if not self._size_rollover:
-            return super().doRollover()
+            try:
+                return super().doRollover()
+            except OSError as exc:
+                if not isinstance(exc, PermissionError) and getattr(exc, 'winerror', None) != 32:
+                    raise
+                self._defer_rollover_after_lock()
+                self._reopen_after_failed_timed_rollover()
+                return None
         if self.stream:
             self.stream.close()
             self.stream = None
@@ -84,8 +94,25 @@ class SizeAndTimeRotatingFileHandler(TimedRotatingFileHandler):
             os.replace(self.baseFilename, destination)
         except FileNotFoundError:
             pass
+        except OSError as exc:
+            if not isinstance(exc, PermissionError) and getattr(exc, 'winerror', None) != 32:
+                raise
+            self._defer_rollover_after_lock()
         self.stream = self._open()
         self._size_rollover = False
+
+    def _defer_rollover_after_lock(self):
+        """Evita que um bloqueio temporário do Windows gere erro por requisição."""
+        self._rollover_retry_after = time.monotonic() + 30.0
+
+    def _reopen_after_failed_timed_rollover(self):
+        if self.stream is None:
+            try:
+                self.stream = self._open()
+            except OSError:
+                # O próximo registro tentará reabrir novamente.
+                self.stream = None
+
 
 
 # ---------------------------------------------------------------------------

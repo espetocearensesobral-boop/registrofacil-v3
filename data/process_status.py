@@ -1,6 +1,7 @@
 """Serviços de configuração de status dos processos."""
 
 from data.database import executar_query
+from data.catalog import validar_nome_unico_db
 from utils.logger import operacional_logger as logger
 
 def add_status_processo(nome, hex_color):

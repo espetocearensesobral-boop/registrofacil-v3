@@ -124,3 +124,43 @@ def test_configuration_route_renders_namespaced_action_classes(app_client):
     assert 'cfg-settings-action-danger' in body
     assert 'cfg-settings-action-success' in body
     assert 'cfg-ibtn' not in body
+
+
+
+def test_configuration_route_updates_status_without_missing_validator(app_client):
+    import models
+
+    with app_client.session_transaction() as session:
+        session.update(
+            logado=True,
+            usuario_id=1,
+            usuario_role='admin',
+            usuario_username='admin',
+            csrf_token='csrf-test',
+        )
+
+    status = models.executar_query(
+        'SELECT id, nome, hex_color, ativo FROM status_processo ORDER BY id LIMIT 1',
+        fetch_one=True,
+    )
+    assert status is not None
+    updated_name = f"{status['nome']} (editado)"
+    response = app_client.post(
+        '/configuracoes/',
+        data={
+            'action': 'edit_status',
+            'id': status['id'],
+            'nome': updated_name,
+            'hex_color': status['hex_color'],
+            'ativo': str(status['ativo']),
+            'csrf_token': 'csrf-test',
+        },
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 200
+    updated = models.executar_query(
+        'SELECT nome FROM status_processo WHERE id = ?', [status['id']], fetch_one=True
+    )
+    assert updated['nome'] == updated_name
+    assert updated_name in response.get_data(as_text=True)
