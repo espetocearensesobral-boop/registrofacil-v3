@@ -281,3 +281,11 @@
 #main-content .kpi-card.kpi-status-progress:focus-visible {
     border-top-color: var(--kpi-status-text) !important;
 }
+
+#main-content .kpi-card.kpi-status-completed::before,
+#main-content .kpi-card.kpi-status-prenoted::before,
+#main-content .kpi-card.kpi-status-pending::before,
+#main-content .kpi-card.kpi-status-progress::before {
+    display: none !important;
+    content: none !important;
+}

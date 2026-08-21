@@ -88,3 +88,5 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert '#315E78' in css
     assert '#8F404A' in css
     assert '#7A5A22' in css
+    assert 'kpi-status-completed::before' in css
+    assert 'display: none !important;' in css
