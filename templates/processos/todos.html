@@ -74,7 +74,7 @@
                                         <div class="tbl-actions">
                                         <a href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" class="tbl-btn view" title="Visualizar"><i class="bi bi-eye"></i></a>
                                         {% if processo.status_nome_original == 'Finalizado' or processo.data_conclusao %}
-                                        <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="tbl-btn edit" title="Processo finalizado — edição registrada no histórico" style="color:var(--color-warning, #f59e0b);"><i class="bi bi-exclamation-triangle"></i></a>
+                                        <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="tbl-btn edit is-finalized" title="Processo finalizado — edição registrada no histórico"><i class="bi bi-exclamation-triangle"></i></a>
                                         {% else %}
                                         <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="tbl-btn edit" title="Editar"><i class="bi bi-pencil"></i></a>
                                         {% endif %}

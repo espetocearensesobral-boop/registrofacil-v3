@@ -166,3 +166,30 @@ def test_cadastros_auditoria_and_users_use_clean_white_list_shell():
     assert 'table-titulares' in css
     assert 'table-usuarios' in css
     assert 'table-auditoria' in css
+
+
+def test_process_action_buttons_have_complete_semantic_visual_contract():
+    css = read('static/css/layout-standard.css')
+    templates = (
+        'templates/processos/todos.html',
+        'templates/processos/hoje.html',
+        'templates/processos/pendentes.html',
+        'templates/processos/em_andamento.html',
+        'templates/processos/vinculados.html',
+    )
+
+    for relative in templates:
+        text = read(relative)
+        assert 'tbl-btn view' in text, relative
+        assert 'tbl-btn edit' in text, relative
+        assert 'tbl-btn del' in text, relative
+        assert 'bi-eye' in text, relative
+        assert 'bi-pencil' in text or 'bi-pencil-square' in text, relative
+        assert 'bi-trash' in text, relative
+
+    assert '.process-list-card .tbl-actions .tbl-btn' in css
+    assert '.tbl-actions .tbl-btn.view' in css
+    assert '.tbl-actions .tbl-btn.edit' in css
+    assert '.tbl-actions .tbl-btn.del' in css
+    assert 'visibility: visible !important' in css
+    assert 'opacity: 1 !important' in css
