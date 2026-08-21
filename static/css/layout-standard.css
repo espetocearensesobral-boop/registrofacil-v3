@@ -5173,3 +5173,142 @@ html body #main-content .rf-clean-list-card .tbl-actions .tbl-btn:focus-visible 
   outline: 3px solid color-mix(in srgb, var(--color-primary-light, #1B4368) 58%, transparent) !important;
   outline-offset: 2px;
 }
+
+
+/* =====================================================================
+   AÇÕES COMPLEMENTARES — Consulta Inteligente, Usuários e Configurações
+   ===================================================================== */
+html body #globalSearchModal .rf-process-report-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: .35rem !important;
+  min-width: 6.5rem !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action.nav-btn-primary,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action.nav-btn-secondary {
+  display: inline-flex !important;
+  width: 2rem !important;
+  min-width: 2rem !important;
+  max-width: 2rem !important;
+  height: 2rem !important;
+  min-height: 2rem !important;
+  flex: 0 0 2rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border: 1px solid var(--rf-border-strong, #AEB8BA) !important;
+  border-radius: var(--rf-radius-action, 9px) !important;
+  background: transparent !important;
+  color: var(--rf-text-body, #2A2A2A) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action i {
+  display: inline-block !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  margin: 0 !important;
+  color: inherit !important;
+  font-size: .875rem !important;
+  line-height: 1 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-view {
+  border-color: color-mix(in srgb, var(--rf-info, var(--color-info, #3C6570)) 58%, var(--rf-border-strong, #AEB8BA)) !important;
+  color: var(--rf-info, var(--color-info, #3C6570)) !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-print {
+  border-color: color-mix(in srgb, var(--rf-accent, var(--color-gold-primary, #CDA865)) 58%, var(--rf-border-strong, #AEB8BA)) !important;
+  color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-download {
+  border-color: color-mix(in srgb, var(--rf-danger, var(--color-error, #98424C)) 58%, var(--rf-border-strong, #AEB8BA)) !important;
+  color: var(--rf-danger, var(--color-error, #98424C)) !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-view:hover,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-view:focus-visible {
+  border-color: var(--rf-info, var(--color-info, #3C6570)) !important;
+  background: color-mix(in srgb, var(--rf-info, var(--color-info, #3C6570)) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+  color: var(--rf-info, var(--color-info, #3C6570)) !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-print:hover,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-print:focus-visible {
+  border-color: var(--rf-accent, var(--color-gold-primary, #CDA865)) !important;
+  background: color-mix(in srgb, var(--rf-accent, var(--color-gold-primary, #CDA865)) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+  color: var(--rf-accent-hover, var(--color-gold-dark, #8B6332)) !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-download:hover,
+html body #globalSearchModal .rf-process-report-actions .rf-search-action-download:focus-visible {
+  border-color: var(--rf-danger, var(--color-error, #98424C)) !important;
+  background: color-mix(in srgb, var(--rf-danger, var(--color-error, #98424C)) 12%, var(--rf-surface-card, #FFFFFF)) !important;
+  color: var(--rf-danger-hover, var(--color-error, #98424C)) !important;
+}
+html body #globalSearchModal .rf-process-report-actions .rf-search-action:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary-light, #1B4368) 58%, transparent) !important;
+  outline-offset: 2px;
+}
+html body #main-content .rf-clean-list-card .tbl-actions .tbl-btn,
+html body #main-content .admin-list-card .tbl-actions .tbl-btn {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+html body .cfg-settings-rebuild .cfg-row-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: .35rem !important;
+  min-width: 4.35rem !important;
+  width: max-content !important;
+  white-space: nowrap !important;
+}
+html body .cfg-settings-rebuild .cfg-row-actions .cfg-inline {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-actions-cell,
+html body .cfg-settings-rebuild #panel-services .cfg-actions-cell {
+  width: 7rem !important;
+  min-width: 7rem !important;
+  padding-inline: .65rem !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn {
+  display: inline-flex !important;
+  width: 2rem !important;
+  min-width: 2rem !important;
+  height: 2rem !important;
+  min-height: 2rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 2rem !important;
+  padding: 0 !important;
+  border-radius: var(--rf-radius-action, 9px) !important;
+  line-height: 1 !important;
+}
+html body .cfg-settings-rebuild #panel-status .cfg-row-actions .cfg-ibtn i,
+html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-ibtn i {
+  display: inline-block !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  font-size: .875rem !important;
+  line-height: 1 !important;
+}
+@media (max-width: 767.98px) {
+  html body .cfg-settings-rebuild #panel-status .cfg-actions-cell,
+  html body .cfg-settings-rebuild #panel-services .cfg-actions-cell {
+    width: auto !important;
+    min-width: 0 !important;
+  }
+  html body .cfg-settings-rebuild .cfg-row-actions {
+    min-width: 4.35rem !important;
+  }
+}

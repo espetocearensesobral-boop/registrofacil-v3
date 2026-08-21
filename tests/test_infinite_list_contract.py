@@ -197,3 +197,21 @@ def test_process_action_buttons_have_complete_semantic_visual_contract():
     assert '.tbl-actions .tbl-btn.del' in css
     assert 'visibility: visible !important' in css
     assert 'opacity: 1 !important' in css
+
+
+def test_complementary_action_groups_share_spacing_and_visibility_contract():
+    css = read('static/css/layout-standard.css')
+    main_js = read('static/js/main.js')
+    config_template = read('templates/configuracoes.html')
+
+    assert 'rf-search-action-view' in main_js
+    assert 'rf-search-action-print' in main_js
+    assert 'rf-search-action-download' in main_js
+    assert '#globalSearchModal .rf-process-report-actions .rf-search-action' in css
+    assert 'visibility: visible !important' in css
+    assert 'opacity: 1 !important' in css
+    assert '.cfg-settings-rebuild .cfg-row-actions' in css
+    assert '#panel-status .cfg-actions-cell' in css
+    assert '#panel-services .cfg-actions-cell' in css
+    assert 'id="panel-status"' in config_template
+    assert 'id="panel-services"' in config_template
