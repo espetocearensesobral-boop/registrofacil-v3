@@ -1,54 +1,63 @@
-# Redesign de UI — Registro Fácil
+# Redesign completo de UI — Registro Fácil
 
 ## Objetivo
 
-Aplicar os princípios da skill `frontend-ui-engineering` ao fluxo público e às telas internas autenticadas do projeto [Registro Fácil](https://github.com/espetocearensesobral-boop/registrofacil-v3), preservando rotas Flask, regras de negócio, sistema de temas, filtros, gráficos, formulários e operações administrativas.
+Aplicar a skill `frontend-ui-engineering` ao sistema Registro Fácil como um produto administrativo completo, não apenas a páginas isoladas. O trabalho cobre autenticação, shell autenticado, dashboard, processos, detalhes, cadastros, configurações, backup, métricas, atividades, auditoria, administração de usuários, permissões, perfil, modais, estados vazios e breakpoints responsivos.
 
-> **Direção visual:** produto administrativo contemporâneo, sóbrio e acolhedor, com superfícies neutras, ação principal temática, acento institucional terroso, tipografia hierarquizada, bordas discretas, sombras mínimas e estados de interação claros.
+> **Direção visual:** um sistema administrativo institucional, sóbrio e acolhedor, com superfícies neutras, ação principal temática, acento terroso derivado da paleta do projeto, tipografia hierarquizada, bordas discretas, sombras reduzidas e estados de interação claros.
 
-## Escopo entregue
+## Sistema visual consolidado
 
-| Área | Implementação | Resultado |
-| --- | --- | --- |
-| Shell autenticado | Nova camada `static/css/internal-ui.css` carregada pelo `base.html`; sidebar, logo, estado ativo, topbar, menu mobile, ações e rodapé foram refinados com tokens semânticos. | Navegação mais coesa, topbar estável, hierarquia clara e melhor leitura em desktop e mobile. |
-| Dashboard | Saudação, KPIs clicáveis, cards de processos recentes, prazos críticos, gráficos e leitura operacional receberam espaçamento, bordas, estados hover/focus e pesos visuais mais consistentes. | A informação prioritária é escaneável sem excesso de sombra ou decoração genérica. |
-| Listagem de processos | Toolbar de busca/filtros, selects, ações de impressão/exportação, tabela e estado vazio foram harmonizados. | Ações e filtros são distinguíveis, com maior respiro e feedback visual coerente. |
-| Formulário de novo processo | Campos, seções, grupos de dados, observações, anexos e ações herdaram a régua interna; placeholders de `form-floating` foram ocultados para evitar sobreposição com labels. | Formulário mais limpo, especialmente em 375px, mantendo labels semânticos e textos de ajuda. |
-| Configurações | Abas, cartões, tabela de status e controles administrativos foram validados com o novo shell. | A página preserva sua estrutura funcional e mantém o estado ativo das abas. |
-| Autenticação | `auth.css` compartilhado para login, recuperação, cadastro e redefinição; skip link, `main`/`aside`, alertas semânticos e controles reais de senha. | Fluxo público consistente, responsivo e navegável por teclado. |
-| Cascata CSS | Overrides públicos conflitantes foram removidos de `visual-system.css`; heading global foi restrito ao conteúdo autenticado para não atingir a marca da autenticação. | Menos dependência de `!important` legado e uma fonte visual central por contexto. |
-| Microcopy | Corrigida a pontuação duplicada na saudação do dashboard. | Primeira leitura mais polida e natural. |
+A camada `static/css/internal-ui.css` tornou-se a fonte transversal de acabamento para as telas autenticadas. Ela usa os tokens já existentes em `color-themes.css` — incluindo `--rf-surface-card`, `--rf-border`, `--rf-text-heading`, `--rf-accent`, `--rf-action-primary`, `--rf-danger`, `--rf-success` e `--rf-font-*` — e é carregada no final do `base.html` para vencer estilos inline e blocos legados sem alterar a lógica de negócio.
 
-## Arquivos principais
+| Princípio | Aplicação |
+| --- | --- |
+| Hierarquia | Página, seção, metadado, conteúdo e helper text recebem pesos e tamanhos distintos. |
+| Densidade | Cards e toolbars usam a escala do projeto; sombras são pequenas e reservadas a superfícies com elevação real. |
+| Cor | A paleta institucional permanece como fonte de ação, acento, status, perigo, sucesso e informação; estados não dependem somente de cor. |
+| Componentização | Shell, botões, filtros, tabelas, cards, formulários, modais, badges, pills, vazios, detalhes e timelines possuem contratos globais. |
+| Responsividade | A interface começa por uma coluna e expande para grids e tabelas em desktop; listas administrativas viram cartões em mobile. |
+| Acessibilidade | Foco visível, labels associados, skip link, `aria-expanded`, `aria-controls`, `aria-live`, alertas semânticos e ações rotuladas. |
+
+## Áreas cobertas
+
+| Área | Redesign entregue |
+| --- | --- |
+| Autenticação | Login, recuperação, cadastro e redefinição compartilham `auth.css`, com painel institucional, campos, foco, alerts, skip link e toggles de senha acessíveis. |
+| Shell | Sidebar, logo, grupos de navegação, item ativo, saída, topbar, menu mobile, ações da página e rodapé foram uniformizados. |
+| Dashboard | Saudação, KPIs, recentes, prazos críticos, gráficos, leitura operacional e estados sem dados seguem uma hierarquia de produto operacional. A pontuação duplicada da saudação foi corrigida. |
+| Processos | Todas as listas — todos, hoje, pendentes, em andamento e vinculados — usam filtros, tabelas, estados vazios, pills e ações com o mesmo contrato. O formulário de novo/editar processo recebeu campos, seções, anexos, observações e barras de ação responsivas. |
+| Detalhe de processo | Dados de titular e apresentante, metadados, status, identificador, observações, anexos, histórico/timeline e modais de relatório/exclusão foram refatorados para classes semânticas; estilos inline de apresentação foram removidos, mantendo somente as variáveis dinâmicas de status. |
+| Titulares e apresentantes | Listagens, filtros, ordenação, pills, estados vazios, ações de linha, modais de exclusão, formulários novo/editar e páginas de histórico seguem a mesma linguagem. No mobile, tabelas viram cartões. |
+| Configurações e estabelecimento | Abas, status, tipos de serviço, e-mail, estabelecimento, atividades/segurança e sobre mantêm a estrutura funcional com cards, campos, tabela, tabs e mensagens consistentes. |
+| Backup | KPIs, status do servidor, última execução, ações de backup, path box, tabela, estado vazio, presença na rede, seleção de diretório, configuração SFTP/automação e modais destrutivos seguem o contrato global. |
+| Métricas | Tabs, KPIs, cards comparativos, gráficos, progresso, carregamento, erro, vazio e tabela de equipe usam a mesma escala, bordas, estados e tipografia. |
+| Atividades e auditoria | Toolbars de filtro, tabelas infinitas, badges de origem, paginação, detalhes de evento, comparação e metadados recebem o mesmo padrão administrativo. |
+| Usuários e permissões | Lista de usuários, filtros, status, ações sensíveis, perfis, categorias de permissão, expansão, contadores, alertas e barras de salvar foram alinhados; a tabela de usuários também é responsiva em cartões. |
+| Perfil | Dados pessoais, segurança, toggles de senha, resumo da conta, aparência e modal de tema permanecem em cartões com ações e helpers legíveis. |
+| Modais e estados | Confirmações, busca inteligente, atalhos, detalhes, exclusões, configuração, erros e estados vazios compartilham radius, header, footer, foco e contraste. |
+
+## Arquivos centrais
 
 - `static/css/internal-ui.css`
 - `static/css/auth.css`
+- `static/css/color-themes.css`
 - `static/css/visual-system.css`
 - `templates/base.html`
 - `templates/dashboard.html`
-- `templates/processos/todos.html`
-- `templates/processos/novo.html`
-- `templates/configuracoes.html`
-- `templates/login.html`
-- `templates/recuperar_senha.html`
-- `templates/novo_usuario.html`
-- `templates/reset_password.html`
-
-## Acessibilidade e responsividade
-
-A interface foi revisada com foco em navegação por teclado, estados `:focus-visible`, labels associados, `aria-label`, `aria-controls`, `aria-pressed`, `role="alert"`, skip links e estados vazios significativos. As ações da topbar permanecem rotuladas também no mobile; a navegação lateral continua recebendo enriquecimento de teclado pelo `accessibility.js` existente.
-
-As prévias foram verificadas em 1440×900, 1024×900, 768×900 e 375×900. O shell interno empilha o conteúdo sem criar overflow horizontal; a toolbar da listagem passa para uma coluna legível e os campos do novo processo mantêm alvos de toque confortáveis.
+- `templates/processos/visualizar.html`
+- `templates/admin/usuarios.html`
+- Templates de processos, titulares, apresentantes, configurações, backup, métricas, atividades, auditoria, perfil e permissões.
 
 ## Validação
 
-A aplicação Flask foi executada localmente na porta 5055. As rotas autenticadas `/dashboard`, `/processos/`, `/processos/novo` e `/configuracoes/` foram renderizadas por uma sessão de QA isolada e verificadas visualmente. As rotas públicas de autenticação também foram verificadas com `auth.css` carregado.
+A aplicação Flask foi executada localmente na porta 5055. Foram renderizadas amostras autenticadas de **18 telas** e verificadas prévias em **1440×1000, 768×1000 e 375×1000**. Foram conferidos shell, listas, tabelas, formulários, detalhes, estados vazios, cards analíticos, modais e ações mobile.
 
-A suíte automatizada foi executada com `PYTHONPATH=.` e concluiu com **129 testes aprovados**. Também foram executados `git diff --check`, checagem estática dos templates, validação de carregamento HTTP e inspeção do console da sessão autenticada sem erros JavaScript relacionados às alterações.
+A suíte automatizada foi executada com `PYTHONPATH=.` e concluiu com **129 testes aprovados**. Também foram executados `git diff --check`, auditoria de rotas GET autenticadas, verificação de renderização HTML e inspeção das alterações no detalhe de processo. O toggle de histórico foi ajustado para usar `hidden` e `aria-expanded` corretamente.
 
 ## Integração com o GitHub
 
-As alterações foram aplicadas ao checkout local derivado da branch `main` do repositório informado. A publicação remota deve ocorrer em uma branch de revisão, preservando `main` até a aprovação visual e funcional do usuário.
+As alterações estão organizadas na branch [`ui/full-system-redesign`](https://github.com/espetocearensesobral-boop/registrofacil-v3/tree/ui/full-system-redesign), derivada de `main`. A branch deve ser revisada visualmente antes do merge. Nenhuma alteração foi feita diretamente na `main`.
 
 ## Referências
 

@@ -465,6 +465,999 @@ body:not(.rf-auth-page) #sidebar {
 }
 
 /* -------------------------------------------------------------------------
+   Sistema transversal para todas as áreas internas
+   ------------------------------------------------------------------------- */
+body:not(.rf-auth-page) #main-content {
+    min-width: 0;
+    padding-block: var(--rf-space-4, 1rem) var(--rf-space-5, 1.25rem);
+}
+
+body:not(.rf-auth-page) #main-content > * {
+    min-width: 0;
+}
+
+body:not(.rf-auth-page) #main-content .rf-list-page,
+body:not(.rf-auth-page) #main-content .rf-form-card,
+body:not(.rf-auth-page) #main-content .form-card,
+body:not(.rf-auth-page) #main-content .rf-clean-list-card,
+body:not(.rf-auth-page) #main-content .admin-list-card,
+body:not(.rf-auth-page) #main-content .nt-card,
+body:not(.rf-auth-page) #main-content .rf-info-card,
+body:not(.rf-auth-page) #main-content .rf-backup-card,
+body:not(.rf-auth-page) #main-content .rf-process-report-modal .modal-content {
+    border: 1px solid var(--rf-border, #e2e2e2);
+    border-radius: var(--rf-radius-surface, .875rem);
+    background: var(--rf-surface-card, #fff);
+    box-shadow: 0 1px 3px rgba(18, 18, 18, .045);
+}
+
+body:not(.rf-auth-page) #main-content .rf-form-card,
+body:not(.rf-auth-page) #main-content .form-card {
+    overflow: hidden;
+}
+
+body:not(.rf-auth-page) #main-content .rf-card-header,
+body:not(.rf-auth-page) #main-content .card-header,
+body:not(.rf-auth-page) #main-content .nt-header,
+body:not(.rf-auth-page) #main-content .rf-about-header,
+body:not(.rf-auth-page) #main-content .rf-backup-toolbar,
+body:not(.rf-auth-page) #main-content .rf-report-context-bar {
+    border-bottom: 1px solid var(--rf-border-subtle, #ececea);
+    background: var(--rf-surface-card, #fff);
+}
+
+body:not(.rf-auth-page) #main-content .rf-card-header,
+body:not(.rf-auth-page) #main-content .card-header,
+body:not(.rf-auth-page) #main-content .nt-header {
+    min-height: 3.25rem;
+    padding: var(--rf-space-3, .75rem) var(--rf-space-4, 1rem);
+}
+
+body:not(.rf-auth-page) #main-content .rf-card-body,
+body:not(.rf-auth-page) #main-content .card-body,
+body:not(.rf-auth-page) #main-content .nt-body,
+body:not(.rf-auth-page) #main-content .rf-backup-card-body {
+    min-width: 0;
+    background: var(--rf-surface-card, #fff);
+}
+
+body:not(.rf-auth-page) #main-content .rf-card-title,
+body:not(.rf-auth-page) #main-content .card-title,
+body:not(.rf-auth-page) #main-content .nt-header h1,
+body:not(.rf-auth-page) #main-content .nt-header h2,
+body:not(.rf-auth-page) #main-content .nt-header h3,
+body:not(.rf-auth-page) #main-content .rf-entity-title,
+body:not(.rf-auth-page) #main-content .rf-profile-title,
+body:not(.rf-auth-page) #main-content .rf-about-section-title {
+    color: var(--rf-text-heading, var(--rf-text-strong, #121212));
+    font-weight: 700;
+    letter-spacing: -.015em;
+}
+
+body:not(.rf-auth-page) #main-content .section-title,
+body:not(.rf-auth-page) #main-content .rf-row-title,
+body:not(.rf-auth-page) #main-content .rf-linked-users-title,
+body:not(.rf-auth-page) #main-content .rf-backup-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--rf-space-2, .5rem);
+    color: var(--rf-text-heading, var(--rf-text-strong, #121212));
+    font-size: 1rem;
+    font-weight: 750;
+    letter-spacing: -.01em;
+}
+
+body:not(.rf-auth-page) #main-content .section-title i,
+body:not(.rf-auth-page) #main-content .rf-backup-section-icon,
+body:not(.rf-auth-page) #main-content .rf-info-icon,
+body:not(.rf-auth-page) #main-content .nt-header-icon {
+    color: var(--rf-accent, var(--color-primary));
+}
+
+/* Filtros de cadastros, usuários, atividades e auditoria. */
+body:not(.rf-auth-page) #main-content .cadastro-filter-surface,
+body:not(.rf-auth-page) #main-content .admin-filter-surface,
+body:not(.rf-auth-page) #main-content .filter-bar,
+body:not(.rf-auth-page) #main-content .rf-filter-toolbar,
+body:not(.rf-auth-page) #main-content .rf-backup-toolbar {
+    border-bottom: 1px solid var(--rf-border-subtle, #ececea);
+    background: var(--rf-surface-card, #fff);
+}
+
+body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar,
+body:not(.rf-auth-page) #main-content .admin-filter-toolbar,
+body:not(.rf-auth-page) #main-content .rf-filter-toolbar,
+body:not(.rf-auth-page) #main-content .admin-filter-surface,
+body:not(.rf-auth-page) #main-content .cadastro-filter-surface {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--rf-space-2, .5rem);
+    padding: var(--rf-space-3, .75rem) var(--rf-space-4, 1rem);
+}
+
+body:not(.rf-auth-page) #main-content .cadastro-filter-search,
+body:not(.rf-auth-page) #main-content .admin-filter-search,
+body:not(.rf-auth-page) #main-content .activity-filter-search,
+body:not(.rf-auth-page) #main-content .rf-process-search,
+body:not(.rf-auth-page) #main-content .process-filter-search {
+    min-height: var(--rf-internal-control-height);
+    border: 1px solid var(--rf-border-input, var(--rf-border, #d8d8d5));
+    border-radius: var(--rf-radius-md, .75rem);
+    background: var(--rf-surface-card, #fff);
+    color: var(--rf-text-primary, #121212);
+}
+
+body:not(.rf-auth-page) #main-content .cadastro-filter-search:focus-within,
+body:not(.rf-auth-page) #main-content .admin-filter-search:focus-within,
+body:not(.rf-auth-page) #main-content .activity-filter-search:focus-within,
+body:not(.rf-auth-page) #main-content .rf-process-search:focus-within,
+body:not(.rf-auth-page) #main-content .process-filter-search:focus-within {
+    border-color: var(--rf-action-primary, var(--color-primary));
+    box-shadow: var(--rf-focus-ring, 0 0 0 .2rem rgba(18, 18, 18, .12));
+}
+
+body:not(.rf-auth-page) #main-content .cadastro-filter-search input,
+body:not(.rf-auth-page) #main-content .admin-filter-search input,
+body:not(.rf-auth-page) #main-content .activity-filter-search input,
+body:not(.rf-auth-page) #main-content .rf-process-search input,
+body:not(.rf-auth-page) #main-content .process-filter-search input,
+body:not(.rf-auth-page) #main-content .admin-filter-select,
+body:not(.rf-auth-page) #main-content .admin-filter-date,
+body:not(.rf-auth-page) #main-content .activity-filter-select,
+body:not(.rf-auth-page) #main-content .activity-filter-date {
+    color: var(--rf-text-primary, #121212);
+    background: transparent;
+}
+
+body:not(.rf-auth-page) #main-content .cadastro-filter-icon-btn,
+body:not(.rf-auth-page) #main-content .admin-filter-icon-btn,
+body:not(.rf-auth-page) #main-content .activity-filter-icon-btn,
+body:not(.rf-auth-page) #main-content .admin-filter-more-btn,
+body:not(.rf-auth-page) #main-content .process-filter-icon-btn {
+    width: var(--rf-internal-control-height);
+    min-width: var(--rf-internal-control-height);
+    height: var(--rf-internal-control-height);
+    min-height: var(--rf-internal-control-height);
+    display: inline-grid;
+    place-items: center;
+    border: 1px solid var(--rf-border, #e2e2e2);
+    border-radius: var(--rf-radius-md, .75rem);
+    background: var(--rf-surface-card, #fff);
+    color: var(--rf-text-strong, #121212);
+}
+
+body:not(.rf-auth-page) #main-content .cadastro-filter-icon-btn:hover,
+body:not(.rf-auth-page) #main-content .cadastro-filter-icon-btn:focus-visible,
+body:not(.rf-auth-page) #main-content .admin-filter-icon-btn:hover,
+body:not(.rf-auth-page) #main-content .admin-filter-icon-btn:focus-visible,
+body:not(.rf-auth-page) #main-content .activity-filter-icon-btn:hover,
+body:not(.rf-auth-page) #main-content .activity-filter-icon-btn:focus-visible,
+body:not(.rf-auth-page) #main-content .admin-filter-more-btn:hover,
+body:not(.rf-auth-page) #main-content .admin-filter-more-btn:focus-visible {
+    border-color: var(--rf-accent, var(--color-primary));
+    background: var(--rf-surface-muted, #f5f5f4);
+    color: var(--rf-accent, var(--color-primary));
+}
+
+/* Listas e tabelas de todos os domínios. */
+body:not(.rf-auth-page) #main-content .cadastro-list-card,
+body:not(.rf-auth-page) #main-content .admin-list-card,
+body:not(.rf-auth-page) #main-content .rf-backup-card,
+body:not(.rf-auth-page) #main-content .rf-info-card {
+    overflow: hidden;
+}
+
+body:not(.rf-auth-page) #main-content table.table,
+body:not(.rf-auth-page) #main-content .mtr-table,
+body:not(.rf-auth-page) #main-content .rf-permission-table,
+body:not(.rf-auth-page) #main-content .rf-backup-table,
+body:not(.rf-auth-page) #main-content .cfg-tbl {
+    width: 100%;
+    border-color: var(--rf-border-subtle, #ececea);
+    color: var(--rf-text-primary, #121212);
+}
+
+body:not(.rf-auth-page) #main-content table.table thead th,
+body:not(.rf-auth-page) #main-content .mtr-table thead th,
+body:not(.rf-auth-page) #main-content .rf-permission-table thead th,
+body:not(.rf-auth-page) #main-content .rf-backup-table thead th,
+body:not(.rf-auth-page) #main-content .cfg-tbl th {
+    padding: var(--rf-space-3, .75rem) var(--rf-space-4, 1rem);
+    border-bottom: 1px solid var(--rf-border, #e2e2e2);
+    background: var(--rf-surface-muted, #f5f5f4);
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .6875rem;
+    font-weight: 750;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+body:not(.rf-auth-page) #main-content table.table tbody td,
+body:not(.rf-auth-page) #main-content .mtr-table tbody td,
+body:not(.rf-auth-page) #main-content .rf-permission-table tbody td,
+body:not(.rf-auth-page) #main-content .rf-backup-table tbody td,
+body:not(.rf-auth-page) #main-content .cfg-tbl td {
+    padding: var(--rf-space-3, .75rem) var(--rf-space-4, 1rem);
+    border-bottom: 1px solid var(--rf-border-subtle, #ececea);
+    vertical-align: middle;
+}
+
+body:not(.rf-auth-page) #main-content table.table tbody tr:hover td,
+body:not(.rf-auth-page) #main-content .mtr-table tbody tr:hover td,
+body:not(.rf-auth-page) #main-content .rf-permission-table tbody tr:hover td,
+body:not(.rf-auth-page) #main-content .rf-backup-table tbody tr:hover td,
+body:not(.rf-auth-page) #main-content .cfg-tbl tbody tr:hover td {
+    background: var(--rf-surface-hover, #f4f4f1);
+}
+
+body:not(.rf-auth-page) #main-content .rf-table-head-row .th-sort,
+body:not(.rf-auth-page) #main-content .th-sort {
+    cursor: pointer;
+    user-select: none;
+}
+
+body:not(.rf-auth-page) #main-content .rf-table-head-row .th-sort:hover,
+body:not(.rf-auth-page) #main-content .th-sort:hover {
+    color: var(--rf-accent, var(--color-primary));
+}
+
+/* Formulários, seções, notas, upload e barras de ação. */
+body:not(.rf-auth-page) #main-content .form-section,
+body:not(.rf-auth-page) #main-content .nt-row-2,
+body:not(.rf-auth-page) #main-content .rf-profile-row,
+body:not(.rf-auth-page) #main-content .rf-info-row {
+    padding: var(--rf-space-4, 1rem);
+    border-bottom: 1px solid var(--rf-border-subtle, #ececea);
+}
+
+body:not(.rf-auth-page) #main-content .form-section:last-of-type,
+body:not(.rf-auth-page) #main-content .rf-profile-row:last-child,
+body:not(.rf-auth-page) #main-content .rf-info-row:last-child {
+    border-bottom: 0;
+}
+
+body:not(.rf-auth-page) #main-content .form-label,
+body:not(.rf-auth-page) #main-content .cfg-fld label,
+body:not(.rf-auth-page) #main-content .nt-fld label,
+body:not(.rf-auth-page) #main-content .field-label,
+body:not(.rf-auth-page) #main-content .det-lbl,
+body:not(.rf-auth-page) #main-content .info-cell label {
+    margin-bottom: var(--rf-space-1, .25rem);
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .6875rem;
+    font-weight: 750;
+    letter-spacing: .045em;
+    text-transform: uppercase;
+}
+
+body:not(.rf-auth-page) #main-content .form-floating > label {
+    color: var(--rf-text-muted, #6b7280);
+}
+
+body:not(.rf-auth-page) #main-content .form-text,
+body:not(.rf-auth-page) #main-content .text-muted,
+body:not(.rf-auth-page) #main-content .rf-row-subtitle,
+body:not(.rf-auth-page) #main-content .rf-inline-note,
+body:not(.rf-auth-page) #main-content .rf-list-context-note,
+body:not(.rf-auth-page) #main-content .rf-backup-description {
+    color: var(--rf-text-muted, #6b7280) !important;
+}
+
+body:not(.rf-auth-page) #main-content .rf-form-actions,
+body:not(.rf-auth-page) #main-content .nt-footer,
+body:not(.rf-auth-page) #main-content .rf-profile-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--rf-space-2, .5rem);
+    padding: var(--rf-space-4, 1rem);
+    border-top: 1px solid var(--rf-border, #e2e2e2);
+    background: var(--rf-surface-muted, #f5f5f4);
+}
+
+body:not(.rf-auth-page) #main-content .file-upload-area {
+    border: 1px dashed var(--rf-border-strong, #c9c9c5);
+    border-radius: var(--rf-radius-lg, .875rem);
+    background: color-mix(in srgb, var(--rf-accent, var(--color-primary)) 4%, var(--rf-surface-card, #fff));
+    color: var(--rf-text-body, #2a2a2a);
+    transition: border-color .18s ease, background-color .18s ease;
+}
+
+body:not(.rf-auth-page) #main-content .file-upload-area:hover,
+body:not(.rf-auth-page) #main-content .file-upload-area:focus-within {
+    border-color: var(--rf-accent, var(--color-primary));
+    background: color-mix(in srgb, var(--rf-accent, var(--color-primary)) 8%, var(--rf-surface-card, #fff));
+}
+
+/* Detalhes, perfis, relatórios de processo e entidades. */
+body:not(.rf-auth-page) #main-content .rf-entity-heading,
+body:not(.rf-auth-page) #main-content .rf-profile-title,
+body:not(.rf-auth-page) #main-content .rf-report-context-bar,
+body:not(.rf-auth-page) #main-content .rf-process-report-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--rf-space-3, .75rem);
+    padding: var(--rf-space-4, 1rem);
+}
+
+body:not(.rf-auth-page) #main-content .rf-entity-heading-main,
+body:not(.rf-auth-page) #main-content .rf-profile-detail-body,
+body:not(.rf-auth-page) #main-content .rf-report-context-main {
+    min-width: 0;
+}
+
+body:not(.rf-auth-page) #main-content .rf-entity-meta,
+body:not(.rf-auth-page) #main-content .rf-contact-info,
+body:not(.rf-auth-page) #main-content .rf-inline-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--rf-space-2, .5rem);
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .8125rem;
+}
+
+body:not(.rf-auth-page) #main-content .rf-detail-grid,
+body:not(.rf-auth-page) #main-content .rf-profile-grid,
+body:not(.rf-auth-page) #main-content .info-row,
+body:not(.rf-auth-page) #main-content .det-grid,
+body:not(.rf-auth-page) #main-content .detalhes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rf-space-3, .75rem);
+}
+
+body:not(.rf-auth-page) #main-content .det-item,
+body:not(.rf-auth-page) #main-content .info-cell,
+body:not(.rf-auth-page) #main-content .rf-profile-row,
+body:not(.rf-auth-page) #main-content .rf-kpi-meta,
+body:not(.rf-auth-page) #main-content .rf-process-report-summary > * {
+    min-width: 0;
+    padding: var(--rf-space-3, .75rem);
+    border: 1px solid var(--rf-border-subtle, #ececea);
+    border-radius: var(--rf-radius-md, .75rem);
+    background: var(--rf-surface-muted, #f5f5f4);
+}
+
+body:not(.rf-auth-page) #main-content .det-val,
+body:not(.rf-auth-page) #main-content .field-value,
+body:not(.rf-auth-page) #main-content .rf-profile-row .rf-profile-value {
+    color: var(--rf-text-strong, #121212);
+    font-size: .875rem;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+body:not(.rf-auth-page) #main-content .timeline,
+body:not(.rf-auth-page) #main-content .rf-linked-users,
+body:not(.rf-auth-page) #main-content .rf-process-report-body {
+    padding: var(--rf-space-4, 1rem);
+}
+
+body:not(.rf-auth-page) #main-content .rf-report-context-title,
+body:not(.rf-auth-page) #main-content .rf-process-report-head h1,
+body:not(.rf-auth-page) #main-content .rf-process-report-head h2 {
+    margin: 0;
+    color: var(--rf-text-heading, var(--rf-text-strong, #121212));
+    font-size: 1.05rem;
+}
+
+body:not(.rf-auth-page) #main-content .rf-report-context-subtitle,
+body:not(.rf-auth-page) #main-content .report-sub {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .8125rem;
+}
+
+/* Backup, métricas, atividades e permissões administrativas. */
+body:not(.rf-auth-page) #main-content .rf-backup-actions,
+body:not(.rf-auth-page) #main-content .rf-quick-actions,
+body:not(.rf-auth-page) #main-content .charts-grid,
+body:not(.rf-auth-page) #main-content .perm-grid,
+body:not(.rf-auth-page) #main-content .metricas-tabs {
+    gap: var(--rf-space-3, .75rem);
+}
+
+body:not(.rf-auth-page) #main-content .rf-backup-meta,
+body:not(.rf-auth-page) #main-content .rf-backup-path-box,
+body:not(.rf-auth-page) #main-content .rf-info-body,
+body:not(.rf-auth-page) #main-content .panel-info-step,
+body:not(.rf-auth-page) #main-content .perm-cat-body,
+body:not(.rf-auth-page) #main-content .mtr-loading,
+body:not(.rf-auth-page) #main-content .mtr-error,
+body:not(.rf-auth-page) #main-content .mtr-empty {
+    padding: var(--rf-space-4, 1rem);
+    border-radius: var(--rf-radius-md, .75rem);
+    background: var(--rf-surface-muted, #f5f5f4);
+    color: var(--rf-text-body, #2a2a2a);
+}
+
+body:not(.rf-auth-page) #main-content .rf-backup-count,
+body:not(.rf-auth-page) #main-content .sum-value,
+body:not(.rf-auth-page) #main-content .kpi-value,
+body:not(.rf-auth-page) #main-content .metric-value {
+    color: var(--rf-text-heading, var(--rf-text-strong, #121212));
+    font-variant-numeric: tabular-nums;
+    font-weight: 750;
+}
+
+body:not(.rf-auth-page) #main-content .rf-backup-warning-action,
+body:not(.rf-auth-page) #main-content .rf-action-danger,
+body:not(.rf-auth-page) #main-content .nav-btn-danger {
+    color: var(--rf-text-on-danger, #fff) !important;
+}
+
+body:not(.rf-auth-page) #main-content .perm-category-card,
+body:not(.rf-auth-page) #main-content .backup-presence-summary-card,
+body:not(.rf-auth-page) #main-content .dashboard-panel,
+body:not(.rf-auth-page) #main-content .dashboard-chart-panel,
+body:not(.rf-auth-page) #main-content .chart-body {
+    border: 1px solid var(--rf-border, #e2e2e2);
+    border-radius: var(--rf-radius-lg, .875rem);
+    background: var(--rf-surface-card, #fff);
+}
+
+body:not(.rf-auth-page) #main-content .perm-cat-header,
+body:not(.rf-auth-page) #main-content .backup-presence-summary-label {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .6875rem;
+    font-weight: 750;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+body:not(.rf-auth-page) #main-content .perm-item {
+    min-height: 3rem;
+    padding: var(--rf-space-2, .5rem) var(--rf-space-3, .75rem);
+    border: 1px solid var(--rf-border-subtle, #ececea);
+    border-radius: var(--rf-radius-md, .75rem);
+    background: var(--rf-surface-card, #fff);
+}
+
+body:not(.rf-auth-page) #main-content .perm-item:hover,
+body:not(.rf-auth-page) #main-content .perm-item:focus-within {
+    border-color: var(--rf-accent, var(--color-primary));
+    background: var(--rf-surface-muted, #f5f5f4);
+}
+
+body:not(.rf-auth-page) #main-content .metricas-tabs,
+body:not(.rf-auth-page) #main-content .rf-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--rf-border, #e2e2e2);
+}
+
+body:not(.rf-auth-page) #main-content .metricas-tab-btn,
+body:not(.rf-auth-page) #main-content .rf-tab-btn {
+    min-height: 2.5rem;
+    padding: .625rem .875rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .8125rem;
+    font-weight: 700;
+}
+
+body:not(.rf-auth-page) #main-content .metricas-tab-btn:hover,
+body:not(.rf-auth-page) #main-content .metricas-tab-btn:focus-visible,
+body:not(.rf-auth-page) #main-content .rf-tab-btn:hover,
+body:not(.rf-auth-page) #main-content .rf-tab-btn:focus-visible,
+body:not(.rf-auth-page) #main-content .metricas-tab-btn.active,
+body:not(.rf-auth-page) #main-content .rf-tab-btn.active {
+    border-bottom-color: var(--rf-accent, var(--color-primary));
+    background: var(--rf-surface-muted, #f5f5f4);
+    color: var(--rf-text-strong, #121212);
+}
+
+/* Detalhe de processo: entidade, metadados, anexos e histórico. */
+body:not(.rf-auth-page) #main-content .rf-card-header-accent {
+    background: color-mix(in srgb, var(--rf-accent, var(--color-primary)) 6%, var(--rf-surface-card, #fff)) !important;
+}
+
+body:not(.rf-auth-page) #main-content .rf-card-header-muted {
+    background: var(--rf-surface-muted, #f5f5f4) !important;
+}
+
+body:not(.rf-auth-page) #main-content .rf-detail-section-title,
+body:not(.rf-auth-page) #main-content .rf-accent-icon {
+    color: var(--rf-accent, var(--color-primary));
+}
+
+body:not(.rf-auth-page) #main-content .rf-detail-name {
+    color: var(--rf-text-heading, var(--rf-text-strong, #121212));
+    font-size: 1.125rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+body:not(.rf-auth-page) #main-content .rf-detail-name-sm {
+    font-size: 1rem;
+}
+
+body:not(.rf-auth-page) #main-content .rf-contact-link {
+    color: var(--rf-text-primary, #121212) !important;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+body:not(.rf-auth-page) #main-content .rf-contact-link:hover,
+body:not(.rf-auth-page) #main-content .rf-contact-link:focus-visible {
+    color: var(--rf-accent, var(--color-primary)) !important;
+    text-decoration: underline;
+    text-underline-offset: .2em;
+}
+
+body:not(.rf-auth-page) #main-content .rf-contact-whatsapp i {
+    color: var(--rf-success, #287a58);
+}
+
+body:not(.rf-auth-page) #main-content .rf-contact-email i {
+    color: var(--rf-info, #3f7f97);
+}
+
+body:not(.rf-auth-page) #main-content .rf-status-badge {
+    background: var(--rf-status-bg, var(--rf-surface-muted, #f5f5f4)) !important;
+    color: var(--rf-status-text, var(--rf-text-strong, #121212)) !important;
+    font-size: .75rem;
+    padding: .25rem .75rem;
+}
+
+body:not(.rf-auth-page) #main-content .rf-process-id-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    padding: .2rem .625rem;
+    border: 1px solid var(--rf-border, #e2e2e2);
+    border-radius: var(--rf-radius-sm, .5rem);
+    background: var(--rf-surface-muted, #f5f5f4);
+    color: var(--rf-text-muted, #6b7280);
+    font-family: var(--rf-font-mono, monospace);
+    font-size: .75rem;
+    font-weight: 650;
+}
+
+body:not(.rf-auth-page) #main-content .rf-mono-value,
+body:not(.rf-auth-page) #main-content .rf-uuid-value {
+    font-family: var(--rf-font-mono, monospace);
+    font-size: .8125rem;
+    overflow-wrap: anywhere;
+}
+
+body:not(.rf-auth-page) #main-content .rf-status-success {
+    color: var(--rf-success, #287a58) !important;
+    font-weight: 650;
+}
+
+body:not(.rf-auth-page) #main-content .rf-status-warning {
+    color: var(--rf-warning, #a36f18) !important;
+    font-weight: 650;
+}
+
+body:not(.rf-auth-page) #main-content .rf-status-strong {
+    font-weight: 750;
+}
+
+body:not(.rf-auth-page) #main-content .rf-observation-copy {
+    margin: 0;
+    color: var(--rf-text-primary, #121212);
+    font-size: .875rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+body:not(.rf-auth-page) #main-content .rf-empty-copy {
+    margin: 0;
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .8125rem;
+}
+
+body:not(.rf-auth-page) #main-content .rf-attachment-link {
+    padding: var(--rf-space-3, .75rem) var(--rf-space-4, 1rem);
+    border: 0;
+    border-bottom: 1px solid var(--rf-border-subtle, #ececea);
+    color: var(--rf-text-primary, #121212);
+}
+
+body:not(.rf-auth-page) #main-content .rf-attachment-link:hover,
+body:not(.rf-auth-page) #main-content .rf-attachment-link:focus-visible {
+    background: var(--rf-surface-hover, #f4f4f1);
+    color: var(--rf-accent, var(--color-primary));
+}
+
+body:not(.rf-auth-page) #main-content .rf-attachment-icon {
+    color: var(--rf-accent, var(--color-primary));
+    font-size: 1rem;
+}
+
+body:not(.rf-auth-page) #main-content .rf-attachment-name {
+    max-width: min(18rem, 42vw);
+}
+
+body:not(.rf-auth-page) #main-content .rf-attachment-meta {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .75rem;
+}
+
+body:not(.rf-auth-page) #main-content .rf-attachment-download {
+    color: var(--rf-text-muted, #6b7280);
+}
+
+body:not(.rf-auth-page) #main-content .rf-history-empty {
+    display: grid;
+    place-items: center;
+    gap: var(--rf-space-2, .5rem);
+    padding: var(--rf-space-8, 2rem) var(--rf-space-4, 1rem);
+    color: var(--rf-text-muted, #6b7280);
+    text-align: center;
+}
+
+body:not(.rf-auth-page) #main-content .rf-history-empty-icon {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: 2rem;
+    opacity: .35;
+}
+
+body:not(.rf-auth-page) #main-content .htl-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+body:not(.rf-auth-page) #main-content .htl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--rf-space-3, .75rem);
+    padding: var(--rf-space-3, .75rem) 0;
+    border-bottom: 1px solid var(--rf-border-subtle, #ececea);
+}
+
+body:not(.rf-auth-page) #main-content .htl-item:last-child {
+    border-bottom: 0;
+}
+
+body:not(.rf-auth-page) #main-content .htl-dot-col {
+    display: flex;
+    flex: 0 0 2rem;
+    flex-direction: column;
+    align-items: center;
+    width: 2rem;
+}
+
+body:not(.rf-auth-page) #main-content .htl-dot {
+    width: 2rem;
+    height: 2rem;
+    display: inline-grid;
+    flex: 0 0 2rem;
+    place-items: center;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    font-size: .8125rem;
+}
+
+body:not(.rf-auth-page) #main-content .htl-dot.criacao,
+body:not(.rf-auth-page) #main-content .htl-badge.criacao {
+    border-color: var(--rf-success, #287a58);
+    background: var(--rf-success-surface, #edf7f1);
+    color: var(--rf-success, #287a58);
+}
+
+body:not(.rf-auth-page) #main-content .htl-dot.edicao,
+body:not(.rf-auth-page) #main-content .htl-badge.edicao {
+    border-color: var(--rf-info, #3f7f97);
+    background: var(--rf-info-surface, #eef6f8);
+    color: var(--rf-info, #3f7f97);
+}
+
+body:not(.rf-auth-page) #main-content .htl-dot.exclusao,
+body:not(.rf-auth-page) #main-content .htl-badge.exclusao {
+    border-color: var(--rf-danger, var(--color-error));
+    background: var(--rf-danger-surface, #fff0f1);
+    color: var(--rf-danger, var(--color-error));
+}
+
+body:not(.rf-auth-page) #main-content .htl-dot.status,
+body:not(.rf-auth-page) #main-content .htl-badge.status {
+    border-color: var(--rf-accent, var(--color-primary));
+    background: color-mix(in srgb, var(--rf-accent, var(--color-primary)) 10%, var(--rf-surface-card, #fff));
+    color: var(--rf-accent-hover, var(--color-primary));
+}
+
+body:not(.rf-auth-page) #main-content .htl-dot.sistema,
+body:not(.rf-auth-page) #main-content .htl-badge.sistema {
+    border-color: var(--rf-border, #e2e2e2);
+    background: var(--rf-surface-muted, #f5f5f4);
+    color: var(--rf-text-muted, #6b7280);
+}
+
+body:not(.rf-auth-page) #main-content .htl-line {
+    width: 1px;
+    flex: 1;
+    min-height: .75rem;
+    margin-top: .25rem;
+    background: var(--rf-border, #e2e2e2);
+}
+
+body:not(.rf-auth-page) #main-content .htl-item:last-child .htl-line {
+    display: none;
+}
+
+body:not(.rf-auth-page) #main-content .htl-body {
+    min-width: 0;
+    flex: 1;
+    padding-top: .25rem;
+}
+
+body:not(.rf-auth-page) #main-content .htl-header,
+body:not(.rf-auth-page) #main-content .htl-event-author {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--rf-space-2, .5rem);
+}
+
+body:not(.rf-auth-page) #main-content .htl-header {
+    justify-content: space-between;
+    margin-bottom: var(--rf-space-2, .5rem);
+}
+
+body:not(.rf-auth-page) #main-content .htl-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    font-size: .6875rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+body:not(.rf-auth-page) #main-content .htl-event-user {
+    color: var(--rf-text-strong, #121212);
+    font-size: .75rem;
+    font-weight: 650;
+}
+
+body:not(.rf-auth-page) #main-content .htl-meta {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .75rem;
+}
+
+body:not(.rf-auth-page) #main-content .htl-detail,
+body:not(.rf-auth-page) #main-content .htl-detail-copy {
+    color: var(--rf-text-body, #2a2a2a);
+    font-size: .8125rem;
+}
+
+body:not(.rf-auth-page) #main-content .htl-detail-danger {
+    color: var(--rf-danger, var(--color-error));
+}
+
+body:not(.rf-auth-page) #main-content .htl-change {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--rf-space-2, .5rem);
+    margin-top: var(--rf-space-1, .25rem);
+    padding: var(--rf-space-2, .5rem) var(--rf-space-3, .75rem);
+    border: 1px solid var(--rf-border, #e2e2e2);
+    border-radius: var(--rf-radius-sm, .5rem);
+    background: var(--rf-surface-muted, #f5f5f4);
+}
+
+body:not(.rf-auth-page) #main-content .htl-change .field-name {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .6875rem;
+    font-weight: 750;
+    letter-spacing: .045em;
+    text-transform: uppercase;
+}
+
+body:not(.rf-auth-page) #main-content .htl-change .val-old {
+    color: var(--rf-danger, var(--color-error));
+    opacity: .8;
+    text-decoration: line-through;
+}
+
+body:not(.rf-auth-page) #main-content .htl-change .arr {
+    color: var(--rf-text-muted, #6b7280);
+}
+
+body:not(.rf-auth-page) #main-content .htl-change .val-new {
+    color: var(--rf-success, #287a58);
+    font-weight: 650;
+}
+
+/* Botões e ações de todas as áreas internas. */
+body:not(.rf-auth-page) #main-content .btn,
+body:not(.rf-auth-page) #main-content .nav-btn,
+body:not(.rf-auth-page) .modal .btn,
+body:not(.rf-auth-page) .modal .nav-btn {
+    min-height: var(--rf-internal-control-height);
+    border-radius: var(--rf-radius-md, .75rem);
+    font-size: .8125rem;
+    font-weight: 700;
+    letter-spacing: .005em;
+    transition: background-color .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+body:not(.rf-auth-page) #main-content .btn:hover,
+body:not(.rf-auth-page) #main-content .nav-btn:hover,
+body:not(.rf-auth-page) .modal .btn:hover,
+body:not(.rf-auth-page) .modal .nav-btn:hover {
+    transform: translateY(-1px);
+}
+
+body:not(.rf-auth-page) #main-content .btn:active,
+body:not(.rf-auth-page) #main-content .nav-btn:active,
+body:not(.rf-auth-page) .modal .btn:active,
+body:not(.rf-auth-page) .modal .nav-btn:active {
+    transform: translateY(0);
+}
+
+body:not(.rf-auth-page) #main-content .btn-primary,
+body:not(.rf-auth-page) #main-content .btn-dark,
+body:not(.rf-auth-page) #main-content .nav-btn-primary,
+body:not(.rf-auth-page) .modal .btn-primary,
+body:not(.rf-auth-page) .modal .nav-btn-primary {
+    border-color: var(--rf-action-primary, var(--color-primary)) !important;
+    background: var(--rf-action-primary, var(--color-primary)) !important;
+    color: var(--rf-text-on-primary, #fff) !important;
+}
+
+body:not(.rf-auth-page) #main-content .btn-primary:hover,
+body:not(.rf-auth-page) #main-content .btn-dark:hover,
+body:not(.rf-auth-page) #main-content .nav-btn-primary:hover,
+body:not(.rf-auth-page) .modal .btn-primary:hover,
+body:not(.rf-auth-page) .modal .nav-btn-primary:hover {
+    border-color: var(--rf-action-primary-hover, var(--color-primary-light)) !important;
+    background: var(--rf-action-primary-hover, var(--color-primary-light)) !important;
+    color: var(--rf-text-on-primary, #fff) !important;
+}
+
+body:not(.rf-auth-page) #main-content .btn-secondary,
+body:not(.rf-auth-page) #main-content .btn-outline-secondary,
+body:not(.rf-auth-page) #main-content .nav-btn-secondary,
+body:not(.rf-auth-page) .modal .btn-secondary,
+body:not(.rf-auth-page) .modal .nav-btn-secondary {
+    border-color: var(--rf-border, #e2e2e2) !important;
+    background: var(--rf-surface-card, #fff) !important;
+    color: var(--rf-text-strong, #121212) !important;
+}
+
+body:not(.rf-auth-page) #main-content .btn-secondary:hover,
+body:not(.rf-auth-page) #main-content .btn-outline-secondary:hover,
+body:not(.rf-auth-page) #main-content .nav-btn-secondary:hover,
+body:not(.rf-auth-page) .modal .btn-secondary:hover,
+body:not(.rf-auth-page) .modal .nav-btn-secondary:hover {
+    border-color: var(--rf-accent, var(--color-primary)) !important;
+    background: var(--rf-surface-muted, #f5f5f4) !important;
+    color: var(--rf-accent, var(--color-primary)) !important;
+}
+
+body:not(.rf-auth-page) #main-content .btn-danger,
+body:not(.rf-auth-page) #main-content .nav-btn-danger,
+body:not(.rf-auth-page) .modal .btn-danger,
+body:not(.rf-auth-page) .modal .nav-btn-danger {
+    border-color: var(--rf-danger, var(--color-error)) !important;
+    background: var(--rf-danger, var(--color-error)) !important;
+    color: var(--rf-text-on-danger, #fff) !important;
+}
+
+body:not(.rf-auth-page) #main-content .btn-success,
+body:not(.rf-auth-page) #main-content .nav-btn-success {
+    border-color: var(--rf-success, #287a58) !important;
+    background: var(--rf-success, #287a58) !important;
+    color: var(--rf-text-on-primary, #fff) !important;
+}
+
+body:not(.rf-auth-page) #main-content .btn-warning,
+body:not(.rf-auth-page) #main-content .nav-btn-warning {
+    border-color: var(--rf-warning, #a36f18) !important;
+    background: var(--rf-warning, #a36f18) !important;
+    color: var(--rf-text-on-primary, #fff) !important;
+}
+
+body:not(.rf-auth-page) #main-content .btn-info,
+body:not(.rf-auth-page) #main-content .nav-btn-info {
+    border-color: var(--rf-info, #3f7f97) !important;
+    background: var(--rf-info, #3f7f97) !important;
+    color: var(--rf-text-on-primary, #fff) !important;
+}
+
+/* Estados, badges, pills, feedback e modais compartilhados. */
+body:not(.rf-auth-page) #main-content .rf-pill,
+body:not(.rf-auth-page) #main-content .rf-pill-soft,
+body:not(.rf-auth-page) #main-content .rf-badge,
+body:not(.rf-auth-page) #main-content .badge,
+body:not(.rf-auth-page) #main-content .rf-event-source,
+body:not(.rf-auth-page) #main-content .rf-progress-pct {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    font-size: .6875rem;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+body:not(.rf-auth-page) #main-content .rf-muted-cell,
+body:not(.rf-auth-page) #main-content .rf-muted-value,
+body:not(.rf-auth-page) #main-content .rf-muted-inline {
+    color: var(--rf-text-muted, #6b7280) !important;
+}
+
+body:not(.rf-auth-page) #main-content .rf-report-empty,
+body:not(.rf-auth-page) #main-content .rf-backup-empty,
+body:not(.rf-auth-page) #main-content .mtr-empty,
+body:not(.rf-auth-page) #main-content .backup-presence-empty,
+body:not(.rf-auth-page) #main-content .empty-state-small {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: var(--rf-space-2, .5rem);
+    min-height: 12rem;
+    padding: var(--rf-space-8, 2rem) var(--rf-space-4, 1rem);
+    text-align: center;
+    color: var(--rf-text-muted, #6b7280);
+}
+
+body:not(.rf-auth-page) #main-content .rf-report-empty > i,
+body:not(.rf-auth-page) #main-content .rf-backup-empty-icon,
+body:not(.rf-auth-page) #main-content .mtr-empty > i {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: 1.75rem;
+}
+
+body:not(.rf-auth-page) .modal-content,
+body:not(.rf-auth-page) #main-content .modal-content,
+body:not(.rf-auth-page) .rf-modal {
+    overflow: hidden;
+    border: 1px solid var(--rf-border, #e2e2e2);
+    border-radius: var(--rf-radius-lg, .875rem);
+    background: var(--rf-surface-card, #fff);
+    box-shadow: 0 1rem 3rem rgba(18, 18, 18, .16);
+}
+
+body:not(.rf-auth-page) .modal-header,
+body:not(.rf-auth-page) .modal-footer {
+    border-color: var(--rf-border-subtle, #ececea);
+    background: var(--rf-surface-card, #fff);
+}
+
+body:not(.rf-auth-page) .modal-header {
+    padding: var(--rf-space-4, 1rem) var(--rf-space-5, 1.25rem);
+}
+
+body:not(.rf-auth-page) .modal-body {
+    padding: var(--rf-space-5, 1.25rem);
+    color: var(--rf-text-body, #2a2a2a);
+}
+
+body:not(.rf-auth-page) .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--rf-space-2, .5rem);
+    padding: var(--rf-space-3, .75rem) var(--rf-space-5, 1.25rem);
+}
+
+body:not(.rf-auth-page) .rf-modal-danger-header {
+    background: var(--rf-danger, var(--color-error)) !important;
+    color: var(--rf-text-on-danger, #fff) !important;
+}
+
+body:not(.rf-auth-page) .rf-modal-danger-header .modal-title,
+body:not(.rf-auth-page) .rf-modal-danger-header .btn-close {
+    color: var(--rf-text-on-danger, #fff);
+}
+
+/* -------------------------------------------------------------------------
    Responsividade interna
    ------------------------------------------------------------------------- */
 @media (max-width: 1100px) {
@@ -522,6 +1515,112 @@ body:not(.rf-auth-page) #sidebar {
     #main-content .filter-bar.process-filter-surface .process-filter-toolbar {
         align-items: stretch;
         flex-wrap: wrap;
+    }
+
+    #main-content .det-grid,
+    #main-content .rf-detail-grid,
+    #main-content .rf-profile-grid,
+    #main-content .info-row,
+    #main-content .detalhes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #main-content .det-item:nth-child(even) {
+        border-left: 0;
+    }
+
+    #main-content .htl-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #main-content .rf-attachment-name {
+        max-width: 62vw;
+    }
+
+    /* Cadastros e usuários: tabela vira lista de cartões legíveis no mobile. */
+    #main-content .cadastro-list-card .table-responsive,
+    #main-content .admin-list-card .table-responsive {
+        overflow: visible !important;
+    }
+
+    #main-content .cadastro-list-card table.table,
+    #main-content .admin-list-card table.table {
+        display: block;
+        width: 100%;
+    }
+
+    #main-content .cadastro-list-card table.table thead,
+    #main-content .admin-list-card table.table thead {
+        display: none;
+    }
+
+    #main-content .cadastro-list-card table.table tbody,
+    #main-content .admin-list-card table.table tbody {
+        display: grid;
+        gap: var(--rf-space-2, .5rem);
+        padding: var(--rf-space-2, .5rem);
+    }
+
+    #main-content .cadastro-list-card table.table tbody tr,
+    #main-content .admin-list-card table.table tbody tr {
+        display: block;
+        overflow: hidden;
+        border: 1px solid var(--rf-border, #e2e2e2);
+        border-radius: var(--rf-radius-md, .75rem);
+        background: var(--rf-surface-card, #fff);
+        box-shadow: 0 1px 2px rgba(18, 18, 18, .035);
+    }
+
+    #main-content .cadastro-list-card table.table tbody td,
+    #main-content .admin-list-card table.table tbody td {
+        display: grid !important;
+        grid-template-columns: minmax(5.5rem, 36%) minmax(0, 1fr);
+        align-items: center;
+        gap: var(--rf-space-2, .5rem);
+        width: 100%;
+        padding: .625rem .75rem !important;
+        border-bottom: 1px solid var(--rf-border-subtle, #ececea) !important;
+        text-align: right;
+    }
+
+    #main-content .cadastro-list-card table.table tbody td:last-child,
+    #main-content .admin-list-card table.table tbody td:last-child {
+        border-bottom: 0 !important;
+    }
+
+    #main-content .cadastro-list-card table.table tbody td::before,
+    #main-content .admin-list-card table.table tbody td::before {
+        content: attr(data-label);
+        color: var(--rf-text-muted, #6b7280);
+        font-size: .625rem;
+        font-weight: 750;
+        letter-spacing: .04em;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    #main-content .cadastro-list-card table.table tbody td[data-label="Nome"],
+    #main-content .admin-list-card table.table tbody td[data-label="Nome Completo"] {
+        grid-template-columns: 1fr;
+        text-align: left;
+    }
+
+    #main-content .cadastro-list-card table.table tbody td[data-label="Nome"]::before,
+    #main-content .admin-list-card table.table tbody td[data-label="Nome Completo"]::before {
+        display: none;
+    }
+
+    #main-content .cadastro-list-card table.table tbody td[data-label="Ações"],
+    #main-content .admin-list-card table.table tbody td[data-label="Ações"] {
+        display: flex !important;
+        justify-content: flex-end;
+        text-align: right;
+    }
+
+    #main-content .cadastro-list-card table.table tbody td[data-label="Ações"]::before,
+    #main-content .admin-list-card table.table tbody td[data-label="Ações"]::before {
+        display: none;
     }
 }
 
