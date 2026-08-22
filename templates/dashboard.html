@@ -249,7 +249,7 @@
                 greetingMessageEl.textContent = parts[0] + '.';
                 const subtitleText = parts.slice(1).join('. ').trim();
                 if (subtitleText) {
-                    greetingSubtitleEl.textContent = subtitleText + (subtitleText.endsWith('.') ? '' : '.');
+                    greetingSubtitleEl.textContent = subtitleText + (/[.!?]$/.test(subtitleText) ? '' : '.');
                     greetingSubtitleEl.style.display = 'block';
                 } else {
                     greetingSubtitleEl.style.display = 'none';

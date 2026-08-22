@@ -739,7 +739,13 @@ body,
 .menu-item.active { background: var(--color-primary, var(--color-primary)) !important; color: #FFFFFF !important; }
 
 /* Tipografia e superfícies */
-h1, h2, h3, .page-title-text, .card-title, .rf-card-title, .modal-title { color: var(--text-color-primary) !important; }
+#page-content-wrapper h1,
+#page-content-wrapper h2,
+#page-content-wrapper h3,
+.page-title-text,
+.card-title,
+.rf-card-title,
+.modal-title { color: var(--text-color-primary) !important; }
 .card, .rf-card, .kpi-card, .modal-content, .cfg-card, .filter-bar { background: var(--background-color-card) !important; border-color: var(--border-color-default) !important; }
 .card-header, .rf-card-header, .modal-header, .cfg-card-header { background: var(--background-color-body) !important; border-color: var(--border-color-default) !important; color: var(--text-color-primary) !important; }
 .text-muted, .form-text, .section-subtitle, .kpi-sub, .cfg-info-row, .cfg-info-lbl { color: var(--text-color-secondary) !important; }
@@ -888,13 +894,7 @@ body .modal-header, body .modal-footer { background: var(--background-color-body
 body .modal-header[style*="var(--color-error)"] { background: var(--color-gold-primary) !important; color: #FFFFFF !important; }
 body .toast, body .toast-container .toast { border-color: var(--border-color-default) !important; }
 
-/* Autenticação independente do base.html */
-.auth-panel-left { background: var(--color-primary) !important; }
-.auth-panel-right { background: linear-gradient(145deg, var(--color-primary-dark) 0%, var(--background-color-sidebar) 52%, var(--color-primary-dark) 100%) !important; }
-.auth-panel-left::before { background: linear-gradient(90deg, var(--color-gold-primary), var(--color-primary-light), var(--color-gold-primary)) !important; }
-.auth-btn { background: var(--color-gold-primary) !important; color: #FFFFFF !important; }
-.auth-btn:hover { background: var(--color-gold-dark) !important; }
-.auth-link:hover, .panel-feature-item i, .auth-input-group:focus-within { color: var(--color-gold-primary) !important; border-color: var(--color-gold-primary) !important; }
+/* Autenticação pública: estilos consolidados em auth.css. */
 
 /* Acessibilidade e ausência de efeitos conflitantes */
 body .btn:hover, body button:hover, body a.btn:hover, body .nav-btn:hover { transform: none; box-shadow: none; }
@@ -992,30 +992,7 @@ html body .kpi-card.kpi-warning,
 html body .kpi-card.kpi-danger { border-top-color: var(--color-gold-primary) !important; }
 html body .kpi-card .kpi-bg-icon { color: var(--color-primary) !important; }
 
-/* Contraste das telas públicas escuras. */
-html body .auth-panel-left .auth-title,
-html body .auth-panel-right .panel-brand h1 { color: #FFFFFF !important; }
-html body .auth-panel-left .auth-subtitle,
-html body .auth-panel-left .auth-label,
-html body .auth-panel-left .field-hint,
-html body .auth-panel-left .auth-links,
-html body .auth-panel-right .panel-brand p,
-html body .auth-panel-right .panel-feature-item,
-html body .auth-panel-right .step-info span,
-html body .auth-panel-right .step-info strong { color: #D6D2CA !important; }
-html body .auth-panel-left .auth-input-group { background: color-mix(in srgb, var(--background-color-sidebar) 88%, #000) !important; border-color: var(--color-primary-light) !important; }
-html body .auth-panel-left .auth-input-group input { background: transparent !important; color: #FFFFFF !important; }
-html body .auth-panel-left .auth-input-group input::placeholder { color: #A7A39B !important; }
-html body .auth-panel-left .auth-input-group .input-icon,
-html body .auth-panel-left .auth-input-group .toggle-pw { color: #BDB8AE !important; }
-html body .auth-panel-left .auth-input-group:focus-within { border-color: var(--color-gold-primary) !important; box-shadow: 0 0 0 .2rem rgba(122,31,43,.28) !important; }
-html body .auth-panel-left .auth-link,
-html body .auth-panel-right .panel-feature-item i,
-html body .auth-panel-right .step-num,
-html body .auth-panel-right .panel-info-box h3,
-html body .auth-panel-right .panel-info-step i { color: #C98A95 !important; }
-html body .auth-panel-right .panel-brand .gold-line { background: var(--color-gold-primary) !important; }
-html body .auth-panel-left .auth-icon-badge { background: rgba(122,31,43,.20) !important; border-color: rgba(201,138,149,.55) !important; color: #C98A95 !important; }
+/* Contraste de autenticação: consolidado em auth.css. */
 
 
 /* A sidebar é definida integralmente pelo tema selecionado. */
@@ -1037,61 +1014,9 @@ html body .sidebar .menu-item.active .menu-icon,
 html body .sidebar .menu-item.active .menu-text,
 html body .sidebar .menu-item.active i { color: var(--sidebar-active-text) !important; }
 
-/* Autenticação semântica compartilhada — etapa de absorção dos estilos públicos. */
-.auth-panel-left,
-.auth-panel-right { background: var(--rf-surface-body) !important; color: var(--rf-text-primary) !important; }
-.auth-panel-left { border-color: var(--rf-border) !important; }
-.auth-panel-left::before,
-.panel-brand .gold-line { background: var(--rf-accent) !important; }
-.auth-panel-right { background: linear-gradient(145deg, var(--rf-sidebar-surface), var(--rf-surface-body)) !important; }
-.panel-brand h1,
-.auth-title { color: var(--rf-text-strong) !important; }
-.panel-brand p,
-.panel-feature-item,
-.auth-subtitle,
-.auth-link,
-.auth-divider { color: var(--rf-text-secondary) !important; }
-.panel-feature-item i,
-.auth-link:hover { color: var(--rf-accent) !important; }
-.auth-logo-sm .logo-circle,
-.panel-brand img { background: var(--rf-surface-card) !important; border-color: var(--rf-border) !important; }
-.auth-label { color: var(--rf-text-secondary) !important; font-size: var(--rf-font-sm) !important; }
-.auth-input-group { background: var(--rf-surface-input) !important; border-color: var(--rf-border-input) !important; }
-.auth-input-group:focus-within { border-color: var(--rf-action-primary) !important; box-shadow: var(--rf-focus-ring) !important; }
-.auth-input-group .input-icon,
-.auth-input-group .toggle-pw { color: var(--rf-text-secondary) !important; }
-.auth-input-group .toggle-pw:hover { color: var(--rf-accent) !important; }
-.auth-input-group input { color: var(--rf-text-primary) !important; }
-.auth-input-group input::placeholder { color: var(--rf-text-muted) !important; }
-.auth-btn { background: var(--rf-action-primary) !important; color: var(--rf-text-on-primary) !important; }
-.auth-btn:hover { background: var(--rf-action-primary-hover) !important; box-shadow: none !important; }
-.auth-btn:active { transform: none !important; }
-.auth-alert.danger { background: var(--rf-danger-surface) !important; border-color: var(--rf-danger) !important; color: var(--rf-danger-text) !important; }
-.auth-alert.success { background: var(--rf-success-surface) !important; border-color: var(--rf-success) !important; color: var(--rf-success-text) !important; }
-.auth-alert.warning { background: var(--rf-warning-surface) !important; border-color: var(--rf-warning) !important; color: var(--rf-warning-text) !important; }
-.auth-alert.info { background: var(--rf-info-surface) !important; border-color: var(--rf-info) !important; color: var(--rf-info-text) !important; }
-.lock-warning { color: var(--rf-danger-text) !important; }
-.version-badge { color: var(--rf-text-muted) !important; font-family: var(--rf-font-mono) !important; }
-body.auth-page,
-body:has(.auth-panel-left) { font-family: var(--rf-font-sans) !important; background: var(--rf-surface-body) !important; color: var(--rf-text-primary) !important; }
+/* Autenticação pública: tokens e componentes consolidados em auth.css. */
 
-.auth-notice { margin-top: .75rem; padding: .75rem .875rem; border: 1px solid var(--rf-border); border-radius: var(--rf-radius-sm); font-size: var(--rf-font-sm); line-height: 1.5; }
-.auth-notice-warning { background: var(--rf-warning-surface) !important; border-color: var(--rf-warning) !important; color: var(--rf-warning-text) !important; }
-
-/* Contraste público final — vence seletores legados específicos sem reintroduzir cores fixas. */
-html body:has(.auth-panel-left) .auth-panel-left .auth-title,
-html body:has(.auth-panel-left) .auth-panel-right .panel-brand h1 { color: var(--rf-text-strong) !important; }
-html body:has(.auth-panel-left) .auth-panel-left .auth-subtitle,
-html body:has(.auth-panel-left) .auth-panel-left .auth-label,
-html body:has(.auth-panel-left) .auth-panel-left .field-hint,
-html body:has(.auth-panel-left) .auth-panel-left .auth-links,
-html body:has(.auth-panel-left) .auth-panel-right .panel-brand p,
-html body:has(.auth-panel-left) .auth-panel-right .panel-feature-item,
-html body:has(.auth-panel-left) .auth-panel-right .step-info strong,
-html body:has(.auth-panel-left) .auth-panel-right .step-info span { color: var(--rf-text-secondary) !important; }
-html body:has(.auth-panel-left) .auth-panel-left .auth-label { font-size: var(--rf-font-sm) !important; }
-html body:has(.auth-panel-left) .auth-panel-left .auth-input-group input { color: var(--rf-text-primary) !important; }
-html body:has(.auth-panel-left) .auth-panel-left .auth-btn { background: var(--rf-action-primary) !important; color: var(--rf-text-on-primary) !important; }
+/* Contraste público: consolidado em auth.css. */
 
 /* Etapa 6 — foco e navegação acessível. */
 .skip-link {
@@ -1239,32 +1164,7 @@ html body:has(.auth-panel-left) .auth-panel-left .auth-btn { background: var(--r
 .cfg-modal-footer { padding: 10px 16px; gap: 8px; }
 .cfg-dir-list { max-height: 340px; overflow-y: auto; }
 
-/* Onda de contraste da autenticação pública: usa o par semântico da superfície de entrada. */
-html body:has(.auth-panel-left) .auth-panel-right {
-  background: linear-gradient(145deg,
-    color-mix(in srgb, var(--rf-surface-body) 72%, var(--rf-sidebar-surface)),
-    var(--rf-surface-body)) !important;
-}
-html body:has(.auth-panel-left) .auth-input-group {
-  background: color-mix(in srgb, var(--rf-sidebar-surface) 88%, #000000) !important;
-}
-html body:has(.auth-panel-left) .auth-panel-left .auth-input-group input {
-  color: var(--sidebar-text, #FFFFFF) !important;
-}
-html body:has(.auth-panel-left) .auth-input-group input::placeholder,
-html body:has(.auth-panel-left) .auth-input-group .input-icon,
-html body:has(.auth-panel-left) .auth-input-group .toggle-pw {
-  color: color-mix(in srgb, var(--rf-sidebar-text) 68%, var(--rf-sidebar-surface)) !important;
-}
-html body:has(.auth-panel-left) .auth-link {
-  color: var(--rf-text-link) !important;
-  text-decoration: none;
-}
-html body:has(.auth-panel-left) .auth-link:hover,
-html body:has(.auth-panel-left) .auth-link:focus-visible {
-  color: var(--rf-accent) !important;
-  text-decoration: underline;
-}
+/* Contraste adicional de autenticação: removido em favor de auth.css. */
 
 /* Dashboard: ações compactas usam superfície clara e texto temático; no hover, ação sólida. */
 html body .dashboard-action-link.nav-btn-secondary {
