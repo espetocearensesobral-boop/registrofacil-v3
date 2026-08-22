@@ -25,22 +25,23 @@
 {% set cadastro_label = 'Apresentante' %}
 {% set cadastro_endpoint = 'apresentantes.index' %}
 <!-- Tabela -->
-<div class="rf-card cadastro-list-card rf-clean-list-card">
+<section class="rf-card cadastro-list-card rf-clean-list-card" data-rf-ui="complete" data-rf-surface="apresentantes-index" data-rf-component="apresentantes-list" aria-labelledby="apresentantes-list-title">
+    <h2 class="visually-hidden" id="apresentantes-list-title">Apresentantes cadastrados</h2>
     {% include "_cadastro_filter_toolbar.html" %}
     <div class="card-body p-0">
         <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('apresentantes.index') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ registros_por_pagina }}" data-page-size-param="registros_por_pagina">
-            <table class="table-apresentantes table table-hover align-middle mb-0">
+            <table class="table-apresentantes table table-hover align-middle mb-0" data-rf-component="apresentantes-table"><caption class="visually-hidden">Lista de apresentantes</caption>
                 <thead>
                     <tr class="rf-table-head-row">
                         {% macro sort_icon(col) %}{% if ordenar == col %}{% if direcao == 'asc' %}<i class="bi bi-sort-up ms-1 rf-sort-active"></i>{% else %}<i class="bi bi-sort-down ms-1 rf-sort-active"></i>{% endif %}{% else %}<i class="bi bi-arrow-down-up ms-1 rf-sort-inactive"></i>{% endif %}{% endmacro %}
                         {% macro sort_url(col) %}{{ url_for('apresentantes.index', busca=busca, registros_por_pagina=registros_por_pagina, ordenar=col, direcao='desc' if (ordenar == col and direcao == 'asc') else 'asc', pagina=1) }}{% endmacro %}
-                        <th class="th-sort" onclick="window.location='{{ sort_url('id') }}'">ID{{ sort_icon('id') }}</th>
-                        <th class="th-sort" onclick="window.location='{{ sort_url('nome') }}'">Nome do Apresentante{{ sort_icon('nome') }}</th>
-                        <th class="th-sort" onclick="window.location='{{ sort_url('telefone') }}'">Telefone{{ sort_icon('telefone') }}</th>
-                        <th class="th-sort" onclick="window.location='{{ sort_url('email') }}'">E-mail{{ sort_icon('email') }}</th>
-                        <th class="th-sort" onclick="window.location='{{ sort_url('processos') }}'">Processos{{ sort_icon('processos') }}</th>
-                        <th>Último Registro</th>
-                        <th class="text-center">Ações</th>
+                        <th class="th-sort" scope="col"><a href="{{ sort_url('id') }}" class="rf-table-sort-link">ID{{ sort_icon('id') }}</a></th>
+                        <th class="th-sort" scope="col"><a href="{{ sort_url('nome') }}" class="rf-table-sort-link">Nome do Apresentante{{ sort_icon('nome') }}</a></th>
+                        <th class="th-sort" scope="col"><a href="{{ sort_url('telefone') }}" class="rf-table-sort-link">Telefone{{ sort_icon('telefone') }}</a></th>
+                        <th class="th-sort" scope="col"><a href="{{ sort_url('email') }}" class="rf-table-sort-link">E-mail{{ sort_icon('email') }}</a></th>
+                        <th class="th-sort" scope="col"><a href="{{ sort_url('processos') }}" class="rf-table-sort-link">Processos{{ sort_icon('processos') }}</a></th>
+                        <th scope="col">Último Registro</th>
+                        <th class="text-center" scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,7 +82,7 @@
                             <div class="tbl-actions">
                                 <a href="{{ url_for('apresentantes.visualizar', apresentante_id=apresentante.id) }}"
                                    class="tbl-btn view"
-                                   title="Ver Histórico">
+                                   title="Ver Histórico" aria-label="Ver histórico de {{ apresentante.nome }}">
                                     <i class="bi bi-clock-history"></i>
                                 </a>
                                 {% if tem_vinculo %}
@@ -97,14 +98,14 @@
                                 {% else %}
                                 <a href="{{ url_for('apresentantes.editar', apresentante_id=apresentante.id) }}"
                                    class="tbl-btn edit"
-                                   title="Editar Apresentante">
+                                   title="Editar Apresentante" aria-label="Editar {{ apresentante.nome }}">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <button type="button"
                                         class="tbl-btn del btn-excluir-apresentante"
                                         data-id="{{ apresentante.id }}"
                                         data-nome="{{ apresentante.nome }}"
-                                        title="Excluir Apresentante">
+                                        title="Excluir Apresentante" aria-label="Excluir {{ apresentante.nome }}">
                                     <i class="bi bi-trash"></i>
                                 </button>
                                 {% endif %}
@@ -130,14 +131,14 @@
     </div>
 
 
-</div>
+</section>
 
 <!-- Modal exclusão apresentante -->
-<div class="modal fade" id="confirmDeleteApresentanteModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteApresentanteModal" tabindex="-1" aria-labelledby="confirmDeleteApresentanteTitle" aria-hidden="true" data-rf-component="apresentante-delete-modal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header rf-modal-danger-header">
-                <h5 class="modal-title fw-bold"><i class="bi bi-trash me-2"></i>Confirmar Exclusão</h5>
+                <h5 class="modal-title fw-bold" id="confirmDeleteApresentanteTitle"><i class="bi bi-trash me-2" aria-hidden="true"></i>Confirmar Exclusão</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body rf-modal-body">

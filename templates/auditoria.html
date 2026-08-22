@@ -10,17 +10,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="rf-card admin-list-card rf-clean-list-card">
-    <div class="rf-list-context-note">Alterações administrativas e tentativas de acesso bloqueadas.</div>
-    <form method="get" class="rf-filter-toolbar p-3 border-bottom">
+<section class="rf-card admin-list-card rf-clean-list-card" data-rf-ui="complete" data-rf-surface="auditoria" data-rf-component="security-audit" aria-labelledby="security-audit-title">
+    <div class="rf-list-context-note" id="security-audit-title"><i class="bi bi-shield-lock me-2" aria-hidden="true"></i>Alterações administrativas e tentativas de acesso bloqueadas.</div>
+    <form method="get" class="rf-filter-toolbar p-3 border-bottom" role="search" aria-label="Filtrar auditoria de segurança" data-rf-component="filter-toolbar">
         <div class="row g-2 align-items-end">
             <div class="col-12 col-md-5">
                 <label for="filtro-acao" class="form-label small fw-semibold">Ação ou tentativa</label>
-                <input id="filtro-acao" name="acao" class="form-control" value="{{ filtro_acao }}" placeholder="Ex.: alteração_role, acesso_admin">
+                <input id="filtro-acao" name="acao" type="search" class="form-control" value="{{ filtro_acao }}" placeholder="Ex.: alteração_role, acesso_admin">
             </div>
             <div class="col-12 col-md-4">
                 <label for="filtro-ip" class="form-label small fw-semibold">IP</label>
-                <input id="filtro-ip" name="ip" class="form-control font-monospace" value="{{ filtro_ip }}" placeholder="192.168.0.10">
+                <input id="filtro-ip" name="ip" type="search" class="form-control font-monospace" value="{{ filtro_ip }}" placeholder="192.168.0.10">
             </div>
             <div class="col-12 col-md-3 d-flex gap-2">
                 <button type="submit" class="nav-btn nav-btn-primary flex-grow-1"><i class="bi bi-search me-1"></i>Filtrar</button>
@@ -36,16 +36,16 @@
     </div>
     {% else %}
     <div class="table-responsive">
-        <table class="rf-table table-auditoria">
+        <table class="rf-table table-auditoria" data-rf-component="audit-table">
             <thead>
                 <tr>
-                    <th>Data/Hora</th>
-                    <th>Origem</th>
-                    <th>Ação</th>
-                    <th>Usuário</th>
-                    <th>Alvo</th>
-                    <th>IP</th>
-                    <th>Evento</th>
+                    <th scope="col">Data/Hora</th>
+                    <th scope="col">Origem</th>
+                    <th scope="col">Ação</th>
+                    <th scope="col">Usuário</th>
+                    <th scope="col">Alvo</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">Evento</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,16 +66,16 @@
         </table>
     </div>
     {% if total_paginas > 1 %}
-    <div class="d-flex justify-content-between align-items-center p-3 border-top small">
+    <nav class="d-flex justify-content-between align-items-center p-3 border-top small" aria-label="Paginação da auditoria">
         <span>Página {{ pagina_atual }} de {{ total_paginas }}</span>
         <div class="d-flex gap-2">
             {% if pagina_atual > 1 %}<a class="nav-btn nav-btn-secondary" href="{{ url_for('atividades.auditoria_seguranca', pagina=pagina_atual - 1, acao=filtro_acao, ip=filtro_ip) }}">Anterior</a>{% endif %}
             {% if pagina_atual < total_paginas %}<a class="nav-btn nav-btn-secondary" href="{{ url_for('atividades.auditoria_seguranca', pagina=pagina_atual + 1, acao=filtro_acao, ip=filtro_ip) }}">Próxima</a>{% endif %}
         </div>
-    </div>
+    </nav>
     {% endif %}
     {% endif %}
-</div>
+</section>
 {% endblock %}
 
 {% block scripts %}

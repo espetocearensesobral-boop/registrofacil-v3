@@ -113,7 +113,7 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
 </head>
-<body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}">
+<body hx-indicator=".loader-overlay" data-cor="{{ tema_cor_usuario }}" data-lock-timeout-minutes="{{ LOCK_TIMEOUT_MINUTES if LOCK_TIMEOUT_MINUTES is defined else 15 }}" data-rf-ui="complete" data-rf-surface="base" data-rf-component="page-surface">
     <a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
     <!-- Overlay para fechar sidebar no mobile -->
     <div id="sidebar-overlay"></div>
@@ -253,7 +253,7 @@
                 </div>
             </nav>
 
-            <main id="main-content" class="container-fluid rf-shell py-4{% if request.endpoint in ['processos.todos', 'processos.hoje', 'processos.pendentes', 'processos.em_andamento', 'processos.vinculados', 'titulares.index', 'apresentantes.index', 'admin_users.users_list', 'atividades.historico'] %} rf-list-page{% endif %}" tabindex="-1">
+            <main id="main-content" class="container-fluid rf-shell py-4{% if request.endpoint in ['processos.todos', 'processos.hoje', 'processos.pendentes', 'processos.em_andamento', 'processos.vinculados', 'titulares.index', 'apresentantes.index', 'admin_users.users_list', 'atividades.historico'] %} rf-list-page{% endif %}" data-rf-ui="complete" data-rf-surface="{{ request.endpoint|default('screen')|replace('.', '-') }}" tabindex="-1">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         <script>

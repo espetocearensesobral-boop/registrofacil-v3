@@ -8,23 +8,23 @@
 
 {% block content %}
 
-<div class="profile-page-layout">
+<div class="profile-page-layout" data-rf-ui="complete" data-rf-surface="perfil" data-rf-component="page-surface">
     <div class="profile-main-column">
-        <div class="rf-card profile-main-card">
+        <section class="rf-card profile-main-card" data-rf-component="profile-editor" aria-labelledby="profile-editor-title">
             <div class="rf-card-header profile-card-header">
                 <div>
-                    <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Dados pessoais e segurança</h5>
+                    <h5 class="mb-0" id="profile-editor-title"><i class="bi bi-person-circle me-2" aria-hidden="true"></i>Dados pessoais e segurança</h5>
                     <p class="profile-card-subtitle mb-0">Atualize seus dados e credenciais de acesso.</p>
                 </div>
             </div>
             <div class="rf-card-body profile-form-body">
-                <form id="form-perfil" method="post" data-rf-submit-state data-submit-label="Salvar Alterações">
+                <form id="form-perfil" method="post" data-rf-submit-state data-submit-label="Salvar Alterações" data-rf-component="profile-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     
                     <div class="profile-field-grid">
                     {# Nome Completo #}
                     <div class="mb-3">
-                        <label for="nome" class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">
+                        <label for="nome" class="form-label profile-field-label">
                             Nome Completo <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
@@ -38,7 +38,7 @@
                     
                     {# Email #}
                     <div class="mb-3">
-                        <label for="email" class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">
+                        <label for="email" class="form-label profile-field-label">
                             E-mail <span class="text-danger">*</span>
                         </label>
                         <input type="email" 
@@ -67,7 +67,7 @@
                     
                     <div class="profile-password-grid">
                     <div class="mb-3">
-                        <label for="senha_atual" class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Senha Atual</label>
+                        <label for="senha_atual" class="form-label profile-field-label">Senha Atual</label>
                         <div class="input-group">
                             <input type="password" 
                                    class="form-control" 
@@ -86,7 +86,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="nova_senha" class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Nova Senha</label>
+                        <label for="nova_senha" class="form-label profile-field-label">Nova Senha</label>
                         <div class="input-group">
                             <input type="password" 
                                    class="form-control" 
@@ -106,7 +106,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="confirmar_senha" class="form-label" style="font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-color-secondary);">Confirmar Nova Senha</label>
+                        <label for="confirmar_senha" class="form-label profile-field-label">Confirmar Nova Senha</label>
                         <div class="input-group">
                             <input type="password" 
                                    class="form-control" 
@@ -135,15 +135,15 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </section>
     </div>
 
-    <aside class="profile-side-column">
+    <aside class="profile-side-column" aria-label="Informações complementares do perfil">
         {# Aparência fica junto dos cartões auxiliares para reduzir a coluna principal. #}
-        <div class="rf-card profile-side-card profile-appearance-card">
+        <section class="rf-card profile-side-card profile-appearance-card" data-rf-component="profile-appearance" aria-labelledby="profile-appearance-title">
             <div class="rf-card-header profile-side-header">
                 <div>
-                    <h6 class="mb-0"><i class="bi bi-palette-fill me-2"></i>Aparência do sistema</h6>
+                    <h6 class="mb-0" id="profile-appearance-title"><i class="bi bi-palette-fill me-2" aria-hidden="true"></i>Aparência do sistema</h6>
                     <span class="profile-side-caption">Identidade visual da aplicação</span>
                 </div>
                 <button class="nav-btn nav-btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPaletas" aria-label="Alterar aparência">
@@ -159,24 +159,24 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
         {# Informações da Conta (Somente Leitura) #}
-        <div class="rf-card profile-side-card profile-account-card">
+        <section class="rf-card profile-side-card profile-account-card" data-rf-component="profile-account" aria-labelledby="profile-account-title">
             <div class="rf-card-header profile-side-header">
-                <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informações da conta</h6>
+                <h6 class="mb-0" id="profile-account-title"><i class="bi bi-info-circle me-2" aria-hidden="true"></i>Informações da conta</h6>
             </div>
             <div class="rf-card-body profile-meta-list">
                 <div class="mb-3">
-                    <label class="fw-bold text-muted small text-uppercase">Usuário</label>
-                    <div class="p-2 bg-light rounded border small">
+                    <span class="profile-meta-label">Usuário</span>
+                    <div class="p-2 bg-light rounded border small profile-meta-value">
                         <code>{{ user_data.usuario }}</code>
                     </div>
                 </div>
                 
                 <div class="mb-3">
-                    <label class="fw-bold text-muted small text-uppercase">Função</label>
-                    <div class="p-2 bg-light rounded border small">
+                    <span class="profile-meta-label">Função</span>
+                    <div class="p-2 bg-light rounded border small profile-meta-value">
                         {% if user_data.role == 'admin' %}
                         <span class="badge bg-danger">
                             <i class="bi bi-shield-check me-1"></i> Administrador
@@ -190,8 +190,8 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label class="fw-bold text-muted small text-uppercase">Status</label>
-                    <div class="p-2 bg-light rounded border small">
+                    <span class="profile-meta-label">Status</span>
+                    <div class="p-2 bg-light rounded border small profile-meta-value">
                         {% if user_data.ativo %}
                         <span class="badge bg-success">
                             <i class="bi bi-check-circle me-1"></i> Ativo
@@ -205,13 +205,13 @@
                 </div>
                 
                 <div class="mb-0">
-                    <label class="fw-bold text-muted small text-uppercase">Cadastrado em</label>
-                    <div class="p-2 bg-light rounded border small">
+                    <span class="profile-meta-label">Cadastrado em</span>
+                    <div class="p-2 bg-light rounded border small profile-meta-value">
                         {{ user_data.created_at }}
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
         
     </aside>
 </div>

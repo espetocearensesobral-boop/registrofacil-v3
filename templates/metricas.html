@@ -51,6 +51,10 @@
     }
     .metricas-tab-panel { display: none; }
     .metricas-tab-panel.active { display: block; }
+    .mtr-loading-wide, .mtr-error-wide { grid-column: 1 / -1; }
+    .metricas-chart-card { min-width: 0; }
+    .metricas-chart-card .card-header { min-height: 3rem; }
+    .metricas-chart-card .chart-body { display: flex; align-items: center; justify-content: center; }
 
     /* ── KPI CARDS ── */
     .kpi-grid {
@@ -320,11 +324,23 @@ function fmtDias(n) { return fmt(n) + ' d'; }
    TABS
 ───────────────────────────────────────────────────────── */
 function switchTab(btn) {
-    document.querySelectorAll('.metricas-tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.metricas-tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.metricas-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.metricas-tab-panel').forEach(p => {
+        p.classList.remove('active');
+        p.setAttribute('aria-hidden', 'true');
+        p.setAttribute('hidden', '');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
     const panel = document.getElementById('tab-' + btn.dataset.tab);
-    if (panel) panel.classList.add('active');
+    if (panel) {
+        panel.classList.add('active');
+        panel.setAttribute('aria-hidden', 'false');
+        panel.removeAttribute('hidden');
+    }
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -368,7 +384,7 @@ async function loadMetricasUsuario() {
         renderSemanal(data.performance_semanal);
         renderComparativo(data.comparativo);
     } catch(e) {
-        setWrap('kpi-usuario', `<div class="mtr-error" style="grid-column:1/-1"><i class="bi bi-exclamation-triangle-fill"></i><p>Erro ao carregar indicadores.</p></div>`);
+        setWrap('kpi-usuario', `<div class="mtr-error mtr-error-wide" role="alert"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><p>Erro ao carregar indicadores.</p></div>`);
         ['chart-evolucao-wrap','chart-status-wrap','chart-tipo-wrap',
          'chart-semanal-wrap','comparativo-wrap'].forEach(id => setWrap(id, errorHTML()));
         console.error('Métricas usuário:', e);
@@ -945,8 +961,8 @@ function refreshAll() {
     if (icon) icon.classList.add('bi-arrow-clockwise');
 
     // Reset KPIs
-    setWrap('kpi-usuario', `<div class="mtr-loading" style="grid-column:1/-1"><div class="mtr-spinner"></div></div>`);
-    setWrap('kpi-resumo',  `<div class="mtr-loading" style="grid-column:1/-1"><div class="mtr-spinner"></div></div>`);
+    setWrap('kpi-usuario', `<div class="mtr-loading mtr-loading-wide" role="status"><div class="mtr-spinner"></div></div>`);
+    setWrap('kpi-resumo',  `<div class="mtr-loading mtr-loading-wide" role="status"><div class="mtr-spinner"></div></div>`);
 
     // Reset charts
     ['chart-evolucao-wrap','chart-status-wrap','chart-tipo-wrap','chart-semanal-wrap',
@@ -977,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
 {% endblock %}
 
 {% block content %}
-<div class="rf-report-context-bar" aria-label="Contexto do painel de métricas">
+<div class="rf-report-context-bar" aria-label="Contexto do painel de métricas" data-rf-ui="complete" data-rf-surface="metricas" data-rf-component="page-surface">
     <div class="rf-report-context-main">
         <span class="rf-report-context-title">Indicadores operacionais</span>
         <span class="rf-report-context-subtitle">Acompanhe desempenho, situação dos processos e carga de trabalho da equipe.</span>
@@ -986,23 +1002,23 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 <!-- TABS -->
 
-<div class="metricas-tabs">
-    <button class="metricas-tab-btn{% if not active_tab or active_tab == 'meu-desempenho' %} active{% endif %}" data-tab="meu-desempenho" onclick="switchTab(this)">
+<div class="metricas-tabs" role="tablist" aria-label="Painéis de métricas" data-rf-component="metrics-tabs">
+    <button class="metricas-tab-btn{% if not active_tab or active_tab == 'meu-desempenho' %} active{% endif %}" id="metricas-tab-meu-desempenho" role="tab" aria-controls="tab-meu-desempenho" aria-selected="{{ 'true' if not active_tab or active_tab == 'meu-desempenho' else 'false' }}" data-tab="meu-desempenho" onclick="switchTab(this)">
         <i class="bi bi-person-lines-fill"></i> Meu Desempenho
     </button>
-    <button class="metricas-tab-btn{% if active_tab == 'visao-geral' %} active{% endif %}" data-tab="visao-geral" onclick="switchTab(this)">
+    <button class="metricas-tab-btn{% if active_tab == 'visao-geral' %} active{% endif %}" id="metricas-tab-visao-geral" role="tab" aria-controls="tab-visao-geral" aria-selected="{{ 'true' if active_tab == 'visao-geral' else 'false' }}" data-tab="visao-geral" onclick="switchTab(this)">
         <i class="bi bi-globe2"></i> Visão Geral
     </button>
-    <button class="metricas-tab-btn{% if active_tab == 'equipe' %} active{% endif %}" data-tab="equipe" onclick="switchTab(this)">
+    <button class="metricas-tab-btn{% if active_tab == 'equipe' %} active{% endif %}" id="metricas-tab-equipe" role="tab" aria-controls="tab-equipe" aria-selected="{{ 'true' if active_tab == 'equipe' else 'false' }}" data-tab="equipe" onclick="switchTab(this)">
         <i class="bi bi-people-fill"></i> Equipe
     </button>
 </div>
 
 <!-- ══ TAB: MEU DESEMPENHO ══ -->
-<div class="metricas-tab-panel{% if not active_tab or active_tab == 'meu-desempenho' %} active{% endif %}" id="tab-meu-desempenho">
+<section class="metricas-tab-panel{% if not active_tab or active_tab == 'meu-desempenho' %} active{% endif %}" id="tab-meu-desempenho" role="tabpanel" aria-labelledby="metricas-tab-meu-desempenho" aria-hidden="{{ 'false' if not active_tab or active_tab == 'meu-desempenho' else 'true' }}"{% if active_tab and active_tab != 'meu-desempenho' %} hidden{% endif %} data-rf-component="metrics-user-panel">
 
-    <div class="kpi-grid" id="kpi-usuario">
-        <div class="mtr-loading" style="grid-column:1/-1">
+    <div class="kpi-grid" id="kpi-usuario" aria-live="polite" aria-busy="true" data-rf-component="metrics-user-kpis">
+        <div class="mtr-loading mtr-loading-wide" role="status">
             <div class="mtr-spinner"></div>Carregando indicadores…
         </div>
     </div>
@@ -1010,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="charts-grid">
 
         <!-- Evolução Diária -->
-        <div class="card shadow-sm chart-full-width">
+        <article class="card shadow-sm chart-full-width metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-graph-up-arrow me-2 text-primary"></i>Evolução Diária — Últimos 30 Dias
@@ -1022,10 +1038,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
         <!-- Por Status -->
-        <div class="card shadow-sm">
+        <article class="card shadow-sm metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-pie-chart-fill me-2 text-primary"></i>Processos por Status
@@ -1036,10 +1052,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
         <!-- Por Tipo de Serviço -->
-        <div class="card shadow-sm">
+        <article class="card shadow-sm metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-tags-fill me-2 text-primary"></i>Por Tipo de Serviço
@@ -1050,10 +1066,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
         <!-- Comparativo com Equipe -->
-        <div class="card shadow-sm chart-full-width">
+        <article class="card shadow-sm chart-full-width metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-arrow-left-right me-2 text-primary"></i>Comparativo com a Equipe — Últimos 30 Dias
@@ -1065,16 +1081,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
     </div>
-</div>
+</section>
 
 <!-- ══ TAB: VISÃO GERAL ══ -->
-<div class="metricas-tab-panel{% if active_tab == 'visao-geral' %} active{% endif %}" id="tab-visao-geral">
+<section class="metricas-tab-panel{% if active_tab == 'visao-geral' %} active{% endif %}" id="tab-visao-geral" role="tabpanel" aria-labelledby="metricas-tab-visao-geral" aria-hidden="{{ 'false' if active_tab == 'visao-geral' else 'true' }}"{% if active_tab != 'visao-geral' %} hidden{% endif %} data-rf-component="metrics-overview-panel">
 
-    <div class="kpi-grid" id="kpi-resumo">
-        <div class="mtr-loading" style="grid-column:1/-1">
+    <div class="kpi-grid" id="kpi-resumo" aria-live="polite" aria-busy="true" data-rf-component="metrics-overview-kpis">
+        <div class="mtr-loading mtr-loading-wide" role="status">
             <div class="mtr-spinner"></div>Carregando estatísticas…
         </div>
     </div>
@@ -1082,7 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="charts-grid">
 
         <!-- Status Geral -->
-        <div class="card shadow-sm">
+        <article class="card shadow-sm metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-pie-chart me-2 text-primary"></i>Status dos Processos — 30 Dias
@@ -1093,10 +1109,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
         <!-- Prazo Geral -->
-        <div class="card shadow-sm">
+        <article class="card shadow-sm metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-hourglass-split me-2 text-primary"></i>Situação de Prazo (Processos Ativos)
@@ -1107,10 +1123,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
         <!-- Top Tipos -->
-        <div class="card shadow-sm">
+        <article class="card shadow-sm metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-list-ol me-2 text-primary"></i>Top 5 Tipos de Serviço
@@ -1121,10 +1137,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
         <!-- Evolução Mensal -->
-        <div class="card shadow-sm">
+        <article class="card shadow-sm metricas-chart-card" data-rf-component="metricas-chart-card">
             <div class="card-header">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-bar-chart-steps me-2 text-primary"></i>Evolução Mensal — 6 Meses
@@ -1135,30 +1151,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mtr-loading"><div class="mtr-spinner"></div></div>
                 </div>
             </div>
-        </div>
+        </article>
 
     </div>
-</div>
+</section>
 
 <!-- ══ TAB: EQUIPE ══ -->
-<div class="metricas-tab-panel{% if active_tab == 'equipe' %} active{% endif %}" id="tab-equipe">
+<section class="metricas-tab-panel{% if active_tab == 'equipe' %} active{% endif %}" id="tab-equipe" role="tabpanel" aria-labelledby="metricas-tab-equipe" aria-hidden="{{ 'false' if active_tab == 'equipe' else 'true' }}"{% if active_tab != 'equipe' %} hidden{% endif %} data-rf-component="metrics-team-panel">
 
-    <div class="card shadow-sm mb-4">
+    <article class="card shadow-sm mb-4 metricas-chart-card" data-rf-component="metrics-team-table">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h6 class="mb-0 fw-bold">
-                <i class="bi bi-trophy-fill me-2" style="color:var(--color-gold-primary);"></i>Performance da Equipe — Últimos 30 Dias
+                <i class="bi bi-trophy-fill me-2 metricas-team-icon" aria-hidden="true"></i>Performance da Equipe — Últimos 30 Dias
             </h6>
             <span class="badge bg-secondary" id="badge-equipe">—</span>
         </div>
         <div class="card-body p-0" id="tabela-equipe-wrap">
             <div class="mtr-loading"><div class="mtr-spinner"></div></div>
         </div>
-    </div>
+    </article>
 
-    <div class="card shadow-sm">
+    <article class="card shadow-sm metricas-chart-card" data-rf-component="metrics-team-workload">
         <div class="card-header">
             <h6 class="mb-0 fw-bold">
-                <i class="bi bi-person-workspace me-2 text-primary"></i>Carga de Trabalho por Responsável
+                <i class="bi bi-person-workspace me-2 text-primary" aria-hidden="true"></i>Carga de Trabalho por Responsável
             </h6>
         </div>
         <div class="card-body">
@@ -1166,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="mtr-loading"><div class="mtr-spinner"></div></div>
             </div>
         </div>
-    </div>
+    </article>
 
-</div>
+</section>
 {% endblock %}

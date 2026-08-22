@@ -1,4 +1,4 @@
-<div class="cfg-panel{% if active_tab == 'atividades' %} active{% endif %}" id="panel-atividades">
+<div class="cfg-panel{% if active_tab == 'atividades' %} active{% endif %}" id="panel-atividades" data-rf-ui="complete" data-rf-surface="-config-activity-panel" data-rf-component="activity-panel" role="region" aria-labelledby="cfg-tab-atividades">
     <div class="cfg-panel-header">
         <span class="cfg-ph-icon"><i class="bi bi-activity"></i></span>
         <div>
@@ -30,16 +30,16 @@
                 <tbody>
                 {% for atividade in atividades_recentes %}
                     <tr>
-                        <td class="font-monospace">{{ atividade.id }}</td>
-                        <td>{{ atividade.usuario_nome | default('N/A') }}</td>
-                        <td class="cfg-activity-action">{{ atividade.acao }}</td>
-                        <td>
+                        <td data-label="ID" class="font-monospace">{{ atividade.id }}</td>
+                        <td data-label="Usuário">{{ atividade.usuario_nome | default('N/A') }}</td>
+                        <td data-label="Ação" class="cfg-activity-action">{{ atividade.acao }}</td>
+                        <td data-label="Processo">
                             {% if atividade.processo_id %}
                                 <a href="{{ url_for('processos.visualizar', processo_id=atividade.processo_id) }}" class="rf-table-inline-link">#{{ atividade.processo_id }}</a>
                             {% else %}—{% endif %}
                         </td>
-                        <td class="font-monospace">{{ atividade.ip | default('N/A') }}</td>
-                        <td class="text-nowrap">{{ atividade.timestamp | format_datetime_full }}</td>
+                        <td data-label="IP" class="font-monospace">{{ atividade.ip | default('N/A') }}</td>
+                        <td data-label="Data/Hora" class="text-nowrap">{{ atividade.timestamp | format_datetime_full }}</td>
                     </tr>
                 {% else %}
                     <tr><td colspan="6" class="text-center text-muted py-4">Nenhuma atividade registrada.</td></tr>

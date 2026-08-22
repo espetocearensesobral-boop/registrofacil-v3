@@ -1,8 +1,18 @@
 <style>
+    :root {
+        --rf-print-ink: #222;
+        --rf-print-heading: #121212;
+        --rf-print-muted: #475467;
+        --rf-print-accent: #8B6332;
+        --rf-print-accent-soft: #fffdf7;
+        --rf-print-border: #e5d7be;
+        --rf-print-row-border: #f0e8d8;
+        --rf-print-row-alt: #fdfaf5;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #222;
+        color: var(--rf-print-ink);
         background: #fff;
         font-size: 9.5pt;
     }
@@ -14,7 +24,7 @@
         width: 100%;
         padding-bottom: 12px;
         margin-bottom: 14px;
-        border-bottom: 3px solid #CDA865;
+        border-bottom: 3px solid var(--rf-print-accent);
     }
     .header-left, .header-right {
         display: table-cell;
@@ -23,16 +33,16 @@
     }
     .header-right { text-align: right; }
     .logo { max-width: 160px; max-height: 55px; object-fit: contain; }
-    .report-title { font-size: 15pt; font-weight: 700; color: #121212; margin-bottom: 3px; letter-spacing: .1px; }
-    .report-sub { font-size: 8.5pt; color: #475467; font-style: normal; }
+    .report-title { font-size: 15pt; font-weight: 700; color: var(--rf-print-heading); margin-bottom: 3px; letter-spacing: .1px; }
+    .report-sub { font-size: 8.5pt; color: var(--rf-print-muted); font-style: normal; }
 
     /* RESUMO */
     .summary-bar {
         display: table;
         width: 100%;
         margin-bottom: 14px;
-        background: #fffdf7;
-        border: 1px solid #e5d7be;
+        background: var(--rf-print-accent-soft);
+        border: 1px solid var(--rf-print-border);
         border-radius: 6px;
         overflow: hidden;
     }
@@ -41,25 +51,25 @@
         padding: 9px 14px;
         vertical-align: middle;
         text-align: center;
-        border-right: 1px solid #e5d7be;
+        border-right: 1px solid var(--rf-print-border);
     }
     .sum-cell:last-child { border-right: none; }
     .sum-label {
         font-size: 7pt;
         font-weight: 700;
         text-transform: uppercase;
-        color: #475467;
+        color: var(--rf-print-muted);
         letter-spacing: 0.4px;
         display: block;
         margin-bottom: 2px;
     }
-    .sum-value { font-size: 14pt; font-weight: 750; color: #1f2937; }
-    .sum-value.small { font-size: 9pt; color: #344054; font-weight: 650; }
+    .sum-value { font-size: 14pt; font-weight: 750; color: var(--rf-print-heading); }
+    .sum-value.small { font-size: 9pt; color: var(--rf-print-muted); font-weight: 650; }
 
     /* TABELA */
     table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
     thead th {
-        background: #8B6332;
+        background: var(--rf-print-accent);
         color: #fff;
         font-size: 8pt;
         font-weight: 700;
@@ -74,24 +84,24 @@
         font-size: 8.5pt;
         padding: 6px 7px;
         vertical-align: middle;
-        border-bottom: 1px solid #f0e8d8;
-        color: #333;
+        border-bottom: 1px solid var(--rf-print-row-border);
+        color: var(--rf-print-ink);
     }
-    tbody tr:nth-child(even) td { background: #fdfaf5; }
+    tbody tr:nth-child(even) td { background: var(--rf-print-row-alt); }
     tbody tr:last-child td { border-bottom: none; }
-    .nome-col { font-weight: 600; color: #222; }
+    .nome-col { font-weight: 600; color: var(--rf-print-ink); }
     .empty-report {
         padding: 24px 12px;
-        color: #475467;
+        color: var(--rf-print-muted);
         text-align: center;
         font-style: normal;
     }
-    .empty-report strong { display: block; color: #1f2937; font-size: 9pt; margin-bottom: 3px; }
+    .empty-report strong { display: block; color: var(--rf-print-heading); font-size: 9pt; margin-bottom: 3px; }
     .empty-report span { display: block; font-size: 8pt; }
     .count-badge {
         display: inline-block;
-        background: #f0e8d8;
-        color: #8B6332;
+        background: var(--rf-print-row-border);
+        color: var(--rf-print-accent);
         font-weight: 700;
         font-size: 8pt;
         padding: 2px 7px;
@@ -103,7 +113,7 @@
         display: table;
         width: 100%;
         padding-top: 8px;
-        border-top: 1px solid #e5d7be;
+        border-top: 1px solid var(--rf-print-border);
     }
     .footer-left, .footer-center, .footer-right {
         display: table-cell;

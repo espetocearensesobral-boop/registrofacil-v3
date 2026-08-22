@@ -1,4 +1,4 @@
-<div class="cfg-panel{% if active_tab == 'atividades' %} active{% endif %}" id="panel-atividades">
+<div class="cfg-panel{% if active_tab == 'atividades' %} active{% endif %}" id="panel-atividades" data-rf-ui="complete" data-rf-surface="-config-event-panel" data-rf-component="event-log-panel" role="region" aria-labelledby="cfg-tab-atividades">
     <div class="cfg-panel-header cfg-events-header">
         <span class="cfg-ph-icon"><i class="bi bi-shield-check"></i></span>
         <div>
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <form method="get" action="{{ url_for('configuracoes.index') }}" class="cfg-events-filter" id="cfg-events-filter">
+        <form method="get" action="{{ url_for('configuracoes.index') }}" class="cfg-events-filter" id="cfg-events-filter" role="search" aria-label="Filtros do histórico de eventos" data-rf-component="filter-toolbar">
             <input type="hidden" name="tab" value="atividades">
             <div class="cfg-events-filter-main">
                 <label class="cfg-events-search">

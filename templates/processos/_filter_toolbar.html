@@ -1,8 +1,8 @@
-<div class="filter-bar process-filter-surface">
-    <form method="get" action="{{ request.path }}" class="process-filter-toolbar" id="process-filter-form">
+<div class="filter-bar process-filter-surface" data-rf-ui="complete" data-rf-surface="processos--filter-toolbar" data-rf-component="page-surface">
+    <form method="get" action="{{ request.path }}" class="process-filter-toolbar" id="process-filter-form" role="search" aria-label="Filtros de processos" data-rf-component="filter-toolbar">
         <div class="process-filter-search">
             <i class="bi bi-search" aria-hidden="true"></i>
-            <input type="text" name="busca" id="busca" placeholder="ID, titular, matrícula ou outros dados..." value="{{ filtro_busca | default('') }}" autocomplete="off">
+            <input type="search" name="busca" id="busca" placeholder="ID, titular, matrícula ou outros dados..." value="{{ filtro_busca | default('') }}" autocomplete="off" aria-label="Pesquisar processos">
         </div>
         <select name="status" id="status" class="process-filter-select" aria-label="Filtrar por status">
             <option value="">Status: Todos</option>

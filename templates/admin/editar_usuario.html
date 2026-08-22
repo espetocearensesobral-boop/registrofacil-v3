@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="form-card rf-form-card">
+<div class="form-card rf-form-card" data-rf-ui="complete" data-rf-surface="admin-editar-usuario" data-rf-component="page-surface">
     <form id="form-edit-user" method="post" novalidate action="{{ url_for('admin_users.edit_user', user_id=user_data.id) }}" data-rf-submit-state data-rf-submit-managed data-submit-label="Salvar Alterações">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 

@@ -1,5 +1,5 @@
-<div class="filter-bar admin-filter-surface">
-    <form method="get" action="{{ url_for('atividades.historico') }}" class="admin-filter-toolbar" id="activity-filter-form">
+<div class="filter-bar admin-filter-surface" data-rf-ui="complete" data-rf-surface="-activity-filter-toolbar" data-rf-component="page-surface">
+    <form method="get" action="{{ url_for('atividades.historico') }}" class="admin-filter-toolbar" id="activity-filter-form" role="search" aria-label="Filtros de atividades" data-rf-component="filter-toolbar">
         <select name="usuario" id="atividade-usuario" class="admin-filter-select" aria-label="Filtrar por usuário">
             <option value="">Usuário: Todos</option>
             {% for user_item in usuarios %}
@@ -26,7 +26,7 @@
             </button>
             <div class="admin-filter-popover" id="activity-filter-popover" hidden>
                 <label for="atividade-ordenar">Ordenar por</label>
-                <select name="ordenar" id="atividade-ordenar">
+                <select name="ordenar" id="atividade-ordenar" aria-label="Ordenar atividades">
                     <option value="created_at_desc" {% if ordenar == 'created_at_desc' %}selected{% endif %}>Mais recente</option>
                     <option value="created_at_asc" {% if ordenar == 'created_at_asc' %}selected{% endif %}>Mais antigo</option>
                     <option value="usuario_asc" {% if ordenar == 'usuario_asc' %}selected{% endif %}>Usuário (A–Z)</option>

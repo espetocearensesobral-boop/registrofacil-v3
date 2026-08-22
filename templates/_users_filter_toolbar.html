@@ -1,5 +1,5 @@
-<div class="filter-bar admin-filter-surface">
-    <form method="get" action="{{ url_for('admin_users.users_list') }}" class="admin-filter-toolbar" id="users-filter-form">
+<div class="filter-bar admin-filter-surface" data-rf-ui="complete" data-rf-surface="-users-filter-toolbar" data-rf-component="page-surface">
+    <form method="get" action="{{ url_for('admin_users.users_list') }}" class="admin-filter-toolbar" id="users-filter-form" role="search" aria-label="Filtros de usuários" data-rf-component="filter-toolbar">
         <select name="status" id="usuarios-status" class="admin-filter-select" aria-label="Filtrar por status">
             <option value="ativo" {% if filtro_status == 'ativo' %}selected{% endif %}>Status: Ativos</option>
             <option value="inativo" {% if filtro_status == 'inativo' %}selected{% endif %}>Status: Inativos</option>
@@ -7,7 +7,7 @@
         </select>
         <div class="admin-filter-search">
             <i class="bi bi-search" aria-hidden="true"></i>
-            <input type="text" name="busca" id="usuarios-busca" value="{{ filtro_busca | default('') }}" placeholder="Usuário, nome ou e-mail..." autocomplete="off" aria-label="Buscar usuário">
+            <input type="search" name="busca" id="usuarios-busca" value="{{ filtro_busca | default('') }}" placeholder="Usuário, nome ou e-mail..." autocomplete="off" aria-label="Buscar usuário">
         </div>
         <button type="submit" class="admin-filter-icon-btn admin-filter-apply-btn" title="Aplicar filtros" aria-label="Aplicar filtros">
             <i class="bi bi-funnel" aria-hidden="true"></i>

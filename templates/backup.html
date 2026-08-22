@@ -164,7 +164,7 @@
 
 
 <!-- KPI Cards -->
-<div class="kpi-grid">
+<section class="kpi-grid" data-rf-ui="complete" data-rf-surface="backup" data-rf-component="backup-summary" aria-label="Resumo de backup">
     <div class="kpi-card kpi-gold">
         <div class="kpi-label">Backups Existentes</div>
         <div class="kpi-value kpi-gold">{{ backups | length }}</div>
@@ -185,7 +185,7 @@
         <div class="kpi-sub">Endereço de rede</div>
         <i class="bi bi-hdd-network kpi-bg-icon"></i>
     </div>
-</div>
+</section>
 
 {% set status_label = {
     'success_local': 'Concluído localmente',
@@ -196,12 +196,12 @@
     'never_run': 'Ainda não executado',
     'invalid': 'Status indisponível'
 }.get(backup_status.status, backup_status.status) %}
-<div class="rf-card mb-4">
+<section class="rf-card mb-4" data-rf-component="backup-last-run" aria-labelledby="backup-last-run-title">
     <div class="rf-card-header">
-        <h5 class="m-0"><i class="bi bi-shield-check me-2 rf-backup-section-icon"></i>Última execução</h5>
+        <h5 class="m-0" id="backup-last-run-title"><i class="bi bi-shield-check me-2 rf-backup-section-icon" aria-hidden="true"></i>Última execução</h5>
         <span class="badge {% if backup_status.status in ['success_local', 'success_remote'] %}bg-success{% elif backup_status.status in ['failed', 'verification_failed'] %}bg-danger{% elif backup_status.status == 'partial' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">{{ status_label }}</span>
     </div>
-    <div class="rf-card-body rf-backup-card-body">
+    <div class="rf-card-body rf-backup-card-body" aria-live="polite">
         {% if backup_status.updated_at %}
         <div class="row g-2">
             <div class="col-md-4"><strong>Data:</strong> {{ backup_status.updated_at }}</div>
@@ -214,14 +214,14 @@
         {% if backup_status.sha256 %}<div class="mt-2 text-muted"><strong>SHA-256:</strong> <code class="rf-backup-sha">{{ backup_status.sha256 }}</code></div>{% endif %}
         {% if backup_status.error %}<div class="alert alert-danger mt-3 mb-0 py-2">{{ backup_status.error }}</div>{% endif %}
     </div>
-</div>
+</section>
 
-<div class="row g-4">
+<div class="row g-4" data-rf-component="backup-workspace">
     <div class="col-12">
         <!-- Gerar Backup -->
-        <div class="rf-card mb-4">
+        <section class="rf-card mb-4" data-rf-component="backup-create" aria-labelledby="backup-create-title">
             <div class="rf-card-header">
-                <h5 class="m-0"><i class="bi bi-cloud-arrow-up me-2 rf-backup-section-icon"></i>Gerar Novo Backup</h5>
+                <h5 class="m-0" id="backup-create-title"><i class="bi bi-cloud-arrow-up me-2 rf-backup-section-icon" aria-hidden="true"></i>Gerar Novo Backup</h5>
             </div>
             <div class="rf-card-body">
                 <p class="rf-backup-description">
@@ -230,7 +230,7 @@
                 </p>
 
                 <!-- Ações principais em linha -->
-                <div class="rf-backup-toolbar">
+                <div class="rf-backup-toolbar" role="group" aria-label="Ações de backup">
                     <form id="form-create-backup" method="post" action="{{ url_for('backup.manual_backup') }}">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <button type="submit" class="nav-btn nav-btn-primary rf-backup-primary-action">
@@ -258,12 +258,12 @@
                     <code class="rf-backup-path">{{ db_config.path_completo }}</code>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Backups Existentes -->
-        <div class="rf-card">
+        <section class="rf-card" data-rf-component="backup-list" aria-labelledby="backup-list-title">
             <div class="rf-card-header">
-                <h5 class="m-0"><i class="bi bi-folder-fill me-2 text-accent"></i>Backups Existentes</h5>
+                <h5 class="m-0" id="backup-list-title"><i class="bi bi-folder-fill me-2 text-accent" aria-hidden="true"></i>Backups Existentes</h5>
                 <span class="rf-backup-count">{{ backups | length }}</span>
             </div>
             <div class="card-body p-0">
@@ -272,35 +272,35 @@
                     <table class="table table-hover align-middle mb-0 rf-backup-table">
                         <thead>
                             <tr class="rf-backup-table-head">
-                                <th class="ps-4">Nome do Arquivo</th>
-                                <th>Data</th>
-                                <th>Tamanho</th>
-                                <th class="text-center pe-4">Ações</th>
+                                <th class="ps-4" scope="col">Nome do Arquivo</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Tamanho</th>
+                                <th class="text-center pe-4" scope="col">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for backup in backups %}
                             <tr>
-                                <td class="ps-4 rf-backup-table-cell">
+                                <td class="ps-4 rf-backup-table-cell" data-label="Nome do arquivo">
                                     <code class="rf-backup-name">{{ backup.name }}</code>
                                 </td>
-                                <td class="rf-backup-meta">{{ backup.created_at }}</td>
-                                <td class="rf-backup-meta">{{ backup.size }}</td>
-                                <td class="text-center pe-4 rf-backup-table-cell">
+                                <td class="rf-backup-meta" data-label="Data">{{ backup.created_at }}</td>
+                                <td class="rf-backup-meta" data-label="Tamanho">{{ backup.size }}</td>
+                                <td class="text-center pe-4 rf-backup-table-cell" data-label="Ações">
                                     <div class="rf-backup-actions">
-                                        <a href="{{ backup.download_url }}" class="nav-btn nav-btn-secondary rf-backup-action" title="Baixar">
+                                        <a href="{{ backup.download_url }}" class="nav-btn nav-btn-secondary rf-backup-action" title="Baixar" aria-label="Baixar {{ backup.name }}">
                                             <i class="bi bi-download"></i>
                                         </a>
                                         <button type="button" class="nav-btn nav-btn-danger btn-delete-backup rf-backup-action"
                                                 data-filename="{{ backup.name }}"
-                                                data-bs-toggle="tooltip" title="Excluir">
+                                                data-bs-toggle="tooltip" title="Excluir" aria-label="Excluir {{ backup.name }}">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                         {% if session.get('usuario_role') in ['admin', 'suporte'] %}
                                         <form method="post" action="{{ url_for('backup.restore_backup') }}" onsubmit="return confirmarRestauracao('{{ backup.name|e }}');" class="rf-inline-form" data-rf-submit-state data-submit-label="Restaurando...">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                             <input type="hidden" name="filename" value="{{ backup.name }}">
-                                            <button type="submit" class="nav-btn nav-btn-secondary rf-backup-action" title="Restaurar" data-loading-text="Restaurando...">
+                                            <button type="submit" class="nav-btn nav-btn-secondary rf-backup-action" title="Restaurar" aria-label="Restaurar {{ backup.name }}" data-loading-text="Restaurando...">
                                                 <i class="bi bi-arrow-counterclockwise"></i>
                                             </button>
                                         </form>
@@ -319,7 +319,7 @@
                 </div>
                 {% endif %}
             </div>
-        </div>
+        </section>
 
 </div>
 
@@ -348,7 +348,7 @@
                             <label>Caminho dos Backups</label>
                             <div class="cfg-path-row">
                                 <input type="text" id="local_backup_path" name="local_path" value="{{ backup_config.local_path | default(DEFAULT_BACKUP_PATH) }}" required class="cfg-path-input">
-                                <button class="btn-browse-dir cfg-browse-dir" type="button" data-target="#local_backup_path" onmouseover="this.style.background='var(--color-black-premium)';this.style.color='#fff'" onmouseout="this.style.background='var(--background-color-body)';this.style.color='var(--text-color-secondary)'"><i class="bi bi-folder2-open"></i></button>
+                                <button class="btn-browse-dir cfg-browse-dir" type="button" data-target="#local_backup_path" aria-label="Selecionar pasta de backups"><i class="bi bi-folder2-open" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="cfg-fld">

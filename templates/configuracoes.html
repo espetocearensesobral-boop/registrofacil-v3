@@ -497,29 +497,29 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
 }
 </style>
 
-<div class="cfg-settings-rebuild">
+<div class="cfg-settings-rebuild" data-rf-ui="complete" data-rf-surface="configuracoes" data-rf-component="page-surface">
     <div class="cfg-settings-tabs-wrap">
         <div class="rf-tabs" id="cfg-tabs">
-            <button class="rf-tab-btn{% if not active_tab or active_tab == 'status' %} active{% endif %}" data-panel="status" onclick="cfgSwitch(this)">
+            <button class="rf-tab-btn{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="cfg-tab-status" data-panel="status" onclick="cfgSwitch(this)" aria-controls="panel-status" aria-selected="{{ 'true' if not active_tab or active_tab == 'status' else 'false' }}">
                 <i class="bi bi-palette-fill"></i> Status
             </button>
-            <button class="rf-tab-btn{% if active_tab == 'services' %} active{% endif %}" data-panel="services" onclick="cfgSwitch(this)">
+            <button class="rf-tab-btn{% if active_tab == 'services' %} active{% endif %}" id="cfg-tab-services" data-panel="services" onclick="cfgSwitch(this)" aria-controls="panel-services" aria-selected="{{ 'true' if active_tab == 'services' else 'false' }}">
                 <i class="bi bi-list-check"></i> Tipos de Serviço
             </button>
             {% if session.get('usuario_role') == 'admin' %}
-            <button class="rf-tab-btn{% if active_tab == 'email' %} active{% endif %}" data-panel="email" onclick="cfgSwitch(this)">
+            <button class="rf-tab-btn{% if active_tab == 'email' %} active{% endif %}" id="cfg-tab-email" data-panel="email" onclick="cfgSwitch(this)" aria-controls="panel-email" aria-selected="{{ 'true' if active_tab == 'email' else 'false' }}">
                 <i class="bi bi-envelope"></i> E-mail
             </button>
-            <button class="rf-tab-btn{% if active_tab == 'estabelecimento' %} active{% endif %}" data-panel="estabelecimento" onclick="cfgSwitch(this)">
+            <button class="rf-tab-btn{% if active_tab == 'estabelecimento' %} active{% endif %}" id="cfg-tab-estabelecimento" data-panel="estabelecimento" onclick="cfgSwitch(this)" aria-controls="panel-estabelecimento" aria-selected="{{ 'true' if active_tab == 'estabelecimento' else 'false' }}">
                 <i class="bi bi-building-fill"></i> Estabelecimento
             </button>
             {% endif %}
             {% if pode_ver_atividades %}
-            <button class="rf-tab-btn{% if active_tab == 'atividades' %} active{% endif %}" data-panel="atividades" onclick="cfgSwitch(this)">
+            <button class="rf-tab-btn{% if active_tab == 'atividades' %} active{% endif %}" id="cfg-tab-atividades" data-panel="atividades" onclick="cfgSwitch(this)" aria-controls="panel-atividades" aria-selected="{{ 'true' if active_tab == 'atividades' else 'false' }}">
                 <i class="bi bi-shield-check"></i> Atividades e Segurança
             </button>
             {% endif %}
-            <button class="rf-tab-btn{% if active_tab == 'sobre' %} active{% endif %}" data-panel="sobre" onclick="cfgSwitch(this)">
+            <button class="rf-tab-btn{% if active_tab == 'sobre' %} active{% endif %}" id="cfg-tab-sobre" data-panel="sobre" onclick="cfgSwitch(this)" aria-controls="panel-sobre" aria-selected="{{ 'true' if active_tab == 'sobre' else 'false' }}">
                 <i class="bi bi-info-circle"></i> Sobre
             </button>
         </div>
@@ -529,7 +529,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
 
         {% if pode_ver_configuracoes %}
         <!-- STATUS -->
-        <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status">
+        <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status" data-rf-component="settings-panel" role="region" aria-labelledby="cfg-tab-status">
             <form method="post" novalidate id="form-add-status" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Adicionando status...">
                 <input type="hidden" name="action" value="add_status">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -614,7 +614,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
         </div>
 
         <!-- SERVIÇOS -->
-        <div class="cfg-panel{% if active_tab == 'services' %} active{% endif %}" id="panel-services">
+        <div class="cfg-panel{% if active_tab == 'services' %} active{% endif %}" id="panel-services" data-rf-component="settings-panel" role="region" aria-labelledby="cfg-tab-services">
             <form method="post" novalidate id="form-add-service" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Adicionando serviço...">
                 <input type="hidden" name="action" value="add_service">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -686,7 +686,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
         {% if session.get('usuario_role') == 'admin' %}
 
         <!-- E-MAIL -->
-        <div class="cfg-panel{% if active_tab == 'email' %} active{% endif %}" id="panel-email">
+        <div class="cfg-panel{% if active_tab == 'email' %} active{% endif %}" id="panel-email" data-rf-component="settings-panel" role="region" aria-labelledby="cfg-tab-email">
             <div class="cfg-card">
                 <div class="cfg-card-header">Configurações SMTP</div>
                 <div class="cfg-card-body">
@@ -753,7 +753,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
         {# As abas Atividades e Sobre ficam disponíveis fora do bloco de edição administrativa. #}
 
         {# ── ABA: ESTABELECIMENTO (conteúdo de empresa.html integrado) ── #}
-        <div class="cfg-panel{% if active_tab == 'estabelecimento' %} active{% endif %}" id="panel-estabelecimento">
+        <div class="cfg-panel{% if active_tab == 'estabelecimento' %} active{% endif %}" id="panel-estabelecimento" data-rf-component="settings-panel" role="region" aria-labelledby="cfg-tab-estabelecimento">
 
             <form id="form-empresa-cfg" method="post" action="{{ url_for('empresa.index') }}" enctype="multipart/form-data" novalidate data-rf-submit-state data-submit-label="Salvando organização...">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -1032,11 +1032,16 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
 {{ super() }}
 <script>
 window.cfgSwitch = function(btn) {
-    document.querySelectorAll('.rf-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.rf-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+    });
     document.querySelectorAll('.cfg-panel').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
     const panel = document.getElementById('panel-' + btn.dataset.panel);
     if (panel) panel.classList.add('active');
+    btn.focus({ preventScroll: true });
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.set('tab', btn.dataset.panel);
     if (btn.dataset.panel !== 'atividades') {

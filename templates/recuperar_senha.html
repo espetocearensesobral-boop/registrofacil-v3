@@ -71,7 +71,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimized.css', v=app_version) }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui1') }}">
 </head>
-<body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}">
+<body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}" data-rf-ui="complete" data-rf-surface="recuperar-senha" data-rf-component="page-surface">
     <a class="auth-skip-link" href="#recoverForm">Pular para o formulário de recuperação</a>
     <!-- Painel esquerdo: formulário -->
     <main class="auth-panel-left" id="auth-content" aria-labelledby="auth-title">

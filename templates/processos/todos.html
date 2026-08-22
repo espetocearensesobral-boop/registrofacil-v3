@@ -18,7 +18,7 @@
 
 
 {% block content %}
-<div class="card process-list-card">
+<div class="card process-list-card" data-rf-ui="complete" data-rf-surface="processos-todos" data-rf-component="page-surface">
     {% include "processos/_filter_toolbar.html" %}
     <div class="card-body p-0">
         {% if not processos %}

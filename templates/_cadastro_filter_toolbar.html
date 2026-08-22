@@ -1,10 +1,10 @@
-<div class="filter-bar cadastro-filter-surface">
-    <form method="get" action="{{ url_for(cadastro_endpoint) }}" class="cadastro-filter-toolbar" id="{{ cadastro_tipo }}-filter-form">
+<div class="filter-bar cadastro-filter-surface" data-rf-ui="complete" data-rf-surface="-cadastro-filter-toolbar" data-rf-component="page-surface">
+    <form method="get" action="{{ url_for(cadastro_endpoint) }}" class="cadastro-filter-toolbar" id="{{ cadastro_tipo }}-filter-form" role="search" aria-label="Filtros de {{ cadastro_label | lower }}" data-rf-component="filter-toolbar">
         <input type="hidden" name="ordenar" value="{{ ordenar | default('nome') }}">
         <input type="hidden" name="direcao" value="{{ direcao | default('asc') }}">
         <div class="cadastro-filter-search">
             <i class="bi bi-search" aria-hidden="true"></i>
-            <input type="text"
+            <input type="search"
                    name="busca"
                    id="{{ cadastro_tipo }}-busca"
                    placeholder="Nome, e-mail ou telefone..."

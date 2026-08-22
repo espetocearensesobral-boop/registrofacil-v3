@@ -18,9 +18,9 @@
 
 {% set admin_filter_context = 'atividades' %}
 <!-- Tabela -->
-<div class="rf-card admin-list-card">
+<section class="rf-card admin-list-card" data-rf-ui="complete" data-rf-surface="atividades" data-rf-component="activity-history" aria-labelledby="activity-history-title">
     <div class="rf-card-header">
-        <h6 class="rf-card-title mb-0"><i class="bi bi-activity"></i> Histórico Operacional</h6>
+        <h6 class="rf-card-title mb-0" id="activity-history-title"><i class="bi bi-activity" aria-hidden="true"></i> Histórico Operacional</h6>
         <span class="rf-badge count">{{ total_registros }}</span>
     </div>
     {% include "_activity_filter_toolbar.html" %}
@@ -36,7 +36,7 @@
             </div>
         {% else %}
             <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('atividades.historico') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ itens_por_pagina }}" data-page-size-param="itens_por_pagina">
-                <table class="rf-table table-atividades">
+                <table class="rf-table table-atividades" data-rf-component="activity-table">
                     <colgroup>
                         <col class="activity-col-id">
                         <col class="activity-col-user">
@@ -49,7 +49,7 @@
                     {% macro sort_th_atv(label, col) %}
                     {% set cur = request.args.to_dict() %}
                     {% set next_ord = col ~ '_asc' if ordenar == col ~ '_desc' else col ~ '_desc' %}
-                    <th>
+                    <th scope="col">
                         <a href="{{ url_for('atividades.historico', **(cur | combine({'pagina': 1, 'ordenar': next_ord}))) }}"
                            class="text-decoration-none text-reset">
                             {{ label }}
@@ -91,7 +91,7 @@
                                             data-ip="{{ atividade.ip | default('N/A') | e }}"
                                             data-timestamp="{{ atividade.timestamp | format_datetime_full }}"
                                             data-processo-id="{{ atividade.processo_id or '' }}"
-                                            title="Clique para ver detalhes das alterações">
+                                            title="Clique para ver detalhes das alterações" aria-label="Ver detalhes da atividade {{ atividade.id }}">
                                         <span class="acao-tipo">{{ acao_tipo }}</span>{% if acao_desc %}<span class="acao-sep">: </span><span class="acao-desc">{{ acao_desc }}</span>{% endif %}
                                         <i class="bi bi-chevron-right acao-icon"></i>
                                     </button>
@@ -122,19 +122,19 @@
 
         {% endif %}
     </div>
-</div>
+</section>
 
 <!-- ==================== MODAL DETALHE ==================== -->
-<div class="modal fade" id="modalDetalheAtividade" tabindex="-1" aria-labelledby="modalDetalheLabel" aria-hidden="true">
+<div class="modal fade" id="modalDetalheAtividade" tabindex="-1" aria-labelledby="modalDetalheLabel" aria-hidden="true" data-rf-component="activity-detail-modal">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalDetalheLabel">
-                    <i class="bi bi-activity me-2 text-primary"></i>Detalhes da Atividade
+                    <i class="bi bi-activity me-2 text-primary" aria-hidden="true"></i>Detalhes da Atividade
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body p-0">
+            <div class="modal-body p-0" aria-live="polite">
 
                 <!-- ── Cabeçalho colorido com tipo + descrição ── -->
                 <div class="modal-acao-header px-4 py-3 border-bottom">
@@ -149,7 +149,7 @@
                     <!-- ── Alterações (contexto) ── -->
                     <div id="modal-contexto-bloco" class="mb-3">
                         <p class="modal-section-label">
-                            <i class="bi bi-pencil-square me-1"></i>Alterações realizadas
+                            <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>Alterações realizadas
                         </p>
                         <div id="modal-contexto-corpo"></div>
                     </div>

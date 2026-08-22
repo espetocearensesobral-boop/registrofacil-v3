@@ -28,6 +28,12 @@
         .header-content { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; max-width: 1400px; margin: 0 auto; }
         .logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; font-size: 1.5rem; color: var(--accent-primary); text-decoration: none; }
         .logo i { font-size: 2rem; color: var(--accent-hover); }
+        .version-badge { display: inline-flex; align-items: center; min-height: 2rem; padding: .35rem .7rem; border: 1px solid var(--border-color); border-radius: 999px; background: rgba(205, 168, 101, .08); color: var(--accent-hover); font-size: .8rem; font-weight: 700; }
+        [data-rf-ui="complete"] :where(a, button, input, select, textarea):focus-visible { outline: 3px solid rgba(205, 168, 101, .45); outline-offset: 3px; }
+        [data-rf-ui="complete"] .nav-link { min-height: 2.75rem; }
+        [data-rf-ui="complete"] .content-section > h1,
+        [data-rf-ui="complete"] .content-section > h2 { scroll-margin-top: 6rem; }
+        [data-rf-ui="complete"] pre { overflow-x: auto; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; background: #f4f4f2; }
         .main-container { display: flex; max-width: 1400px; margin: 0 auto; }
         .sidebar { width: 300px; flex-shrink: 0; background: var(--bg-container); border-right: 1px solid var(--border-color); padding: 2rem 0; position: sticky; top: 77px; height: calc(100vh - 77px); overflow-y: auto; }
         .nav-section-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); padding: 0 1.5rem; margin: 1.5rem 0 0.75rem 0; }
@@ -61,23 +67,24 @@
         .badge-user { background: rgba(30, 136, 229, 0.1); color: var(--info-color); }
         .badge-suporte { background: rgba(0, 168, 107, 0.1); color: var(--success-color); }
         .perm-category { font-weight: 700; color: var(--accent-hover); margin-top: 1rem; margin-bottom: 0.25rem; }
-        @media (max-width: 992px) { .main-container { flex-direction: column; } .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border-color); } .content { max-width: 100%; padding: 1.5rem; } }
+        @media (max-width: 992px) { .main-container { flex-direction: column; } .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border-color); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: .75rem 0; } .nav-section-title { grid-column: 1 / -1; margin: .75rem 0 .25rem; } .nav-link { padding: .65rem 1rem; } .content { max-width: 100%; padding: 1.5rem; } }
+        @media (max-width: 576px) { .header-content { padding: .8rem 1rem; align-items: flex-start; gap: .75rem; } .logo { font-size: 1.05rem; } .logo i { font-size: 1.35rem; } .version-badge { font-size: .7rem; white-space: nowrap; } .sidebar { grid-template-columns: 1fr; } .content { padding: 1rem; } h1 { font-size: 1.85rem; } h2 { font-size: 1.5rem; margin-top: 2rem; } .card-header, .card-body { padding: 1rem; } }
     </style>
 </head>
-<body>
+<body data-rf-ui="complete" data-rf-surface="documentacao" data-rf-component="documentation-page">
 
-    <header class="header">
+    <header class="header" data-rf-component="documentation-header">
         <div class="header-content">
             <a href="#" class="logo">
                 <i class="bi bi-file-earmark-text"></i>
                 <span>Registro Fácil &nbsp;|&nbsp; Manual do Usuário</span>
             </a>
-            <span style="font-size:0.85rem; color: var(--text-secondary);">v3.27.0 &nbsp;·&nbsp; 2026</span>
+            <span class="version-badge">v3.27.0 &nbsp;·&nbsp; 2026</span>
         </div>
     </header>
 
     <div class="main-container">
-        <nav class="sidebar">
+        <nav class="sidebar" data-rf-component="documentation-sidebar" aria-label="Navegação da documentação">
             <a href="#introduction" class="nav-link active" onclick="showSection('introduction')"><i class="bi bi-book"></i><span>Introdução</span></a>
 
             <div class="nav-section-title">Guia de Início Rápido</div>
@@ -102,7 +109,7 @@
             <a href="#changelog" class="nav-link" onclick="showSection('changelog')"><i class="bi bi-clock-history"></i><span>Histórico de Versões</span></a>
         </nav>
 
-        <main class="content">
+        <main class="content" id="main-content" data-rf-ui="complete" data-rf-surface="documentacao-content" tabindex="-1">
 
             <!-- ===== INTRODUÇÃO ===== -->
             <section id="introduction" class="content-section active">

@@ -955,6 +955,66 @@ body:not(.rf-auth-page) #main-content .rf-tab-btn.active {
     color: var(--rf-text-strong, #121212);
 }
 
+/* Contrato base aplicado às superfícies marcadas nos templates. */
+[data-rf-ui="complete"] {
+    --rf-page-gutter: clamp(1rem, 2.2vw, 2rem);
+    --rf-section-gap: clamp(1rem, 2vw, 1.5rem);
+    color: var(--rf-text-body, #2a2a2a);
+}
+
+[data-rf-ui="complete"] :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--rf-text-heading, var(--rf-text-strong, #121212));
+}
+
+[data-rf-ui="complete"] :where(.card, .rf-card, .form-card, .rf-form-card, .cfg-card, .process-list-card, .admin-list-card, .rf-report-card, .metric-card) {
+    border: 1px solid var(--rf-border-subtle, #ececea);
+    border-radius: var(--rf-radius-surface, .875rem);
+    background: var(--rf-surface-card, #fff);
+    box-shadow: 0 1px 2px rgba(18, 18, 18, .035);
+}
+
+[data-rf-ui="complete"] :where(.card-header, .rf-card-header, .form-card-header, .rf-form-card-header, .cfg-card-header, .modal-header) {
+    border-bottom-color: var(--rf-border-subtle, #ececea);
+    background: var(--rf-surface-card, #fff);
+    color: var(--rf-text-heading, var(--rf-text-strong, #121212));
+}
+
+[data-rf-ui="complete"] :where(.table, .rf-table, .cfg-tbl) {
+    --bs-table-border-color: var(--rf-border-subtle, #ececea);
+    color: var(--rf-text-body, #2a2a2a);
+}
+
+[data-rf-ui="complete"] :where(.table thead th, .rf-table thead th, .cfg-tbl th) {
+    color: var(--rf-text-muted, #6b7280);
+    font-size: .6875rem;
+    font-weight: 750;
+    letter-spacing: .045em;
+    text-transform: uppercase;
+}
+
+[data-rf-ui="complete"] :where(.empty-state, .empty-report, .rf-report-empty, .rf-empty-cell, .cfg-events-empty) {
+    color: var(--rf-text-muted, #6b7280);
+}
+
+[data-rf-ui="complete"] :where(.form-control, .form-select, .form-check-input, textarea, input, select) {
+    accent-color: var(--rf-accent, var(--color-primary));
+}
+
+[data-rf-ui="complete"] :where(.form-control, .form-select, textarea, input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select):focus {
+    border-color: var(--rf-accent, var(--color-primary));
+    box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--rf-accent, var(--color-primary)) 13%, transparent);
+}
+
+[data-rf-surface="dashboard"] { display: block; }
+[data-rf-surface="metricas"] { display: block; }
+[data-rf-surface="backup"] { display: block; }
+[data-rf-surface="configuracoes"] { display: block; }
+[data-rf-surface="atividades"],
+[data-rf-surface="auditoria"] { display: block; }
+[data-rf-surface="processos-visualizar"],
+[data-rf-surface="titulares-visualizar"],
+[data-rf-surface="apresentantes-visualizar"] { min-width: 0; }
+
 /* Detalhe de processo: entidade, metadados, anexos e histórico. */
 body:not(.rf-auth-page) #main-content .rf-card-header-accent {
     background: color-mix(in srgb, var(--rf-accent, var(--color-primary)) 6%, var(--rf-surface-card, #fff)) !important;
