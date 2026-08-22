@@ -95,3 +95,7 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert 'height: auto;' in css
     assert 'border: 1px solid var(--rf-border' in css
     assert 'grid-template-rows: none;' in css
+    assert 'grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);' in css
+    assert 'container-type: inline-size;' in css
+    assert '@container (max-width: 56rem)' in css
+    assert 'max-width: 100%;' in css
