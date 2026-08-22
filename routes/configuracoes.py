@@ -3,9 +3,11 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 import os
 import secrets
 from datetime import datetime
+from functools import wraps
 
 from routes.auth import login_status_required, admin_required, verificar_csrf_token, get_client_ip, gerar_csrf_token
 from routes.permissoes import permission_required, has_permission
+from data.audit_logs import obter_eventos_unificados, obter_eventos_filtros
 from models import (
     get_email_config, save_email_config, send_email,
     get_backup_config, save_backup_config,
@@ -21,6 +23,44 @@ from utils.sftp_backup import test_sftp_connection
 
 configuracoes_bp = Blueprint('configuracoes', __name__, url_prefix='/configuracoes')
 
+
+def _config_access_required(view):
+    """Autoriza Configurações geral ou somente a aba unificada de eventos."""
+    @wraps(view)
+    def decorated(*args, **kwargs):
+        usuario_id = session.get('usuario_id')
+        usuario_role = session.get('usuario_role')
+        persisted_user = executar_query(
+            "SELECT role, ativo FROM usuarios WHERE id = ?",
+            [usuario_id],
+            fetch_one=True,
+        ) if usuario_id else None
+        role_consistente = (
+            persisted_user
+            and persisted_user.get('ativo') == 1
+            and persisted_user.get('role') == usuario_role
+        )
+        tem_configuracoes = bool(role_consistente and has_permission(usuario_id, 'config_geral'))
+        somente_eventos = (
+            request.method == 'GET'
+            and request.args.get('tab') == 'atividades'
+            and role_consistente
+            and (
+                has_permission(usuario_id, 'atividades_visualizar')
+                or has_permission(usuario_id, 'admin_logs')
+            )
+        )
+        if not tem_configuracoes and not somente_eventos:
+            flash("Você não tem permissão para acessar esta página.", 'error')
+            logger.warning(
+                f"Acesso negado às configurações para Usuário ID: {usuario_id}, "
+                f"IP: {get_client_ip()}"
+            )
+            return redirect(url_for('auth.dashboard'))
+        return view(*args, **kwargs)
+    return decorated
+
+
 def proteger_input(texto):
     if texto is None:
         return ""
@@ -29,12 +69,18 @@ def proteger_input(texto):
 @configuracoes_bp.route('/', methods=['GET', 'POST'])
 @configuracoes_bp.route('/salvar', methods=['GET', 'POST'])
 @login_status_required
-@permission_required('config_geral')
+@_config_access_required
 def index():
     usuario_id = session.get('usuario_id')
     usuario_role = session.get('usuario_role')
     active_tab = request.args.get('tab', 'status')
-    pode_ver_atividades = usuario_role in {'admin', 'suporte'} or has_permission(usuario_id, 'atividades_visualizar')
+    pode_ver_configuracoes = usuario_role in {'admin', 'suporte'} or has_permission(usuario_id, 'config_geral')
+    pode_ver_atividades = (
+        usuario_role in {'admin', 'suporte'}
+        or has_permission(usuario_id, 'atividades_visualizar')
+        or has_permission(usuario_id, 'admin_logs')
+    )
+    pode_ver_auditoria = usuario_role in {'admin', 'suporte'} or has_permission(usuario_id, 'admin_logs')
 
     if request.method == 'GET' and active_tab == 'backup':
         return redirect(url_for('backup.index', config='1'))
@@ -386,16 +432,41 @@ O teste não cria processos, não dispara backup e não altera a senha de nenhum
         from utils.helpers import get_contrast_color
         csrf_token_val = gerar_csrf_token()
 
-        atividades_recentes = []
-        atividades_total = 0
+        eventos_unificados = []
+        eventos_total = 0
+        eventos_total_paginas = 0
+        eventos_pagina_atual = 1
+        eventos_itens_por_pagina = 50
+        eventos_fonte = request.args.get('eventos_fonte', 'todos')
+        eventos_busca = proteger_input(request.args.get('eventos_busca'))
+        eventos_data = proteger_input(request.args.get('eventos_data'))
+        eventos_ordenar = request.args.get('eventos_ordenar', 'created_at_desc')
+        eventos_usuarios = []
+        eventos_acoes = []
         if active_tab == 'atividades' and pode_ver_atividades:
-            atividades_recentes = executar_query(
-                """SELECT H.id, H.acao, H.contexto, H.processo_id, H.ip, H.timestamp, U.nome AS usuario_nome
-                   FROM logs H LEFT JOIN usuarios U ON H.usuario_id = U.id
-                   ORDER BY H.timestamp DESC, H.id DESC LIMIT 50"""
+            eventos_pagina_atual = max(1, request.args.get('pagina', 1, type=int))
+            eventos_itens_por_pagina = min(100, max(10, request.args.get('eventos_itens_por_pagina', 50, type=int)))
+            if not pode_ver_auditoria:
+                eventos_fonte = 'atividade'
+            eventos_resultado = obter_eventos_unificados(
+                {
+                    'fonte': eventos_fonte,
+                    'busca': eventos_busca,
+                    'usuario_id': request.args.get('eventos_usuario', type=int),
+                    'data': eventos_data,
+                    'ordenar': eventos_ordenar,
+                },
+                pagina=eventos_pagina_atual,
+                por_pagina=eventos_itens_por_pagina,
             )
-            total_atividades_row = executar_query("SELECT COUNT(*) AS count FROM logs", fetch_one=True)
-            atividades_total = total_atividades_row['count'] if total_atividades_row else 0
+            eventos_unificados = eventos_resultado['logs']
+            eventos_total = eventos_resultado['total']
+            eventos_total_paginas = eventos_resultado['total_paginas']
+            eventos_fonte = eventos_resultado['filtros']['fonte']
+            eventos_ordenar = eventos_resultado['filtros']['ordenar']
+            eventos_filtros = obter_eventos_filtros()
+            eventos_usuarios = eventos_filtros['usuarios']
+            eventos_acoes = eventos_filtros['acoes']
 
         return render_template('configuracoes.html',
                                email_config=email_config,
@@ -410,9 +481,20 @@ O teste não cria processos, não dispara backup e não altera a senha de nenhum
                                get_contrast_color=get_contrast_color,
                                empresa=empresa_data,
                                display_logo_url=display_logo_url,
+                               pode_ver_configuracoes=pode_ver_configuracoes,
                                pode_ver_atividades=pode_ver_atividades,
-                               atividades_recentes=atividades_recentes,
-                               atividades_total=atividades_total)
+                               pode_ver_auditoria=pode_ver_auditoria,
+                               eventos_unificados=eventos_unificados,
+                               eventos_total=eventos_total,
+                               eventos_total_paginas=eventos_total_paginas,
+                               eventos_pagina_atual=eventos_pagina_atual,
+                               eventos_itens_por_pagina=eventos_itens_por_pagina,
+                               eventos_fonte=eventos_fonte,
+                               eventos_busca=eventos_busca,
+                               eventos_data=eventos_data,
+                               eventos_ordenar=eventos_ordenar,
+                               eventos_usuarios=eventos_usuarios,
+                               eventos_acoes=eventos_acoes)
     except Exception as e:
         logger.exception(f"Erro ao carregar página de configurações: {e}")
         flash(f"Erro ao carregar configurações: {str(e)}", 'danger')

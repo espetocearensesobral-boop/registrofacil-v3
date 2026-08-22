@@ -1,0 +1,154 @@
+<div class="cfg-panel{% if active_tab == 'atividades' %} active{% endif %}" id="panel-atividades">
+    <div class="cfg-panel-header cfg-events-header">
+        <span class="cfg-ph-icon"><i class="bi bi-shield-check"></i></span>
+        <div>
+            <h5>Atividades, auditoria e segurança</h5>
+            <p class="cfg-appearance-intro mb-0">Um único histórico para acompanhar operações, alterações administrativas e bloqueios de acesso.</p>
+        </div>
+    </div>
+
+    <div class="cfg-card cfg-events-card">
+        <div class="cfg-card-header cfg-events-card-header">
+            <div class="cfg-events-title">
+                <span><i class="bi bi-clock-history me-1"></i>Histórico unificado</span>
+                <span class="rf-badge count">{{ eventos_total }}</span>
+            </div>
+            <div class="cfg-events-legend" aria-label="Origens dos eventos">
+                <span><i class="bi bi-circle-fill cfg-event-dot cfg-event-dot-atividade"></i>Atividade</span>
+                {% if pode_ver_auditoria %}
+                <span><i class="bi bi-circle-fill cfg-event-dot cfg-event-dot-auditoria"></i>Administração</span>
+                <span><i class="bi bi-circle-fill cfg-event-dot cfg-event-dot-seguranca"></i>Segurança</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <form method="get" action="{{ url_for('configuracoes.index') }}" class="cfg-events-filter" id="cfg-events-filter">
+            <input type="hidden" name="tab" value="atividades">
+            <div class="cfg-events-filter-main">
+                <label class="cfg-events-search">
+                    <span class="visually-hidden">Pesquisar eventos</span>
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                    <input type="search" name="eventos_busca" value="{{ eventos_busca }}" placeholder="Pesquisar ação, usuário, IP, processo ou evento" autocomplete="off">
+                </label>
+                <select name="eventos_fonte" class="cfg-events-select" aria-label="Filtrar por origem">
+                    <option value="todos" {% if eventos_fonte == 'todos' %}selected{% endif %}>Todas as origens</option>
+                    <option value="atividade" {% if eventos_fonte == 'atividade' %}selected{% endif %}>Atividades</option>
+                    {% if pode_ver_auditoria %}
+                    <option value="auditoria" {% if eventos_fonte == 'auditoria' %}selected{% endif %}>Administração</option>
+                    <option value="seguranca" {% if eventos_fonte == 'seguranca' %}selected{% endif %}>Segurança</option>
+                    {% endif %}
+                </select>
+                <select name="eventos_usuario" class="cfg-events-select" aria-label="Filtrar por usuário">
+                    <option value="">Todos os usuários</option>
+                    {% for evento_usuario in eventos_usuarios %}
+                    <option value="{{ evento_usuario.id }}" {% if request.args.get('eventos_usuario', type=int) == evento_usuario.id %}selected{% endif %}>{{ evento_usuario.nome }}</option>
+                    {% endfor %}
+                </select>
+                <label class="cfg-events-date">
+                    <span class="visually-hidden">Filtrar por data</span>
+                    <i class="bi bi-calendar3" aria-hidden="true"></i>
+                    <input type="date" name="eventos_data" value="{{ eventos_data }}" aria-label="Filtrar por data">
+                </label>
+            </div>
+            <div class="cfg-events-filter-actions">
+                <select name="eventos_ordenar" class="cfg-events-sort" aria-label="Ordenar eventos">
+                    <option value="created_at_desc" {% if eventos_ordenar == 'created_at_desc' %}selected{% endif %}>Mais recentes</option>
+                    <option value="created_at_asc" {% if eventos_ordenar == 'created_at_asc' %}selected{% endif %}>Mais antigos</option>
+                    <option value="fonte_asc" {% if eventos_ordenar == 'fonte_asc' %}selected{% endif %}>Origem (A–Z)</option>
+                    <option value="usuario_asc" {% if eventos_ordenar == 'usuario_asc' %}selected{% endif %}>Usuário (A–Z)</option>
+                    <option value="acao_asc" {% if eventos_ordenar == 'acao_asc' %}selected{% endif %}>Ação (A–Z)</option>
+                </select>
+                <button type="submit" class="cfg-events-icon-btn" title="Aplicar filtros" aria-label="Aplicar filtros"><i class="bi bi-funnel"></i></button>
+                <a href="{{ url_for('configuracoes.index', tab='atividades') }}" class="cfg-events-icon-btn" title="Limpar filtros" aria-label="Limpar filtros"><i class="bi bi-x-lg"></i></a>
+            </div>
+        </form>
+
+        {% if not eventos_unificados %}
+        <div class="empty-state cfg-events-empty">
+            <i class="bi bi-journal-x"></i>
+            <h4 class="mb-2">Nenhum evento encontrado</h4>
+            <p class="text-muted mb-0">Ajuste a busca ou os filtros para consultar outros registros.</p>
+        </div>
+        {% else %}
+        <div class="table-responsive cfg-events-table-wrap rf-infinite-table"
+             data-infinite-scroll
+             data-infinite-endpoint="{{ url_for('configuracoes.index') }}"
+             data-page="{{ eventos_pagina_atual }}"
+             data-total-pages="{{ eventos_total_paginas }}"
+             data-total-records="{{ eventos_total }}"
+             data-page-size="{{ eventos_itens_por_pagina }}"
+             data-page-size-param="eventos_itens_por_pagina">
+            <table class="cfg-tbl cfg-events-table">
+                <thead>
+                    <tr><th>Data/Hora</th><th>Origem</th><th>Usuário</th><th>Ação</th><th>Referência</th><th>IP</th></tr>
+                </thead>
+                <tbody>
+                {% for evento in eventos_unificados %}
+                    <tr>
+                        <td data-label="Data/Hora" class="text-nowrap">{{ evento.created_at | format_datetime_full }}</td>
+                        <td data-label="Origem">
+                            <span class="cfg-event-source cfg-event-source-{{ evento.fonte }}">
+                                {% if evento.fonte == 'atividade' %}Atividade{% elif evento.fonte == 'auditoria' %}Administração{% else %}Segurança{% endif %}
+                            </span>
+                        </td>
+                        <td data-label="Usuário">{{ evento.usuario_nome or evento.usuario_id or 'Sistema' }}</td>
+                        <td data-label="Ação" class="cfg-event-action-cell">
+                            {% if evento.detalhes or evento.event_id or evento.request_id %}
+                            <button type="button" class="cfg-event-detail-trigger" data-bs-toggle="modal" data-bs-target="#cfgEventDetailModal"
+                                    data-event-source="{{ evento.fonte }}"
+                                    data-event-action="{{ evento.acao | e }}"
+                                    data-event-user="{{ (evento.usuario_nome or evento.usuario_id or 'Sistema') | e }}"
+                                    data-event-ip="{{ (evento.ip or '—') | e }}"
+                                    data-event-date="{{ evento.created_at | format_datetime_full | e }}"
+                                    data-event-reference="{{ (evento.alvo_id or '') | e }}"
+                                    data-event-details="{{ (evento.detalhes or '') | e }}"
+                                    data-event-id="{{ (evento.event_id or evento.request_id or '') | e }}">
+                                <span>{{ evento.acao }}</span><i class="bi bi-chevron-right" aria-hidden="true"></i>
+                            </button>
+                            {% else %}
+                            <span class="cfg-event-action-text">{{ evento.acao }}</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Referência">
+                            {% if evento.fonte == 'atividade' and evento.alvo_id %}
+                                <a href="{{ url_for('processos.visualizar', processo_id=evento.alvo_id) }}" class="rf-table-inline-link">Processo #{{ evento.alvo_id }}</a>
+                            {% elif evento.alvo_id %}
+                                #{{ evento.alvo_id }}
+                            {% else %}—{% endif %}
+                        </td>
+                        <td data-label="IP" class="font-monospace">{{ evento.ip or '—' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="rf-infinite-sentinel" data-infinite-sentinel hidden aria-hidden="true"></div>
+            <div class="rf-infinite-status" data-infinite-status role="status" aria-live="polite" hidden></div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="modal fade" id="cfgEventDetailModal" tabindex="-1" aria-labelledby="cfgEventDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cfgEventDetailLabel"><i class="bi bi-info-circle me-2"></i>Detalhes do evento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar detalhes do evento"></button>
+            </div>
+            <div class="modal-body cfg-event-detail-body">
+                <div class="cfg-event-detail-heading"><span id="cfg-event-detail-source"></span><strong id="cfg-event-detail-action"></strong></div>
+                <dl class="cfg-event-detail-grid">
+                    <div><dt>Usuário</dt><dd id="cfg-event-detail-user"></dd></div>
+                    <div><dt>Data/Hora</dt><dd id="cfg-event-detail-date"></dd></div>
+                    <div><dt>IP de origem</dt><dd id="cfg-event-detail-ip" class="font-monospace"></dd></div>
+                    <div><dt>Referência</dt><dd id="cfg-event-detail-reference"></dd></div>
+                    <div class="cfg-event-detail-wide"><dt>Detalhes</dt><dd id="cfg-event-detail-details"></dd></div>
+                    <div class="cfg-event-detail-wide"><dt>Identificador técnico</dt><dd id="cfg-event-detail-id" class="font-monospace"></dd></div>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="nav-btn nav-btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -342,6 +342,68 @@
     .cfg-settings-rebuild .rf-tab-btn { flex: 1 1 auto; min-width: 0; padding-inline: .55rem; font-size: .8125rem; }
     .cfg-settings-rebuild .cfg-card-body { padding: .65rem !important; }
 }
+.cfg-events-card { margin-top: .25rem; }
+.cfg-events-card-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+.cfg-events-title, .cfg-events-legend { display: inline-flex; align-items: center; gap: .5rem; min-width: 0; }
+.cfg-events-legend { color: var(--rf-text-muted); font-size: .7rem; font-weight: 600; }
+.cfg-events-legend > span { display: inline-flex; align-items: center; gap: .25rem; white-space: nowrap; }
+.cfg-event-dot { font-size: .45rem; }
+.cfg-event-dot-atividade { color: var(--color-primary); }
+.cfg-event-dot-auditoria { color: var(--color-gold-primary, #CDA865); }
+.cfg-event-dot-seguranca { color: var(--color-error, #98424C); }
+.cfg-events-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    width: 100%;
+    padding: .65rem .75rem;
+    border-bottom: 1px solid var(--rf-border-subtle);
+    background: var(--rf-surface);
+}
+.cfg-events-filter-main, .cfg-events-filter-actions { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.cfg-events-filter-main { flex: 1 1 auto; }
+.cfg-events-search, .cfg-events-date { display: inline-flex; align-items: center; gap: .35rem; min-width: 0; height: 2.2rem; padding: 0 .55rem; border: 1px solid var(--rf-border-input); border-radius: var(--rf-radius-sm, 8px); background: var(--rf-surface-input, var(--rf-surface)); color: var(--rf-text-muted); }
+.cfg-events-search { flex: 1 1 18rem; }
+.cfg-events-search input, .cfg-events-date input { min-width: 0; width: 100%; border: 0; outline: 0; background: transparent; color: var(--rf-text-body); font-size: .8125rem; }
+.cfg-events-search:focus-within, .cfg-events-date:focus-within { border-color: var(--color-primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 12%, transparent); }
+.cfg-events-select, .cfg-events-sort { min-width: 8.25rem; height: 2.2rem; padding: 0 .55rem; border: 1px solid var(--rf-border-input); border-radius: var(--rf-radius-sm, 8px); background: var(--rf-surface-input, var(--rf-surface)); color: var(--rf-text-body); font-size: .78rem; }
+.cfg-events-sort { min-width: 8.75rem; }
+.cfg-events-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.2rem; height: 2.2rem; flex: 0 0 2.2rem; border: 1px solid var(--rf-border-strong); border-radius: var(--rf-radius-action, 9px); background: transparent; color: var(--rf-text-body); text-decoration: none; }
+.cfg-events-icon-btn:hover, .cfg-events-icon-btn:focus-visible { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 10%, var(--rf-surface)); color: var(--color-primary); }
+.cfg-events-table-wrap { overflow-x: auto; }
+.cfg-events-table { table-layout: auto; }
+.cfg-events-table th, .cfg-events-table td { white-space: nowrap; }
+.cfg-events-table td:nth-child(4) { white-space: normal; min-width: 12rem; }
+.cfg-event-source { display: inline-flex; align-items: center; padding: .18rem .45rem; border-radius: 999px; font-size: .68rem; font-weight: 700; white-space: nowrap; }
+.cfg-event-source-atividade { background: color-mix(in srgb, var(--color-primary) 10%, var(--rf-surface)); color: var(--color-primary); }
+.cfg-event-source-auditoria { background: color-mix(in srgb, var(--color-gold-primary, #CDA865) 16%, var(--rf-surface)); color: var(--color-gold-dark, #8B6332); }
+.cfg-event-source-seguranca { background: color-mix(in srgb, var(--color-error, #98424C) 12%, var(--rf-surface)); color: var(--color-error, #98424C); }
+.cfg-event-detail-trigger { display: inline-flex; align-items: baseline; gap: .3rem; max-width: 100%; padding: 0; border: 0; background: transparent; color: var(--rf-text-body); font: inherit; text-align: left; cursor: pointer; }
+.cfg-event-detail-trigger span { overflow-wrap: anywhere; }
+.cfg-event-detail-trigger i { flex: 0 0 auto; color: var(--rf-text-muted); font-size: .7rem; }
+.cfg-event-detail-trigger:hover, .cfg-event-detail-trigger:focus-visible { color: var(--color-primary); }
+.cfg-event-action-text { overflow-wrap: anywhere; }
+.cfg-events-empty { min-height: 13rem; padding: 2rem 1rem; }
+.cfg-event-detail-body { padding: 1rem; }
+.cfg-event-detail-heading { display: flex; flex-direction: column; gap: .35rem; margin-bottom: .9rem; padding-bottom: .75rem; border-bottom: 1px solid var(--rf-border-subtle); }
+.cfg-event-detail-heading span { width: fit-content; padding: .18rem .45rem; border-radius: 999px; background: color-mix(in srgb, var(--color-primary) 10%, var(--rf-surface)); color: var(--color-primary); font-size: .7rem; font-weight: 700; }
+.cfg-event-detail-heading strong { color: var(--rf-text-strong); overflow-wrap: anywhere; }
+.cfg-event-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin: 0; }
+.cfg-event-detail-grid > div { min-width: 0; padding: .55rem .65rem; border-radius: var(--rf-radius-sm, 8px); background: color-mix(in srgb, var(--color-primary) 4%, var(--rf-surface)); }
+.cfg-event-detail-grid dt { margin-bottom: .2rem; color: var(--rf-text-muted); font-size: .68rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.cfg-event-detail-grid dd { margin: 0; color: var(--rf-text-body); font-size: .82rem; overflow-wrap: anywhere; }
+.cfg-event-detail-wide { grid-column: 1 / -1; }
+@media (max-width: 767.98px) {
+    .cfg-events-filter { align-items: stretch; flex-direction: column; }
+    .cfg-events-filter-main, .cfg-events-filter-actions { width: 100%; flex-wrap: wrap; }
+    .cfg-events-search { flex: 1 1 100%; }
+    .cfg-events-select, .cfg-events-sort { flex: 1 1 9rem; }
+    .cfg-events-filter-actions { justify-content: flex-end; }
+    .cfg-events-table { min-width: 42rem; }
+    .cfg-event-detail-grid { grid-template-columns: 1fr; }
+    .cfg-event-detail-wide { grid-column: auto; }
+}
 .color-swatches { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
 .cswatch { display: inline-flex; width: 1.35rem; height: 1.35rem; flex: 0 0 1.35rem; align-items: center; justify-content: center; border: 2px solid transparent; border-radius: 50%; cursor: pointer; }
 .cswatch.selected { border-color: var(--rf-text-strong); box-shadow: 0 0 0 1px var(--rf-surface); }
@@ -454,7 +516,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
             {% endif %}
             {% if pode_ver_atividades %}
             <button class="rf-tab-btn{% if active_tab == 'atividades' %} active{% endif %}" data-panel="atividades" onclick="cfgSwitch(this)">
-                <i class="bi bi-activity"></i> Atividades
+                <i class="bi bi-shield-check"></i> Atividades e Segurança
             </button>
             {% endif %}
             <button class="rf-tab-btn{% if active_tab == 'sobre' %} active{% endif %}" data-panel="sobre" onclick="cfgSwitch(this)">
@@ -465,6 +527,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
     <div class="cfg-settings-content">
     <div>
 
+        {% if pode_ver_configuracoes %}
         <!-- STATUS -->
         <div class="cfg-panel{% if not active_tab or active_tab == 'status' %} active{% endif %}" id="panel-status">
             <form method="post" novalidate id="form-add-status" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Adicionando status...">
@@ -617,6 +680,8 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
                 </div>
             </div>
         </div>
+
+        {% endif %}
 
         {% if session.get('usuario_role') == 'admin' %}
 
@@ -834,7 +899,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
         {% endif %}
 
         {% if pode_ver_atividades %}
-        {% include "_config_activity_panel.html" %}
+        {% include "_config_event_panel.html" %}
         {% endif %}
         {% include "_config_about_panel.html" %}
 
@@ -972,9 +1037,38 @@ window.cfgSwitch = function(btn) {
     btn.classList.add('active');
     const panel = document.getElementById('panel-' + btn.dataset.panel);
     if (panel) panel.classList.add('active');
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('tab', btn.dataset.panel);
+    if (btn.dataset.panel !== 'atividades') {
+        ['pagina', 'eventos_busca', 'eventos_fonte', 'eventos_usuario', 'eventos_data', 'eventos_ordenar', 'eventos_itens_por_pagina'].forEach(key => currentUrl.searchParams.delete(key));
+    }
+    window.history.replaceState({}, '', currentUrl);
 };
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    const eventDetailModal = document.getElementById('cfgEventDetailModal');
+    if (eventDetailModal) {
+        eventDetailModal.addEventListener('show.bs.modal', function(event) {
+            const trigger = event.relatedTarget;
+            if (!trigger) return;
+            const sourceLabels = { atividade: 'Atividade', auditoria: 'Administração', seguranca: 'Segurança' };
+            const values = {
+                'cfg-event-detail-source': sourceLabels[trigger.dataset.eventSource] || trigger.dataset.eventSource || 'Evento',
+                'cfg-event-detail-action': trigger.dataset.eventAction || '—',
+                'cfg-event-detail-user': trigger.dataset.eventUser || 'Sistema',
+                'cfg-event-detail-ip': trigger.dataset.eventIp || '—',
+                'cfg-event-detail-date': trigger.dataset.eventDate || '—',
+                'cfg-event-detail-reference': trigger.dataset.eventReference ? `#${trigger.dataset.eventReference}` : '—',
+                'cfg-event-detail-details': trigger.dataset.eventDetails || 'Sem detalhes adicionais.',
+                'cfg-event-detail-id': trigger.dataset.eventId || '—'
+            };
+            Object.entries(values).forEach(([id, value]) => {
+                const target = document.getElementById(id);
+                if (target) target.textContent = value;
+            });
+        });
+    }
 
     // Aparência padrão: seleção visual instantânea antes de salvar.
     document.querySelectorAll('.appearance-card input[name="default_theme"]').forEach(function(input) {

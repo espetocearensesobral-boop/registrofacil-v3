@@ -6,8 +6,8 @@ from data import system_updates
 from data.update_config import load_update_settings
 
 
-CURRENT_VERSION = "3.28.56"
-NEXT_VERSION = "3.28.57"
+CURRENT_VERSION = "3.28.57"
+NEXT_VERSION = "3.28.58"
 
 
 def _login_admin(client):

@@ -4,7 +4,7 @@ import sqlite3
 import pytest
 
 from data import database
-from data.audit_logs import obter_logs_seguranca
+from data.audit_logs import obter_eventos_unificados, obter_logs_seguranca
 from utils.log_events import event_extra, sanitize_text
 from utils.logger_config import RequestContextFilter, SizeAndTimeRotatingFileHandler
 
@@ -53,6 +53,30 @@ def test_schema_contains_structured_log_columns(temp_database):
             assert expected <= columns
 
 
+def test_unified_event_query_merges_operational_admin_and_security_sources(temp_database):
+    database.executar_query(
+        "INSERT INTO logs (acao, contexto, usuario_id, ip, timestamp) VALUES (?, ?, ?, ?, ?)",
+        ['Cadastrou titular', 'nome=Exemplo', None, '192.0.2.10', '2026-08-22 10:00:00'],
+    )
+    database.executar_query(
+        "INSERT INTO auditoria_admin (acao, justificativa, ip, created_at) VALUES (?, ?, ?, ?)",
+        ['alteração_role', 'Perfil atualizado', '192.0.2.11', '2026-08-22 10:01:00'],
+    )
+    database.executar_query(
+        "INSERT INTO tentativas_acesso_nao_autorizado (tipo_tentativa, detalhes, ip, created_at) VALUES (?, ?, ?, ?)",
+        ['acesso_admin_negado', 'Permissão insuficiente', '192.0.2.12', '2026-08-22 10:02:00'],
+    )
+
+    result = obter_eventos_unificados({}, pagina=1, por_pagina=10)
+    assert result['total'] == 3
+    assert {row['fonte'] for row in result['logs']} == {'atividade', 'auditoria', 'seguranca'}
+    assert result['logs'][0]['fonte'] == 'seguranca'
+
+    security_only = obter_eventos_unificados({'fonte': 'seguranca'}, pagina=1, por_pagina=10)
+    assert security_only['total'] == 1
+    assert security_only['logs'][0]['acao'] == 'acesso_admin_negado'
+
+
 def test_security_query_returns_stable_empty_contract(temp_database):
     result = obter_logs_seguranca({}, pagina=1, por_pagina=50)
     assert result['logs'] == []
@@ -69,9 +93,27 @@ def test_admin_audit_route_renders_for_admin(app_client):
             usuario_username='admin',
             csrf_token='csrf-test',
         )
-    response = app_client.get('/atividades/auditoria')
+    response = app_client.get('/atividades/auditoria', follow_redirects=True)
     assert response.status_code == 200
-    assert 'Auditoria e Segurança'.encode('utf-8') in response.data
+    assert 'Atividades e Segurança'.encode('utf-8') in response.data
+    assert 'Histórico unificado'.encode('utf-8') in response.data
+
+
+def test_unified_events_are_rendered_inside_settings_and_old_sidebar_entry_is_gone(app_client):
+    with app_client.session_transaction() as session:
+        session.update(
+            logado=True,
+            usuario_id=1,
+            usuario_role='admin',
+            usuario_username='admin',
+            csrf_token='csrf-test',
+        )
+
+    response = app_client.get('/configuracoes/?tab=atividades')
+    assert response.status_code == 200
+    assert 'Atividades e Segurança'.encode('utf-8') in response.data
+    assert 'Histórico unificado'.encode('utf-8') in response.data
+    assert 'Auditoria e Segurança'.encode('utf-8') not in response.data
 
 
 def test_gravar_log_persists_structured_operational_event(temp_database):
