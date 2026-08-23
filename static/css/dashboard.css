@@ -1,273 +1,59 @@
-/* ==========================================================================
-   DASHBOARD — UI Rebrand & UX Redesign Pro
-   Versão validada: zero erros de sintaxe, compatível com linters.
-   ========================================================================== */
-
-/* --- 1. Saudação Dinâmica --- */
-.greeting-banner {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.875rem 1.25rem;
-  background: var(--rf-surface);
-  border: 1px solid var(--rf-border);
-  border-left: 4px solid var(--rf-accent);
-  border-radius: var(--rf-radius-md);
-  box-shadow: var(--rf-shadow-sm);
-}
-
-.greeting-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.greeting-main {
-  font-family: var(--rf-font-display);
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--rf-text-strong);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-
-.greeting-sub {
-  font-size: 0.8125rem;
-  margin: 2px 0 0;
-}
-
-.greeting-time-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  background: var(--rf-page);
-  border: 1px solid var(--rf-border);
-  border-radius: 99px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--rf-text-muted);
-  white-space: nowrap;
-}
-
-/* --- 2. KPI Cards --- */
-.kpi-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-.kpi-link:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--rf-shadow-md);
-}
-
-/* --- 3. Grids e Painéis --- */
-.dash-cols {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--rf-gap);
-}
-
-@media (min-width: 992px) {
-  .dash-cols {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.dash-card,
-.dashboard-panel {
-  display: flex;
-  flex-direction: column;
-}
-
-.dash-card-body,
-.dashboard-panel-body {
-  flex: 0 0 auto;
-  height: auto;
-  max-height: none;
-  overflow: visible;
-}
-
-.dashboard-panel .table-responsive {
-  overflow: visible;
-  max-height: none;
-}
-
-/* --- 4. Ícones e Urgência --- */
-.icon-danger {
-  color: var(--color-error);
-}
-
-.icon-success {
-  color: var(--color-success);
-}
-
-.dashboard-panel-urgent {
-  border-color: color-mix(in srgb, var(--color-error) 35%, var(--rf-border)) !important;
-  box-shadow: 0 1px 8px color-mix(in srgb, var(--color-error) 12%, transparent);
-}
-
-.dashboard-panel-urgent .rf-card-header {
-  border-bottom-color: color-mix(in srgb, var(--color-error) 25%, var(--rf-border-subtle));
-}
-
-.count-danger {
-  background: var(--color-error);
-  color: var(--rf-text-on-primary);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  border-radius: 99px;
-  padding: 2px 7px;
-}
-
-/* --- 5. Tabelas do Dashboard --- */
-.dash-table {
-  margin-bottom: 0;
-  font-size: 0.8125rem;
-}
-
-.dash-table thead th {
-  padding: 0.5rem 0.875rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--rf-text-muted);
-  background: var(--rf-surface-muted);
-  border-bottom: 1px solid var(--rf-border-subtle);
-}
-
-.dash-table tbody td {
-  padding: 0.5625rem 0.875rem;
-  border-top: 1px solid var(--rf-border-subtle);
-  vertical-align: middle;
-}
-
-.col-fill {
-  width: 100%;
-}
-
-.col-end {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.cell-strong {
-  font-weight: 600;
-}
-
-.cell-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 220px;
-}
-
-.cell-mono {
-  font-family: var(--rf-font-mono);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--rf-text-muted);
-  margin-top: 2px;
-}
-
-.dash-row-link {
-  cursor: pointer;
-}
-
-.dash-row-link:hover td {
-  background: var(--rf-surface-hover);
-}
-
-/* --- 6. Badges e Chips --- */
-.status-badge {
-  display: inline-block;
-  background: var(--st);
-  color: var(--st-text);
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 99px;
-  padding: 2px 9px;
-  white-space: nowrap;
-}
-
-.prazo-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border: 1px solid;
-  border-radius: 99px;
-  padding: 2px 9px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.prazo-chip-vencido {
-  color: var(--color-error);
-  background: color-mix(in srgb, var(--color-error) 10%, transparent);
-  border-color: color-mix(in srgb, var(--color-error) 35%, transparent);
-}
-
-.prazo-chip-hoje {
-  color: var(--color-warning);
-  background: color-mix(in srgb, var(--color-warning) 12%, transparent);
-  border-color: color-mix(in srgb, var(--color-warning) 35%, transparent);
-}
-
-.prazo-chip-futuro {
-  color: var(--color-info);
-  background: color-mix(in srgb, var(--color-info) 10%, transparent);
-  border-color: color-mix(in srgb, var(--color-info) 35%, transparent);
-}
-
-@media (max-width: 991.98px) {
-  .dash-card-body,
-  .dashboard-panel-body {
-    flex-basis: auto;
-    overflow: visible;
-  }
-}
-
-/* --- 7. Grid Analítico (Insights) --- */
+/* DASHBOARD — componentes semânticos, sem geometria inline */
+.greeting-banner { display: flex; align-items: center; gap: 1rem; padding: .875rem 1.25rem; background: var(--rf-surface); border: 1px solid var(--rf-border); border-left: 4px solid var(--rf-accent); border-radius: var(--rf-radius-md); box-shadow: var(--rf-shadow-sm); }
+.greeting-body { flex: 1; min-width: 0; }
+.greeting-main { font-size: 1.0625rem; font-weight: 700; color: var(--rf-text-strong); line-height: 1.3; }
+.greeting-sub { font-size: .8125rem; margin: 2px 0 0; }
+.greeting-time-badge { display: flex; align-items: center; gap: .375rem; padding: .25rem .75rem; background: var(--rf-page); border: 1px solid var(--rf-border); border-radius: 99px; font-size: .75rem; font-weight: 600; color: var(--rf-text-muted); white-space: nowrap; }
+.kpi-link { text-decoration: none; color: inherit; display: block; transition: transform .15s, box-shadow .15s; }
+.kpi-link:hover { transform: translateY(-2px); box-shadow: var(--rf-shadow-md); }
+.dash-cols { display: grid; grid-template-columns: 1fr; gap: var(--rf-gap); }
+@media (min-width: 992px) { .dash-cols { grid-template-columns: 1fr 1fr; } }
+.dash-card, .dashboard-panel { display: flex; flex-direction: column; }
+.dash-card-body, .dashboard-panel-body { flex: 0 0 auto; height: auto; max-height: none; overflow: visible; }
+.dashboard-panel .table-responsive { overflow: visible; max-height: none; }
+.icon-danger { color: var(--color-error); } .icon-success { color: var(--color-success); }
+.dashboard-panel-urgent { border-color: color-mix(in srgb, var(--color-error) 35%, var(--rf-border)) !important; box-shadow: 0 1px 8px color-mix(in srgb, var(--color-error) 12%, transparent); }
+.dashboard-panel-urgent .rf-card-header { border-bottom-color: color-mix(in srgb, var(--color-error) 25%, var(--rf-border-subtle)); }
+.count-danger { background: var(--color-error); color: var(--rf-text-on-primary); font-size: .6875rem; font-weight: 700; border-radius: 99px; padding: 2px 7px; }
+.dash-table { margin-bottom: 0; font-size: .8125rem; }
+.dash-table thead th { padding: .5rem .875rem; font-size: .6875rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--rf-text-muted); background: var(--rf-surface-muted); border-bottom: 1px solid var(--rf-border-subtle); }
+.dash-table tbody td { padding: .5625rem .875rem; border-top: 1px solid var(--rf-border-subtle); vertical-align: middle; }
+.col-fill { width: 100%; } .col-end { text-align: right; white-space: nowrap; }
+.cell-strong { font-weight: 600; } .cell-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+.cell-mono { font-family: var(--rf-font-mono); font-size: .75rem; font-weight: 600; color: var(--rf-text-muted); margin-top: 2px; }
+.dash-row-link { cursor: pointer; } .dash-row-link:hover td { background: var(--rf-surface-hover); }
+.status-badge { display: inline-block; background: var(--st); color: var(--st-text); font-size: .75rem; font-weight: 600; border-radius: 99px; padding: 2px 9px; white-space: nowrap; }
+.prazo-chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid; border-radius: 99px; padding: 2px 9px; font-size: .75rem; font-weight: 700; white-space: nowrap; }
+.prazo-chip-vencido { color: var(--color-error); background: color-mix(in srgb, var(--color-error) 10%, transparent); border-color: color-mix(in srgb, var(--color-error) 35%, transparent); }
+.prazo-chip-hoje { color: var(--color-warning); background: color-mix(in srgb, var(--color-warning) 12%, transparent); border-color: color-mix(in srgb, var(--color-warning) 35%, transparent); }
+.prazo-chip-futuro { color: var(--color-info); background: color-mix(in srgb, var(--color-info) 10%, transparent); border-color: color-mix(in srgb, var(--color-info) 35%, transparent); }
+@media (max-width: 991.98px) { .dash-card-body, .dashboard-panel-body { flex-basis: auto; overflow: visible; } }
+/* -------------------------------------------------------------------------
+Dashboard analítico — leitura compacta, visual e acionável
+------------------------------------------------------------------------- */
 .dashboard-insights-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
+  gap: .75rem;
 }
-
 .dashboard-insight-card {
   --insight-color: var(--color-primary);
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: .7rem;
   min-width: 0;
   min-height: 5.25rem;
-  padding: 0.8rem 0.85rem;
+  padding: .8rem .85rem;
   border: 1px solid var(--rf-border);
   border-top: 3px solid var(--insight-color);
   border-radius: var(--rf-radius-md);
   background: var(--rf-surface);
   box-shadow: var(--rf-shadow-sm);
 }
-
-.dashboard-insight-blue {
-  --insight-color: var(--color-info);
-}
-
-.dashboard-insight-green {
-  --insight-color: var(--color-success);
-}
-
-.dashboard-insight-red {
-  --insight-color: var(--color-error);
-}
-
-.dashboard-insight-gold {
-  --insight-color: var(--color-primary);
-}
-
+.dashboard-insight-blue { --insight-color: var(--color-info); }
+.dashboard-insight-green { --insight-color: var(--color-success); }
+.dashboard-insight-red { --insight-color: var(--color-error); }
+.dashboard-insight-gold { --insight-color: var(--color-primary); }
 .dashboard-insight-icon {
   display: grid;
   place-items: center;
@@ -277,13 +63,9 @@
   border-radius: var(--rf-radius-sm);
   background: color-mix(in srgb, var(--insight-color) 12%, var(--rf-surface));
   color: var(--insight-color);
-  font-size: 0.95rem;
+  font-size: .95rem;
 }
-
-.dashboard-insight-content {
-  min-width: 0;
-}
-
+.dashboard-insight-content { min-width: 0; }
 .dashboard-insight-label,
 .dashboard-insight-content small {
   display: block;
@@ -291,45 +73,38 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .dashboard-insight-label {
   color: var(--rf-text-muted);
-  font-size: 0.66rem;
+  font-size: .66rem;
   font-weight: 750;
-  letter-spacing: 0.04em;
+  letter-spacing: .04em;
   text-transform: uppercase;
 }
-
 .dashboard-insight-content strong {
   display: block;
-  margin-top: 0.15rem;
+  margin-top: .15rem;
   color: var(--rf-text-strong);
   font-size: 1.35rem;
   font-weight: 800;
   line-height: 1.05;
 }
-
 .dashboard-insight-content strong em {
-  font-size: 0.7rem;
+  font-size: .7rem;
   font-style: normal;
   font-weight: 700;
 }
-
 .dashboard-insight-content small {
-  margin-top: 0.25rem;
+  margin-top: .25rem;
   color: var(--rf-text-muted);
-  font-size: 0.68rem;
+  font-size: .68rem;
 }
-
-/* --- 8. Gráficos e Legendas --- */
 .dashboard-analytics-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
-  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);
+  gap: .75rem;
   width: 100%;
   min-width: 0;
 }
-
 .dashboard-chart-panel {
   display: flex;
   width: 100%;
@@ -338,39 +113,32 @@
   flex-direction: column;
   overflow: hidden;
 }
-
 .dashboard-chart-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: .75rem;
   min-height: 3.35rem;
-  padding: 0.7rem 0.85rem !important;
+  padding: .7rem .85rem !important;
 }
-
-.dashboard-chart-header > div {
-  min-width: 0;
-}
-
+.dashboard-chart-header > div { min-width: 0; }
 .dashboard-chart-subtitle {
   display: block;
-  margin-top: 0.18rem;
+  margin-top: .18rem;
   color: var(--rf-text-muted);
-  font-size: 0.68rem;
+  font-size: .68rem;
   line-height: 1.25;
 }
-
 .dashboard-chart-kicker {
   flex: 0 0 auto;
-  padding: 0.25rem 0.45rem;
+  padding: .25rem .45rem;
   border: 1px solid var(--rf-border);
   border-radius: 999px;
   color: var(--rf-text-muted);
-  font-size: 0.6rem;
+  font-size: .6rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: .06em;
 }
-
 .dashboard-chart-body {
   position: relative;
   width: 100%;
@@ -378,164 +146,115 @@
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
-  padding: 0.55rem 0.85rem 0.7rem;
+  padding: .55rem .85rem .7rem;
 }
-
 .dashboard-chart-body canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
 }
-
-.dashboard-status-chart-body {
-  height: 9.6rem;
-  padding-bottom: 0.25rem;
-}
-
-.dashboard-services-chart-body {
-  height: 12rem;
-}
-
+.dashboard-status-chart-body { height: 9.6rem; padding-bottom: .25rem; }
+.dashboard-services-chart-body { height: 12rem; }
 .dashboard-status-legend {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.35rem 0.7rem;
-  padding: 0.15rem 0.85rem 0.75rem;
+  gap: .35rem .7rem;
+  padding: .15rem .85rem .75rem;
 }
-
 .dashboard-status-legend-item {
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 0.35rem;
+  gap: .35rem;
   color: var(--rf-text-muted);
-  font-size: 0.68rem;
+  font-size: .68rem;
 }
-
 .dashboard-status-legend-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  flex: 0 0 0.5rem;
+  width: .5rem;
+  height: .5rem;
+  flex: 0 0 .5rem;
   border-radius: 50%;
   background: var(--legend-color);
 }
-
 .dashboard-status-legend-name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .dashboard-status-legend-total {
   margin-left: auto;
   color: var(--rf-text-strong);
   font-weight: 750;
 }
-
-/* --- 9. Leitura Operacional --- */
-.dashboard-operational-panel {
-  min-height: 0;
-}
-
+.dashboard-operational-panel { min-height: 0; }
 .dashboard-operational-list {
   display: grid;
   gap: 0;
-  padding: 0.25rem 0.85rem 0.6rem;
+  padding: .25rem .85rem .6rem;
 }
-
 .dashboard-operational-list > div {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: .75rem;
   min-height: 2.25rem;
   border-bottom: 1px solid var(--rf-border-subtle);
   color: var(--rf-text-muted);
-  font-size: 0.76rem;
+  font-size: .76rem;
 }
-
-.dashboard-operational-list > div:last-child {
-  border-bottom: 0;
-}
-
+.dashboard-operational-list > div:last-child { border-bottom: 0; }
 .dashboard-operational-list strong {
   color: var(--rf-text-strong);
-  font-size: 0.88rem;
-  font-family: var(--rf-font-mono);
-  letter-spacing: -0.01em;
+  font-size: .88rem;
 }
-
-/* --- 10. Responsividade --- */
 @media (max-width: 1100px) {
-  .dashboard-insights-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .dashboard-insights-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
 @media (max-width: 900px) {
-  .dashboard-analytics-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
+  .dashboard-analytics-grid { grid-template-columns: minmax(0, 1fr); }
 }
-
+/* Empilha pela largura real do conteúdo, inclusive quando a viewport desktop
+está reduzida por zoom, painel lateral ou uma janela estreita. */
 #main-content {
   container-type: inline-size;
 }
-
 @container (max-width: 56rem) {
   #main-content .dashboard-analytics-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-
 @media (max-width: 575.98px) {
-  .dashboard-insights-grid {
-    grid-template-columns: 1fr;
-  }
-  .dashboard-insight-card {
-    min-height: 4.75rem;
-  }
-  .dashboard-chart-header {
-    align-items: flex-start;
-  }
-  .dashboard-chart-body {
-    height: 11.5rem;
-    padding-inline: 0.65rem;
-  }
-  .dashboard-status-chart-body {
-    height: 9rem;
-  }
-  .dashboard-status-legend {
-    padding-inline: 0.65rem;
-  }
+  .dashboard-insights-grid { grid-template-columns: 1fr; }
+  .dashboard-insight-card { min-height: 4.75rem; }
+  .dashboard-chart-header { align-items: flex-start; }
+  .dashboard-chart-body { height: 11.5rem; padding-inline: .65rem; }
+  .dashboard-status-chart-body { height: 9rem; }
+  .dashboard-status-legend { padding-inline: .65rem; }
 }
-
-/* --- 11. Cores Semânticas dos KPIs --- */
+/* -------------------------------------------------------------------------
+Cards de status — semântica fixa, levemente saturada e independente do tema
+------------------------------------------------------------------------- */
 #main-content .kpi-card.kpi-status-completed {
-  --kpi-status-color: #3f7f5f;
-  --kpi-status-text: #2f6b50;
-  --kpi-status-surface: #f1f7f3;
+  --kpi-status-color: #3F7F5F;
+  --kpi-status-text: #2F6B50;
+  --kpi-status-surface: #F1F7F3;
 }
-
 #main-content .kpi-card.kpi-status-prenoted {
-  --kpi-status-color: #4b7e9c;
-  --kpi-status-text: #315e78;
-  --kpi-status-surface: #f1f6f9;
+  --kpi-status-color: #4B7E9C;
+  --kpi-status-text: #315E78;
+  --kpi-status-surface: #F1F6F9;
 }
-
 #main-content .kpi-card.kpi-status-pending {
-  --kpi-status-color: #b05b63;
-  --kpi-status-text: #8f404a;
-  --kpi-status-surface: #fbf2f3;
+  --kpi-status-color: #B05B63;
+  --kpi-status-text: #8F404A;
+  --kpi-status-surface: #FBF2F3;
 }
-
 #main-content .kpi-card.kpi-status-progress {
-  --kpi-status-color: #c09545;
-  --kpi-status-text: #7a5a22;
-  --kpi-status-surface: #fcf8ef;
+  --kpi-status-color: #C09545;
+  --kpi-status-text: #7A5A22;
+  --kpi-status-surface: #FCF8EF;
 }
-
 #main-content .kpi-card.kpi-status-completed,
 #main-content .kpi-card.kpi-status-prenoted,
 #main-content .kpi-card.kpi-status-pending,
@@ -543,36 +262,31 @@
   border-top: 4px solid var(--kpi-status-color) !important;
   background: var(--kpi-status-surface) !important;
 }
-
 #main-content .kpi-card.kpi-status-completed .kpi-value,
 #main-content .kpi-card.kpi-status-prenoted .kpi-value,
 #main-content .kpi-card.kpi-status-pending .kpi-value,
 #main-content .kpi-card.kpi-status-progress .kpi-value {
   color: var(--kpi-status-text) !important;
 }
-
 #main-content .kpi-card.kpi-status-completed .kpi-bg-icon,
 #main-content .kpi-card.kpi-status-prenoted .kpi-bg-icon,
 #main-content .kpi-card.kpi-status-pending .kpi-bg-icon,
 #main-content .kpi-card.kpi-status-progress .kpi-bg-icon {
   color: var(--kpi-status-color) !important;
-  opacity: 0.13 !important;
+  opacity: .13 !important;
 }
-
 #main-content .kpi-card.kpi-status-completed .kpi-label,
 #main-content .kpi-card.kpi-status-prenoted .kpi-label,
 #main-content .kpi-card.kpi-status-pending .kpi-label,
 #main-content .kpi-card.kpi-status-progress .kpi-label {
-  color: var(--rf-text-strong, #2a2a2a) !important;
+  color: var(--rf-text-strong, #2A2A2A) !important;
 }
-
 #main-content .kpi-card.kpi-status-completed .kpi-sub,
 #main-content .kpi-card.kpi-status-prenoted .kpi-sub,
 #main-content .kpi-card.kpi-status-pending .kpi-sub,
 #main-content .kpi-card.kpi-status-progress .kpi-sub {
   color: var(--rf-text-body, #475467) !important;
 }
-
 #main-content .kpi-card.kpi-status-completed:hover,
 #main-content .kpi-card.kpi-status-completed:focus-visible,
 #main-content .kpi-card.kpi-status-prenoted:hover,
@@ -583,7 +297,6 @@
 #main-content .kpi-card.kpi-status-progress:focus-visible {
   border-top-color: var(--kpi-status-text) !important;
 }
-
 #main-content .kpi-card.kpi-status-completed::before,
 #main-content .kpi-card.kpi-status-prenoted::before,
 #main-content .kpi-card.kpi-status-pending::before,
@@ -591,92 +304,99 @@
   display: none !important;
   content: none !important;
 }
-
-/* --- 12. Painéis Analíticos --- */
+/* -------------------------------------------------------------------------
+Painéis analíticos — bordas uniformes sem estiramento artificial
+------------------------------------------------------------------------- */
 #main-content .dashboard-analytics-grid {
   align-items: start;
 }
-
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel {
   align-self: start;
   height: auto;
   min-height: 0;
-  border: 1px solid var(--rf-border, #d4dce5) !important;
-  border-radius: var(--rf-radius-lg, 0.875rem) !important;
-  box-shadow: var(--rf-shadow-sm, 0 1px 6px rgba(18, 18, 18, 0.06)) !important;
+  border: 1px solid var(--rf-border, #D4DCE5) !important;
+  border-radius: var(--rf-radius-lg, .875rem) !important;
+  box-shadow: var(--rf-shadow-sm, 0 1px 6px rgba(18, 18, 18, .06)) !important;
 }
-
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel .dashboard-chart-header {
   flex: 0 0 auto;
-  border-bottom: 1px solid var(--rf-border-subtle, #e6eaeb) !important;
+  border-bottom: 1px solid var(--rf-border-subtle, #E6EAEB) !important;
 }
-
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel .dashboard-chart-body {
   flex: 0 0 auto;
 }
-
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel .dashboard-status-legend {
   flex: 0 0 auto;
 }
-
 #main-content .dashboard-analytics-grid > .dashboard-operational-panel .dashboard-operational-list {
   flex: 0 0 auto;
   grid-template-rows: none;
 }
-
-/* --- 13. Identidade Visual (Serifada + Mono) --- */
+/* =========================================================================
+IDENTIDADE VISUAL DO DASHBOARD
+Tratamento editorial/institucional próprio desta tela: serifada nos
+títulos, números tabulares em mono, superfícies neutras com acento por
+cor de status. Escopado via classes exclusivas do dashboard (.dashboard-
+panel, .dashboard-chart-panel) e via :has() para .kpi-card/.kpi-value,
+que também são usados em métricas, backup e cadastros — não afeta essas
+telas.
+========================================================================= */
+/* Saudação: a mensagem ganha a mesma voz serifada dos títulos H1-H3 do
+sistema, em vez de sans-serif genérico igual ao resto do corpo do texto. */
 .greeting-main {
   font-family: var(--rf-font-display);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -.01em;
 }
-
+/* Títulos de painel (Prazos Críticos, Processos Recentes, gráficos):
+serifada + regra fina em ouro para reforçar a identidade institucional
+já usada nos temas de cor, sem depender de peso/cor genéricos de h6. */
 .dashboard-panel .rf-card-title,
 .dashboard-chart-panel .rf-card-title {
   font-family: var(--rf-font-display);
-  font-size: 0.9375rem;
+  font-size: .9375rem;
   font-weight: 600;
-  letter-spacing: -0.005em;
+  letter-spacing: -.005em;
 }
-
 .dashboard-panel .rf-card-header,
 .dashboard-chart-panel .dashboard-chart-header {
   border-bottom-width: 2px !important;
   border-bottom-color: var(--rf-accent, var(--color-primary)) !important;
   opacity: 1;
 }
-
-.dashboard-panel .rf-card-header {
-  border-bottom-style: solid;
-}
-
+.dashboard-panel .rf-card-header { border-bottom-style: solid; }
+/* KPI cards: números em mono tabular (leitura de dado, não decoração),
+superfície neutra e ícone discreto ao lado do rótulo — substitui o
+ícone gigante de fundo, que é padrão genérico de template. */
 #main-content:has(.dashboard-analytics-grid) .kpi-card {
   background: var(--rf-surface) !important;
   align-items: flex-start;
 }
-
 #main-content:has(.dashboard-analytics-grid) .kpi-label {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: .375rem;
 }
-
 #main-content:has(.dashboard-analytics-grid) .kpi-label i {
-  font-size: 0.8125rem;
-  opacity: 0.85;
+  font-size: .8125rem;
+  opacity: .85;
 }
-
 #main-content:has(.dashboard-analytics-grid) .kpi-value {
   font-family: var(--rf-font-mono);
   font-weight: 700;
   font-size: 1.625rem;
-  letter-spacing: -0.02em;
-  margin-top: 0.2rem;
+  letter-spacing: -.02em;
+  margin-top: .2rem;
 }
-
 #main-content .kpi-card.kpi-status-completed,
 #main-content .kpi-card.kpi-status-prenoted,
 #main-content .kpi-card.kpi-status-pending,
 #main-content .kpi-card.kpi-status-progress {
   --kpi-status-surface: var(--rf-surface);
+}
+/* Leitura operacional: valores no mesmo tratamento mono dos KPIs, para
+não parecer uma lista à parte com linguagem visual diferente. */
+.dashboard-operational-list strong {
+  font-family: var(--rf-font-mono);
+  letter-spacing: -.01em;
 }
