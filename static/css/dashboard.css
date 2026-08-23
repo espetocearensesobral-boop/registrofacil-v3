@@ -12,6 +12,8 @@
 .dash-card-body, .dashboard-panel-body { flex: 0 0 auto; height: auto; max-height: none; overflow: visible; }
 .dashboard-panel .table-responsive { overflow: visible; max-height: none; }
 .icon-danger { color: var(--color-error); } .icon-success { color: var(--color-success); }
+.dashboard-panel-urgent { border-color: color-mix(in srgb, var(--color-error) 35%, var(--rf-border)) !important; box-shadow: 0 1px 8px color-mix(in srgb, var(--color-error) 12%, transparent); }
+.dashboard-panel-urgent .rf-card-header { border-bottom-color: color-mix(in srgb, var(--color-error) 25%, var(--rf-border-subtle)); }
 .count-danger { background: var(--color-error); color: var(--rf-text-on-primary); font-size: .6875rem; font-weight: 700; border-radius: 99px; padding: 2px 7px; }
 .dash-table { margin-bottom: 0; font-size: .8125rem; }
 .dash-table thead th { padding: .5rem .875rem; font-size: .6875rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--rf-text-muted); background: var(--rf-surface-muted); border-bottom: 1px solid var(--rf-border-subtle); }
@@ -336,4 +338,78 @@
 #main-content .dashboard-analytics-grid > .dashboard-operational-panel .dashboard-operational-list {
     flex: 0 0 auto;
     grid-template-rows: none;
+}
+
+/* =========================================================================
+   IDENTIDADE VISUAL DO DASHBOARD
+   Tratamento editorial/institucional próprio desta tela: serifada nos
+   títulos, números tabulares em mono, superfícies neutras com acento por
+   cor de status. Escopado via classes exclusivas do dashboard (.dashboard-
+   panel, .dashboard-chart-panel) e via :has() para .kpi-card/.kpi-value,
+   que também são usados em métricas, backup e cadastros — não afeta essas
+   telas.
+   ========================================================================= */
+
+/* Saudação: a mensagem ganha a mesma voz serifada dos títulos H1-H3 do
+   sistema, em vez de sans-serif genérico igual ao resto do corpo do texto. */
+.greeting-main {
+    font-family: var(--rf-font-display);
+    font-weight: 600;
+    letter-spacing: -.01em;
+}
+
+/* Títulos de painel (Prazos Críticos, Processos Recentes, gráficos):
+   serifada + regra fina em ouro para reforçar a identidade institucional
+   já usada nos temas de cor, sem depender de peso/cor genéricos de h6. */
+.dashboard-panel .rf-card-title,
+.dashboard-chart-panel .rf-card-title {
+    font-family: var(--rf-font-display);
+    font-size: .9375rem;
+    font-weight: 600;
+    letter-spacing: -.005em;
+}
+.dashboard-panel .rf-card-header,
+.dashboard-chart-panel .dashboard-chart-header {
+    border-bottom-width: 2px !important;
+    border-bottom-color: var(--rf-accent, var(--color-primary)) !important;
+    opacity: 1;
+}
+.dashboard-panel .rf-card-header { border-bottom-style: solid; }
+
+/* KPI cards: números em mono tabular (leitura de dado, não decoração),
+   superfície neutra e ícone discreto ao lado do rótulo — substitui o
+   ícone gigante de fundo, que é padrão genérico de template. */
+#main-content:has(.dashboard-analytics-grid) .kpi-card {
+    background: var(--rf-surface) !important;
+    align-items: flex-start;
+}
+#main-content:has(.dashboard-analytics-grid) .kpi-label {
+    display: flex;
+    align-items: center;
+    gap: .375rem;
+}
+#main-content:has(.dashboard-analytics-grid) .kpi-label i {
+    font-size: .8125rem;
+    opacity: .85;
+}
+#main-content:has(.dashboard-analytics-grid) .kpi-value {
+    font-family: var(--rf-font-mono);
+    font-weight: 700;
+    font-size: 1.625rem;
+    letter-spacing: -.02em;
+    margin-top: .2rem;
+}
+
+#main-content .kpi-card.kpi-status-completed,
+#main-content .kpi-card.kpi-status-prenoted,
+#main-content .kpi-card.kpi-status-pending,
+#main-content .kpi-card.kpi-status-progress {
+    --kpi-status-surface: var(--rf-surface);
+}
+
+/* Leitura operacional: valores no mesmo tratamento mono dos KPIs, para
+   não parecer uma lista à parte com linguagem visual diferente. */
+.dashboard-operational-list strong {
+    font-family: var(--rf-font-mono);
+    letter-spacing: -.01em;
 }
