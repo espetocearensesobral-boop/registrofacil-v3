@@ -1,104 +1,5 @@
 /* registrofacil/static/css/processos.css */
 
-/* Estilos para o cabeçalho da página (page-header) */
-.page-header {
-    background-color: var(--background-color-header);
-    padding: 1.5rem 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: var(--rf-radius-md);
-    border-bottom: 1px solid var(--border-color-default);
-}
-
-.page-header h1 {
-    color: var(--text-color-primary);
-    font-size: var(--font-lg);
-    font-weight: 600;
-}
-
-.page-header .btn {
-    font-weight: 500;
-    padding: 0.6rem 1.2rem;
-    border-radius: var(--rf-radius-md);
-}
-
-/* Seção de Filtros */
-.filter-section {
-    background-color: var(--background-color-card);
-    border-radius: var(--rf-radius-md);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid var(--border-color-default);
-    transition: all 0.3s ease-in-out;
-}
-
-.filter-highlight {
-    border-color: var(--color-info) !important;
-    box-shadow: var(--rf-focus-ring);
-}
-
-.filter-toggle {
-    background-color: var(--color-gray-medium);
-    color: var(--text-color-light);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--rf-radius-md);
-    font-size: var(--font-base);
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-bottom: 1rem;
-}
-.filter-toggle:hover {
-    background-color: var(--color-gray-dark);
-}
-
-.filter-section .form-label {
-    font-weight: 500;
-    color: var(--text-color-primary);
-    margin-bottom: 0.5rem;
-    font-size: var(--font-base);
-}
-
-.filter-section .form-control,
-.filter-section .form-select {
-    border-radius: 5px;
-    border: 1px solid var(--border-color-input);
-    padding: 0.6rem 0.75rem;
-    background-color: var(--background-color-input-bg);
-    color: var(--text-color-primary);
-    font-size: var(--font-base);
-}
-.filter-section .form-control::placeholder {
-    color: var(--text-color-secondary);
-}
-
-
-.btn-filtrar {
-    background-color: var(--color-info);
-    color: var(--text-color-light);
-    border-radius: 5px;
-    padding: 0.6rem 1.2rem;
-    font-weight: 500;
-    font-size: var(--font-base);
-}
-.btn-filtrar:hover {
-    background-color: #176bb8;
-    color: var(--text-color-light);
-}
-
-.btn-limpar {
-    background-color: var(--color-gray-light);
-    color: var(--text-color-primary);
-    border: 1px solid var(--border-color-input);
-    border-radius: 5px;
-    padding: 0.6rem 1.2rem;
-    font-weight: 500;
-    font-size: var(--font-base);
-}
-.btn-limpar:hover {
-    background-color: #e2e6ea;
-    color: var(--text-color-primary);
-}
-
 /* Estilos da Tabela */
 .card .table {
     margin-bottom: 0;
@@ -175,50 +76,6 @@
     transform: translateY(-2px);
     box-shadow: var(--rf-shadow-sm);
 }
-
-/* REMOVIDO: Estilo para colunas redimensionáveis e arrastáveis */
-/*
-.resizable {
-    position: relative;
-}
-
-.col-resizer {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 8px;
-    cursor: col-resize;
-    z-index: 2;
-}
-
-.draggable {
-    cursor: grab;
-}
-
-.draggable.dragging {
-    opacity: 0.5;
-}
-
-.draggable.drag-left::before,
-.draggable.drag-right::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-color: var(--color-info);
-    z-index: 1;
-}
-
-.draggable.drag-left::before {
-    left: -2px;
-}
-
-.draggable.drag-right::after {
-    right: -2px;
-}
-*/
 
 /* Estados vazios da tabela */
 .empty-state {
@@ -504,14 +361,6 @@
     min-width: 2.2em;
 }
 
-/* Estilos para os cards de estatísticas clicáveis no Dashboard */
-.card-link-wrapper {
-    display: block;
-    height: 100%;
-    color: inherit;
-    text-decoration: none;
-}
-
 /* Estilos para o Histórico de Alterações (Linha do Tempo) */
 .timeline {
     position: relative;
@@ -633,14 +482,30 @@
     color: var(--text-color-secondary) !important; /* Força o uso da cor secundária do tema */
 }
 
-/* REMOVIDO: Regras específicas para dashboard-stat-card, agora substituídas por card-custom-style */
-/*
-.dashboard-stat-card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+/* =========================================================================
+   IDENTIDADE VISUAL DAS LISTAS DE PROCESSOS
+   Mesma linguagem do dashboard: identificadores em mono tabular, prazo com
+   destaque de cor em vez de só texto em negrito. Aplicado via seletor de
+   data-label / classe já existentes nas 5 telas de lista — sem tocar em
+   nenhum template.
+   ========================================================================= */
+.table-processos td[data-label="ID"],
+.table-processos td[data-label="Matrícula"] {
+    font-family: var(--rf-font-mono);
+    font-size: .8125rem;
 }
 
-.dashboard-stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--rf-shadow-lg);
+.table-processos td.prazo-atrasado,
+.table-processos td.prazo-hoje {
+    border-radius: var(--rf-radius-sm);
 }
-*/
+.table-processos td.prazo-atrasado {
+    color: var(--color-error);
+    font-weight: 700;
+    background: color-mix(in srgb, var(--color-error) 7%, transparent);
+}
+.table-processos td.prazo-hoje {
+    color: var(--color-warning);
+    font-weight: 700;
+    background: color-mix(in srgb, var(--color-warning) 9%, transparent);
+}
