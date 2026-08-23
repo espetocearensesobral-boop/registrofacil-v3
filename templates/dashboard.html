@@ -2,105 +2,96 @@
 
 {% block title %}Dashboard - Registro Fácil{% endblock %}
 
-{% block page_title %}Dashboard{% endblock %}
+{% block page_title %}Visão Geral{% endblock %}
 
 {% block page_actions %}
-    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary" title="Novo Processo" aria-label="Novo Processo">
-        <i class="bi bi-plus-circle"></i> Novo Processo
+    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary" aria-label="Criar novo processo">
+        <i class="bi bi-plus-circle me-1"></i> Novo Processo
     </a>
-    <a href="{{ url_for('dashboard.metricas') }}" class="nav-btn nav-btn-secondary" title="Métricas" aria-label="Métricas">
-        <i class="bi bi-graph-up"></i> Métricas
+    <a href="{{ url_for('dashboard.metricas') }}" class="nav-btn nav-btn-secondary" aria-label="Ver métricas detalhadas">
+        <i class="bi bi-graph-up me-1"></i> Métricas
     </a>
 {% endblock %}
 
 {% block content %}
-    {# Saudação Dinâmica - Destacada #}
-    <div class="greeting-banner" data-rf-ui="complete" data-rf-surface="dashboard" data-rf-component="page-surface">
+    <!-- 1. Saudação Dinâmica (Contexto Imediato) -->
+    <div class="greeting-banner" role="region" aria-label="Saudação e resumo do dia">
         <div class="greeting-body">
-            <div class="greeting-main" id="greeting-message">{{ custom_greeting }}</div>
-            <p class="greeting-sub" id="greeting-subtitle"></p>
+            <h1 class="greeting-main" id="greeting-message">{{ custom_greeting }}</h1>
+            <p class="greeting-sub" id="greeting-subtitle" aria-live="polite"></p>
         </div>
-        <div class="greeting-time-badge" id="greeting-time">
-            <i class="bi bi-clock"></i> <span id="greeting-clock">--:--</span>
+        <div class="greeting-time-badge" aria-label="Hora atual">
+            <i class="bi bi-clock" aria-hidden="true"></i> 
+            <span id="greeting-clock" aria-live="off">--:--</span>
         </div>
     </div>
 
-    <!-- KPI Cards -->
-    <div class="kpi-grid">
-        <a class="kpi-card kpi-status-completed kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
-            <div class="kpi-label"><i class="bi bi-check-circle-fill"></i> Concluídos</div>
-            <div class="kpi-value kpi-status-value kpi-status-completed">{{ dashboard_info.processos_concluidos }}</div>
+    <!-- 2. KPIs Principais (Acesso Rápido) -->
+    <nav class="kpi-grid" aria-label="Indicadores chave de desempenho">
+        <a class="kpi-link kpi-status-completed" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
+            <div class="kpi-label"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Concluídos</div>
+            <div class="kpi-value">{{ dashboard_info.processos_concluidos }}</div>
             <div class="kpi-sub">Processos finalizados</div>
         </a>
-        <a class="kpi-card kpi-status-prenoted kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
-            <div class="kpi-label"><i class="bi bi-pencil-square"></i> Prenotados</div>
-            <div class="kpi-value kpi-status-value kpi-status-prenoted">{{ dashboard_info.processos_prenotados }}</div>
+        <a class="kpi-link kpi-status-prenoted" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
+            <div class="kpi-label"><i class="bi bi-pencil-square" aria-hidden="true"></i> Prenotados</div>
+            <div class="kpi-value">{{ dashboard_info.processos_prenotados }}</div>
             <div class="kpi-sub">Processos prenotados</div>
         </a>
-        <a class="kpi-card kpi-status-pending kpi-link" href="{{ url_for('processos.pendentes') }}">
-            <div class="kpi-label"><i class="bi bi-hourglass-split"></i> Pendentes</div>
-            <div class="kpi-value kpi-status-value kpi-status-pending">{{ dashboard_info.processos_pendentes }}</div>
+        <a class="kpi-link kpi-status-pending" href="{{ url_for('processos.pendentes') }}">
+            <div class="kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pendentes</div>
+            <div class="kpi-value">{{ dashboard_info.processos_pendentes }}</div>
             <div class="kpi-sub">Aguardando conclusão</div>
         </a>
-        <a class="kpi-card kpi-status-progress kpi-link" href="{{ url_for('processos.em_andamento') }}">
-            <div class="kpi-label"><i class="bi bi-arrow-repeat"></i> Em Andamento</div>
-            <div class="kpi-value kpi-status-value kpi-status-progress">{{ dashboard_info.processos_em_andamento }}</div>
+        <a class="kpi-link kpi-status-progress" href="{{ url_for('processos.em_andamento') }}">
+            <div class="kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Em Andamento</div>
+            <div class="kpi-value">{{ dashboard_info.processos_em_andamento }}</div>
             <div class="kpi-sub">Processos ativos</div>
         </a>
-    </div>
-
+    </nav>
 
     {% set analytics = dashboard_info.analytics %}
 
+    <!-- 3. Painéis de Ação Imediata (Urgência > Informação) -->
     <div class="row g-3 dashboard-panels-row">
-        {# Card: Prazos Críticos — vem primeiro: é a informação de maior urgência da tela #}
+        <!-- Prazos Críticos -->
         <div class="col-lg-6">
-            <div class="rf-card dashboard-panel{% if dashboard_info.processos_com_prazo_critico %} dashboard-panel-urgent{% endif %}">
-                <div class="rf-card-header">
-                    <h6 class="rf-card-title mb-0">
-                        <i class="bi bi-exclamation-triangle-fill me-1 icon-danger"></i> Prazos Críticos
+            <article class="dashboard-panel{% if dashboard_info.processos_com_prazo_critico %} dashboard-panel-urgent{% endif %}">
+                <header class="rf-card-header">
+                    <h2 class="rf-card-title">
+                        <i class="bi bi-exclamation-triangle-fill icon-danger" aria-hidden="true"></i> 
+                        Prazos Críticos
                         {% if dashboard_info.processos_com_prazo_critico %}
-                        <span class="count-danger">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
+                        <span class="count-danger" aria-label="{{ dashboard_info.processos_com_prazo_critico|length }} itens críticos">{{ dashboard_info.processos_com_prazo_critico|length }}</span>
                         {% endif %}
-                    </h6>
-                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
-                        <i class="bi bi-clock-history"></i> Pendentes
+                    </h2>
+                    <a href="{{ url_for('processos.pendentes') }}" class="nav-btn nav-btn-secondary btn-xs">
+                        <i class="bi bi-clock-history me-1" aria-hidden="true"></i> Ver Pendentes
                     </a>
-                </div>
-                <div class="card-body p-0 dashboard-panel-body">
+                </header>
+                <div class="dashboard-panel-body">
                     {% if dashboard_info.processos_com_prazo_critico %}
                     <div class="table-responsive">
                         <table class="table dash-table">
                             <thead>
                                 <tr>
-                                    <th class="col-fill">Titular</th>
-                                    <th class="col-end">Prazo</th>
+                                    <th scope="col" class="col-fill">Titular</th>
+                                    <th scope="col" class="col-end">Prazo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for processo in dashboard_info.processos_com_prazo_critico %}
-                                {% set prazo_diff_days = ((processo['prazo_final'] | string | replace('-','') | int) - (now.strftime('%Y%m%d') | int)) %}
-                                {% if prazo_diff_days < 0 %}
-                                    {% set prazo_texto = 'Vencido há ' ~ (-prazo_diff_days) ~ 'd' %}
-                                    {% set prazo_icon = 'bi-x-circle-fill' %}
-                                {% elif prazo_diff_days == 0 %}
-                                    {% set prazo_texto = 'Vence hoje!' %}
-                                    {% set prazo_icon = 'bi-alarm-fill' %}
-                                {% elif prazo_diff_days == 1 %}
-                                    {% set prazo_texto = 'Amanhã' %}
-                                    {% set prazo_icon = 'bi-alarm' %}
-                                {% else %}
-                                    {% set prazo_texto = prazo_diff_days ~ ' dias' %}
-                                    {% set prazo_icon = 'bi-calendar-event' %}
-                                {% endif %}
-                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}" title="Clique para visualizar">
+                                {% set prazo_diff_days = processo.prazo_diff_days | default(0) %}
+                                {% set prazo_icon = 'bi-exclamation-circle-fill' if prazo_diff_days < 0 else 'bi-clock-fill' %}
+                                {% set prazo_texto = processo.prazo_formatado | default('—') %}
+                                <tr class="dash-row-link" tabindex="0" data-href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}" role="button" aria-label="Visualizar processo de {{ processo['titular'] }}">
                                     <td class="col-fill">
                                         <div class="cell-strong cell-ellipsis">{{ processo['titular'] }}</div>
-                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else 'Sem matrícula' }}</div>
                                     </td>
                                     <td class="col-end">
                                         <span class="prazo-chip {% if prazo_diff_days < 0 %}prazo-chip-vencido{% elif prazo_diff_days <= 1 %}prazo-chip-hoje{% else %}prazo-chip-futuro{% endif %}">
-                                            <i class="bi {{ prazo_icon }}"></i>{{ prazo_texto }}
+                                            <i class="bi {{ prazo_icon }}" aria-hidden="true"></i> {{ prazo_texto }}
                                         </span>
                                     </td>
                                 </tr>
@@ -110,43 +101,46 @@
                     </div>
                     {% else %}
                     <div class="empty-state-small">
-                        <i class="bi bi-patch-check icon-success"></i>
-                        <p class="mb-0 text-center mt-2" >Nenhum prazo crítico. Tudo em dia!</p>
+                        <i class="bi bi-patch-check" aria-hidden="true"></i>
+                        <p class="mb-0">Nenhum prazo crítico. Tudo em dia!</p>
                     </div>
                     {% endif %}
                 </div>
-            </div>
+            </article>
         </div>
 
-        {# Card: Processos Recentes — informativo, vem depois do que é urgente #}
+        <!-- Processos Recentes -->
         <div class="col-lg-6">
-            <div class="rf-card dashboard-panel">
-                <div class="rf-card-header">
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-clock-history me-1"></i> Processos Recentes</h6>
-                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
-                        <i class="bi bi-list-ul"></i> Ver todos
+            <article class="dashboard-panel">
+                <header class="rf-card-header">
+                    <h2 class="rf-card-title">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i> Processos Recentes
+                    </h2>
+                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary btn-xs">
+                        <i class="bi bi-list-ul me-1" aria-hidden="true"></i> Ver Todos
                     </a>
-                </div>
-                <div class="card-body p-0 dashboard-panel-body">
+                </header>
+                <div class="dashboard-panel-body">
                     {% if dashboard_info.processos_recentes %}
                     <div class="table-responsive">
                         <table class="table dash-table">
                             <thead>
                                 <tr>
-                                    <th class="col-fill">Titular</th>
-                                    <th class="col-end">Status</th>
+                                    <th scope="col" class="col-fill">Titular</th>
+                                    <th scope="col" class="col-end">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for processo in dashboard_info.processos_recentes %}
-                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" title="Clique para visualizar">
+                                <tr class="dash-row-link" tabindex="0" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" role="button" aria-label="Visualizar processo de {{ processo['titular'] }}">
                                     <td class="col-fill">
                                         <div class="cell-strong cell-ellipsis">{{ processo['titular'] }}</div>
-                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else 'Sem matrícula' }}</div>
                                     </td>
                                     <td class="col-end">
-                                        <span class="status-badge" data-status-color="{{ processo['status_hex'] }}" data-status-text="{{ get_contrast_color(processo['status_hex']) }}">
-                                            {{ (processo['status_nome'] | default('—')) | replace('_',' ') | capitalize }}
+                                        <span class="status-badge" 
+                                              style="--st: {{ processo['status_hex'] }}; --st-text: {{ get_contrast_color(processo['status_hex']) }};">
+                                            {{ (processo['status_nome'] | default('Indefinido')) | replace('_', ' ') | capitalize }}
                                         </span>
                                     </td>
                                 </tr>
@@ -156,182 +150,169 @@
                     </div>
                     {% else %}
                     <div class="empty-state-small">
-                        <i class="bi bi-inbox" ></i>
-                        <p class="mb-0 text-center mt-2" >Nenhum processo recente.</p>
+                        <i class="bi bi-inbox" aria-hidden="true"></i>
+                        <p class="mb-0">Nenhum processo recente registrado.</p>
                     </div>
                     {% endif %}
                 </div>
-            </div>
+            </article>
         </div>
     </div>
 
-    <section class="dashboard-analytics-grid" aria-label="Análises do movimento">
-        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
-            <div class="rf-card-header dashboard-chart-header">
+    <!-- 4. Análise Visual (Dados Secundários, mas importantes) -->
+    <section class="dashboard-analytics-grid" aria-label="Análises de movimentação">
+        <article class="dashboard-chart-panel">
+            <header class="rf-card-header dashboard-chart-header">
                 <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-line me-1"></i>Movimentação diária</h6>
-                    <span class="dashboard-chart-subtitle">Entradas registradas nos últimos sete dias</span>
+                    <h2 class="rf-card-title"><i class="bi bi-bar-chart-line" aria-hidden="true"></i> Movimentação Diária</h2>
+                    <span class="dashboard-chart-subtitle">Entradas registradas nos últimos 7 dias</span>
                 </div>
-                <span class="dashboard-chart-kicker">PICO {{ analytics.pico_movimentacao.total }}</span>
+                <span class="dashboard-chart-kicker">PICO: {{ analytics.pico_movimentacao.total }}</span>
+            </header>
+            <div class="dashboard-chart-body">
+                <canvas id="dashboardMovementChart" aria-label="Gráfico de barras mostrando a movimentação diária de processos"></canvas>
             </div>
-            <div class="dashboard-chart-body"><canvas id="dashboardMovementChart" aria-label="Gráfico de barras da movimentação diária"></canvas></div>
         </article>
-        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-status">
-            <div class="rf-card-header dashboard-chart-header">
+        
+        <article class="dashboard-chart-panel">
+            <header class="rf-card-header dashboard-chart-header">
                 <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-pie-chart me-1"></i>Distribuição por status</h6>
+                    <h2 class="rf-card-title"><i class="bi bi-pie-chart" aria-hidden="true"></i> Distribuição por Status</h2>
                     <span class="dashboard-chart-subtitle">Carteira atual de processos</span>
                 </div>
+            </header>
+            <div class="dashboard-chart-body dashboard-status-chart-body">
+                <canvas id="dashboardStatusChart" aria-label="Gráfico de rosca mostrando a distribuição percentual por status"></canvas>
             </div>
-            <div class="dashboard-chart-body dashboard-status-chart-body"><canvas id="dashboardStatusChart" aria-label="Gráfico da distribuição por status"></canvas></div>
-            <div class="dashboard-status-legend" id="dashboardStatusLegend"></div>
+            <div class="dashboard-status-legend" id="dashboardStatusLegend" role="list"></div>
         </article>
     </section>
 
+    <!-- 5. Detalhamento Operacional -->
     <section class="dashboard-analytics-grid dashboard-analytics-grid-secondary" aria-label="Detalhamento operacional">
-        <article class="rf-card dashboard-chart-panel dashboard-chart-panel-wide">
-            <div class="rf-card-header dashboard-chart-header">
+        <article class="dashboard-chart-panel">
+            <header class="rf-card-header dashboard-chart-header">
                 <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-bar-chart-steps me-1"></i>Serviços mais movimentados</h6>
+                    <h2 class="rf-card-title"><i class="bi bi-bar-chart-steps" aria-hidden="true"></i> Serviços Mais Movimentados</h2>
                     <span class="dashboard-chart-subtitle">Tipos com maior volume acumulado</span>
                 </div>
+            </header>
+            <div class="dashboard-chart-body dashboard-services-chart-body">
+                <canvas id="dashboardServicesChart" aria-label="Gráfico de barras horizontais dos serviços mais movimentados"></canvas>
             </div>
-            <div class="dashboard-chart-body dashboard-services-chart-body"><canvas id="dashboardServicesChart" aria-label="Gráfico dos serviços mais movimentados"></canvas></div>
         </article>
-        <article class="rf-card dashboard-chart-panel dashboard-operational-panel">
-            <div class="rf-card-header dashboard-chart-header">
+        
+        <article class="dashboard-chart-panel dashboard-operational-panel">
+            <header class="rf-card-header dashboard-chart-header">
                 <div>
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-speedometer2 me-1"></i>Leitura operacional</h6>
+                    <h2 class="rf-card-title"><i class="bi bi-speedometer2" aria-hidden="true"></i> Leitura Operacional</h2>
                     <span class="dashboard-chart-subtitle">Resumo acionável do momento</span>
                 </div>
-            </div>
-            <div class="dashboard-operational-list">
-                <div><span>Processos abertos</span><strong>{{ analytics.total_abertos }}</strong></div>
-                <div><span>Próximos 5 dias</span><strong>{{ analytics.total_proximos }}</strong></div>
-                <div><span>Minha carteira</span><strong>{{ dashboard_info.processos_vinculados_a_mim }}</strong></div>
-                <div><span>Concluídos no prazo</span><strong>{{ '%.1f'|format(analytics.taxa_no_prazo) }}%</strong></div>
+            </header>
+            <div class="dashboard-operational-list" role="list">
+                <div role="listitem"><span>Processos abertos</span><strong>{{ analytics.total_abertos }}</strong></div>
+                <div role="listitem"><span>Próximos 5 dias</span><strong>{{ analytics.total_proximos }}</strong></div>
+                <div role="listitem"><span>Minha carteira</span><strong>{{ dashboard_info.processos_vinculados_a_mim }}</strong></div>
+                <div role="listitem"><span>Concluídos no prazo</span><strong>{{ '%.1f'|format(analytics.taxa_no_prazo) }}%</strong></div>
             </div>
         </article>
     </section>
-
-    {# Script: linhas clicáveis dos cards do dashboard #}
-    <script>
-    document.querySelectorAll('.status-badge').forEach(function(badge) {
-        badge.style.setProperty('--st', badge.dataset.statusColor || 'var(--color-primary)');
-        badge.style.setProperty('--st-text', badge.dataset.statusText || 'var(--rf-text-on-primary)');
-    });
-    document.querySelectorAll('.dash-row-link').forEach(function(row) {
-        row.addEventListener('click', function() {
-            window.location.href = this.dataset.href;
-        });
-    });
-    </script>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
-{# Chart.js CDN #}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const greetingMessageEl = document.getElementById('greeting-message');
-        const greetingSubtitleEl = document.getElementById('greeting-subtitle');
-
-        if (greetingMessageEl && greetingSubtitleEl) {
-            const fullGreetingText = greetingMessageEl.textContent.trim();
-            const parts = fullGreetingText.split('. ');
-
-            if (parts.length > 1) {
-                greetingMessageEl.textContent = parts[0] + '.';
-                const subtitleText = parts.slice(1).join('. ').trim();
-                if (subtitleText) {
-                    greetingSubtitleEl.textContent = subtitleText + (/[.!?]$/.test(subtitleText) ? '' : '.');
-                    greetingSubtitleEl.style.display = 'block';
-                } else {
-                    greetingSubtitleEl.style.display = 'none';
-                }
-            } else {
-                greetingMessageEl.textContent = fullGreetingText;
-                greetingSubtitleEl.style.display = 'none';
-            }
-        }
-
-        // Live clock
-        function updateClock() {
-            const now = new Date();
-            const h = String(now.getHours()).padStart(2,'0');
-            const m = String(now.getMinutes()).padStart(2,'0');
-            const el = document.getElementById('greeting-clock');
-            if (el) el.textContent = h + ':' + m;
-
-            // Dynamic avatar emoji based on time
-            const hour = now.getHours();
-            const avatarEl = document.getElementById('greeting-avatar');
-            if (avatarEl) {
-                if (hour >= 5 && hour < 12) avatarEl.textContent = '🌤️';
-                else if (hour >= 12 && hour < 18) avatarEl.textContent = '☀️';
-                else avatarEl.textContent = '🌙';
-            }
-        }
-        updateClock();
-        setInterval(updateClock, 30000);
-
-        // Configuração de cores para gráficos
-        const textColor = '#212529';
-        const gridColor = 'rgba(0, 0, 0, 0.1)';
-    });
-    </script>
-
-<script>
 document.addEventListener('DOMContentLoaded', function () {
+    // 1. Saudação Dinâmica Refinada
+    const greetingMessageEl = document.getElementById('greeting-message');
+    const greetingSubtitleEl = document.getElementById('greeting-subtitle');
+
+    if (greetingMessageEl && greetingSubtitleEl) {
+        const fullText = greetingMessageEl.textContent.trim();
+        const parts = fullText.split('. ');
+        if (parts.length > 1) {
+            greetingMessageEl.textContent = parts[0] + '.';
+            const subtitleText = parts.slice(1).join('. ').trim();
+            if (subtitleText) {
+                greetingSubtitleEl.textContent = subtitleText + (/[.!?]$/.test(subtitleText) ? '' : '.');
+                greetingSubtitleEl.style.display = 'block';
+            }
+        }
+    }
+
+    // 2. Relógio em Tempo Real
+    function updateClock() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const el = document.getElementById('greeting-clock');
+        if (el) el.textContent = `${h}:${m}`;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    // 3. Interatividade das Linhas da Tabela (Acessibilidade: Enter/Space)
+    document.querySelectorAll('.dash-row-link').forEach(function(row) {
+        const navigate = () => { window.location.href = row.dataset.href; };
+        row.addEventListener('click', navigate);
+        row.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate();
+            }
+        });
+    });
+
+    // 4. Configuração dos Gráficos (Chart.js)
     if (typeof Chart === 'undefined') return;
 
     const analytics = {{ dashboard_info.analytics | tojson }};
     const rootStyles = getComputedStyle(document.body);
     const token = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
+    
     const colors = {
-        primary: token('--color-primary', '#CDA865'),
-        dark: token('--rf-text-strong', '#121212'),
-        muted: token('--rf-text-muted', '#6B7280'),
-        border: token('--rf-border-subtle', '#E2E2E2'),
-        info: token('--color-info', '#2D6A8A'),
-        success: token('--color-success', '#3E7C59'),
-        error: token('--color-error', '#9B3A3A'),
+        primary: token('--color-primary', '#cda865'),
+        dark: token('--rf-text-strong', '#0f172a'),
+        muted: token('--rf-text-muted', '#64748b'),
+        border: token('--rf-border-subtle', '#e2e8f0'),
+        info: token('--color-info', '#2563eb'),
     };
-    const movement = analytics.movimentacao_diaria || [];
-    const status = analytics.status_distribuicao || [];
-    const services = analytics.servicos_principais || [];
+
     const chartDefaults = {
         responsive: true,
         maintainAspectRatio: false,
-        animation: { duration: 450 },
+        animation: { duration: 400, easing: 'easeOutQuart' },
         plugins: {
             legend: { display: false },
             tooltip: {
                 backgroundColor: colors.dark,
-                titleColor: '#fff',
-                bodyColor: '#fff',
+                titleColor: '#ffffff',
+                bodyColor: '#ffffff',
                 padding: 10,
-                cornerRadius: 7,
+                cornerRadius: 6,
+                displayColors: false,
             },
         },
     };
-    const grid = { color: colors.border, drawBorder: false };
-    const axis = { color: colors.muted, font: { size: 10 } };
 
+    const grid = { color: colors.border, drawBorder: false };
+    const axis = { color: colors.muted, font: { size: 11, family: "'Source Sans 3', sans-serif" } };
+
+    // Gráfico de Movimentação
     const movementCanvas = document.getElementById('dashboardMovementChart');
-    if (movementCanvas) {
+    if (movementCanvas && analytics.movimentacao_diaria) {
         new Chart(movementCanvas, {
             type: 'bar',
             data: {
-                labels: movement.map(item => item.label),
+                labels: analytics.movimentacao_diaria.map(item => item.label),
                 datasets: [{
                     label: 'Entradas',
-                    data: movement.map(item => item.total),
+                    data: analytics.movimentacao_diaria.map(item => item.total),
                     backgroundColor: colors.primary,
-                    borderRadius: 6,
+                    borderRadius: 4,
                     borderSkipped: false,
-                    maxBarThickness: 34,
+                    maxBarThickness: 32,
                 }],
             },
             options: {
@@ -344,23 +325,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Gráfico de Status (Doughnut)
     const statusCanvas = document.getElementById('dashboardStatusChart');
-    if (statusCanvas) {
+    if (statusCanvas && analytics.status_distribuicao) {
         new Chart(statusCanvas, {
             type: 'doughnut',
             data: {
-                labels: status.map(item => item.nome),
+                labels: analytics.status_distribuicao.map(item => item.nome),
                 datasets: [{
-                    data: status.map(item => item.total),
-                    backgroundColor: status.map(item => item.cor),
-                    borderColor: token('--rf-surface', '#FFFFFF'),
-                    borderWidth: 3,
-                    hoverOffset: 5,
+                    data: analytics.status_distribuicao.map(item => item.total),
+                    backgroundColor: analytics.status_distribuicao.map(item => item.cor),
+                    borderColor: token('--rf-surface', '#ffffff'),
+                    borderWidth: 2,
+                    hoverOffset: 4,
                 }],
             },
             options: {
                 ...chartDefaults,
-                cutout: '66%',
+                cutout: '65%',
                 plugins: {
                     ...chartDefaults.plugins,
                     tooltip: {
@@ -370,40 +352,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
             },
         });
+
+        // Legenda Customizada Acessível
+        const legend = document.getElementById('dashboardStatusLegend');
+        if (legend) {
+            analytics.status_distribuicao.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'dashboard-status-legend-item';
+                row.innerHTML = `
+                    <span class="dashboard-status-legend-dot" style="--legend-color: ${item.cor};" aria-hidden="true"></span>
+                    <span class="dashboard-status-legend-name">${item.nome}</span>
+                    <strong class="dashboard-status-legend-total">${item.total}</strong>
+                `;
+                legend.appendChild(row);
+            });
+        }
     }
 
-    const legend = document.getElementById('dashboardStatusLegend');
-    if (legend) {
-        status.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'dashboard-status-legend-item';
-            const dot = document.createElement('span');
-            dot.className = 'dashboard-status-legend-dot';
-            dot.style.setProperty('--legend-color', item.cor);
-            const name = document.createElement('span');
-            name.className = 'dashboard-status-legend-name';
-            name.textContent = item.nome;
-            const total = document.createElement('strong');
-            total.className = 'dashboard-status-legend-total';
-            total.textContent = item.total;
-            row.append(dot, name, total);
-            legend.appendChild(row);
-        });
-    }
-
+    // Gráfico de Serviços
     const servicesCanvas = document.getElementById('dashboardServicesChart');
-    if (servicesCanvas) {
+    if (servicesCanvas && analytics.servicos_principais) {
         new Chart(servicesCanvas, {
             type: 'bar',
             data: {
-                labels: services.map(item => item.nome),
+                labels: analytics.servicos_principais.map(item => item.nome),
                 datasets: [{
                     label: 'Processos',
-                    data: services.map(item => item.total),
+                    data: analytics.servicos_principais.map(item => item.total),
                     backgroundColor: colors.info,
-                    borderRadius: 5,
+                    borderRadius: 4,
                     borderSkipped: false,
-                    barPercentage: .62,
+                    barPercentage: 0.7,
                 }],
             },
             options: {
