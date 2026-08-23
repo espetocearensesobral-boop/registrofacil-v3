@@ -28,83 +28,34 @@
     <!-- KPI Cards -->
     <div class="kpi-grid">
         <a class="kpi-card kpi-status-completed kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
-            <div class="kpi-label">Concluídos</div>
+            <div class="kpi-label"><i class="bi bi-check-circle-fill"></i> Concluídos</div>
             <div class="kpi-value kpi-status-value kpi-status-completed">{{ dashboard_info.processos_concluidos }}</div>
             <div class="kpi-sub">Processos finalizados</div>
-            <i class="bi bi-check-circle-fill kpi-bg-icon"></i>
         </a>
         <a class="kpi-card kpi-status-prenoted kpi-link" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
-            <div class="kpi-label">Prenotados</div>
+            <div class="kpi-label"><i class="bi bi-pencil-square"></i> Prenotados</div>
             <div class="kpi-value kpi-status-value kpi-status-prenoted">{{ dashboard_info.processos_prenotados }}</div>
             <div class="kpi-sub">Processos prenotados</div>
-            <i class="bi bi-pencil-square kpi-bg-icon"></i>
         </a>
         <a class="kpi-card kpi-status-pending kpi-link" href="{{ url_for('processos.pendentes') }}">
-            <div class="kpi-label">Pendentes</div>
+            <div class="kpi-label"><i class="bi bi-hourglass-split"></i> Pendentes</div>
             <div class="kpi-value kpi-status-value kpi-status-pending">{{ dashboard_info.processos_pendentes }}</div>
             <div class="kpi-sub">Aguardando conclusão</div>
-            <i class="bi bi-hourglass-split kpi-bg-icon"></i>
         </a>
         <a class="kpi-card kpi-status-progress kpi-link" href="{{ url_for('processos.em_andamento') }}">
-            <div class="kpi-label">Em Andamento</div>
+            <div class="kpi-label"><i class="bi bi-arrow-repeat"></i> Em Andamento</div>
             <div class="kpi-value kpi-status-value kpi-status-progress">{{ dashboard_info.processos_em_andamento }}</div>
             <div class="kpi-sub">Processos ativos</div>
-            <i class="bi bi-arrow-repeat kpi-bg-icon"></i>
         </a>
     </div>
+
 
     {% set analytics = dashboard_info.analytics %}
 
     <div class="row g-3 dashboard-panels-row">
-        {# Card: Processos Recentes — interativo #}
+        {# Card: Prazos Críticos — vem primeiro: é a informação de maior urgência da tela #}
         <div class="col-lg-6">
-            <div class="rf-card dashboard-panel">
-                <div class="rf-card-header">
-                    <h6 class="rf-card-title mb-0"><i class="bi bi-clock-history me-1"></i> Processos Recentes</h6>
-                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
-                        <i class="bi bi-list-ul"></i> Ver todos
-                    </a>
-                </div>
-                <div class="card-body p-0 dashboard-panel-body">
-                    {% if dashboard_info.processos_recentes %}
-                    <div class="table-responsive">
-                        <table class="table dash-table">
-                            <thead>
-                                <tr>
-                                    <th class="col-fill">Titular</th>
-                                    <th class="col-end">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for processo in dashboard_info.processos_recentes %}
-                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" title="Clique para visualizar">
-                                    <td class="col-fill">
-                                        <div class="cell-strong cell-ellipsis">{{ processo['titular'] }}</div>
-                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
-                                    </td>
-                                    <td class="col-end">
-                                        <span class="status-badge" data-status-color="{{ processo['status_hex'] }}" data-status-text="{{ get_contrast_color(processo['status_hex']) }}">
-                                            {{ (processo['status_nome'] | default('—')) | replace('_',' ') | capitalize }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="empty-state-small">
-                        <i class="bi bi-inbox" ></i>
-                        <p class="mb-0 text-center mt-2" >Nenhum processo recente.</p>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        {# Card: Prazos Críticos — interativo #}
-        <div class="col-lg-6">
-            <div class="rf-card dashboard-panel">
+            <div class="rf-card dashboard-panel{% if dashboard_info.processos_com_prazo_critico %} dashboard-panel-urgent{% endif %}">
                 <div class="rf-card-header">
                     <h6 class="rf-card-title mb-0">
                         <i class="bi bi-exclamation-triangle-fill me-1 icon-danger"></i> Prazos Críticos
@@ -167,6 +118,51 @@
             </div>
         </div>
 
+        {# Card: Processos Recentes — informativo, vem depois do que é urgente #}
+        <div class="col-lg-6">
+            <div class="rf-card dashboard-panel">
+                <div class="rf-card-header">
+                    <h6 class="rf-card-title mb-0"><i class="bi bi-clock-history me-1"></i> Processos Recentes</h6>
+                    <a href="{{ url_for('processos.todos') }}" class="nav-btn nav-btn-secondary btn-xs dashboard-action-link">
+                        <i class="bi bi-list-ul"></i> Ver todos
+                    </a>
+                </div>
+                <div class="card-body p-0 dashboard-panel-body">
+                    {% if dashboard_info.processos_recentes %}
+                    <div class="table-responsive">
+                        <table class="table dash-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-fill">Titular</th>
+                                    <th class="col-end">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for processo in dashboard_info.processos_recentes %}
+                                <tr class="dash-row-link" data-href="{{ url_for('processos.visualizar', processo_id=processo.id) }}" title="Clique para visualizar">
+                                    <td class="col-fill">
+                                        <div class="cell-strong cell-ellipsis">{{ processo['titular'] }}</div>
+                                        <div class="cell-mono">{{ processo['matricula'] if processo['matricula'] else '—' }}</div>
+                                    </td>
+                                    <td class="col-end">
+                                        <span class="status-badge" data-status-color="{{ processo['status_hex'] }}" data-status-text="{{ get_contrast_color(processo['status_hex']) }}">
+                                            {{ (processo['status_nome'] | default('—')) | replace('_',' ') | capitalize }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-state-small">
+                        <i class="bi bi-inbox" ></i>
+                        <p class="mb-0 text-center mt-2" >Nenhum processo recente.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 
     <section class="dashboard-analytics-grid" aria-label="Análises do movimento">
