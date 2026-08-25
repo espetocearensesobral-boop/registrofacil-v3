@@ -184,6 +184,9 @@ def test_auth_templates_use_single_centered_panel_without_legacy_right_panel_or_
         assert 'panel-brand' not in text, relative
         assert 'panel-info-box' not in text, relative
         assert 'panel-steps' not in text, relative
+        assert 'auth-logo-sm' not in text, relative
+        assert 'logo-circle' not in text, relative
+        assert 'registrofacil.png' not in text, relative
 
     register = read('templates/novo_usuario.html')
     assert 'auth-notice' not in register
@@ -208,6 +211,8 @@ def test_public_auth_pages_render_without_right_panel_or_permission_notice(app_c
         assert 'auth-panel-left' in body, route
         assert 'Atenção:' not in body, route
         assert 'Novos usuários não possuem permissões por padrão' not in body, route
+        assert 'auth-logo-sm' not in body, route
+        assert 'logo-circle' not in body, route
 
 
 
@@ -220,3 +225,7 @@ def test_auth_pages_keep_dark_gold_corporate_visual_contract():
     assert '.rf-auth-page .auth-form-wrap::before' in css
     assert '.rf-auth-page .auth-form-wrap::after' in css
     assert 'linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold))' in css
+    assert 'html:has(body.rf-auth-page)' in css
+    assert 'height: 100dvh;' in css
+    assert 'overflow: hidden !important;' in css
+    assert 'auth-logo-sm' not in css

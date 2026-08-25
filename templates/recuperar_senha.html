@@ -16,9 +16,6 @@
         @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
         .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
         .auth-form-wrap{width:100%;max-width:380px}
-        .auth-logo-sm{text-align:center;margin-bottom:2.5rem}
-        .auth-logo-sm .logo-circle{width:82px;height:82px;border-radius:50%;background:#1a1a1a;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;box-shadow:0 4px 20px rgba(205,168,101,.15)}.auth-logo-sm .logo-circle img{width:58px;height:58px;object-fit:contain;}
-        @media(min-width:992px){.auth-logo-sm{display:none}}
         .auth-icon-badge{width:64px;height:64px;border-radius:50%;background:rgba(205,168,101,.1);border:1.5px solid rgba(205,168,101,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.8rem;color:#CDA865}
         .auth-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em;text-align:center}
         .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem;text-align:center;line-height:1.6}
@@ -54,18 +51,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css', v=app_version) }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v=app_version + '-ui1') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimized.css', v=app_version) }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui6') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui7') }}">
 </head>
 <body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}" data-rf-ui="complete" data-rf-surface="recuperar-senha" data-rf-component="page-surface">
     <a class="auth-skip-link" href="#recoverForm">Pular para o formulário de recuperação</a>
     <!-- Conteúdo principal -->
     <main class="auth-panel-left" id="auth-content" aria-labelledby="auth-title">
         <div class="auth-form-wrap">
-            <div class="auth-logo-sm">
-                <div class="logo-circle">
-                    <img src="{{ logo_url or url_for('static', filename='img/registrofacil.png') }}" alt="Logo">
-                </div>
-            </div>
             <div class="auth-icon-badge"><i class="bi bi-key-fill"></i></div>
             <h2 class="auth-title" id="auth-title">Recuperar Senha</h2>
             <p class="auth-subtitle">Informe seu e-mail cadastrado e enviaremos<br>um link para redefinir sua senha</p>
