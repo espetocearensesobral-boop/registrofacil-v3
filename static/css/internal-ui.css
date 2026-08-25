@@ -325,14 +325,14 @@ body:not(.rf-auth-page) #sidebar {
     box-shadow: 0 .5rem 1.25rem rgba(18, 18, 18, .09) !important;
 }
 
-#main-content:has(.dashboard-analytics-grid) .dashboard-panel,
-#main-content:has(.dashboard-analytics-grid) .dashboard-chart-panel {
+#main-content:has(.dashboard-analytics-grid) .dashboard-chart-panel,
+#main-content:has(.dashboard-analytics-grid) .dashboard-management-card {
     border-color: var(--rf-border, #e2e2e2) !important;
     box-shadow: 0 1px 3px rgba(18, 18, 18, .045) !important;
 }
 
-#main-content:has(.dashboard-analytics-grid) .dashboard-panel .rf-card-header,
-#main-content:has(.dashboard-analytics-grid) .dashboard-chart-header {
+#main-content:has(.dashboard-analytics-grid) .dashboard-chart-header,
+#main-content:has(.dashboard-analytics-grid) .dashboard-management-card .dashboard-chart-header {
     min-height: 3.5rem;
     padding-inline: var(--rf-space-4, 1rem) !important;
 }
@@ -342,10 +342,6 @@ body:not(.rf-auth-page) #sidebar {
     border-radius: var(--rf-radius-sm, .5rem);
 }
 
-#main-content:has(.dashboard-analytics-grid) .dash-table tbody tr,
-#main-content:has(.dashboard-analytics-grid) .dashboard-operational-list > div {
-    transition: background-color .15s ease;
-}
 
 /* -------------------------------------------------------------------------
    Listagens: filtros, tabelas e estados vazios
@@ -1857,7 +1853,6 @@ html body:not(.rf-auth-page) #main-content table tbody tr:focus-within > td {
 }
 
 /* Famílias com layout histórico de alta especificidade. */
-html body:not(.rf-auth-page) #main-content .dashboard-panels-row .dash-table tbody tr:nth-child(odd) > td,
 html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:nth-child(odd) > td,
 html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-atividades tbody tr:nth-child(odd) > td,
 html body:not(.rf-auth-page) #main-content .cfg-tbl tbody tr:nth-child(odd) > td,
@@ -1867,7 +1862,6 @@ html body:not(.rf-auth-page) #main-content .rf-backup-table tbody tr:nth-child(o
     background: var(--rf-surface-card, #fff) !important;
     background-color: var(--rf-surface-card, #fff) !important;
 }
-html body:not(.rf-auth-page) #main-content .dashboard-panels-row .dash-table tbody tr:nth-child(even) > td,
 html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:nth-child(even) > td,
 html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-atividades tbody tr:nth-child(even) > td,
 html body:not(.rf-auth-page) #main-content .cfg-tbl tbody tr:nth-child(even) > td,
@@ -1877,7 +1871,6 @@ html body:not(.rf-auth-page) #main-content .rf-backup-table tbody tr:nth-child(e
     background: var(--rf-surface-muted, #EFF1F1) !important;
     background-color: var(--rf-surface-muted, #EFF1F1) !important;
 }
-html body:not(.rf-auth-page) #main-content .dashboard-panels-row .dash-table tbody tr:hover > td,
 html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:hover > td,
 html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-atividades tbody tr:hover > td,
 html body:not(.rf-auth-page) #main-content .cfg-tbl tbody tr:hover > td,

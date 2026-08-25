@@ -42,27 +42,38 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert response.status_code == 200
     body = response.get_data(as_text=True)
 
-    assert 'dashboard-insights-grid' in body
-    assert body.find('class="kpi-grid"') < body.find('dashboard-focus-panel') < body.find('Prazos Críticos') < body.find('Processos Recentes') < body.find('Movimentação Diária')
+    assert 'dashboard-insights-grid' not in body
+    assert 'Prazos Críticos' not in body
+    assert 'Processos Recentes' not in body
+    assert body.find('class="kpi-grid"') < body.find('dashboard-focus-panel') < body.find('dashboard-analytics-section')
     for marker in (
         'dashboard-hero-summary',
         'dashboard-focus-panel',
         'dashboard-focus-title',
-        'dashboard-insights-grid',
+        'dashboard-analytics-section',
+        'dashboard-analytics-title',
         'dashboardMovementChart',
         'dashboardStatusChart',
         'dashboardServicesChart',
-        'Movimentação Diária',
-        'Distribuição por Status',
-        'Serviços Mais Movimentados',
-        'Leitura Operacional',
+        'Ritmo de entrada',
+        'Carteira por situação',
+        'Demanda por serviço',
+        'Saúde da carteira',
+        'dashboard-management-grid',
     ):
         assert marker in body
 
     dashboard_template = (ROOT / 'templates/dashboard.html').read_text(encoding='utf-8')
     assert 'dashboard_info.analytics | tojson' in dashboard_template
     assert 'processo.prazo_diff_days' in dashboard_template
-    assert 'analytics.total_vencidos' in dashboard_template
+    assert 'processos_com_prazo_critico[:5]' in dashboard_template
+    assert 'analytics.total_vencidos' not in dashboard_template
+    assert 'analytics.total_proximos' not in dashboard_template
+    assert 'analytics.movimentacao_7_dias' not in dashboard_template
+    assert 'analytics.taxa_no_prazo' not in dashboard_template
+    assert 'analytics.total_abertos' in dashboard_template
+    assert 'analytics.total_vencem_hoje' in dashboard_template
+    assert 'analytics.taxa_conclusao' in dashboard_template
     assert "type: 'bar'" in dashboard_template
     assert "type: 'doughnut'" in dashboard_template
 
@@ -99,8 +110,9 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert 'dashboard-analytics-grid > .dashboard-chart-panel' in css
     assert 'height: auto;' in css
     assert 'border: 1px solid var(--rf-border' in css
-    assert 'grid-template-rows: none;' in css
     assert 'grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);' in css
+    assert '.dashboard-management-grid' in css
+    assert '.dashboard-management-callout' in css
     assert 'container-type: inline-size;' in css
     assert '@container (max-width: 56rem)' in css
     assert 'max-width: 100%;' in css

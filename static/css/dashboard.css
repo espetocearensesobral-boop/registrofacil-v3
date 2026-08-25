@@ -6,98 +6,7 @@
 .greeting-time-badge { display: flex; align-items: center; gap: .375rem; padding: .25rem .75rem; background: var(--rf-page); border: 1px solid var(--rf-border); border-radius: 99px; font-size: .75rem; font-weight: 600; color: var(--rf-text-muted); white-space: nowrap; }
 .kpi-link { text-decoration: none; color: inherit; display: block; transition: transform .15s, box-shadow .15s; }
 .kpi-link:hover { transform: translateY(-2px); box-shadow: var(--rf-shadow-md); }
-.dash-cols { display: grid; grid-template-columns: 1fr; gap: var(--rf-gap); }
-@media (min-width: 992px) { .dash-cols { grid-template-columns: 1fr 1fr; } }
-.dash-card, .dashboard-panel { display: flex; flex-direction: column; }
-.dash-card-body, .dashboard-panel-body { flex: 0 0 auto; height: auto; max-height: none; overflow: visible; }
-.dashboard-panel .table-responsive { overflow: visible; max-height: none; }
-.icon-danger { color: var(--color-error); } .icon-success { color: var(--color-success); }
-.dashboard-panel-urgent { border-color: color-mix(in srgb, var(--color-error) 35%, var(--rf-border)) !important; box-shadow: 0 1px 8px color-mix(in srgb, var(--color-error) 12%, transparent); }
-.dashboard-panel-urgent .rf-card-header { border-bottom-color: color-mix(in srgb, var(--color-error) 25%, var(--rf-border-subtle)); }
-.count-danger { background: var(--color-error); color: var(--rf-text-on-primary); font-size: .6875rem; font-weight: 700; border-radius: 99px; padding: 2px 7px; }
-.dash-table { margin-bottom: 0; font-size: .8125rem; }
-.dash-table thead th { padding: .5rem .875rem; font-size: .6875rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--rf-text-muted); background: var(--rf-surface-muted); border-bottom: 1px solid var(--rf-border-subtle); }
-.dash-table tbody td { padding: .5625rem .875rem; border-top: 1px solid var(--rf-border-subtle); vertical-align: middle; }
-.col-fill { width: 100%; } .col-end { text-align: right; white-space: nowrap; }
-.cell-strong { font-weight: 600; } .cell-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
-.cell-mono { font-family: var(--rf-font-mono); font-size: .75rem; font-weight: 600; color: var(--rf-text-muted); margin-top: 2px; }
-.dash-row-link { cursor: pointer; } .dash-row-link:hover td { background: var(--rf-surface-hover); }
-.status-badge { display: inline-block; background: var(--st); color: var(--st-text); font-size: .75rem; font-weight: 600; border-radius: 99px; padding: 2px 9px; white-space: nowrap; }
-.prazo-chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid; border-radius: 99px; padding: 2px 9px; font-size: .75rem; font-weight: 700; white-space: nowrap; }
-.prazo-chip-vencido { color: var(--color-error); background: color-mix(in srgb, var(--color-error) 10%, transparent); border-color: color-mix(in srgb, var(--color-error) 35%, transparent); }
-.prazo-chip-hoje { color: var(--color-warning); background: color-mix(in srgb, var(--color-warning) 12%, transparent); border-color: color-mix(in srgb, var(--color-warning) 35%, transparent); }
-.prazo-chip-futuro { color: var(--color-info); background: color-mix(in srgb, var(--color-info) 10%, transparent); border-color: color-mix(in srgb, var(--color-info) 35%, transparent); }
-@media (max-width: 991.98px) { .dash-card-body, .dashboard-panel-body { flex-basis: auto; overflow: visible; } }
-/* -------------------------------------------------------------------------
-Dashboard analítico — leitura compacta, visual e acionável
-------------------------------------------------------------------------- */
-.dashboard-insights-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: .75rem;
-}
-.dashboard-insight-card {
-  --insight-color: var(--color-primary);
-  display: flex;
-  align-items: center;
-  gap: .7rem;
-  min-width: 0;
-  min-height: 5.25rem;
-  padding: .8rem .85rem;
-  border: 1px solid var(--rf-border);
-  border-top: 3px solid var(--insight-color);
-  border-radius: var(--rf-radius-md);
-  background: var(--rf-surface);
-  box-shadow: var(--rf-shadow-sm);
-}
-.dashboard-insight-blue { --insight-color: var(--color-info); }
-.dashboard-insight-green { --insight-color: var(--color-success); }
-.dashboard-insight-red { --insight-color: var(--color-error); }
-.dashboard-insight-gold { --insight-color: var(--color-primary); }
-.dashboard-insight-icon {
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  flex: 0 0 2rem;
-  border-radius: var(--rf-radius-sm);
-  background: color-mix(in srgb, var(--insight-color) 12%, var(--rf-surface));
-  color: var(--insight-color);
-  font-size: .95rem;
-}
-.dashboard-insight-content { min-width: 0; }
-.dashboard-insight-label,
-.dashboard-insight-content small {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.dashboard-insight-label {
-  color: var(--rf-text-muted);
-  font-size: .66rem;
-  font-weight: 750;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-.dashboard-insight-content strong {
-  display: block;
-  margin-top: .15rem;
-  color: var(--rf-text-strong);
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1.05;
-}
-.dashboard-insight-content strong em {
-  font-size: .7rem;
-  font-style: normal;
-  font-weight: 700;
-}
-.dashboard-insight-content small {
-  margin-top: .25rem;
-  color: var(--rf-text-muted);
-  font-size: .68rem;
-}
+
 .dashboard-analytics-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);
@@ -187,30 +96,116 @@ Dashboard analítico — leitura compacta, visual e acionável
   color: var(--rf-text-strong);
   font-weight: 750;
 }
-.dashboard-operational-panel { min-height: 0; }
-.dashboard-operational-list {
+.dashboard-analytics-section {
   display: grid;
-  gap: 0;
-  padding: .25rem .85rem .6rem;
+  gap: .7rem;
+  margin-top: 1rem;
 }
-.dashboard-operational-list > div {
+.dashboard-section-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: .15rem;
+}
+.dashboard-section-intro h2 {
+  margin: .15rem 0 0;
+  color: var(--rf-text-strong);
+  font-size: 1rem;
+  font-weight: 800;
+}
+.dashboard-period-label {
+  color: var(--rf-text-muted);
+  font-size: .68rem;
+  white-space: nowrap;
+}
+.dashboard-analytics-grid-primary {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+}
+.dashboard-analytics-grid-secondary {
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+}
+.dashboard-chart-panel-featured .dashboard-chart-body { height: 15rem; }
+.dashboard-chart-footnote {
+  margin: -.15rem .85rem .75rem;
+  color: var(--rf-text-muted);
+  font-size: .69rem;
+}
+.dashboard-chart-footnote strong { color: var(--rf-text-strong); }
+.dashboard-management-card {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  flex-direction: column;
+  align-self: start;
+  overflow: hidden;
+  border: 1px solid var(--rf-border, #D4DCE5);
+  border-radius: var(--rf-radius-lg, .875rem);
+  background: var(--rf-surface-card, #fff);
+  box-shadow: var(--rf-shadow-sm, 0 1px 6px rgba(18, 18, 18, .06));
+}
+.dashboard-management-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+  padding: .85rem;
+}
+.dashboard-management-item {
+  display: grid;
+  gap: .22rem;
+  min-width: 0;
+  padding: .65rem .7rem;
+  border: 1px solid var(--rf-border-subtle);
+  border-radius: var(--rf-radius-sm, .5rem);
+  background: var(--rf-surface-muted);
+}
+.dashboard-management-item span {
+  color: var(--rf-text-muted);
+  font-size: .68rem;
+  line-height: 1.25;
+}
+.dashboard-management-item strong {
+  color: var(--rf-text-strong);
+  font-size: 1rem;
+  line-height: 1.1;
+}
+.dashboard-management-item small {
+  color: var(--rf-text-muted);
+  font-size: .65rem;
+  font-weight: 700;
+}
+.dashboard-management-callout {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  margin: 0 .85rem .65rem;
+  padding: .5rem .6rem;
+  border: 1px solid color-mix(in srgb, var(--color-success) 25%, var(--rf-border-subtle));
+  border-radius: var(--rf-radius-sm, .5rem);
+  background: color-mix(in srgb, var(--color-success) 8%, var(--rf-surface-card));
+  color: var(--rf-text-body);
+  font-size: .7rem;
+}
+.dashboard-management-callout > i { color: var(--color-success); }
+.dashboard-management-callout.is-alert {
+  border-color: color-mix(in srgb, var(--color-warning) 35%, var(--rf-border-subtle));
+  background: color-mix(in srgb, var(--color-warning) 10%, var(--rf-surface-card));
+}
+.dashboard-management-callout.is-alert > i { color: var(--color-warning); }
+.dashboard-panel-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: .75rem;
-  min-height: 2.25rem;
-  border-bottom: 1px solid var(--rf-border-subtle);
-  color: var(--rf-text-muted);
-  font-size: .76rem;
-}
-.dashboard-operational-list > div:last-child { border-bottom: 0; }
-.dashboard-operational-list strong {
+  gap: .5rem;
+  margin: 0 .85rem .8rem;
   color: var(--rf-text-strong);
-  font-size: .88rem;
+  font-size: .7rem;
+  font-weight: 750;
+  text-decoration: none;
 }
-@media (max-width: 1100px) {
-  .dashboard-insights-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
+.dashboard-panel-link:hover { color: var(--color-primary); }
+.dashboard-panel-link i { color: var(--color-primary); }
 @media (max-width: 900px) {
   .dashboard-analytics-grid { grid-template-columns: minmax(0, 1fr); }
 }
@@ -225,12 +220,13 @@ está reduzida por zoom, painel lateral ou uma janela estreita. */
   }
 }
 @media (max-width: 575.98px) {
-  .dashboard-insights-grid { grid-template-columns: 1fr; }
-  .dashboard-insight-card { min-height: 4.75rem; }
+  .dashboard-section-intro { align-items: flex-start; flex-direction: column; gap: .25rem; }
   .dashboard-chart-header { align-items: flex-start; }
-  .dashboard-chart-body { height: 11.5rem; padding-inline: .65rem; }
+  .dashboard-chart-body,
+  .dashboard-chart-panel-featured .dashboard-chart-body { height: 11.5rem; padding-inline: .65rem; }
   .dashboard-status-chart-body { height: 9rem; }
   .dashboard-status-legend { padding-inline: .65rem; }
+  .dashboard-management-grid { gap: .4rem; padding: .65rem; }
 }
 /* -------------------------------------------------------------------------
 Cards de status — semântica fixa, levemente saturada e independente do tema
@@ -328,10 +324,6 @@ Painéis analíticos — bordas uniformes sem estiramento artificial
 #main-content .dashboard-analytics-grid > .dashboard-chart-panel .dashboard-status-legend {
   flex: 0 0 auto;
 }
-#main-content .dashboard-analytics-grid > .dashboard-operational-panel .dashboard-operational-list {
-  flex: 0 0 auto;
-  grid-template-rows: none;
-}
 /* =========================================================================
 IDENTIDADE VISUAL DO DASHBOARD
 Tratamento editorial/institucional próprio desta tela: serifada nos
@@ -348,23 +340,22 @@ sistema, em vez de sans-serif genérico igual ao resto do corpo do texto. */
   font-weight: 600;
   letter-spacing: -.01em;
 }
-/* Títulos de painel (Prazos Críticos, Processos Recentes, gráficos):
-serifada + regra fina em ouro para reforçar a identidade institucional
-já usada nos temas de cor, sem depender de peso/cor genéricos de h6. */
-.dashboard-panel .rf-card-title,
-.dashboard-chart-panel .rf-card-title {
+/* Títulos dos painéis analíticos: voz institucional e regra fina em ouro. */
+.dashboard-chart-panel .rf-card-title,
+.dashboard-management-card .rf-card-title {
   font-family: var(--rf-font-display);
   font-size: .9375rem;
   font-weight: 600;
   letter-spacing: -.005em;
 }
-.dashboard-panel .rf-card-header,
-.dashboard-chart-panel .dashboard-chart-header {
+.dashboard-chart-panel .dashboard-chart-header,
+.dashboard-management-card .dashboard-chart-header {
   border-bottom-width: 2px !important;
   border-bottom-color: var(--rf-accent, var(--color-primary)) !important;
   opacity: 1;
 }
-.dashboard-panel .rf-card-header { border-bottom-style: solid; }
+.dashboard-chart-panel .dashboard-chart-header,
+.dashboard-management-card .dashboard-chart-header { border-bottom-style: solid; }
 /* KPI cards: números em mono tabular (leitura de dado, não decoração),
 superfície neutra e ícone discreto ao lado do rótulo — substitui o
 ícone gigante de fundo, que é padrão genérico de template. */
@@ -394,9 +385,8 @@ superfície neutra e ícone discreto ao lado do rótulo — substitui o
 #main-content .kpi-card.kpi-status-progress {
   --kpi-status-surface: var(--rf-surface);
 }
-/* Leitura operacional: valores no mesmo tratamento mono dos KPIs, para
-não parecer uma lista à parte com linguagem visual diferente. */
-.dashboard-operational-list strong {
+/* Valores de saúde da carteira usam o mesmo tratamento tabular dos KPIs. */
+.dashboard-management-item strong {
   font-family: var(--rf-font-mono);
   letter-spacing: -.01em;
 }
