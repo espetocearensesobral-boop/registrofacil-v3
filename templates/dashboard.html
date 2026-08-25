@@ -2,7 +2,15 @@
 
 {% block title %}Dashboard - Registro Fácil{% endblock %}
 
-{% block page_title %}Visão Geral{% endblock %}
+{% set greeting_parts = custom_greeting.split('. ', 1) %}
+{% block page_title %}
+    <span class="dashboard-page-greeting" aria-label="Saudação">
+        <strong class="dashboard-greeting-title" id="greeting-message">{{ greeting_parts[0] }}{% if greeting_parts|length > 1 %}.{% endif %}</strong>
+        {% if greeting_parts|length > 1 %}
+        <span class="dashboard-greeting-subtitle" id="dashboard-greeting-subtitle">{{ greeting_parts[1] }}</span>
+        {% endif %}
+    </span>
+{% endblock %}
 
 {% block page_actions %}
     <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary" aria-label="Criar novo processo">
@@ -15,20 +23,7 @@
 
 {% block content %}
     {% set analytics = dashboard_info.analytics %}
-    <!-- 1. Saudação principal -->
-    <div class="greeting-banner" role="region" aria-label="Saudação">
-        <div class="greeting-body">
-            <h1 class="greeting-main" id="greeting-message">{{ custom_greeting }}</h1>
-        </div>
-        <div class="dashboard-hero-actions">
-            <div class="greeting-time-badge" aria-label="Hora atual">
-                <i class="bi bi-clock" aria-hidden="true"></i>
-                <span id="greeting-clock" aria-live="off">--:--</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. KPIs Principais (Acesso Rápido) -->
+    <!-- 1. KPIs Principais (Acesso Rápido) -->
     <nav class="kpi-grid" aria-label="Indicadores chave de desempenho">
         <a class="kpi-card kpi-status-completed" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
             <div class="kpi-label"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Concluídos</div>
@@ -52,7 +47,7 @@
         </a>
     </nav>
 
-    <!-- 3. Foco do dia: prioridades reais, ordenadas pelo risco de prazo -->
+    <!-- 2. Foco do dia: prioridades reais, ordenadas pelo risco de prazo -->
     <section class="dashboard-focus-panel" id="dashboard-focus" aria-labelledby="dashboard-focus-title">
         <header class="dashboard-focus-header">
             <div>
@@ -82,7 +77,7 @@
         </div>
     </section>
 
-    <!-- 4. Leitura gerencial: tendência, carteira e capacidade operacional -->
+    <!-- 3. Leitura gerencial: tendência, carteira e capacidade operacional -->
     <section class="dashboard-analytics-section" aria-labelledby="dashboard-analytics-title">
         <header class="dashboard-section-intro">
             <div>
@@ -162,20 +157,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. Saudação principal: conteúdo intencionalmente enxuto.
-
-    // 2. Relógio em Tempo Real
-    function updateClock() {
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const el = document.getElementById('greeting-clock');
-        if (el) el.textContent = `${h}:${m}`;
-    }
-    updateClock();
-    setInterval(updateClock, 30000);
-
-    // 3. Interatividade das Linhas da Tabela (Acessibilidade: Enter/Space)
+    // 1. Interatividade das Linhas da Tabela (Acessibilidade: Enter/Space)
     document.querySelectorAll('.dash-row-link').forEach(function(row) {
         const navigate = () => { window.location.href = row.dataset.href; };
         row.addEventListener('click', navigate);

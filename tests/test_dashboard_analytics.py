@@ -47,9 +47,12 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert 'Processos Recentes' not in body
     assert 'Ver foco do dia' not in body
     assert 'dashboard-focus-btn' not in body
-    assert body.find('class="kpi-grid"') < body.find('dashboard-focus-panel') < body.find('dashboard-analytics-section')
+    assert body.find('dashboard-page-greeting') < body.find('class="kpi-grid"') < body.find('dashboard-focus-panel') < body.find('dashboard-analytics-section')
+    assert 'greeting-banner' not in body
+    assert 'greeting-clock' not in body
     for marker in (
-        'greeting-main',
+        'dashboard-page-greeting',
+        'dashboard-greeting-title',
         'dashboard-focus-panel',
         'dashboard-focus-title',
         'dashboard-analytics-section',
@@ -78,7 +81,13 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert 'analytics.taxa_conclusao' in dashboard_template
     assert 'dashboard-hero-summary' not in dashboard_template
     assert 'dashboard-hero-stat' not in dashboard_template
-    assert 'greeting-subtitle' not in dashboard_template
+    assert 'greeting-banner' not in dashboard_template
+    assert 'greeting-clock' not in dashboard_template
+    assert 'dashboard-hero-actions' not in dashboard_template
+    assert "greeting_parts = custom_greeting.split('. ', 1)" in dashboard_template
+    assert 'dashboard-page-greeting' in dashboard_template
+    assert 'dashboard-greeting-title' in dashboard_template
+    assert 'dashboard-greeting-subtitle' in dashboard_template
     assert 'id="greeting-message"' in dashboard_template
     assert "type: 'bar'" in dashboard_template
     assert "type: 'doughnut'" in dashboard_template
@@ -126,8 +135,10 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert '@container (max-width: 56rem)' in css
     assert 'max-width: 100%;' in css
     assert '.dashboard-focus-panel' in css
-    assert '.greeting-main' in css
-    assert 'font-size: 1.15rem;' in css
+    assert '.dashboard-page-greeting' in css
+    assert '.dashboard-greeting-title' in css
+    assert '.dashboard-greeting-subtitle' in css
+    assert 'font-size: 1.2rem;' in css
     assert '.dashboard-hero-summary' not in css
     assert '.dashboard-hero-stat' not in css
     assert '.dashboard-hero-metrics' not in css

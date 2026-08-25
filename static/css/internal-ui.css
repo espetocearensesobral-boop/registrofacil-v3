@@ -301,18 +301,6 @@ body:not(.rf-auth-page) #sidebar {
 /* -------------------------------------------------------------------------
    Dashboard: hierarquia de dados e leitura de cartões
    ------------------------------------------------------------------------- */
-#main-content:has(.dashboard-analytics-grid) .greeting-banner {
-    min-height: 4.25rem;
-    padding: var(--rf-space-4, 1rem) var(--rf-space-5, 1.25rem);
-    border-left-width: 3px;
-    background: var(--rf-surface-card, #fff);
-}
-
-#main-content:has(.dashboard-analytics-grid) .greeting-main {
-    font-size: 1.2rem;
-    letter-spacing: -.015em;
-}
-
 #main-content:has(.dashboard-analytics-grid) .kpi-card {
     min-height: 6.5rem;
     border-radius: var(--rf-radius-lg, .875rem) !important;
@@ -1559,11 +1547,6 @@ body:not(.rf-auth-page) .rf-modal-danger-header .btn-close {
 
     #page-content-wrapper > .navbar > .container-fluid {
         flex-wrap: wrap;
-    }
-
-    #main-content:has(.dashboard-analytics-grid) .greeting-banner {
-        align-items: flex-start;
-        flex-direction: column;
     }
 
     #main-content .filter-bar.process-filter-surface .process-filter-toolbar {
