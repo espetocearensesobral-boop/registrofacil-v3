@@ -188,7 +188,7 @@
         margin-inline: -.875rem;
         padding-inline: .875rem;
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: thin;
     }

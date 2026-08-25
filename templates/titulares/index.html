@@ -29,7 +29,7 @@
     <h2 class="visually-hidden" id="titulares-list-title">Titulares cadastrados</h2>
     {% include "_cadastro_filter_toolbar.html" %}
     <div class="card-body p-0">
-        <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('titulares.index') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ registros_por_pagina }}" data-page-size-param="registros_por_pagina">
+        <div class="table-responsive rf-infinite-table" data-infinite-scroll data-infinite-endpoint="{{ url_for('titulares.index') }}" data-page="{{ pagina_atual }}" data-total-pages="{{ total_paginas }}" data-total-records="{{ total_registros }}" data-page-size="{{ registros_por_pagina }}" data-page-size-param="registros_por_pagina" data-list-scroll-mode="natural">
             <table class="table-titulares table table-hover align-middle mb-0" data-rf-component="titulares-table"><caption class="visually-hidden">Lista de titulares</caption>
                 <thead>
                     <tr class="rf-table-head-row">

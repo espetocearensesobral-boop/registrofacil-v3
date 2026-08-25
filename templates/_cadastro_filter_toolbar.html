@@ -1,8 +1,8 @@
-<div class="filter-bar cadastro-filter-surface" data-rf-ui="complete" data-rf-surface="-cadastro-filter-toolbar" data-rf-component="page-surface">
-    <form method="get" action="{{ url_for(cadastro_endpoint) }}" class="cadastro-filter-toolbar" id="{{ cadastro_tipo }}-filter-form" role="search" aria-label="Filtros de {{ cadastro_label | lower }}" data-rf-component="filter-toolbar">
+<div class="filter-bar cadastro-filter-surface process-filter-surface" data-rf-ui="complete" data-rf-surface="cadastro-filter-toolbar" data-rf-component="page-surface">
+    <form method="get" action="{{ url_for(cadastro_endpoint) }}" class="cadastro-filter-toolbar process-filter-toolbar" id="{{ cadastro_tipo }}-filter-form" role="search" aria-label="Filtros de {{ cadastro_label | lower }}" data-rf-component="filter-toolbar">
         <input type="hidden" name="ordenar" value="{{ ordenar | default('nome') }}">
         <input type="hidden" name="direcao" value="{{ direcao | default('asc') }}">
-        <div class="cadastro-filter-search">
+        <div class="cadastro-filter-search process-filter-search">
             <i class="bi bi-search" aria-hidden="true"></i>
             <input type="search"
                    name="busca"
@@ -13,13 +13,13 @@
                    aria-label="Buscar {{ cadastro_label | lower }}">
         </div>
         <button type="submit"
-                class="cadastro-filter-icon-btn cadastro-filter-apply-btn"
+                class="cadastro-filter-icon-btn process-filter-icon-btn process-filter-apply-btn"
                 title="Aplicar filtros"
                 aria-label="Aplicar filtros">
             <i class="bi bi-funnel" aria-hidden="true"></i>
         </button>
         <a href="{{ url_for(cadastro_endpoint) }}"
-           class="cadastro-filter-icon-btn cadastro-filter-clear-btn"
+           class="cadastro-filter-icon-btn process-filter-icon-btn process-filter-clear-btn"
            title="Limpar filtros"
            aria-label="Limpar filtros">
             <i class="bi bi-x-lg" aria-hidden="true"></i>
