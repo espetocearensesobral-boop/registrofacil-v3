@@ -1756,11 +1756,13 @@ body:not(.rf-auth-page) #main-content.rf-list-page .table-scroll-container {
     overscroll-behavior: auto !important;
     scrollbar-gutter: auto !important;
 }
-body:not(.rf-auth-page) #main-content .cadastro-filter-surface.process-filter-surface {
+body:not(.rf-auth-page) #main-content .cadastro-filter-surface.process-filter-surface,
+body:not(.rf-auth-page) #main-content .admin-filter-surface.process-filter-surface {
     min-width: 0;
     overflow: visible !important;
 }
-body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar.process-filter-toolbar {
+body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar.process-filter-toolbar,
+body:not(.rf-auth-page) #main-content .admin-filter-toolbar.process-filter-toolbar {
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
@@ -1769,11 +1771,13 @@ body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar.process-filter-to
     padding: .75rem 1rem !important;
     overflow: visible !important;
 }
-body:not(.rf-auth-page) #main-content .cadastro-filter-search.process-filter-search {
+body:not(.rf-auth-page) #main-content .cadastro-filter-search.process-filter-search,
+body:not(.rf-auth-page) #main-content .admin-filter-search.process-filter-search {
     flex: 1 1 16rem !important;
     min-width: 15rem !important;
 }
-body:not(.rf-auth-page) #main-content .cadastro-filter-icon-btn.process-filter-icon-btn {
+body:not(.rf-auth-page) #main-content .cadastro-filter-icon-btn.process-filter-icon-btn,
+body:not(.rf-auth-page) #main-content .admin-filter-icon-btn.process-filter-icon-btn {
     flex: 0 0 auto !important;
     width: 2.375rem !important;
     min-width: 2.375rem !important;
@@ -1781,13 +1785,44 @@ body:not(.rf-auth-page) #main-content .cadastro-filter-icon-btn.process-filter-i
     min-height: 2.375rem !important;
 }
 @media (max-width: 800px) {
-    body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar.process-filter-toolbar {
+    body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar.process-filter-toolbar,
+    body:not(.rf-auth-page) #main-content .admin-filter-toolbar.process-filter-toolbar {
         flex-wrap: wrap !important;
         min-height: 3.75rem !important;
         padding-inline: .75rem !important;
     }
-    body:not(.rf-auth-page) #main-content .cadastro-filter-search.process-filter-search {
+    body:not(.rf-auth-page) #main-content .cadastro-filter-search.process-filter-search,
+    body:not(.rf-auth-page) #main-content .admin-filter-search.process-filter-search {
         flex: 0 0 15rem !important;
         min-width: 15rem !important;
     }
+}
+
+/* -------------------------------------------------------------------------
+   Zebra transversal para tabelas fora das listas padronizadas
+   ------------------------------------------------------------------------- */
+body:not(.rf-auth-page) #main-content table:not(.table-processos):not(.table-titulares):not(.table-apresentantes):not(.table-usuarios):not(.table-atividades):not(.table-auditoria) tbody tr td {
+    background: var(--rf-table-row-base, var(--rf-surface-card, #fff)) !important;
+}
+body:not(.rf-auth-page) #main-content table:not(.table-processos):not(.table-titulares):not(.table-apresentantes):not(.table-usuarios):not(.table-atividades):not(.table-auditoria) tbody tr:nth-child(even) td {
+    background: var(--rf-table-row-alt, color-mix(in srgb, var(--rf-surface-card, #fff) 94%, var(--rf-surface-body, #f8f8f8))) !important;
+}
+body:not(.rf-auth-page) #main-content table:not(.table-processos):not(.table-titulares):not(.table-apresentantes):not(.table-usuarios):not(.table-atividades):not(.table-auditoria) tbody tr:hover td {
+    background: var(--rf-table-row-hover, var(--rf-surface-hover, #f5f5f4)) !important;
+}
+
+/* -------------------------------------------------------------------------
+   Scrollbar principal — sem botões nativos nem gutter vazio
+   ------------------------------------------------------------------------- */
+html {
+    overflow-y: auto !important;
+    scrollbar-gutter: auto !important;
+}
+html::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+html::-webkit-scrollbar-corner {
+    background: transparent !important;
 }

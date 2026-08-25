@@ -87,6 +87,35 @@ def test_cadastro_lists_use_process_filter_and_natural_scroll_contract():
     assert ' .cadastro-list-card,\nbody:not(.rf-auth-page) #main-content .admin-list-card' not in internal_css
 
 
+def test_users_use_process_filter_and_natural_scroll_contract():
+    css = read('static/css/layout-standard.css')
+    internal_css = read('static/css/internal-ui.css')
+    toolbar = read('templates/_users_filter_toolbar.html')
+    users = read('templates/admin/usuarios.html')
+    assert 'process-filter-surface' in toolbar
+    assert 'process-filter-toolbar' in toolbar
+    assert 'process-filter-select' in toolbar
+    assert 'process-filter-search' in toolbar
+    assert 'data-list-scroll-mode="natural"' in users
+    assert 'overflow-y: hidden !important' in internal_css
+    assert 'scrollbar-gutter: auto !important' in internal_css
+    assert '::-webkit-scrollbar-button' in internal_css
+    assert 'overflow-y: auto !important' in css
+
+
+def test_all_runtime_table_families_have_explicit_zebra_contracts():
+    css = read('static/css/layout-standard.css')
+    internal_css = read('static/css/internal-ui.css')
+    assert 'table-processos tbody tr:nth-child(even)' in css
+    assert 'table-titulares tbody tr:nth-child(even)' in css
+    assert 'table-apresentantes tbody tr:nth-child(even)' in css
+    assert 'table-usuarios tbody tr:nth-child(even)' in css
+    assert 'table-atividades tbody tr:nth-child(even)' in css
+    assert 'table-auditoria tbody tr:nth-child(even)' in css
+    assert 'var(--rf-clean-row-alt' in css
+    assert 'var(--rf-table-row-alt' in internal_css
+
+
 def test_cadastro_tables_expose_ids_and_last_record_data_contract():
     titulares = read('templates/titulares/index.html')
     apresentantes = read('templates/apresentantes/index.html')

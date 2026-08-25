@@ -4764,12 +4764,14 @@ html body #main-content .rf-clean-list-card .table-auditoria thead th {
 html body #main-content .rf-clean-list-card .table-apresentantes tbody tr,
 html body #main-content .rf-clean-list-card .table-titulares tbody tr,
 html body #main-content .rf-clean-list-card .table-usuarios tbody tr,
-html body #main-content .rf-clean-list-card .table-auditoria tbody tr,
+html body #main-content .rf-clean-list-card .table-auditoria tbody tr {
+  background: var(--rf-clean-row-base, var(--rf-surface-card, #FFFFFF)) !important;
+}
 html body #main-content .rf-clean-list-card .table-apresentantes tbody tr:nth-child(even),
 html body #main-content .rf-clean-list-card .table-titulares tbody tr:nth-child(even),
 html body #main-content .rf-clean-list-card .table-usuarios tbody tr:nth-child(even),
 html body #main-content .rf-clean-list-card .table-auditoria tbody tr:nth-child(even) {
-  background: var(--rf-surface-card, #FFFFFF) !important;
+  background: var(--rf-clean-row-alt, color-mix(in srgb, var(--rf-surface-card, #FFFFFF) 94%, var(--rf-surface-body, #F8F8F8))) !important;
 }
 html body #main-content .rf-clean-list-card .table-apresentantes tbody td,
 html body #main-content .rf-clean-list-card .table-titulares tbody td,
