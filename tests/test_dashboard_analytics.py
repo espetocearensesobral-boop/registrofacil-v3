@@ -50,10 +50,10 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert body.find('class="kpi-grid"') < body.find('dashboard-focus-panel') < body.find('dashboard-analytics-section')
     for marker in (
         'dashboard-hero-summary',
-        'dashboard-hero-metrics',
-        'dashboard-hero-metric is-danger',
-        'dashboard-hero-metric is-warning',
-        'dashboard-hero-metric is-info',
+        'dashboard-hero-stat is-danger',
+        'dashboard-hero-stat is-warning',
+        'dashboard-hero-stat is-info',
+        'dashboard-hero-focus-note',
         'dashboard-focus-panel',
         'dashboard-focus-title',
         'dashboard-analytics-section',
@@ -127,6 +127,9 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert 'max-width: 100%;' in css
     assert '.dashboard-focus-panel' in css
     assert '.dashboard-hero-summary' in css
-    assert '.dashboard-hero-metrics' in css
-    assert '.dashboard-hero-metric.is-danger' in css
+    assert '.dashboard-hero-stat' in css
+    assert '.dashboard-hero-stat.is-danger' in css
+    assert '.dashboard-hero-stat.is-warning' in css
+    assert '.dashboard-hero-stat.is-info' in css
+    assert '.dashboard-hero-metrics' not in css
     assert '.dashboard-focus-btn' not in css

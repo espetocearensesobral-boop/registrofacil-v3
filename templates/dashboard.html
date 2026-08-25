@@ -21,15 +21,13 @@
             <h1 class="greeting-main" id="greeting-message">{{ custom_greeting }}</h1>
             <p class="greeting-sub" id="greeting-subtitle" aria-live="polite"></p>
             <p class="dashboard-hero-summary">
-                Acompanhe primeiro o que pode comprometer o prazo e avance pela carteira na ordem certa.
-                <strong>{{ dashboard_info.processos_com_prazo_critico|length }}</strong> prioridade{{ 's' if dashboard_info.processos_com_prazo_critico|length != 1 else '' }} estão em foco.
+                Acompanhe primeiro o que pode comprometer o prazo e avance pela carteira na ordem certa:
+                <span class="dashboard-hero-stat is-neutral"><strong>{{ analytics.total_abertos }}</strong> em aberto</span>,
+                <span class="dashboard-hero-stat is-danger"><strong>{{ analytics.total_vencidos }}</strong> vencido{{ 's' if analytics.total_vencidos != 1 else '' }}</span>,
+                <span class="dashboard-hero-stat is-warning"><strong>{{ analytics.total_proximos }}</strong> nos próximos 5 dias</span> e
+                <span class="dashboard-hero-stat is-info"><strong>{{ analytics.total_vencem_hoje }}</strong> vence{{ 'm' if analytics.total_vencem_hoje != 1 else '' }} hoje</span>.
+                <span class="dashboard-hero-focus-note"><strong>{{ dashboard_info.processos_com_prazo_critico|length }}</strong> prioridade{{ 's' if dashboard_info.processos_com_prazo_critico|length != 1 else '' }} em foco.</span>
             </p>
-            <div class="dashboard-hero-metrics" aria-label="Resumo de urgência da carteira">
-                <span class="dashboard-hero-metric is-neutral"><span>Em aberto</span><strong>{{ analytics.total_abertos }}</strong></span>
-                <span class="dashboard-hero-metric is-danger"><span>Vencidos</span><strong>{{ analytics.total_vencidos }}</strong></span>
-                <span class="dashboard-hero-metric is-warning"><span>Próximos 5 dias</span><strong>{{ analytics.total_proximos }}</strong></span>
-                <span class="dashboard-hero-metric is-info"><span>Vencem hoje</span><strong>{{ analytics.total_vencem_hoje }}</strong></span>
-            </div>
         </div>
         <div class="dashboard-hero-actions">
             <div class="greeting-time-badge" aria-label="Hora atual">

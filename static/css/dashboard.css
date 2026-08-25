@@ -438,43 +438,25 @@ superfície neutra e ícone discreto ao lado do rótulo — substitui o
   line-height: 1.45;
 }
 .dashboard-hero-summary strong { color: var(--rf-text-strong); font-weight: 750; }
-.dashboard-hero-metrics {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(6.5rem, 1fr));
-  gap: .45rem;
-  max-width: 44rem;
-  margin-top: .7rem;
-}
-.dashboard-hero-metric {
-  display: grid;
-  gap: .22rem;
-  min-width: 0;
-  padding: .45rem .6rem .5rem;
-  border: 1px solid color-mix(in srgb, var(--metric-color) 24%, var(--rf-border-subtle));
-  border-top: 3px solid var(--metric-color);
-  border-radius: var(--rf-radius-sm, .5rem);
-  background: color-mix(in srgb, var(--metric-color) 7%, var(--rf-surface-card));
-}
-.dashboard-hero-metric span {
-  overflow: hidden;
-  color: var(--rf-text-muted);
-  font-size: .63rem;
+.dashboard-hero-stat {
   font-weight: 700;
-  line-height: 1.15;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
-.dashboard-hero-metric strong {
-  color: var(--metric-color);
+.dashboard-hero-stat strong {
   font-family: var(--rf-font-mono, ui-monospace, monospace);
-  font-size: 1.08rem;
   font-weight: 800;
-  line-height: 1;
 }
-.dashboard-hero-metric.is-neutral { --metric-color: var(--rf-text-strong, #2A2A2A); }
-.dashboard-hero-metric.is-danger { --metric-color: var(--color-error, #98424C); }
-.dashboard-hero-metric.is-warning { --metric-color: var(--color-warning, #846A30); }
-.dashboard-hero-metric.is-info { --metric-color: var(--color-info, #3C6570); }
+.dashboard-hero-stat.is-neutral strong { color: var(--rf-text-strong, #2A2A2A); }
+.dashboard-hero-stat.is-danger strong { color: var(--color-error, #98424C); }
+.dashboard-hero-stat.is-warning strong { color: var(--color-warning, #846A30); }
+.dashboard-hero-stat.is-info strong { color: var(--color-info, #3C6570); }
+.dashboard-hero-focus-note {
+  display: inline-block;
+  margin-left: .2rem;
+  color: var(--rf-text-strong);
+  font-weight: 750;
+}
+.dashboard-hero-focus-note strong { color: var(--rf-accent, var(--color-gold-primary, #CDA865)); }
 .dashboard-hero-actions {
   display: flex;
   flex: 0 0 auto;
@@ -583,7 +565,8 @@ superfície neutra e ícone discreto ao lado do rótulo — substitui o
 }
 @media (max-width: 480px) {
   .greeting-banner { flex-direction: column; }
-  .dashboard-hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; }
+  .dashboard-hero-summary { line-height: 1.6; }
+  .dashboard-hero-stat { white-space: normal; }
   .dashboard-hero-actions { margin-left: 0; }
   .dashboard-focus-item { gap: .5rem; padding-inline: .75rem; }
   .dashboard-focus-deadline { font-size: .65rem; }
