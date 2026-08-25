@@ -117,7 +117,7 @@ def test_all_runtime_table_families_have_explicit_zebra_contracts():
     assert 'tbody tr:nth-child(even) > td' in internal_css
     assert 'background-color: var(--rf-surface-muted' in internal_css
     base = read('templates/base.html')
-    assert 'full-ui4' in base
+    assert 'full-ui5' in base
     assert 'dashboard4' in base
     assert '#mobile-menu-btn' in internal_css
     assert 'display: none !important;' in internal_css

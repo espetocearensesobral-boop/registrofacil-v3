@@ -431,32 +431,10 @@ superfície neutra e ícone discreto ao lado do rótulo — substitui o
 /* -------------------------------------------------------------------------
    Camada inspirada no modelo de referência — contexto e foco operacional
    ------------------------------------------------------------------------- */
-.dashboard-hero-summary {
-  margin: .45rem 0 0;
-  color: var(--rf-text-muted);
-  font-size: .78rem;
-  line-height: 1.45;
+.greeting-main {
+  font-size: 1.15rem;
+  line-height: 1.3;
 }
-.dashboard-hero-summary strong { color: var(--rf-text-strong); font-weight: 750; }
-.dashboard-hero-stat {
-  font-weight: 700;
-  white-space: nowrap;
-}
-.dashboard-hero-stat strong {
-  font-family: var(--rf-font-mono, ui-monospace, monospace);
-  font-weight: 800;
-}
-.dashboard-hero-stat.is-neutral strong { color: var(--rf-text-strong, #2A2A2A); }
-.dashboard-hero-stat.is-danger strong { color: var(--color-error, #98424C); }
-.dashboard-hero-stat.is-warning strong { color: var(--color-warning, #846A30); }
-.dashboard-hero-stat.is-info strong { color: var(--color-info, #3C6570); }
-.dashboard-hero-focus-note {
-  display: inline-block;
-  margin-left: .2rem;
-  color: var(--rf-text-strong);
-  font-weight: 750;
-}
-.dashboard-hero-focus-note strong { color: var(--rf-accent, var(--color-gold-primary, #CDA865)); }
 .dashboard-hero-actions {
   display: flex;
   flex: 0 0 auto;
@@ -565,8 +543,6 @@ superfície neutra e ícone discreto ao lado do rótulo — substitui o
 }
 @media (max-width: 480px) {
   .greeting-banner { flex-direction: column; }
-  .dashboard-hero-summary { line-height: 1.6; }
-  .dashboard-hero-stat { white-space: normal; }
   .dashboard-hero-actions { margin-left: 0; }
   .dashboard-focus-item { gap: .5rem; padding-inline: .75rem; }
   .dashboard-focus-deadline { font-size: .65rem; }

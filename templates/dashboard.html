@@ -15,19 +15,10 @@
 
 {% block content %}
     {% set analytics = dashboard_info.analytics %}
-    <!-- 1. Saudação Dinâmica e contexto operacional -->
-    <div class="greeting-banner" role="region" aria-label="Saudação e resumo do dia">
+    <!-- 1. Saudação principal -->
+    <div class="greeting-banner" role="region" aria-label="Saudação">
         <div class="greeting-body">
             <h1 class="greeting-main" id="greeting-message">{{ custom_greeting }}</h1>
-            <p class="greeting-sub" id="greeting-subtitle" aria-live="polite"></p>
-            <p class="dashboard-hero-summary">
-                Acompanhe primeiro o que pode comprometer o prazo e avance pela carteira na ordem certa:
-                <span class="dashboard-hero-stat is-neutral"><strong>{{ analytics.total_abertos }}</strong> em aberto</span>,
-                <span class="dashboard-hero-stat is-danger"><strong>{{ analytics.total_vencidos }}</strong> vencido{{ 's' if analytics.total_vencidos != 1 else '' }}</span>,
-                <span class="dashboard-hero-stat is-warning"><strong>{{ analytics.total_proximos }}</strong> nos próximos 5 dias</span> e
-                <span class="dashboard-hero-stat is-info"><strong>{{ analytics.total_vencem_hoje }}</strong> vence{{ 'm' if analytics.total_vencem_hoje != 1 else '' }} hoje</span>.
-                <span class="dashboard-hero-focus-note"><strong>{{ dashboard_info.processos_com_prazo_critico|length }}</strong> prioridade{{ 's' if dashboard_info.processos_com_prazo_critico|length != 1 else '' }} em foco.</span>
-            </p>
         </div>
         <div class="dashboard-hero-actions">
             <div class="greeting-time-badge" aria-label="Hora atual">
@@ -171,22 +162,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. Saudação Dinâmica Refinada
-    const greetingMessageEl = document.getElementById('greeting-message');
-    const greetingSubtitleEl = document.getElementById('greeting-subtitle');
-
-    if (greetingMessageEl && greetingSubtitleEl) {
-        const fullText = greetingMessageEl.textContent.trim();
-        const parts = fullText.split('. ');
-        if (parts.length > 1) {
-            greetingMessageEl.textContent = parts[0] + '.';
-            const subtitleText = parts.slice(1).join('. ').trim();
-            if (subtitleText) {
-                greetingSubtitleEl.textContent = subtitleText + (/[.!?]$/.test(subtitleText) ? '' : '.');
-                greetingSubtitleEl.style.display = 'block';
-            }
-        }
-    }
+    // 1. Saudação principal: conteúdo intencionalmente enxuto.
 
     // 2. Relógio em Tempo Real
     function updateClock() {
