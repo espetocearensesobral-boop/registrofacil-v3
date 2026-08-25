@@ -51,13 +51,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css', v=app_version) }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v=app_version + '-ui1') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimized.css', v=app_version) }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui7') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui8') }}">
 </head>
 <body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}" data-rf-ui="complete" data-rf-surface="recuperar-senha" data-rf-component="page-surface">
     <a class="auth-skip-link" href="#recoverForm">Pular para o formulário de recuperação</a>
     <!-- Conteúdo principal -->
     <main class="auth-panel-left" id="auth-content" aria-labelledby="auth-title">
         <div class="auth-form-wrap">
+            <div class="auth-context-strip" aria-label="Contexto do RegistroFácil">
+                <span class="auth-context-mark" aria-hidden="true"><i class="bi bi-file-earmark-text-fill"></i></span>
+                <span class="auth-context-copy"><strong>RegistroFácil</strong><small>Gestão de processos da serventia</small></span>
+                <span class="auth-security-chip"><i class="bi bi-shield-check" aria-hidden="true"></i> Ambiente protegido</span>
+            </div>
             <div class="auth-icon-badge"><i class="bi bi-key-fill"></i></div>
             <h2 class="auth-title" id="auth-title">Recuperar Senha</h2>
             <p class="auth-subtitle">Informe seu e-mail cadastrado e enviaremos<br>um link para redefinir sua senha</p>
@@ -97,6 +102,7 @@
             <div class="auth-links">
                 Lembrou da senha? <a href="{{ url_for('auth.login') }}" class="auth-link">Faça Login</a>
             </div>
+            <p class="auth-support-note"><i class="bi bi-envelope-check" aria-hidden="true"></i> Use o e-mail cadastrado para retomar seu acesso</p>
         </div>
         <span class="version-badge">v{{ app_version }}</span>
     </main>

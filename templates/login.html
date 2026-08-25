@@ -54,13 +54,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css', v=app_version) }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v=app_version + '-ui1') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimized.css', v=app_version) }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui7') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui8') }}">
 </head>
 <body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}" data-rf-ui="complete" data-rf-surface="login" data-rf-component="page-surface">
     <a class="auth-skip-link" href="#loginForm">Pular para o formulário de acesso</a>
     <!-- Conteúdo principal -->
     <main class="auth-panel-left" id="auth-content" aria-labelledby="auth-title">
         <div class="auth-form-wrap">
+            <div class="auth-context-strip" aria-label="Contexto do RegistroFácil">
+                <span class="auth-context-mark" aria-hidden="true"><i class="bi bi-file-earmark-text-fill"></i></span>
+                <span class="auth-context-copy"><strong>RegistroFácil</strong><small>Gestão de processos da serventia</small></span>
+                <span class="auth-security-chip"><i class="bi bi-shield-check" aria-hidden="true"></i> Ambiente protegido</span>
+            </div>
             <h2 class="auth-title" id="auth-title">Bem-vindo</h2>
             <p class="auth-subtitle">Informe suas credenciais para acessar o sistema</p>
 
@@ -111,6 +116,7 @@
                 <span class="auth-divider">•</span>
                 <a href="{{ url_for('auth.novo_usuario') }}" class="auth-link"><i class="bi bi-person-plus me-1"></i>Criar nova conta</a>
             </div>
+            <p class="auth-support-note"><i class="bi bi-diagram-3" aria-hidden="true"></i> Acesso operacional · processos, prazos e rotinas da serventia</p>
         </div>
         <span class="version-badge">v{{ app_version }}</span>
     </main>

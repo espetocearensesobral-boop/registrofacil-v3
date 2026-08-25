@@ -179,6 +179,10 @@ def test_auth_templates_use_single_centered_panel_without_legacy_right_panel_or_
         text = read(relative)
         assert 'auth-panel-left' in text, relative
         assert 'auth-form-wrap' in text, relative
+        assert 'auth-context-strip' in text, relative
+        assert 'auth-context-mark' in text, relative
+        assert 'auth-security-chip' in text, relative
+        assert 'auth-support-note' in text, relative
         assert 'auth-panel-right' not in text, relative
         assert 'Painel direito' not in text, relative
         assert 'panel-brand' not in text, relative
@@ -229,3 +233,7 @@ def test_auth_pages_keep_dark_gold_corporate_visual_contract():
     assert 'height: 100dvh;' in css
     assert 'overflow: hidden !important;' in css
     assert 'auth-logo-sm' not in css
+    assert 'auth-context-strip' in css
+    assert 'auth-context-mark' in css
+    assert 'auth-security-chip' in css
+    assert 'auth-support-note' in css
