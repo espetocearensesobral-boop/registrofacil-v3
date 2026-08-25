@@ -641,8 +641,6 @@ body:not(.rf-auth-page) #main-content .admin-filter-more-btn:focus-visible {
 }
 
 /* Listas e tabelas de todos os domínios. */
-body:not(.rf-auth-page) #main-content .cadastro-list-card,
-body:not(.rf-auth-page) #main-content .admin-list-card,
 body:not(.rf-auth-page) #main-content .rf-backup-card,
 body:not(.rf-auth-page) #main-content .rf-info-card {
     overflow: hidden;
@@ -1724,5 +1722,72 @@ body:not(.rf-auth-page) .rf-modal-danger-header .btn-close {
     #main-content:has(.dashboard-analytics-grid) .kpi-card,
     #main-content .tbl-btn {
         transition: none;
+    }
+}
+
+/* -------------------------------------------------------------------------
+   Contrato final de listas e filtros — aplicado após todos os estilos locais
+   ------------------------------------------------------------------------- */
+html {
+    overflow-y: auto !important;
+    scrollbar-gutter: stable;
+}
+body:not(.rf-auth-page) #main-content.rf-list-page,
+body:not(.rf-auth-page) #main-content.rf-list-page > .cadastro-list-card,
+body:not(.rf-auth-page) #main-content.rf-list-page > .cadastro-list-card > .card-body {
+    max-height: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+}
+body:not(.rf-auth-page) #main-content.rf-list-page > .cadastro-list-card {
+    flex: 0 0 auto !important;
+}
+body:not(.rf-auth-page) #main-content.rf-list-page > .cadastro-list-card > .card-body {
+    display: block !important;
+}
+body:not(.rf-auth-page) #main-content.rf-list-page .table-responsive.rf-infinite-table,
+body:not(.rf-auth-page) #main-content.rf-list-page .table-container,
+body:not(.rf-auth-page) #main-content.rf-list-page .table-scroll-container {
+    max-height: none !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    overscroll-behavior: auto !important;
+    scrollbar-gutter: auto !important;
+}
+body:not(.rf-auth-page) #main-content .cadastro-filter-surface.process-filter-surface {
+    min-width: 0;
+    overflow: visible !important;
+}
+body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar.process-filter-toolbar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    min-height: 4.25rem !important;
+    padding: .75rem 1rem !important;
+    overflow: visible !important;
+}
+body:not(.rf-auth-page) #main-content .cadastro-filter-search.process-filter-search {
+    flex: 1 1 16rem !important;
+    min-width: 15rem !important;
+}
+body:not(.rf-auth-page) #main-content .cadastro-filter-icon-btn.process-filter-icon-btn {
+    flex: 0 0 auto !important;
+    width: 2.375rem !important;
+    min-width: 2.375rem !important;
+    height: 2.375rem !important;
+    min-height: 2.375rem !important;
+}
+@media (max-width: 800px) {
+    body:not(.rf-auth-page) #main-content .cadastro-filter-toolbar.process-filter-toolbar {
+        flex-wrap: wrap !important;
+        min-height: 3.75rem !important;
+        padding-inline: .75rem !important;
+    }
+    body:not(.rf-auth-page) #main-content .cadastro-filter-search.process-filter-search {
+        flex: 0 0 15rem !important;
+        min-width: 15rem !important;
     }
 }

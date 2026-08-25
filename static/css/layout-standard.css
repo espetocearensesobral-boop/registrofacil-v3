@@ -5342,31 +5342,3 @@ html body #main-content > .cadastro-list-card .table-apresentantes .tbl-actions 
     height: auto;
   }
 }
-
-/* =====================================================================
-   LISTAS DE CADASTRO — uma única rolagem vertical no documento
-   ===================================================================== */
-html body #main-content.rf-list-page > .cadastro-list-card,
-html body #main-content.rf-list-page > .cadastro-list-card > .card-body,
-html body #main-content.rf-list-page > .cadastro-list-card > .cadastro-filter-surface {
-  max-height: none !important;
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-}
-html body #main-content.rf-list-page > .cadastro-list-card {
-  flex: 0 0 auto !important;
-}
-html body #main-content.rf-list-page > .cadastro-list-card > .card-body {
-  display: block !important;
-}
-html body #main-content.rf-list-page > .cadastro-list-card .table-responsive.rf-infinite-table {
-  display: block !important;
-  flex: 0 0 auto !important;
-  max-height: none !important;
-  height: auto !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  overscroll-behavior: auto !important;
-  scrollbar-gutter: auto !important;
-}

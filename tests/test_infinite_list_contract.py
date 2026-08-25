@@ -74,6 +74,19 @@ def test_base_and_assets_expose_fixed_list_shell_contract():
     assert 'Todas as listas padronizadas' in css
 
 
+def test_cadastro_lists_use_process_filter_and_natural_scroll_contract():
+    css = read('static/css/layout-standard.css')
+    internal_css = read('static/css/internal-ui.css')
+    toolbar = read('templates/_cadastro_filter_toolbar.html')
+    for relative in ('templates/titulares/index.html', 'templates/apresentantes/index.html'):
+        text = read(relative)
+        assert 'process-filter-surface' in toolbar
+        assert 'process-filter-toolbar' in toolbar
+        assert 'data-list-scroll-mode="natural"' in text
+    assert 'overflow-y: hidden !important' in internal_css
+    assert ' .cadastro-list-card,\nbody:not(.rf-auth-page) #main-content .admin-list-card' not in internal_css
+
+
 def test_cadastro_tables_expose_ids_and_last_record_data_contract():
     titulares = read('templates/titulares/index.html')
     apresentantes = read('templates/apresentantes/index.html')
