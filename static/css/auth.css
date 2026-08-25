@@ -13,15 +13,71 @@
 
 .rf-auth-page {
     --rf-auth-panel-max: 32rem;
+    --rf-auth-bg: #0b0d10;
+    --rf-auth-surface: #14191f;
+    --rf-auth-surface-raised: #1a2128;
+    --rf-auth-surface-input: #0f1419;
+    --rf-auth-text: #f4efe5;
+    --rf-auth-text-soft: #b6b0a4;
+    --rf-auth-text-muted: #827e76;
+    --rf-auth-gold: #d5b36a;
+    --rf-auth-gold-bright: #f0d38e;
+    --rf-auth-gold-soft: rgba(213, 179, 106, .16);
+    --rf-auth-line: rgba(213, 179, 106, .24);
+    --rf-surface-body: var(--rf-auth-bg);
+    --rf-surface-card: var(--rf-auth-surface);
+    --rf-surface-input: var(--rf-auth-surface-input);
+    --rf-surface-hover: #202932;
+    --rf-text-primary: var(--rf-auth-text);
+    --rf-text-heading: var(--rf-auth-text);
+    --rf-text-strong: #e8e0d2;
+    --rf-text-secondary: var(--rf-auth-text-soft);
+    --rf-text-muted: var(--rf-auth-text-muted);
+    --rf-border: rgba(213, 179, 106, .2);
+    --rf-border-input: rgba(213, 179, 106, .32);
+    --rf-border-strong: rgba(213, 179, 106, .46);
+    --rf-accent: var(--rf-auth-gold);
+    --rf-accent-subtle: var(--rf-auth-gold-soft);
+    --rf-action-primary: var(--rf-auth-gold);
+    --rf-action-primary-hover: var(--rf-auth-gold-bright);
+    --rf-text-on-primary: #1a150d;
+    --rf-text-link: var(--rf-auth-gold-bright);
     min-height: 100dvh;
     margin: 0;
+    position: relative;
     display: flex;
     align-items: stretch;
     justify-content: center;
+    isolation: isolate;
     overflow-x: hidden;
     overflow-y: auto;
-    background: var(--rf-surface-body, var(--background-color-body));
-    color: var(--rf-text-primary, var(--text-color-primary));
+    background:
+        radial-gradient(circle at 12% 18%, rgba(213, 179, 106, .13), transparent 28rem),
+        radial-gradient(circle at 88% 78%, rgba(118, 83, 29, .16), transparent 32rem),
+        linear-gradient(145deg, #080a0d 0%, #11171d 52%, #0a0d11 100%);
+    color: var(--rf-auth-text);
+}
+
+.rf-auth-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .16;
+    background-image: radial-gradient(rgba(240, 211, 142, .28) .45px, transparent .55px);
+    background-size: 5px 5px;
+    mix-blend-mode: soft-light;
+}
+
+.rf-auth-page::after {
+    content: '';
+    position: fixed;
+    inset: 1rem;
+    z-index: -1;
+    border: 1px solid rgba(213, 179, 106, .1);
+    border-radius: 1.25rem;
+    pointer-events: none;
 }
 
 .auth-skip-link {
@@ -57,22 +113,54 @@
     justify-content: center;
     flex: 1 1 auto;
     width: 100%;
-    background: var(--rf-surface-body, var(--background-color-body));
+    background: transparent;
     border-right: 0;
     overflow-y: auto;
+    z-index: 1;
 }
 
 .rf-auth-page .auth-panel-left::before {
     content: '';
     position: absolute;
     inset: 0 0 auto;
-    height: .25rem;
-    background: var(--rf-accent, var(--color-gold-primary));
+    height: .2rem;
+    background: linear-gradient(90deg, transparent, var(--rf-auth-gold-bright), var(--rf-auth-gold), transparent);
+    box-shadow: 0 0 1.5rem rgba(213, 179, 106, .42);
 }
 
 .rf-auth-page .auth-form-wrap {
+    position: relative;
     width: min(100%, var(--rf-auth-panel-max));
-    padding: 0;
+    padding: clamp(2rem, 4vw, 3.25rem);
+    border: 1px solid var(--rf-auth-line);
+    border-radius: 1.1rem;
+    background: linear-gradient(155deg, rgba(25, 32, 39, .94), rgba(12, 16, 21, .92));
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .055), 0 0 0 1px rgba(213, 179, 106, .035);
+}
+
+.rf-auth-page .auth-form-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 2rem;
+    width: 5rem;
+    height: .18rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--rf-auth-gold-bright), transparent);
+    box-shadow: 0 0 .9rem rgba(213, 179, 106, .38);
+}
+
+.rf-auth-page .auth-form-wrap::after {
+    content: '';
+    position: absolute;
+    top: 1.35rem;
+    right: 1.35rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid rgba(213, 179, 106, .16);
+    border-radius: 50%;
+    box-shadow: 0 0 0 .45rem rgba(213, 179, 106, .035), 0 0 0 .9rem rgba(213, 179, 106, .022);
+    pointer-events: none;
 }
 
 .rf-auth-page .auth-logo-sm {
@@ -90,9 +178,10 @@
     justify-content: center;
     margin: 0 auto;
     overflow: hidden;
-    border: 1px solid var(--rf-border, var(--border-color-default));
+    border: 1px solid var(--rf-auth-line);
     border-radius: var(--rf-radius-lg, .875rem);
-    background: var(--rf-sidebar-surface, var(--background-color-sidebar));
+    background: linear-gradient(145deg, #0a0d11, #1b2229);
+    box-shadow: 0 .55rem 1.4rem rgba(0, 0, 0, .32), inset 0 1px 0 rgba(240, 211, 142, .08);
 }
 
 .rf-auth-page .auth-logo-sm .logo-circle img {
@@ -108,16 +197,17 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--rf-accent, #8c6d00) 42%, var(--rf-border));
+    border: 1px solid rgba(213, 179, 106, .42);
     border-radius: var(--rf-radius-md, .625rem);
-    background: var(--rf-accent-subtle, rgba(0, 0, 0, .08));
-    color: var(--rf-accent, var(--color-gold-primary));
+    background: rgba(213, 179, 106, .12);
+    color: var(--rf-auth-gold-bright);
+    box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .2), inset 0 1px 0 rgba(240, 211, 142, .08);
     font-size: 1.35rem;
 }
 
 .rf-auth-page .auth-title {
     margin: 0 0 .5rem;
-    color: var(--rf-text-heading, var(--rf-text-primary, var(--text-color-primary)));
+    color: var(--rf-auth-text);
     font-family: var(--rf-font-display, Georgia, serif);
     font-size: clamp(1.75rem, 1.2rem + 1.4vw, 2.55rem);
     font-weight: 600;
@@ -133,7 +223,7 @@
 .rf-auth-page .auth-subtitle {
     max-width: 34rem;
     margin: 0 auto 2rem;
-    color: var(--rf-text-secondary, var(--text-color-secondary));
+    color: var(--rf-auth-text-soft);
     font-size: 1rem;
     line-height: 1.55;
     text-align: center;
@@ -142,7 +232,7 @@
 .rf-auth-page .auth-label {
     display: block;
     margin: 0 0 .45rem;
-    color: var(--rf-text-strong, var(--text-color-primary));
+    color: var(--rf-auth-text-soft);
     font-size: .8125rem;
     font-weight: 700;
     letter-spacing: .06em;
@@ -158,9 +248,9 @@
     align-items: center;
     min-height: var(--rf-control-height, 2.75rem);
     overflow: hidden;
-    border: 1px solid var(--rf-border-input, var(--border-color-input));
+    border: 1px solid var(--rf-border-input);
     border-radius: var(--rf-radius-sm, .375rem);
-    background: var(--rf-surface-input, var(--background-color-input-bg));
+    background: linear-gradient(180deg, rgba(15, 20, 25, .96), rgba(10, 14, 18, .96));
     transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
 }
 
@@ -175,7 +265,7 @@
     align-items: center;
     justify-content: center;
     flex: 0 0 2.75rem;
-    color: var(--rf-text-muted, var(--text-color-secondary));
+    color: var(--rf-auth-text-muted);
     font-size: 1rem;
 }
 
@@ -187,14 +277,14 @@
     border: 0;
     outline: 0;
     background: transparent;
-    color: var(--rf-text-primary, var(--text-color-primary));
+    color: var(--rf-auth-text);
     font-family: var(--rf-font-sans, sans-serif);
     font-size: 1rem;
 }
 
 .rf-auth-page .auth-input-group input::placeholder {
-    color: var(--rf-text-muted, var(--text-color-secondary));
-    opacity: .82;
+    color: var(--rf-auth-text-muted);
+    opacity: 1;
 }
 
 .rf-auth-page .auth-input-group .toggle-pw,
@@ -209,7 +299,7 @@
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--rf-text-muted, var(--text-color-secondary));
+    color: var(--rf-auth-gold);
     cursor: pointer;
     font-size: 1rem;
     transition: color .18s ease, background-color .18s ease;
@@ -237,10 +327,11 @@
     gap: .5rem;
     margin-top: .25rem;
     padding: .75rem 1.1rem;
-    border: 1px solid var(--rf-action-primary, var(--color-primary));
+    border: 1px solid var(--rf-auth-gold);
     border-radius: var(--rf-radius-sm, .375rem);
-    background: var(--rf-action-primary, var(--color-primary));
-    color: var(--rf-text-on-primary, #fff);
+    background: linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold));
+    color: var(--rf-text-on-primary);
+    box-shadow: 0 .55rem 1.4rem rgba(213, 179, 106, .15), inset 0 1px 0 rgba(255, 255, 255, .22);
     cursor: pointer;
     font-family: var(--rf-font-sans, sans-serif);
     font-size: .9375rem;
@@ -251,9 +342,9 @@
 }
 
 .rf-auth-page .auth-btn:hover {
-    border-color: var(--rf-action-primary-hover, var(--color-primary-light));
-    background: var(--rf-action-primary-hover, var(--color-primary-light));
-    box-shadow: var(--rf-shadow-sm, 0 1px 3px rgba(0, 0, 0, .08));
+    border-color: var(--rf-auth-gold-bright);
+    background: linear-gradient(135deg, #f6dda1, var(--rf-auth-gold-bright));
+    box-shadow: 0 .75rem 1.8rem rgba(213, 179, 106, .24), inset 0 1px 0 rgba(255, 255, 255, .28);
 }
 
 .rf-auth-page .auth-btn:active {
@@ -298,13 +389,13 @@
     justify-content: center;
     gap: .5rem .75rem;
     margin-top: 1.25rem;
-    color: var(--rf-text-secondary, var(--text-color-secondary));
+    color: var(--rf-auth-text-soft);
     font-size: .875rem;
     text-align: center;
 }
 
 .rf-auth-page .auth-link {
-    color: var(--rf-text-link, var(--color-primary));
+    color: var(--rf-auth-gold-bright);
     font-weight: 650;
     text-decoration: underline;
     text-decoration-color: color-mix(in srgb, currentColor 32%, transparent);
@@ -428,7 +519,7 @@
     .rf-auth-page {
         display: block;
         min-height: 100dvh;
-        background: var(--rf-surface-body, var(--background-color-body));
+        background: transparent;
     }
 
     .rf-auth-page .auth-panel-left {
@@ -482,4 +573,68 @@
         transition-duration: .01ms !important;
         animation-duration: .01ms !important;
     }
+}
+
+/* -------------------------------------------------------------------------
+   Fechamento do tema: a autenticação precisa vencer os resets globais de UI.
+   ------------------------------------------------------------------------- */
+html body.rf-auth-page {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(213, 179, 106, .13), transparent 28rem),
+        radial-gradient(circle at 88% 78%, rgba(118, 83, 29, .16), transparent 32rem),
+        linear-gradient(145deg, #080a0d 0%, #11171d 52%, #0a0d11 100%) !important;
+    background-color: #0b0d10 !important;
+    color: var(--rf-auth-text) !important;
+}
+
+html body.rf-auth-page .auth-panel-left {
+    background: transparent !important;
+}
+
+html body.rf-auth-page .auth-form-wrap {
+    background: linear-gradient(155deg, rgba(25, 32, 39, .94), rgba(12, 16, 21, .92)) !important;
+}
+
+html body.rf-auth-page .auth-btn {
+    border-color: var(--rf-auth-gold) !important;
+    background: linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold)) !important;
+    background-image: linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold)) !important;
+    color: var(--rf-text-on-primary) !important;
+}
+
+html body.rf-auth-page .auth-input-group input.form-control,
+html body.rf-auth-page .auth-input-group input {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--rf-auth-text) !important;
+}
+
+html body.rf-auth-page button.auth-btn.auth-btn:not(.btn-close) {
+    border-color: var(--rf-auth-gold) !important;
+    background: linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold)) !important;
+    background-image: linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold)) !important;
+    background-color: var(--rf-auth-gold) !important;
+    color: var(--rf-text-on-primary) !important;
+}
+
+html body.rf-auth-page main.auth-panel-left .auth-form-wrap button.auth-btn.auth-btn:not(.btn-close) {
+    border-color: #d5b36a !important;
+    background: linear-gradient(135deg, #f0d38e, #d5b36a) !important;
+    background-image: linear-gradient(135deg, #f0d38e, #d5b36a) !important;
+    background-color: #d5b36a !important;
+    color: #1a150d !important;
+}
+
+html body.rf-auth-page main.auth-panel-left .auth-form-wrap .auth-input-group input.form-control {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #f4efe5 !important;
+}
+
+html body.rf-auth-page main.auth-panel-left .auth-form-wrap button.auth-btn[type="submit"]:not(.btn-danger):not(.nav-btn-danger):not(.btn-primary):not(.nav-btn-primary):not(.btn-success):not(.nav-btn-success):not(.btn-warning):not(.nav-btn-warning):not(.btn-info):not(.nav-btn-info):not(.btn-secondary):not(.btn-outline-secondary) {
+    border-color: #d5b36a !important;
+    background: linear-gradient(135deg, #f0d38e, #d5b36a) !important;
+    background-image: linear-gradient(135deg, #f0d38e, #d5b36a) !important;
+    background-color: #d5b36a !important;
+    color: #1a150d !important;
 }

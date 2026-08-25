@@ -208,3 +208,15 @@ def test_public_auth_pages_render_without_right_panel_or_permission_notice(app_c
         assert 'auth-panel-left' in body, route
         assert 'Atenção:' not in body, route
         assert 'Novos usuários não possuem permissões por padrão' not in body, route
+
+
+
+def test_auth_pages_keep_dark_gold_corporate_visual_contract():
+    css = read('static/css/auth.css')
+    assert '--rf-auth-bg: #0b0d10;' in css
+    assert '--rf-auth-gold: #d5b36a;' in css
+    assert 'radial-gradient(circle at 12% 18%' in css
+    assert 'background-image: radial-gradient(rgba(240, 211, 142' in css
+    assert '.rf-auth-page .auth-form-wrap::before' in css
+    assert '.rf-auth-page .auth-form-wrap::after' in css
+    assert 'linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold))' in css
