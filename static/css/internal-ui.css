@@ -1799,19 +1799,6 @@ body:not(.rf-auth-page) #main-content .admin-filter-icon-btn.process-filter-icon
 }
 
 /* -------------------------------------------------------------------------
-   Zebra transversal para tabelas fora das listas padronizadas
-   ------------------------------------------------------------------------- */
-body:not(.rf-auth-page) #main-content table:not(.table-processos):not(.table-titulares):not(.table-apresentantes):not(.table-usuarios):not(.table-atividades):not(.table-auditoria) tbody tr td {
-    background: var(--rf-table-row-base, var(--rf-surface-card, #fff)) !important;
-}
-body:not(.rf-auth-page) #main-content table:not(.table-processos):not(.table-titulares):not(.table-apresentantes):not(.table-usuarios):not(.table-atividades):not(.table-auditoria) tbody tr:nth-child(even) td {
-    background: var(--rf-table-row-alt, color-mix(in srgb, var(--rf-surface-card, #fff) 94%, var(--rf-surface-body, #f8f8f8))) !important;
-}
-body:not(.rf-auth-page) #main-content table:not(.table-processos):not(.table-titulares):not(.table-apresentantes):not(.table-usuarios):not(.table-atividades):not(.table-auditoria) tbody tr:hover td {
-    background: var(--rf-table-row-hover, var(--rf-surface-hover, #f5f5f4)) !important;
-}
-
-/* -------------------------------------------------------------------------
    Scrollbar principal — sem botões nativos nem gutter vazio
    ------------------------------------------------------------------------- */
 html {
@@ -1825,4 +1812,94 @@ html::-webkit-scrollbar-button {
 }
 html::-webkit-scrollbar-corner {
     background: transparent !important;
+}
+
+/* Zebra efetiva: o fundo é aplicado nas células para vencer Bootstrap,
+   box-model de tabelas e regras históricas por linha. */
+body:not(.rf-auth-page) #main-content table tbody tr > td {
+    background: var(--rf-table-row-base, var(--rf-surface-card, #fff)) !important;
+}
+body:not(.rf-auth-page) #main-content table tbody tr:nth-child(even) > td {
+    background: var(--rf-table-row-alt, var(--rf-surface-muted, #f5f5f4)) !important;
+}
+body:not(.rf-auth-page) #main-content table tbody tr:hover > td,
+body:not(.rf-auth-page) #main-content table tbody tr:focus-within > td {
+    background: var(--rf-table-row-hover, var(--rf-surface-hover, #f4f4f1)) !important;
+}
+
+/* Reforço de compatibilidade: alguns painéis antigos usam `background-color`
+   em vez de `background`, por isso a alternância final também declara o longhand. */
+html body:not(.rf-auth-page) #main-content table tbody tr:nth-child(odd) > td {
+    background-color: var(--rf-table-row-base, var(--rf-surface-card, #fff)) !important;
+}
+html body:not(.rf-auth-page) #main-content table tbody tr:nth-child(even) > td {
+    background-color: var(--rf-table-row-alt, var(--rf-surface-muted, #EFF1F1)) !important;
+}
+html body:not(.rf-auth-page) #main-content table tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content table tbody tr:focus-within > td {
+    background-color: var(--rf-table-row-hover, var(--rf-surface-hover, #f4f4f1)) !important;
+}
+
+/* Fallback definitivo sem custom property opcional: garante que um token de
+   linha vazio não invalide a declaração antes de ela chegar ao navegador. */
+html body:not(.rf-auth-page) #main-content table tbody tr:nth-child(odd) > td {
+    background: var(--rf-surface-card, #fff) !important;
+    background-color: var(--rf-surface-card, #fff) !important;
+}
+html body:not(.rf-auth-page) #main-content table tbody tr:nth-child(even) > td {
+    background: var(--rf-surface-muted, #EFF1F1) !important;
+    background-color: var(--rf-surface-muted, #EFF1F1) !important;
+}
+html body:not(.rf-auth-page) #main-content table tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content table tbody tr:focus-within > td {
+    background: var(--rf-surface-hover, #f4f4f1) !important;
+    background-color: var(--rf-surface-hover, #f4f4f1) !important;
+}
+
+/* Famílias com layout histórico de alta especificidade. */
+html body:not(.rf-auth-page) #main-content .dashboard-panels-row .dash-table tbody tr:nth-child(odd) > td,
+html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:nth-child(odd) > td,
+html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-atividades tbody tr:nth-child(odd) > td,
+html body:not(.rf-auth-page) #main-content .cfg-tbl tbody tr:nth-child(odd) > td,
+html body:not(.rf-auth-page) #main-content .mtr-table tbody tr:nth-child(odd) > td,
+html body:not(.rf-auth-page) #main-content .rf-permission-table tbody tr:nth-child(odd) > td,
+html body:not(.rf-auth-page) #main-content .rf-backup-table tbody tr:nth-child(odd) > td {
+    background: var(--rf-surface-card, #fff) !important;
+    background-color: var(--rf-surface-card, #fff) !important;
+}
+html body:not(.rf-auth-page) #main-content .dashboard-panels-row .dash-table tbody tr:nth-child(even) > td,
+html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:nth-child(even) > td,
+html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-atividades tbody tr:nth-child(even) > td,
+html body:not(.rf-auth-page) #main-content .cfg-tbl tbody tr:nth-child(even) > td,
+html body:not(.rf-auth-page) #main-content .mtr-table tbody tr:nth-child(even) > td,
+html body:not(.rf-auth-page) #main-content .rf-permission-table tbody tr:nth-child(even) > td,
+html body:not(.rf-auth-page) #main-content .rf-backup-table tbody tr:nth-child(even) > td {
+    background: var(--rf-surface-muted, #EFF1F1) !important;
+    background-color: var(--rf-surface-muted, #EFF1F1) !important;
+}
+html body:not(.rf-auth-page) #main-content .dashboard-panels-row .dash-table tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-usuarios tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content > .admin-list-card .rf-table.table-atividades tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content .cfg-tbl tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content .mtr-table tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content .rf-permission-table tbody tr:hover > td,
+html body:not(.rf-auth-page) #main-content .rf-backup-table tbody tr:hover > td {
+    background: var(--rf-surface-hover, #f4f4f1) !important;
+    background-color: var(--rf-surface-hover, #f4f4f1) !important;
+}
+
+/* Tabelas largas em listas naturais: somente o wrapper da tabela pode rolar
+   horizontalmente; a página continua sendo o único scroll vertical. */
+html body:not(.rf-auth-page) #main-content.rf-list-page > .process-list-card .table-responsive.rf-infinite-table,
+html body:not(.rf-auth-page) #main-content.rf-list-page > .cadastro-list-card .table-responsive.rf-infinite-table,
+html body:not(.rf-auth-page) #main-content.rf-list-page > .admin-list-card .table-responsive.rf-infinite-table {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    overscroll-behavior: auto !important;
+    scrollbar-gutter: auto !important;
 }

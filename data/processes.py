@@ -584,11 +584,16 @@ def get_critical_deadline_processes(limit=5):
     """
     results = executar_query(query, [hoje, hoje, hoje, hoje, limit])
     
+    hoje_dt = datetime.now().date()
     for r in results:
         if isinstance(r['prazo_final'], str) and len(r['prazo_final']) >= 10:
             r['prazo_final_dt'] = datetime.strptime(r['prazo_final'].split(' ')[0], '%Y-%m-%d').date()
+            r['prazo_diff_days'] = (r['prazo_final_dt'] - hoje_dt).days
+            r['prazo_formatado'] = r['prazo_final_dt'].strftime('%d/%m/%Y')
         else:
             r['prazo_final_dt'] = None
+            r['prazo_diff_days'] = None
+            r['prazo_formatado'] = 'Sem prazo'
     return results
 
 def get_dashboard_analytics():

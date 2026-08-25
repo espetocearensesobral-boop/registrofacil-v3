@@ -42,9 +42,13 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert response.status_code == 200
     body = response.get_data(as_text=True)
 
-    assert 'dashboard-insights-grid' not in body
-    assert body.find('class="kpi-grid"') < body.find('Prazos Críticos') < body.find('Processos Recentes') < body.find('Movimentação Diária')
+    assert 'dashboard-insights-grid' in body
+    assert body.find('class="kpi-grid"') < body.find('dashboard-focus-panel') < body.find('Prazos Críticos') < body.find('Processos Recentes') < body.find('Movimentação Diária')
     for marker in (
+        'dashboard-hero-summary',
+        'dashboard-focus-panel',
+        'dashboard-focus-title',
+        'dashboard-insights-grid',
         'dashboardMovementChart',
         'dashboardStatusChart',
         'dashboardServicesChart',
@@ -57,6 +61,8 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
 
     dashboard_template = (ROOT / 'templates/dashboard.html').read_text(encoding='utf-8')
     assert 'dashboard_info.analytics | tojson' in dashboard_template
+    assert 'processo.prazo_diff_days' in dashboard_template
+    assert 'analytics.total_vencidos' in dashboard_template
     assert "type: 'bar'" in dashboard_template
     assert "type: 'doughnut'" in dashboard_template
 
@@ -98,3 +104,5 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert 'container-type: inline-size;' in css
     assert '@container (max-width: 56rem)' in css
     assert 'max-width: 100%;' in css
+    assert '.dashboard-focus-panel' in css
+    assert '.dashboard-hero-summary' in css

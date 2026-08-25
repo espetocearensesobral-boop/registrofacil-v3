@@ -114,6 +114,9 @@ def test_all_runtime_table_families_have_explicit_zebra_contracts():
     assert 'table-auditoria tbody tr:nth-child(even)' in css
     assert 'var(--rf-clean-row-alt' in css
     assert 'var(--rf-table-row-alt' in internal_css
+    assert 'tbody tr:nth-child(even) > td' in internal_css
+    assert 'background-color: var(--rf-surface-muted' in internal_css
+    assert "full-ui3" in read('templates/base.html')
 
 
 def test_cadastro_tables_expose_ids_and_last_record_data_contract():

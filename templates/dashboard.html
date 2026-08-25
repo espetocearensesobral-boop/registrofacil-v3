@@ -14,15 +14,26 @@
 {% endblock %}
 
 {% block content %}
-    <!-- 1. Saudação Dinâmica (Contexto Imediato) -->
+    {% set analytics = dashboard_info.analytics %}
+    <!-- 1. Saudação Dinâmica e contexto operacional -->
     <div class="greeting-banner" role="region" aria-label="Saudação e resumo do dia">
         <div class="greeting-body">
             <h1 class="greeting-main" id="greeting-message">{{ custom_greeting }}</h1>
             <p class="greeting-sub" id="greeting-subtitle" aria-live="polite"></p>
+            <p class="dashboard-hero-summary">
+                {% if analytics.total_vencidos %}<strong>{{ analytics.total_vencidos }} prazo{{ 's' if analytics.total_vencidos != 1 else '' }} vencido{{ 's' if analytics.total_vencidos != 1 else '' }}</strong>{% else %}<strong>Nenhum prazo vencido</strong>{% endif %},
+                <strong>{{ analytics.total_proximos }}</strong> nos próximos cinco dias e
+                <strong>{{ analytics.movimentacao_7_dias }}</strong> movimentaç{{ 'ões' if analytics.movimentacao_7_dias != 1 else 'ão' }} nos últimos sete dias.
+            </p>
         </div>
-        <div class="greeting-time-badge" aria-label="Hora atual">
-            <i class="bi bi-clock" aria-hidden="true"></i> 
-            <span id="greeting-clock" aria-live="off">--:--</span>
+        <div class="dashboard-hero-actions">
+            <div class="greeting-time-badge" aria-label="Hora atual">
+                <i class="bi bi-clock" aria-hidden="true"></i>
+                <span id="greeting-clock" aria-live="off">--:--</span>
+            </div>
+            <a class="dashboard-focus-btn" href="#dashboard-focus">
+                <i class="bi bi-crosshair2" aria-hidden="true"></i> Ver foco do dia
+            </a>
         </div>
     </div>
 
@@ -50,9 +61,37 @@
         </a>
     </nav>
 
-    {% set analytics = dashboard_info.analytics %}
+    <!-- 3. Foco do dia: prioridades reais, ordenadas pelo risco de prazo -->
+    <section class="dashboard-focus-panel" id="dashboard-focus" aria-labelledby="dashboard-focus-title">
+        <header class="dashboard-focus-header">
+            <div>
+                <span class="dashboard-section-kicker"><i class="bi bi-crosshair2" aria-hidden="true"></i> Prioridade operacional</span>
+                <h2 id="dashboard-focus-title">Foco do dia</h2>
+            </div>
+            <span class="dashboard-focus-count">{{ dashboard_info.processos_com_prazo_critico|length }} prioridade{{ 's' if dashboard_info.processos_com_prazo_critico|length != 1 else '' }}</span>
+        </header>
+        <div class="dashboard-focus-list">
+            {% if dashboard_info.processos_com_prazo_critico %}
+                {% for processo in dashboard_info.processos_com_prazo_critico[:4] %}
+                <a class="dashboard-focus-item" href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}">
+                    <span class="dashboard-focus-priority dashboard-focus-priority-{{ 'danger' if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 else ('warning' if processo.prazo_diff_days is not none and processo.prazo_diff_days <= 1 else 'info') }}" aria-hidden="true">{{ loop.index }}</span>
+                    <span class="dashboard-focus-copy">
+                        <strong>{{ processo['titular'] }}</strong>
+                        <span>{{ processo['tipo_servico_nome'] or 'Processo' }} · {{ processo['matricula'] or 'Sem matrícula' }}</span>
+                    </span>
+                    <span class="dashboard-focus-deadline {% if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 %}is-overdue{% elif processo.prazo_diff_days is not none and processo.prazo_diff_days <= 1 %}is-near{% endif %}">
+                        {% if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 %}Vencido há {{ processo.prazo_diff_days|abs }}d{% elif processo.prazo_diff_days == 0 %}Vence hoje{% elif processo.prazo_diff_days == 1 %}Vence amanhã{% else %}Vence em {{ processo.prazo_diff_days }}d{% endif %}
+                    </span>
+                    <i class="bi bi-chevron-right dashboard-focus-arrow" aria-hidden="true"></i>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="dashboard-focus-empty"><i class="bi bi-check2-circle" aria-hidden="true"></i><span>Nenhuma prioridade crítica identificada.</span></div>
+            {% endif %}
+        </div>
+    </section>
 
-    <!-- 3. Painéis de Ação Imediata (Urgência > Informação) -->
+    <!-- 4. Painéis de Ação Imediata (Urgência > Informação) -->
     <div class="row g-3 dashboard-panels-row">
         <!-- Prazos Críticos -->
         <div class="col-lg-6">
@@ -159,7 +198,27 @@
         </div>
     </div>
 
-    <!-- 4. Análise Visual (Dados Secundários, mas importantes) -->
+    <!-- 5. Insights operacionais baseados nos dados do período -->
+    <section class="dashboard-insights-grid" aria-label="Insights operacionais">
+        <article class="dashboard-insight-card dashboard-insight-red">
+            <span class="dashboard-insight-icon"><i class="bi bi-exclamation-circle" aria-hidden="true"></i></span>
+            <span class="dashboard-insight-content"><span class="dashboard-insight-label">Prazos vencidos</span><strong>{{ analytics.total_vencidos }}</strong><small>processos abertos em atraso</small></span>
+        </article>
+        <article class="dashboard-insight-card dashboard-insight-gold">
+            <span class="dashboard-insight-icon"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
+            <span class="dashboard-insight-content"><span class="dashboard-insight-label">Próximos cinco dias</span><strong>{{ analytics.total_proximos }}</strong><small>prazos que exigem acompanhamento</small></span>
+        </article>
+        <article class="dashboard-insight-card dashboard-insight-blue">
+            <span class="dashboard-insight-icon"><i class="bi bi-activity" aria-hidden="true"></i></span>
+            <span class="dashboard-insight-content"><span class="dashboard-insight-label">Movimentação</span><strong>{{ analytics.movimentacao_7_dias }}</strong><small>entradas nos últimos sete dias</small></span>
+        </article>
+        <article class="dashboard-insight-card dashboard-insight-green">
+            <span class="dashboard-insight-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+            <span class="dashboard-insight-content"><span class="dashboard-insight-label">Conclusão no prazo</span><strong>{{ '%.1f'|format(analytics.taxa_no_prazo) }}<em>%</em></strong><small>entre processos concluídos</small></span>
+        </article>
+    </section>
+
+    <!-- 6. Análise Visual (Dados Secundários, mas importantes) -->
     <section class="dashboard-analytics-grid" aria-label="Análises de movimentação">
         <article class="dashboard-chart-panel">
             <header class="rf-card-header dashboard-chart-header">
