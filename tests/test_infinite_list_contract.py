@@ -116,7 +116,13 @@ def test_all_runtime_table_families_have_explicit_zebra_contracts():
     assert 'var(--rf-table-row-alt' in internal_css
     assert 'tbody tr:nth-child(even) > td' in internal_css
     assert 'background-color: var(--rf-surface-muted' in internal_css
-    assert "full-ui3" in read('templates/base.html')
+    base = read('templates/base.html')
+    assert 'full-ui4' in base
+    assert 'dashboard4' in base
+    assert '#mobile-menu-btn' in internal_css
+    assert 'display: none !important;' in internal_css
+    assert '--rf-scrollbar-thumb' in internal_css
+    assert 'scrollbar-color: var(--rf-scrollbar-thumb) var(--rf-scrollbar-track) !important;' in internal_css
 
 
 def test_cadastro_tables_expose_ids_and_last_record_data_contract():

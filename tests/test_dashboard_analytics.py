@@ -45,9 +45,15 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert 'dashboard-insights-grid' not in body
     assert 'Prazos Críticos' not in body
     assert 'Processos Recentes' not in body
+    assert 'Ver foco do dia' not in body
+    assert 'dashboard-focus-btn' not in body
     assert body.find('class="kpi-grid"') < body.find('dashboard-focus-panel') < body.find('dashboard-analytics-section')
     for marker in (
         'dashboard-hero-summary',
+        'dashboard-hero-metrics',
+        'dashboard-hero-metric is-danger',
+        'dashboard-hero-metric is-warning',
+        'dashboard-hero-metric is-info',
         'dashboard-focus-panel',
         'dashboard-focus-title',
         'dashboard-analytics-section',
@@ -67,8 +73,8 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     assert 'dashboard_info.analytics | tojson' in dashboard_template
     assert 'processo.prazo_diff_days' in dashboard_template
     assert 'processos_com_prazo_critico[:5]' in dashboard_template
-    assert 'analytics.total_vencidos' not in dashboard_template
-    assert 'analytics.total_proximos' not in dashboard_template
+    assert 'analytics.total_vencidos' in dashboard_template
+    assert 'analytics.total_proximos' in dashboard_template
     assert 'analytics.movimentacao_7_dias' not in dashboard_template
     assert 'analytics.taxa_no_prazo' not in dashboard_template
     assert 'analytics.total_abertos' in dashboard_template
@@ -111,6 +117,9 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert 'height: auto;' in css
     assert 'border: 1px solid var(--rf-border' in css
     assert 'grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);' in css
+    assert css.count('grid-auto-rows: auto;') >= 2
+    assert 'min-height: 20rem;' in css
+    assert 'min-height: 18rem;' in css
     assert '.dashboard-management-grid' in css
     assert '.dashboard-management-callout' in css
     assert 'container-type: inline-size;' in css
@@ -118,3 +127,6 @@ def test_dashboard_status_cards_use_fixed_semantic_palette(app_client):
     assert 'max-width: 100%;' in css
     assert '.dashboard-focus-panel' in css
     assert '.dashboard-hero-summary' in css
+    assert '.dashboard-hero-metrics' in css
+    assert '.dashboard-hero-metric.is-danger' in css
+    assert '.dashboard-focus-btn' not in css

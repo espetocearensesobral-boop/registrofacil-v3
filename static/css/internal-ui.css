@@ -164,7 +164,7 @@ body:not(.rf-auth-page) #sidebar {
     min-width: var(--rf-internal-control-height);
     height: var(--rf-internal-control-height);
     min-height: var(--rf-internal-control-height);
-    display: inline-grid;
+    display: none;
     place-items: center;
     padding: 0;
     border: 1px solid var(--rf-border, #e2e2e2);
@@ -1895,4 +1895,56 @@ html body:not(.rf-auth-page) #main-content.rf-list-page > .admin-list-card .tabl
     overflow-y: hidden !important;
     overscroll-behavior: auto !important;
     scrollbar-gutter: auto !important;
+}
+
+
+:root {
+    --rf-scrollbar-track: var(--rf-page, var(--background-color-body, #F7F8F8));
+    --rf-scrollbar-thumb: var(--rf-accent, var(--color-primary, #CDA865));
+    --rf-scrollbar-thumb-hover: var(--rf-accent-hover, var(--color-primary-dark, #8B6332));
+}
+
+/* O controle pertence exclusivamente ao drawer mobile; no desktop a navbar
+   começa diretamente pelo título da página. */
+#mobile-menu-btn {
+    display: none !important;
+}
+@media (max-width: 991.98px) {
+    #mobile-menu-btn {
+        display: inline-grid !important;
+    }
+}
+
+/* Scrollbar final do shell: trilho claro da página, thumb no acento vigente e
+   sem setas/botões nativos. O mesmo tratamento vale para tabelas largas. */
+html {
+    scrollbar-color: var(--rf-scrollbar-thumb) var(--rf-scrollbar-track) !important;
+}
+html::-webkit-scrollbar-track,
+html body::-webkit-scrollbar-track {
+    background: var(--rf-scrollbar-track) !important;
+}
+html::-webkit-scrollbar-thumb,
+html body::-webkit-scrollbar-thumb {
+    background: var(--rf-scrollbar-thumb) !important;
+    border-color: var(--rf-scrollbar-track) !important;
+}
+html::-webkit-scrollbar-thumb:hover,
+html body::-webkit-scrollbar-thumb:hover {
+    background: var(--rf-scrollbar-thumb-hover) !important;
+    border-color: var(--rf-scrollbar-track) !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table {
+    scrollbar-color: var(--rf-scrollbar-thumb) var(--rf-scrollbar-track) !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table::-webkit-scrollbar-track {
+    background: var(--rf-scrollbar-track) !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table::-webkit-scrollbar-thumb {
+    background: var(--rf-scrollbar-thumb) !important;
+    border-color: var(--rf-scrollbar-track) !important;
+}
+#main-content.rf-list-page .table-responsive.rf-infinite-table::-webkit-scrollbar-thumb:hover {
+    background: var(--rf-scrollbar-thumb-hover) !important;
+    border-color: var(--rf-scrollbar-track) !important;
 }
