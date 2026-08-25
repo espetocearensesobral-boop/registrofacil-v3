@@ -1,4 +1,5 @@
 import json
+import hashlib
 import sqlite3
 import zipfile
 from pathlib import Path
@@ -167,11 +168,13 @@ def test_promote_staged_restore_replaces_data_and_preserves_keys(tmp_path, monke
         upload_processos=dirs["processos"],
         upload_empresa=dirs["empresa"],
         rollback_root=str(tmp_path / "rollbacks"),
+        log_dir=dirs["logs"],
     )
 
     restored = sqlite3.connect(database).execute("SELECT valor FROM dados").fetchone()[0]
     assert restored == "teste"
     assert (Path(dirs["processos"]) / "processos.txt").read_text(encoding="utf-8") == "processos"
+    assert (Path(dirs["logs"]) / "logs.txt").read_text(encoding="utf-8") == "logs"
     assert key.read_text(encoding="utf-8") == "nao-alterar"
     assert Path(promoted["rollback_dir"]).is_dir()
 
@@ -188,3 +191,23 @@ def test_write_backup_status_is_atomic(tmp_path):
     assert payload["status"] == "success_local"
     assert payload["filename"] == "backup.zip"
     assert not list(tmp_path.glob(".backup-status.*.tmp"))
+
+
+def test_validate_backup_archive_rejects_manifest_hash_tampering(tmp_path):
+    path = tmp_path / "tampered.zip"
+    original = b"original"
+    manifest = {
+        "format_version": backup_service.BACKUP_FORMAT_VERSION,
+        "database": "registrofacil.db",
+        "entries": [{
+            "path": "database/registrofacil.db",
+            "size": len(original),
+            "sha256": hashlib.sha256(original).hexdigest(),
+        }],
+    }
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("database/registrofacil.db", b"tampered")
+        archive.writestr(backup_service.MANIFEST_NAME, json.dumps(manifest))
+
+    with pytest.raises(ValueError, match="Hash divergente"):
+        backup_service.validate_backup_archive(str(path))

@@ -500,7 +500,7 @@ def gerenciar_usuario(user_id):
             return jsonify(success=False, message=str(e), type='danger'), 400
         except Exception as e:
             logger.exception(f"Erro ao gerenciar usuário {user_id}: {e}")
-            return jsonify(success=False, message=f'Erro inesperado: {str(e)}', type='danger'), 500
+            return jsonify(success=False, message='Não foi possível concluir a alteração. Consulte os logs.', type='danger'), 500
     
     csrf_token_val = gerar_csrf_token()
     return render_template('admin/gerenciar_usuario.html',

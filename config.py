@@ -2,7 +2,8 @@
 
 import os
 import sys
-import secrets  # <<< CORREÇÃO ADICIONADA AQUI
+import secrets
+import stat
 from datetime import timedelta, datetime
 
 # --- Lógica de Caminhos para .EXE e Desenvolvimento ---
@@ -21,9 +22,39 @@ else:
     DATA_DIR = BASE_DIR
 
 
+def _read_persistent_secret(path):
+    """Lê um segredo persistente e restringe suas permissões locais."""
+    with open(path, 'r', encoding='utf-8') as handle:
+        value = handle.read().strip()
+    if os.name != 'nt':
+        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
+    return value
+
+
+def _write_persistent_secret(path, value):
+    """Cria um segredo com modo restritivo e evita sobrescrever um arquivo novo."""
+    directory = os.path.dirname(path)
+    os.makedirs(directory, exist_ok=True)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    flags |= getattr(os, 'O_NOFOLLOW', 0)
+    fd = os.open(path, flags, stat.S_IRUSR | stat.S_IWUSR)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as handle:
+            handle.write(value)
+    except Exception:
+        try:
+            os.close(fd)
+        except OSError:
+            pass
+        raise
+    if os.name != 'nt':
+        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
+
+
 class Config:
-    VERSION = '3.28.58'
-    ENVIRONMENT = os.environ.get('REGISTROFACIL_ENV', 'development').strip().lower()
+    VERSION = '3.28.59'
+    _configured_environment = os.environ.get('REGISTROFACIL_ENV', '').strip().lower()
+    ENVIRONMENT = _configured_environment or 'production'
     IS_PRODUCTION = ENVIRONMENT in {'production', 'prod'}
     INITIAL_ADMIN_PASSWORD = os.environ.get('INITIAL_ADMIN_PASSWORD')
     TRUST_PROXY_HEADERS = os.environ.get('TRUST_PROXY_HEADERS', 'false').strip().lower() == 'true'
@@ -41,12 +72,10 @@ class Config:
         if os.environ.get('SECRET_KEY'):
             SECRET_KEY = os.environ.get('SECRET_KEY')
         elif os.path.exists(_secret_key_file):
-            with open(_secret_key_file, 'r') as _f:
-                SECRET_KEY = _f.read().strip()
+            SECRET_KEY = _read_persistent_secret(_secret_key_file)
         else:
             SECRET_KEY = secrets.token_hex(32)
-            with open(_secret_key_file, 'w') as _f:
-                _f.write(SECRET_KEY)
+            _write_persistent_secret(_secret_key_file, SECRET_KEY)
             # Ocultar no Windows
             if sys.platform == 'win32':
                 try:
@@ -84,21 +113,25 @@ class Config:
         if os.environ.get('ENCRYPTION_KEY'):
             ENCRYPTION_KEY = os.environ.get('ENCRYPTION_KEY')
         elif os.path.exists(_enc_key_file):
-            with open(_enc_key_file, 'r') as _fk:
-                ENCRYPTION_KEY = _fk.read().strip()
+            ENCRYPTION_KEY = _read_persistent_secret(_enc_key_file)
         else:
             from cryptography.fernet import Fernet
             ENCRYPTION_KEY = Fernet.generate_key().decode()
-            with open(_enc_key_file, 'w') as _fk:
-                _fk.write(ENCRYPTION_KEY)
+            _write_persistent_secret(_enc_key_file, ENCRYPTION_KEY)
             if sys.platform == 'win32':
                 try:
                     import ctypes
                     ctypes.windll.kernel32.SetFileAttributesW(_enc_key_file, 0x2)
                 except Exception:
                     pass
-    except Exception:
-        # Fallback de emergência - não persiste, mas não bloqueia a inicialização
+    except Exception as _encryption_error:
+        if IS_PRODUCTION:
+            raise RuntimeError(
+                'Não foi possível carregar ou persistir a chave de criptografia. '
+                'Corrija as permissões do diretório de dados antes de iniciar o sistema.'
+            ) from _encryption_error
+        # Em desenvolvimento, manter compatibilidade sem mascarar o problema em logs.
+        print(f'Aviso: chave de criptografia temporária em desenvolvimento: {_encryption_error}', file=sys.stderr)
         from cryptography.fernet import Fernet
         ENCRYPTION_KEY = Fernet.generate_key().decode()
 

@@ -106,6 +106,7 @@ def init_db(criar_indices_performance, init_fts):
                     ip TEXT NOT NULL,
                     sucesso INTEGER NOT NULL,
                     event_id TEXT,
+                    identidade_hash TEXT,
                     tempo TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
                 );
             """)
@@ -113,6 +114,7 @@ def init_db(criar_indices_performance, init_fts):
         else:
             logger.info("Tabela 'login_attempts' já existe.")
             ensure_column('login_attempts', 'event_id', 'TEXT')
+            ensure_column('login_attempts', 'identidade_hash', 'TEXT')
 
         if not table_exists("logs"):
             cursor.execute("""

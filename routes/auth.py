@@ -205,6 +205,58 @@ def login_status_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def dashboard_permission_required(permission_name):
+    """Protege dados de dashboard com resposta 403 para páginas e APIs."""
+    def decorator(f):
+        @functools.wraps(f)
+        def decorated_function(*args, **kwargs):
+            user_id = session.get('usuario_id')
+            session_role = session.get('usuario_role')
+            persisted_user = get_user_by_id(user_id) if user_id else None
+            role_consistente = (
+                persisted_user
+                and persisted_user.get('ativo') == 1
+                and persisted_user.get('role') == session_role
+            )
+            has_specific_permission = False
+            if role_consistente and user_id:
+                permission_row = executar_query(
+                    """
+                    SELECT 1
+                    FROM permissoes_usuarios p
+                    JOIN modulos_sistema m ON m.id = p.modulo_id
+                    WHERE p.usuario_id = ? AND m.nome = ? AND m.ativo = 1 AND p.concedido = 1
+                    LIMIT 1
+                    """,
+                    [user_id, permission_name],
+                    fetch_one=True,
+                )
+                has_specific_permission = permission_row is not None
+
+            allowed = bool(
+                role_consistente
+                and (session_role in {'admin', 'suporte'} or has_specific_permission)
+            )
+            if not allowed:
+                logger.warning(
+                    f"Acesso negado aos dados do dashboard. Usuário ID: {user_id}, "
+                    f"Permissão: {permission_name}, IP: {get_client_ip()}"
+                )
+                wants_json = request.path.startswith('/api/') or (
+                    'application/json' in request.headers.get('Accept', '')
+                )
+                if wants_json:
+                    return jsonify(
+                        success=False,
+                        message="Você não tem permissão para acessar estes dados.",
+                        type='danger',
+                    ), 403
+                return "Você não tem permissão para acessar este recurso.", 403
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+
 def admin_required(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
@@ -308,17 +360,7 @@ def login():
             flash("Acesso não autorizado.", 'error')
             logger.warning(f"Honeypot acionado para IP: {ip}")
             gravar_log("Falha de login: Honeypot acionado", None, None, ip)
-            registrar_tentativa_login(ip, False)
-            session.pop('csrf_token', None)
-            return render_template('login.html', csrf_token=gerar_csrf_token(),
-                                   usuario=usuario_input, logo_url=logo_url_for_template)
-
-        pode_tentar, erro_tentativas = verificar_tentativas_login(ip) 
-        if not pode_tentar:
-            flash(erro_tentativas, 'error')
-            logger.warning(f"Login bloqueado para IP '{ip}' devido a excesso de tentativas.")
-            gravar_log("Tentativa de login bloqueada por excesso de tentativas", None, None, ip) 
-            registrar_tentativa_login(ip, False) 
+            registrar_tentativa_login(ip, False, username=usuario_input)
             session.pop('csrf_token', None)
             return render_template('login.html', csrf_token=gerar_csrf_token(),
                                    usuario=usuario_input, logo_url=logo_url_for_template)
@@ -327,7 +369,7 @@ def login():
             flash("Token de segurança inválido ou expirado. Por favor, recarregue a página e tente novamente.", 'error')
             logger.error(f"Falha de login: Token CSRF inválido para IP: {ip}")
             gravar_log("Falha de login: Token CSRF inválido", None, None, ip) 
-            registrar_tentativa_login(ip, False) 
+            registrar_tentativa_login(ip, False, username=usuario_input)
             session.pop('csrf_token', None)
             return render_template('login.html', csrf_token=gerar_csrf_token(),
                                    usuario=usuario_input, logo_url=logo_url_for_template)
@@ -335,11 +377,21 @@ def login():
         usuario_input = proteger_input(request.form.get('usuario', ''))
         senha_input = request.form.get('senha', '')
 
+        pode_tentar, erro_tentativas = verificar_tentativas_login(ip, usuario_input)
+        if not pode_tentar:
+            flash(erro_tentativas, 'error')
+            logger.warning("Login bloqueado por excesso de tentativas para IP/identidade.")
+            gravar_log("Tentativa de login bloqueada por excesso de tentativas", None, None, ip)
+            registrar_tentativa_login(ip, False, username=usuario_input)
+            session.pop('csrf_token', None)
+            return render_template('login.html', csrf_token=gerar_csrf_token(),
+                                   usuario=usuario_input, logo_url=logo_url_for_template)
+
         if not usuario_input or not senha_input:
             flash("Preencha todos os campos.", 'error')
             logger.warning(f"Tentativa de login com campos vazios. IP: {ip}")
             gravar_log("Falha de login: Campos vazios", None, None, ip) 
-            registrar_tentativa_login(ip, False) 
+            registrar_tentativa_login(ip, False, username=usuario_input)
             return render_template('login.html', csrf_token=gerar_csrf_token(),
                                    usuario=usuario_input, logo_url=logo_url_for_template)
 
@@ -351,7 +403,7 @@ def login():
                 action_log = f"Falha de login: Usuário não encontrado ({usuario_input})"
                 logger.warning(action_log)
                 gravar_log(action_log, None, None, ip) 
-                registrar_tentativa_login(ip, False) 
+                registrar_tentativa_login(ip, False, username=usuario_input)
                 return render_template('login.html', csrf_token=gerar_csrf_token(),
                                        usuario=usuario_input, logo_url=logo_url_for_template)
 
@@ -360,7 +412,7 @@ def login():
                 action_log = f"Falha de login: Conta inativa para usuário '{usuario_input}'"
                 logger.warning(action_log)
                 gravar_log(action_log, None, user['id'], ip) 
-                registrar_tentativa_login(ip, False) 
+                registrar_tentativa_login(ip, False, username=usuario_input)
                 return render_template('login.html', csrf_token=gerar_csrf_token(),
                                        usuario=usuario_input, logo_url=logo_url_for_template)
 
@@ -369,7 +421,7 @@ def login():
                 action_log = f"Falha de login: Senha incorreta para usuário '{usuario_input}'"
                 logger.warning(action_log)
                 gravar_log(action_log, None, user['id'], ip) 
-                registrar_tentativa_login(ip, False) 
+                registrar_tentativa_login(ip, False, username=usuario_input)
                 return render_template('login.html', csrf_token=gerar_csrf_token(),
                                        usuario=usuario_input, logo_url=logo_url_for_template)
 
@@ -459,7 +511,7 @@ def login():
             flash("Login realizado com sucesso!", 'success')
             logger.info(f"Login bem-sucedido para usuário: '{usuario_input}' (ID: {user['id']})")
             gravar_log(f"Login bem-sucedido: {usuario_input}", None, user['id'], ip) 
-            registrar_tentativa_login(ip, True)
+            registrar_tentativa_login(ip, True, username=usuario_input)
 
             # Força troca de senha se sinalizado (ex: primeiro acesso com senha padrão)
             if user.get('must_change_password') == 1:
@@ -473,7 +525,7 @@ def login():
             flash("Ocorreu um erro inesperado ao tentar fazer login. Por favor, tente novamente mais tarde.", 'error')
             logger.exception(f"Erro inesperado durante login para '{usuario_input}': {e}")
             gravar_log(f"Erro durante login: {str(e)}", None, None, ip) 
-            registrar_tentativa_login(ip, False) 
+            registrar_tentativa_login(ip, False, username=usuario_input)
 
     csrf_token_val = gerar_csrf_token()
     return render_template('login.html', csrf_token=csrf_token_val,
@@ -512,6 +564,7 @@ def logout():
 
 @auth_bp.route('/dashboard')
 @login_status_required
+@dashboard_permission_required('processos_visualizar')
 def dashboard():
     user_id = session.get('usuario_id')
     

@@ -224,6 +224,7 @@ def promote_staged_restore(
     upload_processos: str,
     upload_empresa: str,
     rollback_root: str,
+    log_dir: str | None = None,
     preserve_keys: bool = True,
 ) -> dict:
     """Promove staging validado, mantendo cópia de rollback e sem substituir chaves."""
@@ -249,6 +250,8 @@ def promote_staged_restore(
         "uploads_processos": (os.path.join(staging_dir, "uploads", "processos"), os.path.abspath(upload_processos), "dir"),
         "uploads_empresa": (os.path.join(staging_dir, "uploads", "empresa"), os.path.abspath(upload_empresa), "dir"),
     }
+    if log_dir is not None:
+        targets["logs"] = (os.path.join(staging_dir, "logs"), os.path.abspath(log_dir), "dir")
     for label, (source, _, kind) in targets.items():
         if kind == "file" and not os.path.isfile(source):
             raise ValueError(f"Item obrigatório ausente no staging: {label}")
@@ -261,7 +264,9 @@ def promote_staged_restore(
     database_rollback = os.path.join(rollback_dir, "database.db")
     try:
         shutil.copy2(database_path, database_rollback)
-        for label in ("uploads_processos", "uploads_empresa"):
+        for label in ("uploads_processos", "uploads_empresa", "logs"):
+            if label not in targets:
+                continue
             _, target, _ = targets[label]
             old = os.path.join(rollback_dir, label)
             if os.path.exists(target):
@@ -270,7 +275,9 @@ def promote_staged_restore(
         temp_database = f"{database_path}.restore.tmp"
         shutil.copy2(staged_database, temp_database)
         os.replace(temp_database, database_path)
-        for label in ("uploads_processos", "uploads_empresa"):
+        for label in ("uploads_processos", "uploads_empresa", "logs"):
+            if label not in targets:
+                continue
             source, target, _ = targets[label]
             shutil.copytree(source, target)
         return {"rollback_dir": rollback_dir, "database_path": database_path, "keys_preserved": True}
@@ -318,6 +325,7 @@ def rollback_promoted_restore(
     database_path: str,
     upload_processos: str,
     upload_empresa: str,
+    log_dir: str | None = None,
 ) -> None:
     """Reverte uma promoção usando o snapshot criado antes da troca."""
     database_backup = os.path.join(rollback_dir, "database.db")
@@ -325,10 +333,13 @@ def rollback_promoted_restore(
         raise ValueError("Rollback sem cópia do banco original.")
     shutil.copy2(database_backup, f"{database_path}.rollback.tmp")
     os.replace(f"{database_path}.rollback.tmp", database_path)
-    for label, target in (
+    restore_targets = [
         ("uploads_processos", upload_processos),
         ("uploads_empresa", upload_empresa),
-    ):
+    ]
+    if log_dir is not None:
+        restore_targets.append(("logs", log_dir))
+    for label, target in restore_targets:
         source = os.path.join(rollback_dir, label)
         if os.path.isdir(source):
             if os.path.exists(target):
@@ -385,7 +396,7 @@ def apply_retention(destination_dir: str, keep_count: int = DEFAULT_RETENTION_CO
         if not entry.is_file() or not entry.name.startswith(BACKUP_PREFIX) or not entry.name.endswith(".zip"):
             continue
         try:
-            validate_backup_archive(entry.path)
+            validate_backup_archive(entry.path, require_entry_integrity=False)
             candidates.append(entry)
         except Exception:
             logger.warning("Backup ignorado pela retenção por não passar na validação: %s", entry.path)
@@ -400,8 +411,62 @@ def apply_retention(destination_dir: str, keep_count: int = DEFAULT_RETENTION_CO
     return removed
 
 
-def validate_backup_archive(path: str, *, require_manifest: bool = True) -> dict:
-    """Valida o ZIP, seus caminhos e a presença do manifesto."""
+def _sha256_archive_entry(archive: zipfile.ZipFile, name: str) -> str:
+    digest = hashlib.sha256()
+    with archive.open(name, "r") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _validate_manifest_entries(archive: zipfile.ZipFile, names: list[str], manifest: dict) -> None:
+    entries = manifest.get("entries")
+    if not isinstance(entries, list):
+        raise ValueError("Manifesto sem lista de entradas.")
+
+    archive_names = set(names)
+    declared_names = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            raise ValueError("Entrada inválida no manifesto.")
+        name = _safe_archive_name(str(entry.get("path") or ""))
+        if name in declared_names:
+            raise ValueError(f"Entrada duplicada no manifesto: {name}")
+        if name not in archive_names or name == MANIFEST_NAME:
+            raise ValueError(f"Entrada do manifesto ausente no ZIP: {name}")
+        declared_names.add(name)
+
+        try:
+            expected_size = int(entry["size"])
+            expected_sha256 = str(entry["sha256"]).lower()
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError(f"Metadados inválidos no manifesto para: {name}") from exc
+        if expected_size < 0 or len(expected_sha256) != 64:
+            raise ValueError(f"Metadados inválidos no manifesto para: {name}")
+
+        info = archive.getinfo(name)
+        if info.is_dir() or info.file_size != expected_size:
+            raise ValueError(f"Tamanho divergente no backup: {name}")
+        actual_sha256 = _sha256_archive_entry(archive, name)
+        if not secrets.compare_digest(actual_sha256, expected_sha256):
+            raise ValueError(f"Hash divergente no backup: {name}")
+
+    unlisted = (archive_names - {MANIFEST_NAME}) - declared_names
+    if unlisted:
+        raise ValueError(f"Entrada não declarada no manifesto: {sorted(unlisted)[0]}")
+
+    database_name = _safe_archive_name(f"database/{manifest['database']}")
+    if database_name not in declared_names:
+        raise ValueError("Manifesto não referencia a entrada do banco de dados.")
+
+
+def validate_backup_archive(
+    path: str,
+    *,
+    require_manifest: bool = True,
+    require_entry_integrity: bool = True,
+) -> dict:
+    """Valida o ZIP, seus caminhos, o manifesto e a integridade das entradas."""
     with zipfile.ZipFile(path, "r") as archive:
         bad_file = archive.testzip()
         if bad_file:
@@ -413,11 +478,18 @@ def validate_backup_archive(path: str, *, require_manifest: bool = True) -> dict
             raise ValueError("Backup sem manifesto de integridade.")
         manifest = {}
         if MANIFEST_NAME in names:
-            manifest = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
+            try:
+                manifest = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
+            except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+                raise ValueError("Manifesto de integridade inválido.") from exc
+            if not isinstance(manifest, dict):
+                raise ValueError("Manifesto de integridade inválido.")
             if manifest.get("format_version") != BACKUP_FORMAT_VERSION:
                 raise ValueError("Versão de formato do backup não suportada.")
             if not manifest.get("database"):
                 raise ValueError("Manifesto sem referência ao banco de dados.")
+            if require_entry_integrity or "entries" in manifest:
+                _validate_manifest_entries(archive, names, manifest)
         return {
             "path": path,
             "sha256": _sha256_file(path),

@@ -38,6 +38,7 @@ def criar_indices_performance(cursor):
 
             # Login attempts
             "CREATE INDEX IF NOT EXISTS idx_login_attempts_ip ON login_attempts(ip, tempo DESC)",
+            "CREATE INDEX IF NOT EXISTS idx_login_attempts_identity ON login_attempts(identidade_hash, tempo DESC)",
             "CREATE INDEX IF NOT EXISTS idx_login_attempts_event_id ON login_attempts(event_id)",
 
             # Notificações

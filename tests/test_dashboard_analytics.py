@@ -43,16 +43,15 @@ def test_dashboard_exposes_analytics_cards_and_chart_canvases(app_client):
     body = response.get_data(as_text=True)
 
     assert 'dashboard-insights-grid' not in body
-    assert body.find('class="kpi-grid"') < body.find('Processos Recentes') < body.find('Movimentação diária')
-    assert body.find('Processos Recentes') < body.find('Prazos Críticos')
+    assert body.find('class="kpi-grid"') < body.find('Prazos Críticos') < body.find('Processos Recentes') < body.find('Movimentação Diária')
     for marker in (
         'dashboardMovementChart',
         'dashboardStatusChart',
         'dashboardServicesChart',
-        'Movimentação diária',
-        'Distribuição por status',
-        'Serviços mais movimentados',
-        'Leitura operacional',
+        'Movimentação Diária',
+        'Distribuição por Status',
+        'Serviços Mais Movimentados',
+        'Leitura Operacional',
     ):
         assert marker in body
 

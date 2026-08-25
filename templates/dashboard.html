@@ -28,22 +28,22 @@
 
     <!-- 2. KPIs Principais (Acesso Rápido) -->
     <nav class="kpi-grid" aria-label="Indicadores chave de desempenho">
-        <a class="kpi-link kpi-status-completed" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
+        <a class="kpi-card kpi-status-completed" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
             <div class="kpi-label"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Concluídos</div>
             <div class="kpi-value">{{ dashboard_info.processos_concluidos }}</div>
             <div class="kpi-sub">Processos finalizados</div>
         </a>
-        <a class="kpi-link kpi-status-prenoted" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
+        <a class="kpi-card kpi-status-prenoted" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
             <div class="kpi-label"><i class="bi bi-pencil-square" aria-hidden="true"></i> Prenotados</div>
             <div class="kpi-value">{{ dashboard_info.processos_prenotados }}</div>
             <div class="kpi-sub">Processos prenotados</div>
         </a>
-        <a class="kpi-link kpi-status-pending" href="{{ url_for('processos.pendentes') }}">
+        <a class="kpi-card kpi-status-pending" href="{{ url_for('processos.pendentes') }}">
             <div class="kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pendentes</div>
             <div class="kpi-value">{{ dashboard_info.processos_pendentes }}</div>
             <div class="kpi-sub">Aguardando conclusão</div>
         </a>
-        <a class="kpi-link kpi-status-progress" href="{{ url_for('processos.em_andamento') }}">
+        <a class="kpi-card kpi-status-progress" href="{{ url_for('processos.em_andamento') }}">
             <div class="kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Em Andamento</div>
             <div class="kpi-value">{{ dashboard_info.processos_em_andamento }}</div>
             <div class="kpi-sub">Processos ativos</div>

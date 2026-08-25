@@ -5,6 +5,7 @@ continuem importando-as através de `models.py`.
 """
 
 from datetime import datetime, timedelta
+import hashlib
 import secrets
 import sqlite3
 
@@ -19,24 +20,51 @@ TENTATIVAS_MAX = Config.TENTATIVAS_MAX
 BLOQUEIO_TEMPO = Config.BLOQUEIO_TEMPO
 VALID_USER_ROLES = frozenset({'admin', 'suporte', 'user'})
 
-def verificar_tentativas_login(ip):
+def _login_identity_hash(username):
+    normalized = sanitize_text(username or '', 128).strip().casefold()
+    if not normalized:
+        return None
+    return hashlib.sha256(normalized.encode('utf-8')).hexdigest()
+
+
+def verificar_tentativas_login(ip, username=None):
     tempo_limite = datetime.now() - timedelta(seconds=BLOQUEIO_TEMPO)
     tempo_limite_str = tempo_limite.strftime('%Y-%m-%d %H:%M:%S')
+    identity_hash = _login_identity_hash(username)
 
-    result = executar_query(
-        "SELECT COUNT(*) AS total_count FROM login_attempts WHERE ip = ? AND tempo > ? AND sucesso = 0",
-        [ip, tempo_limite_str], fetch_one=True
-    )
+    if identity_hash:
+        query = """
+            SELECT COUNT(*) AS total_count
+            FROM login_attempts
+            WHERE tempo > ? AND sucesso = 0
+              AND (ip = ? OR identidade_hash = ?)
+        """
+        params = [tempo_limite_str, ip, identity_hash]
+    else:
+        query = """
+            SELECT COUNT(*) AS total_count
+            FROM login_attempts
+            WHERE ip = ? AND tempo > ? AND sucesso = 0
+        """
+        params = [ip, tempo_limite_str]
+
+    result = executar_query(query, params, fetch_one=True)
     if result and result['total_count'] >= TENTATIVAS_MAX:
-        auth_logger.warning(f"IP '{ip}' bloqueado por excesso de tentativas de login ({result['total_count']} falhas).")
+        auth_logger.warning(
+            "Tentativas de login bloqueadas por excesso de falhas para IP/identidade."
+        )
         return False, f"Muitas tentativas de login. Tente novamente em {BLOQUEIO_TEMPO // 60} minutos."
     return True, None
 
-def registrar_tentativa_login(ip, sucesso, event_id=None):
+
+def registrar_tentativa_login(ip, sucesso, event_id=None, username=None):
     event_id = event_id or new_event_id()
     return executar_query(
-        "INSERT INTO login_attempts (ip, sucesso, event_id, tempo) VALUES (?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
-        [sanitize_text(ip, 128), 1 if sucesso else 0, event_id]
+        """
+        INSERT INTO login_attempts (ip, sucesso, event_id, identidade_hash, tempo)
+        VALUES (?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
+        """,
+        [sanitize_text(ip, 128), 1 if sucesso else 0, event_id, _login_identity_hash(username)]
     )
 
 def _select_user_query(where_clause):

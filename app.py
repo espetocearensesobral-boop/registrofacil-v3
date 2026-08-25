@@ -77,6 +77,23 @@ def create_app():
 
     app.jinja_env.globals.update(now=lambda: datetime.now())
 
+    @app.after_request
+    def add_security_headers(response):
+        """Aplica hardening HTTP uniforme a todas as respostas."""
+        response.headers.setdefault('X-Content-Type-Options', 'nosniff')
+        response.headers.setdefault('X-Frame-Options', 'DENY')
+        response.headers.setdefault('Referrer-Policy', 'strict-origin-when-cross-origin')
+        response.headers.setdefault(
+            'Permissions-Policy',
+            'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+        )
+        if request.is_secure or Config.SESSION_COOKIE_SECURE:
+            response.headers.setdefault(
+                'Strict-Transport-Security',
+                'max-age=31536000; includeSubDomains',
+            )
+        return response
+
     @app.before_request
     def ensure_csrf_token():
         """

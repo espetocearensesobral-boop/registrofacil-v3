@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, jsonify, session
 from models import executar_query
-from routes.auth import login_status_required
+from routes.auth import login_status_required, dashboard_permission_required
 from routes.permissoes import permission_required
 from utils.logger import operacional_logger as logger
 from datetime import datetime, timedelta
@@ -13,6 +13,7 @@ dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 @dashboard_bp.route('/api/graficos', methods=['GET'])
 @login_status_required
+@dashboard_permission_required('processos_visualizar')
 def api_graficos():
     """API que retorna dados para gráficos do dashboard."""
     try:
@@ -141,6 +142,7 @@ def api_graficos():
 
 @dashboard_bp.route('/api/stats/resumo', methods=['GET'])
 @login_status_required
+@dashboard_permission_required('processos_visualizar')
 def api_stats_resumo():
     """Retorna estatísticas resumidas em tempo real."""
     try:
@@ -205,6 +207,7 @@ def api_stats_resumo():
 
 @dashboard_bp.route('/api/stats/performance', methods=['GET'])
 @login_status_required
+@dashboard_permission_required('processos_visualizar')
 def api_stats_performance():
     """Retorna métricas de performance da equipe."""
     try:
@@ -265,6 +268,7 @@ def metricas():
 
 @dashboard_bp.route('/api/metricas/usuario', methods=['GET'])
 @login_status_required
+@dashboard_permission_required('metricas_visualizar')
 def api_metricas_usuario():
     """Retorna métricas detalhadas do usuário logado."""
     try:

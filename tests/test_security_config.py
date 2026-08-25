@@ -2,7 +2,7 @@ import sqlite3
 
 import pytest
 
-from config import Config
+from config import Config, _write_persistent_secret
 from data import database, migrations
 from data.schema import init_db
 from routes import auth
@@ -36,6 +36,23 @@ class _request_context:
 
     def __exit__(self, exc_type, exc, tb):
         self.ctx.pop()
+
+
+def test_security_headers_are_applied_to_responses(app_client):
+    response = app_client.get('/api/system/update/health')
+
+    assert response.status_code == 200
+    assert response.headers['X-Content-Type-Options'] == 'nosniff'
+    assert response.headers['X-Frame-Options'] == 'DENY'
+    assert response.headers['Referrer-Policy'] == 'strict-origin-when-cross-origin'
+    assert 'camera=()' in response.headers['Permissions-Policy']
+
+
+def test_persistent_secret_is_created_with_restricted_permissions(tmp_path):
+    secret_path = tmp_path / '.secret_key'
+    _write_persistent_secret(str(secret_path), 'segredo-de-teste')
+
+    assert oct(secret_path.stat().st_mode & 0o777) == '0o600'
 
 
 def test_production_requires_initial_admin_password(tmp_path, monkeypatch):

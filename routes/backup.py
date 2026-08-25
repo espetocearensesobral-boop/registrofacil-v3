@@ -241,7 +241,7 @@ def manual_backup():
             write_backup_status(locals().get('local_backup_root', Config.BACKUP_ROOT_DIR), status="failed", source="manual", error=str(e))
         except Exception:
             logger.warning("Falha ao persistir status de erro do backup manual.", exc_info=True)
-        return jsonify(success=False, message=f"Erro ao criar backup: {e}", type='danger'), 500
+        return jsonify(success=False, message="Não foi possível criar o backup. Consulte os logs.", type='danger'), 500
 
 @backup_bp.route('/restore', methods=['POST'])
 @login_status_required
@@ -284,6 +284,7 @@ def restore_backup():
             upload_processos=get_upload_folder(),
             upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
             rollback_root=os.path.join(Config.DATA_DIR, 'restore_rollbacks'),
+            log_dir=Config.LOG_DIR,
             preserve_keys=True,
         )
         from models import init_db, rebuild_fts_index, test_db_connection
@@ -313,6 +314,7 @@ def restore_backup():
                     database_path=DATABASE_PATH,
                     upload_processos=get_upload_folder(),
                     upload_empresa=Config.EMPRESA_UPLOAD_FOLDER,
+                    log_dir=Config.LOG_DIR,
                 )
                 logger.warning("Restauração revertida automaticamente após falha no health check.")
             except Exception:
@@ -320,7 +322,7 @@ def restore_backup():
         if maintenance_started:
             end_restore_maintenance()
         write_backup_status(local_backup_root, status="restore_failed", source="restore", error=str(e))
-        flash(f"Restauração não concluída: {e}", 'danger')
+        flash('A restauração não foi concluída. Consulte os logs para obter detalhes.', 'danger')
     return redirect(url_for('backup.index'))
 
 
@@ -388,7 +390,7 @@ def test_db():
         else:
             flash("Erro ao conectar com o banco de dados.", 'danger')
     except Exception as e:
-        flash(f"Erro ao testar banco de dados: {str(e)}", 'danger')
+        flash("Não foi possível testar o banco de dados. Consulte os logs.", 'danger')
     return redirect(url_for('backup.index'))
 
 
@@ -408,7 +410,7 @@ def optimize_db():
         else:
             flash("Erro ao otimizar o banco de dados. Verifique os logs.", 'danger')
     except Exception as e:
-        flash(f"Erro ao otimizar banco de dados: {str(e)}", 'danger')
+        flash("Não foi possível otimizar o banco de dados. Consulte os logs.", 'danger')
     return redirect(url_for('backup.index'))
 
 
@@ -460,7 +462,7 @@ def repair_db():
             )
     except Exception as e:
         logger.exception(f"Erro ao executar reparo do banco de dados: {e}")
-        flash(f"Erro inesperado durante o reparo: {str(e)}", 'danger')
+        flash("Não foi possível reparar o banco de dados. Consulte os logs.", 'danger')
     return redirect(url_for('backup.index'))
 
 
@@ -514,7 +516,7 @@ def reconstruct_db():
             )
     except Exception as e:
         logger.exception(f"Erro ao reconstruir banco de dados: {e}")
-        flash(f"Erro inesperado durante a reconstrução: {str(e)}", 'danger')
+        flash("Não foi possível reconstruir o banco de dados. Consulte os logs.", 'danger')
     return redirect(url_for('backup.index'))
 
 
@@ -552,5 +554,5 @@ def rebuild_fts():
             )
     except Exception as e:
         logger.exception(f"Erro ao reconstruir FTS5: {e}")
-        flash(f"Erro inesperado ao reconstruir índice: {str(e)}", 'danger')
+        flash("Não foi possível reconstruir o índice. Consulte os logs.", 'danger')
     return redirect(url_for('backup.index'))

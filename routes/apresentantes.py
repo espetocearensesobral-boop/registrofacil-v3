@@ -182,9 +182,11 @@ def novo():
                 return render_template('apresentantes/novo.html')
 
             now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            with executar_query("INSERT INTO apresentantes (nome, telefone, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?)", 
-                                [nome, telefone if telefone else None, email if email else None, now, now], fetch_one=False) as conn:
-                pass
+            executar_query(
+                "INSERT INTO apresentantes (nome, telefone, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+                [nome, telefone if telefone else None, email if email else None, now, now],
+                fetch_one=False,
+            )
 
             gravar_log("Criou apresentante", None, session.get('usuario_id'), get_client_ip(), f"Novo apresentante: {nome}")
             flash("Apresentante cadastrado com sucesso!", "success")
@@ -320,10 +322,17 @@ def gerar_pdf():
 
 @apresentantes_bp.route('/api/buscar', methods=['GET'])
 @login_status_required
+@permission_required('apresentantes_visualizar')
 def api_buscar():
     termo = request.args.get('q', '')
-    apresentantes = buscar_apresentantes_json(termo)
-    return jsonify(apresentantes)
+    if termo.strip() != '%' and len(termo.strip()) < 2:
+        return jsonify([])
+    try:
+        apresentantes = buscar_apresentantes_json(termo)
+        return jsonify(apresentantes)
+    except Exception as e:
+        logger.error(f"Erro na API de busca de apresentantes: {e}", exc_info=True)
+        return jsonify([]), 500
 
 @apresentantes_bp.route('/api/verificar-duplicidade', methods=['GET'])
 @login_status_required

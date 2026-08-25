@@ -37,7 +37,7 @@ def index():
 
     except Exception as e:
         logger.exception(f"Erro ao carregar dados da empresa: {e}")
-        flash(f"Erro ao carregar dados da empresa: {e}", 'danger')
+        flash("Não foi possível carregar os dados da empresa. Consulte os logs.", 'danger')
         empresa_data = {}
 
     display_logo_url = get_image_url_for_display(empresa_data.get('logo'), is_company_logo=True)
@@ -109,7 +109,7 @@ def index():
                     flash(f"Erro no upload da logo: {e}", 'warning')
                     logger.warning(f"Erro de validação no upload da logo da empresa: {e}. User ID: {usuario_id}")
                 except Exception as e:
-                    flash(f"Erro inesperado ao processar a logo: {e}", 'warning')
+                    flash("Não foi possível processar a logo. Consulte os logs.", 'warning')
                     logger.error(f"Erro inesperado no upload da logo da empresa: {e}. User ID: {usuario_id}", exc_info=True)
 
             elif request.form.get('remover_logo') == '1':
@@ -135,10 +135,10 @@ def index():
             flash(f"Erro de validação: {e}", 'error')
             logger.warning(f"Erro de validação ao salvar info da empresa: {e}. User ID: {usuario_id}, IP: {get_client_ip()}")
         except sqlite3.Error as e:
-            flash(f"Erro de banco de dados ao salvar informações da empresa: {e}", 'danger')
+            flash("Não foi possível salvar os dados da empresa. Consulte os logs.", 'danger')
             logger.exception(f"Erro de DB ao salvar info da empresa. User ID: {usuario_id}, IP: {get_client_ip()}: {e}")
         except Exception as e:
-            flash(f"Erro inesperado ao salvar informações da empresa: {e}", 'danger')
+            flash("Não foi possível salvar os dados da empresa. Consulte os logs.", 'danger')
             logger.exception(f"Erro inesperado ao salvar info da empresa. User ID: {usuario_id}, IP: {get_client_ip()}: {e}")
         
         return redirect(url_for('configuracoes.index', tab='estabelecimento'))

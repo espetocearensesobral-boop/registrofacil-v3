@@ -216,7 +216,7 @@ def atualizar_permissoes(usuario_id):
         logger.error(f"Erro ao atualizar permissões do usuário {usuario_id}: {e}", exc_info=True)
         return jsonify(
             success=False,
-            message=f"Erro ao atualizar permissões: {str(e)}",
+            message="Não foi possível atualizar as permissões. Consulte os logs.",
             type='error'
         ), 500
 
@@ -404,7 +404,7 @@ def atualizar_perfil(perfil_id):
         return jsonify(success=True, message="Perfil atualizado com sucesso!", type='success'), 200
     except Exception as e:
         logger.error(f"Erro ao atualizar perfil {perfil_id}: {e}", exc_info=True)
-        return jsonify(success=False, message=f"Erro ao atualizar perfil: {str(e)}", type='error'), 500
+        return jsonify(success=False, message="Não foi possível atualizar o perfil de permissão. Consulte os logs.", type='error'), 500
 
 
 @permissoes_bp.route('/perfis/<int:perfil_id>/excluir', methods=['POST'])
@@ -484,7 +484,7 @@ def aplicar_perfil_usuario(usuario_id):
             return jsonify(success=True, message="Perfil removido. Permissões do usuário foram limpas.", type="info"), 200
     except Exception as e:
         logger.error(f"Erro ao aplicar perfil ao usuário {usuario_id}: {e}", exc_info=True)
-        return jsonify(success=False, message=f"Erro ao aplicar perfil: {str(e)}", type='error'), 500
+        return jsonify(success=False, message="Não foi possível aplicar o perfil de permissão. Consulte os logs.", type='error'), 500
 
 
 def _aplicar_permissoes_perfil(usuario_id, perfil_id, admin_id):

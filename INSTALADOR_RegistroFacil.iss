@@ -15,7 +15,7 @@
 
 #define MyAppName        "Registro Facil"
 #ifndef MyAppVersion
-#define MyAppVersion     "3.28.58"
+#define MyAppVersion     "3.28.59"
 #endif
 #define MyAppPublisher   "Tauan Pires"
 #define MyAppExeName     "RegistroFacil.exe"

@@ -1,5 +1,10 @@
 from pathlib import Path
 
+import os
+
+os.environ.setdefault('REGISTROFACIL_ENV', 'test')
+os.environ.setdefault('INITIAL_ADMIN_PASSWORD', 'pytest-admin-password')
+
 import pytest
 
 from data import backup, database, migrations, processes

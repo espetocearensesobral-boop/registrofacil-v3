@@ -41,6 +41,23 @@ def test_login_attempts_are_blocked_after_limit(temp_database):
     assert "tentativas" in message.lower()
 
 
+def test_login_attempts_are_blocked_by_identity_across_ips(temp_database):
+    username = "alvo-distribuido"
+    for index in range(5):
+        assert users.registrar_tentativa_login(
+            f"198.51.100.{50 + index}",
+            False,
+            username=username,
+        )
+
+    allowed, message = users.verificar_tentativas_login(
+        "203.0.113.99",
+        username,
+    )
+    assert allowed is False
+    assert "tentativas" in message.lower()
+
+
 def test_record_lock_lifecycle(temp_database):
     admin = users.get_user_by_username("admin")
     assert admin

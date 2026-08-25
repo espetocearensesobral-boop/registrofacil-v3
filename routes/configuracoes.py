@@ -396,8 +396,8 @@ O teste não cria processos, não dispara backup e não altera a senha de nenhum
         except Exception as e:
             logger.exception(f"Erro ao processar configurações: {e}")
             if is_ajax:
-                return jsonify({'success': False, 'message': f"Erro inesperado: {str(e)}"})
-            flash(f"Erro inesperado: {str(e)}", 'danger')
+                return jsonify({'success': False, 'message': 'Não foi possível processar a configuração. Consulte os logs.'})
+            flash("Não foi possível processar a configuração. Consulte os logs.", 'danger')
 
         if request.form.get('return_to') == 'backup':
             return redirect(url_for('backup.index', config='1'))
@@ -497,5 +497,5 @@ O teste não cria processos, não dispara backup e não altera a senha de nenhum
                                eventos_acoes=eventos_acoes)
     except Exception as e:
         logger.exception(f"Erro ao carregar página de configurações: {e}")
-        flash(f"Erro ao carregar configurações: {str(e)}", 'danger')
+        flash("Não foi possível carregar as configurações. Consulte os logs.", 'danger')
         return redirect(url_for('auth.dashboard'))
