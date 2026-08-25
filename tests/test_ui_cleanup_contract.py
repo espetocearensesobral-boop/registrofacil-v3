@@ -164,3 +164,47 @@ def test_configuration_route_updates_status_without_missing_validator(app_client
     )
     assert updated['nome'] == updated_name
     assert updated_name in response.get_data(as_text=True)
+
+
+AUTH_TEMPLATES = (
+    'templates/login.html',
+    'templates/recuperar_senha.html',
+    'templates/novo_usuario.html',
+    'templates/reset_password.html',
+)
+
+
+def test_auth_templates_use_single_centered_panel_without_legacy_right_panel_or_notice():
+    for relative in AUTH_TEMPLATES:
+        text = read(relative)
+        assert 'auth-panel-left' in text, relative
+        assert 'auth-form-wrap' in text, relative
+        assert 'auth-panel-right' not in text, relative
+        assert 'Painel direito' not in text, relative
+        assert 'panel-brand' not in text, relative
+        assert 'panel-info-box' not in text, relative
+        assert 'panel-steps' not in text, relative
+
+    register = read('templates/novo_usuario.html')
+    assert 'auth-notice' not in register
+    assert 'Atenção:' not in register
+    assert 'Novos usuários não possuem permissões por padrão' not in register
+
+    css = read('static/css/auth.css')
+    assert 'grid-template-columns: minmax(22rem, .86fr) minmax(31rem, 1.14fr);' not in css
+    assert '.rf-auth-page .auth-panel-left' in css
+    assert 'justify-content: center;' in css
+    assert 'text-align: center;' in css
+    assert '.rf-auth-page .auth-panel-right' not in css
+    assert '.rf-auth-page .auth-notice' not in css
+
+
+def test_public_auth_pages_render_without_right_panel_or_permission_notice(app_client):
+    for route in ('/login', '/recuperar_senha', '/novo_usuario'):
+        response = app_client.get(route)
+        assert response.status_code == 200, route
+        body = response.get_data(as_text=True)
+        assert 'auth-panel-right' not in body, route
+        assert 'auth-panel-left' in body, route
+        assert 'Atenção:' not in body, route
+        assert 'Novos usuários não possuem permissões por padrão' not in body, route
