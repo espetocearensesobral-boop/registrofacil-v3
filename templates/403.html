@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}Acesso restrito · Registro Fácil{% endblock %}
+{% block page_title %}Acesso restrito{% endblock %}
+
+{% block content %}
+<style>
+    .rf-access-denied {
+        --access-bg: var(--rf-surface, #ffffff);
+        --access-ink: var(--rf-text, #162332);
+        --access-muted: var(--rf-text-muted, #667789);
+        --access-border: var(--rf-border, rgba(22, 35, 50, .12));
+        --access-gold: #cda865;
+        --access-blue: var(--color-primary-light, #1b4368);
+        min-height: min(680px, calc(100dvh - 150px));
+        display: grid;
+        place-items: center;
+        padding: clamp(24px, 6vw, 72px) 20px;
+    }
+
+    .rf-access-card {
+        position: relative;
+        width: min(100%, 760px);
+        overflow: hidden;
+        border: 1px solid var(--access-border);
+        border-radius: 18px;
+        background:
+            linear-gradient(135deg, rgba(205, 168, 101, .08), transparent 35%),
+            var(--access-bg);
+        box-shadow: 0 18px 50px rgba(10, 24, 38, .12);
+    }
+
+    .rf-access-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 4px;
+        background: linear-gradient(90deg, var(--access-blue), var(--access-gold), var(--access-blue));
+    }
+
+    .rf-access-grid {
+        display: grid;
+        grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr);
+        align-items: stretch;
+    }
+
+    .rf-access-signal {
+        display: grid;
+        place-items: center;
+        min-height: 330px;
+        padding: 32px 24px;
+        color: #f5f7fa;
+        background:
+            radial-gradient(circle at 25% 20%, rgba(205, 168, 101, .2), transparent 42%),
+            linear-gradient(145deg, #102c45, #0a1725 70%);
+    }
+
+    .rf-access-seal {
+        display: grid;
+        place-items: center;
+        width: 92px;
+        height: 92px;
+        margin-bottom: 22px;
+        border: 1px solid rgba(205, 168, 101, .68);
+        border-radius: 50%;
+        color: #e5c27d;
+        font-size: 2.1rem;
+        box-shadow: 0 0 0 8px rgba(205, 168, 101, .06), inset 0 0 25px rgba(205, 168, 101, .1);
+    }
+
+    #main-content .rf-access-signal h2 {
+        margin: 0;
+        color: #f5f7fa !important;
+        font: 700 1.02rem/1.2 var(--rf-font-sans, "Source Sans 3", sans-serif);
+        letter-spacing: .02em;
+    }
+
+    .rf-access-signal p {
+        max-width: 210px;
+        margin: 8px 0 0;
+        color: rgba(245, 247, 250, .7);
+        font-size: .82rem;
+        line-height: 1.45;
+        text-align: center;
+    }
+
+    .rf-access-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(28px, 5vw, 52px);
+    }
+
+    .rf-access-kicker {
+        margin: 0 0 10px;
+        color: var(--access-gold);
+        font: 600 .7rem/1.2 var(--rf-font-mono, "IBM Plex Mono", monospace);
+        letter-spacing: .14em;
+        text-transform: uppercase;
+    }
+
+    .rf-access-copy h1 {
+        margin: 0;
+        color: var(--access-ink);
+        font: 700 clamp(1.55rem, 3vw, 2.2rem)/1.1 var(--rf-font-display, "Fraunces", Georgia, serif);
+    }
+
+    .rf-access-copy .lead {
+        max-width: 470px;
+        margin: 16px 0 0;
+        color: var(--access-ink);
+        font-size: 1.02rem;
+        line-height: 1.5;
+    }
+
+    .rf-access-detail {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin: 22px 0 0;
+        padding: 13px 15px;
+        border: 1px solid rgba(205, 168, 101, .3);
+        border-radius: 10px;
+        color: var(--access-muted);
+        background: rgba(205, 168, 101, .07);
+        font-size: .86rem;
+        line-height: 1.45;
+    }
+
+    .rf-access-detail i {
+        flex: 0 0 auto;
+        margin-top: 2px;
+        color: var(--access-gold);
+    }
+
+    .rf-access-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 26px;
+    }
+
+    .rf-access-actions .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .rf-access-actions .btn-primary {
+        border-color: var(--access-blue);
+        background: var(--access-blue);
+    }
+
+    .rf-access-actions .btn-primary:hover,
+    .rf-access-actions .btn-primary:focus-visible {
+        border-color: #102c45;
+        background: #102c45;
+    }
+
+    .rf-access-actions .btn-outline-secondary {
+        border-color: var(--access-border);
+        color: var(--access-ink);
+    }
+
+    .rf-access-actions .btn-outline-secondary:hover,
+    .rf-access-actions .btn-outline-secondary:focus-visible {
+        border-color: var(--access-gold);
+        color: var(--access-ink);
+        background: rgba(205, 168, 101, .08);
+    }
+
+    .rf-access-reference {
+        margin: 18px 0 0;
+        color: var(--access-muted);
+        font: .68rem/1.4 var(--rf-font-mono, "IBM Plex Mono", monospace);
+        opacity: .82;
+    }
+
+    @media (max-width: 700px) {
+        .rf-access-denied {
+            min-height: auto;
+            padding: 24px 12px;
+        }
+
+        .rf-access-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .rf-access-signal {
+            min-height: auto;
+            padding: 28px 20px 24px;
+        }
+
+        .rf-access-seal {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 14px;
+            font-size: 1.7rem;
+        }
+
+        .rf-access-signal p {
+            margin-top: 5px;
+        }
+
+        .rf-access-copy {
+            padding: 28px 22px 30px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .rf-access-card *, .rf-access-card *::before, .rf-access-card *::after {
+            animation-duration: .01ms !important;
+            transition-duration: .01ms !important;
+        }
+    }
+</style>
+
+<main class="rf-access-denied" id="access-denied" aria-labelledby="access-denied-title">
+    <section class="rf-access-card" aria-describedby="access-denied-description">
+        <div class="rf-access-grid">
+            <div class="rf-access-signal" aria-hidden="true">
+                <div>
+                    <div class="rf-access-seal"><i class="bi bi-shield-lock"></i></div>
+                    <h2 class="text-center">Controle de acesso</h2>
+                    <p>O RegistroFácil mantém cada rotina disponível para os perfis autorizados.</p>
+                </div>
+            </div>
+
+            <div class="rf-access-copy">
+                <p class="rf-access-kicker">Acesso restrito · RegistroFácil</p>
+                <h1 id="access-denied-title">Esta rotina ainda não está liberada para o seu perfil.</h1>
+                <p class="lead" id="access-denied-description">Seu acesso continua ativo, mas este recurso exige uma permissão específica para preservar a organização e a responsabilidade das operações da serventia.</p>
+                <div class="rf-access-detail" role="note">
+                    <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+                    <span>Se você precisa executar esta atividade, solicite ao administrador a revisão do seu perfil de acesso.</span>
+                </div>
+                <div class="rf-access-actions">
+                    <a class="btn btn-primary" href="{{ url_for('auth.dashboard') }}">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                        Voltar ao início
+                    </a>
+                    <a class="btn btn-outline-secondary" href="{{ url_for('perfil.index') }}">
+                        <i class="bi bi-person-gear" aria-hidden="true"></i>
+                        Ver meu perfil
+                    </a>
+                </div>
+                <p class="rf-access-reference">RF-403 · permissão necessária: acesso autorizado pelo administrador</p>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

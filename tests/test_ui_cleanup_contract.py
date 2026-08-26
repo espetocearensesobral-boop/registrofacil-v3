@@ -248,3 +248,24 @@ def test_auth_templates_keep_inline_dark_gold_visual_contract():
         assert 'prefers-reduced-motion:reduce' in text, relative
         assert 'class="context-strip"' in text, relative
         assert 'class="security-chip"' in text, relative
+
+
+def test_access_denied_response_uses_contextual_system_visual():
+    forbidden = read('templates/403.html')
+    assert '{% extends "base.html" %}' in forbidden
+    assert 'rf-access-denied' in forbidden
+    assert 'rf-access-card' in forbidden
+    assert 'rf-access-signal' in forbidden
+    assert 'Controle de acesso' in forbidden
+    assert 'Esta rotina ainda não está liberada para o seu perfil.' in forbidden
+    assert "url_for('auth.dashboard')" in forbidden
+    assert "url_for('perfil.index')" in forbidden
+
+    auth = read('routes/auth.py')
+    assert "'403.html'" in auth
+    assert 'Esta rotina ainda não está liberada para o seu perfil.' in auth
+    assert 'Solicite ao administrador a revisão do seu acesso.' in auth
+
+    permissions = read('routes/permissoes.py')
+    assert 'Esta rotina ainda não está liberada para o seu perfil.' in permissions
+    assert 'Esta ação ainda não está liberada para o seu perfil.' in permissions

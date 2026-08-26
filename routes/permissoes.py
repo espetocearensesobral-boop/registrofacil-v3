@@ -66,11 +66,18 @@ def permission_required(permission_name):
                 if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                     return jsonify(
                         success=False, 
-                        message="Você não tem permissão para realizar esta ação.", 
+                        message=(
+                            "Esta ação ainda não está liberada para o seu perfil. "
+                            "Solicite ao administrador a revisão do seu acesso."
+                        ),
                         type='danger'
                     ), 403
                 else:
-                    flash("Você não tem permissão para acessar esta página.", 'error')
+                    flash(
+                        "Esta rotina ainda não está liberada para o seu perfil. "
+                        "Solicite ao administrador a revisão do seu acesso.",
+                        'error'
+                    )
                     logger.warning(
                         f"Acesso negado para Usuário ID: {user_id}, "
                         f"Permissão: {permission_name}, IP: {get_client_ip()}"

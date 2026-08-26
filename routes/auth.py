@@ -248,10 +248,16 @@ def dashboard_permission_required(permission_name):
                 if wants_json:
                     return jsonify(
                         success=False,
-                        message="Você não tem permissão para acessar estes dados.",
+                        message=(
+                            "Esta rotina ainda não está liberada para o seu perfil. "
+                            "Solicite ao administrador a revisão do seu acesso."
+                        ),
                         type='danger',
                     ), 403
-                return "Você não tem permissão para acessar este recurso.", 403
+                return render_template(
+                    '403.html',
+                    required_permission=permission_name,
+                ), 403
             return f(*args, **kwargs)
         return decorated_function
     return decorator
