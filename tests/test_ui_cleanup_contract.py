@@ -174,76 +174,77 @@ AUTH_TEMPLATES = (
 )
 
 
-def test_auth_templates_use_single_centered_panel_without_legacy_right_panel_or_notice():
-    for relative in AUTH_TEMPLATES:
+def test_auth_templates_use_complete_v4_layout_and_preserve_public_flow_contract():
+    expected_templates = {
+        'templates/login.html': ('login-v4', 'loginForm'),
+        'templates/recuperar_senha.html': ('recover-v4', 'recoverForm'),
+        'templates/novo_usuario.html': ('register-v4', 'registerForm'),
+        'templates/reset_password.html': ('reset-v4', 'resetForm'),
+    }
+    for relative, (template_id, form_id) in expected_templates.items():
         text = read(relative)
-        assert 'auth-panel-left' in text, relative
-        assert 'auth-form-wrap' in text, relative
-        assert 'auth-context-strip' in text, relative
-        assert 'auth-context-mark' in text, relative
-        assert 'auth-security-chip' in text, relative
-        assert 'auth-support-note' in text, relative
-        assert 'auth-panel-right' not in text, relative
-        assert 'Painel direito' not in text, relative
-        assert 'panel-brand' not in text, relative
-        assert 'panel-info-box' not in text, relative
-        assert 'panel-steps' not in text, relative
+        assert f'data-rf-template="{template_id}"' in text, relative
+        assert 'class="auth-template-v4"' in text, relative
+        assert 'class="auth-panel"' in text, relative
+        assert 'class="auth-wrap"' in text, relative
+        assert f'id="{form_id}"' in text, relative
+        assert '<base target="_blank">' not in text, relative
+        assert 'auth-panel-left' not in text, relative
+        assert 'auth-form-wrap' not in text, relative
         assert 'auth-logo-sm' not in text, relative
         assert 'logo-circle' not in text, relative
         assert 'registrofacil.png' not in text, relative
 
-    register = read('templates/novo_usuario.html')
-    assert 'auth-notice' not in register
-    assert 'Atenção:' not in register
-    assert 'Novos usuários não possuem permissões por padrão' not in register
-
     login = read('templates/login.html')
-    assert 'data-rf-template="login-v2"' in login
-    assert 'Bem-vindo de volta' in login
-    assert 'auth-login-links' in login
+    assert 'class="visual-panel"' in login
     assert 'id="wrap-usuario"' in login
     assert 'id="wrap-senha"' in login
     assert 'id="capsWarn"' in login
     assert 'id="numWarn"' in login
 
-    css = read('static/css/auth.css')
-    assert 'grid-template-columns: minmax(22rem, .86fr) minmax(31rem, 1.14fr);' not in css
-    assert '.rf-auth-page .auth-panel-left' in css
-    assert 'justify-content: center;' in css
-    assert 'text-align: center;' in css
-    assert '.rf-auth-page .auth-panel-right' not in css
-    assert '.rf-auth-page .auth-notice' not in css
+    register = read('templates/novo_usuario.html')
+    assert 'step-indicator' in register
+    assert 'strengthFill' in register
+    assert 'auth-notice' not in register
+    assert 'Atenção:' not in register
+    assert 'Novos usuários não possuem permissões por padrão' not in register
+
+    recover = read('templates/recuperar_senha.html')
+    assert 'class="icon-badge"' in recover
+    assert 'successOverlay' in recover
+
+    reset = read('templates/reset_password.html')
+    assert 'token-info' in reset
+    assert 'strengthCriteria' in reset
+    assert 'error-match' in reset
 
 
-def test_public_auth_pages_render_without_right_panel_or_permission_notice(app_client):
-    for route in ('/login', '/recuperar_senha', '/novo_usuario'):
+def test_public_auth_pages_render_complete_v4_layout_without_legacy_permission_notice(app_client):
+    for route, marker in (
+        ('/login', 'data-rf-template="login-v4"'),
+        ('/recuperar_senha', 'data-rf-template="recover-v4"'),
+        ('/novo_usuario', 'data-rf-template="register-v4"'),
+    ):
         response = app_client.get(route)
         assert response.status_code == 200, route
         body = response.get_data(as_text=True)
-        assert 'auth-panel-right' not in body, route
-        assert 'auth-panel-left' in body, route
+        assert marker in body, route
+        assert 'class="auth-panel"' in body, route
+        assert 'class="auth-wrap"' in body, route
         assert 'Atenção:' not in body, route
         assert 'Novos usuários não possuem permissões por padrão' not in body, route
+        assert 'auth-panel-left' not in body, route
         assert 'auth-logo-sm' not in body, route
         assert 'logo-circle' not in body, route
 
 
 
-def test_auth_pages_keep_dark_gold_corporate_visual_contract():
-    css = read('static/css/auth.css')
-    assert '--rf-auth-bg: #0b0d10;' in css
-    assert '--rf-auth-gold: #d5b36a;' in css
-    assert 'radial-gradient(circle at 12% 18%' in css
-    assert 'background-image: radial-gradient(rgba(240, 211, 142' in css
-    assert '.rf-auth-page .auth-form-wrap::before' in css
-    assert '.rf-auth-page .auth-form-wrap::after' in css
-    assert 'linear-gradient(135deg, var(--rf-auth-gold-bright), var(--rf-auth-gold))' in css
-    assert 'html:has(body.rf-auth-page)' in css
-    assert 'height: 100dvh;' in css
-    assert 'overflow: hidden !important;' in css
-    assert 'auth-logo-sm' not in css
-    assert 'auth-context-strip' in css
-    assert 'auth-context-mark' in css
-    assert 'auth-security-chip' in css
-    assert 'auth-support-note' in css
-    assert '[data-rf-template="login-v2"]' in css
+def test_auth_templates_keep_inline_dark_gold_visual_contract():
+    for relative in AUTH_TEMPLATES:
+        text = read(relative)
+        assert '--gold: #CDA865' in text, relative
+        assert '--bg: #0a0a0a' in text, relative
+        assert 'linear-gradient(135deg, var(--gold), var(--gold-dim))' in text, relative
+        assert 'prefers-reduced-motion:reduce' in text, relative
+        assert 'class="context-strip"' in text, relative
+        assert 'class="security-chip"' in text, relative

@@ -3,79 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Conta - Registro Fácil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Criar Conta — RegistroFácil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
     <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{font-family: var(--rf-font-sans);min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8}
-        /* Painel esquerdo = formulário */
-        .auth-panel-left{width:100%;max-width:520px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0;overflow-y:auto}
-        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
-        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
-        .auth-form-wrap{width:100%;max-width:420px;padding:1rem 0}
-        .auth-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em}
-        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2rem}
-        .auth-label{display:block;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
-        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
-        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
-        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
-        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family: var(--rf-font-sans);min-width:0}
-        .auth-input-group input::placeholder{color:#444}
-        .auth-input-group .toggle-pw{padding:0 14px;color:#555;cursor:pointer;font-size:15px;flex-shrink:0;transition:color .2s}
-        .auth-input-group .toggle-pw:hover{color:#CDA865}
-        .auth-field{margin-bottom:1rem}
-        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family: var(--rf-font-sans);cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.6rem}
-        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
-        .auth-btn:active{transform:translateY(1px)}
-        .auth-btn.is-loading{cursor:wait;opacity:.82;pointer-events:none}
-        .auth-btn .auth-loading-spinner{display:none}
-        .auth-btn.is-loading .auth-loading-spinner{display:inline-block}
-        .auth-btn.is-loading .auth-action-icon{display:none}
-        .auth-btn i{font-size:16px}
-        .auth-links{text-align:center;margin-top:1.4rem;font-size:.83rem;color:#666}
-        .auth-link{color:#CDA865;text-decoration:none;font-weight:600}
-        .auth-link:hover{color:#b8913e}
-        .auth-alert{padding:12px 14px;border-radius:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.4rem;border:1.5px solid}
-        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
-        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
-        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
-        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
-        .auth-alert i{font-size:1rem;flex-shrink:0;margin-top:1px}
-        .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
-        .auth-alert .close-btn:hover{opacity:1}
-        .lock-warning{font-size:.75rem;color:#f07070;margin-top:5px;display:none}
-        .honeypot-field{position:absolute;left:-9999px;visibility:hidden;height:1px;width:1px;pointer-events:none;opacity:0}
-        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family: var(--rf-font-mono)}
-        .field-hint{font-size:.73rem;color:#555;margin-top:.35rem}
+        :root {
+            --gold: #CDA865; --gold-dim: #8B6332; --gold-glow: rgba(205,168,101,0.15);
+            --bg: #0a0a0a; --bg-elevated: #111111;
+            --surface: #1a1a1a; --surface-hover: #222222;
+            --border: rgba(255,255,255,0.06); --border-focus: rgba(205,168,101,0.4);
+            --text-primary: #f0f0f0; --text-secondary: #888888; --text-muted: #555555;
+            --danger: #e74c3c; --danger-soft: rgba(231,76,60,0.12);
+            --success: #2ecc71; --success-soft: rgba(46,204,113,0.12);
+            --warning: #f39c12; --warning-soft: rgba(243,156,18,0.12);
+            --info: #3498db; --info-soft: rgba(52,152,219,0.12);
+            --shadow-gold: 0 0 40px rgba(205,168,101,0.08);
+            --transition-fast: 0.15s cubic-bezier(0.4,0,0.2,1);
+            --transition-smooth: 0.3s cubic-bezier(0.4,0,0.2,1);
+            --transition-spring: 0.5s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box }
+        html { scroll-behavior:smooth }
+        body {
+            font-family:'Inter',system-ui,sans-serif;
+            background:var(--bg); color:var(--text-primary);
+            min-height:100vh; display:flex; overflow-x:hidden;
+            -webkit-font-smoothing:antialiased;
+        }
+        .skip-link {
+            position:absolute; top:-100%; left:50%; transform:translateX(-50%);
+            background:var(--gold); color:#000; padding:10px 24px;
+            border-radius:0 0 12px 12px; font-weight:600; font-size:0.85rem;
+            z-index:9999; transition:top var(--transition-fast); text-decoration:none;
+        }
+        .skip-link:focus { top:0; outline:none }
+
+        .auth-panel {
+            width:100%; max-width:560px; min-height:100vh;
+            background:var(--bg-elevated); display:flex;
+            align-items:center; justify-content:center;
+            padding:2.5rem 2rem; position:relative; flex-shrink:0;
+            border-right:1px solid var(--border); overflow-y:auto;
+        }
+        .auth-panel::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            background:linear-gradient(90deg,transparent,var(--gold),var(--gold-dim),var(--gold),transparent);
+            background-size:200% 100%; animation:shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer { 0%,100%{background-position:200% 0} 50%{background-position:-200% 0} }
+        .auth-panel::after {
+            content:''; position:absolute; inset:0;
+            background:
+                radial-gradient(ellipse 600px 400px at 20% 30%, rgba(205,168,101,0.03) 0%, transparent 70%),
+                radial-gradient(ellipse 400px 300px at 80% 70%, rgba(205,168,101,0.02) 0%, transparent 70%);
+            pointer-events:none;
+        }
+
+        .auth-wrap {
+            width:100%; max-width:440px; position:relative; z-index:1;
+            animation:slideUp 0.6s var(--transition-spring) both;
+        }
+        @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+        .context-strip {
+            display:flex; align-items:center; gap:12px;
+            margin-bottom:2rem; padding-bottom:1.5rem;
+            border-bottom:1px solid var(--border);
+        }
+        .context-mark {
+            width:40px; height:40px; border-radius:10px;
+            background:linear-gradient(135deg, rgba(205,168,101,0.15), rgba(205,168,101,0.05));
+            border:1px solid rgba(205,168,101,0.2);
+            display:flex; align-items:center; justify-content:center;
+            color:var(--gold); font-size:1.1rem; flex-shrink:0;
+        }
+        .context-info { flex:1 }
+        .context-info strong { display:block; font-size:0.95rem; font-weight:700; }
+        .context-info small { display:block; font-size:0.75rem; color:var(--text-muted); margin-top:2px; }
+        .security-chip {
+            display:flex; align-items:center; gap:5px; font-size:0.7rem; color:var(--text-muted);
+            background:rgba(255,255,255,0.03); padding:4px 10px; border-radius:20px;
+            border:1px solid var(--border); white-space:nowrap;
+        }
+        .security-chip i { color:var(--success); font-size:0.75rem }
+
+        .auth-title {
+            font-size:1.6rem; font-weight:800; letter-spacing:-0.03em;
+            background:linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+        }
+        .auth-subtitle { font-size:0.875rem; color:var(--text-secondary); margin-top:0.5rem; margin-bottom:2rem; }
+
+        .alert {
+            padding:14px 16px; border-radius:12px; font-size:0.85rem;
+            display:flex; align-items:flex-start; gap:12px; margin-bottom:1.5rem;
+            border:1px solid; animation:alertIn 0.4s var(--transition-spring) both;
+            backdrop-filter:blur(10px);
+        }
+        @keyframes alertIn { from{opacity:0;transform:translateY(-10px) scale(0.98)} to{opacity:1;transform:translateY(0) scale(1)} }
+        .alert-danger { background:var(--danger-soft); border-color:rgba(231,76,60,0.25); color:#ff8a80 }
+        .alert-success { background:var(--success-soft); border-color:rgba(46,204,113,0.25); color:#6ee7b7 }
+        .alert-warning { background:var(--warning-soft); border-color:rgba(243,156,18,0.25); color:#fbbf24 }
+        .alert-info { background:var(--info-soft); border-color:rgba(52,152,219,0.25); color:#7dd3fc }
+        .alert i { font-size:1.1rem; flex-shrink:0; margin-top:1px }
+        .alert-close { margin-left:auto; cursor:pointer; opacity:0.6; transition:opacity var(--transition-fast);
+            background:none; border:none; color:inherit; padding:0; }
+        .alert-close:hover { opacity:1 }
+
+        .field { margin-bottom:1.1rem; position:relative }
+        .field-label {
+            display:block; font-size:0.75rem; font-weight:600;
+            text-transform:uppercase; letter-spacing:0.08em;
+            color:var(--text-muted); margin-bottom:0.5rem;
+            transition:color var(--transition-fast);
+        }
+        .field:focus-within .field-label { color:var(--gold) }
+
+        .input-wrap {
+            display:flex; align-items:center; background:var(--surface);
+            border:1.5px solid var(--border); border-radius:12px;
+            transition:all var(--transition-smooth); position:relative; overflow:hidden;
+        }
+        .input-wrap::before {
+            content:''; position:absolute; inset:0;
+            background:linear-gradient(135deg, rgba(205,168,101,0.03), transparent);
+            opacity:0; transition:opacity var(--transition-smooth); pointer-events:none;
+        }
+        .input-wrap:focus-within {
+            border-color:var(--border-focus);
+            box-shadow:0 0 0 4px var(--gold-glow), var(--shadow-gold);
+            transform:translateY(-1px);
+        }
+        .input-wrap:focus-within::before { opacity:1 }
+        .input-wrap.is-invalid { border-color:var(--danger); animation:shake 0.4s ease }
+        .input-wrap.is-valid { border-color:var(--success) }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+
+        .input-icon { padding:0 14px; color:var(--text-muted); font-size:1rem; flex-shrink:0; transition:color var(--transition-fast); }
+        .input-wrap:focus-within .input-icon { color:var(--gold) }
+        .input-wrap input { flex:1; background:transparent; border:none; outline:none; color:var(--text-primary); font-size:0.9rem; padding:13px 12px 13px 0; font-family:inherit; min-width:0; }
+        .input-wrap input::placeholder { color:var(--text-muted); opacity:0.7 }
+
+        .toggle-pw { padding:0 14px; color:var(--text-muted); cursor:pointer; font-size:1rem; flex-shrink:0; transition:all var(--transition-fast); background:none; border:none; }
+        .toggle-pw:hover { color:var(--gold) }
+        .toggle-pw:focus-visible { outline:2px solid var(--gold); outline-offset:-2px; border-radius:4px }
+
+        .field-hint { font-size:0.72rem; color:var(--text-muted); margin-top:5px; display:flex; align-items:center; gap:4px; }
+        .field-hint i { font-size:0.65rem }
+        .field-error { font-size:0.72rem; color:var(--danger); margin-top:5px; display:none; align-items:center; gap:4px; animation:fadeIn 0.2s ease; }
+        .field-error.visible { display:flex }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+        .lock-warn { font-size:0.75rem; color:var(--danger); margin-top:6px; display:none; align-items:center; gap:5px; animation:fadeIn 0.2s ease; }
+        .lock-warn.visible { display:flex }
+
+        /* Password strength */
+        .strength-bar { height:4px; border-radius:2px; margin-top:8px; background:var(--surface); overflow:hidden; position:relative; }
+        .strength-fill { height:100%; width:0%; border-radius:2px; transition:all 0.4s ease; }
+        .strength-text { font-size:0.72rem; margin-top:5px; color:var(--text-muted); transition:color 0.3s; }
+
+        .btn-primary {
+            display:flex; align-items:center; justify-content:center; gap:10px;
+            width:100%; padding:14px 24px;
+            background:linear-gradient(135deg, var(--gold), var(--gold-dim));
+            color:#0a0a0a; border:none; border-radius:12px;
+            font-size:0.95rem; font-weight:700; font-family:inherit;
+            cursor:pointer; letter-spacing:0.01em; position:relative; overflow:hidden;
+            transition:all var(--transition-smooth);
+            box-shadow:0 4px 20px rgba(205,168,101,0.2); margin-top:0.5rem;
+        }
+        .btn-primary::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,0.15), transparent); opacity:0; transition:opacity var(--transition-fast); }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(205,168,101,0.35); }
+        .btn-primary:hover::before { opacity:1 }
+        .btn-primary:active { transform:translateY(0) scale(0.98) }
+        .btn-primary:disabled { opacity:0.7; cursor:not-allowed; transform:none; box-shadow:0 4px 20px rgba(205,168,101,0.1); }
+        .btn-primary .spinner { width:18px; height:18px; border:2.5px solid rgba(10,10,10,0.2); border-top-color:#0a0a0a; border-radius:50%; animation:spin 0.8s linear infinite; display:none; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .btn-primary.is-loading .spinner { display:block }
+        .btn-primary.is-loading .btn-icon { display:none }
+
+        .auth-links { text-align:center; margin-top:1.8rem; font-size:0.85rem; color:var(--text-secondary); }
+        .auth-link { color:var(--gold); text-decoration:none; font-weight:600; transition:all var(--transition-fast); padding:4px 8px; border-radius:6px; }
+        .auth-link:hover { color:#b8913e; background:rgba(205,168,101,0.08); }
+        .auth-link:focus-visible { outline:2px solid var(--gold); outline-offset:2px; }
+
+        .support-note { text-align:center; font-size:0.75rem; color:var(--text-muted); margin-top:1.5rem; display:flex; align-items:center; justify-content:center; gap:6px; }
+        .version-badge { position:absolute; bottom:1.5rem; right:1.5rem; font-size:0.7rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace; opacity:0.5; }
+        .honeypot { position:absolute; left:-9999px; opacity:0; pointer-events:none }
+
+        /* Step indicator */
+        .step-indicator { display:flex; align-items:center; gap:8px; margin-bottom:2rem; }
+        .step { display:flex; align-items:center; gap:8px; }
+        .step-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; transition:all var(--transition-smooth); }
+        .step-dot.active { background:var(--gold); color:#0a0a0a; }
+        .step-dot.pending { background:var(--surface); color:var(--text-muted); border:1.5px solid var(--border); }
+        .step-dot.done { background:var(--success); color:#fff; }
+        .step-line { flex:1; height:2px; background:var(--border); border-radius:1px; transition:background var(--transition-smooth); }
+        .step-line.done { background:var(--success); }
+        .step-label { font-size:0.7rem; color:var(--text-muted); font-weight:500; }
+
+        @media(max-width:576px){ .auth-panel{padding:1.5rem} .auth-wrap{max-width:100%} .auth-title{font-size:1.4rem} }
+        @media(max-width:576px){
+            .auth-panel { padding: .75rem 1rem; }
+            .context-strip { gap: 8px; margin-bottom: 1rem; padding-bottom: .75rem; }
+            .context-mark { width: 32px; height: 32px; font-size: .9rem; }
+            .context-info strong { font-size: .8rem; }
+            .context-info small { font-size: .64rem; }
+            .security-chip { padding: 3px 7px; font-size: .58rem; }
+            .auth-title { font-size: 1.3rem; }
+            .auth-subtitle { margin-bottom: 1rem; font-size: .76rem; line-height: 1.3; }
+            .step-indicator { gap: 5px; margin-bottom: 1rem; }
+            .step { gap: 5px; }
+            .step-dot { width: 22px; height: 22px; font-size: .62rem; }
+            .step-label { font-size: .58rem; }
+            .step-line { height: 1px; }
+            .field { margin-bottom: .65rem; }
+            .field-label { margin-bottom: .3rem; font-size: .65rem; }
+            .input-wrap input { padding: 9px 10px 9px 0; font-size: .82rem; }
+            .input-icon { padding: 0 10px; font-size: .85rem; }
+            .toggle-pw { padding: 0 10px; }
+            .field-hint, .field-error, .strength-text { margin-top: 3px; font-size: .6rem; }
+            .strength-bar { margin-top: 5px; height: 3px; }
+            .lock-warn { margin-top: 3px; font-size: .62rem; }
+            .btn-primary { padding: 10px 16px; font-size: .84rem; margin-top: .25rem; }
+            .auth-links { margin-top: .75rem; font-size: .76rem; }
+            .support-note { margin-top: .55rem; font-size: .62rem; }
+            .version-badge { right: .75rem; bottom: .4rem; font-size: .58rem; }
+        }
+        @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;} }
     </style>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css', v=app_version) }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v=app_version + '-ui1') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimized.css', v=app_version) }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui8') }}">
 </head>
-<body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}" data-rf-ui="complete" data-rf-surface="novo-usuario" data-rf-component="page-surface">
-    <a class="auth-skip-link" href="#registerForm">Pular para o formulário de cadastro</a>
-    <!-- Conteúdo principal -->
-    <main class="auth-panel-left" id="auth-content" aria-labelledby="auth-title">
-        <div class="auth-form-wrap">
-            <div class="auth-context-strip" aria-label="Contexto do RegistroFácil">
-                <span class="auth-context-mark" aria-hidden="true"><i class="bi bi-file-earmark-text-fill"></i></span>
-                <span class="auth-context-copy"><strong>RegistroFácil</strong><small>Gestão de processos da serventia</small></span>
-                <span class="auth-security-chip"><i class="bi bi-shield-check" aria-hidden="true"></i> Ambiente protegido</span>
+<body class="auth-template-v4" data-rf-surface="novo-usuario" data-rf-template="register-v4">
+    <a href="#registerForm" class="skip-link">Pular para o formulário de cadastro</a>
+
+    <main class="auth-panel" id="auth-content" aria-labelledby="auth-title">
+        <div class="auth-wrap">
+            <div class="context-strip" aria-label="Contexto do RegistroFácil">
+                <span class="context-mark" aria-hidden="true"><i class="bi bi-file-earmark-text-fill"></i></span>
+                <div class="context-info">
+                    <strong>RegistroFácil</strong>
+                    <small>Gestão de processos da serventia</small>
+                </div>
+                <span class="security-chip"><i class="bi bi-shield-check"></i> Protegido</span>
             </div>
-            <h2 class="auth-title" id="auth-title">Criar Nova Conta</h2>
-            <p class="auth-subtitle">Preencha os dados abaixo para solicitar acesso</p>
+
+            <h1 class="auth-title" id="auth-title">Criar Nova Conta</h1>
+            <p class="auth-subtitle">Preencha os dados abaixo para solicitar acesso ao sistema</p>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator" aria-label="Progresso do cadastro">
+                <div class="step">
+                    <span class="step-dot active" aria-current="step">1</span>
+                    <span class="step-label">Dados</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <span class="step-dot pending">2</span>
+                    <span class="step-label">Aprovação</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <span class="step-dot pending">3</span>
+                    <span class="step-label">Acesso</span>
+                </div>
+            </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                    <div class="auth-alert {{ 'danger' if category == 'error' else category }}" role="alert">
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}" role="alert" style="animation-delay:{{ loop.index * 0.1 }}s">
                         <i class="bi bi-{{ 'exclamation-circle-fill' if category == 'error' or category == 'warning' else 'check-circle-fill' if category == 'success' else 'info-circle-fill' }}"></i>
                         <div>{{ message }}</div>
-                        <button type="button" class="close-btn" aria-label="Fechar mensagem" onclick="this.parentElement.remove()"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+                        <button type="button" class="alert-close" aria-label="Fechar mensagem" onclick="this.parentElement.remove()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
                     </div>
                     {% endfor %}
                 {% endif %}
@@ -83,142 +286,273 @@
 
             <form method="post" id="registerForm" aria-labelledby="auth-title" novalidate>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <div class="honeypot-field">
+                <div class="honeypot">
                     <label for="honeypot">Deixe este campo vazio:</label>
                     <input type="text" id="honeypot" name="honeypot" tabindex="-1" autocomplete="off">
                 </div>
 
-                <div class="auth-field">
-                    <label class="auth-label" for="nome">Nome Completo</label>
-                    <div class="auth-input-group">
+                <div class="field">
+                    <label class="field-label" for="nome">Nome Completo</label>
+                    <div class="input-wrap" id="wrap-nome">
                         <span class="input-icon"><i class="bi bi-person-fill"></i></span>
-                        <input type="text" id="nome" name="nome" value="{{ nome }}" placeholder="Seu nome completo" required>
+                        <input type="text" id="nome" name="nome" value="{{ nome }}"
+                               placeholder="Seu nome completo" required
+                               autocomplete="name">
                     </div>
+                    <div class="field-error" id="error-nome"><i class="bi bi-x-circle-fill"></i>Nome é obrigatório</div>
                 </div>
 
-                <div class="auth-field">
-                    <label class="auth-label" for="email">E-mail</label>
-                    <div class="auth-input-group">
+                <div class="field">
+                    <label class="field-label" for="email">E-mail</label>
+                    <div class="input-wrap" id="wrap-email">
                         <span class="input-icon"><i class="bi bi-envelope-fill"></i></span>
-                        <input type="email" id="email" name="email" value="{{ email }}" placeholder="seu.email@exemplo.com" autocomplete="email" required>
+                        <input type="email" id="email" name="email" value="{{ email }}"
+                               placeholder="seu.email@exemplo.com" required
+                               autocomplete="email">
                     </div>
+                    <div class="field-hint"><i class="bi bi-info-circle"></i>Usado para recuperação de acesso</div>
+                    <div class="field-error" id="error-email"><i class="bi bi-x-circle-fill"></i>E-mail inválido</div>
                 </div>
 
-                <div class="auth-field">
-                    <label class="auth-label" for="usuario">Usuário</label>
-                    <div class="auth-input-group">
+                <div class="field">
+                    <label class="field-label" for="usuario">Usuário</label>
+                    <div class="input-wrap" id="wrap-usuario">
                         <span class="input-icon"><i class="bi bi-person-badge"></i></span>
-                        <input type="text" id="usuario" name="usuario" value="{{ usuario }}" placeholder="Nome de usuário para login" autocomplete="username" required>
+                        <input type="text" id="usuario" name="usuario" value="{{ usuario }}"
+                               placeholder="Nome de usuário para login" required
+                               autocomplete="username">
                     </div>
-                    <div class="field-hint">Usado para entrar no sistema. Sem espaços.</div>
+                    <div class="field-hint"><i class="bi bi-info-circle"></i>Sem espaços. Usado para entrar no sistema.</div>
+                    <div class="field-error" id="error-usuario"><i class="bi bi-x-circle-fill"></i>Usuário inválido</div>
                 </div>
 
-                <div class="auth-field">
-                    <label class="auth-label" for="senha">Senha</label>
-                    <div class="auth-input-group">
+                <div class="field">
+                    <label class="field-label" for="senha">Senha</label>
+                    <div class="input-wrap" id="wrap-senha">
                         <span class="input-icon"><i class="bi bi-lock-fill"></i></span>
-                        <input type="password" id="senha" name="senha" placeholder="Mín. 6 caracteres" autocomplete="new-password" required minlength="6">
-                        <button type="button" class="toggle-pw" onclick="togglePw('senha', this)" aria-label="Mostrar senha" aria-controls="senha" aria-pressed="false"><i class="bi bi-eye" aria-hidden="true"></i></button>
+                        <input type="password" id="senha" name="senha"
+                               placeholder="Mínimo 6 caracteres" required minlength="6"
+                               autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw('senha', this)"
+                                aria-label="Mostrar senha" aria-controls="senha" aria-pressed="false">
+                            <i class="bi bi-eye"></i>
+                        </button>
                     </div>
+                    <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                    <div class="strength-text" id="strengthText"></div>
                 </div>
 
-                <div class="auth-field">
-                    <label class="auth-label" for="confirmar_senha">Confirmar Senha</label>
-                    <div class="auth-input-group">
+                <div class="field">
+                    <label class="field-label" for="confirmar_senha">Confirmar Senha</label>
+                    <div class="input-wrap" id="wrap-confirmar">
                         <span class="input-icon"><i class="bi bi-lock-fill"></i></span>
-                        <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Repita a senha" autocomplete="new-password" required>
-                        <button type="button" class="toggle-pw" onclick="togglePw('confirmar_senha', this)" aria-label="Mostrar senha" aria-controls="confirmar_senha" aria-pressed="false"><i class="bi bi-eye" aria-hidden="true"></i></button>
+                        <input type="password" id="confirmar_senha" name="confirmar_senha"
+                               placeholder="Repita a senha" required
+                               autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw('confirmar_senha', this)"
+                                aria-label="Mostrar senha" aria-controls="confirmar_senha" aria-pressed="false">
+                            <i class="bi bi-eye"></i>
+                        </button>
                     </div>
+                    <div class="field-error" id="error-confirmar"><i class="bi bi-x-circle-fill"></i>As senhas não coincidem</div>
                 </div>
 
-                <div class="lock-warning" id="capsWarning"><i class="bi bi-exclamation-triangle me-1"></i>Caps Lock ativado</div>
-                <div class="lock-warning" id="numWarning"><i class="bi bi-exclamation-triangle me-1"></i>Num Lock desativado</div>
+                <div class="lock-warn" id="capsWarn"><i class="bi bi-exclamation-triangle-fill"></i>Caps Lock ativado</div>
+                <div class="lock-warn" id="numWarn"><i class="bi bi-exclamation-triangle-fill"></i>Num Lock desativado</div>
 
-                <button type="submit" class="auth-btn" id="registerSubmit">
-                    <span class="spinner-border spinner-border-sm auth-loading-spinner" aria-hidden="true"></span>
-                    <i class="bi bi-person-plus-fill auth-action-icon" aria-hidden="true"></i>
-                    <span class="auth-action-text">Criar Conta</span>
+                <button type="submit" class="btn-primary" id="registerSubmit">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <i class="bi bi-person-plus-fill btn-icon" aria-hidden="true"></i>
+                    <span class="btn-text">Criar Conta</span>
                 </button>
             </form>
 
             <div class="auth-links">
                 Já tem uma conta? <a href="{{ url_for('auth.login') }}" class="auth-link">Faça Login</a>
             </div>
-            <p class="auth-support-note"><i class="bi bi-person-check" aria-hidden="true"></i> Seu acesso será usado nas rotinas da serventia</p>
+            <p class="support-note"><i class="bi bi-person-check"></i> Seu acesso será usado nas rotinas da serventia</p>
         </div>
         <span class="version-badge">v{{ app_version }}</span>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/accessibility.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='js/accessibility.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/auth_loading.js', v=app_version) }}" defer></script>
     <script>
-        function togglePw(id,btn){
-            const input=document.getElementById(id);
-            const icon=btn.querySelector('i');
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            const icon = btn.querySelector('i');
             const showing = input.type === 'password';
             input.type = showing ? 'text' : 'password';
             icon.className = showing ? 'bi bi-eye-slash' : 'bi bi-eye';
             btn.setAttribute('aria-label', showing ? 'Ocultar senha' : 'Mostrar senha');
             btn.setAttribute('aria-pressed', String(showing));
         }
-        document.addEventListener('DOMContentLoaded',function(){
-            const first=document.querySelector('#registerForm input:not([type="hidden"]):not(#honeypot)');
-            if(first)first.focus();
-            const s=document.getElementById('senha');
-            const cf=document.getElementById('confirmar_senha');
-            const c=document.getElementById('capsWarning');
-            const n=document.getElementById('numWarning');
-            function checkLocks(e){
-                c.style.display=e.getModifierState('CapsLock')?'block':'none';
-                n.style.display=!e.getModifierState('NumLock')?'block':'none';
-            }
-            [s,cf].forEach(i=>{i.addEventListener('keydown',checkLocks);i.addEventListener('keyup',checkLocks);});
 
-            // Validação de e-mail client-side
+        document.addEventListener('DOMContentLoaded', function() {
+            const first = document.querySelector('#registerForm input:not([type="hidden"]):not(#honeypot)');
+            if (first) first.focus();
+
+            // Lock warnings
+            const senha = document.getElementById('senha');
+            const confirmar = document.getElementById('confirmar_senha');
+            const capsWarn = document.getElementById('capsWarn');
+            const numWarn = document.getElementById('numWarn');
+            function checkLocks(e) {
+                capsWarn.classList.toggle('visible', e.getModifierState('CapsLock'));
+                numWarn.classList.toggle('visible', !e.getModifierState('NumLock'));
+            }
+            [senha, confirmar].forEach(i => { if(i){i.addEventListener('keydown',checkLocks);i.addEventListener('keyup',checkLocks);} });
+
+            // Email validation
             const emailInput = document.getElementById('email');
             const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (emailInput) {
                 emailInput.addEventListener('blur', function() {
                     const val = this.value.trim();
+                    const wrap = document.getElementById('wrap-email');
+                    const err = document.getElementById('error-email');
                     if (val && !EMAIL_REGEX.test(val)) {
-                        this.classList.add('is-invalid');
-                        let fb = this.nextElementSibling;
-                        if (!fb || !fb.classList.contains('invalid-feedback')) {
-                            fb = document.createElement('div');
-                            fb.className = 'invalid-feedback';
-                            this.parentNode.appendChild(fb);
-                        }
-                        fb.textContent = 'Por favor, insira um endereço de e-mail válido.';
+                        wrap.classList.add('is-invalid');
+                        err.classList.add('visible');
                     } else {
-                        this.classList.remove('is-invalid');
+                        wrap.classList.remove('is-invalid');
+                        err.classList.remove('visible');
+                        if (val) wrap.classList.add('is-valid');
+                    }
+                });
+                emailInput.addEventListener('input', function() {
+                    document.getElementById('wrap-email').classList.remove('is-invalid', 'is-valid');
+                    document.getElementById('error-email').classList.remove('visible');
+                });
+            }
+
+            // Password strength
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            if (senha) {
+                senha.addEventListener('input', function() {
+                    const val = this.value;
+                    let score = 0;
+                    if (val.length >= 6) score++;
+                    if (val.length >= 10) score++;
+                    if (/[A-Z]/.test(val)) score++;
+                    if (/[0-9]/.test(val)) score++;
+                    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+                    const colors = ['#c5282f','#e67e22','#f1c40f','#27ae60','#1abc9c'];
+                    const labels = ['Muito fraca','Fraca','Média','Forte','Muito forte'];
+                    if (val.length === 0) {
+                        strengthFill.style.width = '0%';
+                        strengthFill.style.background = 'transparent';
+                        strengthText.textContent = '';
+                    } else {
+                        const visualScore = Math.max(score, 1);
+                        const idx = Math.max(0, Math.min(visualScore - 1, 4));
+                        strengthFill.style.background = colors[idx];
+                        strengthFill.style.width = ((visualScore / 5) * 100) + '%';
+                        strengthText.textContent = labels[idx];
+                        strengthText.style.color = colors[idx];
                     }
                 });
             }
 
-            // Enter → próximo campo
-            const form = document.getElementById('registerForm');
-            if (form) {
-                const submit = document.getElementById('registerSubmit');
-                form.addEventListener('submit', function(){
-                    if (!submit || submit.dataset.submitting === 'true') return;
-                    submit.dataset.submitting = 'true';
-                    submit.disabled = true;
-                    submit.setAttribute('aria-busy', 'true');
-                    submit.classList.add('is-loading');
-                    submit.querySelector('.auth-action-text').textContent = 'Criando conta...';
+            // Confirm password match
+            if (confirmar && senha) {
+                confirmar.addEventListener('input', function() {
+                    const wrap = document.getElementById('wrap-confirmar');
+                    const err = document.getElementById('error-confirmar');
+                    if (this.value && this.value !== senha.value) {
+                        wrap.classList.add('is-invalid');
+                        err.classList.add('visible');
+                    } else {
+                        wrap.classList.remove('is-invalid');
+                        err.classList.remove('visible');
+                        if (this.value && this.value === senha.value) wrap.classList.add('is-valid');
+                    }
                 });
-                form.addEventListener('keydown', function(e) {
-                    if (e.key !== 'Enter') return;
-                    const tag = e.target.tagName;
-                    if (tag === 'TEXTAREA' || tag === 'BUTTON') return;
-                    if (e.target.type === 'submit') return;
-                    e.preventDefault();
-                    const tabbable = Array.from(form.querySelectorAll('input:not([type="hidden"]):not([disabled]), button:not([disabled])')).filter(el => el.offsetParent !== null);
-                    const idx = tabbable.indexOf(e.target);
-                    if (idx >= 0 && idx < tabbable.length - 1) tabbable[idx + 1].focus();
-                }, true);
             }
+
+            // Form submission
+            const form = document.getElementById('registerForm');
+            const submitBtn = document.getElementById('registerSubmit');
+            form.addEventListener('submit', function(e) {
+                if (submitBtn.dataset.submitting === 'true') { e.preventDefault(); return; }
+
+                let hasError = false;
+                const nome = document.getElementById('nome');
+                const email = document.getElementById('email');
+                const usuario = document.getElementById('usuario');
+
+                // Validate all fields
+                if (!nome.value.trim()) {
+                    document.getElementById('wrap-nome').classList.add('is-invalid');
+                    document.getElementById('error-nome').classList.add('visible');
+                    hasError = true;
+                }
+                if (!email.value.trim() || !EMAIL_REGEX.test(email.value.trim())) {
+                    document.getElementById('wrap-email').classList.add('is-invalid');
+                    document.getElementById('error-email').classList.add('visible');
+                    hasError = true;
+                }
+                if (!usuario.value.trim()) {
+                    document.getElementById('wrap-usuario').classList.add('is-invalid');
+                    document.getElementById('error-usuario').classList.add('visible');
+                    hasError = true;
+                }
+                if (!senha.value || senha.value.length < 6) {
+                    document.getElementById('wrap-senha').classList.add('is-invalid');
+                    hasError = true;
+                }
+                if (senha.value !== confirmar.value) {
+                    document.getElementById('wrap-confirmar').classList.add('is-invalid');
+                    document.getElementById('error-confirmar').classList.add('visible');
+                    hasError = true;
+                }
+
+                if (hasError) {
+                    e.preventDefault();
+                    // Focus first invalid
+                    const firstInvalid = form.querySelector('.is-invalid input');
+                    if (firstInvalid) firstInvalid.focus();
+                    setTimeout(() => {
+                        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                        document.querySelectorAll('.field-error.visible').forEach(el => el.classList.remove('visible'));
+                    }, 3000);
+                    return;
+                }
+
+                submitBtn.dataset.submitting = 'true';
+                submitBtn.disabled = true;
+                submitBtn.setAttribute('aria-busy', 'true');
+                submitBtn.classList.add('is-loading');
+                submitBtn.querySelector('.btn-text').textContent = 'Criando conta...';
+            });
+
+            // Enter navigation
+            form.addEventListener('keydown', function(e) {
+                if (e.key !== 'Enter') return;
+                const tag = e.target.tagName;
+                if (tag === 'TEXTAREA' || tag === 'BUTTON') return;
+                if (e.target.type === 'submit') return;
+                e.preventDefault();
+                const tabbable = Array.from(form.querySelectorAll('input:not([type="hidden"]):not([disabled]), button:not([disabled])')).filter(el => el.offsetParent !== null);
+                const idx = tabbable.indexOf(e.target);
+                if (idx >= 0 && idx < tabbable.length - 1) tabbable[idx + 1].focus();
+            }, true);
+
+            // Clear errors on input
+            form.querySelectorAll('input').forEach(inp => {
+                inp.addEventListener('input', function() {
+                    if (this.id === 'confirmar_senha') return;
+                    const wrap = this.closest('.input-wrap');
+                    if (wrap) wrap.classList.remove('is-invalid');
+                    const field = this.closest('.field');
+                    if (field) {
+                        const err = field.querySelector('.field-error');
+                        if (err) err.classList.remove('visible');
+                    }
+                });
+            });
         });
     </script>
 </body>
