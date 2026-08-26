@@ -1,244 +1,460 @@
 {% extends "base.html" %}
 
-{% block title %}Acesso restrito · Registro Fácil{% endblock %}
-{% block page_title %}Acesso restrito{% endblock %}
+{% block title %}Acesso Restrito · RegistroFácil{% endblock %}
+{% block page_title %}Acesso Restrito{% endblock %}
 
 {% block content %}
 <style>
-    .rf-access-denied {
-        --access-bg: var(--rf-surface, #ffffff);
-        --access-ink: var(--rf-text, #162332);
-        --access-muted: var(--rf-text-muted, #667789);
-        --access-border: var(--rf-border, rgba(22, 35, 50, .12));
-        --access-gold: #cda865;
-        --access-blue: var(--color-primary-light, #1b4368);
-        min-height: min(560px, calc(100dvh - 150px));
-        display: grid;
-        place-items: center;
-        padding: clamp(18px, 3vw, 36px) 16px;
-    }
+    /* ===== CORE TOKENS ===== */
+    .rf-403 {
+        --403-gold: #CDA865;
+        --403-gold-dim: #8B6332;
+        --403-gold-glow: rgba(205,168,101,0.12);
+        --403-blue: #1b4368;
+        --403-blue-dark: #0a1725;
+        --403-surface: var(--rf-surface, #ffffff);
+        --403-ink: var(--rf-text, #162332);
+        --403-muted: var(--rf-text-muted, #667789);
+        --403-border: var(--rf-border, rgba(22,35,50,.12));
+        --403-transition-fast: 0.15s cubic-bezier(0.4,0,0.2,1);
+        --403-transition-smooth: 0.4s cubic-bezier(0.4,0,0.2,1);
+        --403-transition-spring: 0.6s cubic-bezier(0.34,1.56,0.64,1);
 
-    .rf-access-card {
+        min-height: min(720px, calc(100dvh - 140px));
+        display: grid; place-items: center;
+        padding: clamp(20px, 5vw, 60px) 16px;
         position: relative;
-        width: min(100%, 760px);
         overflow: hidden;
-        border: 1px solid var(--access-border);
-        border-radius: 14px;
-        background:
-            linear-gradient(135deg, rgba(205, 168, 101, .08), transparent 35%),
-            var(--access-bg);
-        box-shadow: 0 10px 28px rgba(10, 24, 38, .1);
     }
 
-    .rf-access-card::before {
-        content: "";
+    /* Subtle ambient background */
+    .rf-403::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 800px 600px at 15% 20%, rgba(205,168,101,0.04) 0%, transparent 60%),
+            radial-gradient(ellipse 600px 400px at 85% 80%, rgba(27,67,104,0.04) 0%, transparent 60%);
+        pointer-events: none;
+    }
+
+    /* ===== CARD ===== */
+    .rf-403-card {
+        position: relative;
+        width: min(100%, 800px);
+        border: 1px solid var(--403-border);
+        border-radius: 24px;
+        background: var(--403-surface);
+        box-shadow:
+            0 4px 6px -1px rgba(0,0,0,0.05),
+            0 12px 24px -4px rgba(0,0,0,0.08),
+            0 24px 48px -8px rgba(0,0,0,0.06);
+        overflow: hidden;
+        animation: cardReveal 0.7s var(--403-transition-spring) both;
+    }
+
+    @keyframes cardReveal {
+        from { opacity: 0; transform: translateY(40px) scale(0.97); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Animated top bar */
+    .rf-403-card::before {
+        content: '';
         position: absolute;
         inset: 0 0 auto;
         height: 4px;
-        background: linear-gradient(90deg, var(--access-blue), var(--access-gold), var(--access-blue));
+        background: linear-gradient(90deg, var(--403-blue), var(--403-gold), var(--403-gold-dim), var(--403-gold), var(--403-blue));
+        background-size: 300% 100%;
+        animation: barShimmer 4s ease-in-out infinite;
+    }
+    @keyframes barShimmer {
+        0%, 100% { background-position: 0% 50%; }
+        50%      { background-position: 100% 50%; }
     }
 
-    .rf-access-grid {
+    /* ===== GRID ===== */
+    .rf-403-grid {
         display: grid;
-        grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr);
+        grid-template-columns: minmax(200px, .65fr) minmax(0, 1.35fr);
         align-items: stretch;
     }
 
-    .rf-access-signal {
-        display: grid;
-        place-items: center;
-        min-height: 0;
-        padding: 24px 18px;
-        color: #f5f7fa;
+    /* ===== LEFT PANEL — Visual Signal ===== */
+    .rf-403-signal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 28px;
+        position: relative;
+        overflow: hidden;
         background:
-            radial-gradient(circle at 25% 20%, rgba(205, 168, 101, .2), transparent 42%),
-            linear-gradient(145deg, #102c45, #0a1725 70%);
+            radial-gradient(circle at 30% 25%, rgba(205,168,101,0.18) 0%, transparent 50%),
+            radial-gradient(circle at 70% 75%, rgba(27,67,104,0.15) 0%, transparent 50%),
+            linear-gradient(160deg, #102c45 0%, #0a1725 60%, #07101a 100%);
     }
 
-    .rf-access-seal {
+    /* Floating particles */
+    .rf-403-signal::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            radial-gradient(circle 2px at 20% 30%, rgba(205,168,101,0.4) 0%, transparent 100%),
+            radial-gradient(circle 1.5px at 60% 20%, rgba(205,168,101,0.3) 0%, transparent 100%),
+            radial-gradient(circle 2px at 80% 60%, rgba(205,168,101,0.25) 0%, transparent 100%),
+            radial-gradient(circle 1px at 40% 70%, rgba(205,168,101,0.35) 0%, transparent 100%),
+            radial-gradient(circle 1.5px at 10% 80%, rgba(205,168,101,0.2) 0%, transparent 100%);
+        animation: particlesFloat 8s ease-in-out infinite alternate;
+        pointer-events: none;
+    }
+    @keyframes particlesFloat {
+        from { transform: translateY(0) rotate(0deg); }
+        to   { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    /* Shield Seal */
+    .rf-403-seal {
+        position: relative;
+        z-index: 1;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
         display: grid;
         place-items: center;
-        width: 68px;
-        height: 68px;
-        margin-bottom: 12px;
-        border: 1px solid rgba(205, 168, 101, .68);
-        border-radius: 50%;
-        color: #e5c27d;
-        font-size: 1.55rem;
-        box-shadow: 0 0 0 6px rgba(205, 168, 101, .06), inset 0 0 20px rgba(205, 168, 101, .1);
+        margin-bottom: 24px;
+        background: linear-gradient(135deg, rgba(205,168,101,0.15), rgba(205,168,101,0.05));
+        border: 1.5px solid rgba(205,168,101,0.5);
+        box-shadow:
+            0 0 0 10px rgba(205,168,101,0.06),
+            0 0 0 20px rgba(205,168,101,0.03),
+            inset 0 0 30px rgba(205,168,101,0.08),
+            0 8px 32px rgba(0,0,0,0.3);
+        animation: sealPulse 3s ease-in-out infinite;
+    }
+    @keyframes sealPulse {
+        0%, 100% { box-shadow: 0 0 0 10px rgba(205,168,101,0.06), 0 0 0 20px rgba(205,168,101,0.03), inset 0 0 30px rgba(205,168,101,0.08), 0 8px 32px rgba(0,0,0,0.3); }
+        50%      { box-shadow: 0 0 0 14px rgba(205,168,101,0.08), 0 0 0 28px rgba(205,168,101,0.04), inset 0 0 40px rgba(205,168,101,0.12), 0 12px 40px rgba(0,0,0,0.35); }
     }
 
-    #main-content .rf-access-signal h2 {
+    .rf-403-seal i {
+        font-size: 2.4rem;
+        color: var(--403-gold);
+        filter: drop-shadow(0 0 8px rgba(205,168,101,0.4));
+        animation: iconBob 2.5s ease-in-out infinite;
+    }
+    @keyframes iconBob {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-4px); }
+    }
+
+    /* Code display */
+    .rf-403-code {
+        position: relative;
+        z-index: 1;
+        font: 800 clamp(3.5rem, 8vw, 5rem)/1 var(--rf-font-display, "Fraunces", Georgia, serif);
+        color: transparent;
+        -webkit-text-stroke: 1.5px rgba(205,168,101,0.5);
+        letter-spacing: -0.04em;
+        opacity: 0.6;
+        margin-bottom: 8px;
+        animation: codeFade 1s var(--403-transition-spring) 0.3s both;
+    }
+    @keyframes codeFade {
+        from { opacity: 0; transform: scale(0.8); }
+        to   { opacity: 0.6; transform: scale(1); }
+    }
+
+    .rf-403-signal h2 {
+        position: relative;
+        z-index: 1;
         margin: 0;
-        color: #f5f7fa !important;
-        font: 700 1.02rem/1.2 var(--rf-font-sans, "Source Sans 3", sans-serif);
-        letter-spacing: .02em;
-    }
-
-    .rf-access-signal p {
-        max-width: 220px;
-        margin: 6px 0 0;
-        color: rgba(245, 247, 250, .7);
-        font-size: .78rem;
-        line-height: 1.35;
+        color: #f5f7fa;
+        font: 700 1.05rem/1.3 var(--rf-font-sans, "Source Sans 3", sans-serif);
+        letter-spacing: 0.02em;
         text-align: center;
+        animation: textReveal 0.6s var(--403-transition-smooth) 0.5s both;
+    }
+    @keyframes textReveal {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 
-    .rf-access-copy {
+    .rf-403-signal p {
+        position: relative;
+        z-index: 1;
+        max-width: 220px;
+        margin: 10px 0 0;
+        color: rgba(245,247,250,0.65);
+        font-size: 0.82rem;
+        line-height: 1.5;
+        text-align: center;
+        animation: textReveal 0.6s var(--403-transition-smooth) 0.7s both;
+    }
+
+    /* ===== RIGHT PANEL — Copy ===== */
+    .rf-403-copy {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: clamp(26px, 4vw, 40px);
+        padding: clamp(28px, 4vw, 48px);
+        animation: copySlide 0.6s var(--403-transition-smooth) 0.4s both;
+    }
+    @keyframes copySlide {
+        from { opacity: 0; transform: translateX(20px); }
+        to   { opacity: 1; transform: translateX(0); }
     }
 
-    .rf-access-kicker {
-        margin: 0 0 8px;
-        color: var(--access-gold);
-        font: 600 .64rem/1.2 var(--rf-font-mono, "IBM Plex Mono", monospace);
-        letter-spacing: .14em;
+    .rf-403-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 12px;
+        color: var(--403-gold);
+        font: 600 0.7rem/1 var(--rf-font-mono, "IBM Plex Mono", monospace);
+        letter-spacing: 0.12em;
         text-transform: uppercase;
     }
+    .rf-403-kicker::before {
+        content: '';
+        width: 20px;
+        height: 2px;
+        background: var(--403-gold);
+        border-radius: 1px;
+    }
 
-    .rf-access-copy h1 {
+    .rf-403-copy h1 {
         margin: 0;
-        color: var(--access-ink);
-        font: 700 clamp(1.45rem, 2.6vw, 2rem)/1.08 var(--rf-font-display, "Fraunces", Georgia, serif);
+        color: var(--403-ink);
+        font: 700 clamp(1.5rem, 3vw, 2.1rem)/1.15 var(--rf-font-display, "Fraunces", Georgia, serif);
+        letter-spacing: -0.02em;
     }
 
-    .rf-access-copy .lead {
-        max-width: 470px;
-        margin: 12px 0 0;
-        color: var(--access-ink);
-        font-size: .94rem;
-        line-height: 1.4;
-    }
-
-    .rf-access-detail {
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
+    .rf-403-copy .lead {
+        max-width: 480px;
         margin: 16px 0 0;
-        padding: 10px 12px;
-        border: 1px solid rgba(205, 168, 101, .3);
-        border-radius: 10px;
-        color: var(--access-muted);
-        background: rgba(205, 168, 101, .07);
-        font-size: .8rem;
-        line-height: 1.35;
+        color: var(--403-ink);
+        font-size: 1rem;
+        line-height: 1.6;
     }
 
-    .rf-access-detail i {
-        flex: 0 0 auto;
-        margin-top: 2px;
-        color: var(--access-gold);
-    }
 
-    .rf-access-actions {
+
+    /* ===== ACTIONS ===== */
+    .rf-403-actions {
         display: flex;
         flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 28px;
+    }
+
+    .rf-403-actions .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 11px 20px;
+        transition: all var(--403-transition-fast);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .rf-403-actions .btn-primary {
+        border: none;
+        background: linear-gradient(135deg, var(--403-blue), #102c45);
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(27,67,104,0.25);
+    }
+    .rf-403-actions .btn-primary::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+        opacity: 0;
+        transition: opacity var(--403-transition-fast);
+    }
+    .rf-403-actions .btn-primary:hover,
+    .rf-403-actions .btn-primary:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(27,67,104,0.35);
+    }
+    .rf-403-actions .btn-primary:hover::before { opacity: 1; }
+    .rf-403-actions .btn-primary:active { transform: translateY(0) scale(0.98); }
+
+    .rf-403-actions .btn-outline-secondary {
+        border: 1.5px solid var(--403-border);
+        background: transparent;
+        color: var(--403-ink);
+    }
+    .rf-403-actions .btn-outline-secondary:hover,
+    .rf-403-actions .btn-outline-secondary:focus-visible {
+        border-color: var(--403-gold);
+        color: var(--403-ink);
+        background: rgba(205,168,101,0.06);
+        transform: translateY(-2px);
+    }
+    .rf-403-actions .btn-outline-secondary:active { transform: translateY(0) scale(0.98); }
+
+
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 720px) {
+        .rf-403 {
+            min-height: auto;
+            padding: 16px 12px;
+        }
+        .rf-403-grid {
+            grid-template-columns: 1fr;
+        }
+        .rf-403-signal {
+            padding: 32px 20px 28px;
+            min-height: 240px;
+        }
+        .rf-403-seal {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 16px;
+        }
+        .rf-403-seal i { font-size: 2rem; }
+        .rf-403-code {
+            font-size: 4rem;
+            margin-bottom: 4px;
+        }
+        .rf-403-signal h2 { font-size: 0.95rem; }
+        .rf-403-copy {
+            padding: 28px 22px 32px;
+        }
+        .rf-403-actions {
+            flex-direction: column;
+        }
+        .rf-403-actions .btn {
+            justify-content: center;
+            width: 100%;
+        }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .rf-403 *, .rf-403 *::before, .rf-403 *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+    /* ===== RegistroFácil compact override ===== */
+    #main-content .rf-403 {
+        min-height: min(600px, calc(100dvh - 140px));
+        padding: 16px 12px;
+        overflow: visible;
+    }
+    #main-content .rf-403-card {
+        width: min(100%, 760px);
+        border-radius: 16px;
+    }
+    #main-content .rf-403-signal {
+        min-height: 0;
+        padding: 24px 18px;
+    }
+    #main-content .rf-403-seal {
+        width: 68px;
+        height: 68px;
+        margin-bottom: 12px;
+    }
+    #main-content .rf-403-seal i { font-size: 1.55rem; }
+    #main-content .rf-403-code {
+        font-size: clamp(2.4rem, 8vw, 3.2rem);
+        margin-bottom: 4px;
+    }
+    #main-content .rf-403-signal h2 {
+        color: #f5f7fa !important;
+        font-size: .95rem;
+    }
+    #main-content .rf-403-signal p {
+        margin-top: 6px;
+        font-size: .76rem;
+        line-height: 1.35;
+    }
+    #main-content .rf-403-copy {
+        padding: 24px 28px;
+    }
+    #main-content .rf-403-kicker {
+        margin-bottom: 8px;
+        font-size: .64rem;
+    }
+    #main-content .rf-403-copy h1 {
+        font-size: clamp(1.42rem, 2.6vw, 1.95rem);
+        line-height: 1.08;
+    }
+    #main-content .rf-403-copy .lead {
+        margin-top: 12px;
+        font-size: .9rem;
+        line-height: 1.4;
+    }
+    #main-content .rf-403-actions {
         gap: 8px;
         margin-top: 18px;
     }
-
-    .rf-access-actions .btn {
-        display: inline-flex;
-        align-items: center;
+    #main-content .rf-403-actions .btn {
         gap: 6px;
-        padding: .46rem .68rem !important;
+        padding: .45rem .68rem !important;
         border-radius: 7px;
         font-size: .8rem !important;
-        font-weight: 600;
     }
 
-    .rf-access-actions .btn-primary {
-        border-color: var(--access-blue);
-        background: var(--access-blue);
-    }
-
-    .rf-access-actions .btn-primary:hover,
-    .rf-access-actions .btn-primary:focus-visible {
-        border-color: #102c45;
-        background: #102c45;
-    }
-
-    .rf-access-actions .btn-outline-secondary {
-        border-color: var(--access-border);
-        color: var(--access-ink);
-    }
-
-    .rf-access-actions .btn-outline-secondary:hover,
-    .rf-access-actions .btn-outline-secondary:focus-visible {
-        border-color: var(--access-gold);
-        color: var(--access-ink);
-        background: rgba(205, 168, 101, .08);
-    }
-
-    .rf-access-reference {
-        margin: 12px 0 0;
-        color: var(--access-muted);
-        font: .62rem/1.3 var(--rf-font-mono, "IBM Plex Mono", monospace);
-        opacity: .82;
-    }
-
-    @media (max-width: 700px) {
-        .rf-access-denied {
-            min-height: auto;
+    @media (max-width: 720px) {
+        #main-content .rf-403 {
+            min-height: 0;
             padding: 12px;
         }
-
-        .rf-access-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .rf-access-signal {
-            min-height: auto;
+        #main-content .rf-403-signal {
             padding: 18px 16px 16px;
         }
-
-        .rf-access-seal {
+        #main-content .rf-403-seal {
             width: 58px;
             height: 58px;
             margin-bottom: 8px;
-            font-size: 1.35rem;
         }
-
-        .rf-access-signal p {
-            margin-top: 5px;
+        #main-content .rf-403-seal i { font-size: 1.35rem; }
+        #main-content .rf-403-code { font-size: 2.45rem; }
+        #main-content .rf-403-copy {
+            padding: 20px 18px;
         }
-
-        .rf-access-copy {
-            padding: 20px 18px 20px;
+        #main-content .rf-403-actions {
+            flex-direction: row;
         }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .rf-access-card *, .rf-access-card *::before, .rf-access-card *::after {
-            animation-duration: .01ms !important;
-            transition-duration: .01ms !important;
+        #main-content .rf-403-actions .btn {
+            width: auto;
+            flex: 1 1 130px;
+            justify-content: center;
         }
     }
 </style>
 
-<main class="rf-access-denied" id="access-denied" aria-labelledby="access-denied-title">
-    <section class="rf-access-card" aria-describedby="access-denied-description">
-        <div class="rf-access-grid">
-            <div class="rf-access-signal" aria-hidden="true">
-                <div>
-                    <div class="rf-access-seal"><i class="bi bi-shield-lock"></i></div>
-                    <h2 class="text-center">Controle de acesso</h2>
-                    <p>O RegistroFácil mantém cada rotina disponível para os perfis autorizados.</p>
+<main class="rf-403" id="access-denied" aria-labelledby="access-denied-title">
+    <section class="rf-403-card" aria-describedby="access-denied-description">
+        <div class="rf-403-grid">
+            <!-- Visual Signal Panel -->
+            <div class="rf-403-signal" aria-hidden="true">
+                <div class="rf-403-seal">
+                    <i class="bi bi-shield-lock"></i>
                 </div>
+                <div class="rf-403-code">403</div>
+                <h2>Controle de acesso</h2>
+                <p>Cada rotina do RegistroFácil está disponível apenas para os perfis autorizados.</p>
             </div>
 
-            <div class="rf-access-copy">
-                <p class="rf-access-kicker">Acesso restrito · RegistroFácil</p>
+            <!-- Content Panel -->
+            <div class="rf-403-copy">
+                <p class="rf-403-kicker">Acesso Restrito</p>
                 <h1 id="access-denied-title">Esta rotina ainda não está liberada para o seu perfil.</h1>
-                <p class="lead" id="access-denied-description">Seu acesso continua ativo, mas este recurso exige uma permissão específica para preservar a organização e a responsabilidade das operações da serventia.</p>
-                <div class="rf-access-detail" role="note">
-                    <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
-                    <span>Se você precisa executar esta atividade, solicite ao administrador a revisão do seu perfil de acesso.</span>
-                </div>
-                <div class="rf-access-actions">
+                <p class="lead" id="access-denied-description">
+                    Seu acesso continua ativo, mas este recurso exige uma permissão específica para preservar a organização e a responsabilidade das operações da serventia.
+                </p>
+
+
+                <div class="rf-403-actions">
                     <a class="btn btn-primary" href="{{ url_for('auth.dashboard') }}">
                         <i class="bi bi-arrow-left" aria-hidden="true"></i>
                         Voltar ao início
@@ -248,7 +464,8 @@
                         Ver meu perfil
                     </a>
                 </div>
-                <p class="rf-access-reference">RF-403 · permissão necessária: acesso autorizado pelo administrador</p>
+
+
             </div>
         </div>
     </section>

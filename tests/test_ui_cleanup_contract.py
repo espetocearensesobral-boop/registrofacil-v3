@@ -253,13 +253,18 @@ def test_auth_templates_keep_inline_dark_gold_visual_contract():
 def test_access_denied_response_uses_contextual_system_visual():
     forbidden = read('templates/403.html')
     assert '{% extends "base.html" %}' in forbidden
-    assert 'rf-access-denied' in forbidden
-    assert 'rf-access-card' in forbidden
-    assert 'rf-access-signal' in forbidden
+    assert 'rf-403' in forbidden
+    assert 'rf-403-card' in forbidden
+    assert 'rf-403-signal' in forbidden
     assert 'Controle de acesso' in forbidden
     assert 'Esta rotina ainda não está liberada para o seu perfil.' in forbidden
     assert "url_for('auth.dashboard')" in forbidden
     assert "url_for('perfil.index')" in forbidden
+    assert 'RF-403' not in forbidden
+    assert 'Acesso básico' not in forbidden
+    assert 'Permissão especial necessária' not in forbidden
+    assert 'A liberação é feita em até 24 horas úteis.' not in forbidden
+    assert 'Se você precisa executar esta atividade' not in forbidden
 
     auth = read('routes/auth.py')
     assert "'403.html'" in auth
