@@ -197,6 +197,15 @@ def test_auth_templates_use_single_centered_panel_without_legacy_right_panel_or_
     assert 'Atenção:' not in register
     assert 'Novos usuários não possuem permissões por padrão' not in register
 
+    login = read('templates/login.html')
+    assert 'data-rf-template="login-v2"' in login
+    assert 'Bem-vindo de volta' in login
+    assert 'auth-login-links' in login
+    assert 'id="wrap-usuario"' in login
+    assert 'id="wrap-senha"' in login
+    assert 'id="capsWarn"' in login
+    assert 'id="numWarn"' in login
+
     css = read('static/css/auth.css')
     assert 'grid-template-columns: minmax(22rem, .86fr) minmax(31rem, 1.14fr);' not in css
     assert '.rf-auth-page .auth-panel-left' in css
@@ -237,3 +246,4 @@ def test_auth_pages_keep_dark_gold_corporate_visual_contract():
     assert 'auth-context-mark' in css
     assert 'auth-security-chip' in css
     assert 'auth-support-note' in css
+    assert '[data-rf-template="login-v2"]' in css

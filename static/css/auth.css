@@ -848,3 +848,48 @@ html body.rf-auth-page .auth-support-note i {
         font-size: .56rem;
     }
 }
+
+/* -------------------------------------------------------------------------
+   Login v2: adaptação do template de referência ao painel institucional único
+   ------------------------------------------------------------------------- */
+html body.rf-auth-page[data-rf-template="login-v2"] .auth-input-group.is-invalid {
+    border-color: var(--rf-danger, #e74c3c) !important;
+    box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--rf-danger, #e74c3c) 18%, transparent) !important;
+    animation: rf-login-shake .4s ease;
+}
+
+html body.rf-auth-page[data-rf-template="login-v2"] .auth-login-links {
+    margin-top: .85rem;
+    gap: .45rem;
+}
+
+html body.rf-auth-page[data-rf-template="login-v2"] .auth-login-links .auth-link {
+    padding: .38rem .7rem;
+}
+
+html body.rf-auth-page[data-rf-template="login-v2"] .auth-login-links .auth-divider {
+    color: var(--rf-auth-text-muted);
+    font-size: .72rem;
+}
+
+html body.rf-auth-page[data-rf-template="login-v2"] .auth-support-note {
+    margin-top: .85rem;
+}
+
+@keyframes rf-login-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+}
+
+@media (max-width: 575.98px) {
+    html body.rf-auth-page[data-rf-template="login-v2"] .auth-login-links {
+        margin-top: .55rem;
+    }
+
+    html body.rf-auth-page[data-rf-template="login-v2"] .auth-support-note {
+        margin-top: .5rem;
+    }
+}

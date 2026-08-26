@@ -3,62 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Registro Fácil</title>
+    <title>Login — RegistroFácil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/certificate.png') }}">
     <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{font-family: var(--rf-font-sans);min-height:100vh;display:flex;background:#0a0a0a;color:#e8e8e8;overflow:hidden}
-        /* Painel esquerdo = formulário */
-        .auth-panel-left{width:100%;max-width:480px;min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem;position:relative;flex-shrink:0}
-        @media(min-width:992px){.auth-panel-left{border-right:1px solid #1f1f1f}}
-        .auth-panel-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CDA865,#8B6332,#CDA865)}
-        .auth-form-wrap{width:100%;max-width:380px}
-        .auth-title{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:.4rem;letter-spacing:-.02em}
-        .auth-subtitle{font-size:.85rem;color:#666;margin-bottom:2.2rem}
-        .auth-label{display:block;font-size: .75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:.45rem}
-        .auth-input-group{display:flex;align-items:center;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
-        .auth-input-group:focus-within{border-color:#CDA865;box-shadow:0 0 0 3px rgba(205,168,101,.12)}
-        .auth-input-group .input-icon{padding:0 14px;color:#555;font-size:15px;flex-shrink:0}
-        .auth-input-group input{flex:1;background:transparent;border:none;outline:none;color:#e8e8e8;font-size:.9rem;padding:11px 12px 11px 0;font-family: var(--rf-font-sans)}
-        .auth-input-group input::placeholder{color:#444}
-        .auth-input-group .toggle-pw{padding:0 14px;color:#555;cursor:pointer;font-size:15px;flex-shrink:0;transition:color .2s}
-        .auth-input-group .toggle-pw:hover{color:#CDA865}
-        .auth-field{margin-bottom:1.2rem}
-        .auth-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 20px;background:#CDA865;color:#0a0a0a;border:none;border-radius:8px;font-size:.9rem;font-weight:700;font-family: var(--rf-font-sans);cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.01em;margin-top:.4rem}
-        .auth-btn:hover{background:#b8913e;box-shadow:0 4px 16px rgba(205,168,101,.25)}
-        .auth-btn:active{transform:translateY(1px)}
-        .auth-btn.is-loading{cursor:wait;opacity:.82;pointer-events:none}
-        .auth-btn .auth-loading-spinner{display:none}
-        .auth-btn.is-loading .auth-loading-spinner{display:inline-block}
-        .auth-btn.is-loading .auth-login-icon{display:none}
-        .auth-btn i{font-size:16px}
-        .auth-links{display:flex;flex-direction:column;align-items:center;gap:.55rem;margin-top:1.6rem}
-        .auth-divider{color:#333;font-size:.8rem}
-        .auth-link{font-size:.83rem;color:#666;text-decoration:none;transition:color .2s}
-        .auth-link:hover{color:#CDA865}
-        .auth-alert{padding:12px 14px;border-radius:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.4rem;border:1.5px solid}
-        .auth-alert.danger{background:rgba(197,40,47,.1);border-color:rgba(197,40,47,.3);color:#f07070}
-        .auth-alert.success{background:rgba(0,168,107,.1);border-color:rgba(0,168,107,.3);color:#5dd9a0}
-        .auth-alert.warning{background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.3);color:#ffb060}
-        .auth-alert.info{background:rgba(30,136,229,.1);border-color:rgba(30,136,229,.3);color:#70b8f0}
-        .auth-alert i{font-size:1rem;flex-shrink:0;margin-top:1px}
-        .auth-alert .close-btn{margin-left:auto;cursor:pointer;font-size:.9rem;opacity:.7;flex-shrink:0}
-        .auth-alert .close-btn:hover{opacity:1}
-        .lock-warning{font-size:.75rem;color:#f07070;margin-top:5px;display:none}
-        .honeypot-field{position:absolute;left:-9999px;visibility:hidden;height:1px;width:1px;pointer-events:none;opacity:0}
-        .version-badge{position:absolute;bottom:1.5rem;right:1.5rem;font-size:.7rem;color:#333;font-family: var(--rf-font-mono)}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Inter, var(--rf-font-sans); min-height: 100vh; display: flex; background: #0a0a0a; color: #e8e8e8; overflow: hidden; }
+        .auth-panel-left { width: 100%; max-width: 520px; min-height: 100vh; background: #111; display: flex; align-items: center; justify-content: center; padding: 2.5rem 2rem; position: relative; flex-shrink: 0; }
+        .auth-panel-left::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #CDA865, #8B6332, #CDA865, transparent); }
+        .auth-form-wrap { width: 100%; max-width: 400px; }
+        .auth-title { font-size: 1.75rem; font-weight: 800; color: #fff; margin-bottom: .4rem; letter-spacing: -.03em; line-height: 1.2; }
+        .auth-subtitle { font-size: .875rem; color: #888; margin-top: .5rem; margin-bottom: 2rem; line-height: 1.5; }
+        .auth-label { display: block; font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #555; margin-bottom: .5rem; }
+        .auth-input-group { display: flex; align-items: center; background: #1a1a1a; border: 1.5px solid rgba(255,255,255,.06); border-radius: 12px; transition: all .3s cubic-bezier(.4,0,.2,1); overflow: hidden; position: relative; }
+        .auth-input-group:focus-within { border-color: rgba(205,168,101,.4); box-shadow: 0 0 0 4px rgba(205,168,101,.15), 0 0 40px rgba(205,168,101,.08); transform: translateY(-1px); }
+        .auth-input-group .input-icon { padding: 0 14px; color: #555; font-size: 1rem; flex-shrink: 0; transition: color .15s ease; }
+        .auth-input-group:focus-within .input-icon { color: #CDA865; }
+        .auth-input-group input { flex: 1; min-width: 0; min-height: 2.75rem; background: transparent; border: none; outline: none; color: #f0f0f0; font-size: .9rem; padding: 13px 12px 13px 0; font-family: inherit; }
+        .auth-input-group input::placeholder { color: #555; opacity: .7; }
+        .auth-input-group .toggle-pw { min-height: 2.75rem; padding: 0 14px; color: #555; cursor: pointer; font-size: 1rem; flex-shrink: 0; transition: all .15s ease; background: transparent; border: none; }
+        .auth-input-group .toggle-pw:hover { color: #CDA865; }
+        .auth-input-group .toggle-pw:focus-visible { outline: 2px solid #CDA865; outline-offset: -2px; border-radius: 4px; }
+        .auth-field { margin-bottom: 1.25rem; position: relative; }
+        .auth-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 3rem; padding: 14px 24px; background: linear-gradient(135deg, #CDA865, #8B6332); color: #0a0a0a; border: none; border-radius: 12px; font-size: .95rem; font-weight: 700; font-family: inherit; cursor: pointer; letter-spacing: .01em; position: relative; overflow: hidden; transition: all .3s cubic-bezier(.4,0,.2,1); box-shadow: 0 4px 20px rgba(205,168,101,.2); }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(205,168,101,.35); }
+        .auth-btn:active { transform: translateY(0) scale(.98); }
+        .auth-btn:disabled, .auth-btn.is-loading { opacity: .7; cursor: wait; pointer-events: none; }
+        .auth-btn .auth-loading-spinner { display: none; width: 18px; height: 18px; border-width: 2.5px; border-color: rgba(10,10,10,.2); border-top-color: #0a0a0a; }
+        .auth-btn.is-loading .auth-loading-spinner { display: inline-block; }
+        .auth-btn.is-loading .auth-login-icon { display: none; }
+        .auth-btn:focus-visible, .auth-link:focus-visible { outline: 2px solid #CDA865; outline-offset: 2px; }
+        .auth-links { display: flex; flex-direction: column; align-items: center; gap: .6rem; margin-top: 1rem; }
+        .auth-divider { display: flex; align-items: center; gap: 12px; width: 100%; color: #555; font-size: .75rem; }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent); }
+        .auth-link { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: .85rem; color: #888; text-decoration: none; font-weight: 500; transition: all .15s ease; }
+        .auth-link:hover { color: #CDA865; background: rgba(205,168,101,.08); }
+        .auth-alert { padding: 14px 16px; border-radius: 12px; font-size: .85rem; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 1.5rem; border: 1px solid; animation: rfLoginAlertIn .4s cubic-bezier(.34,1.56,.64,1) both; }
+        .auth-alert.danger { background: rgba(231,76,60,.12); border-color: rgba(231,76,60,.25); color: #ff8a80; }
+        .auth-alert.success { background: rgba(46,204,113,.12); border-color: rgba(46,204,113,.25); color: #6ee7b7; }
+        .auth-alert.warning { background: rgba(243,156,18,.12); border-color: rgba(243,156,18,.25); color: #fbbf24; }
+        .auth-alert.info { background: rgba(52,152,219,.12); border-color: rgba(52,152,219,.25); color: #7dd3fc; }
+        .auth-alert > i { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+        .auth-alert .close-btn { margin-left: auto; cursor: pointer; opacity: .6; transition: opacity .15s ease; flex-shrink: 0; background: transparent; border: none; color: inherit; padding: 0; }
+        .auth-alert .close-btn:hover { opacity: 1; }
+        .lock-warning { display: none; align-items: center; gap: 5px; font-size: .75rem; color: #e74c3c; margin-top: 6px; animation: rfLoginFadeIn .2s ease; }
+        .lock-warning.is-visible { display: flex; }
+        .honeypot-field { position: absolute; left: -9999px; visibility: hidden; height: 1px; width: 1px; pointer-events: none; opacity: 0; }
+        .version-badge { position: absolute; bottom: 1.5rem; right: 1.5rem; font-size: .7rem; color: #555; font-family: 'JetBrains Mono', monospace; opacity: .5; }
+        @keyframes rfLoginAlertIn { from { opacity: 0; transform: translateY(-10px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes rfLoginFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media (max-width: 576px) { .auth-panel-left { padding: 1.5rem; } .auth-form-wrap { max-width: 100%; } .auth-title { font-size: 1.5rem; } .auth-context-strip { flex-wrap: wrap; gap: 8px; } .auth-security-chip { font-size: .65rem; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/color-themes.css', v=app_version) }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-system.css', v=app_version + '-ui1') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimized.css', v=app_version) }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui8') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v=app_version + '-ui9') }}">
 </head>
-<body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}" data-rf-ui="complete" data-rf-surface="login" data-rf-component="page-surface">
-    <a class="auth-skip-link" href="#loginForm">Pular para o formulário de acesso</a>
-    <!-- Conteúdo principal -->
+<body class="rf-auth-page" data-cor="{{ tema_cor_usuario }}" data-rf-ui="complete" data-rf-surface="login" data-rf-template="login-v2" data-rf-component="page-surface">
+    <a href="#loginForm" class="auth-skip-link">Pular para o formulário de acesso</a>
+
     <main class="auth-panel-left" id="auth-content" aria-labelledby="auth-title">
         <div class="auth-form-wrap">
             <div class="auth-context-strip" aria-label="Contexto do RegistroFácil">
@@ -66,14 +72,15 @@
                 <span class="auth-context-copy"><strong>RegistroFácil</strong><small>Gestão de processos da serventia</small></span>
                 <span class="auth-security-chip"><i class="bi bi-shield-check" aria-hidden="true"></i> Ambiente protegido</span>
             </div>
-            <h2 class="auth-title" id="auth-title">Bem-vindo</h2>
+
+            <h1 class="auth-title" id="auth-title">Bem-vindo de volta</h1>
             <p class="auth-subtitle">Informe suas credenciais para acessar o sistema</p>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                    <div class="auth-alert {{ 'danger' if category == 'error' else category }}" role="alert">
-                        <i class="bi bi-{{ 'exclamation-circle-fill' if category == 'error' or category == 'warning' else 'check-circle-fill' if category == 'success' else 'info-circle-fill' }}"></i>
+                    <div class="auth-alert {{ 'danger' if category == 'error' else category }}" role="alert" style="animation-delay:{{ loop.index * 0.1 }}s">
+                        <i class="bi bi-{{ 'exclamation-circle-fill' if category == 'error' or category == 'warning' else 'check-circle-fill' if category == 'success' else 'info-circle-fill' }}" aria-hidden="true"></i>
                         <div>{{ message }}</div>
                         <button type="button" class="close-btn" aria-label="Fechar mensagem" onclick="this.parentElement.remove()"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
                     </div>
@@ -87,23 +94,26 @@
                     <label for="honeypot">Deixe este campo vazio:</label>
                     <input type="text" id="honeypot" name="honeypot" tabindex="-1" autocomplete="off">
                 </div>
+
                 <div class="auth-field">
                     <label class="auth-label" for="usuario">Usuário</label>
-                    <div class="auth-input-group">
-                        <span class="input-icon"><i class="bi bi-person"></i></span>
+                    <div class="auth-input-group" id="wrap-usuario">
+                        <span class="input-icon"><i class="bi bi-person" aria-hidden="true"></i></span>
                         <input type="text" id="usuario" name="usuario" value="{{ usuario }}" placeholder="Seu usuário" autocomplete="username" required>
                     </div>
                 </div>
+
                 <div class="auth-field">
                     <label class="auth-label" for="senha">Senha</label>
-                    <div class="auth-input-group">
-                        <span class="input-icon"><i class="bi bi-lock"></i></span>
-                        <input type="password" id="senha" name="senha" placeholder="Sua senha" autocomplete="current-password" required>
+                    <div class="auth-input-group" id="wrap-senha">
+                        <span class="input-icon"><i class="bi bi-lock" aria-hidden="true"></i></span>
+                        <input type="password" id="senha" name="senha" placeholder="Sua senha" autocomplete="current-password" required aria-describedby="capsWarn numWarn">
                         <button type="button" class="toggle-pw" onclick="togglePw('senha', this)" aria-label="Mostrar senha" aria-controls="senha" aria-pressed="false"><i class="bi bi-eye" aria-hidden="true"></i></button>
                     </div>
-                    <div class="lock-warning" id="capsWarning"><i class="bi bi-exclamation-triangle me-1"></i>Caps Lock ativado</div>
-                    <div class="lock-warning" id="numWarning"><i class="bi bi-exclamation-triangle me-1"></i>Num Lock desativado</div>
+                    <div class="lock-warning" id="capsWarn" aria-live="polite"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Caps Lock ativado</div>
+                    <div class="lock-warning" id="numWarn" aria-live="polite"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Num Lock desativado</div>
                 </div>
+
                 <button type="submit" class="auth-btn" id="loginSubmit">
                     <span class="spinner-border spinner-border-sm auth-loading-spinner" aria-hidden="true"></span>
                     <i class="bi bi-box-arrow-in-right auth-login-icon" aria-hidden="true"></i>
@@ -111,12 +121,13 @@
                 </button>
             </form>
 
-            <div class="auth-links">
-                <a href="{{ url_for('auth.recuperar_senha') }}" class="auth-link"><i class="bi bi-key me-1"></i>Esqueceu sua senha?</a>
-                <span class="auth-divider">•</span>
-                <a href="{{ url_for('auth.novo_usuario') }}" class="auth-link"><i class="bi bi-person-plus me-1"></i>Criar nova conta</a>
+            <div class="auth-links auth-login-links">
+                <a href="{{ url_for('auth.recuperar_senha') }}" class="auth-link"><i class="bi bi-key" aria-hidden="true"></i>Esqueceu sua senha?</a>
+                <span class="auth-divider">ou</span>
+                <a href="{{ url_for('auth.novo_usuario') }}" class="auth-link"><i class="bi bi-person-plus" aria-hidden="true"></i>Criar nova conta</a>
             </div>
-            <p class="auth-support-note"><i class="bi bi-diagram-3" aria-hidden="true"></i> Acesso operacional · processos, prazos e rotinas da serventia</p>
+
+            <p class="auth-support-note"><i class="bi bi-diagram-3" aria-hidden="true"></i>Acesso operacional · processos, prazos e rotinas da serventia</p>
         </div>
         <span class="version-badge">v{{ app_version }}</span>
     </main>
@@ -125,41 +136,78 @@
     <script src="{{ url_for('static', filename='js/accessibility.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/auth_loading.js', v=app_version) }}" defer></script>
     <script>
-        function togglePw(id,btn){
-            const input=document.getElementById(id);
-            const icon=btn.querySelector('i');
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            const icon = btn.querySelector('i');
             const showing = input.type === 'password';
             input.type = showing ? 'text' : 'password';
             icon.className = showing ? 'bi bi-eye-slash' : 'bi bi-eye';
             btn.setAttribute('aria-label', showing ? 'Ocultar senha' : 'Mostrar senha');
             btn.setAttribute('aria-pressed', String(showing));
         }
-        document.addEventListener('DOMContentLoaded',function(){
-            const u=document.getElementById('usuario');
-            if(u)u.focus();
-            const s=document.getElementById('senha');
-            const c=document.getElementById('capsWarning');
-            const n=document.getElementById('numWarning');
-            function checkLocks(e){
-                c.style.display=e.getModifierState('CapsLock')?'block':'none';
-                n.style.display=!e.getModifierState('NumLock')?'block':'none';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const usuario = document.getElementById('usuario');
+            if (usuario) usuario.focus();
+
+            const senha = document.getElementById('senha');
+            const capsWarn = document.getElementById('capsWarn');
+            const numWarn = document.getElementById('numWarn');
+
+            function checkLocks(event) {
+                const capsOn = event.getModifierState('CapsLock');
+                const numOff = !event.getModifierState('NumLock');
+                capsWarn.classList.toggle('is-visible', capsOn);
+                numWarn.classList.toggle('is-visible', numOff);
+                capsWarn.setAttribute('aria-hidden', String(!capsOn));
+                numWarn.setAttribute('aria-hidden', String(!numOff));
             }
-            s.addEventListener('keydown',checkLocks);
-            s.addEventListener('keyup',checkLocks);
-            const form=document.getElementById('loginForm');
-            const submit=form.querySelector('#loginSubmit');
-            form.addEventListener('submit',function(){
-                if(!submit || submit.dataset.submitting==='true') return;
-                submit.dataset.submitting='true';
-                submit.disabled=true;
-                submit.setAttribute('aria-busy','true');
-                submit.classList.add('is-loading');
-                submit.querySelector('.auth-login-text').textContent='Entrando...';
+
+            if (senha) {
+                senha.addEventListener('keydown', checkLocks);
+                senha.addEventListener('keyup', checkLocks);
+            }
+
+            const form = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('loginSubmit');
+            const inputs = [...form.querySelectorAll('input:not([type="hidden"]):not(#honeypot)')];
+
+            form.addEventListener('submit', function (event) {
+                if (submitBtn.dataset.submitting === 'true') {
+                    event.preventDefault();
+                    return;
+                }
+
+                const usuarioVal = usuario.value.trim();
+                const senhaVal = senha.value;
+                if (!usuarioVal || !senhaVal) {
+                    event.preventDefault();
+                    const invalidWrap = !usuarioVal ? document.getElementById('wrap-usuario') : document.getElementById('wrap-senha');
+                    invalidWrap.classList.add('is-invalid');
+                    (!usuarioVal ? usuario : senha).focus();
+                    setTimeout(() => document.querySelectorAll('.is-invalid').forEach((element) => element.classList.remove('is-invalid')), 2000);
+                    return;
+                }
+
+                submitBtn.dataset.submitting = 'true';
+                submitBtn.disabled = true;
+                submitBtn.setAttribute('aria-busy', 'true');
+                submitBtn.classList.add('is-loading');
+                submitBtn.querySelector('.auth-login-text').textContent = 'Entrando...';
             });
-            const inputs=[...document.querySelectorAll('#loginForm input:not([type="hidden"]):not(#honeypot)')];
-            inputs.forEach((inp,i)=>inp.addEventListener('keydown',function(e){
-                if(e.key==='Enter'){e.preventDefault();if(i+1<inputs.length)inputs[i+1].focus();else form.requestSubmit();}
-            }));
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        if (index + 1 < inputs.length) inputs[index + 1].focus();
+                        else form.requestSubmit();
+                    }
+                });
+                input.addEventListener('input', function () {
+                    this.closest('.auth-input-group')?.classList.remove('is-invalid');
+                });
+            });
         });
     </script>
 </body>
