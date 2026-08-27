@@ -279,7 +279,46 @@ def is_maintenance_active(state: dict[str, Any] | None = None) -> bool:
         "restarting",
         "verifying",
         "maintenance_pending",
+        # Incluído para alinhar backend ao frontend: o serviço preparou uma release
+        # mas não conseguiu reiniciar. A interface apresenta a tela de recuperação
+        # sem bloquear formulários, mas o backend considera o sistema em manutenção.
+        "ready_to_restart",
     }
+
+
+def clear_ready_to_restart(confirmed_by: str) -> dict[str, Any]:
+    """Limpa o estado ``ready_to_restart`` e devolve o sistema ao modo normal.
+
+    Deve ser chamada somente por um administrador autenticado que confirme
+    explicitamente que o serviço está rodando na versão esperada ou que a
+    release preparada pode ser descartada com segurança. A operação é registrada
+    em log de auditoria.
+
+    Levanta ``RuntimeError`` se o estado atual não for ``ready_to_restart``.
+    """
+    with get_sqlite_connection() as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        current = get_update_state_from_connection(conn)
+        if current.get("state") != "ready_to_restart":
+            raise RuntimeError(
+                f"O estado atual é '{current.get('state')}', não 'ready_to_restart'. "
+                "A operação de limpeza não é permitida."
+            )
+        state = _write_state(
+            conn,
+            {
+                **IDLE_STATE,
+                "message": "Estado de reinício limpo pelo administrador. Sistema retornado ao modo normal.",
+            },
+        )
+    manutencao_logger.warning(
+        "Estado ready_to_restart limpo administrativamente por '%s'. "
+        "version_from=%s version_to=%s",
+        confirmed_by,
+        current.get("version_from"),
+        current.get("version_to"),
+    )
+    return state
 
 
 def mark_failed(message: str) -> dict[str, Any]:

@@ -482,6 +482,66 @@
     color: var(--text-color-secondary) !important; /* Força o uso da cor secundária do tema */
 }
 
+/* ── Painel inteligente: visualização de processo ─────────────────── */
+#main-content .process-intelligence { margin-bottom: 1rem; }
+#main-content .process-intelligence-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem 1.5rem;
+    padding: 1.25rem 1.4rem 0;
+    border: 1px solid var(--rf-border, var(--border-color-default));
+    border-left: 5px solid var(--rf-accent, var(--color-primary));
+    border-radius: .8rem;
+    background: linear-gradient(115deg, var(--rf-surface-card, #fff), color-mix(in srgb, var(--rf-accent, var(--color-primary)) 5%, var(--rf-surface-card, #fff)));
+    box-shadow: var(--rf-shadow-sm);
+}
+#main-content .process-intelligence-eyebrow { display: inline-flex; align-items: center; gap: .4rem; color: var(--rf-accent, var(--color-primary)); font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+#main-content .process-intelligence-title h1 { margin: .35rem 0 .2rem; color: var(--rf-text-strong, var(--text-color-primary)); font-family: var(--rf-font-display, inherit); font-size: clamp(1.35rem, 2vw, 1.8rem); font-weight: 750; line-height: 1.15; }
+#main-content .process-intelligence-title p { margin: 0; color: var(--rf-text-muted, var(--text-color-secondary)); font-size: .86rem; }
+#main-content .process-intelligence-status { display: flex; align-items: flex-end; flex-direction: column; gap: .45rem; }
+#main-content .process-intelligence-complete { color: var(--rf-success, var(--color-success)); font-size: .76rem; font-weight: 700; white-space: nowrap; }
+#main-content .process-intelligence-summary { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: .15rem -1.4rem 0; border-top: 1px solid var(--rf-border, var(--border-color-default)); }
+#main-content .process-intelligence-summary > div { min-width: 0; padding: .85rem 1.4rem; border-right: 1px solid var(--rf-border, var(--border-color-default)); }
+#main-content .process-intelligence-summary > div:last-child { border-right: 0; }
+#main-content .process-intelligence-summary dt, #main-content .det-lbl { margin: 0 0 .25rem; color: var(--rf-text-muted, var(--text-color-secondary)); font-size: .68rem; font-weight: 800; letter-spacing: .055em; text-transform: uppercase; }
+#main-content .process-intelligence-summary dd { margin: 0; color: var(--rf-text-strong, var(--text-color-primary)); font-size: .86rem; font-weight: 700; overflow-wrap: anywhere; }
+#main-content .process-intelligence-summary .is-deadline { color: var(--rf-warning, var(--color-warning)); }
+#main-content .process-intelligence-summary .is-deadline i { margin-right: .35rem; }
+#main-content .process-contact-card { overflow: hidden; }
+#main-content .process-contact-card-primary { border-top: 3px solid var(--rf-accent, var(--color-primary)); }
+#main-content .process-contact-card .rf-card-body { padding: 1.15rem !important; }
+#main-content .process-details-panel { overflow: hidden; }
+#main-content .process-details-panel .rf-card-header { padding: .9rem 1.15rem; }
+#main-content .process-details-panel .rf-card-body { background: var(--rf-surface-card, #fff); }
+#main-content .det-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--rf-surface-card, #fff); }
+#main-content .det-item { min-width: 0; padding: 1rem 1.15rem; background: var(--rf-surface-card, #fff); border-right: 1px solid color-mix(in srgb, var(--rf-border, var(--border-color-default)) 72%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--rf-border, var(--border-color-default)) 72%, transparent); }
+#main-content .det-item:nth-child(4n) { border-right: 0; }
+#main-content .det-item:nth-last-child(-n+4) { border-bottom: 0; }
+#main-content .det-val { color: var(--rf-text-strong, var(--text-color-primary)); font-size: .88rem; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
+#main-content .process-observation-card .rf-card-body { min-height: 8.5rem; }
+#main-content .process-attachments-card .list-group-item { padding: .75rem 1rem; }
+#main-content .process-history-panel .rf-card-header { padding: .9rem 1.15rem; }
+@media (max-width: 991px) {
+    #main-content .process-intelligence-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #main-content .process-intelligence-summary > div:nth-child(2) { border-right: 0; }
+    #main-content .process-intelligence-summary > div:nth-child(-n+2) { border-bottom: 1px solid var(--rf-border, var(--border-color-default)); }
+    #main-content .det-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #main-content .det-item:nth-child(4n) { border-right: 1px solid var(--rf-border, var(--border-color-default)); }
+    #main-content .det-item:nth-child(even) { border-right: 0; }
+    #main-content .det-item:nth-last-child(-n+4) { border-bottom: 1px solid var(--rf-border, var(--border-color-default)); }
+    #main-content .det-item:nth-last-child(-n+2) { border-bottom: 0; }
+}
+@media (max-width: 640px) {
+    #main-content .process-intelligence-hero { grid-template-columns: 1fr; padding: 1rem 1rem 0; }
+    #main-content .process-intelligence-status { align-items: flex-start; }
+    #main-content .process-intelligence-summary { grid-template-columns: 1fr; margin-inline: -1rem; }
+    #main-content .process-intelligence-summary > div, #main-content .process-intelligence-summary > div:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--rf-border, var(--border-color-default)); padding: .7rem 1rem; }
+    #main-content .process-intelligence-summary > div:last-child { border-bottom: 0; }
+    #main-content .det-grid { grid-template-columns: 1fr; }
+    #main-content .det-item, #main-content .det-item:nth-child(4n), #main-content .det-item:nth-child(even) { border-right: 0; border-bottom: 1px solid var(--rf-border, var(--border-color-default)); }
+    #main-content .det-item:last-child { border-bottom: 0; }
+}
+
 /* =========================================================================
    IDENTIDADE VISUAL DAS LISTAS DE PROCESSOS
    Mesma linguagem do dashboard: identificadores em mono tabular, prazo com

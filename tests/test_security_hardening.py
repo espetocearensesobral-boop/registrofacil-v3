@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 
 import models
 from config import Config
@@ -87,6 +88,38 @@ def test_stale_role_cannot_use_process_search_permission(app_client):
 
     assert response.status_code == 302
     assert "/dashboard" in response.headers["Location"]
+
+
+def test_release_lock_accepts_csrf_header(app_client):
+    _authenticated_session(app_client)
+
+    response = app_client.post(
+        "/api/release_lock",
+        json={"table_name": "processos", "record_id": 1},
+        headers={"X-CSRFToken": "test-csrf"},
+    )
+
+    assert response.status_code != 403
+
+
+def test_theme_endpoint_rejects_revoked_session(app_client):
+    _authenticated_session(app_client, epoch=0)
+    models.executar_query(
+        "UPDATE usuarios SET session_epoch = 1 WHERE id = ?",
+        [1],
+    )
+
+    response = app_client.get("/perfil/tema")
+
+    assert response.status_code == 302
+    assert "/login" in response.headers["Location"]
+
+
+def test_process_uploads_are_not_inside_flask_static_directory(app_client):
+    static_folder = Path(app_client.application.static_folder).resolve()
+    process_upload_folder = Path(Config.UPLOAD_PROCESSOS_DIR).resolve()
+
+    assert not process_upload_folder.is_relative_to(static_folder)
 
 
 def test_invalid_role_is_rejected_at_data_layer(temp_database):

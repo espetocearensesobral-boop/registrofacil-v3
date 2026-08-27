@@ -225,7 +225,7 @@ def api_release_lock():
         data = request.form
     ip = get_client_ip()
 
-    if not verificar_csrf_token(data.get('csrf_token')):
+    if not verificar_csrf_token(_csrf_token_from_request(data)):
         logger.error(f"Token CSRF inválido em api_release_lock. IP: {get_client_ip()}")
         return jsonify(success=False, message="Token de segurança inválido.", type='danger'), 403
 

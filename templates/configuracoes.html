@@ -22,8 +22,8 @@
     color: var(--rf-text-body);
 }
 
-/* Os controles de e-mail precisam permanecer nativos e clicáveis. */
-.cfg-settings-rebuild #panel-email .cfg-sw {
+/* Os controles de switch/checkbox precisam permanecer nativos e clicáveis em todas as abas. */
+.cfg-settings-rebuild .cfg-sw {
     position: relative;
     z-index: 2;
     display: inline-flex;
@@ -39,12 +39,13 @@
     cursor: pointer;
     user-select: none;
 }
-.cfg-settings-rebuild #panel-email .cfg-sw:hover,
-.cfg-settings-rebuild #panel-email .cfg-sw:has(input:focus-visible) {
+.cfg-settings-rebuild .cfg-sw:hover,
+.cfg-settings-rebuild .cfg-sw:has(input:focus-visible) {
     border-color: var(--color-primary);
     background: color-mix(in srgb, var(--color-primary) 6%, var(--rf-surface));
 }
-.cfg-settings-rebuild #panel-email .cfg-sw input[type="checkbox"] {
+.cfg-settings-rebuild .cfg-sw input[type="checkbox"],
+#panel-email .cfg-sw input[type="checkbox"] {
     position: relative !important;
     z-index: 3 !important;
     display: inline-block !important;
@@ -60,7 +61,7 @@
     appearance: auto !important;
     cursor: pointer !important;
 }
-.cfg-settings-rebuild #panel-email .cfg-sw:has(input:checked) {
+.cfg-settings-rebuild .cfg-sw:has(input:checked) {
     border-color: color-mix(in srgb, var(--color-primary) 55%, var(--rf-border-input));
     background: color-mix(in srgb, var(--color-primary) 10%, var(--rf-surface));
     color: var(--rf-text-strong);
@@ -657,7 +658,7 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
                                 <td data-label="Ações" class="cfg-actions-cell">
                                     <div class="cfg-row-actions">
                                         <button class="cfg-settings-action cfg-settings-action-edit" data-bs-toggle="modal" data-bs-target="#editServiceModal"
-                                                data-id="{{sv.id}}" data-nome="{{sv.nome}}" data-descricao="{{sv.descricao or ''}}" data-prazo="{{sv.prazo_padrao or ''}}" title="Editar">
+                                                data-id="{{sv.id}}" data-nome="{{sv.nome}}" data-descricao="{{sv.descricao or ''}}" data-prazo="{{sv.prazo_padrao or ''}}" data-ativo="{{ 1 if sv.ativo else 0 }}" title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <form method="post" class="cfg-inline" action="{{ url_for('configuracoes.index') }}" data-rf-submit-state data-submit-label="Atualizando...">
@@ -984,6 +985,12 @@ html body .cfg-settings-rebuild #panel-services .cfg-row-actions .cfg-settings-a
                         <label>Prazo Padrão (dias)</label>
                         <input type="number" id="edit_service_prazo_padrao" name="prazo_padrao" class="cfg-modal-input">
                     </div>
+                    <div class="cfg-fld">
+                        <label class="cfg-sw cfg-switch-offset">
+                            <input class="form-check-input" type="checkbox" id="edit_service_ativo" name="ativo" value="1">
+                            Ativo
+                        </label>
+                    </div>
                 </div>
                 <div class="modal-footer cfg-modal-footer">
                     <button type="button" class="cfg-obtn" data-bs-dismiss="modal">Cancelar</button>
@@ -1148,6 +1155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('edit_service_nome').value = b.dataset.nome;
         document.getElementById('edit_service_descricao').value = b.dataset.descricao;
         document.getElementById('edit_service_prazo_padrao').value = b.dataset.prazo;
+        document.getElementById('edit_service_ativo').checked = b.dataset.ativo === '1';
     });
 
     // E-mail AJAX

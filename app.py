@@ -262,9 +262,18 @@ def create_app():
         # empresa/ é pública: logo exibida nas páginas sem autenticação (login, recuperar_senha...)
         is_public = safe.startswith('empresa/') or safe.startswith('empresa' + os.sep)
 
-        # Anexos de processos exigem sessão autenticada.
-        if not is_public and not session.get('usuario_id'):
-            abort(401)
+        # Anexos de processos exigem sessão ativa e a permissão específica.
+        # Não basta testar a presença do ID: sessões revogadas ou usuários
+        # desativados também não podem consumir os documentos.
+        if not is_public:
+            from routes.auth import _validate_active_session
+            from utils.permissions_helper import has_permission
+
+            user_id = session.get('usuario_id')
+            if not user_id or not _validate_active_session():
+                abort(401)
+            if not has_permission(user_id, 'processos_anexos'):
+                abort(403)
 
         if not os.path.isfile(abs_file):
             abort(404)

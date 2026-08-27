@@ -6,10 +6,12 @@ import subprocess
 import sys
 
 from flask import Blueprint, current_app, jsonify, request
+from flask_login import current_user
 from config import Config
 
 from data.system_updates import (
     cancel_update,
+    clear_ready_to_restart,
     detect_available_version,
     get_update_state,
     request_confirmation,
@@ -92,5 +94,24 @@ def cancel():
         return _csrf_failure()
     try:
         return jsonify(success=True, **cancel_update())
+    except RuntimeError as exc:
+        return jsonify(success=False, message=str(exc), type="warning"), 409
+
+
+@system_updates_bp.post("/clear-restart")
+@admin_required
+def clear_restart():
+    """Limpa o estado ``ready_to_restart`` e devolve o sistema ao modo normal.
+
+    Requer autenticação de administrador e token CSRF. Só opera quando o estado
+    atual é exatamente ``ready_to_restart``; rejeita qualquer outro estado com
+    409. A ação é registrada em log de auditoria com o e-mail do solicitante.
+    """
+    if not _require_csrf():
+        return _csrf_failure()
+    confirmed_by = getattr(current_user, "email", None) or getattr(current_user, "login", "desconhecido")
+    try:
+        state = clear_ready_to_restart(confirmed_by=confirmed_by)
+        return jsonify(success=True, **state)
     except RuntimeError as exc:
         return jsonify(success=False, message=str(exc), type="warning"), 409

@@ -271,6 +271,16 @@ def todos():
                 filtro_envolve_notas = None
         except ValueError:
             filtro_envolve_notas = None
+
+    # Filtro de prazo proveniente dos KPIs do dashboard. Mantemos uma lista
+    # fechada de valores para que a camada de dados receba apenas intenções
+    # de filtro conhecidas, e não expressões SQL vindas da URL.
+    prazo_alerta = request.args.get('prazo_alerta', '').strip().lower()
+    if prazo_alerta not in {'', 'vencidos', 'proximos'}:
+        prazo_alerta = ''
+    # Mantém a semântica do gráfico de movimentação: data de entrada quando
+    # informada e data de criação como fallback para registros legados.
+    filtro_movimentacao_dashboard = request.args.get('movimentacao_dashboard') == '1'
     ordenar = request.args.get('ordenar', 'id_desc')
     ordenar_opcoes = ['data_entrada_asc', 'data_entrada_desc', 'titular_asc', 'titular_desc',
                       'tipo_asc', 'tipo_desc', 'status_asc', 'status_desc', 'id_asc', 'id_desc',
@@ -284,6 +294,8 @@ def todos():
         'tipo': filtro_tipo, 'busca': filtro_busca,
         'data_inicio': filtro_data_inicio, 'data_fim': filtro_data_fim,
         'envolve_notas': filtro_envolve_notas, 'filtro_pendentes_dashboard': filtro_pendentes_dashboard,
+        'prazo_alerta': prazo_alerta,
+        'movimentacao_dashboard': filtro_movimentacao_dashboard,
     }
     
     # Lógica de prioridade: Se status_ids_in estiver presente, use-o e ignore status_id único
@@ -312,7 +324,7 @@ def todos():
             bool(status_ids_in),
             filtro_tipo, filtro_busca, filtro_data_inicio,
             filtro_data_fim, filtro_envolve_notas is not None,
-            filtro_pendentes_dashboard,
+            filtro_pendentes_dashboard, prazo_alerta, filtro_movimentacao_dashboard,
             ordenar != 'id_desc',
             registros_por_pagina != 10
         ])
@@ -354,6 +366,8 @@ def todos():
                            prazo_vencido=prazo_vencido, processos_andamento=processos_andamento,
                            get_contrast_color=get_contrast_color, formatar_data=formatar_data,
                            filtro_pendentes_dashboard=filtro_pendentes_dashboard,
+                           prazo_alerta=prazo_alerta,
+                           filtro_movimentacao_dashboard=filtro_movimentacao_dashboard,
                            status_ids_in_active=status_ids_in_str
                            )
 

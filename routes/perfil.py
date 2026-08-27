@@ -330,6 +330,7 @@ def index(user_id=None):
 
 
 @perfil_bp.route('/tema', methods=['GET'])
+@login_status_required
 def obter_tema():
     """API: Retorna o tema atual do usuário."""
     usuario_id = session.get('usuario_id')

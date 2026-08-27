@@ -177,7 +177,11 @@ window.setActive = function(element) {
     if (!isModalTrigger) {
         const href = element.dataset.href;
         if (href && href !== '#') {
-            window.location.href = href;
+            if (typeof window.rfNavigate === 'function') {
+                window.rfNavigate(href);
+            } else {
+                window.location.href = href;
+            }
             console.log(`setActive: Redirecionando para: ${href}`);
         } else {
             console.warn("setActive: Item de menu não tem href válido para navegação.", element);

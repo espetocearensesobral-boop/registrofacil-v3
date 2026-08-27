@@ -185,3 +185,90 @@ def test_mutations_are_blocked_during_maintenance(app_client):
 
     assert response.status_code == 423
     assert response.get_json()["type"] == "maintenance"
+
+
+# ── Novos testes: ready_to_restart não bloqueia interface, mas é manutenção ──
+
+
+def test_ready_to_restart_is_considered_maintenance(temp_database):
+    """O backend deve reconhecer ready_to_restart como estado de manutenção."""
+    system_updates.update_state(
+        state="ready_to_restart",
+        progress=95,
+        message="Atualização preparada. Configure o reinício.",
+        can_cancel=False,
+    )
+    state = system_updates.get_update_state()
+    assert system_updates.is_maintenance_active(state) is True
+
+
+def test_clear_ready_to_restart_returns_to_idle(temp_database):
+    """clear_ready_to_restart() deve devolver o sistema ao estado idle."""
+    system_updates.update_state(
+        state="ready_to_restart",
+        progress=95,
+        message="Atualização preparada.",
+        can_cancel=False,
+    )
+
+    result = system_updates.clear_ready_to_restart(confirmed_by="admin@example.com")
+
+    assert result["state"] == "idle"
+    assert system_updates.is_maintenance_active(result) is False
+    # Confirma persistência
+    persisted = system_updates.get_update_state()
+    assert persisted["state"] == "idle"
+
+
+def test_clear_ready_to_restart_rejects_wrong_state(temp_database):
+    """clear_ready_to_restart() deve lançar RuntimeError se o estado não for ready_to_restart."""
+    # Estado inicial: idle
+    with pytest.raises(RuntimeError, match="ready_to_restart"):
+        system_updates.clear_ready_to_restart(confirmed_by="admin@example.com")
+
+
+def test_clear_restart_http_requires_admin_and_csrf(app_client, temp_database):
+    """A rota /clear-restart deve exigir autenticação de admin e token CSRF."""
+    # Sem autenticação → redireciona para login
+    response = app_client.post(
+        "/api/system/update/clear-restart",
+        headers={"X-Requested-With": "XMLHttpRequest"},
+    )
+    assert response.status_code in (302, 401)
+
+    _login_admin(app_client)
+
+    # Sem CSRF → 400
+    no_csrf = app_client.post(
+        "/api/system/update/clear-restart",
+        headers={"X-Requested-With": "XMLHttpRequest"},
+    )
+    assert no_csrf.status_code == 400
+
+    # Estado não é ready_to_restart → 409
+    wrong_state = app_client.post(
+        "/api/system/update/clear-restart",
+        headers={"X-CSRFToken": "csrf-test", "X-Requested-With": "XMLHttpRequest"},
+    )
+    assert wrong_state.status_code == 409
+
+
+def test_clear_restart_http_succeeds_from_ready_to_restart(app_client, temp_database):
+    """A rota /clear-restart deve retornar 200 e estado idle quando aplicável."""
+    system_updates.update_state(
+        state="ready_to_restart",
+        progress=95,
+        message="Atualização preparada.",
+        can_cancel=False,
+    )
+
+    _login_admin(app_client)
+    response = app_client.post(
+        "/api/system/update/clear-restart",
+        headers={"X-CSRFToken": "csrf-test", "X-Requested-With": "XMLHttpRequest"},
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["success"] is True
+    assert data["state"] == "idle"

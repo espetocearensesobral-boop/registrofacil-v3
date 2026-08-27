@@ -40,7 +40,7 @@
             </div>
         </div>
         <button type="submit" class="process-filter-icon-btn process-filter-apply-btn" title="Aplicar filtros" aria-label="Aplicar filtros"><i class="bi bi-funnel" aria-hidden="true"></i></button>
-        <a href="{{ request.path }}" class="process-filter-icon-btn process-filter-clear-btn" title="Limpar filtros" aria-label="Limpar filtros"><i class="bi bi-x-lg" aria-hidden="true"></i></a>
+        <a href="{{ request.path }}" class="process-filter-icon-btn process-filter-clear-btn" data-rf-soft-nav title="Limpar filtros" aria-label="Limpar filtros"><i class="bi bi-x-lg" aria-hidden="true"></i></a>
     </form>
 </div>
 
@@ -59,6 +59,12 @@
         badge.textContent = count;
         badge.classList.toggle('on', count > 0);
     }
+    window.rfUpdateProcessFilterBadge = updateProcessFilterBadge;
+    if (window.__rfProcessFilterToolbarInitialized) {
+        updateProcessFilterBadge();
+        return;
+    }
+    window.__rfProcessFilterToolbarInitialized = true;
     document.addEventListener('click', function (event) {
         const moreButton = event.target.closest('#process-filter-more');
         const popover = document.getElementById('process-filter-popover');

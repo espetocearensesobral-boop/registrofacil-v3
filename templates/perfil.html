@@ -324,7 +324,7 @@
 {% endblock content %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/paleta.js') }}"></script>
+<script src="{{ url_for('static', filename='js/paleta.js', v=app_version) }}"></script>
 {{ super() }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {

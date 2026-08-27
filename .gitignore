@@ -23,6 +23,8 @@ env/
 # Uploads e dados gerados em runtime — nunca versionar documentos de usuários
 /static/uploads/*
 !/static/uploads/.gitkeep
+/uploads/*
+!/uploads/.gitkeep
 
 # Artefatos de build e sistema
 .DS_Store

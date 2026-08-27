@@ -1,4 +1,4 @@
-<html lang="pt-BR">
+<html lang="pt-BR" {% if is_dashboard %}class="dashboard-page"{% endif %}>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,6 +95,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css', v=app_version + '-dashboard6') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout-standard.css', v=app_version + '-dashboard4') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimized.css', v=app_version) }}">
+    {# Carregado no head para evitar clarão de estilos ao trocar de página. #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/internal-ui.css', v=app_version + '-full-ui6') }}">
     <style id="rf-header-button-contract">
         html body .navbar .nav-btn.nav-btn-secondary {
             background-color: var(--color-primary-light, #1B4368) !important;
@@ -276,6 +278,7 @@
                 <span>Registro Fácil v{{ app_version }}</span>
                 <span>{{ (now() if now is callable else now).strftime('%d/%m/%Y') }} · sessão segura</span>
             </footer>
+            <div id="rf-page-scripts">{% block scripts %}{% endblock %}</div>
         </div>
     </div>
 
@@ -515,6 +518,7 @@
     <script type="module" src="{{ url_for('static', filename='js/processos/record_locking.js', v=app_version) }}"></script>
     
     {# O main.js agora é o orquestrador, ele DEVE ser o último script a ser carregado, e também precisa ser um módulo #}
+    <script type="module" src="{{ url_for('static', filename='js/soft_navigation.js', v=app_version) }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/main.js', v=app_version) }}"></script>
     <script src="{{ url_for('static', filename='js/accessibility.js', v=app_version) }}" defer></script>
     <script src="{{ url_for('static', filename='js/infinite-tables.js', v=app_version) }}" defer></script>
@@ -558,7 +562,6 @@
         }
     });
     </script>
-    {% block scripts %}{% endblock %}
     <!-- Identidade visual semântica consolidada após estilos locais dos templates -->
     <!-- Indicador global de carregamento; notificações continuam no container de toasts. -->
     <div id="rf-global-loading" role="status" aria-live="polite" aria-atomic="true" hidden>
@@ -569,6 +572,5 @@
     </div>
     <!-- Toast Container Global -->
     <div class="toast-container position-fixed top-0 end-0 p-3 rf-toast-container"></div>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/internal-ui.css', v=app_version + '-full-ui6') }}">
 </body>
 </html>

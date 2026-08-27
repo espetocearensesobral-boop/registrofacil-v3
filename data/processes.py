@@ -377,6 +377,18 @@ def listar_processos(filtros, pagina_atual, registros_por_pagina, ordenar, ignor
 
         if filtros.get('filtro_em_andamento'):
             where_clauses.append("SP.nome != 'Finalizado' AND P.data_conclusao IS NULL")
+
+        if filtros.get('prazo_alerta') == 'vencidos':
+            where_clauses.append(
+                "SP.nome != 'Finalizado' AND P.data_conclusao IS NULL "
+                "AND P.prazo_final < date('now', 'localtime')"
+            )
+        elif filtros.get('prazo_alerta') == 'proximos':
+            where_clauses.append(
+                "SP.nome != 'Finalizado' AND P.data_conclusao IS NULL "
+                "AND P.prazo_final > date('now', 'localtime') "
+                "AND P.prazo_final <= date('now', 'localtime', '+5 days')"
+            )
         
         if filtros.get('responsavel_id'):
             where_clauses.append("P.responsavel_id = ?")
@@ -401,10 +413,18 @@ def listar_processos(filtros, pagina_atual, registros_por_pagina, ordenar, ignor
         where_clauses.append("(P.numero_processo LIKE ? OR P.id LIKE ? OR P.titular LIKE ? OR P.titular_telefone LIKE ? OR P.titular_email LIKE ? OR P.apresentante LIKE ? OR P.apresentante_telefone LIKE ? OR P.apresentante_email LIKE ? OR P.matricula LIKE ? OR U.nome LIKE ? OR TS.nome LIKE ? OR SP.nome LIKE ?)")
         query_params.extend([busca_termo] * 12)
     if filtros.get('data_inicio'):
-        where_clauses.append("P.data_entrada >= ?")
+        date_field = (
+            "date(COALESCE(NULLIF(P.data_entrada, ''), P.created_at))"
+            if filtros.get('movimentacao_dashboard') else "P.data_entrada"
+        )
+        where_clauses.append(f"{date_field} >= ?")
         query_params.append(filtros['data_inicio'])
     if filtros.get('data_fim'):
-        where_clauses.append("P.data_entrada <= ?")
+        date_field = (
+            "date(COALESCE(NULLIF(P.data_entrada, ''), P.created_at))"
+            if filtros.get('movimentacao_dashboard') else "P.data_entrada"
+        )
+        where_clauses.append(f"{date_field} <= ?")
         query_params.append(filtros['data_fim'])
     if filtros.get('envolve_notas') is not None:
         where_clauses.append("P.envolvido_notas = ?")
@@ -596,17 +616,36 @@ def get_critical_deadline_processes(limit=5):
             r['prazo_formatado'] = 'Sem prazo'
     return results
 
-def get_dashboard_analytics():
+def get_dashboard_analytics(period_days=7, responsavel_id=None):
     """Retorna indicadores agregados do Dashboard usando somente dados reais do sistema.
 
-    A janela de movimentação considera os últimos sete dias, incluindo o dia atual.
-    As consultas usam as tabelas existentes e retornam estruturas prontas para os
-    cards e gráficos, sem gerar dados sintéticos.
+    ``data_entrada`` é a referência operacional para entrada de um processo;
+    ``created_at`` é usado somente como fallback para registros legados que não
+    a possuam. Isso mantém cards, gráficos e filtros com a mesma definição.
     """
+    try:
+        period_days = int(period_days)
+    except (TypeError, ValueError):
+        period_days = 7
+    if period_days not in {7, 30, 90}:
+        period_days = 7
+
+    try:
+        responsavel_id = int(responsavel_id) if responsavel_id else None
+    except (TypeError, ValueError):
+        responsavel_id = None
+
+    entry_date = "date(COALESCE(NULLIF(P.data_entrada, ''), P.created_at))"
+    period_modifier = f'-{period_days - 1} days'
+    responsible_join = ' AND P.responsavel_id = ?' if responsavel_id else ''
+    responsible_where = ' WHERE P.responsavel_id = ?' if responsavel_id else ''
+    responsible_capacity_clause = ' AND P.responsavel_id = ?' if responsavel_id else ''
+    responsible_params = [responsavel_id] if responsavel_id else []
+
     daily_query = """
         SELECT * FROM (
             WITH RECURSIVE dias(dia) AS (
-                SELECT date('now', 'localtime', '-6 days')
+                SELECT date('now', 'localtime', ?)
                 UNION ALL
                 SELECT date(dia, '+1 day') FROM dias
                 WHERE dia < date('now', 'localtime')
@@ -616,35 +655,36 @@ def get_dashboard_analytics():
                 COUNT(P.id) AS total
             FROM dias
             LEFT JOIN processos P
-                ON date(COALESCE(NULLIF(P.data_entrada, ''), P.created_at)) = dias.dia
+                ON """ + entry_date + """ = dias.dia""" + responsible_join + """
             GROUP BY dias.dia
             ORDER BY dias.dia ASC
         )
     """
-    daily_rows = executar_query(daily_query, fetch_all=True) or []
+    daily_rows = executar_query(daily_query, [period_modifier, *responsible_params], fetch_all=True) or []
 
     status_rows = executar_query(
         """
-        SELECT SP.nome, SP.hex_color, COUNT(P.id) AS total
+        SELECT SP.id, SP.nome, SP.hex_color, COUNT(P.id) AS total
         FROM status_processo SP
-        LEFT JOIN processos P ON P.status_id = SP.id
+        LEFT JOIN processos P ON P.status_id = SP.id""" + responsible_join + """
         GROUP BY SP.id, SP.nome, SP.hex_color
         HAVING COUNT(P.id) > 0
         ORDER BY total DESC, SP.nome COLLATE NOCASE ASC
         """,
-        fetch_all=True,
+        responsible_params, fetch_all=True,
     ) or []
 
     service_rows = executar_query(
         """
-        SELECT COALESCE(TS.nome, 'Sem tipo') AS nome, COUNT(P.id) AS total
+        SELECT TS.id, COALESCE(TS.nome, 'Sem tipo') AS nome, COUNT(P.id) AS total
         FROM processos P
         LEFT JOIN tipos_servico TS ON P.tipo_id = TS.id
-        GROUP BY P.tipo_id, TS.nome
+        """ + responsible_where + """
+        GROUP BY P.tipo_id, TS.id, TS.nome
         ORDER BY total DESC, nome COLLATE NOCASE ASC
         LIMIT 5
         """,
-        fetch_all=True,
+        responsible_params, fetch_all=True,
     ) or []
 
     summary = executar_query(
@@ -656,11 +696,12 @@ def get_dashboard_analytics():
             SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado' AND P.prazo_final < date('now', 'localtime') THEN 1 ELSE 0 END) AS total_vencidos,
             SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado' AND P.prazo_final = date('now', 'localtime') THEN 1 ELSE 0 END) AS total_vencem_hoje,
             SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado' AND P.prazo_final > date('now', 'localtime') AND P.prazo_final <= date('now', 'localtime', '+5 days') THEN 1 ELSE 0 END) AS total_proximos,
-            SUM(CASE WHEN date(COALESCE(NULLIF(P.data_entrada, ''), P.created_at)) >= date('now', 'localtime', '-6 days') THEN 1 ELSE 0 END) AS movimentacao_7_dias
+            SUM(CASE WHEN """ + entry_date + """ >= date('now', 'localtime', ?) THEN 1 ELSE 0 END) AS movimentacao_periodo
         FROM processos P
         JOIN status_processo SP ON P.status_id = SP.id
+        """ + responsible_where + """
         """,
-        fetch_one=True,
+        [period_modifier, *responsible_params], fetch_one=True,
     ) or {}
 
     performance = executar_query(
@@ -668,9 +709,8 @@ def get_dashboard_analytics():
         SELECT
             COALESCE(ROUND(AVG(CASE
                 WHEN P.data_conclusao IS NOT NULL
-                 AND P.data_entrada IS NOT NULL
-                 AND julianday(P.data_conclusao) >= julianday(P.data_entrada)
-                THEN julianday(P.data_conclusao) - julianday(P.data_entrada)
+                 AND julianday(P.data_conclusao) >= julianday(COALESCE(NULLIF(P.data_entrada, ''), P.created_at))
+                THEN julianday(P.data_conclusao) - julianday(COALESCE(NULLIF(P.data_entrada, ''), P.created_at))
             END), 1), 0) AS media_dias_conclusao,
             SUM(CASE
                 WHEN P.data_conclusao IS NOT NULL
@@ -681,9 +721,30 @@ def get_dashboard_analytics():
             SUM(CASE WHEN P.data_conclusao IS NOT NULL OR SP.nome = 'Finalizado' THEN 1 ELSE 0 END) AS concluidos_com_data
         FROM processos P
         JOIN status_processo SP ON P.status_id = SP.id
+        """ + responsible_where + """
         """,
-        fetch_one=True,
+        responsible_params, fetch_one=True,
     ) or {}
+
+    capacity_rows = executar_query(
+        """
+        SELECT
+            COALESCE(U.nome, 'Sem responsável') AS nome,
+            COUNT(P.id) AS abertos,
+            SUM(CASE WHEN P.prazo_final < date('now', 'localtime') THEN 1 ELSE 0 END) AS vencidos,
+            SUM(CASE WHEN P.prazo_final > date('now', 'localtime')
+                      AND P.prazo_final <= date('now', 'localtime', '+5 days') THEN 1 ELSE 0 END) AS proximos
+        FROM processos P
+        JOIN status_processo SP ON P.status_id = SP.id
+        LEFT JOIN usuarios U ON P.responsavel_id = U.id
+        WHERE P.data_conclusao IS NULL AND SP.nome != 'Finalizado'""" + responsible_capacity_clause + """
+        GROUP BY P.responsavel_id, U.nome
+        HAVING COUNT(P.id) > 0
+        ORDER BY vencidos DESC, abertos DESC, nome COLLATE NOCASE ASC
+        LIMIT 8
+        """,
+        responsible_params, fetch_all=True,
+    ) or []
 
     daily = []
     for row in daily_rows:
@@ -702,16 +763,22 @@ def get_dashboard_analytics():
 
     return {
         'movimentacao_diaria': daily,
+        'period_days': period_days,
         'status_distribuicao': [
             {
                 'nome': row.get('nome') or 'Sem status',
+                'id': row.get('id'),
                 'cor': row.get('hex_color') or '#6B7280',
                 'total': int(row.get('total') or 0),
             }
             for row in status_rows
         ],
         'servicos_principais': [
-            {'nome': row.get('nome') or 'Sem tipo', 'total': int(row.get('total') or 0)}
+            {
+                'id': row.get('id'),
+                'nome': row.get('nome') or 'Sem tipo',
+                'total': int(row.get('total') or 0),
+            }
             for row in service_rows
         ],
         'total_processos': total_processos,
@@ -720,11 +787,21 @@ def get_dashboard_analytics():
         'total_vencidos': int(summary.get('total_vencidos') or 0),
         'total_vencem_hoje': int(summary.get('total_vencem_hoje') or 0),
         'total_proximos': int(summary.get('total_proximos') or 0),
-        'movimentacao_7_dias': int(summary.get('movimentacao_7_dias') or 0),
+        # Nome legado preservado para integrações; o valor respeita period_days.
+        'movimentacao_7_dias': int(summary.get('movimentacao_periodo') or 0),
         'pico_movimentacao': pico,
         'media_dias_conclusao': float(performance.get('media_dias_conclusao') or 0),
         'taxa_conclusao': round((total_concluidos / total_processos) * 100, 1) if total_processos else 0,
         'taxa_no_prazo': round((concluidos_no_prazo / concluidos_com_data) * 100, 1) if concluidos_com_data else 0,
+        'capacidade_responsaveis': [
+            {
+                'nome': row.get('nome') or 'Sem responsável',
+                'abertos': int(row.get('abertos') or 0),
+                'vencidos': int(row.get('vencidos') or 0),
+                'proximos': int(row.get('proximos') or 0),
+            }
+            for row in capacity_rows
+        ],
     }
 
 
@@ -769,4 +846,3 @@ def excluir_anexo_processo(anexo_id, processo_id, connection=None):
             )
             return result['nome_arquivo']
     return None
-

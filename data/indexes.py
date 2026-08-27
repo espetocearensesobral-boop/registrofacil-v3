@@ -11,6 +11,7 @@ def criar_indices_performance(cursor):
             "CREATE INDEX IF NOT EXISTS idx_processos_tipo ON processos(tipo_id)",
             "CREATE INDEX IF NOT EXISTS idx_processos_responsavel ON processos(responsavel_id)",
             "CREATE INDEX IF NOT EXISTS idx_processos_created_at ON processos(created_at DESC)",
+            "CREATE INDEX IF NOT EXISTS idx_processos_data_entrada ON processos(data_entrada DESC)",
             "CREATE INDEX IF NOT EXISTS idx_processos_numero ON processos(numero_processo)",
             "CREATE INDEX IF NOT EXISTS idx_processos_matricula ON processos(matricula)",
             "CREATE INDEX IF NOT EXISTS idx_processos_prazo ON processos(prazo_final, data_conclusao)",
@@ -80,4 +81,3 @@ def criar_indices_performance(cursor):
         logger.info("Índices de performance criados/verificados com sucesso.")
     except Exception as e:
         logger.error(f"Erro ao criar índices: {e}", exc_info=True)
-

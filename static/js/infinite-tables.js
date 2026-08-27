@@ -178,4 +178,5 @@
     } else {
         boot();
     }
+    document.addEventListener('rf:page-change', boot);
 })();

@@ -14,7 +14,7 @@
         <i class="bi bi-exclamation-triangle me-1"></i> Editar
     </a>
     {% else %}
-    <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="nav-btn nav-btn-primary">
+    <a href="{{ url_for('processos.editar', processo_id=processo.id) }}" class="nav-btn nav-btn-warning">
         <i class="bi bi-pencil"></i> Editar
     </a>
     {% endif %}
@@ -29,11 +29,33 @@
 
 {% block content %}
 
-<div class="row g-4 mb-4" data-rf-ui="complete" data-rf-surface="processos-visualizar" data-rf-component="page-surface">
+<section class="process-intelligence" data-rf-ui="complete" data-rf-surface="processos-visualizar" data-rf-component="page-surface" aria-labelledby="process-intelligence-title">
+    <header class="process-intelligence-hero">
+        <div class="process-intelligence-title">
+            <span class="process-intelligence-eyebrow"><i class="bi bi-folder2-open" aria-hidden="true"></i> Processo em acompanhamento</span>
+            <h1 id="process-intelligence-title">{{ processo.titular }}</h1>
+            <p>{{ processo.tipo_nome | default('Serviço não informado') }} <span aria-hidden="true">·</span> Processo #{{ '%04d' % processo.id }}</p>
+        </div>
+        <div class="process-intelligence-status">
+            <span class="badge rounded-pill rf-status-badge" style="--rf-status-bg: {{ processo.status_hex_original | default('#6c757d') }}; --rf-status-text: {{ get_contrast_color(processo.status_hex_original | default('#6c757d')) }};">
+                {{ (processo.status_nome_original | default('Desconhecido')) | replace('_', ' ') | capitalize }}
+            </span>
+            {% if processo.data_conclusao %}<span class="process-intelligence-complete"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Concluído em {{ formatar_data(processo.data_conclusao) }}</span>{% endif %}
+        </div>
+        <dl class="process-intelligence-summary" aria-label="Resumo do processo">
+            <div><dt>Prazo final</dt><dd class="is-deadline"><i class="bi bi-calendar-event" aria-hidden="true"></i>{{ formatar_data(processo.prazo_final) }}</dd></div>
+            <div><dt>Entrada</dt><dd>{{ formatar_data(processo.data_entrada) }}</dd></div>
+            <div><dt>Responsável</dt><dd>{{ processo.responsavel_nome | default('Não definido') }}</dd></div>
+            <div><dt>Matrícula</dt><dd class="rf-mono-value">{{ processo.matricula if processo.matricula and processo.matricula != 'None' else '—' }}</dd></div>
+        </dl>
+    </header>
+</section>
+
+<div class="row g-4 mb-4 process-contact-grid">
     <!-- Card Dados do Titular -->
     <div class="col-md-6">
-        <div class="rf-card h-100">
-            <div class="rf-card-header rf-card-header-accent">
+        <div class="rf-card h-100 process-contact-card process-contact-card-primary">
+            <div class="rf-card-header">
                 <h5 class="m-0 rf-detail-section-title">
                     <i class="bi bi-person-fill me-2"></i>Dados do Titular
                 </h5>
@@ -44,7 +66,7 @@
                     <div class="det-val fw-bold rf-detail-name">{{ processo.titular }}</div>
                 </div>
                 <div class="row g-3">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="det-lbl">Telefone</div>
                         <div class="det-val">
                             {% if processo.titular_telefone %}
@@ -54,7 +76,7 @@
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-6 process-contact-email-col">
+                    <div class="col-sm-7 process-contact-email-col">
                         <div class="det-lbl">E-mail</div>
                         <div class="det-val">
                             {% if processo.titular_email %}
@@ -71,8 +93,8 @@
 
     <!-- Card Dados do Apresentante -->
     <div class="col-md-6">
-        <div class="rf-card h-100">
-            <div class="rf-card-header rf-card-header-muted">
+        <div class="rf-card h-100 process-contact-card">
+            <div class="rf-card-header">
                 <h5 class="m-0">
                     <i class="bi bi-person-badge-fill me-2"></i>Dados do Apresentante
                 </h5>
@@ -83,7 +105,7 @@
                     <div class="det-val fw-bold rf-detail-name rf-detail-name-sm">{{ processo.apresentante | default('Não informado') }}</div>
                 </div>
                 <div class="row g-3">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="det-lbl">Telefone</div>
                         <div class="det-val">
                             {% if processo.apresentante_telefone %}
@@ -93,7 +115,7 @@
                             {% else %}<span class="text-muted">Não informado</span>{% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-6 process-contact-email-col">
+                    <div class="col-sm-7 process-contact-email-col">
                         <div class="det-lbl">E-mail</div>
                         <div class="det-val">
                             {% if processo.apresentante_email %}
@@ -110,15 +132,10 @@
 </div>
 
 <!-- Card Informações do Processo -->
-<div class="rf-card mb-4">
+<div class="rf-card mb-4 process-details-panel">
     <div class="rf-card-header d-flex justify-content-between align-items-center">
         <h5 class="m-0"><i class="bi bi-info-circle me-2 rf-accent-icon"></i>Informações do Processo</h5>
-        <div class="d-flex align-items-center gap-2">
-            <span class="badge rounded-pill rf-status-badge" style="--rf-status-bg: {{ processo.status_hex_original | default('#6c757d') }}; --rf-status-text: {{ get_contrast_color(processo.status_hex_original | default('#6c757d')) }};">
-                {{ (processo.status_nome_original | default('Desconhecido')) | replace('_', ' ') | capitalize }}
-            </span>
-            <span class="rf-process-id-chip">#{{ '%04d' % processo.id }}</span>
-        </div>
+        <span class="rf-process-id-chip">#{{ '%04d' % processo.id }}</span>
     </div>
     <div class="rf-card-body p-0">
         <div class="det-grid">
@@ -170,41 +187,10 @@
     </div>
 </div>
 
-<style>
-.det-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-.det-item {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color-default);
-}
-.det-item:nth-child(even) {
-    border-left: 1px solid var(--border-color-default);
-}
-.det-lbl {
-    font-size: .75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: var(--text-color-secondary);
-    margin-bottom: 6px;
-}
-.det-val {
-    font-size: 14px;
-    color: var(--text-color-primary);
-    word-break: break-word;
-}
-@media (max-width: 768px) {
-    .det-grid { grid-template-columns: 1fr; }
-    .det-item:nth-child(even) { border-left: none; }
-}
-</style>
-
 <!-- Observações e Anexos -->
-<div class="row g-4 mb-4">
+<div class="row g-4 mb-4 process-support-grid">
     <div class="col-md-7">
-        <div class="rf-card h-100">
+        <div class="rf-card h-100 process-observation-card">
             <div class="rf-card-header">
                 <h5 class="m-0"><i class="bi bi-chat-left-text me-2 rf-accent-icon"></i>Observações</h5>
             </div>
@@ -218,7 +204,7 @@
         </div>
     </div>
     <div class="col-md-5">
-        <div class="rf-card h-100">
+        <div class="rf-card h-100 process-attachments-card">
             <div class="rf-card-header d-flex justify-content-between align-items-center">
                 <h5 class="m-0"><i class="bi bi-paperclip me-2 rf-accent-icon"></i>Anexos</h5>
                 <span class="rf-pill rf-pill-dark">{{ anexos_do_processo | length }}</span>
@@ -253,7 +239,7 @@
 </div>
 
 <!-- Histórico de Alterações -->
-<div class="rf-card mb-4">
+<div class="rf-card mb-4 process-history-panel">
     <div class="rf-card-header d-flex justify-content-between align-items-center">
         <h5 class="m-0"><i class="bi bi-clock-history me-2 rf-accent-icon"></i>Histórico de Alterações</h5>
         <button class="btn btn-sm btn-outline-secondary" onclick="toggleHistorico()" id="btn-toggle-hist" aria-controls="historico-body" aria-expanded="false">

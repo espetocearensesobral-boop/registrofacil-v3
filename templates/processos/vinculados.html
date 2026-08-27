@@ -12,9 +12,6 @@
     <button type="button" class="nav-btn nav-btn-secondary" data-bs-toggle="modal" data-bs-target="#printListModal">
         <i class="bi bi-printer"></i> Imprimir
     </button>
-    <a class="nav-btn nav-btn-secondary" href="{{ url_for('processos.exportar_excel', **request.args.to_dict()) }}">
-        <i class="bi bi-filetype-xlsx"></i> Exportar Excel
-    </a>
 {% endblock %}
 
 
@@ -175,6 +172,9 @@
                     </a>
                     <a id="btnImprimirLista" href="{{ url_for('processos.imprimir_lista', **(request.args.to_dict() | combine({'view_mode': 'vinculados'}))) }}" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-lg">
                         <i class="bi bi-printer me-2"></i> Imprimir
+                    </a>
+                    <a href="{{ url_for('processos.exportar_excel', **request.args.to_dict()) }}" class="btn btn-outline-success btn-lg">
+                        <i class="bi bi-filetype-xlsx me-2"></i> Exportar Excel
                     </a>
                 </div>
             </div>

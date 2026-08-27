@@ -6,300 +6,42 @@
 {% block page_title %}
     <span class="dashboard-page-greeting" aria-label="Saudação">
         <strong class="dashboard-greeting-title" id="greeting-message">{{ greeting_parts[0] }}{% if greeting_parts|length > 1 %}.{% endif %}</strong>
-        {% if greeting_parts|length > 1 %}
-        <span class="dashboard-greeting-subtitle" id="dashboard-greeting-subtitle">{{ greeting_parts[1] }}</span>
-        {% endif %}
+        {% if greeting_parts|length > 1 %}<span class="dashboard-greeting-subtitle" id="dashboard-greeting-subtitle">{{ greeting_parts[1] }}</span>{% endif %}
     </span>
 {% endblock %}
 
 {% block page_actions %}
-    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary" aria-label="Criar novo processo">
-        <i class="bi bi-plus-circle me-1"></i> Novo Processo
-    </a>
-    <a href="{{ url_for('dashboard.metricas') }}" class="nav-btn nav-btn-secondary" aria-label="Ver métricas detalhadas">
-        <i class="bi bi-graph-up me-1"></i> Métricas
-    </a>
+    <a href="{{ url_for('processos.novo') }}" class="nav-btn nav-btn-primary" aria-label="Criar novo processo"><i class="bi bi-plus-circle me-1"></i> Novo Processo</a>
+    <a href="{{ url_for('dashboard.metricas') }}" class="nav-btn nav-btn-secondary" aria-label="Ver métricas detalhadas"><i class="bi bi-graph-up me-1"></i> Métricas</a>
 {% endblock %}
 
 {% block content %}
-    {% set analytics = dashboard_info.analytics %}
-    <!-- 1. KPIs Principais (Acesso Rápido) -->
     <nav class="kpi-grid" aria-label="Indicadores chave de desempenho">
-        <a class="kpi-card kpi-status-completed" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}">
-            <div class="kpi-label"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Concluídos</div>
-            <div class="kpi-value">{{ dashboard_info.processos_concluidos }}</div>
-            <div class="kpi-sub">Processos finalizados</div>
-        </a>
-        <a class="kpi-card kpi-status-prenoted" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}">
-            <div class="kpi-label"><i class="bi bi-pencil-square" aria-hidden="true"></i> Prenotados</div>
-            <div class="kpi-value">{{ dashboard_info.processos_prenotados }}</div>
-            <div class="kpi-sub">Processos prenotados</div>
-        </a>
-        <a class="kpi-card kpi-status-pending" href="{{ url_for('processos.pendentes') }}">
-            <div class="kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pendentes</div>
-            <div class="kpi-value">{{ dashboard_info.processos_pendentes }}</div>
-            <div class="kpi-sub">Aguardando conclusão</div>
-        </a>
-        <a class="kpi-card kpi-status-progress" href="{{ url_for('processos.em_andamento') }}">
-            <div class="kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Em Andamento</div>
-            <div class="kpi-value">{{ dashboard_info.processos_em_andamento }}</div>
-            <div class="kpi-sub">Processos ativos</div>
-        </a>
+        <a class="kpi-card kpi-status-completed" href="{{ url_for('processos.todos', status=dashboard_info.finalizado_status_id) }}"><div class="kpi-label"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Concluídos</div><div class="kpi-value">{{ dashboard_info.processos_concluidos }}</div><div class="kpi-sub">Processos finalizados</div></a>
+        <a class="kpi-card kpi-status-prenoted" href="{{ url_for('processos.todos', status=dashboard_info.prenotado_status_id) }}"><div class="kpi-label"><i class="bi bi-pencil-square" aria-hidden="true"></i> Prenotados</div><div class="kpi-value">{{ dashboard_info.processos_prenotados }}</div><div class="kpi-sub">Processos prenotados</div></a>
+        <a class="kpi-card kpi-status-pending" href="{{ url_for('processos.pendentes') }}"><div class="kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pendentes</div><div class="kpi-value">{{ dashboard_info.processos_pendentes }}</div><div class="kpi-sub">Aguardando conclusão</div></a>
+        <a class="kpi-card kpi-status-progress" href="{{ url_for('processos.em_andamento') }}"><div class="kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Em Andamento</div><div class="kpi-value">{{ dashboard_info.processos_em_andamento }}</div><div class="kpi-sub">Processos ativos</div></a>
     </nav>
 
-    <!-- 2. Foco do dia: prioridades reais, ordenadas pelo risco de prazo -->
     <section class="dashboard-focus-panel" id="dashboard-focus" aria-labelledby="dashboard-focus-title">
         <header class="dashboard-focus-header">
-            <div>
-                <span class="dashboard-section-kicker"><i class="bi bi-crosshair2" aria-hidden="true"></i> Prioridade operacional</span>
-                <h2 id="dashboard-focus-title">Foco do dia</h2>
+            <div><h2 id="dashboard-focus-title">Foco do dia</h2></div>
+            <div class="dashboard-focus-actions" aria-label="Filtros rápidos de prioridade">
+                <a class="dashboard-focus-action is-overdue" href="{{ url_for('processos.todos', prazo_alerta='vencidos', ordenar='prazo_asc') }}" aria-label="Ver {{ dashboard_info.total_vencidos }} processos vencidos"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i><span>Vencidos</span><strong>{{ dashboard_info.total_vencidos }}</strong></a>
+                <a class="dashboard-focus-action is-upcoming" href="{{ url_for('processos.todos', prazo_alerta='proximos', ordenar='prazo_asc') }}" aria-label="Ver {{ dashboard_info.total_proximos }} processos com prazo nos próximos cinco dias"><i class="bi bi-calendar-event-fill" aria-hidden="true"></i><span>Próximos 5 dias</span><strong>{{ dashboard_info.total_proximos }}</strong></a>
             </div>
-            <span class="dashboard-focus-count">{{ dashboard_info.processos_com_prazo_critico|length }} prioridade{{ 's' if dashboard_info.processos_com_prazo_critico|length != 1 else '' }}</span>
         </header>
         <div class="dashboard-focus-list">
             {% if dashboard_info.processos_com_prazo_critico %}
                 {% for processo in dashboard_info.processos_com_prazo_critico[:5] %}
                 <a class="dashboard-focus-item" href="{{ url_for('processos.visualizar', processo_id=processo['id']) }}">
                     <span class="dashboard-focus-priority dashboard-focus-priority-{{ 'danger' if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 else ('warning' if processo.prazo_diff_days is not none and processo.prazo_diff_days <= 1 else 'info') }}" aria-hidden="true">{{ loop.index }}</span>
-                    <span class="dashboard-focus-copy">
-                        <strong>{{ processo['titular'] }}</strong>
-                        <span>{{ processo['tipo_servico_nome'] or 'Processo' }} · {{ processo['matricula'] or 'Sem matrícula' }}</span>
-                    </span>
-                    <span class="dashboard-focus-deadline {% if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 %}is-overdue{% elif processo.prazo_diff_days is not none and processo.prazo_diff_days <= 1 %}is-near{% endif %}">
-                        {% if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 %}Vencido há {{ processo.prazo_diff_days|abs }}d{% elif processo.prazo_diff_days == 0 %}Vence hoje{% elif processo.prazo_diff_days == 1 %}Vence amanhã{% else %}Vence em {{ processo.prazo_diff_days }}d{% endif %}
-                    </span>
+                    <span class="dashboard-focus-copy"><strong>{{ processo['titular'] }}</strong><span>{{ processo['tipo_servico_nome'] or 'Processo' }} · {{ processo['matricula'] or 'Sem matrícula' }}</span></span>
+                    <span class="dashboard-focus-deadline {% if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 %}is-overdue{% elif processo.prazo_diff_days is not none and processo.prazo_diff_days <= 1 %}is-near{% endif %}">{% if processo.prazo_diff_days is not none and processo.prazo_diff_days < 0 %}Vencido há {{ processo.prazo_diff_days|abs }}d{% elif processo.prazo_diff_days == 0 %}Vence hoje{% elif processo.prazo_diff_days == 1 %}Vence amanhã{% else %}Vence em {{ processo.prazo_diff_days }}d{% endif %}</span>
                     <i class="bi bi-chevron-right dashboard-focus-arrow" aria-hidden="true"></i>
                 </a>
                 {% endfor %}
-            {% else %}
-                <div class="dashboard-focus-empty"><i class="bi bi-check2-circle" aria-hidden="true"></i><span>Nenhuma prioridade crítica identificada.</span></div>
-            {% endif %}
-        </div>
-    </section>
-
-    <!-- 3. Leitura gerencial: tendência, carteira e capacidade operacional -->
-    <section class="dashboard-analytics-section" aria-labelledby="dashboard-analytics-title">
-        <header class="dashboard-section-intro">
-            <div>
-                <span class="dashboard-section-kicker"><i class="bi bi-bar-chart-line" aria-hidden="true"></i> Leitura gerencial</span>
-                <h2 id="dashboard-analytics-title">Acompanhe o ritmo da operação</h2>
-            </div>
-            <span class="dashboard-period-label">Janela: últimos sete dias</span>
-        </header>
-
-        <div class="dashboard-analytics-grid dashboard-analytics-grid-primary">
-            <article class="dashboard-chart-panel dashboard-chart-panel-featured">
-                <header class="rf-card-header dashboard-chart-header">
-                    <div>
-                        <h3 class="rf-card-title"><i class="bi bi-activity" aria-hidden="true"></i> Ritmo de entrada</h3>
-                        <span class="dashboard-chart-subtitle">Processos registrados por dia</span>
-                    </div>
-                </header>
-                <div class="dashboard-chart-body">
-                    <canvas id="dashboardMovementChart" aria-label="Gráfico de barras do ritmo diário de entrada de processos"></canvas>
-                </div>
-                <p class="dashboard-chart-footnote"><strong>{{ analytics.pico_movimentacao.total }}</strong> no pico de {{ analytics.pico_movimentacao.label }}.</p>
-            </article>
-
-            <article class="dashboard-chart-panel">
-                <header class="rf-card-header dashboard-chart-header">
-                    <div>
-                        <h3 class="rf-card-title"><i class="bi bi-pie-chart" aria-hidden="true"></i> Carteira por situação</h3>
-                        <span class="dashboard-chart-subtitle">Como os processos estão distribuídos agora</span>
-                    </div>
-                </header>
-                <div class="dashboard-chart-body dashboard-status-chart-body">
-                    <canvas id="dashboardStatusChart" aria-label="Gráfico de rosca da carteira atual de processos por situação"></canvas>
-                </div>
-                <div class="dashboard-status-legend" id="dashboardStatusLegend" role="list" aria-label="Legenda da carteira por situação"></div>
-            </article>
-        </div>
-
-        <div class="dashboard-analytics-grid dashboard-analytics-grid-secondary">
-            <article class="dashboard-chart-panel">
-                <header class="rf-card-header dashboard-chart-header">
-                    <div>
-                        <h3 class="rf-card-title"><i class="bi bi-bar-chart-steps" aria-hidden="true"></i> Demanda por serviço</h3>
-                        <span class="dashboard-chart-subtitle">Serviços com maior volume na carteira</span>
-                    </div>
-                    {% if analytics.servicos_principais %}<span class="dashboard-chart-kicker">{{ analytics.servicos_principais|length }} categorias</span>{% endif %}
-                </header>
-                <div class="dashboard-chart-body dashboard-services-chart-body">
-                    <canvas id="dashboardServicesChart" aria-label="Gráfico horizontal da demanda por serviço"></canvas>
-                </div>
-            </article>
-
-            <article class="dashboard-management-card">
-                <header class="rf-card-header dashboard-chart-header">
-                    <div>
-                        <h3 class="rf-card-title"><i class="bi bi-heart-pulse" aria-hidden="true"></i> Saúde da carteira</h3>
-                        <span class="dashboard-chart-subtitle">Indicadores para decidir o próximo movimento</span>
-                    </div>
-                </header>
-                <div class="dashboard-management-grid" role="list" aria-label="Indicadores de saúde da carteira">
-                    <div class="dashboard-management-item" role="listitem"><span>Processos abertos</span><strong>{{ analytics.total_abertos }}</strong></div>
-                    <div class="dashboard-management-item" role="listitem"><span>Vencem hoje</span><strong>{{ analytics.total_vencem_hoje }}</strong></div>
-                    <div class="dashboard-management-item" role="listitem"><span>Tempo médio</span><strong>{{ '%.1f'|format(analytics.media_dias_conclusao) }} <small>dias</small></strong></div>
-                    <div class="dashboard-management-item" role="listitem"><span>Taxa de conclusão</span><strong>{{ '%.1f'|format(analytics.taxa_conclusao) }}%</strong></div>
-                </div>
-                <div class="dashboard-management-callout{% if analytics.total_vencem_hoje %} is-alert{% endif %}">
-                    <i class="bi {% if analytics.total_vencem_hoje %}bi-bell-fill{% else %}bi-check-circle-fill{% endif %}" aria-hidden="true"></i>
-                    <span>{% if analytics.total_vencem_hoje %}{{ analytics.total_vencem_hoje }} processo{{ 's' if analytics.total_vencem_hoje != 1 else '' }} vence{{ 'm' if analytics.total_vencem_hoje != 1 else '' }} hoje.{% else %}Nenhum processo vence hoje.{% endif %}</span>
-                </div>
-                <a class="dashboard-panel-link" href="{{ url_for('processos.em_andamento') }}">Abrir carteira em andamento <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
-            </article>
+            {% else %}<div class="dashboard-focus-empty"><i class="bi bi-check2-circle" aria-hidden="true"></i><span>Nenhuma prioridade crítica identificada.</span></div>{% endif %}
         </div>
     </section>
 {% endblock %}
-
-{% block scripts %}
-{{ super() }}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // 1. Interatividade das Linhas da Tabela (Acessibilidade: Enter/Space)
-    document.querySelectorAll('.dash-row-link').forEach(function(row) {
-        const navigate = () => { window.location.href = row.dataset.href; };
-        row.addEventListener('click', navigate);
-        row.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                navigate();
-            }
-        });
-    });
-
-    // 4. Configuração dos Gráficos (Chart.js)
-    if (typeof Chart === 'undefined') return;
-
-    const analytics = {{ dashboard_info.analytics | tojson }};
-    const rootStyles = getComputedStyle(document.body);
-    const token = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
-    
-    const colors = {
-        primary: token('--color-primary', '#cda865'),
-        dark: token('--rf-text-strong', '#0f172a'),
-        muted: token('--rf-text-muted', '#64748b'),
-        border: token('--rf-border-subtle', '#e2e8f0'),
-        info: token('--color-info', '#2563eb'),
-    };
-
-    const chartDefaults = {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 400, easing: 'easeOutQuart' },
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                backgroundColor: colors.dark,
-                titleColor: '#ffffff',
-                bodyColor: '#ffffff',
-                padding: 10,
-                cornerRadius: 6,
-                displayColors: false,
-            },
-        },
-    };
-
-    const grid = { color: colors.border, drawBorder: false };
-    const axis = { color: colors.muted, font: { size: 11, family: "'Source Sans 3', sans-serif" } };
-
-    // Gráfico de Movimentação
-    const movementCanvas = document.getElementById('dashboardMovementChart');
-    if (movementCanvas && analytics.movimentacao_diaria) {
-        new Chart(movementCanvas, {
-            type: 'bar',
-            data: {
-                labels: analytics.movimentacao_diaria.map(item => item.label),
-                datasets: [{
-                    label: 'Entradas',
-                    data: analytics.movimentacao_diaria.map(item => item.total),
-                    backgroundColor: colors.primary,
-                    borderRadius: 4,
-                    borderSkipped: false,
-                    maxBarThickness: 32,
-                }],
-            },
-            options: {
-                ...chartDefaults,
-                scales: {
-                    x: { grid: { display: false }, ticks: axis },
-                    y: { beginAtZero: true, ticks: { ...axis, precision: 0 }, grid },
-                },
-            },
-        });
-    }
-
-    // Gráfico de Status (Doughnut)
-    const statusCanvas = document.getElementById('dashboardStatusChart');
-    if (statusCanvas && analytics.status_distribuicao) {
-        new Chart(statusCanvas, {
-            type: 'doughnut',
-            data: {
-                labels: analytics.status_distribuicao.map(item => item.nome),
-                datasets: [{
-                    data: analytics.status_distribuicao.map(item => item.total),
-                    backgroundColor: analytics.status_distribuicao.map(item => item.cor),
-                    borderColor: token('--rf-surface', '#ffffff'),
-                    borderWidth: 2,
-                    hoverOffset: 4,
-                }],
-            },
-            options: {
-                ...chartDefaults,
-                cutout: '65%',
-                plugins: {
-                    ...chartDefaults.plugins,
-                    tooltip: {
-                        ...chartDefaults.plugins.tooltip,
-                        callbacks: { label: context => ` ${context.label}: ${context.raw}` },
-                    },
-                },
-            },
-        });
-
-        // Legenda Customizada Acessível
-        const legend = document.getElementById('dashboardStatusLegend');
-        if (legend) {
-            analytics.status_distribuicao.forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'dashboard-status-legend-item';
-                row.innerHTML = `
-                    <span class="dashboard-status-legend-dot" style="--legend-color: ${item.cor};" aria-hidden="true"></span>
-                    <span class="dashboard-status-legend-name">${item.nome}</span>
-                    <strong class="dashboard-status-legend-total">${item.total}</strong>
-                `;
-                legend.appendChild(row);
-            });
-        }
-    }
-
-    // Gráfico de Serviços
-    const servicesCanvas = document.getElementById('dashboardServicesChart');
-    if (servicesCanvas && analytics.servicos_principais) {
-        new Chart(servicesCanvas, {
-            type: 'bar',
-            data: {
-                labels: analytics.servicos_principais.map(item => item.nome),
-                datasets: [{
-                    label: 'Processos',
-                    data: analytics.servicos_principais.map(item => item.total),
-                    backgroundColor: colors.info,
-                    borderRadius: 4,
-                    borderSkipped: false,
-                    barPercentage: 0.7,
-                }],
-            },
-            options: {
-                ...chartDefaults,
-                indexAxis: 'y',
-                scales: {
-                    x: { beginAtZero: true, ticks: { ...axis, precision: 0 }, grid },
-                    y: { grid: { display: false }, ticks: { ...axis, autoSkip: false } },
-                },
-            },
-        });
-    }
-});
-</script>
-{% endblock scripts %}

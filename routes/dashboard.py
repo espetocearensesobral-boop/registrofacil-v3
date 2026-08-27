@@ -27,7 +27,7 @@ def api_graficos():
                 COUNT(p.id) as value
             FROM processos p
             JOIN status_processo s ON p.status_id = s.id
-            WHERE p.created_at >= date('now', 'localtime', '-30 days')
+            WHERE date(COALESCE(NULLIF(p.data_entrada, ''), p.created_at)) >= date('now', 'localtime', '-30 days')
             GROUP BY s.id, s.nome, s.hex_color
             ORDER BY value DESC
         """
@@ -36,11 +36,11 @@ def api_graficos():
         # Gráfico 2: Timeline de Criação (Últimos 30 dias)
         query_timeline = """
             SELECT 
-                DATE(created_at) as label,
+                DATE(COALESCE(NULLIF(data_entrada, ''), created_at)) as label,
                 COUNT(*) as value
             FROM processos
-            WHERE created_at >= date('now', 'localtime', '-30 days')
-            GROUP BY DATE(created_at)
+            WHERE date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', 'localtime', '-30 days')
+            GROUP BY DATE(COALESCE(NULLIF(data_entrada, ''), created_at))
             ORDER BY label ASC
         """
         dados_timeline = executar_query(query_timeline, fetch_all=True) or []
@@ -52,7 +52,7 @@ def api_graficos():
                 COUNT(p.id) as value
             FROM processos p
             JOIN tipos_servico t ON p.tipo_id = t.id
-            WHERE p.created_at >= date('now', 'localtime', '-30 days')
+            WHERE date(COALESCE(NULLIF(p.data_entrada, ''), p.created_at)) >= date('now', 'localtime', '-30 days')
             GROUP BY t.id, t.nome
             ORDER BY value DESC
             LIMIT 5
@@ -96,12 +96,12 @@ def api_graficos():
         # Gráfico 6: Evolução Mensal (Últimos 6 meses)
         query_mensal = """
             SELECT 
-                strftime('%Y-%m', created_at) as mes,
+                strftime('%Y-%m', COALESCE(NULLIF(data_entrada, ''), created_at)) as mes,
                 COUNT(*) as criados,
                 SUM(CASE WHEN data_conclusao IS NOT NULL THEN 1 ELSE 0 END) as concluidos
             FROM processos
-            WHERE created_at >= date('now', 'localtime', '-6 months')
-            GROUP BY strftime('%Y-%m', created_at)
+            WHERE date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', 'localtime', '-6 months')
+            GROUP BY strftime('%Y-%m', COALESCE(NULLIF(data_entrada, ''), created_at))
             ORDER BY mes ASC
         """
         dados_mensal = executar_query(query_mensal, fetch_all=True) or []
@@ -150,29 +150,29 @@ def api_stats_resumo():
         
         # Processos hoje
         stats['hoje'] = executar_query(
-            "SELECT COUNT(*) as total FROM processos WHERE DATE(created_at) = DATE('now', 'localtime')",
+            "SELECT COUNT(*) as total FROM processos WHERE DATE(COALESCE(NULLIF(data_entrada, ''), created_at)) = DATE('now', 'localtime')",
             fetch_one=True
         )['total']
         
         # Processos esta semana
         stats['semana'] = executar_query(
-            "SELECT COUNT(*) as total FROM processos WHERE created_at >= date('now', 'localtime', 'weekday 0', '-7 days')",
+            "SELECT COUNT(*) as total FROM processos WHERE date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', 'localtime', 'weekday 0', '-7 days')",
             fetch_one=True
         )['total']
         
         # Processos este mês
         stats['mes'] = executar_query(
-            "SELECT COUNT(*) as total FROM processos WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now', 'localtime')",
+            "SELECT COUNT(*) as total FROM processos WHERE strftime('%Y-%m', COALESCE(NULLIF(data_entrada, ''), created_at)) = strftime('%Y-%m', 'now', 'localtime')",
             fetch_one=True
         )['total']
         
         # Tempo médio de conclusão (em dias)
         query_tempo_medio = """
             SELECT 
-                AVG(julianday(data_conclusao) - julianday(created_at)) as media_dias
+                AVG(julianday(data_conclusao) - julianday(COALESCE(NULLIF(data_entrada, ''), created_at))) as media_dias
             FROM processos
             WHERE data_conclusao IS NOT NULL
-            AND created_at >= date('now', '-30 days')
+            AND date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', '-30 days')
         """
         tempo_medio = executar_query(query_tempo_medio, fetch_one=True)
         stats['tempo_medio_conclusao'] = round(tempo_medio['media_dias'], 1) if tempo_medio and tempo_medio['media_dias'] else 0
@@ -184,7 +184,7 @@ def api_stats_resumo():
                 SUM(CASE WHEN data_conclusao <= prazo_final THEN 1 ELSE 0 END) as no_prazo
             FROM processos
             WHERE data_conclusao IS NOT NULL
-            AND created_at >= date('now', '-30 days')
+            AND date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', '-30 days')
         """
         taxa = executar_query(query_taxa, fetch_one=True)
         if taxa and taxa['total'] > 0:
@@ -219,11 +219,11 @@ def api_stats_performance():
                 SUM(CASE WHEN p.data_conclusao IS NOT NULL THEN 1 ELSE 0 END) as concluidos,
                 SUM(CASE WHEN p.prazo_final < date('now') AND p.data_conclusao IS NULL THEN 1 ELSE 0 END) as vencidos,
                 AVG(CASE WHEN p.data_conclusao IS NOT NULL 
-                    THEN julianday(p.data_conclusao) - julianday(p.created_at) 
+                    THEN julianday(p.data_conclusao) - julianday(COALESCE(NULLIF(p.data_entrada, ''), p.created_at))
                     ELSE NULL END) as tempo_medio
             FROM usuarios u
             LEFT JOIN processos p ON u.id = p.responsavel_id 
-                AND p.created_at >= date('now', 'localtime', '-30 days')
+                AND date(COALESCE(NULLIF(p.data_entrada, ''), p.created_at)) >= date('now', 'localtime', '-30 days')
             WHERE u.ativo = 1
             GROUP BY u.id, u.nome
             HAVING COUNT(p.id) > 0
@@ -282,7 +282,7 @@ def api_metricas_usuario():
                 SUM(CASE WHEN data_conclusao IS NULL THEN 1 ELSE 0 END) as em_andamento,
                 SUM(CASE WHEN prazo_final < date('now') AND data_conclusao IS NULL THEN 1 ELSE 0 END) as atrasados,
                 AVG(CASE WHEN data_conclusao IS NOT NULL 
-                    THEN julianday(data_conclusao) - julianday(created_at) END) as tempo_medio_dias,
+                    THEN julianday(data_conclusao) - julianday(COALESCE(NULLIF(data_entrada, ''), created_at)) END) as tempo_medio_dias,
                 SUM(CASE WHEN data_conclusao IS NOT NULL AND data_conclusao <= prazo_final THEN 1 ELSE 0 END) as concluidos_no_prazo
             FROM processos
             WHERE responsavel_id = ?
@@ -315,13 +315,13 @@ def api_metricas_usuario():
         # Evolução nos últimos 30 dias (por dia)
         query_evolucao = """
             SELECT 
-                DATE(created_at) as data,
+                DATE(COALESCE(NULLIF(data_entrada, ''), created_at)) as data,
                 COUNT(*) as criados,
                 SUM(CASE WHEN data_conclusao IS NOT NULL THEN 1 ELSE 0 END) as concluidos
             FROM processos
             WHERE responsavel_id = ?
-            AND created_at >= date('now', 'localtime', '-30 days')
-            GROUP BY DATE(created_at)
+            AND date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', 'localtime', '-30 days')
+            GROUP BY DATE(COALESCE(NULLIF(data_entrada, ''), created_at))
             ORDER BY data ASC
         """
         evolucao = executar_query(query_evolucao, [usuario_id], fetch_all=True) or []
@@ -360,15 +360,15 @@ def api_metricas_usuario():
         # Performance Semanal (últimas 8 semanas)
         query_semanal = """
             SELECT 
-                strftime('%Y-%W', created_at) as semana,
+                strftime('%Y-%W', COALESCE(NULLIF(data_entrada, ''), created_at)) as semana,
                 COUNT(*) as total,
                 SUM(CASE WHEN data_conclusao IS NOT NULL THEN 1 ELSE 0 END) as concluidos,
                 AVG(CASE WHEN data_conclusao IS NOT NULL 
-                    THEN julianday(data_conclusao) - julianday(created_at) END) as tempo_medio
+                    THEN julianday(data_conclusao) - julianday(COALESCE(NULLIF(data_entrada, ''), created_at)) END) as tempo_medio
             FROM processos
             WHERE responsavel_id = ?
-            AND created_at >= date('now', 'localtime', '-56 days')
-            GROUP BY strftime('%Y-%W', created_at)
+            AND date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', 'localtime', '-56 days')
+            GROUP BY strftime('%Y-%W', COALESCE(NULLIF(data_entrada, ''), created_at))
             ORDER BY semana ASC
         """
         performance_semanal = executar_query(query_semanal, [usuario_id], fetch_all=True) or []
@@ -389,10 +389,10 @@ def api_metricas_usuario():
                     COUNT(*) as processos,
                     SUM(CASE WHEN data_conclusao IS NOT NULL THEN 1 ELSE 0 END) as concluidos,
                     AVG(CASE WHEN data_conclusao IS NOT NULL 
-                        THEN julianday(data_conclusao) - julianday(created_at) END) as tempo_medio
+                        THEN julianday(data_conclusao) - julianday(COALESCE(NULLIF(data_entrada, ''), created_at)) END) as tempo_medio
                 FROM processos
                 WHERE responsavel_id = ?
-                AND created_at >= date('now', '-30 days')
+                AND date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', '-30 days')
             ) u, (
                 SELECT 
                     AVG(processos_count) as media_processos,
@@ -403,9 +403,9 @@ def api_metricas_usuario():
                         COUNT(*) as processos_count,
                         SUM(CASE WHEN data_conclusao IS NOT NULL THEN 1 ELSE 0 END) as concluidos_count,
                         AVG(CASE WHEN data_conclusao IS NOT NULL 
-                            THEN julianday(data_conclusao) - julianday(created_at) END) as tempo_medio
+                        THEN julianday(data_conclusao) - julianday(COALESCE(NULLIF(data_entrada, ''), created_at)) END) as tempo_medio
                     FROM processos
-                    WHERE created_at >= date('now', 'localtime', '-30 days')
+                    WHERE date(COALESCE(NULLIF(data_entrada, ''), created_at)) >= date('now', 'localtime', '-30 days')
                     GROUP BY responsavel_id
                 )
             ) e

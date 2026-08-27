@@ -4,6 +4,7 @@ import os
 import sys
 import secrets
 import stat
+import hashlib
 from datetime import timedelta, datetime
 
 # --- Lógica de Caminhos para .EXE e Desenvolvimento ---
@@ -49,6 +50,56 @@ def _write_persistent_secret(path, value):
         raise
     if os.name != 'nt':
         os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
+
+
+def _same_file_content(left_path, right_path):
+    """Compara dois arquivos sem carregar seu conteúdo inteiro na memória."""
+    if os.path.getsize(left_path) != os.path.getsize(right_path):
+        return False
+    left_hash = hashlib.sha256()
+    right_hash = hashlib.sha256()
+    with open(left_path, 'rb') as left_file, open(right_path, 'rb') as right_file:
+        while True:
+            left_chunk = left_file.read(1024 * 1024)
+            right_chunk = right_file.read(1024 * 1024)
+            if left_chunk != right_chunk:
+                return False
+            if not left_chunk:
+                return left_hash.digest() == right_hash.digest()
+            left_hash.update(left_chunk)
+            right_hash.update(right_chunk)
+
+
+def _migrate_legacy_public_uploads(legacy_root, private_root):
+    """Move uploads antigos para fora de ``static`` sem alterar seus nomes.
+
+    Versões anteriores guardavam anexos em ``static/uploads``. Como o Flask
+    serve toda a árvore ``static`` publicamente, mantê-los ali contorna a rota
+    autenticada de downloads. A migração é idempotente e preserva os nomes que
+    já estão registrados no banco de dados.
+    """
+    for subfolder in ('processos', 'empresa'):
+        source_dir = os.path.join(legacy_root, subfolder)
+        destination_dir = os.path.join(private_root, subfolder)
+        if not os.path.isdir(source_dir):
+            continue
+        os.makedirs(destination_dir, exist_ok=True)
+        for root, _, filenames in os.walk(source_dir):
+            relative_dir = os.path.relpath(root, source_dir)
+            target_dir = destination_dir if relative_dir == '.' else os.path.join(destination_dir, relative_dir)
+            os.makedirs(target_dir, exist_ok=True)
+            for filename in filenames:
+                source_path = os.path.join(root, filename)
+                destination_path = os.path.join(target_dir, filename)
+                if os.path.exists(destination_path):
+                    if _same_file_content(source_path, destination_path):
+                        os.remove(source_path)
+                        continue
+                    raise RuntimeError(
+                        'Não foi possível migrar um upload legado porque já existe '
+                        f'um arquivo diferente no destino: {destination_path}'
+                    )
+                os.replace(source_path, destination_path)
 
 
 class Config:
@@ -176,16 +227,12 @@ class Config:
     BACKUP_ROOT_DIR = os.path.join(DATA_DIR, ROOT_BACKUP_FOLDER_NAME)
     DEFAULT_BACKUP_PATH = BACKUP_ROOT_DIR
 
-    # Uploads ficam em DATA_DIR quando frozen (C:\Program Files é somente leitura)
+    # Uploads sempre ficam fora de static. Do contrário, /static/ exporia anexos
+    # de processos sem passar pela rota autenticada de download.
     UPLOAD_ROOT_FOLDER_NAME = 'uploads'
     PROCESSOS_UPLOAD_SUBFOLDER = 'processos'
     EMPRESA_UPLOAD_SUBFOLDER = 'empresa'
-    # Modo .py (dev): uploads dentro de static/ para Flask servir via url_for('static').
-    # Modo .exe (frozen): static/ é read-only no bundle PyInstaller, usa DATA_DIR.
-    if getattr(sys, 'frozen', False):
-        UPLOAD_ROOT_DIR = os.path.join(DATA_DIR, UPLOAD_ROOT_FOLDER_NAME)
-    else:
-        UPLOAD_ROOT_DIR = os.path.join(BASE_DIR, 'static', UPLOAD_ROOT_FOLDER_NAME)
+    UPLOAD_ROOT_DIR = os.path.join(DATA_DIR, UPLOAD_ROOT_FOLDER_NAME)
     UPLOAD_PROCESSOS_DIR = os.path.join(UPLOAD_ROOT_DIR, PROCESSOS_UPLOAD_SUBFOLDER)
     EMPRESA_UPLOAD_FOLDER = os.path.join(UPLOAD_ROOT_DIR, EMPRESA_UPLOAD_SUBFOLDER)
 
@@ -215,3 +262,11 @@ class Config:
     except OSError as e:
         print(f"ERRO CRÍTICO: Não foi possível criar ou escrever nos diretórios. Verifique as permissões. Erro: {e}")
         sys.exit(1)
+
+
+# Migra instalações criadas por versões que usavam static/uploads. A execução
+# ocorre durante a carga da configuração, antes de o Flask expor /static/.
+_migrate_legacy_public_uploads(
+    os.path.join(BASE_DIR, 'static', Config.UPLOAD_ROOT_FOLDER_NAME),
+    Config.UPLOAD_ROOT_DIR,
+)

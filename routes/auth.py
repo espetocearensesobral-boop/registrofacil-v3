@@ -21,7 +21,7 @@ from models import (
     get_em_andamento_processes_count,
     get_in_progress_processes_count,
     get_user_linked_processes_count,
-    get_critical_deadline_processes, get_dashboard_analytics,
+    get_critical_deadline_processes,
     release_all_locks, send_email, email_notification_enabled,
     obter_status_processo_config,
     get_status_id_by_name,
@@ -587,6 +587,19 @@ def dashboard():
             
     finalizado_status_id = get_status_id_by_name('Finalizado') 
     prenotado_status_id = get_status_id_by_name('Prenotado')
+    deadline_counts = executar_query(
+        """
+        SELECT
+            SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado'
+                      AND P.prazo_final < date('now', 'localtime') THEN 1 ELSE 0 END) AS vencidos,
+            SUM(CASE WHEN P.data_conclusao IS NULL AND SP.nome != 'Finalizado'
+                      AND P.prazo_final > date('now', 'localtime')
+                      AND P.prazo_final <= date('now', 'localtime', '+5 days') THEN 1 ELSE 0 END) AS proximos
+        FROM processos P
+        JOIN status_processo SP ON P.status_id = SP.id
+        """,
+        fetch_one=True,
+    ) or {}
 
     dashboard_info = {
         'processos_concluidos': get_concluidos_processes_count(), 
@@ -596,7 +609,8 @@ def dashboard():
         'processos_pendentes': get_in_progress_processes_count(), 
         'processos_vinculados_a_mim': get_user_linked_processes_count(user_id), 
         'processos_com_prazo_critico': get_critical_deadline_processes(limit=5),
-        'analytics': get_dashboard_analytics(),
+        'total_vencidos': int(deadline_counts.get('vencidos') or 0),
+        'total_proximos': int(deadline_counts.get('proximos') or 0),
         'pending_status_options': pending_status_options,
         'all_pending_status_ids_str': ','.join(all_pending_status_ids),
         'finalizado_status_id': finalizado_status_id,
@@ -608,7 +622,8 @@ def dashboard():
                            get_contrast_color=get_contrast_color,
                            formatar_data=formatar_data,
                            now=datetime.now(),
-                           custom_greeting=custom_greeting
+                           custom_greeting=custom_greeting,
+                           is_dashboard=True,
                           )
 
 @auth_bp.route('/recuperar_senha', methods=['GET', 'POST'])
