@@ -239,7 +239,7 @@ def index(user_id=None):
                     current_user_id=current_user_id,
                 )
                 
-                # Aplicar mudanças
+                # Aplicar mudanças e registrar a auditoria na mesma transação.
                 with get_sqlite_connection() as conn:
                     cursor = conn.cursor()
                     
@@ -262,20 +262,21 @@ def index(user_id=None):
                         params.append(target_user_id)
                         sql = f"UPDATE usuarios SET {', '.join(sql_updates)} WHERE id = ?"
                         cursor.execute(sql, params)
-                
-                # Gravar auditoria
-                for campo, valor_ant, valor_novo in mudancas:
-                    gravar_auditoria_admin(
-                        admin_id=current_user_id,
-                        acao=f'alteracao_{campo}',
-                        justificativa=justificativa,
-                        ip=get_client_ip(),
-                        usuario_afetado_id=target_user_id,
-                        campo_alterado=campo,
-                        valor_anterior=str(valor_ant),
-                        valor_novo=str(valor_novo),
-                        user_agent=request.headers.get('User-Agent')
-                    )
+
+                    # Auditoria obrigatória para cada mudança, dentro da mesma transação.
+                    for campo, valor_ant, valor_novo in mudancas:
+                        gravar_auditoria_admin(
+                            admin_id=current_user_id,
+                            acao=f'alteracao_{campo}',
+                            justificativa=justificativa,
+                            ip=get_client_ip(),
+                            usuario_afetado_id=target_user_id,
+                            campo_alterado=campo,
+                            valor_anterior=str(valor_ant),
+                            valor_novo=str(valor_novo),
+                            user_agent=request.headers.get('User-Agent'),
+                            connection=conn,
+                        )
                 
                 # Notificações
                 if user_data['role'] != role:

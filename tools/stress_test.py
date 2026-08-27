@@ -103,7 +103,6 @@ def _patch_runtime_paths(root: Path) -> Path:
         Path(path).mkdir(parents=True, exist_ok=True)
 
     logger_config.setup_all_loggers(console=False)
-    logger_config._build_legacy_logger()
 
     for module in (database, migrations, backup_data, processes):
         if hasattr(module, "DATABASE_PATH"):

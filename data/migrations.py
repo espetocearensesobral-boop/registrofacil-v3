@@ -323,6 +323,87 @@ def executar_migracoes_dados(connection=None):
 
         migracoes.append(migracao_014)
 
+        def migracao_015(cursor):
+            """Preserva logs de processos removidos trocando CASCADE por SET NULL."""
+            tabela = cursor.execute(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'logs'"
+            ).fetchone()
+            if not tabela:
+                logger.info("[Migração 015] Tabela 'logs' ausente; nada a migrar.")
+                return
+
+            foreign_keys = cursor.execute("PRAGMA foreign_key_list(logs)").fetchall()
+            processo_fk = next((row for row in foreign_keys if row[3] == 'processo_id'), None)
+            if not processo_fk or str(processo_fk[6]).upper() != 'CASCADE':
+                logger.info("[Migração 015] Relação de processo da tabela 'logs' já preserva exclusões.")
+                return
+
+            existing_indexes = cursor.execute(
+                "SELECT name FROM sqlite_master "
+                "WHERE type = 'index' AND tbl_name = 'logs' AND sql IS NOT NULL"
+            ).fetchall()
+            for row in existing_indexes:
+                cursor.execute(f'DROP INDEX IF EXISTS "{row[0].replace(chr(34), chr(34) * 2)}"')
+
+            cursor.execute("PRAGMA foreign_keys = OFF")
+            cursor.execute("ALTER TABLE logs RENAME TO logs_legacy_015")
+            cursor.execute("""
+                CREATE TABLE logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    acao TEXT NOT NULL,
+                    contexto TEXT,
+                    processo_id INTEGER,
+                    usuario_id INTEGER,
+                    ip TEXT,
+                    event_id TEXT,
+                    request_id TEXT,
+                    domain TEXT DEFAULT 'operacional',
+                    event_type TEXT DEFAULT 'legacy',
+                    entity_id TEXT,
+                    severity TEXT DEFAULT 'INFO',
+                    timestamp TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
+                    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL,
+                    FOREIGN KEY (processo_id) REFERENCES processos(id) ON DELETE SET NULL
+                )
+            """)
+            cursor.execute("""
+                INSERT INTO logs (
+                    id, acao, contexto, processo_id, usuario_id, ip,
+                    event_id, request_id, domain, event_type, entity_id,
+                    severity, timestamp
+                )
+                SELECT
+                    old.id, old.acao, old.contexto,
+                    CASE WHEN EXISTS (
+                        SELECT 1 FROM processos p WHERE p.id = old.processo_id
+                    ) THEN old.processo_id ELSE NULL END,
+                    old.usuario_id, old.ip, old.event_id, old.request_id,
+                    old.domain, old.event_type,
+                    CASE
+                        WHEN old.entity_id IS NOT NULL THEN old.entity_id
+                        WHEN old.processo_id IS NOT NULL AND NOT EXISTS (
+                            SELECT 1 FROM processos p WHERE p.id = old.processo_id
+                        ) THEN CAST(old.processo_id AS TEXT)
+                        ELSE NULL
+                    END,
+                    old.severity, old.timestamp
+                FROM logs_legacy_015 old
+            """)
+            cursor.execute("DROP TABLE logs_legacy_015")
+            cursor.execute("PRAGMA foreign_keys = ON")
+
+            for index_sql in (
+                "CREATE INDEX IF NOT EXISTS idx_logs_timestamp ON logs(timestamp DESC)",
+                "CREATE INDEX IF NOT EXISTS idx_logs_usuario ON logs(usuario_id, timestamp DESC)",
+                "CREATE INDEX IF NOT EXISTS idx_logs_acao ON logs(acao, timestamp DESC)",
+                "CREATE INDEX IF NOT EXISTS idx_logs_event_id ON logs(event_id)",
+                "CREATE INDEX IF NOT EXISTS idx_logs_domain_type ON logs(domain, event_type, timestamp DESC)",
+            ):
+                cursor.execute(index_sql)
+            logger.info("[Migração 015] Tabela 'logs' reconstruída com ON DELETE SET NULL; registros preservados.")
+
+        migracoes.append(migracao_015)
+
         total = len(migracoes)
         pendentes = migracoes[versao_atual:]
 

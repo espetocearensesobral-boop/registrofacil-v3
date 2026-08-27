@@ -106,6 +106,7 @@ def init_db(criar_indices_performance, init_fts):
                     ip TEXT NOT NULL,
                     sucesso INTEGER NOT NULL,
                     event_id TEXT,
+                    request_id TEXT,
                     identidade_hash TEXT,
                     tempo TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
                 );
@@ -114,6 +115,7 @@ def init_db(criar_indices_performance, init_fts):
         else:
             logger.info("Tabela 'login_attempts' já existe.")
             ensure_column('login_attempts', 'event_id', 'TEXT')
+            ensure_column('login_attempts', 'request_id', 'TEXT')
             ensure_column('login_attempts', 'identidade_hash', 'TEXT')
 
         if not table_exists("logs"):
@@ -133,7 +135,7 @@ def init_db(criar_indices_performance, init_fts):
                     severity TEXT DEFAULT 'INFO',
                     timestamp TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
                     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL,
-                    FOREIGN KEY (processo_id) REFERENCES processos(id) ON DELETE CASCADE
+                    FOREIGN KEY (processo_id) REFERENCES processos(id) ON DELETE SET NULL
                 );
             """)
             logger.info("Tabela 'logs' criada no SQLite.")

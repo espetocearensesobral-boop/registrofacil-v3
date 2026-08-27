@@ -38,6 +38,12 @@
                     <option value="seguranca" {% if eventos_fonte == 'seguranca' %}selected{% endif %}>Segurança</option>
                     {% endif %}
                 </select>
+                <select name="eventos_acao" class="cfg-events-select" aria-label="Filtrar por ação">
+                    <option value="">Todas as ações</option>
+                    {% for evento_acao in eventos_acoes %}
+                    <option value="{{ evento_acao.acao }}" {% if eventos_acao == evento_acao.acao %}selected{% endif %}>{{ evento_acao.acao }}</option>
+                    {% endfor %}
+                </select>
                 <select name="eventos_usuario" class="cfg-events-select" aria-label="Filtrar por usuário">
                     <option value="">Todos os usuários</option>
                     {% for evento_usuario in eventos_usuarios %}

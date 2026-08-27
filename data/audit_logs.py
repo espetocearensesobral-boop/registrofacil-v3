@@ -1,6 +1,7 @@
 """Consultas de auditoria administrativa, eventos de segurança e atividades."""
 
 import math
+from datetime import datetime, timedelta
 
 from data.database import executar_query
 from utils.logger import sistema_logger as logger
@@ -60,16 +61,16 @@ _EVENTOS_UNION_SQL = """
 """
 
 _EVENTOS_ORDER_MAP = {
-    'created_at_asc': 'created_at ASC, id ASC',
-    'created_at_desc': 'created_at DESC, id DESC',
-    'usuario_asc': 'LOWER(COALESCE(usuario_nome, \'\')) ASC, created_at DESC, id DESC',
-    'usuario_desc': 'LOWER(COALESCE(usuario_nome, \'\')) DESC, created_at DESC, id DESC',
+    'created_at_asc': 'created_at ASC, fonte ASC, id ASC',
+    'created_at_desc': 'created_at DESC, fonte ASC, id DESC',
+    'usuario_asc': 'LOWER(COALESCE(usuario_nome, \'\')) ASC, created_at DESC, fonte ASC, id DESC',
+    'usuario_desc': 'LOWER(COALESCE(usuario_nome, \'\')) DESC, created_at DESC, fonte ASC, id DESC',
     'fonte_asc': 'fonte ASC, created_at DESC, id DESC',
     'fonte_desc': 'fonte DESC, created_at DESC, id DESC',
-    'acao_asc': 'LOWER(COALESCE(acao, \'\')) ASC, created_at DESC, id DESC',
-    'acao_desc': 'LOWER(COALESCE(acao, \'\')) DESC, created_at DESC, id DESC',
-    'ip_asc': 'COALESCE(ip, \'\') ASC, created_at DESC, id DESC',
-    'ip_desc': 'COALESCE(ip, \'\') DESC, created_at DESC, id DESC',
+    'acao_asc': 'LOWER(COALESCE(acao, \'\')) ASC, created_at DESC, fonte ASC, id DESC',
+    'acao_desc': 'LOWER(COALESCE(acao, \'\')) DESC, created_at DESC, fonte ASC, id DESC',
+    'ip_asc': 'COALESCE(ip, \'\') ASC, created_at DESC, fonte ASC, id DESC',
+    'ip_desc': 'COALESCE(ip, \'\') DESC, created_at DESC, fonte ASC, id DESC',
 }
 
 
@@ -83,11 +84,18 @@ def _normalizar_filtros_eventos(filtros):
     if ordenar not in _EVENTOS_ORDER_MAP:
         ordenar = 'created_at_desc'
 
+    data = str(filtros.get('data') or '').strip()
+    try:
+        datetime.strptime(data, '%Y-%m-%d')
+    except ValueError:
+        data = ''
+
     return {
         'fonte': fonte,
         'busca': str(filtros.get('busca') or '').strip(),
+        'acao': str(filtros.get('acao') or '').strip(),
         'usuario_id': filtros.get('usuario_id'),
-        'data': str(filtros.get('data') or '').strip(),
+        'data': data,
         'ordenar': ordenar,
     }
 
@@ -108,19 +116,31 @@ def obter_eventos_unificados(filtros=None, pagina=1, por_pagina=50):
         clauses.append('fonte = ?')
         params.append(filtros['fonte'])
 
+    if filtros['acao']:
+        clauses.append("(acao = ? OR acao LIKE ? ESCAPE '\\')")
+        params.extend([filtros['acao'], f"{filtros['acao']}:%"])
+
     if filtros['usuario_id']:
         clauses.append('usuario_id = ?')
         params.append(filtros['usuario_id'])
 
     if filtros['data']:
-        clauses.append("strftime('%Y-%m-%d', created_at) = ?")
-        params.append(filtros['data'])
+        start = datetime.strptime(filtros['data'], '%Y-%m-%d')
+        end = start + timedelta(days=1)
+        clauses.append('created_at >= ? AND created_at < ?')
+        params.extend([
+            start.strftime('%Y-%m-%d 00:00:00'),
+            end.strftime('%Y-%m-%d 00:00:00'),
+        ])
 
     if filtros['busca']:
-        search = f"%{filtros['busca']}%"
+        search = filtros['busca'].replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
+        search = f"%{search}%"
         clauses.append("""(
-            acao LIKE ? OR usuario_nome LIKE ? OR ip LIKE ? OR detalhes LIKE ?
-            OR CAST(alvo_id AS TEXT) LIKE ? OR event_id LIKE ? OR request_id LIKE ?
+            acao LIKE ? ESCAPE '\\' OR usuario_nome LIKE ? ESCAPE '\\'
+            OR ip LIKE ? ESCAPE '\\' OR detalhes LIKE ? ESCAPE '\\'
+            OR CAST(alvo_id AS TEXT) LIKE ? ESCAPE '\\'
+            OR event_id LIKE ? ESCAPE '\\' OR request_id LIKE ? ESCAPE '\\'
         )""")
         params.extend([search] * 7)
 
@@ -173,12 +193,19 @@ def obter_eventos_filtros():
                     UNION
                     SELECT usuario_id FROM tentativas_acesso_nao_autorizado WHERE usuario_id IS NOT NULL
               ) E ON E.usuario_id = U.id
-             WHERE U.ativo = 1
              ORDER BY U.nome
             """
         )
         acoes = executar_query(
-            f"SELECT DISTINCT acao FROM ({_EVENTOS_UNION_SQL}) eventos WHERE acao IS NOT NULL ORDER BY acao"
+            f"""
+            SELECT DISTINCT
+                   CASE WHEN instr(acao, ':') > 0
+                        THEN substr(acao, 1, instr(acao, ':') - 1)
+                        ELSE acao END AS acao
+              FROM ({_EVENTOS_UNION_SQL}) eventos
+             WHERE acao IS NOT NULL
+             ORDER BY acao
+            """
         )
         return {'usuarios': usuarios, 'acoes': [row['acao'] for row in acoes]}
     except Exception as exc:

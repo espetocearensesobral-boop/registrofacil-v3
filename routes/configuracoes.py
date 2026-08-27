@@ -439,6 +439,7 @@ O teste não cria processos, não dispara backup e não altera a senha de nenhum
         eventos_itens_por_pagina = 50
         eventos_fonte = request.args.get('eventos_fonte', 'todos')
         eventos_busca = proteger_input(request.args.get('eventos_busca'))
+        eventos_acao = proteger_input(request.args.get('eventos_acao'))
         eventos_data = proteger_input(request.args.get('eventos_data'))
         eventos_ordenar = request.args.get('eventos_ordenar', 'created_at_desc')
         eventos_usuarios = []
@@ -452,6 +453,7 @@ O teste não cria processos, não dispara backup e não altera a senha de nenhum
                 {
                     'fonte': eventos_fonte,
                     'busca': eventos_busca,
+                    'acao': eventos_acao,
                     'usuario_id': request.args.get('eventos_usuario', type=int),
                     'data': eventos_data,
                     'ordenar': eventos_ordenar,
@@ -491,6 +493,7 @@ O teste não cria processos, não dispara backup e não altera a senha de nenhum
                                eventos_itens_por_pagina=eventos_itens_por_pagina,
                                eventos_fonte=eventos_fonte,
                                eventos_busca=eventos_busca,
+                               eventos_acao=eventos_acao,
                                eventos_data=eventos_data,
                                eventos_ordenar=eventos_ordenar,
                                eventos_usuarios=eventos_usuarios,

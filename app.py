@@ -9,6 +9,7 @@ from config import Config
 from models import init_db, executar_query, set_config, get_config, get_user_by_username
 from utils.logger import sistema_logger, setup_all_loggers, manutencao_logger
 from utils.logger_config import limpar_logs_antigos, limpar_logs_persistidos
+from utils.log_events import request_id as get_request_id
 from datetime import datetime
 from utils.helpers import formatar_data
 
@@ -92,7 +93,15 @@ def create_app():
                 'Strict-Transport-Security',
                 'max-age=31536000; includeSubDomains',
             )
+        request_identifier = get_request_id()
+        if request_identifier:
+            response.headers.setdefault('X-Request-ID', request_identifier)
         return response
+
+    @app.before_request
+    def ensure_request_context():
+        """Cria uma única correlação por requisição para todos os destinos de log."""
+        get_request_id()
 
     @app.before_request
     def ensure_csrf_token():

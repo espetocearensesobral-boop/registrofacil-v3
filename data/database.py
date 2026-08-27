@@ -81,7 +81,11 @@ def executar_query(query, params=None, fetch_one=False, fetch_all=False, connect
             conn.commit()
         return cursor.rowcount
     except sqlite3.Error as e:
-        logger.error(f"Erro no banco de dados SQLite ao executar query '{query}': {e}", exc_info=True)
+        logger.error(
+            f"Erro no banco de dados SQLite durante a operação parametrizada: {e}",
+            extra={'details': {'operation': 'executar_query'}},
+            exc_info=True,
+        )
         if close_conn:
             try:
                 conn.rollback()
@@ -128,14 +132,14 @@ def add_column_if_not_exists_sqlite(table_name, column_name, column_type, defaul
         except sqlite3.OperationalError as e:
             logger.error(
                 f"Erro operacional SQLite ao adicionar ou atualizar coluna "
-                f"'{column_name}' à tabela '{table_name}': {e}. SQL: {alter_sql}",
+                f"'{column_name}' à tabela '{table_name}': {e}",
                 exc_info=True,
             )
             raise
         except Exception as e:
             logger.error(
                 f"Erro inesperado ao adicionar ou atualizar coluna "
-                f"'{column_name}' à tabela '{table_name}': {e}. SQL: {alter_sql}",
+                f"'{column_name}' à tabela '{table_name}': {e}",
                 exc_info=True,
             )
             raise
@@ -158,14 +162,14 @@ def add_column_if_not_exists_sqlite(table_name, column_name, column_type, defaul
     except sqlite3.OperationalError as e:
         logger.error(
             f"Erro operacional SQLite ao adicionar coluna '{column_name}' "
-            f"à tabela '{table_name}': {e}. SQL: {alter_sql}",
+            f"à tabela '{table_name}': {e}",
             exc_info=True,
         )
         raise
     except Exception as e:
         logger.error(
             f"Erro inesperado ao adicionar coluna '{column_name}' "
-            f"à tabela '{table_name}': {e}. SQL: {alter_sql}",
+            f"à tabela '{table_name}': {e}",
             exc_info=True,
         )
         raise

@@ -32,11 +32,13 @@ A aplicação não deve ser exposta diretamente à Internet sem TLS no proxy rev
 
 ## Atualização de uma instalação existente
 
-A versão 3.19.0 mantém o SQLite como banco compatível com a instalação anterior. A migração 014 consolida registros legados de Representantes em Apresentantes quando necessário e remove a tabela e os campos legados após a confirmação transacional. Na inicialização, `data/schema.py` verifica e cria colunas e tabelas ausentes de forma idempotente, enquanto `data/migrations.py` aplica as migrações de dados pendentes usando `PRAGMA user_version`. As migrações atuais levam bancos antigos até a versão de esquema 6 e preservam os registros existentes.
+A versão 3.28.59 mantém o SQLite como banco compatível com a instalação anterior. A migração 014 consolida registros legados de Representantes em Apresentantes quando necessário e a migração 015 reconstrói a tabela `logs` para preservar os eventos quando um processo é excluído, convertendo referências históricas para `entity_id`. Na inicialização, `data/schema.py` verifica e cria colunas e tabelas ausentes de forma idempotente, enquanto `data/migrations.py` aplica as migrações de dados pendentes usando `PRAGMA user_version`. As migrações atuais levam bancos antigos até a versão de esquema 15 e preservam os registros existentes.
 
 Antes de atualizar uma instalação com dados reais, faça uma cópia do arquivo `registrofacil.db`, da pasta de uploads e das chaves `.secret_key` e `.encryption_key` — ou forneça as mesmas chaves por variáveis de ambiente. A atualização deve ser executada primeiro em uma cópia de homologação. Não substitua as chaves ao migrar, pois isso pode impedir a leitura de dados criptografados e invalidar sessões existentes.
 
-O procedimento recomendado é parar a versão antiga, copiar o banco para o ambiente de homologação, iniciar a versão 3.19.0 uma vez, verificar os logs de migração e executar um smoke test. Só depois dessa validação a cópia deve ser promovida para produção. A aplicação não deve ser iniciada sobre o banco de produção sem backup verificável.
+O procedimento recomendado é parar a versão antiga, copiar o banco para o ambiente de homologação, iniciar a versão 3.28.59 uma vez, verificar os logs de migração e executar um smoke test. Só depois dessa validação a cópia deve ser promovida para produção. A aplicação não deve ser iniciada sobre o banco de produção sem backup verificável.
+
+Os prazos de retenção de arquivos podem ser ajustados por `REGISTROFACIL_LOG_RETENTION_DAYS` e `REGISTROFACIL_LOG_MAX_BYTES`. A retenção de logs persistidos usa `REGISTROFACIL_LOG_DB_RETENTION_DAYS` e `REGISTROFACIL_SECURITY_LOG_RETENTION_DAYS`; o expurgo de auditoria administrativa e segurança permanece desativado por padrão e só é habilitado com `REGISTROFACIL_PURGE_SECURITY_LOGS=true`.
 
 ## Instalação e testes
 

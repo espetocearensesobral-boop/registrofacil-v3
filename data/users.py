@@ -5,6 +5,7 @@ continuem importando-as através de `models.py`.
 """
 
 from datetime import datetime, timedelta
+from contextlib import nullcontext
 import hashlib
 import secrets
 import sqlite3
@@ -13,7 +14,7 @@ import pytz
 
 from config import Config
 from data.database import executar_query, get_sqlite_connection
-from utils.log_events import event_extra, new_event_id, sanitize_details, sanitize_text
+from utils.log_events import event_extra, last_event_id, new_event_id, request_id as current_request_id, sanitize_details, sanitize_text
 from utils.logger import auth_logger, security_logger
 
 TENTATIVAS_MAX = Config.TENTATIVAS_MAX
@@ -57,14 +58,21 @@ def verificar_tentativas_login(ip, username=None):
     return True, None
 
 
-def registrar_tentativa_login(ip, sucesso, event_id=None, username=None):
-    event_id = event_id or new_event_id()
+def registrar_tentativa_login(ip, sucesso, event_id=None, username=None, request_id=None):
+    event_id = event_id or last_event_id() or new_event_id()
+    request_id = request_id or current_request_id()
     return executar_query(
         """
-        INSERT INTO login_attempts (ip, sucesso, event_id, identidade_hash, tempo)
-        VALUES (?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
+        INSERT INTO login_attempts (ip, sucesso, event_id, request_id, identidade_hash, tempo)
+        VALUES (?, ?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
         """,
-        [sanitize_text(ip, 128), 1 if sucesso else 0, event_id, _login_identity_hash(username)]
+        [
+            sanitize_text(ip, 128),
+            1 if sucesso else 0,
+            event_id,
+            sanitize_text(request_id, 80),
+            _login_identity_hash(username),
+        ]
     )
 
 def _select_user_query(where_clause):
@@ -272,40 +280,47 @@ def mark_password_reset_token_as_used(token_id, connection=None):
 
 def gravar_auditoria_admin(admin_id, acao, justificativa, ip, usuario_afetado_id=None,
                            campo_alterado=None, valor_anterior=None, valor_novo=None,
-                           user_agent=None, *, event_id=None, request_id=None):
-    """Grava auditoria administrativa com correlação e dados sanitizados."""
+                           user_agent=None, *, event_id=None, request_id=None, connection=None):
+    """Grava auditoria administrativa com correlação e dados sanitizados.
+
+    Quando recebe uma conexão, a auditoria participa da transação do chamador.
+    Uma falha nessa modalidade é propagada para forçar rollback da mutação.
+    Chamadas sem conexão preservam o comportamento best effort legado.
+    """
     event_id = event_id or new_event_id()
+    request_id = request_id or current_request_id()
     safe_action = sanitize_text(acao, 160) or 'admin.action'
     safe_justification = sanitize_details(justificativa)
     safe_ip = sanitize_text(ip, 128)
     safe_agent = sanitize_text(user_agent, 500)
+    transactional = connection is not None
     try:
-        admin_data = executar_query(
-            "SELECT nome, email FROM usuarios WHERE id = ?", [admin_id], fetch_one=True
-        )
-        admin_name = admin_data['nome'] if admin_data else 'Desconhecido'
-        admin_email = admin_data['email'] if admin_data else None
-
-        affected_name = None
-        affected_email = None
-        if usuario_afetado_id:
-            affected_data = executar_query(
-                "SELECT nome, email FROM usuarios WHERE id = ?",
-                [usuario_afetado_id], fetch_one=True
+        with (nullcontext(connection) if transactional else get_sqlite_connection()) as conn:
+            admin_data = executar_query(
+                "SELECT nome, email FROM usuarios WHERE id = ?", [admin_id], fetch_one=True, connection=conn
             )
-            if affected_data:
-                affected_name = affected_data['nome']
-                affected_email = affected_data['email']
+            admin_name = admin_data['nome'] if admin_data else 'Desconhecido'
+            admin_email = admin_data['email'] if admin_data else None
 
-        query = """
-            INSERT INTO auditoria_admin (
-                admin_id, admin_nome, admin_email, acao,
-                usuario_afetado_id, usuario_afetado_nome, usuario_afetado_email,
-                campo_alterado, valor_anterior, valor_novo,
-                justificativa, ip, user_agent, event_id, request_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """
-        with get_sqlite_connection() as conn:
+            affected_name = None
+            affected_email = None
+            if usuario_afetado_id:
+                affected_data = executar_query(
+                    "SELECT nome, email FROM usuarios WHERE id = ?",
+                    [usuario_afetado_id], fetch_one=True, connection=conn
+                )
+                if affected_data:
+                    affected_name = affected_data['nome']
+                    affected_email = affected_data['email']
+
+            query = """
+                INSERT INTO auditoria_admin (
+                    admin_id, admin_nome, admin_email, acao,
+                    usuario_afetado_id, usuario_afetado_nome, usuario_afetado_email,
+                    campo_alterado, valor_anterior, valor_novo,
+                    justificativa, ip, user_agent, event_id, request_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """
             cursor = conn.cursor()
             cursor.execute(query, [
                 admin_id, admin_name, admin_email, safe_action,
@@ -335,38 +350,48 @@ def gravar_auditoria_admin(admin_id, acao, justificativa, ip, usuario_afetado_id
             ),
             exc_info=True,
         )
+        if transactional:
+            raise
         return None
 
 
 def gravar_tentativa_nao_autorizada(usuario_id, tipo_tentativa, ip, detalhes=None,
                                     alvo_user_id=None, user_agent=None, bloqueado=True,
-                                    *, event_id=None, request_id=None):
-    """Grava tentativa não autorizada no banco e na trilha de segurança."""
+                                    *, event_id=None, request_id=None, connection=None):
+    """Grava tentativa não autorizada no banco e na trilha de segurança.
+
+    Quando recebe uma conexão, a inserção participa da transação do chamador
+    e falhas são propagadas. Chamadas sem conexão preservam a compatibilidade
+    best effort usada por bloqueios independentes.
+    """
     event_id = event_id or new_event_id()
+    request_id = request_id or current_request_id()
     safe_type = sanitize_text(tipo_tentativa, 160) or 'unauthorized.action'
     safe_details = sanitize_details(detalhes)
     safe_ip = sanitize_text(ip, 128)
     safe_agent = sanitize_text(user_agent, 500)
+    transactional = connection is not None
     try:
-        user_data = executar_query(
-            "SELECT nome FROM usuarios WHERE id = ?", [usuario_id], fetch_one=True
-        )
-        user_name = user_data['nome'] if user_data else 'Desconhecido'
-        target_name = None
-        if alvo_user_id:
-            target_data = executar_query(
-                "SELECT nome FROM usuarios WHERE id = ?", [alvo_user_id], fetch_one=True
+        with (nullcontext(connection) if transactional else get_sqlite_connection()) as conn:
+            user_data = executar_query(
+                "SELECT nome FROM usuarios WHERE id = ?", [usuario_id], fetch_one=True, connection=conn
             )
-            target_name = target_data['nome'] if target_data else None
+            user_name = user_data['nome'] if user_data else 'Desconhecido'
+            target_name = None
+            if alvo_user_id:
+                target_data = executar_query(
+                    "SELECT nome FROM usuarios WHERE id = ?",
+                    [alvo_user_id], fetch_one=True, connection=conn
+                )
+                target_name = target_data['nome'] if target_data else None
 
-        query = """
-            INSERT INTO tentativas_acesso_nao_autorizado (
-                usuario_id, usuario_nome, tipo_tentativa, detalhes,
-                alvo_user_id, alvo_user_nome, ip, user_agent, bloqueado,
-                event_id, request_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """
-        with get_sqlite_connection() as conn:
+            query = """
+                INSERT INTO tentativas_acesso_nao_autorizado (
+                    usuario_id, usuario_nome, tipo_tentativa, detalhes,
+                    alvo_user_id, alvo_user_nome, ip, user_agent, bloqueado,
+                    event_id, request_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """
             cursor = conn.cursor()
             cursor.execute(query, [
                 usuario_id, user_name, safe_type, safe_details,
@@ -396,4 +421,6 @@ def gravar_tentativa_nao_autorizada(usuario_id, tipo_tentativa, ip, detalhes=Non
             ),
             exc_info=True,
         )
+        if transactional:
+            raise
         return None

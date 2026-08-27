@@ -6,10 +6,16 @@ import os
 import sys
 import time
 import logging
-import re
-import uuid
 from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime, timedelta
+
+from utils.log_events import (
+    current_ip as resolve_current_ip,
+    current_user_id as resolve_current_user_id,
+    request_id as resolve_request_id,
+    sanitize_details,
+    sanitize_text,
+)
 
 # ---------------------------------------------------------------------------
 # Importação segura do Config (compatível com .exe e script .py)
@@ -38,16 +44,30 @@ DOMAIN_DIRS = {
     'manutencao':  os.path.join(LOG_BASE_DIR, 'manutencao'),
 }
 
-# Retenção de logs: 90 dias
-LOG_RETENTION_DAYS = 90
-LOG_MAX_BYTES = 25 * 1024 * 1024
+# Retenção e tamanho podem ser ajustados sem alterar o código.
+LOG_RETENTION_DAYS = max(1, int(getattr(Config, 'LOG_RETENTION_DAYS', 90)))
+LOG_MAX_BYTES = max(1024, int(getattr(Config, 'LOG_MAX_BYTES', 25 * 1024 * 1024)))
+
+
+def _secure_mkdir(path: str) -> None:
+    os.makedirs(path, mode=0o700, exist_ok=True)
+    if os.name != 'nt':
+        try:
+            os.chmod(path, 0o700)
+        except OSError:
+            pass
+
+
+def _secure_file(path: str) -> None:
+    if os.name != 'nt':
+        try:
+            os.chmod(path, 0o600)
+        except OSError:
+            pass
 
 # Formato padrão retrocompatível, agora com correlação e classificação estruturada.
 LOG_FORMAT = '[%(asctime)s] [%(levelname)s] [%(domain)s] [%(event_type)s] [%(module)s] [%(event_id)s] [%(request_id)s] [%(user_id)s] [%(ip)s] %(message)s'
 LOG_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
-_SECRET_PATTERN = re.compile(r'(?i)(password|senha|token|secret|api[_-]?key|encryption[_-]?key|cookie)\s*([:=])\s*([^\s,;]+)')
-
-
 class SizeAndTimeRotatingFileHandler(TimedRotatingFileHandler):
     """Rotaciona por meia-noite ou ao atingir o limite de bytes."""
 
@@ -74,7 +94,9 @@ class SizeAndTimeRotatingFileHandler(TimedRotatingFileHandler):
     def doRollover(self):  # noqa: N802 - API herdada do logging
         if not self._size_rollover:
             try:
-                return super().doRollover()
+                result = super().doRollover()
+                _secure_file(self.baseFilename)
+                return result
             except OSError as exc:
                 if not isinstance(exc, PermissionError) and getattr(exc, 'winerror', None) != 32:
                     raise
@@ -99,6 +121,7 @@ class SizeAndTimeRotatingFileHandler(TimedRotatingFileHandler):
                 raise
             self._defer_rollover_after_lock()
         self.stream = self._open()
+        _secure_file(self.baseFilename)
         self._size_rollover = False
 
     def _defer_rollover_after_lock(self):
@@ -129,11 +152,12 @@ class RequestContextFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         # Só busca do contexto Flask se os campos não foram fornecidos explicitamente.
         if not hasattr(record, 'user_id'):
-            record.user_id = self._get_user_id()
+            record.user_id = resolve_current_user_id()
         if not hasattr(record, 'ip'):
-            record.ip = self._get_ip()
+            record.ip = resolve_current_ip()
         if not hasattr(record, 'event_id'):
-            record.event_id = uuid.uuid4().hex[:20]
+            from utils.log_events import new_event_id
+            record.event_id = new_event_id()
         if not hasattr(record, 'domain'):
             logger_name = record.name or ''
             record.domain = next((domain for domain in DOMAIN_DIRS if f'.{domain}' in logger_name), 'legado')
@@ -142,43 +166,14 @@ class RequestContextFilter(logging.Filter):
         if not hasattr(record, 'entity_id'):
             record.entity_id = '-'
         if not hasattr(record, 'request_id'):
-            record.request_id = '-'
+            record.request_id = resolve_request_id() or '-'
         if not hasattr(record, 'details'):
             record.details = '-'
         # Sanitiza a mensagem e os detalhes antes de qualquer handler gravar.
-        record.msg = _SECRET_PATTERN.sub(lambda match: f'{match.group(1)}{match.group(2)}[REDACTED]', str(record.getMessage()))
+        record.msg = sanitize_text(record.getMessage()) or ''
         record.args = ()
-        record.details = _SECRET_PATTERN.sub(lambda match: f'{match.group(1)}{match.group(2)}[REDACTED]', str(record.details))
+        record.details = sanitize_details(record.details) or '-'
         return True
-
-    @staticmethod
-    def _get_user_id() -> str:
-        try:
-            from flask import session, has_request_context
-            if has_request_context():
-                uid = session.get('usuario_id')
-                uname = session.get('usuario_username', 'desconhecido')
-                if uid:
-                    return f"{uname} / ID: {uid}"
-        except Exception:
-            pass
-        return 'SISTEMA'
-
-    @staticmethod
-    def _get_ip() -> str:
-        try:
-            from flask import request, has_request_context
-            if has_request_context():
-                # Só confia em X-Forwarded-For quando explicitamente habilitado.
-                if getattr(Config, 'TRUST_PROXY_HEADERS', False):
-                    forwarded = request.headers.get('X-Forwarded-For')
-                    if forwarded:
-                        return forwarded.split(',')[0].strip()
-                return request.remote_addr or '0.0.0.0'
-        except Exception:
-            pass
-        return '0.0.0.0'
-
 
 # ---------------------------------------------------------------------------
 # Fábrica de handlers de domínio
@@ -186,7 +181,7 @@ class RequestContextFilter(logging.Filter):
 def _create_domain_handler(domain: str, level: int = logging.DEBUG) -> TimedRotatingFileHandler:
     """Cria um TimedRotatingFileHandler para um domínio específico."""
     domain_dir = DOMAIN_DIRS[domain]
-    os.makedirs(domain_dir, exist_ok=True)
+    _secure_mkdir(domain_dir)
 
     log_file = os.path.join(domain_dir, f'{domain}.log')
     handler = SizeAndTimeRotatingFileHandler(
@@ -203,6 +198,7 @@ def _create_domain_handler(domain: str, level: int = logging.DEBUG) -> TimedRota
 
     formatter = logging.Formatter(fmt=LOG_FORMAT, datefmt=LOG_DATE_FORMAT)
     handler.setFormatter(formatter)
+    _secure_file(log_file)
 
     ctx_filter = RequestContextFilter()
     handler.addFilter(ctx_filter)
@@ -253,7 +249,7 @@ def setup_all_loggers(console: bool = True):
     """
     # Garante que os diretórios existem
     for domain_dir in DOMAIN_DIRS.values():
-        os.makedirs(domain_dir, exist_ok=True)
+        _secure_mkdir(domain_dir)
 
     loggers = {
         'auth':        _setup_domain_logger('auth',        'auth',        logging.DEBUG, console=console),
@@ -368,30 +364,6 @@ def limpar_logs_antigos(retention_days: int = LOG_RETENTION_DAYS,
         extra={'user_id': 'SISTEMA', 'ip': '0.0.0.0'}
     )
     return stats
-
-
-# ---------------------------------------------------------------------------
-# Compatibilidade retroativa: logger único para módulos legados
-# ---------------------------------------------------------------------------
-# Mantém o comportamento anterior de `from utils.logger import logger`
-# Módulos antigos que usam `logger` genérico passam a gravar em 'operacional'.
-# Recomenda-se migrar progressivamente para os loggers específicos de domínio.
-
-def _build_legacy_logger() -> logging.Logger:
-    """Cria o logger legado 'registrofacil_app' apontando para 'operacional'."""
-    legacy = logging.getLogger('registrofacil_app')
-    if not legacy.handlers:
-        legacy.setLevel(logging.DEBUG)
-        legacy.propagate = False
-        handler = _create_domain_handler('operacional', logging.DEBUG)
-        legacy.addHandler(handler)
-        # Console para o logger legado
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
-        ch.setFormatter(logging.Formatter(fmt=LOG_FORMAT, datefmt=LOG_DATE_FORMAT))
-        ch.addFilter(RequestContextFilter())
-        legacy.addHandler(ch)
-    return legacy
 
 
 # ---------------------------------------------------------------------------

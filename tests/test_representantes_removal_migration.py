@@ -45,4 +45,4 @@ def test_representantes_migration_consolidates_and_removes_legacy_data(temp_data
     assert "representantes" not in tables
     assert {"representante", "representante_telefone", "representante_email"}.isdisjoint(columns)
     assert row == ("Pessoa Legada", "88999990000", "legado@example.com")
-    assert version == 14
+    assert version == 15

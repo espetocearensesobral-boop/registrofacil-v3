@@ -1,12 +1,12 @@
-"""Emissão compatível de eventos operacionais, de segurança e de auditoria."""
-
 from __future__ import annotations
 
 import logging
 import re
+import unicodedata
+from dataclasses import dataclass
 
 from data.database import executar_query
-from utils.log_events import emit_event, event_extra, new_event_id, sanitize_details, sanitize_text
+from utils.log_events import event_extra, new_event_id, remember_event_id, sanitize_details, sanitize_text
 from utils.logger import (
     auth_logger,
     manutencao_logger,
@@ -15,61 +15,152 @@ from utils.logger import (
     sistema_logger,
 )
 
-LOG_TO_FILE_ACTIONS = {
-    'Logout do sistema',
-    'Link de recuperação de senha enviado',
-    'Novo usuário registrado',
-    'Editou usuário',
-    'Inativou usuário',
-    'Imprimiu lista de processos',
-}
-LOG_TO_FILE_PREFIXES = (
-    'Login bem-sucedido',
-    'Falha de login:',
-    'Falha de cadastro:',
-    'Erro durante login:',
-    'Tentativa de login bloqueada',
-    'Exportou',
+
+@dataclass(frozen=True)
+class EventPolicy:
+    """Política única para classificação, persistência e espelhamento do evento."""
+
+    event_type: str
+    domain: str
+    persist: bool = True
+    mirror_auth: bool = False
+    action_names: tuple[str, ...] = ()
+    action_prefixes: tuple[str, ...] = ()
+
+
+EVENT_CATALOG = (
+    EventPolicy(
+        event_type='auth.login.success',
+        domain='auth',
+        action_prefixes=('Login bem-sucedido',),
+    ),
+    EventPolicy(
+        event_type='auth.login.failed',
+        domain='auth',
+        action_prefixes=('Falha de login:',),
+    ),
+    EventPolicy(
+        event_type='auth.login.blocked',
+        domain='auth',
+        action_prefixes=('Tentativa de login bloqueada',),
+    ),
+    EventPolicy(
+        event_type='auth.login.error',
+        domain='auth',
+        action_prefixes=('Erro durante login:',),
+    ),
+    EventPolicy(
+        event_type='auth.registration.failed',
+        domain='auth',
+        action_prefixes=('Falha de cadastro:',),
+    ),
+    EventPolicy(
+        event_type='auth.logout',
+        domain='auth',
+        action_names=('Logout do sistema',),
+    ),
+    EventPolicy(
+        event_type='auth.password_reset.sent',
+        domain='auth',
+        action_names=('Link de recuperação de senha enviado',),
+    ),
+    EventPolicy(
+        event_type='auth.password_reset.completed',
+        domain='auth',
+        action_names=('Redefinição de Senha',),
+    ),
+    EventPolicy(
+        event_type='maintenance.backup',
+        domain='manutencao',
+        action_prefixes=('Backup',),
+    ),
+    EventPolicy(
+        event_type='maintenance.backup.restore',
+        domain='manutencao',
+        action_names=('Restauração de backup',),
+    ),
+    EventPolicy(
+        event_type='maintenance.database.optimize',
+        domain='manutencao',
+        action_names=('Otimizou banco de dados',),
+    ),
+    EventPolicy(
+        event_type='maintenance.database.rebuild',
+        domain='manutencao',
+        action_prefixes=('Reconstruiu banco',),
+    ),
+    EventPolicy(
+        event_type='maintenance.database.repair',
+        domain='manutencao',
+        action_prefixes=('Reparou banco',),
+    ),
+    EventPolicy(
+        event_type='maintenance.fts.rebuild',
+        domain='manutencao',
+        action_names=('Reconstruiu índice FTS5',),
+    ),
+    EventPolicy(
+        event_type='operational.export',
+        domain='operacional',
+        mirror_auth=True,
+        action_prefixes=('Exportou',),
+    ),
+    EventPolicy(
+        event_type='operational.process.list_printed',
+        domain='operacional',
+        mirror_auth=True,
+        action_names=('Imprimiu lista de processos',),
+    ),
+    EventPolicy(
+        event_type='operational.user.updated',
+        domain='operacional',
+        mirror_auth=True,
+        action_names=('Editou usuário',),
+    ),
+    EventPolicy(
+        event_type='operational.user.deactivated',
+        domain='operacional',
+        mirror_auth=True,
+        action_names=('Inativou usuário',),
+    ),
 )
 
-# Ações muito frequentes continuam fora da auditoria persistente, mas falhas
-# deixam de ser silenciosas e aparecem em nível warning.
-IGNORED_ACTIONS = {
+# Eventos deliberadamente de alta frequência; falhas de lock permanecem auditáveis.
+IGNORED_ACTIONS = frozenset({
     'pesquisa_realizada',
+    'pesquisa_inteligente_realizada',
     'acquire_lock',
     'renew_lock',
     'release_lock',
-}
-LOCK_FAILURE_ACTIONS = {
+})
+LOCK_FAILURE_ACTIONS = frozenset({
     'acquire_lock_falha',
     'renew_lock_falha',
     'release_lock_falha',
-}
-DB_EXACT_ACTIONS = {
-    'Backup Manual',
-    'Backup Automático',
-    'Backup Automático SFTP',
-    'Otimizou banco de dados',
-    'Configurações de e-mail atualizadas',
-}
-DB_PREFIXES = ('Cadastrou', 'Editou', 'Exclu', 'Criou', 'Inativou', 'Ativou', 'Restaur', 'Reconstruiu', 'Reparou')
+})
 
 
 def _event_type(action: str) -> str:
-    normalized = re.sub(r'[^a-z0-9]+', '.', action.lower(), flags=re.UNICODE).strip('.')
+    normalized = unicodedata.normalize('NFKD', action)
+    normalized = normalized.encode('ascii', 'ignore').decode('ascii')
+    normalized = re.sub(r'[^a-z0-9]+', '.', normalized.lower()).strip('.')
     return normalized[:120] or 'generic'
 
 
-def _domain_for(action: str, explicit: str | None = None) -> str:
-    if explicit in {'auth', 'operacional', 'sistema', 'manutencao'}:
-        return explicit
-    if action.startswith(('Login', 'Falha de login', 'Tentativa de login', 'Logout', 'Link de recuperação', 'Redefinição', 'Falha de cadastro')):
-        return 'auth'
-    if action.startswith(('Backup', 'Restaur', 'Otimizou banco', 'Reconstruiu', 'Reparou')):
-        return 'manutencao'
-    if action.startswith(('Erro no banco', 'Migração', 'FTS', 'Configuração do sistema')):
-        return 'sistema'
-    return 'operacional'
+def _policy_for(action: str, explicit_domain: str | None, explicit_event_type: str | None) -> EventPolicy:
+    for policy in EVENT_CATALOG:
+        if action in policy.action_names or any(action.startswith(prefix) for prefix in policy.action_prefixes):
+            return EventPolicy(
+                event_type=explicit_event_type or policy.event_type,
+                domain=explicit_domain or policy.domain,
+                persist=policy.persist,
+                mirror_auth=policy.mirror_auth,
+            )
+    return EventPolicy(
+        event_type=explicit_event_type or _event_type(action),
+        domain=explicit_domain if explicit_domain in {'auth', 'operacional', 'sistema', 'manutencao'} else 'operacional',
+        persist=True,
+    )
 
 
 def _logger_for(domain: str):
@@ -84,8 +175,6 @@ def _logger_for(domain: str):
 def _level_for(action: str) -> int:
     if action in LOCK_FAILURE_ACTIONS or action.lower().startswith(('falha', 'erro', 'não autorizado')):
         return logging.WARNING
-    if action.lower().startswith(('exclu', 'inativou', 'reparou', 'reconstruiu')):
-        return logging.INFO
     return logging.INFO
 
 
@@ -104,22 +193,21 @@ def gravar_log(
     event_type=None,
     severity=None,
 ):
-    """Emite um evento e, quando aplicável, grava a auditoria operacional.
-
-    Os parâmetros originais continuam compatíveis. Os argumentos nomeados
-    adicionais permitem que novas rotas forneçam classificação explícita.
-    """
+    """Emite e persiste um evento segundo o catálogo central de políticas."""
     action = sanitize_text(acao, 160) or 'evento_sem_acao'
     description = sanitize_text(descricao)
     safe_context = sanitize_details(contexto)
-    resolved_domain = _domain_for(action, domain)
-    resolved_event_type = event_type or _event_type(action)
+    policy = _policy_for(action, domain, event_type)
     resolved_event_id = event_id or new_event_id()
-    level = getattr(logging, (severity or '').upper(), _level_for(action)) if isinstance(severity, str) else _level_for(action)
+    remember_event_id(resolved_event_id)
+    level = (
+        getattr(logging, severity.upper(), _level_for(action))
+        if isinstance(severity, str) else _level_for(action)
+    )
     extras = event_extra(
         event_id=resolved_event_id,
-        domain=resolved_domain,
-        event_type=resolved_event_type,
+        domain=policy.domain,
+        event_type=policy.event_type,
         entity_id=processo_id,
         user_id=usuario_id,
         ip=ip,
@@ -130,15 +218,14 @@ def gravar_log(
     if action in IGNORED_ACTIONS:
         return resolved_event_id
 
-    target_logger = _logger_for(resolved_domain)
+    target_logger = _logger_for(policy.domain)
     message = action if not description else f'{action}: {description}'
     target_logger.log(level, sanitize_text(message), extra=extras)
 
-    if (action in LOG_TO_FILE_ACTIONS or action.startswith(LOG_TO_FILE_PREFIXES)) and security_logger is not target_logger:
+    if policy.mirror_auth and security_logger is not target_logger:
         security_logger.log(level, sanitize_text(message), extra=extras)
 
-    should_store = action in DB_EXACT_ACTIONS or action.startswith(DB_PREFIXES)
-    if not should_store:
+    if not policy.persist:
         return resolved_event_id
 
     safe_process_id = None
@@ -153,7 +240,7 @@ def gravar_log(
             safe_process_id = None
 
     try:
-        final_action = action if description is None else f'{action}: {description}'
+        event_details = safe_context or description
         executar_query(
             """
             INSERT INTO logs (
@@ -162,23 +249,22 @@ def gravar_log(
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
             """,
             [
-                final_action,
-                safe_context,
+                action,
+                event_details,
                 safe_process_id,
                 usuario_id,
                 sanitize_text(ip, 128) if ip else None,
                 resolved_event_id,
                 extras['request_id'],
-                resolved_domain,
-                resolved_event_type,
+                policy.domain,
+                policy.event_type,
                 str(safe_process_id) if safe_process_id is not None else None,
                 logging.getLevelName(level),
             ],
             connection=connection,
         )
     except Exception as exc:
-        # A falha da auditoria nunca deve esconder a operação original, mas
-        # precisa ficar registrada com o mesmo event_id para diagnóstico.
+        # A falha da auditoria operacional não deve esconder a operação original.
         operacional_logger.error(
             f'Falha ao persistir evento de auditoria {resolved_event_id}: {exc}',
             extra=event_extra(

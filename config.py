@@ -23,6 +23,13 @@ else:
     DATA_DIR = BASE_DIR
 
 
+def _positive_int_env(name, default, minimum=1):
+    try:
+        return max(minimum, int(os.environ.get(name, default)))
+    except (TypeError, ValueError):
+        return default
+
+
 def _read_persistent_secret(path):
     """Lê um segredo persistente e restringe suas permissões locais."""
     with open(path, 'r', encoding='utf-8') as handle:
@@ -142,8 +149,10 @@ class Config:
 
     # Retenção persistente: operação pode ser expurgada; auditoria de segurança
     # permanece preservada por padrão até o administrador habilitar expurgo.
-    LOG_DB_RETENTION_DAYS = int(os.environ.get('REGISTROFACIL_LOG_DB_RETENTION_DAYS', '365'))
-    SECURITY_LOG_RETENTION_DAYS = int(os.environ.get('REGISTROFACIL_SECURITY_LOG_RETENTION_DAYS', '730'))
+    LOG_RETENTION_DAYS = _positive_int_env('REGISTROFACIL_LOG_RETENTION_DAYS', 90)
+    LOG_MAX_BYTES = _positive_int_env('REGISTROFACIL_LOG_MAX_BYTES', 25 * 1024 * 1024, minimum=1024)
+    LOG_DB_RETENTION_DAYS = _positive_int_env('REGISTROFACIL_LOG_DB_RETENTION_DAYS', 365)
+    SECURITY_LOG_RETENTION_DAYS = _positive_int_env('REGISTROFACIL_SECURITY_LOG_RETENTION_DAYS', 730)
     PURGE_SECURITY_LOGS = os.environ.get('REGISTROFACIL_PURGE_SECURITY_LOGS', 'false').strip().lower() == 'true'
 
     # Define o tempo de vida da sessão por inatividade
@@ -241,8 +250,11 @@ class Config:
 
     try:
         # Garante que o DATA_DIR exista primeiro (quando frozen = C:\ProgramData\RegistroFacil)
-        os.makedirs(DATA_DIR, exist_ok=True)
-        os.makedirs(LOG_DIR, exist_ok=True)
+        os.makedirs(DATA_DIR, mode=0o700, exist_ok=True)
+        os.makedirs(LOG_DIR, mode=0o700, exist_ok=True)
+        if os.name != 'nt':
+            os.chmod(DATA_DIR, 0o700)
+            os.chmod(LOG_DIR, 0o700)
         os.makedirs(AUTH_LOG_DIR, exist_ok=True)
         os.makedirs(OPERACIONAL_LOG_DIR, exist_ok=True)
         os.makedirs(SISTEMA_LOG_DIR, exist_ok=True)
@@ -256,8 +268,11 @@ class Config:
         os.makedirs(BACKUP_ROOT_DIR, exist_ok=True)
         
         # Teste de permissão de escrita
-        with open(os.path.join(LOG_DIR, 'permission_test.log'), 'a') as f:
+        permission_test_path = os.path.join(LOG_DIR, 'permission_test.log')
+        with open(permission_test_path, 'a', encoding='utf-8') as f:
             f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Teste de permissão de escrita ok.\n")
+        if os.name != 'nt':
+            os.chmod(permission_test_path, 0o600)
 
     except OSError as e:
         print(f"ERRO CRÍTICO: Não foi possível criar ou escrever nos diretórios. Verifique as permissões. Erro: {e}")

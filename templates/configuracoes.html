@@ -1052,7 +1052,7 @@ window.cfgSwitch = function(btn) {
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.set('tab', btn.dataset.panel);
     if (btn.dataset.panel !== 'atividades') {
-        ['pagina', 'eventos_busca', 'eventos_fonte', 'eventos_usuario', 'eventos_data', 'eventos_ordenar', 'eventos_itens_por_pagina'].forEach(key => currentUrl.searchParams.delete(key));
+        ['pagina', 'eventos_busca', 'eventos_fonte', 'eventos_acao', 'eventos_usuario', 'eventos_data', 'eventos_ordenar', 'eventos_itens_por_pagina'].forEach(key => currentUrl.searchParams.delete(key));
     }
     window.history.replaceState({}, '', currentUrl);
 };
